@@ -1,0 +1,76 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.7/schema.json",
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": [
+              ":URL:",
+              ":BLANK_LINE:",
+              [":BUN:", ":NODE:"],
+              ":BLANK_LINE:",
+              [
+                ":PACKAGE:",
+                ":PACKAGE_WITH_PROTOCOL:",
+                "!@/**",
+                "!@blindtest/**"
+              ],
+              ":BLANK_LINE:",
+              "@blindtest/protocol/**",
+              ":BLANK_LINE:",
+              "@blindtest/core/**",
+              ":BLANK_LINE:",
+              [":ALIAS:", "@/**", "!@blindtest/**"],
+              ":BLANK_LINE:",
+              [":PATH:", "@/**", "!@blindtest/**"]
+            ],
+            "identifierOrder": "natural"
+          }
+        },
+        "useSortedAttributes": "on",
+        "useSortedKeys": "on",
+        "useSortedProperties": "on"
+      }
+    }
+  },
+  "files": {
+    "includes": ["**", "!**/dist", "!**/*.svg", "!.claude/skills"]
+  },
+  "formatter": {
+    "indentStyle": "space"
+  },
+  "javascript": {
+    "formatter": {
+      "jsxQuoteStyle": "single",
+      "quoteStyle": "single",
+      "semicolons": "asNeeded",
+      "trailingCommas": "none"
+    }
+  },
+  "linter": {
+    "domains": {
+      "react": "recommended"
+    },
+    "rules": {
+      "nursery": {
+        "noFloatingPromises": "error"
+      },
+      "suspicious": {
+        "noConsole": {
+          "level": "error",
+          "options": {
+            "allow": ["debug", "error", "info", "warn"]
+          }
+        }
+      }
+    }
+  },
+  "vcs": {
+    "clientKind": "git",
+    "defaultBranch": "main",
+    "enabled": true,
+    "useIgnoreFile": true
+  }
+}

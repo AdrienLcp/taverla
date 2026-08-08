@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"],
+      "@blindtest/core/*": ["../../packages/core/src/*"],
+      "@blindtest/protocol/*": ["../../packages/protocol/src/*"]
+    }
+  },
+  "extends": "../../tsconfig.json",
+  "include": ["src", "vite.config.ts"]
+}

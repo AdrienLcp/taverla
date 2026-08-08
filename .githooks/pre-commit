@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+# Run `biome check --write` on staged files, re-stage the ones it modified.
+# Activated by `git config core.hooksPath .githooks`, which the root
+# package.json runs from its preinstall script.
+
+set -e
+
+staged=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ts|tsx|js|jsx|mjs|json|css|scss)$' || true)
+
+if [ -z "$staged" ]; then
+  exit 0
+fi
+
+# Batched because Windows caps a command line at ~8 KB, well below what xargs
+# assumes: an unbatched run dies with "command line is too long" on any commit
+# touching a few hundred files.
+echo "$staged" | xargs -n 40 pnpm biome check --write --no-errors-on-unmatched
+
+echo "$staged" | xargs -n 40 git add

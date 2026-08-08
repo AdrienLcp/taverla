@@ -1,0 +1,16 @@
+// Pure module: mixins only.
+
+/// react-aria sets `data-focus-visible` on keyboard focus only, so this never
+/// fires on a pointer press — and the ring is drawn outside the element so it
+/// stays visible against a filled background.
+@mixin ring
+  &[data-focus-visible],
+  &:focus-visible
+    outline: 2px solid var(--info)
+    outline-offset: 3px
+
+@mixin ring-inset
+  &[data-focus-visible],
+  &:focus-visible
+    outline: 2px solid var(--info)
+    outline-offset: -2px

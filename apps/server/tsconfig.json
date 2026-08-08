@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"],
+      "@blindtest/core/*": ["../../packages/core/src/*"],
+      "@blindtest/protocol/*": ["../../packages/protocol/src/*"]
+    },
+    "types": ["node"]
+  },
+  "extends": "../../tsconfig.json",
+  "include": ["src", "vitest.config.ts"]
+}

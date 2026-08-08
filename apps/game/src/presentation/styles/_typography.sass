@@ -1,0 +1,40 @@
+// Pure module: mixins only, no top-level CSS. Safe to @use from any component.
+
+@mixin display
+  font-size: clamp(2.5rem, 7vw, 5rem)
+  font-weight: 800
+  letter-spacing: -0.03em
+  line-height: 1
+
+@mixin title
+  font-size: clamp(1.5rem, 3vw, 2.25rem)
+  font-weight: 700
+  letter-spacing: -0.02em
+
+@mixin heading
+  font-size: 1.125rem
+  font-weight: 650
+  letter-spacing: -0.01em
+
+@mixin body
+  font-size: 1rem
+  font-weight: 400
+
+@mixin caption
+  font-size: 0.8125rem
+  font-weight: 500
+  letter-spacing: 0.01em
+
+/// Small, wide, uppercase — for the labels above a value, never for prose.
+@mixin overline
+  font-size: 0.6875rem
+  font-weight: 700
+  letter-spacing: 0.14em
+  text-transform: uppercase
+
+/// Room codes and countdowns: tabular figures stop the layout from twitching
+/// as digits change.
+@mixin numeric
+  font-family: var(--font-numeric)
+  font-variant-numeric: tabular-nums
+  letter-spacing: 0.08em

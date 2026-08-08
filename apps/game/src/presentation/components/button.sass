@@ -1,0 +1,53 @@
+@use '../styles/focus'
+@use '../styles/typography'
+
+@layer components
+  .button
+    @include focus.ring
+    @include typography.heading
+
+    align-items: center
+    border: 1px solid transparent
+    border-radius: var(--radius-full)
+    display: inline-flex
+    gap: var(--space-xs)
+    justify-content: center
+    transition: background-color var(--transition-fast, 0) var(--timing, ease), border-color var(--transition-fast, 0) var(--timing, ease), color var(--transition-fast, 0) var(--timing, ease), transform var(--transition-fast, 0) var(--timing, ease)
+    white-space: nowrap
+
+    &.medium
+      min-height: 44px
+      padding: 0 var(--space-m)
+
+    &.large
+      font-size: 1.25rem
+      min-height: 60px
+      padding: 0 var(--space-l)
+
+    &.filled
+      background: var(--accent)
+      color: var(--accent-ink)
+
+      &[data-hovered]
+        background: var(--accent-strong)
+
+    &.outlined
+      border-color: var(--border)
+      color: var(--text)
+
+      &[data-hovered]
+        background: var(--surface-raised)
+        border-color: var(--text-faint)
+
+    &.ghost
+      color: var(--text-muted)
+
+      &[data-hovered]
+        color: var(--text)
+
+    &[data-pressed]
+      transform: scale(0.97)
+
+    &[data-disabled]
+      cursor: not-allowed
+      opacity: 0.45

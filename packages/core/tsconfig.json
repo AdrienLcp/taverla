@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@blindtest/protocol/*": ["../protocol/src/*"]
+    }
+  },
+  "extends": "../../tsconfig.json",
+  "include": ["src", "vitest.config.ts"]
+}

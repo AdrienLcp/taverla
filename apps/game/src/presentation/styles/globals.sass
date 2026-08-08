@@ -1,0 +1,36 @@
+// The `@layer reset, tokens, base, components` order is declared in index.html,
+// where it cannot be reordered by the module graph. See the comment there.
+
+@use './reset'
+@use './tokens'
+
+@layer base
+  html,
+  body,
+  #root
+    height: 100%
+
+  body
+    background: radial-gradient(120vmax 90vmax at 15% -10%, #1b1030 0%, transparent 55%), radial-gradient(100vmax 80vmax at 90% 110%, #10203a 0%, transparent 50%), var(--void)
+    background-attachment: fixed
+    color: var(--text)
+    font-family: var(--font-base)
+
+  #root
+    display: flex
+    flex-direction: column
+
+  a
+    color: var(--info)
+
+  ::selection
+    background: var(--accent)
+    color: var(--accent-ink)
+
+  .visually-hidden
+    clip-path: inset(50%)
+    height: 1px
+    overflow: hidden
+    position: absolute
+    white-space: nowrap
+    width: 1px

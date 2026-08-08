@@ -1,0 +1,40 @@
+@use '../styles/typography'
+
+@layer components
+  .connection-status
+    @include typography.caption
+
+    align-items: center
+    color: var(--text-muted)
+    display: inline-flex
+    gap: var(--space-xs)
+
+    .dot
+      background: currentColor
+      border-radius: var(--radius-full)
+      flex: none
+      height: 8px
+      width: 8px
+
+    .clock
+      color: var(--text-faint)
+
+    &.open
+      color: var(--success)
+
+    &.connecting
+      color: var(--info)
+
+    &.closed
+      color: var(--danger)
+
+      .dot
+        animation: connection-pulse 1.2s ease-in-out infinite
+
+  @media (prefers-reduced-motion: reduce)
+    .connection-status.closed .dot
+      animation: none
+
+@keyframes connection-pulse
+  50%
+    opacity: 0.25

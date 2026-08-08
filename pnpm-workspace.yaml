@@ -1,0 +1,21 @@
+packages:
+  - apps/*
+  - packages/*
+
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+
+# Fail the install when the running Node/pnpm doesn't satisfy package.json "engines".
+engineStrict: true
+
+# pnpm self-installs the version pinned in package.json's "packageManager" field —
+# replaces Corepack, which Node no longer bundles since v25.
+managePackageManagerVersions: true
+
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - esbuild
+
+publicHoistPattern:
+  - '@biomejs/*'

@@ -1,0 +1,50 @@
+@layer tokens
+  \:root
+    --void: #08080e
+    --surface: #12121c
+    --surface-raised: #1c1c2a
+    --border: #2a2a3d
+
+    --text: #f2f2f7
+    --text-muted: #9494ae
+    --text-faint: #62627a
+
+    --accent: #ff2d6f
+    --accent-strong: #ff5c8d
+    --accent-ink: #14000a
+    --info: #5b8cff
+    --success: #2ee6a8
+    --danger: #ff5a5a
+
+    --radius-s: 8px
+    --radius-m: 14px
+    --radius-l: 24px
+    --radius-full: 999px
+
+    --space-2xs: 4px
+    --space-xs: 8px
+    --space-s: 12px
+    --space-m: 20px
+    --space-l: 32px
+    --space-xl: 48px
+    --space-2xl: 72px
+
+    --transition-fast: 120ms
+    --transition-base: 220ms
+    --transition-slow: 420ms
+    --timing: cubic-bezier(0.2, 0, 0, 1)
+
+    --font-base: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif
+    --font-numeric: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace
+
+    --layout-padding: clamp(16px, 4vmin, 48px)
+
+  // Every duration token collapses here, which is why a `var(--transition-*)`
+  // reference must fall back to `0` and never to its nominal value: if the
+  // token ever disappears, the fallback is all that is left, and a literal
+  // duration would animate for someone who asked for no motion.
+  @media (prefers-reduced-motion: reduce)
+    \:root
+      --transition-fast: 0ms
+      --transition-base: 0ms
+      --transition-slow: 0ms

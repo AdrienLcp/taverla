@@ -1,0 +1,105 @@
+@use '../../presentation/styles/layout'
+@use '../../presentation/styles/typography'
+
+@layer components
+  .host-console-page
+    @include layout.stage
+
+    > header
+      align-items: flex-start
+      display: flex
+      justify-content: space-between
+
+      .eyebrow
+        @include typography.overline
+
+        color: var(--text-muted)
+
+      .room-code
+        @include typography.numeric
+
+        color: var(--accent)
+        font-size: clamp(3rem, 9vw, 7rem)
+        font-weight: 800
+        line-height: 1
+
+    .stage
+      display: grid
+      flex: 1
+      gap: var(--space-l)
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))
+
+    h2
+      @include typography.heading
+
+      margin-bottom: var(--space-s)
+
+    .invite
+      @include layout.panel
+
+      display: flex
+      flex-direction: column
+
+      .qr
+        align-self: center
+        background: #fff
+        border-radius: var(--radius-m)
+        padding: var(--space-s)
+
+      .join-url
+        @include typography.caption
+
+        color: var(--text-faint)
+        margin-top: var(--space-s)
+        overflow-wrap: anywhere
+        text-align: center
+
+    .roster
+      @include layout.panel
+
+      .count
+        @include typography.numeric
+
+        color: var(--text-muted)
+        font-size: 0.875rem
+
+      .empty
+        @include typography.caption
+
+        color: var(--text-faint)
+
+      ul
+        display: flex
+        flex-direction: column
+        gap: var(--space-2xs)
+
+      li
+        align-items: center
+        background: var(--surface-raised)
+        border-radius: var(--radius-m)
+        display: flex
+        justify-content: space-between
+        padding: var(--space-xs) var(--space-s)
+
+        &.away
+          opacity: 0.45
+
+        .nickname
+          font-weight: 600
+
+        .score
+          @include typography.numeric
+
+          color: var(--accent)
+          font-weight: 700
+
+    > footer
+      align-items: center
+      display: flex
+      flex-direction: column
+      gap: var(--space-s)
+
+      .error
+        @include typography.caption
+
+        color: var(--danger)

@@ -1,0 +1,6 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <title>Blind Test</title>
+  <rect fill="#08080e" height="32" rx="7" width="32" />
+  <circle cx="16" cy="16" fill="#ff2d6f" r="9" />
+  <circle cx="12.5" cy="12.5" fill="#ff8fb4" r="3" />
+</svg>

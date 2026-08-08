@@ -1,0 +1,16 @@
+@use '../../presentation/styles/layout'
+@use '../../presentation/styles/typography'
+
+@layer components
+  .not-found-page
+    @include layout.screen
+
+    align-items: center
+    justify-content: center
+    text-align: center
+
+    h1
+      @include typography.title
+
+    p
+      color: var(--text-muted)

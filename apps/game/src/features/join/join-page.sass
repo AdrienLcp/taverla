@@ -1,0 +1,61 @@
+@use '../../presentation/styles/layout'
+@use '../../presentation/styles/typography'
+
+@layer components
+  .join-page
+    @include layout.screen
+
+    justify-content: center
+
+    header
+      .eyebrow
+        @include typography.overline
+
+        color: var(--accent)
+        margin-bottom: var(--space-xs)
+
+      h1
+        @include typography.display
+
+    .action
+      @include layout.panel
+
+      display: flex
+      flex-direction: column
+      gap: var(--space-s)
+
+      h2
+        @include typography.heading
+
+      p
+        @include typography.caption
+
+        color: var(--text-muted)
+
+      .react-aria-Form
+        display: flex
+        flex-direction: column
+        gap: var(--space-s)
+
+      .react-aria-Input
+        @include typography.numeric
+
+        font-size: 1.5rem
+        text-align: center
+        text-transform: uppercase
+
+    .divider
+      align-items: center
+      color: var(--text-faint)
+      display: flex
+      gap: var(--space-s)
+
+      &::before,
+      &::after
+        background: var(--border)
+        content: ''
+        flex: 1
+        height: 1px
+
+      span
+        @include typography.overline

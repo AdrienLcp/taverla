@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
+    <meta content="#08080e" name="theme-color" />
+    <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+    <title>Blind Test</title>
+    <!--
+      The cascade order lives here, not in a stylesheet, because a layer's
+      position is fixed by where its name FIRST appears. Every component
+      stylesheet opens with `@layer components`, and the bundler injects them in
+      module-graph order — so a single component imported before the global
+      sheet would register `components` first and push `reset` after it, which
+      is how a reset ends up beating every component rule. Declared in the
+      document head, the order cannot depend on the import graph.
+    -->
+    <style>
+      @layer reset, tokens, base, components;
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="/src/main.tsx" type="module"></script>
+  </body>
+</html>

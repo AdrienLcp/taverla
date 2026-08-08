@@ -1,0 +1,14 @@
+**/coverage
+**/dist
+**/node_modules
+**/storybook-static
+
+*.tsbuildinfo
+
+# Secrets are never committed. Public config lives in committed .env files
+# (Vite convention); anything private goes in a gitignored .env.local override.
+*.env.local
+*.env.*.local
+
+.claude/settings.local.json
+.playwright-mcp

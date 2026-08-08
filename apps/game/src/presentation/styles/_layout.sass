@@ -1,0 +1,28 @@
+// Pure module: mixins only.
+
+/// A phone-first column. Used by every screen a player sees.
+@mixin screen
+  display: flex
+  flex: 1
+  flex-direction: column
+  gap: var(--space-l)
+  margin: 0 auto
+  max-width: 620px
+  padding: var(--layout-padding)
+  width: 100%
+
+/// The host's surface: a laptop or a TV several metres away, so it takes the
+/// whole viewport and lets its content grow instead of centring in a column.
+@mixin stage
+  display: flex
+  flex: 1
+  flex-direction: column
+  gap: var(--space-l)
+  padding: var(--layout-padding)
+  width: 100%
+
+@mixin panel
+  background: color-mix(in srgb, var(--surface) 70%, transparent)
+  border: 1px solid var(--border)
+  border-radius: var(--radius-l)
+  padding: var(--space-m)

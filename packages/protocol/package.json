@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.10"
+  },
+  "exports": {
+    "./*": "./src/*"
+  },
+  "name": "@blindtest/protocol",
+  "private": true,
+  "scripts": {
+    "build": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest --watch"
+  },
+  "type": "module",
+  "version": "0.1.0"
+}

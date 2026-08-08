@@ -1,0 +1,44 @@
+@use '../styles/focus'
+@use '../styles/typography'
+
+@layer components
+  .text-field
+    display: flex
+    flex-direction: column
+    gap: var(--space-2xs)
+
+    .react-aria-Label
+      @include typography.overline
+
+      color: var(--text-muted)
+
+    .react-aria-Input
+      @include focus.ring-inset
+
+      background: var(--surface)
+      border: 1px solid var(--border)
+      border-radius: var(--radius-m)
+      color: var(--text)
+      min-height: 52px
+      padding: 0 var(--space-s)
+      transition: border-color var(--transition-fast, 0) var(--timing, ease)
+      width: 100%
+
+      &::placeholder
+        color: var(--text-faint)
+
+      &[data-hovered]
+        border-color: var(--text-faint)
+
+    &[data-invalid] .react-aria-Input
+      border-color: var(--danger)
+
+    .react-aria-Text[slot='description']
+      @include typography.caption
+
+      color: var(--text-faint)
+
+    .react-aria-FieldError
+      @include typography.caption
+
+      color: var(--danger)
