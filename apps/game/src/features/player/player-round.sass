@@ -1,0 +1,74 @@
+@use '../../presentation/styles/typography'
+
+@layer components
+  .player-round
+    display: flex
+    flex: 1
+    flex-direction: column
+    gap: var(--space-m)
+
+    &.centred
+      align-items: center
+      justify-content: center
+      text-align: center
+
+    .eyebrow
+      @include typography.overline
+
+      color: var(--text-muted)
+
+    .revealed-title
+      font-size: clamp(1.5rem, 7vw, 2.25rem)
+      font-weight: 800
+      line-height: 1.1
+
+    .revealed-artist
+      color: var(--text-muted)
+
+    .you-scored
+      @include typography.numeric
+
+      color: var(--accent)
+      font-size: 2.5rem
+      font-weight: 800
+
+    .their-name
+      @include typography.caption
+
+      color: var(--text-muted)
+      text-align: center
+
+  .buzzer-area
+    justify-content: center
+
+    .buzzer
+      align-items: center
+      aspect-ratio: 1
+      background: var(--accent)
+      border: none
+      border-radius: var(--radius-full)
+      color: var(--accent-ink)
+      display: flex
+      font-size: clamp(1.5rem, 9vw, 3rem)
+      font-weight: 800
+      justify-content: center
+      margin: 0 auto
+      text-transform: uppercase
+      transition: transform var(--transition-fast, 0), background var(--transition-fast, 0)
+      width: min(78vw, 320px)
+
+      &[data-pressed],
+      &.claimed
+        background: var(--accent-strong, var(--accent))
+        transform: scale(0.94)
+
+      &[data-disabled]
+        background: var(--surface-raised)
+        color: var(--text-faint)
+
+    .blocker
+      @include typography.caption
+
+      color: var(--text-muted)
+      min-height: 1.5em
+      text-align: center

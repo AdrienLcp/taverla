@@ -75,6 +75,15 @@ export const endGameMessageSchema = z.object({
   type: z.literal('host.endGame')
 })
 
+/**
+ * Back to the lobby with the same phones in the same seats and the scores at
+ * zero. Distinct from `host.endGame` because keeping the room is the entire
+ * point: making everyone re-scan is what ends an evening after one game.
+ */
+export const playAgainMessageSchema = z.object({
+  type: z.literal('host.playAgain')
+})
+
 export const removePlayerMessageSchema = z.object({
   playerId: playerIdSchema,
   type: z.literal('host.removePlayer')
@@ -95,6 +104,7 @@ export const hostClientMessageSchema = z.discriminatedUnion('type', [
   revealMessageSchema,
   nextRoundMessageSchema,
   endGameMessageSchema,
+  playAgainMessageSchema,
   removePlayerMessageSchema
 ])
 
@@ -115,6 +125,7 @@ export const clientMessageSchema = z.discriminatedUnion('type', [
   revealMessageSchema,
   nextRoundMessageSchema,
   endGameMessageSchema,
+  playAgainMessageSchema,
   removePlayerMessageSchema
 ])
 
@@ -136,5 +147,6 @@ export const HOST_ONLY_MESSAGE_TYPES = new Set<ClientMessageType>([
   'host.reveal',
   'host.nextRound',
   'host.endGame',
+  'host.playAgain',
   'host.removePlayer'
 ])

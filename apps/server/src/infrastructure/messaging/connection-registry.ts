@@ -44,6 +44,13 @@ export const hasConnections = (code: RoomCode): boolean =>
   connectionsByRoom.has(code)
 
 /**
+ * Where a failure the host has to see goes when nobody asked for it — a track
+ * the catalogue would not serve while the room was advancing on its own.
+ */
+export const hostConnectionIn = (code: RoomCode): Connection | null =>
+  connectionsIn(code).find((connection) => connection.role === 'host') ?? null
+
+/**
  * The room keeps its `hostSessionId` after the host closes their tab, so this
  * is what separates "the host is reloading and may come back" from "a second
  * screen is trying to take the room over".

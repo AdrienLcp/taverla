@@ -20,10 +20,11 @@ const playerView: PlayerRoomView = {
     revealedTrack: null
   },
   settings: {
+    autoAdvanceMs: null,
     countdownMs: 3000,
     playbackDurationMs: 30_000,
     roundCount: 10,
-    source: { kind: 'chart' }
+    source: { genreId: 0, kind: 'chart' }
   },
   youId: 'p1'
 }

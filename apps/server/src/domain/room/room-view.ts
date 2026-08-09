@@ -7,6 +7,8 @@ import type {
 } from '@blindtest/protocol/room'
 import type { TrackIdentity } from '@blindtest/protocol/track'
 
+import { elapsedPlaybackMs } from '@/domain/round/round-service'
+
 import type { Participant, Room, Round } from './room'
 
 /**
@@ -17,6 +19,8 @@ import type { Participant, Room, Round } from './room'
 export const toHostView = (room: Room): HostRoomView => ({
   ...toBaseView(room),
   currentTrack: room.round?.track ?? null,
+  playbackElapsedMs:
+    room.round === null ? 0 : elapsedPlaybackMs(room.round, Date.now()),
   remainingPoolSize: room.trackPool.length
 })
 

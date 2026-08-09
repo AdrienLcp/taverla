@@ -29,7 +29,15 @@ export const hostTrackSchema = trackIdentitySchema.extend({
  * `api.deezer.com` answers without `Access-Control-Allow-Origin`.
  */
 export const trackSourceSchema = z.discriminatedUnion('kind', [
-  z.object({ kind: z.literal('chart') }),
+  /**
+   * A Deezer genre chart. `0` is the all-genres chart; the others are the
+   * numeric ids Deezer publishes at `/genre`, and each is a hundred tracks that
+   * are charting — which is the cheapest definition of "a song people know".
+   */
+  z.object({
+    genreId: z.number().int().nonnegative(),
+    kind: z.literal('chart')
+  }),
   z.object({ kind: z.literal('playlist'), playlistId: z.string().min(1) }),
   z.object({
     kind: z.literal('search'),

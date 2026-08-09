@@ -1,0 +1,41 @@
+@layer components
+  .switch
+    align-items: center
+    cursor: pointer
+    display: inline-flex
+    gap: var(--space-xs, 8px)
+
+    .track
+      background: var(--surface-raised)
+      border: 1px solid var(--border)
+      border-radius: var(--radius-full)
+      display: inline-flex
+      height: 26px
+      padding: 2px
+      transition: background var(--transition-fast, 0)
+      width: 46px
+
+    .thumb
+      background: var(--text-muted)
+      border-radius: var(--radius-full)
+      height: 20px
+      transition: transform var(--transition-fast, 0), background var(--transition-fast, 0)
+      width: 20px
+
+    &[data-selected] .track
+      background: var(--accent)
+      border-color: var(--accent)
+
+    &[data-selected] .thumb
+      background: var(--accent-ink)
+      transform: translateX(20px)
+
+    // The ring goes on the track rather than the label, because the track is
+    // what the eye reads as the control.
+    &[data-focus-visible] .track
+      outline: 2px solid var(--info)
+      outline-offset: 3px
+
+    &[data-disabled]
+      cursor: not-allowed
+      opacity: 0.45

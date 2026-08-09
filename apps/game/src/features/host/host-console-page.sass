@@ -23,11 +23,57 @@
         font-weight: 800
         line-height: 1
 
+      .round-index
+        @include typography.overline
+
+        color: var(--text-muted)
+
     .stage
       display: grid
       flex: 1
       gap: var(--space-l)
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))
+
+      &.split
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))
+
+      &.centred
+        align-content: center
+        gap: var(--space-m)
+        justify-items: center
+
+      .listening
+        @include typography.overline
+
+        color: var(--text-muted)
+
+      .final-title
+        @include typography.heading
+
+      .scoreboard
+        min-width: min(460px, 100%)
+
+    // Width driven by a CSS animation rather than a React timer: the clip runs
+    // for a duration the server already decided, and re-keying the element on a
+    // resume is what restarts it after a buzz.
+    .clip-progress
+      background: var(--surface-raised)
+      border-radius: var(--radius-full)
+      height: 6px
+      overflow: hidden
+      position: relative
+      width: min(560px, 100%)
+
+      &::after
+        animation: clip-drain var(--clip-remaining, 0ms) linear forwards
+        background: var(--accent)
+        content: ''
+        inset: 0
+        position: absolute
+
+      @media (prefers-reduced-motion: reduce)
+        &::after
+          animation: none
+          opacity: 0.4
 
     h2
       @include typography.heading
@@ -68,31 +114,6 @@
 
         color: var(--text-faint)
 
-      ul
-        display: flex
-        flex-direction: column
-        gap: var(--space-2xs)
-
-      li
-        align-items: center
-        background: var(--surface-raised)
-        border-radius: var(--radius-m)
-        display: flex
-        justify-content: space-between
-        padding: var(--space-xs) var(--space-s)
-
-        &.away
-          opacity: 0.45
-
-        .nickname
-          font-weight: 600
-
-        .score
-          @include typography.numeric
-
-          color: var(--accent)
-          font-weight: 700
-
     > footer
       align-items: center
       display: flex
@@ -103,3 +124,9 @@
         @include typography.caption
 
         color: var(--danger)
+
+@keyframes clip-drain
+  from
+    transform: translateX(0)
+  to
+    transform: translateX(-100%)

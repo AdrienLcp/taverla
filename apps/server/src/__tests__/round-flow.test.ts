@@ -39,10 +39,11 @@ vi.mock('@/infrastructure/music/deezer-client', () => ({
 const { createApp } = await import('@/app')
 
 const FAST_GAME: RoomSettings = {
+  autoAdvanceMs: null,
   countdownMs: 20,
   playbackDurationMs: 5_000,
   roundCount: 3,
-  source: { kind: 'chart' }
+  source: { genreId: 0, kind: 'chart' }
 }
 
 const WON_IT = { artistCorrect: true, titleCorrect: true }

@@ -8,3 +8,11 @@ export const socketOrigin = (): string =>
 
 /** Most-preferred first, as BCP-47 tags — `['fr-FR', 'fr', 'en-US']`. */
 export const preferredLocales = (): readonly string[] => navigator.languages
+
+/**
+ * Absent on iOS Safari, and silently so. Nothing may be built on top of it —
+ * it confirms a buzz that the screen already confirmed.
+ */
+export const buzzFeedback = (): void => {
+  navigator.vibrate?.(30)
+}

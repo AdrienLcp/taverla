@@ -16,6 +16,16 @@ const REQUEST_TIMEOUT_MS = 6_000
 const POOL_SIZE = 100
 
 /**
+ * Deezer's popularity score runs to about a million, and it is the one field
+ * that separates a song a room will recognise from the AI-generated lo-fi and
+ * bedroom uploads that free-text search is full of. Measured against the
+ * catalogue: charting hits and classics sit at 830k–990k (Bohemian Rhapsody
+ * 958k, Dancing Queen 946k), while the junk sits at 25k–405k. A blind test
+ * nobody can answer is not a hard blind test, it is a broken one.
+ */
+const MINIMUM_TRACK_RANK = 500_000
+
+/**
  * Deezer answers a bad request with HTTP 200 and an `error` object, so the
  * status code alone never tells you whether the call worked.
  */
@@ -33,6 +43,8 @@ const deezerTrackSchema = z.object({
   id: z.union([z.number(), z.string()]).transform(String),
   /** Empty on tracks Deezer will not stream in this country — unplayable, so unusable. */
   preview: z.string(),
+  /** Absent on some endpoints, and a missing score must not silently pass the floor. */
+  rank: z.number().nullish(),
   title: z.string()
 })
 
@@ -58,9 +70,7 @@ export const fetchTracksFor = async (
     return fetched
   }
 
-  const playable = fetched.data
-    .filter((track) => track.preview.length > 0)
-    .map(toSearchResult)
+  const playable = fetched.data.filter(isWorthGuessing).map(toSearchResult)
 
   return playable.length === 0
     ? Result.failure('no_tracks_available')
@@ -83,6 +93,9 @@ export const fetchHostTrack = async (
 
   const parsed = deezerTrackSchema.safeParse(response.data)
 
+  // The rank is not re-checked here: the pool already applied the floor, and a
+  // single-track lookup is Deezer's own `/track` endpoint, which reports a
+  // different score than the list did.
   if (!parsed.success || parsed.data.preview.length === 0) {
     return Result.failure('no_tracks_available')
   }
@@ -93,10 +106,13 @@ export const fetchHostTrack = async (
   })
 }
 
+const isWorthGuessing = (track: DeezerTrack): boolean =>
+  track.preview.length > 0 && (track.rank ?? 0) >= MINIMUM_TRACK_RANK
+
 const pathFor = (source: TrackSource): string => {
   switch (source.kind) {
     case 'chart':
-      return `/chart/0/tracks?limit=${POOL_SIZE}`
+      return `/chart/${source.genreId}/tracks?limit=${POOL_SIZE}`
     case 'playlist':
       return `/playlist/${encodeURIComponent(source.playlistId)}/tracks?limit=${POOL_SIZE}`
     case 'search':

@@ -1,0 +1,36 @@
+@use '../../presentation/styles/typography'
+
+@layer components
+  .playlist-picker
+    border-top: 1px solid var(--border)
+    display: flex
+    flex-direction: column
+    gap: var(--space-s)
+    margin-top: var(--space-m)
+    padding-top: var(--space-m)
+
+    // Twelve genres do not fit one pill row on a laptop, and a horizontal
+    // scroller hides the ones at the end from a host who is standing up.
+    .genres .segments
+      border-radius: var(--radius-m)
+      flex-wrap: wrap
+      gap: 2px
+
+    .error
+      @include typography.caption
+
+      color: var(--danger)
+
+    .preview
+      @include typography.caption
+
+      color: var(--text-faint)
+      display: flex
+      flex-direction: column
+      gap: 2px
+      list-style: none
+
+      li
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap

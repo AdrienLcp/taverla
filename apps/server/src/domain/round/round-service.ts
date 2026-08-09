@@ -215,22 +215,37 @@ export const finishGame = (room: Room, now: number): void => {
   touch(room, now)
 }
 
+/**
+ * The same phones in the same seats, scores at zero. `playedTrackIds` survives
+ * on purpose: a second game in the same room should not replay the tracks the
+ * first one just burnt through.
+ */
+export const restartGame = (room: Room, now: number): void => {
+  for (const participant of room.players.values()) {
+    participant.score = 0
+  }
+
+  room.phase = 'lobby'
+  room.round = null
+  touch(room, now)
+}
+
 export const isFinalRound = (room: Room): boolean =>
   (room.round?.index ?? 0) >= room.settings.roundCount
 
-export const remainingPlaybackMs = (room: Room, now: number): number => {
-  const round = room.round
-
-  if (round === null) {
-    return 0
-  }
-
-  const consumed =
+export const elapsedPlaybackMs = (round: Round, now: number): number =>
+  Math.round(
     round.playedMs +
-    (round.playingSince === null ? 0 : now - round.playingSince)
+      (round.playingSince === null ? 0 : now - round.playingSince)
+  )
 
-  return Math.max(0, room.settings.playbackDurationMs - consumed)
-}
+export const remainingPlaybackMs = (room: Room, now: number): number =>
+  room.round === null
+    ? 0
+    : Math.max(
+        0,
+        room.settings.playbackDurationMs - elapsedPlaybackMs(room.round, now)
+      )
 
 const resumeOrReveal = (room: Room, now: number): VerdictOutcome => {
   const round = room.round

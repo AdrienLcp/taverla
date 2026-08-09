@@ -33,10 +33,11 @@ const viewFor = (
   players: [{ id: 'me', isConnected: true, nickname: 'Alice', score: 0 }],
   round,
   settings: {
+    autoAdvanceMs: null,
     countdownMs: 3_000,
     playbackDurationMs: 30_000,
     roundCount: 10,
-    source: { kind: 'chart' }
+    source: { genreId: 0, kind: 'chart' }
   },
   youId: 'me'
 })

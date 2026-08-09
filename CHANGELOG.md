@@ -8,6 +8,21 @@ one part.
 
 ### Features
 
+- `[Game]` The host console runs an evening: a genre picker, audio scheduled
+  against the server clock, a judging panel that takes one tap, a reveal with
+  the cover art, running scores and a final board that keeps the players for
+  another game
+- `[Game]` The phone plays: a countdown synchronised with every other device, a
+  buzzer that answers on the press rather than the release, an honest reason
+  whenever it is dead, and the reveal on the small screen too
+- `[Server]` Only songs a room will recognise. Deezer's popularity score is the
+  one field that separates a hit from AI-generated lo-fi, and the floor is set
+  from measurements: classics sit at 830k–990k, the junk at 25k–405k
+- `[Game]` Twelve Deezer genre charts to choose from, so the evening is a few
+  thousand well-known tracks rather than today's global top 100
+- `[Game]` A volume slider, and a switch that chains rounds by itself — the
+  wait is served by the server, because the host screen is exactly the tab most
+  likely to be in the background when its timers get throttled
 - `[Server]` The round engine: a track drawn without repeats, a countdown every
   device lands on together, buzzes ordered by arrival, the host's verdict, and
   the reveal. A wrong answer locks that player out and the clip resumes for the

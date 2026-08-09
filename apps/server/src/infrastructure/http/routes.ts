@@ -70,6 +70,15 @@ export const registerHttpRoutes = (app: Hono): void => {
       const { q } = context.req.valid('query')
       const found = await fetchTracksFor({ kind: 'search', query: q })
 
+      // A search that matched nothing well-known enough to guess is an empty
+      // result, not a broken gateway — the caller renders "nothing here", and
+      // 502 is reserved for the catalogue actually being down.
+      if (found.status === 'failure' && found.error === 'no_tracks_available') {
+        const empty: TrackSearchResponse = { results: [] }
+
+        return context.json(empty)
+      }
+
       if (found.status === 'failure') {
         const error: ApiErrorResponse = {
           code: found.error,

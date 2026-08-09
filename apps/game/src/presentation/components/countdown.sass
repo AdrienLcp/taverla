@@ -1,0 +1,19 @@
+@layer components
+  .countdown
+    color: var(--accent)
+    font-size: clamp(4rem, 18vw, 12rem)
+    font-variant-numeric: tabular-nums
+    font-weight: 800
+    line-height: 1
+    text-align: center
+
+    @media (prefers-reduced-motion: no-preference)
+      animation: countdown-beat 900ms ease-out
+
+@keyframes countdown-beat
+  from
+    opacity: 0.4
+    transform: scale(0.82)
+  to
+    opacity: 1
+    transform: scale(1)

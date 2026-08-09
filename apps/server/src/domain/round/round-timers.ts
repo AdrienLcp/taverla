@@ -1,12 +1,12 @@
 import type { RoomCode } from '@blindtest/protocol/identifiers'
 
 /**
- * The two transitions a round makes on its own rather than on a message. They
- * are named rather than counted so that arming one always replaces the previous
- * one of the same kind — a countdown restarted mid-flight must not leave the
- * first one running.
+ * The transitions a round makes on its own rather than on a message. They are
+ * named rather than counted so that arming one always replaces the previous one
+ * of the same kind — a countdown restarted mid-flight must not leave the first
+ * one running.
  */
-export type RoundTimerKind = 'countdown' | 'playback'
+export type RoundTimerKind = 'advance' | 'countdown' | 'playback'
 
 const timersByRoom = new Map<
   RoomCode,

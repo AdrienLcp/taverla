@@ -1,0 +1,45 @@
+@use '../../presentation/styles/layout'
+@use '../../presentation/styles/typography'
+
+@layer components
+  .verdict-panel
+    @include layout.panel
+
+    display: flex
+    flex-direction: column
+    gap: var(--space-m)
+    text-align: center
+    width: min(720px, 100%)
+
+    h2
+      @include typography.heading
+
+    .answer
+      background: var(--surface-raised)
+      border-radius: var(--radius-m)
+      padding: var(--space-m)
+
+      .title
+        font-size: clamp(1.5rem, 4vw, 2.5rem)
+        font-weight: 700
+        line-height: 1.1
+
+      .artist
+        color: var(--text-muted)
+        margin-top: var(--space-2xs)
+
+    .choices
+      display: grid
+      gap: var(--space-s)
+      grid-template-columns: repeat(auto-fit, minmax(148px, 1fr))
+
+    // The one destructive answer, so it reads as the odd one out rather than as
+    // a fourth equal option the host has to read to tell apart.
+    .choice.miss
+      --control-ink: var(--danger)
+
+      border-color: var(--danger)
+
+      &[data-hovered]
+        background: color-mix(in srgb, var(--danger) 14%, transparent)
+        border-color: var(--danger)

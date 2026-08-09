@@ -7,6 +7,9 @@ import { isThemePreference, type ThemePreference } from '@/helpers/theme'
 const LOCALE_KEY = 'blindtest:locale'
 const NICKNAME_KEY = 'blindtest:nickname'
 const THEME_KEY = 'blindtest:theme'
+const VOLUME_KEY = 'blindtest:volume'
+
+export const DEFAULT_VOLUME = 0.8
 
 /**
  * `null` means "never chosen", which is not the same as choosing the default:
@@ -52,6 +55,22 @@ export const readStoredNickname = (): Nickname | null => {
 
 export const writeStoredNickname = (nickname: Nickname): void => {
   write(NICKNAME_KEY, nickname)
+}
+
+/**
+ * The host machine's own loudness, not the room's — it belongs to whichever
+ * laptop is plugged into the speakers, so it never travels over the socket.
+ */
+export const readStoredVolume = (): number => {
+  const stored = Number.parseFloat(read(VOLUME_KEY) ?? '')
+
+  return Number.isFinite(stored) && stored >= 0 && stored <= 1
+    ? stored
+    : DEFAULT_VOLUME
+}
+
+export const writeStoredVolume = (volume: number): void => {
+  write(VOLUME_KEY, String(volume))
 }
 
 const read = (key: string): string | null => {

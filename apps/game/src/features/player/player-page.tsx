@@ -1,11 +1,9 @@
 import { type FormEvent, useState } from 'react'
-import { Form, Button as ReactAriaButton } from 'react-aria-components'
+import { Form } from 'react-aria-components'
 
 import type { ProtocolErrorCode } from '@blindtest/protocol/error-code'
 import type { RoomCode } from '@blindtest/protocol/identifiers'
 import type { PlayerRoomView } from '@blindtest/protocol/room'
-
-import { findBuzzBlocker } from '@blindtest/core/round/buzz-eligibility'
 
 import { NotFoundPage } from '@/features/not-found/not-found-page'
 import {
@@ -21,10 +19,9 @@ import { Button } from '@/presentation/components/button'
 import { ConnectionStatus } from '@/presentation/components/connection-status'
 import { TextField } from '@/presentation/components/text-field'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
-import {
-  buzzBlockerKey,
-  protocolErrorKey
-} from '@/presentation/i18n/translation'
+import { protocolErrorKey } from '@/presentation/i18n/translation'
+
+import { PlayerRound } from './player-round'
 
 import './player-page.sass'
 
@@ -145,10 +142,9 @@ const Lobby = ({
       ) : (
         <>
           <Scoreline view={view} />
-          <Buzzer
-            onBuzz={(roundId) => {
-              send({ roundId, type: 'player.buzz' })
-            }}
+          <PlayerRound
+            clock={clock}
+            onBuzz={(roundId) => send({ roundId, type: 'player.buzz' })}
             view={view}
           />
         </>
@@ -170,45 +166,6 @@ const Scoreline = ({ view }: { view: PlayerRoomView }) => {
       </p>
       <p className='others'>
         {translate('player.roomSize', { count: view.players.length })}
-      </p>
-    </section>
-  )
-}
-
-const Buzzer = ({
-  onBuzz,
-  view
-}: {
-  onBuzz: (roundId: string) => void
-  view: PlayerRoomView
-}) => {
-  const translate = useTranslate()
-  const blocker = findBuzzBlocker(view)
-  const roundId = view.round?.id ?? null
-
-  return (
-    <section className='buzzer-area'>
-      {/*
-        `onPressStart`, not `onPress`: a buzzer has to fire the instant the
-        thumb lands, and waiting for the release costs tens of milliseconds in a
-        race that is decided by exactly that. react-aria normalises it across
-        touch, mouse and keyboard, so the keyboard player is not penalised.
-      */}
-      <ReactAriaButton
-        className='buzzer'
-        isDisabled={blocker !== null || roundId === null}
-        onPressStart={() => {
-          if (roundId !== null) {
-            onBuzz(roundId)
-          }
-        }}
-      >
-        {translate('blindtest.buzz.action')}
-      </ReactAriaButton>
-      <p className='blocker' role='status'>
-        {blocker === null
-          ? translate('blindtest.buzz.ready')
-          : translate(buzzBlockerKey(blocker))}
       </p>
     </section>
   )

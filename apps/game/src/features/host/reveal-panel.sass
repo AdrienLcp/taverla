@@ -1,0 +1,67 @@
+@use '../../presentation/styles/layout'
+@use '../../presentation/styles/typography'
+
+@layer components
+  .reveal-panel
+    @include layout.panel
+
+    align-items: center
+    display: flex
+    flex-wrap: wrap
+    gap: var(--space-l)
+
+    // Deezer serves covers at 250 px and nothing larger, so the layout is built
+    // around that rather than discovering the ceiling at the end.
+    .cover
+      border-radius: var(--radius-m)
+      height: 250px
+      object-fit: cover
+      width: 250px
+
+      &.placeholder
+        background: var(--surface-raised)
+
+    .identity
+      flex: 1
+      min-width: 220px
+
+      .eyebrow
+        @include typography.overline
+
+        color: var(--text-muted)
+
+      .title
+        font-size: clamp(1.75rem, 4vw, 3rem)
+        font-weight: 800
+        line-height: 1.05
+
+      .artist
+        color: var(--text-muted)
+        font-size: 1.25rem
+        margin-top: var(--space-2xs)
+
+      .nobody,
+      .scorers
+        margin-top: var(--space-m)
+
+      .nobody
+        @include typography.caption
+
+        color: var(--text-faint)
+
+      .scorers
+        display: flex
+        flex-direction: column
+        gap: var(--space-2xs)
+        list-style: none
+
+        li
+          display: flex
+          gap: var(--space-s)
+          justify-content: space-between
+
+        .points
+          @include typography.numeric
+
+          color: var(--accent)
+          font-weight: 700

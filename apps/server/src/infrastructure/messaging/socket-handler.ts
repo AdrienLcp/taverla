@@ -33,10 +33,11 @@ import {
   isFinalRound,
   registerBuzz,
   releaseBuzz,
+  restartGame,
   revealRound,
   type VerdictOutcome
 } from '@/domain/round/round-service'
-import { discardPool } from '@/domain/round/track-pool'
+import { discardPoolIfStale } from '@/domain/round/track-pool'
 import { logger } from '@/infrastructure/logging/logger'
 
 import type { Connection, Outbound } from './connection'
@@ -48,6 +49,7 @@ import {
 import { broadcastRoom, sendError, sendPong, sendWelcome } from './outbound'
 import {
   abandonRound,
+  armAutoAdvance,
   armPlaybackTimeout,
   beginRound,
   holdPlaybackTimeout
@@ -276,12 +278,16 @@ export const createRoomSocketEvents = (
         end(room)
         break
       }
+      case 'host.playAgain': {
+        replay(outbound, room)
+        break
+      }
       case 'host.removePlayer': {
         evict(message.playerId, room)
         break
       }
       case 'host.updateSettings': {
-        reconfigure(message.settings, outbound, room)
+        reconfigure(message.settings, room)
         break
       }
     }
@@ -335,7 +341,7 @@ export const createRoomSocketEvents = (
       return
     }
 
-    void beginRound({ hostOutbound: outbound, room })
+    void beginRound(room)
   }
 
   const judge = (
@@ -388,6 +394,7 @@ export const createRoomSocketEvents = (
     abandonRound(room.code)
     revealRound(room, Date.now())
     broadcastRoom(room)
+    armAutoAdvance(room)
   }
 
   const advance = (outbound: Outbound, room: Room): void => {
@@ -407,12 +414,28 @@ export const createRoomSocketEvents = (
       return
     }
 
-    void beginRound({ hostOutbound: outbound, room })
+    void beginRound(room)
   }
 
   const end = (room: Room): void => {
     abandonRound(room.code)
     finishGame(room, Date.now())
+    broadcastRoom(room)
+  }
+
+  const replay = (outbound: Outbound, room: Room): void => {
+    if (room.phase !== 'finished' && room.phase !== 'revealed') {
+      sendError(outbound, {
+        code: 'wrong_phase',
+        fatal: false,
+        message: 'The game is still running'
+      })
+
+      return
+    }
+
+    abandonRound(room.code)
+    restartGame(room, Date.now())
     broadcastRoom(room)
   }
 
@@ -424,28 +447,19 @@ export const createRoomSocketEvents = (
   }
 
   /**
-   * The pool is dropped whatever changed. Refilling costs one request, where a
-   * pool left over from a source the host has just replaced is a bug that
-   * survives the rest of the game.
+   * Allowed in every phase, because the host has to be able to flip
+   * auto-advance on while a reveal is already on screen. The pool is dropped
+   * only when the source actually changed — a pool left over from a source the
+   * host has just replaced is a bug that survives the rest of the game, and
+   * dropping it on an unrelated edit costs a needless catalogue request.
    */
-  const reconfigure = (
-    settings: RoomSettings,
-    outbound: Outbound,
-    room: Room
-  ): void => {
-    if (room.phase !== 'lobby') {
-      sendError(outbound, {
-        code: 'wrong_phase',
-        fatal: false,
-        message: 'Settings are locked once the game starts'
-      })
-
-      return
-    }
+  const reconfigure = (settings: RoomSettings, room: Room): void => {
+    const previousSource = room.settings.source
 
     updateSettings(room, settings, Date.now())
-    discardPool(room)
+    discardPoolIfStale({ previousSource, room })
     broadcastRoom(room)
+    armAutoAdvance(room)
   }
 
   const settle = (outcome: VerdictOutcome | null, room: Room): void => {
@@ -458,6 +472,10 @@ export const createRoomSocketEvents = (
     }
 
     broadcastRoom(room)
+
+    if (outcome === 'revealed') {
+      armAutoAdvance(room)
+    }
   }
 
   return {

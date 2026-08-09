@@ -4,6 +4,8 @@ import type { Room } from '@/domain/room/room'
 import { findRoom } from '@/domain/room/room-store'
 import {
   beginPlayback,
+  finishGame,
+  isFinalRound,
   openRound,
   remainingPlaybackMs,
   revealRound
@@ -16,7 +18,7 @@ import {
 import { drawPlayableTrack } from '@/domain/round/track-pool'
 import { logger } from '@/infrastructure/logging/logger'
 
-import type { Outbound } from './connection'
+import { hostConnectionIn } from './connection-registry'
 import { broadcastRoom, sendError } from './outbound'
 
 /**
@@ -27,21 +29,16 @@ import { broadcastRoom, sendError } from './outbound'
 const roomsDrawing = new Set<RoomCode>()
 
 /**
- * The three time-driven transitions live here rather than in the socket
- * handler: a countdown that lands, a clip that runs out, and a resume after a
- * miss are not messages anyone sent, but they still end in a broadcast.
+ * The time-driven transitions live here rather than in the socket handler: a
+ * countdown that lands, a clip that runs out, and a reveal that moves on by
+ * itself are not messages anyone sent, but they still end in a broadcast.
  */
-export const beginRound = async ({
-  hostOutbound,
-  room
-}: {
-  hostOutbound: Outbound
-  room: Room
-}): Promise<void> => {
+export const beginRound = async (room: Room): Promise<void> => {
   if (roomsDrawing.has(room.code)) {
     return
   }
 
+  cancelRoundTimer(room.code, 'advance')
   roomsDrawing.add(room.code)
 
   try {
@@ -52,11 +49,16 @@ export const beginRound = async ({
         code: room.code,
         reason: drawn.error
       })
-      sendError(hostOutbound, {
-        code: drawn.error,
-        fatal: false,
-        message: 'Could not load a track from the music catalogue'
-      })
+
+      const host = hostConnectionIn(room.code)
+
+      if (host !== null) {
+        sendError(host, {
+          code: drawn.error,
+          fatal: false,
+          message: 'Could not load a track from the music catalogue'
+        })
+      }
 
       return
     }
@@ -102,6 +104,42 @@ export const armPlaybackTimeout = (room: Room): void => {
     run: () => {
       revealRound(room, Date.now())
       broadcastRoom(room)
+      armAutoAdvance(room)
+    }
+  })
+}
+
+/**
+ * Idempotent, and called from every path that reaches a reveal as well as from
+ * the switch itself — a host who turns the mode on while a reveal is already on
+ * screen expects that reveal to move on, not the one after it.
+ */
+export const armAutoAdvance = (room: Room): void => {
+  const delayMs = room.settings.autoAdvanceMs
+
+  if (room.phase !== 'revealed' || delayMs === null) {
+    cancelRoundTimer(room.code, 'advance')
+
+    return
+  }
+
+  scheduleRoundTimer({
+    code: room.code,
+    delayMs,
+    kind: 'advance',
+    run: () => {
+      if (room.phase !== 'revealed') {
+        return
+      }
+
+      if (isFinalRound(room)) {
+        finishGame(room, Date.now())
+        broadcastRoom(room)
+
+        return
+      }
+
+      void beginRound(room)
     }
   })
 }

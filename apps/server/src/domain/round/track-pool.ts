@@ -1,4 +1,4 @@
-import type { HostTrack } from '@blindtest/protocol/track'
+import type { HostTrack, TrackSource } from '@blindtest/protocol/track'
 
 import { Result } from '@blindtest/core/helpers/result'
 
@@ -44,9 +44,36 @@ export const drawPlayableTrack = async (
   return Result.failure('no_tracks_available')
 }
 
-/** Called when the host changes the source, so the next draw comes from the new one. */
-export const discardPool = (room: Room): void => {
-  room.trackPool = []
+/**
+ * A pool left over from a source the host has just replaced would keep serving
+ * the old catalogue for the rest of the game, so it is dropped — but only when
+ * the source really changed, since refilling costs a request.
+ */
+export const discardPoolIfStale = ({
+  previousSource,
+  room
+}: {
+  previousSource: TrackSource
+  room: Room
+}): void => {
+  if (!isSameSource(previousSource, room.settings.source)) {
+    room.trackPool = []
+  }
+}
+
+const isSameSource = (left: TrackSource, right: TrackSource): boolean => {
+  if (left.kind !== right.kind) {
+    return false
+  }
+
+  switch (left.kind) {
+    case 'chart':
+      return true
+    case 'playlist':
+      return right.kind === 'playlist' && left.playlistId === right.playlistId
+    case 'search':
+      return right.kind === 'search' && left.query === right.query
+  }
 }
 
 const refillWhenEmpty = async (

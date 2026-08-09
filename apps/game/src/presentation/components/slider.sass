@@ -1,0 +1,52 @@
+@use '../styles/typography'
+
+@layer components
+  .slider
+    display: flex
+    flex-direction: column
+    gap: var(--space-2xs, 6px)
+    min-width: 180px
+
+    .slider-header
+      @include typography.overline
+
+      color: var(--text-muted)
+      display: flex
+      gap: var(--space-s, 12px)
+      justify-content: space-between
+
+    .react-aria-SliderTrack
+      align-items: center
+      display: flex
+      height: 24px
+      position: relative
+      width: 100%
+
+      &::before
+        background: var(--surface-raised)
+        border-radius: var(--radius-full)
+        content: ''
+        height: 6px
+        position: absolute
+        width: 100%
+
+    .fill
+      background: var(--accent)
+      border-radius: var(--radius-full)
+      height: 6px
+      position: absolute
+      width: var(--fill, 0%)
+
+    .react-aria-SliderThumb
+      background: var(--text)
+      border-radius: var(--radius-full)
+      height: 18px
+      top: 50%
+      width: 18px
+
+      &[data-dragging]
+        background: var(--accent)
+
+      &[data-focus-visible]
+        outline: 2px solid var(--info)
+        outline-offset: 3px
