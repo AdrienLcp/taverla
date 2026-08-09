@@ -141,6 +141,15 @@
         font-weight: 700
         padding: var(--space-2xs) var(--space-s)
 
+      // Why the launch is refusing, under the control that is refusing. The
+      // roster says the same thing on the other side of the screen, which is
+      // too far from a greyed button to read as its reason.
+      .reason
+        @include typography.caption
+
+        color: var(--ink-muted)
+        margin-top: calc(var(--space-m) * -1 + var(--space-2xs))
+
 @keyframes clip-drain
   from
     transform: translateX(0)

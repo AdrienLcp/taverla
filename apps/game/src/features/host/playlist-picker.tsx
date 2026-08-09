@@ -1,5 +1,6 @@
 import type React from 'react'
 import { useEffect, useState } from 'react'
+import { Form } from 'react-aria-components'
 
 import type { RoomSettings } from '@taverla/protocol/room'
 import type { TrackSource } from '@taverla/protocol/track'
@@ -194,7 +195,12 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
       )}
 
       {draft.kind === 'search' && (
-        <>
+        <Form
+          onSubmit={(event) => {
+            event.preventDefault()
+            void search()
+          }}
+        >
           <TextField
             label={translate('host.source.query')}
             onChange={(query) => {
@@ -205,14 +211,12 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
           <Button
             isDisabled={draft.query.trim().length === 0}
             isPending={isSearching}
-            onPress={() => {
-              void search()
-            }}
+            type='submit'
             variant='ghost'
           >
             {translate('host.source.preview')}
           </Button>
-        </>
+        </Form>
       )}
 
       {draft.kind === 'playlist' && (

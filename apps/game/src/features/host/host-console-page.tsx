@@ -292,14 +292,21 @@ const Actions = ({
   const translate = useTranslate()
 
   if (view.phase === 'lobby') {
+    const isRoomEmpty = view.players.length === 0
+
     return (
-      <Button
-        isDisabled={!isLive || view.players.length === 0}
-        onPress={onStart}
-        size='large'
-      >
-        {translate('host.startGame')}
-      </Button>
+      <>
+        <Button
+          isDisabled={!isLive || isRoomEmpty}
+          onPress={onStart}
+          size='large'
+        >
+          {translate('host.startGame')}
+        </Button>
+        {isRoomEmpty && (
+          <p className='reason'>{translate('host.needsPlayer')}</p>
+        )}
+      </>
     )
   }
 

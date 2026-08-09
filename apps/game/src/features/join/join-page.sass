@@ -15,6 +15,32 @@
 
       font-size: clamp(2.25rem, 7.5vmin, 4.5rem)
 
+    // The same two-column frame as the host's lobby, and for the same reason:
+    // this is the screen the host opens on the big display to make a room. A
+    // 620px ribbon down the middle of a laptop is the phone layout, and it puts
+    // the second way in below the fold on a screen with room to spare.
+    @media (width >= 900px)
+      // `align-content`, not just `align-items`: the page is a flex child that
+      // fills the height, so without it the three auto rows share the leftover
+      // and the two ways in drift apart down the column.
+      align-content: center
+      align-items: center
+      column-gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
+      display: grid
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr)
+      max-width: none
+
+      > header
+        grid-column: 1
+        grid-row: 1 / 4
+
+        h1
+          font-size: clamp(3rem, 9vmin, 7rem)
+
+      > .action,
+      > .labelled-separator
+        grid-column: 2
+
     // No rule of its own: the one boundary on this page is the separator
     // between the two ways in, and a section that draws its own edge as well
     // gives the page three identical lines to tell apart.

@@ -67,6 +67,7 @@ export const EN_DICTIONARY = {
   'host.genre.464': 'Metal',
   'host.genre.label': 'Which music',
   'host.invite.title': 'Scan to play',
+  'host.needsPlayer': 'One phone has to join before the game can start',
   'host.nextRound': 'Next round',
   'host.playAgain': 'Play again',
   'host.players.empty': 'Nobody has joined yet. The QR code is waiting.',

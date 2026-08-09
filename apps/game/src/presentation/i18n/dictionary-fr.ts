@@ -69,6 +69,7 @@ export const FR_DICTIONARY: Dictionary = {
   'host.genre.464': 'Metal',
   'host.genre.label': 'Quelle musique',
   'host.invite.title': 'Scanne pour jouer',
+  'host.needsPlayer': 'Il faut qu’un téléphone rejoigne avant de lancer',
   'host.nextRound': 'Tour suivant',
   'host.playAgain': 'Rejouer',
   'host.players.empty': 'Personne n’a encore rejoint. Le QR code attend.',
