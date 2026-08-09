@@ -38,20 +38,32 @@ seriously; it is a bigger change than this stage.
 Fly is the natural first choice: one `fly.toml`, one region, WebSockets need no
 configuration.
 
-## Work
+## Done
 
-- **Build the server for production.** It runs through `tsx` today, which is a
-  dev tool. Bundle it (`tsdown` or `tsup`, `noExternal` the workspace packages
-  so Node never has to resolve them) or run `tsx` deliberately and say why.
-- **Serve the static build from Hono** — `hono/serve-static` for `apps/game/dist`,
-  with an SPA fallback to `index.html` so `/play/K3M9` resolves on a cold load.
-  That single change is what gives you one origin.
-- **Dockerfile**, multi-stage, `pnpm deploy --filter` rather than copying
-  `node_modules` — pnpm's symlinks do not survive a copy.
-- **`ALLOWED_ORIGINS` and `PORT`** are already read from the environment.
-- **HTTPS is not optional.** `getUserMedia` is not in play, but `crypto.randomUUID`
-  requires a secure context, and without it `ensureSessionId` throws and nobody
-  can join. Test on the deployed URL, not on localhost, which is exempt.
+- **Hono serves the static build**, behind `SERVE_GAME_FROM`. Its absence is
+  what keeps development on Vite; its presence is what makes production one
+  origin. Registered after the API and the socket upgrade, because the SPA
+  fallback answers everything and would otherwise swallow them.
+- **`render.yaml`** — free tier, one instance, `/api/health` as the check. The
+  instance count is pinned with a comment: two of them would each hold half the
+  rooms in memory and a phone would reach the wrong one.
+- **`crypto.randomUUID` no longer throws off a secure origin.** It exists only
+  in a secure context, and the obvious way to try this on real phones is plain
+  HTTP on a LAN address. `ensureSessionId` now falls back, and says why the
+  weaker id is acceptable for a seat claim.
+
+Verified locally by running the server with `SERVE_GAME_FROM` set: index served,
+`/host/YDEQ` resolving on a cold load, the API answering, the socket connecting
+on the same port, and the QR code encoding that origin.
+
+## Still to do
+
+- **The server still runs through `tsx`**, a dev tool, deliberately for now. It
+  costs a slower boot on a free instance that sleeps. Bundling it (`tsdown`,
+  `noExternal` the workspace packages) is the fix when the cold start annoys.
+- **No Dockerfile.** Render's native Node runtime handles the pnpm workspace, so
+  there is nothing for one to solve yet.
+- **Rate-limit `POST /api/rooms`** — unauthenticated and it allocates memory.
 
 ## Worth adding at the same time
 
@@ -64,7 +76,8 @@ configuration.
 
 ## Done when
 
-- A phone on mobile data can scan the QR code and play
+- A phone on mobile data can scan the QR code and play — **not verified**, no
+  deployment exists yet; everything above was checked against localhost
 - `/play/K3M9` resolves on a cold load, not only via client navigation
 - The socket survives ten minutes idle — check the platform's idle timeout, and
   note that the 5-second ping already keeps it warm

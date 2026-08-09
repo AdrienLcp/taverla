@@ -8,6 +8,9 @@ one part.
 
 ### Features
 
+- `[Server]` One origin in production: Hono serves the built SPA with an SPA
+  fallback, so `/play/K3M9` resolves on a cold load and the QR code's
+  `location.origin` holds without a proxy or a second domain
 - `[Game]` The host console runs an evening: a genre picker, audio scheduled
   against the server clock, a judging panel that takes one tap, a reveal with
   the cover art, running scores and a final board that keeps the players for
@@ -50,6 +53,12 @@ one part.
   QR code can switch language without a settings page
 - `[Game]` The join form remembers what you like being called, so the second
   room of the evening costs one tap instead of typing a name again
+
+### Fixes
+
+- `[Game]` Taking a seat no longer throws off a secure origin.
+  `crypto.randomUUID` exists only in a secure context, and testing on real
+  phones over the LAN is plain HTTP on an IP address
 
 ### Internal
 

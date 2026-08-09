@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: blindtest
+    runtime: node
+    plan: free
+    # Rooms live in a Map in one process and sockets stay open for the length of
+    # a party, so this deployment must stay a single long-running instance. Do
+    # not raise the instance count: two of them would each hold half the rooms
+    # and a phone would reach the wrong one.
+    numInstances: 1
+    healthCheckPath: /api/health
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm build
+    startCommand: pnpm --filter @blindtest/server start
+    envVars:
+      - key: NODE_VERSION
+        value: '24'
+      # Relative to the server package, because `pnpm --filter` runs the script
+      # from that package's directory rather than the repository root.
+      - key: SERVE_GAME_FROM
+        value: ../game/dist

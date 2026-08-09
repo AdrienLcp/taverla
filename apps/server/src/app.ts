@@ -2,6 +2,7 @@ import { createNodeWebSocket } from '@hono/node-ws'
 import { Hono } from 'hono'
 
 import { registerHttpRoutes } from '@/infrastructure/http/routes'
+import { registerStaticSite } from '@/infrastructure/http/static-site'
 import { createRoomSocketEvents } from '@/infrastructure/messaging/socket-handler'
 
 /**
@@ -21,6 +22,7 @@ export const createApp = () => {
   )
 
   registerHttpRoutes(app)
+  registerStaticSite(app)
 
   return { app, injectWebSocket }
 }

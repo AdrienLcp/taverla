@@ -34,12 +34,25 @@ export const ensureSessionId = (scope: SessionScope): SessionId => {
     return stored
   }
 
-  const created = crypto.randomUUID()
+  const created = mintSessionId()
 
   write(scope, created)
 
   return created
 }
+
+/**
+ * `crypto.randomUUID` exists only in a secure context, and the obvious way to
+ * try this on real phones — plain HTTP on a LAN address — is not one. There it
+ * is `undefined`, and calling it would throw before anyone could take a seat.
+ *
+ * The fallback is not cryptographically strong and does not need to be: a
+ * session id claims a seat in a room whose code is being read aloud in the same
+ * living room.
+ */
+const mintSessionId = (): SessionId =>
+  crypto.randomUUID?.() ??
+  `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`
 
 const read = (scope: SessionScope): SessionId | null => {
   try {
