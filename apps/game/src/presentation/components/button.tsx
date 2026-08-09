@@ -13,10 +13,11 @@ import './button.sass'
 type ButtonProps = ReactAriaButtonProps & {
   /**
    * Physical size (default: `'medium'`):
+   * - `'small'` — an action beside something, never under it
    * - `'medium'` — the default control size
    * - `'large'` — meant to be hit with a thumb, or read across a room
    */
-  size?: 'medium' | 'large'
+  size?: 'small' | 'medium' | 'large'
   /**
    * Visual weight (default: `'filled'`):
    * - `'filled'` — the accent action, one per screen

@@ -75,6 +75,38 @@ Controls are blocks: `filled` inverts the field, `outlined` is ruled in ink,
 `ghost` is underlined. Disabled is **ruled, never dimmed** — fading a filled
 block takes its label's contrast with it.
 
+**The edge says control, the ground says which kind.** Three materials, and the
+distinction only works because all three carry the same 3px ink edge:
+
+| Material | Ground | Is |
+|---|---|---|
+| `filled` | ink | the one action on the screen |
+| `outlined` | the field | an action of equal standing |
+| input | `--cut` paper | something you write on |
+
+Bare paper with no edge belongs to the things you only *look* at — the QR card,
+the cover, the reveal panel. An input that borrowed it was the same block as a
+filled button with the values swapped, and it was **taller than the button that
+submitted it**, which is what made a form read as a stack of slabs. An input is
+never taller than its own action.
+
+Three sizes: `small` (40px) for an action that sits *beside* something, `medium`
+(52px) for the ordinary control, `large` (72px) for a thumb or a room. Before
+`small` existed every secondary action was a 52px block, so every one of them
+read as a second primary action.
+
+### Icons
+
+There is an icon family, and it is authored rather than installed. Every glyph
+is `Icon` — a 24-unit grid, `1.25em`, 3.5 units of stroke, butt caps, miter
+joins — which lands the stroke on the stem weight of Archivo 900 beside it. A
+library's 2-unit round-capped hairline reads as a different product's UI next
+to lettering this heavy, and tuning one to match costs more than drawing the
+two or three glyphs this product actually needs.
+
+A glyph never travels alone: it sits beside the word, because a grandparent and
+a child are both expected users and a bare icon asks them to already know.
+
 ## Motion
 
 One authored moment per event, all of it collapsing to nothing under

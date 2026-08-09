@@ -10,7 +10,7 @@ import './link.sass'
 
 type LinkProps = ReactAriaLinkProps & {
   /** Same scale as `Button` (default: `'medium'`). */
-  size?: 'medium' | 'large'
+  size?: 'small' | 'medium' | 'large'
   /** Same weights as `Button` (default: `'filled'`). */
   variant?: 'filled' | 'outlined' | 'ghost'
 }

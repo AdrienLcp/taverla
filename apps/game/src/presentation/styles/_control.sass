@@ -27,6 +27,16 @@
   transition: background-color var(--transition-fast, 0) var(--timing, ease), color var(--transition-fast, 0) var(--timing, ease), transform var(--transition-fast, 0) var(--timing, ease)
   white-space: nowrap
 
+  // A step below the control voice, for an action that sits beside something
+  // rather than under it — copying a code the room is already reading. Without
+  // it every secondary action in the product was a 52px block, which is why
+  // they all read as second primary actions.
+  &.small
+    font-size: 1rem
+    gap: var(--space-2xs)
+    min-height: 40px
+    padding: 0 var(--space-s)
+
   &.medium
     min-height: 52px
     padding: 0 var(--space-m)

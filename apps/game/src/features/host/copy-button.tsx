@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 
 import { copyToClipboard } from '@/infrastructure/env'
 import { Button } from '@/presentation/components/button'
+import { CheckIcon } from '@/presentation/components/check-icon'
+import { CopyIcon } from '@/presentation/components/copy-icon'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import type { TranslationKey } from '@/presentation/i18n/translation'
 
@@ -26,6 +28,10 @@ type CopyButtonProps = {
  * rather than a note beside it: a control that renames itself to "Copied" is
  * announced to a screen reader on the press it just took, and takes no room on
  * the screen when it has nothing to say.
+ *
+ * The word stays beside the glyph rather than giving way to it. Both a child
+ * and a grandparent are expected here, and a bare icon asks them to already
+ * know what it means.
  */
 export const CopyButton = ({ value }: CopyButtonProps) => {
   const translate = useTranslate()
@@ -51,12 +57,13 @@ export const CopyButton = ({ value }: CopyButtonProps) => {
 
   return (
     <Button
-      className='copy-button'
       onPress={() => {
         void copy()
       }}
+      size='small'
       variant='outlined'
     >
+      {state === 'copied' ? <CheckIcon /> : <CopyIcon />}
       {translate(COPY_KEYS[state])}
     </Button>
   )
