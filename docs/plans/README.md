@@ -14,7 +14,9 @@ describes the code is worse than no plan.
 | [05 — Design pass](05-design-pass.md) | **done** | `/impeccable`: a visual world, motion, the real polish |
 | [06 — Testing](06-testing.md) | next | Server socket tests, component tests, Playwright end-to-end |
 | [07 — Language & appearance](07-i18n.md) | **done** | English and French, light and dark, a preferences bar |
-| [08 — Deploy](08-deploy.md) | | One origin serving both, somewhere friends can reach |
+| [08 — Deploy](08-deploy.md) | **done** | One origin serving both, somewhere friends can reach |
+| [09 — Answer modes](09-answer-modes.md) | | Four choices or a typed answer, everyone at once, scored by speed |
+| [10 — Per-device audio](10-per-device-audio.md) | | A host switch so every phone plays the clip itself |
 
 ## Order, and what can move
 
@@ -22,6 +24,10 @@ describes the code is worse than no plan.
 behaviour the previous one adds. 05 through 08 are independent of each other and
 can be taken in any order once 04 lands — though running the design pass before
 the screens exist wastes it.
+
+09 and 10 are the first stages added after the game shipped, from playing it
+rather than from planning it. 09 is much the larger: it is the first thing that
+breaks the assumption that exactly one player acts at a time.
 
 07 was taken first, out of order and deliberately: routing strings and colours
 through a layer costs an afternoon before a design pass and a rewrite after one.

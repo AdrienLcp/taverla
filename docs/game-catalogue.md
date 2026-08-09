@@ -80,6 +80,21 @@ team on the player model and a turn owner.
 If only one is built next, **Le Fake**. It pays for the submit-then-vote engine,
 and five other games then cost a weekend each.
 
+## An answer mode is not a game
+
+Settled while playing the first one. Four choices on screen and a typed answer
+are **modes of the blind test**, not entries in the table above: the pool, the
+audio, the countdown, the reveal and the scoreboard are identical, and only who
+acts, when the round ends and who decides differ. They live behind
+`RoomSettings.answerMode`, and they are stage 09.
+
+The distinction is worth holding. *Reflex race* and *Quiz* really are separate
+games of the same shape, because they have no track. A blind test answered by
+tapping one of four covers is still a blind test.
+
+What they do change is an assumption everything shipped so far rests on:
+**exactly one player acts at a time**. That is the expensive part, not the UI.
+
 ## The seams, and what it costs to keep them open
 
 **Room state and game state are fused today.** `RoomPhase` is
