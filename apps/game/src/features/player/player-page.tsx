@@ -16,8 +16,9 @@ import {
   writeStoredNickname
 } from '@/infrastructure/storage/preferences-storage'
 import { Button } from '@/presentation/components/button'
-import { ConnectionStatus } from '@/presentation/components/connection-status'
+import { ConnectionRefused } from '@/presentation/components/connection-refused'
 import { TextField } from '@/presentation/components/text-field'
+import { useReportConnection } from '@/presentation/connection/connection-provider'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { protocolErrorKey } from '@/presentation/i18n/translation'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
@@ -125,14 +126,22 @@ const Lobby = ({
   roomCode: RoomCode
 }) => {
   const translate = useTranslate()
-  const { clock, send, status, view } = connection
+  const { clock, error, send, status, view } = connection
 
+  useReportConnection({ clock, status })
   usePhaseField(view?.phase ?? null)
+
+  if (status === 'refused') {
+    return (
+      <main className='player-page'>
+        <ConnectionRefused error={error} />
+      </main>
+    )
+  }
 
   return (
     <main className='player-page playing'>
       <header>
-        <ConnectionStatus clock={clock} status={status} />
         <p className='room'>{translate('player.room', { code: roomCode })}</p>
       </header>
 

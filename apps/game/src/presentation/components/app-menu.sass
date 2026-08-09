@@ -1,0 +1,65 @@
+@use '../styles/focus'
+@use '../styles/typography'
+
+@layer components
+  .app-menu
+    align-items: center
+    display: flex
+    inset-block-start: var(--layout-padding)
+    inset-inline-end: var(--layout-padding)
+    position: fixed
+    z-index: 1
+
+    .alert
+      @include typography.label
+
+      color: var(--ink)
+
+      // The node stays mounted while it is empty, so the gap has to come off
+      // the text rather than off the row.
+      &:not(:empty)
+        margin-inline-end: var(--space-xs)
+
+    .trigger
+      @include focus.ring
+      @include typography.label
+
+      align-items: center
+      background: var(--field)
+      border: 2px solid var(--rule)
+      color: var(--ink-muted)
+      cursor: pointer
+      display: flex
+      gap: var(--space-xs)
+      min-height: 44px
+      padding: 0 var(--space-s)
+      transition: color var(--transition-fast, 0) var(--timing, ease), border-color var(--transition-fast, 0) var(--timing, ease)
+
+      &[data-hovered],
+      &[data-pressed]
+        border-color: var(--ink)
+        color: var(--ink)
+
+  // The field's own ground behind a heavy rule, rather than a die-cut block:
+  // everything inside is a control drawn in `--ink` on `--field`, and a card
+  // that swapped the ground would have to restate all four tokens to keep them
+  // legible.
+  .app-menu-popover
+    background: var(--field)
+    border: 3px solid var(--ink)
+    max-width: min(92vw, 320px)
+    padding: var(--space-m)
+
+    &[data-entering]
+      animation: popover-strike var(--transition-fast, 0) var(--timing, ease)
+
+    .react-aria-Dialog
+      display: flex
+      flex-direction: column
+      gap: var(--space-m)
+      outline: none
+
+@keyframes popover-strike
+  from
+    opacity: 0
+    transform: translateY(-6px)

@@ -18,9 +18,10 @@ import {
   writeStoredVolume
 } from '@/infrastructure/storage/preferences-storage'
 import { Button } from '@/presentation/components/button'
-import { ConnectionStatus } from '@/presentation/components/connection-status'
+import { ConnectionRefused } from '@/presentation/components/connection-refused'
 import { Countdown } from '@/presentation/components/countdown'
 import { Scoreboard } from '@/presentation/components/scoreboard'
+import { useReportConnection } from '@/presentation/connection/connection-provider'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { protocolErrorKey } from '@/presentation/i18n/translation'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
@@ -51,8 +52,19 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
   const { clock, error, send, status, view } = useHostConnection(roomCode)
   const [volume, setVolume] = useState(readStoredVolume)
 
+  useReportConnection({ clock, status })
   usePhaseField(view?.phase ?? null)
   const { unlock } = useRoundAudio({ clock, view, volume })
+
+  if (status === 'refused') {
+    return (
+      <main className='host-console-page'>
+        <div className='stage solo'>
+          <ConnectionRefused error={error} />
+        </div>
+      </main>
+    )
+  }
 
   return (
     <main className='host-console-page'>
@@ -65,14 +77,9 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
             })}
           </p>
         )}
-        <ConnectionStatus clock={clock} status={status} />
       </header>
 
-      {view === null ? (
-        <div className='stage' />
-      ) : (
-        <Stage clock={clock} roomCode={roomCode} send={send} view={view} />
-      )}
+      <Stage clock={clock} roomCode={roomCode} send={send} view={view} />
 
       <footer>
         {error !== null && (
@@ -83,6 +90,7 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
         {view !== null && (
           <>
             <Actions
+              isLive={status === 'open'}
               onStart={() => {
                 // Inside the press, never in an effect: the autoplay policy
                 // grants permission to the element only from a real gesture,
@@ -115,11 +123,16 @@ type StageProps = {
   clock: ClockEstimate | null
   roomCode: RoomCode
   send: (message: ClientMessage) => boolean
-  view: HostRoomView
+  view: HostRoomView | null
 }
 
 const Stage = ({ clock, roomCode, send, view }: StageProps) => {
   const translate = useTranslate()
+
+  if (view === null) {
+    return <div className='stage' />
+  }
+
   const round = view.round
 
   if (view.phase === 'countdown' && round?.audioStartsAt != null) {
@@ -241,11 +254,19 @@ const Lobby = ({
   )
 }
 
+/**
+ * Every one of these sends a frame, and a frame written to a socket that is not
+ * open is dropped with nothing to show for it. Disabled while the connection is
+ * away is the honest state: the press would be a no-op, and a control that
+ * answers nothing reads as a broken game rather than a broken link.
+ */
 const Actions = ({
+  isLive,
   onStart,
   send,
   view
 }: {
+  isLive: boolean
   onStart: () => void
   send: (message: ClientMessage) => boolean
   view: HostRoomView
@@ -255,7 +276,7 @@ const Actions = ({
   if (view.phase === 'lobby') {
     return (
       <Button
-        isDisabled={view.players.length === 0}
+        isDisabled={!isLive || view.players.length === 0}
         onPress={onStart}
         size='large'
       >
@@ -267,6 +288,7 @@ const Actions = ({
   if (view.phase === 'countdown' || view.phase === 'playing') {
     return (
       <Button
+        isDisabled={!isLive}
         onPress={() => {
           if (view.round !== null) {
             send({ roundId: view.round.id, type: 'host.reveal' })
@@ -283,6 +305,7 @@ const Actions = ({
     return (
       <>
         <Button
+          isDisabled={!isLive}
           onPress={() => {
             send({ type: 'host.nextRound' })
           }}
@@ -291,6 +314,7 @@ const Actions = ({
           {translate('host.nextRound')}
         </Button>
         <Button
+          isDisabled={!isLive}
           onPress={() => {
             send({ type: 'host.endGame' })
           }}
@@ -305,6 +329,7 @@ const Actions = ({
   if (view.phase === 'finished') {
     return (
       <Button
+        isDisabled={!isLive}
         onPress={() => {
           send({ type: 'host.playAgain' })
         }}

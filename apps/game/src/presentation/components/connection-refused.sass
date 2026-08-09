@@ -1,0 +1,14 @@
+@use '../styles/typography'
+
+@layer components
+  .connection-refused
+    align-items: center
+    display: flex
+    flex-direction: column
+    gap: var(--space-l)
+    text-align: center
+
+    h2
+      @include typography.billboard
+
+      text-wrap: balance

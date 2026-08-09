@@ -1,7 +1,8 @@
 import { RouterProvider as ReactAriaRouterProvider } from 'react-aria-components'
 import { Outlet, useNavigate } from 'react-router'
 
-import { PreferencesBar } from '@/presentation/components/preferences-bar'
+import { AppMenu } from '@/presentation/components/app-menu'
+import { ConnectionProvider } from '@/presentation/connection/connection-provider'
 
 import './app-shell.sass'
 
@@ -19,10 +20,12 @@ export const AppShell = () => {
         void navigate(path)
       }}
     >
-      <div className='app-shell'>
-        <Outlet />
-        <PreferencesBar />
-      </div>
+      <ConnectionProvider>
+        <div className='app-shell'>
+          <AppMenu />
+          <Outlet />
+        </div>
+      </ConnectionProvider>
     </ReactAriaRouterProvider>
   )
 }

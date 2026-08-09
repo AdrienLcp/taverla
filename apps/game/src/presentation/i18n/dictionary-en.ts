@@ -28,6 +28,7 @@ export const EN_DICTIONARY = {
   'connection.closed': 'Reconnecting',
   'connection.connecting': 'Connecting',
   'connection.open': 'Live',
+  'connection.refused': 'Disconnected',
 
   'error.already_buzzed': 'Someone got there first.',
   'error.api.rejected': 'The server refused that.',
@@ -100,6 +101,9 @@ export const EN_DICTIONARY = {
   'join.roomCode.invalid': 'A room code is {length} letters and digits.',
   'join.roomCode.label': 'Room code',
   'join.roomCode.unknown': 'No game is running under that code.',
+
+  'menu.home': 'Home',
+  'menu.label': 'Menu',
 
   'notFound.back': 'Back to the start',
   'notFound.description': 'That game is over, or the code was mistyped.',

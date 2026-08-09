@@ -37,9 +37,14 @@ src/
 ```
 
 `presentation/app-shell.tsx` is the layout route every page renders inside. It
-is where anything that must exist on *every* surface goes — the preferences bar
-lives there because a phone arriving from a QR code never passes through the
-home page.
+is where anything that must exist on *every* surface goes — `AppMenu` lives
+there because a phone arriving from a QR code never passes through the home
+page, and because a screen whose socket has died still needs a way off it.
+
+The menu shows the connection, which a *page* owns. `presentation/connection/`
+carries it upwards: a page with a socket calls `useReportConnection`, the shell
+reads it. That direction is deliberate — the alternative is three pages each
+mounting their own copy of the chrome.
 
 | From | Importing | Syntax |
 |---|---|---|

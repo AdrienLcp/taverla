@@ -28,6 +28,7 @@ export const FR_DICTIONARY: Dictionary = {
   'connection.closed': 'Reconnexion…',
   'connection.connecting': 'Connexion…',
   'connection.open': 'En direct',
+  'connection.refused': 'Déconnecté',
 
   'error.already_buzzed': 'Quelqu’un a été plus rapide.',
   'error.api.rejected': 'Le serveur a refusé la demande.',
@@ -104,6 +105,9 @@ export const FR_DICTIONARY: Dictionary = {
     'Un code de salon fait {length} lettres et chiffres.',
   'join.roomCode.label': 'Code du salon',
   'join.roomCode.unknown': 'Aucune partie ne tourne sous ce code.',
+
+  'menu.home': 'Accueil',
+  'menu.label': 'Menu',
 
   'notFound.back': 'Retour au départ',
   'notFound.description': 'La partie est finie, ou le code a été mal tapé.',

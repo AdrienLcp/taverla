@@ -6,11 +6,23 @@ import type { TranslationKey } from '@/presentation/i18n/translation'
 
 import './connection-status.sass'
 
-const STATUS_KEYS: Record<SocketStatus, TranslationKey> = {
-  closed: 'connection.closed',
-  connecting: 'connection.connecting',
-  open: 'connection.open'
+/**
+ * A literal template rather than a lookup, for the same reason as
+ * `protocolErrorKey`: adding a state to `SocketStatus` fails to compile until
+ * every locale has named it.
+ */
+export const connectionStatusKey = (status: SocketStatus): TranslationKey =>
+  `connection.${status}`
+
+type ConnectionDotProps = {
+  /** Told apart by shape and motion — a hue that reads on one field vanishes on another. */
+  status: SocketStatus
 }
+
+/** Decorative alone: whatever renders it also renders the word beside it. */
+export const ConnectionDot = ({ status }: ConnectionDotProps) => (
+  <span aria-hidden='true' className={`connection-dot ${status}`} />
+)
 
 type ConnectionStatusProps = {
   /** `null` until the first exchange completes; the offset is shown once it lands. */
@@ -18,18 +30,13 @@ type ConnectionStatusProps = {
   status: SocketStatus
 }
 
-/**
- * A `role="status"` region rather than decoration: on a phone in a dark room,
- * "did it drop?" is the first question, and a silent reconnect is worse than a
- * visible one.
- */
 export const ConnectionStatus = ({ clock, status }: ConnectionStatusProps) => {
   const translate = useTranslate()
 
   return (
-    <p className={`connection-status ${status}`} role='status'>
-      <span aria-hidden='true' className='dot' />
-      {translate(STATUS_KEYS[status])}
+    <p className='connection-status'>
+      <ConnectionDot status={status} />
+      {translate(connectionStatusKey(status))}
       {clock !== null && (
         <span className='clock'>
           {translate('connection.clock', {

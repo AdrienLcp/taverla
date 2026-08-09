@@ -18,6 +18,11 @@
       display: flex
       flex-wrap: wrap
 
+    // `flex: 1` rather than content width: the segments share the strip evenly,
+    // so the trailing gap between the last one and the rule cannot appear. The
+    // basis is 0 but each segment's minimum is its own `nowrap` label, so a
+    // strip too narrow for its options — the twelve genres — wraps exactly where
+    // it does today and then fills the row it landed on.
     .react-aria-Radio
       @include focus.ring-inset
       @include typography.caption
@@ -25,8 +30,10 @@
       border-right: 2px solid var(--rule)
       color: var(--ink-muted)
       cursor: pointer
+      flex: 1
       font-weight: 700
       padding: var(--space-2xs) var(--space-s)
+      text-align: center
       text-transform: uppercase
       transition: background-color var(--transition-fast, 0) var(--timing, ease), color var(--transition-fast, 0) var(--timing, ease)
       white-space: nowrap

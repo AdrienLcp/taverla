@@ -54,13 +54,18 @@ one part.
   are translated client-side and the server's `message` is no longer rendered
 - `[Game]` Light and dark themes, resolved in CSS so the first paint cannot
   flash the wrong ground — `data-theme` is stamped only for an explicit choice
-- `[Game]` A preferences bar on every screen, so the phone that arrived from a
-  QR code can switch language without a settings page
+- `[Game]` One menu in the corner of every screen — language, theme, the
+  connection and the way home — so the phone that arrived from a QR code can
+  reach all of it without a settings page, and no screen is a dead end
 - `[Game]` The join form remembers what you like being called, so the second
   room of the evening costs one tap instead of typing a name again
 
 ### Fixes
 
+- `[Game]` A room that is gone says so and offers the way out, instead of
+  reading "Reconnecting…" forever over buttons that silently do nothing. The
+  socket already stopped retrying on a fatal error; nothing on screen said it,
+  because "given up" and "about to retry" were the same state
 - `[Game]` Taking a seat no longer throws off a secure origin.
   `crypto.randomUUID` exists only in a secure context, and testing on real
   phones over the LAN is plain HTTP on an IP address

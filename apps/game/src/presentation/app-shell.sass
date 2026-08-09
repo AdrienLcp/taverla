@@ -1,5 +1,10 @@
 @layer components
   .app-shell
+    // What the fixed menu covers in the top-right corner. Only the two screens
+    // whose content starts at the very top have to keep clear of it; the rest
+    // centre their column and never reach that corner.
+    --menu-inset: calc(var(--layout-padding) + 116px)
+
     display: flex
     flex: 1
     flex-direction: column

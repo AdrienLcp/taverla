@@ -23,7 +23,13 @@ import {
 import { socketOrigin } from '@/infrastructure/env'
 import { ensureSessionId } from '@/infrastructure/storage/session-storage'
 
-export type SocketStatus = 'connecting' | 'open' | 'closed'
+/**
+ * `closed` and `refused` both mean "no socket", and the difference is the whole
+ * point: `closed` is still counting down to another attempt, `refused` is the
+ * server having said why and the client having stopped. A screen that shows one
+ * as the other tells the user to wait for a reconnection that will never come.
+ */
+export type SocketStatus = 'connecting' | 'open' | 'closed' | 'refused'
 
 export type RoomSocket = {
   clock: ClockEstimate | null
@@ -175,7 +181,7 @@ export const useRoomSocket = ({
 
       socket.addEventListener('close', () => {
         window.clearInterval(pingTimer)
-        setStatus('closed')
+        setStatus(giveUp ? 'refused' : 'closed')
 
         if (disposed || giveUp) {
           return
