@@ -1,13 +1,13 @@
-import { encodeChecked } from '@blindtest/protocol/codec'
-import type { ProtocolErrorCode } from '@blindtest/protocol/error-code'
-import type { SessionId } from '@blindtest/protocol/identifiers'
+import { encodeChecked } from '@taverla/protocol/codec'
+import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
+import type { SessionId } from '@taverla/protocol/identifiers'
 import {
   hostServerMessageSchema,
   playerServerMessageSchema,
   protocolErrorMessageSchema,
   timePongMessageSchema
-} from '@blindtest/protocol/server-message'
-import { PROTOCOL_VERSION } from '@blindtest/protocol/version'
+} from '@taverla/protocol/server-message'
+import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
 import type { Room } from '@/domain/room/room'
 import { toHostView, toPlayerView } from '@/domain/room/room-view'

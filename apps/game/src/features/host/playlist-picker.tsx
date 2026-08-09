@@ -1,10 +1,10 @@
 import type React from 'react'
 import { useState } from 'react'
 
-import type { RoomSettings } from '@blindtest/protocol/room'
-import type { TrackSource } from '@blindtest/protocol/track'
+import type { RoomSettings } from '@taverla/protocol/room'
+import type { TrackSource } from '@taverla/protocol/track'
 
-import { searchTracks } from '@/infrastructure/api/blindtest-api'
+import { searchTracks } from '@/infrastructure/api/taverla-api'
 import { Button } from '@/presentation/components/button'
 import { SegmentedControl } from '@/presentation/components/segmented-control'
 import { TextField } from '@/presentation/components/text-field'

@@ -44,9 +44,9 @@ home page.
 | From | Importing | Syntax |
 |---|---|---|
 | App code | Same app | `@/features/…` |
-| App code | Workspace package | `@blindtest/protocol/…`, `@blindtest/core/…` |
+| App code | Workspace package | `@taverla/protocol/…`, `@taverla/core/…` |
 | Package code | Same package | relative only — never the package's own name |
-| Package code | Another package | `@blindtest/protocol/…` |
+| Package code | Another package | `@taverla/protocol/…` |
 
 ## Where a new thing goes
 
@@ -64,7 +64,7 @@ home page.
 ## No barrel files
 
 No `index.ts` that only re-exports. Both packages expose `"./*": "./src/*"`, so
-`@blindtest/core/time/clock-sync` is the import and the file path at once.
+`@taverla/core/time/clock-sync` is the import and the file path at once.
 
 ## Ports
 

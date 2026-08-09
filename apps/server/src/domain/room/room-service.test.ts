@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
-import { MAX_PLAYERS_PER_ROOM } from '@blindtest/protocol/room'
+import { MAX_PLAYERS_PER_ROOM } from '@taverla/protocol/room'
 
 import type { Room } from './room'
 import { claimHost, joinAsPlayer, removePlayer } from './room-service'

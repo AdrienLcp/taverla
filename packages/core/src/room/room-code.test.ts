@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import {
   ROOM_CODE_ALPHABET,
   ROOM_CODE_LENGTH
-} from '@blindtest/protocol/identifiers'
+} from '@taverla/protocol/identifiers'
 
 import { generateRoomCode, normalizeRoomCode } from './room-code'
 

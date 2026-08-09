@@ -8,11 +8,11 @@ import type {
   HealthResponse,
   RoomExistsResponse,
   TrackSearchResponse
-} from '@blindtest/protocol/http'
-import { trackSearchQuerySchema } from '@blindtest/protocol/http'
-import { PROTOCOL_VERSION } from '@blindtest/protocol/version'
+} from '@taverla/protocol/http'
+import { trackSearchQuerySchema } from '@taverla/protocol/http'
+import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
-import { normalizeRoomCode } from '@blindtest/core/room/room-code'
+import { normalizeRoomCode } from '@taverla/core/room/room-code'
 
 import { createRoom, findRoom } from '@/domain/room/room-store'
 import { env } from '@/env'

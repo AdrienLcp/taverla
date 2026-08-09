@@ -2,10 +2,10 @@ import type React from 'react'
 import { useState } from 'react'
 import { Button as ReactAriaButton } from 'react-aria-components'
 
-import type { PlayerRoomView } from '@blindtest/protocol/room'
+import type { PlayerRoomView } from '@taverla/protocol/room'
 
-import { findBuzzBlocker } from '@blindtest/core/round/buzz-eligibility'
-import type { ClockEstimate } from '@blindtest/core/time/clock-sync'
+import { findBuzzBlocker } from '@taverla/core/round/buzz-eligibility'
+import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
 import { buzzFeedback } from '@/infrastructure/env'
 import { Countdown } from '@/presentation/components/countdown'

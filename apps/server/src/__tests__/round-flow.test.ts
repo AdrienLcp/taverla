@@ -2,16 +2,16 @@ import { serve } from '@hono/node-server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { z } from 'zod'
 
-import type { ClientMessage } from '@blindtest/protocol/client-message'
-import type { CreateRoomResponse } from '@blindtest/protocol/http'
-import type { RoomSettings } from '@blindtest/protocol/room'
+import type { ClientMessage } from '@taverla/protocol/client-message'
+import type { CreateRoomResponse } from '@taverla/protocol/http'
+import type { RoomSettings } from '@taverla/protocol/room'
 import {
   type HostServerMessage,
   hostServerMessageSchema,
   type PlayerServerMessage,
   playerServerMessageSchema
-} from '@blindtest/protocol/server-message'
-import { PROTOCOL_VERSION } from '@blindtest/protocol/version'
+} from '@taverla/protocol/server-message'
+import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
 const { CATALOGUE } = vi.hoisted(() => ({
   CATALOGUE: [

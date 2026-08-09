@@ -2,7 +2,7 @@ import {
   POINTS_PER_ARTIST,
   POINTS_PER_TITLE,
   type Verdict
-} from '@blindtest/protocol/scoring'
+} from '@taverla/protocol/scoring'
 
 export const pointsFor = (verdict: Verdict): number =>
   (verdict.titleCorrect ? POINTS_PER_TITLE : 0) +

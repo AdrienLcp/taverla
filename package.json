@@ -10,18 +10,18 @@
     "node": ">=24.0.0",
     "pnpm": ">=11.14.0"
   },
-  "name": "blindtest",
+  "name": "taverla",
   "packageManager": "pnpm@11.20.0",
   "private": true,
   "scripts": {
     "build": "pnpm -r build",
     "deps:upgrade": "pnpm self-update && pnpm -r up -L",
-    "dev": "pnpm --parallel --filter @blindtest/server --filter @blindtest/game dev",
+    "dev": "pnpm --parallel --filter @taverla/server --filter @taverla/game dev",
     "lint": "biome check --write",
     "lint:ci": "biome ci",
     "preinstall": "git config core.hooksPath .githooks || true",
-    "test": "pnpm --filter @blindtest/protocol --filter @blindtest/core --filter @blindtest/server test",
-    "test:core:watch": "pnpm --filter @blindtest/core test:watch",
+    "test": "pnpm --filter @taverla/protocol --filter @taverla/core --filter @taverla/server test",
+    "test:core:watch": "pnpm --filter @taverla/core test:watch",
     "validate": "pnpm build && pnpm test"
   },
   "type": "module",

@@ -1,11 +1,11 @@
-import type { PlayerId } from '@blindtest/protocol/identifiers'
+import type { PlayerId } from '@taverla/protocol/identifiers'
 import type {
   HostRoomView,
   PlayerRoomView,
   PublicPlayer,
   RoundView
-} from '@blindtest/protocol/room'
-import type { TrackIdentity } from '@blindtest/protocol/track'
+} from '@taverla/protocol/room'
+import type { TrackIdentity } from '@taverla/protocol/track'
 
 import { elapsedPlaybackMs } from '@/domain/round/round-service'
 

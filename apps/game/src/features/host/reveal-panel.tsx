@@ -1,6 +1,6 @@
 import type React from 'react'
 
-import type { PublicPlayer, RoundView } from '@blindtest/protocol/room'
+import type { PublicPlayer, RoundView } from '@taverla/protocol/room'
 
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 

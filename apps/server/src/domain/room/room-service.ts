@@ -4,13 +4,10 @@ import type {
   Nickname,
   PlayerId,
   SessionId
-} from '@blindtest/protocol/identifiers'
-import {
-  MAX_PLAYERS_PER_ROOM,
-  type RoomSettings
-} from '@blindtest/protocol/room'
+} from '@taverla/protocol/identifiers'
+import { MAX_PLAYERS_PER_ROOM, type RoomSettings } from '@taverla/protocol/room'
 
-import { Result } from '@blindtest/core/helpers/result'
+import { Result } from '@taverla/core/helpers/result'
 
 import type { Participant, Room } from './room'
 

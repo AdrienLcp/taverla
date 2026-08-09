@@ -1,8 +1,8 @@
 import type React from 'react'
 
-import type { PublicPlayer } from '@blindtest/protocol/room'
+import type { PublicPlayer } from '@taverla/protocol/room'
 
-import { buildScoreboard } from '@blindtest/core/scoring/scoreboard'
+import { buildScoreboard } from '@taverla/core/scoring/scoreboard'
 
 import './scoreboard.sass'
 

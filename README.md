@@ -1,8 +1,13 @@
-# Blind Test
+# Taverla
 
-A party blind test. One screen runs the game and shows a QR code; everyone else
-plays on the phone already in their pocket. First to buzz gets to name the
-track.
+A shelf of party games sharing one room, one QR code and one set of phones.
+**Blind test** is the first of them: one screen runs the game and shows the QR
+code, everyone else plays on the phone already in their pocket, and the first to
+buzz gets to name the track.
+
+The product is `Taverla`; the game is `Blind test`. Packages are scoped
+`@taverla/*` because they belong to the shelf, while the translation keys a
+single game owns keep its own `blindtest.*` prefix.
 
 ```bash
 pnpm install

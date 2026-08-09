@@ -1,6 +1,6 @@
 import type React from 'react'
 
-import type { RoomSettings } from '@blindtest/protocol/room'
+import type { RoomSettings } from '@taverla/protocol/room'
 
 import { Slider } from '@/presentation/components/slider'
 import { Switch } from '@/presentation/components/switch'

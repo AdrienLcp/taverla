@@ -1,4 +1,4 @@
-import type { PublicPlayer } from '@blindtest/protocol/room'
+import type { PublicPlayer } from '@taverla/protocol/room'
 
 export type ScoreboardEntry = {
   player: PublicPlayer

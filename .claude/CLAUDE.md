@@ -1,7 +1,14 @@
 # CLAUDE.md
 
-A party blind test: one screen runs the game and shows a QR code, everyone else
-plays on the phone in their pocket. First to buzz gets to name the track.
+**Taverla** is a shelf of party games sharing one room, one QR code and one set
+of phones. **Blind test** is the first of them: one screen runs the game and
+shows the QR code, everyone else plays on the phone in their pocket, and the
+first to buzz gets to name the track.
+
+Two names, two scopes, and the distinction is load-bearing. The product owns
+`@taverla/*`, the `taverla:*` storage keys and the repository name. The game
+owns the `blindtest.*` translation prefix and nothing else. When the second game
+lands it takes its own prefix and touches none of the first's.
 
 ## Tech stack
 

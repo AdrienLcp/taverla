@@ -11,20 +11,15 @@
               ":BLANK_LINE:",
               [":BUN:", ":NODE:"],
               ":BLANK_LINE:",
-              [
-                ":PACKAGE:",
-                ":PACKAGE_WITH_PROTOCOL:",
-                "!@/**",
-                "!@blindtest/**"
-              ],
+              [":PACKAGE:", ":PACKAGE_WITH_PROTOCOL:", "!@/**", "!@taverla/**"],
               ":BLANK_LINE:",
-              "@blindtest/protocol/**",
+              "@taverla/protocol/**",
               ":BLANK_LINE:",
-              "@blindtest/core/**",
+              "@taverla/core/**",
               ":BLANK_LINE:",
-              [":ALIAS:", "@/**", "!@blindtest/**"],
+              [":ALIAS:", "@/**", "!@taverla/**"],
               ":BLANK_LINE:",
-              [":PATH:", "@/**", "!@blindtest/**"]
+              [":PATH:", "@/**", "!@taverla/**"]
             ],
             "identifierOrder": "natural"
           }

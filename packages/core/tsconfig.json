@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "paths": {
-      "@blindtest/protocol/*": ["../protocol/src/*"]
+      "@taverla/protocol/*": ["../protocol/src/*"]
     }
   },
   "extends": "../../tsconfig.json",

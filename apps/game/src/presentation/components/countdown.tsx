@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import {
   type ClockEstimate,
   millisecondsUntil
-} from '@blindtest/core/time/clock-sync'
+} from '@taverla/core/time/clock-sync'
 
 import './countdown.sass'
 

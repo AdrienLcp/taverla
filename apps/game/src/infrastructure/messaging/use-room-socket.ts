@@ -4,21 +4,21 @@ import { z } from 'zod'
 import type {
   ClientMessage,
   ConnectionRole
-} from '@blindtest/protocol/client-message'
-import { decodeMessage, encodeMessage } from '@blindtest/protocol/codec'
-import type { RoomCode } from '@blindtest/protocol/identifiers'
+} from '@taverla/protocol/client-message'
+import { decodeMessage, encodeMessage } from '@taverla/protocol/codec'
+import type { RoomCode } from '@taverla/protocol/identifiers'
 import {
   type ProtocolErrorMessage,
   protocolErrorMessageSchema,
   timePongMessageSchema
-} from '@blindtest/protocol/server-message'
-import { PROTOCOL_VERSION } from '@blindtest/protocol/version'
+} from '@taverla/protocol/server-message'
+import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
 import {
   type ClockEstimate,
   type ClockSample,
   estimateClockOffset
-} from '@blindtest/core/time/clock-sync'
+} from '@taverla/core/time/clock-sync'
 
 import { socketOrigin } from '@/infrastructure/env'
 import { ensureSessionId } from '@/infrastructure/storage/session-storage'

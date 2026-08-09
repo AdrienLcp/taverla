@@ -10,7 +10,7 @@ buzzed, and judge them in one gesture.
 
 **Playlist picker** (`features/host/playlist-picker.tsx`). Three sources are
 already in the contract: chart, a Deezer playlist id, a free-text search.
-`searchTracks` in `blindtest-api.ts` is wired and returns results without
+`searchTracks` in `taverla-api.ts` is wired and returns results without
 preview URLs. Show what the pool will contain before the game starts — a blind
 test with the wrong decade is a wasted evening.
 

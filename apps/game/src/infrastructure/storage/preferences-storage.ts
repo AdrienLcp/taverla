@@ -1,13 +1,13 @@
-import { type Nickname, nicknameSchema } from '@blindtest/protocol/identifiers'
+import { type Nickname, nicknameSchema } from '@taverla/protocol/identifiers'
 
-import { isLocale, type Locale } from '@blindtest/core/i18n/locale'
+import { isLocale, type Locale } from '@taverla/core/i18n/locale'
 
 import { isThemePreference, type ThemePreference } from '@/helpers/theme'
 
-const LOCALE_KEY = 'blindtest:locale'
-const NICKNAME_KEY = 'blindtest:nickname'
-const THEME_KEY = 'blindtest:theme'
-const VOLUME_KEY = 'blindtest:volume'
+const LOCALE_KEY = 'taverla:locale'
+const NICKNAME_KEY = 'taverla:nickname'
+const THEME_KEY = 'taverla:theme'
+const VOLUME_KEY = 'taverla:volume'
 
 export const DEFAULT_VOLUME = 0.8
 

@@ -6,10 +6,10 @@ import {
   roomExistsResponseSchema,
   type TrackSearchResult,
   trackSearchResponseSchema
-} from '@blindtest/protocol/http'
-import type { RoomCode } from '@blindtest/protocol/identifiers'
+} from '@taverla/protocol/http'
+import type { RoomCode } from '@taverla/protocol/identifiers'
 
-import { Result } from '@blindtest/core/helpers/result'
+import { Result } from '@taverla/core/helpers/result'
 
 export type ApiError = 'unreachable' | 'unexpected_response' | 'rejected'
 

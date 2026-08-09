@@ -1,11 +1,11 @@
 import { QRCodeSVG } from 'qrcode.react'
 import { useState } from 'react'
 
-import type { ClientMessage } from '@blindtest/protocol/client-message'
-import type { RoomCode } from '@blindtest/protocol/identifiers'
-import type { HostRoomView, RoomSettings } from '@blindtest/protocol/room'
+import type { ClientMessage } from '@taverla/protocol/client-message'
+import type { RoomCode } from '@taverla/protocol/identifiers'
+import type { HostRoomView, RoomSettings } from '@taverla/protocol/room'
 
-import type { ClockEstimate } from '@blindtest/core/time/clock-sync'
+import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
 import { NotFoundPage } from '@/features/not-found/not-found-page'
 import { useHostConnection } from '@/infrastructure/messaging/use-host-connection'

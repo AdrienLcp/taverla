@@ -2,8 +2,8 @@
   "compilerOptions": {
     "paths": {
       "@/*": ["./src/*"],
-      "@blindtest/core/*": ["../../packages/core/src/*"],
-      "@blindtest/protocol/*": ["../../packages/protocol/src/*"]
+      "@taverla/core/*": ["../../packages/core/src/*"],
+      "@taverla/protocol/*": ["../../packages/protocol/src/*"]
     },
     "types": ["node"]
   },

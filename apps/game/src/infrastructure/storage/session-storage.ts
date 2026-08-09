@@ -1,5 +1,5 @@
-import type { ConnectionRole } from '@blindtest/protocol/client-message'
-import type { RoomCode, SessionId } from '@blindtest/protocol/identifiers'
+import type { ConnectionRole } from '@taverla/protocol/client-message'
+import type { RoomCode, SessionId } from '@taverla/protocol/identifiers'
 
 type SessionScope = {
   role: ConnectionRole
@@ -13,7 +13,7 @@ type SessionScope = {
  * each other's identity.
  */
 const keyFor = ({ role, roomCode }: SessionScope): string =>
-  `blindtest:session:${roomCode}:${role}`
+  `taverla:session:${roomCode}:${role}`
 
 /**
  * The session id is minted by the client, not the server, and that is

@@ -5,7 +5,7 @@ export const ROOM_CODE_LENGTH = 4
 /**
  * Room codes are read aloud and typed on a phone keypad, so the alphabet drops
  * every glyph pair a human confuses under stress: `I`/`1`, `O`/`0`, `S`/`5`,
- * `Z`/`2`. Generation lives in `@blindtest/core/room/room-code`; this is only
+ * `Z`/`2`. Generation lives in `@taverla/core/room/room-code`; this is only
  * the shape the wire accepts.
  */
 export const ROOM_CODE_ALPHABET = 'ABCDEFGHJKLMNPQRTUVWXY346789'

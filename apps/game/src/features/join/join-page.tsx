@@ -2,11 +2,11 @@ import { type FormEvent, useState } from 'react'
 import { Form } from 'react-aria-components'
 import { useNavigate } from 'react-router'
 
-import { ROOM_CODE_LENGTH } from '@blindtest/protocol/identifiers'
+import { ROOM_CODE_LENGTH } from '@taverla/protocol/identifiers'
 
-import { normalizeRoomCode } from '@blindtest/core/room/room-code'
+import { normalizeRoomCode } from '@taverla/core/room/room-code'
 
-import { createRoom, roomExists } from '@/infrastructure/api/blindtest-api'
+import { createRoom, roomExists } from '@/infrastructure/api/taverla-api'
 import { hostPathFor, playPathFor } from '@/infrastructure/router/navigation'
 import { Button } from '@/presentation/components/button'
 import { TextField } from '@/presentation/components/text-field'

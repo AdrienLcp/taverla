@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react'
 
-import type { HostRoomView } from '@blindtest/protocol/room'
+import type { HostRoomView } from '@taverla/protocol/room'
 
 import {
   type ClockEstimate,
   millisecondsUntil
-} from '@blindtest/core/time/clock-sync'
+} from '@taverla/core/time/clock-sync'
 
 /**
  * `setTimeout` is only accurate to a handful of milliseconds under load, which

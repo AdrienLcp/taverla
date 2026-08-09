@@ -1,7 +1,7 @@
-import type { RoomCode } from '@blindtest/protocol/identifiers'
-import { DEFAULT_ROOM_SETTINGS } from '@blindtest/protocol/room'
+import type { RoomCode } from '@taverla/protocol/identifiers'
+import { DEFAULT_ROOM_SETTINGS } from '@taverla/protocol/room'
 
-import { generateRoomCode } from '@blindtest/core/room/room-code'
+import { generateRoomCode } from '@taverla/core/room/room-code'
 
 import { logger } from '@/infrastructure/logging/logger'
 

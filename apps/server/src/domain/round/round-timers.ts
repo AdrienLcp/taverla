@@ -1,4 +1,4 @@
-import type { RoomCode } from '@blindtest/protocol/identifiers'
+import type { RoomCode } from '@taverla/protocol/identifiers'
 
 /**
  * The transitions a round makes on its own rather than on a message. They are

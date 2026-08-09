@@ -1,8 +1,8 @@
-import type { ProtocolErrorCode } from '@blindtest/protocol/error-code'
+import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
 
-import type { BuzzBlocker } from '@blindtest/core/round/buzz-eligibility'
+import type { BuzzBlocker } from '@taverla/core/round/buzz-eligibility'
 
-import type { ApiError } from '@/infrastructure/api/blindtest-api'
+import type { ApiError } from '@/infrastructure/api/taverla-api'
 
 import type { EN_DICTIONARY } from './dictionary-en'
 

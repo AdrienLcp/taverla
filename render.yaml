@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: blindtest
+    name: taverla
     runtime: node
     plan: free
     # Rooms live in a Map in one process and sockets stay open for the length of
@@ -10,7 +10,7 @@ services:
     numInstances: 1
     healthCheckPath: /api/health
     buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm build
-    startCommand: pnpm --filter @blindtest/server start
+    startCommand: pnpm --filter @taverla/server start
     envVars:
       - key: NODE_VERSION
         value: '24'

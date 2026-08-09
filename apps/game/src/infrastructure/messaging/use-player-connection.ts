@@ -1,9 +1,9 @@
 import { useCallback, useState } from 'react'
 
-import { decodeMessage } from '@blindtest/protocol/codec'
-import type { RoomCode } from '@blindtest/protocol/identifiers'
-import type { PlayerRoomView } from '@blindtest/protocol/room'
-import { playerServerMessageSchema } from '@blindtest/protocol/server-message'
+import { decodeMessage } from '@taverla/protocol/codec'
+import type { RoomCode } from '@taverla/protocol/identifiers'
+import type { PlayerRoomView } from '@taverla/protocol/room'
+import { playerServerMessageSchema } from '@taverla/protocol/server-message'
 
 import { type RoomSocket, useRoomSocket } from './use-room-socket'
 

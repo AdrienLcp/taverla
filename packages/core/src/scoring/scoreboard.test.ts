@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import type { PublicPlayer } from '@blindtest/protocol/room'
-import type { Verdict } from '@blindtest/protocol/scoring'
+import type { PublicPlayer } from '@taverla/protocol/room'
+import type { Verdict } from '@taverla/protocol/scoring'
 
 import { isMiss, pointsFor } from './award'
 import { buildScoreboard } from './scoreboard'

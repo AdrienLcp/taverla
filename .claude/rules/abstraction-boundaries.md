@@ -17,7 +17,7 @@ abstraction below it: no generic `httpClient.request()`, no neutral
 | `hono/ws` (server) | `apps/server/src/infrastructure/messaging/` |
 | `localStorage` | `apps/game/src/infrastructure/storage/session-storage.ts` (seats) and `preferences-storage.ts` (locale, theme) |
 | `navigator`, `location` | `apps/game/src/infrastructure/env.ts`, plus `location.origin` in `router/navigation.ts` |
-| `fetch` (browser) | `apps/game/src/infrastructure/api/blindtest-api.ts` |
+| `fetch` (browser) | `apps/game/src/infrastructure/api/taverla-api.ts` |
 | `react-router` | `apps/game/src/infrastructure/router/`, plus `useNavigate` in `presentation/app-shell.tsx` — which hands it to react-aria's `RouterProvider`, so components navigate through the design system's `Link` and never import react-router themselves |
 | `react-aria-components` | `apps/game/src/presentation/components/`, `presentation/i18n/i18n-provider.tsx` for `I18nProvider`, and a feature that genuinely needs a primitive the design system has not wrapped yet |
 

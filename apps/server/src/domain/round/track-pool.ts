@@ -1,6 +1,6 @@
-import type { HostTrack, TrackSource } from '@blindtest/protocol/track'
+import type { HostTrack, TrackSource } from '@taverla/protocol/track'
 
-import { Result } from '@blindtest/core/helpers/result'
+import { Result } from '@taverla/core/helpers/result'
 
 import type { Room } from '@/domain/room/room'
 import {

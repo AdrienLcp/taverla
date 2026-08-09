@@ -1,8 +1,8 @@
 import { useParams } from 'react-router'
 
-import type { RoomCode } from '@blindtest/protocol/identifiers'
+import type { RoomCode } from '@taverla/protocol/identifiers'
 
-import { normalizeRoomCode } from '@blindtest/core/room/room-code'
+import { normalizeRoomCode } from '@taverla/core/room/room-code'
 
 export const joinPath = '/'
 export const hostPathFor = (code: RoomCode): string => `/host/${code}`

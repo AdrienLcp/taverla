@@ -1,4 +1,4 @@
-import type { ClockEstimate } from '@blindtest/core/time/clock-sync'
+import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
 import type { SocketStatus } from '@/infrastructure/messaging/use-room-socket'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'

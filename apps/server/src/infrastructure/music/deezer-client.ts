@@ -1,9 +1,9 @@
 import { z } from 'zod'
 
-import type { TrackSearchResult } from '@blindtest/protocol/http'
-import type { HostTrack, TrackSource } from '@blindtest/protocol/track'
+import type { TrackSearchResult } from '@taverla/protocol/http'
+import type { HostTrack, TrackSource } from '@taverla/protocol/track'
 
-import { Result } from '@blindtest/core/helpers/result'
+import { Result } from '@taverla/core/helpers/result'
 
 import { env } from '@/env'
 import { logger } from '@/infrastructure/logging/logger'

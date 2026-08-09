@@ -1,6 +1,6 @@
-import type { ProtocolErrorCode } from '@blindtest/protocol/error-code'
-import type { PlayerId, RoundId } from '@blindtest/protocol/identifiers'
-import type { PlayerRoomView, RoomPhase } from '@blindtest/protocol/room'
+import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
+import type { PlayerId, RoundId } from '@taverla/protocol/identifiers'
+import type { PlayerRoomView, RoomPhase } from '@taverla/protocol/room'
 
 export type BuzzBlocker =
   | 'round_not_running'

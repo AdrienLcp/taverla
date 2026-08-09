@@ -1,4 +1,4 @@
-import type { RoomCode } from '@blindtest/protocol/identifiers'
+import type { RoomCode } from '@taverla/protocol/identifiers'
 
 import type { Room } from '@/domain/room/room'
 import { findRoom } from '@/domain/room/room-store'

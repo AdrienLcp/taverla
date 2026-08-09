@@ -4,10 +4,10 @@ import type {
   RoomCode,
   RoundId,
   SessionId
-} from '@blindtest/protocol/identifiers'
-import type { RoomPhase, RoomSettings } from '@blindtest/protocol/room'
-import type { Award } from '@blindtest/protocol/scoring'
-import type { HostTrack, TrackIdentity } from '@blindtest/protocol/track'
+} from '@taverla/protocol/identifiers'
+import type { RoomPhase, RoomSettings } from '@taverla/protocol/room'
+import type { Award } from '@taverla/protocol/scoring'
+import type { HostTrack, TrackIdentity } from '@taverla/protocol/track'
 
 /**
  * The server's own model, deliberately richer than either wire view: it holds

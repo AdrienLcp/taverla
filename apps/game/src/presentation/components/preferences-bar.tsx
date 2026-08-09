@@ -1,4 +1,4 @@
-import { isLocale, LOCALES, type Locale } from '@blindtest/core/i18n/locale'
+import { isLocale, LOCALES, type Locale } from '@taverla/core/i18n/locale'
 
 import {
   isThemePreference,

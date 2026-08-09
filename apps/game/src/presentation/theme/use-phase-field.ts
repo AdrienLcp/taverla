@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import type { RoomPhase } from '@blindtest/protocol/room'
+import type { RoomPhase } from '@taverla/protocol/room'
 
 /**
  * The phase is the design. Each one owns a field colour, and the whole document

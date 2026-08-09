@@ -1,9 +1,9 @@
 import { type FormEvent, useState } from 'react'
 import { Form } from 'react-aria-components'
 
-import type { ProtocolErrorCode } from '@blindtest/protocol/error-code'
-import type { RoomCode } from '@blindtest/protocol/identifiers'
-import type { PlayerRoomView } from '@blindtest/protocol/room'
+import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
+import type { RoomCode } from '@taverla/protocol/identifiers'
+import type { PlayerRoomView } from '@taverla/protocol/room'
 
 import { NotFoundPage } from '@/features/not-found/not-found-page'
 import {

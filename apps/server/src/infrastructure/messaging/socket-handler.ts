@@ -6,17 +6,13 @@ import {
   clientMessageSchema,
   type HelloMessage,
   HOST_ONLY_MESSAGE_TYPES
-} from '@blindtest/protocol/client-message'
-import { decodeMessage } from '@blindtest/protocol/codec'
-import type {
-  PlayerId,
-  RoomCode,
-  RoundId
-} from '@blindtest/protocol/identifiers'
-import type { RoomSettings } from '@blindtest/protocol/room'
-import { PROTOCOL_VERSION } from '@blindtest/protocol/version'
+} from '@taverla/protocol/client-message'
+import { decodeMessage } from '@taverla/protocol/codec'
+import type { PlayerId, RoomCode, RoundId } from '@taverla/protocol/identifiers'
+import type { RoomSettings } from '@taverla/protocol/room'
+import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
-import { normalizeRoomCode } from '@blindtest/core/room/room-code'
+import { normalizeRoomCode } from '@taverla/core/room/room-code'
 
 import type { Room } from '@/domain/room/room'
 import {

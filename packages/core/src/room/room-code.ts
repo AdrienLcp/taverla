@@ -3,7 +3,7 @@ import {
   ROOM_CODE_LENGTH,
   type RoomCode,
   roomCodeSchema
-} from '@blindtest/protocol/identifiers'
+} from '@taverla/protocol/identifiers'
 
 /**
  * Rejection sampling rather than `% alphabetLength`: 256 is not a multiple of

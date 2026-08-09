@@ -1,17 +1,17 @@
 import { nanoid } from 'nanoid'
 
-import type { ProtocolErrorCode } from '@blindtest/protocol/error-code'
-import type { PlayerId, RoundId } from '@blindtest/protocol/identifiers'
-import type { Verdict } from '@blindtest/protocol/scoring'
-import type { HostTrack } from '@blindtest/protocol/track'
+import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
+import type { PlayerId, RoundId } from '@taverla/protocol/identifiers'
+import type { Verdict } from '@taverla/protocol/scoring'
+import type { HostTrack } from '@taverla/protocol/track'
 
-import { Result } from '@blindtest/core/helpers/result'
+import { Result } from '@taverla/core/helpers/result'
 import {
   type BuzzRejection,
   findBuzzRejection,
   hasEligibleBuzzer
-} from '@blindtest/core/round/buzz-eligibility'
-import { isMiss, pointsFor } from '@blindtest/core/scoring/award'
+} from '@taverla/core/round/buzz-eligibility'
+import { isMiss, pointsFor } from '@taverla/core/scoring/award'
 
 import type { Room, Round } from '@/domain/room/room'
 import { touch } from '@/domain/room/room-service'

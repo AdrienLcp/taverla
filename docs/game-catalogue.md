@@ -123,9 +123,14 @@ and `i18n/locale` are cross-game; `round/buzz-eligibility` and `scoring/*` are
 the blind test's. When the second game lands, split them **by directory**, not
 by package — a package boundary with one consumer on each side buys nothing.
 
-**The `@blindtest/*` package names will be wrong.** Renaming is a mechanical
-find-and-replace that touches every import in the repo, so it is worth doing
-exactly once, on the day the second game starts — not now, and not twice.
+**The package names are already right.** They used to be `@blindtest/*`, which
+named the first game rather than the shelf it sits on, and this file said to fix
+that exactly once and not twice. That rename happened the day the product got
+its name, before the repository was ever published — the cheapest moment it
+could have happened, and the second game inherits `@taverla/*` for free.
+
+What is deliberately *not* renamed: the `blindtest.*` translation keys. Those
+belong to the game, and a second game brings its own prefix.
 
 ## What not to build in advance
 

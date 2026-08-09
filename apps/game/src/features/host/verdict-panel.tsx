@@ -1,7 +1,7 @@
 import type React from 'react'
 
-import type { Verdict } from '@blindtest/protocol/scoring'
-import type { HostTrack } from '@blindtest/protocol/track'
+import type { Verdict } from '@taverla/protocol/scoring'
+import type { HostTrack } from '@taverla/protocol/track'
 
 import { Button } from '@/presentation/components/button'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'

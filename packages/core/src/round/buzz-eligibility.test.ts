@@ -4,7 +4,7 @@ import type {
   PlayerRoomView,
   RoomPhase,
   RoundView
-} from '@blindtest/protocol/room'
+} from '@taverla/protocol/room'
 
 import {
   type BuzzBlocker,

@@ -1,4 +1,4 @@
-import type { PlayerId, SessionId } from '@blindtest/protocol/identifiers'
+import type { PlayerId, SessionId } from '@taverla/protocol/identifiers'
 
 /**
  * Anything that can be written to. Kept separate from `Connection` so a socket
