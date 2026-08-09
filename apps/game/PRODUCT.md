@@ -87,19 +87,45 @@ mechanism the whole catalogue of future games inherits.
 
 - **"Blind test" is the name of this game**, and it must keep working once the
   game has several answer modes.
-- **The product that hosts it has no name yet.** Confirmed constraints:
+- **The product that hosts the games is called `Taverla`.** From *taverne* /
+  *tavern*, a word both languages already own, and the place people have always
+  gathered to play. `taverla.com` and `taverla.fr` are both free as of
+  2026-08-09 and should be registered before anything is published under the
+  name. Known noise, judged not to be a conflict: a small Mexican candle maker
+  ("Velas Taverla") and a surname.
+
+  **`Blind test` remains the name of the game**, and nothing yet displays the
+  product name — with one game on the shelf there is no place it belongs. It
+  gets a home when the second game does.
+
+  Still owed before committing commercially: INPI and EUIPO. Everything below
+  was a registry and web check, never a trademark clearance.
+
+- Constraints the name had to satisfy, kept because the next one will need them:
   - **invented, by preference** — a coined word rather than an existing one;
   - two or three syllables;
   - easy to say and to take in for a French speaker *and* an English speaker.
     The spelling does not have to be identical in both languages; the ease does;
   - **nothing sound- or music-derived.** Not every game on this shelf will have
     audio, and a name that promises music would date on the second title;
-  - not already taken.
+  - not already taken;
+  - **its `.com` must be free.** Added after `Kermo` turned out to be a singer
+    and every shortlisted five-letter `.com` turned out to be registered.
 
-  Rejected on that last point: *Kalido* (an existing networking app), *Hopla*
-  (an existing board game). Rejected on the music constraint: *Fanfare*,
-  *Farandole*, *Ricochet*, *Charade*. **Nothing may hard-code a product name
-  until this is decided.**
+  What that last rule costs, measured rather than assumed: of thirteen
+  pronounceable coined `.com` domains checked against the registry, **one** was
+  free. Alternative TLDs are the other way out and they are not free either —
+  `.io` runs several times a `.com` per year and `.gg` five to eight times.
+
+  Rejected as taken: *Kalido*, *Hopla*, *Kermo*, *Konvi*, *Panora*, *Kervo*,
+  *Kerlo*, *Kalto*, *Marelo*, *Kelmo*, *Kesmo*, *Salko*, *Kovio*. Rejected on
+  the music constraint: *Fanfare*, *Farandole*, *Ricochet*, *Charade*. Rejected
+  on the domain rule: *Verko*, *Rondi*, *Kelvo*, *Odalo*, *Ferio* — all five
+  clear the name search, none has a free `.com`.
+
+  Rejected as an unprotectable common noun: *La Taverne* — hundreds of French
+  bars carry it, its `.com` and `.fr` are both taken, and a descriptive phrase
+  is close to impossible to defend or to rank for.
 - The tone must work with a grandparent and a drunk friend in the same room, so
   it is warm and federating rather than laddish. No in-jokes, no swearing, no
   content that would need explaining to a child.
