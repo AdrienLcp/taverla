@@ -18,6 +18,7 @@
     "deps:upgrade": "pnpm self-update && pnpm -r up -L",
     "dev": "pnpm --parallel --filter @blindtest/server --filter @blindtest/game dev",
     "lint": "biome check --write",
+    "lint:ci": "biome ci",
     "preinstall": "git config core.hooksPath .githooks || true",
     "test": "pnpm --filter @blindtest/protocol --filter @blindtest/core --filter @blindtest/server test",
     "test:core:watch": "pnpm --filter @blindtest/core test:watch",

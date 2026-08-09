@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          cache: pnpm
+          node-version: 24
+
+      - run: pnpm install --frozen-lockfile
+
+      # `pnpm lint` is `biome check --write`: it repairs the drift and exits 0,
+      # so running it here would pass on exactly the code CI exists to reject.
+      - name: Lint
+        run: pnpm lint:ci
+
+      - name: Build
+        run: pnpm build
+
+      - name: Test
+        run: pnpm test

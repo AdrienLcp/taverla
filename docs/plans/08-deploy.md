@@ -65,6 +65,16 @@ on the same port, and the QR code encoding that origin.
   there is nothing for one to solve yet.
 - **Rate-limit `POST /api/rooms`** — unauthenticated and it allocates memory.
 
+## CI
+
+`.github/workflows/ci.yaml` runs lint, build and test on `main` and on every
+pull request. It calls `pnpm lint:ci` rather than `pnpm lint`, because the
+latter is `biome check --write`: it would repair the drift and exit 0, passing
+on exactly the code the job exists to reject.
+
+There is no deploy job. Render redeploys from `main` itself, and a second
+mechanism racing it would only be a way to ship a build CI had not seen.
+
 ## Worth adding at the same time
 
 - **Rate-limit room creation.** `POST /api/rooms` is unauthenticated and
@@ -86,5 +96,6 @@ on the same port, and the QR code encoding that origin.
 
 ## Out of scope
 
-CI, staging, monitoring, a custom domain. A friends-and-family game does not
-need a pipeline; add one if this ever grows.
+Staging, monitoring, a custom domain. CI was in this list and is no longer: it
+is one file and it catches the class of mistake that only shows up on a machine
+that is not yours.

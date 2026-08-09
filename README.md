@@ -62,8 +62,39 @@ removed.
 | `pnpm dev` | Server and app together |
 | `pnpm build` | Type-check everything, build the app |
 | `pnpm lint` | Biome, with fixes applied |
+| `pnpm lint:ci` | Biome, reporting instead of fixing |
 | `pnpm test` | protocol + core + server |
 | `pnpm validate` | build + test |
+
+## CI
+
+[`.github/workflows/ci.yaml`](.github/workflows/ci.yaml) lints, builds and tests
+on every push to `main` and every pull request.
+
+## Deploying
+
+One instance, one origin. [`render.yaml`](render.yaml) is a Render blueprint: it
+builds the workspace and starts the server with `SERVE_GAME_FROM` pointing at
+the app's `dist`, so Hono answers the static build, the API and the socket on a
+single port — which is what makes the QR code resolve for the phone that scans
+it.
+
+1. On Render, **New → Blueprint**, and pick this repository. It reads
+   `render.yaml`; there is nothing to fill in.
+2. Deploy, and wait for `/api/health` to go green.
+3. Open the URL, create a room, and scan the QR code from a phone on mobile
+   data rather than the Wi-Fi — that is the thing being tested.
+
+Pushes to `main` redeploy from then on.
+
+The instance count is pinned to one deliberately: rooms live in a `Map` in the
+process, so a second instance would hold half of them and a phone would reach
+the wrong one. The free tier sleeps when idle, which costs a cold start on the
+first request and drops whatever rooms were open — fine for a party, not for a
+demo you are about to give.
+
+Fly.io and a small VPS fit the same shape. What rules a platform in or out is in
+[`docs/plans/08-deploy.md`](docs/plans/08-deploy.md).
 
 ## Docs
 
