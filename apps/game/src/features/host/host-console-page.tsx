@@ -27,6 +27,7 @@ import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { protocolErrorKey } from '@/presentation/i18n/translation'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
 
+import { CopyButton } from './copy-button'
 import { HostControls } from './host-controls'
 import { PlaylistPicker } from './playlist-picker'
 import { RevealPanel } from './reveal-panel'
@@ -241,7 +242,10 @@ const Lobby = ({
   return (
     <div className='stage lobby'>
       <section className='invitation'>
-        <p className='room-code'>{roomCode}</p>
+        <div className='code'>
+          <p className='room-code'>{roomCode}</p>
+          <CopyButton value={roomCode} />
+        </div>
         <div className='qr'>
           <QRCodeSVG
             bgColor='transparent'

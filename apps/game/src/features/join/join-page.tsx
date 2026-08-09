@@ -133,6 +133,9 @@ export const JoinPage = () => {
               setCode(next)
               setCodeError(null)
             }}
+            // Derived rather than written, so it cannot drift from the length
+            // the server actually generates. Dots carry no language.
+            placeholder={'•'.repeat(ROOM_CODE_LENGTH)}
             value={code}
           />
           <Button

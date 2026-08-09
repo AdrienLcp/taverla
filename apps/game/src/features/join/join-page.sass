@@ -63,11 +63,14 @@
         gap: var(--space-m)
 
       // A room code is read aloud and typed under pressure, so it is set at the
-      // size it will be read at, not at input size.
+      // size it will be read at, not at input size — and sized to the four
+      // characters it holds. Stretched to the column it was a white slab with
+      // nothing in it, indistinguishable from the filled button below it.
       .react-aria-Input
         @include typography.monument
 
         font-size: clamp(2rem, 9vmin, 3.5rem)
         letter-spacing: 0.06em
-        min-height: 96px
+        min-height: 84px
         text-align: center
+        width: 5ch

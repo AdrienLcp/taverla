@@ -56,6 +56,15 @@
       justify-content: center
       min-width: 0
 
+      // The code and the button that copies it are one object, so they sit
+      // closer to each other than to the QR card below them.
+      .code
+        align-items: flex-start
+        display: flex
+        flex-direction: column
+        gap: var(--space-s)
+        width: 100%
+
       .room-code
         @include typography.monument
 

@@ -9,9 +9,21 @@
     padding-top: var(--space-m)
 
     // Twelve genres do not fit one row on a laptop, and a horizontal scroller
-    // hides the ones at the end from a host who is standing up.
+    // hides the ones at the end from a host who is standing up. A wrapped flex
+    // strip is worse than it sounds here: the last row gets two chips stretched
+    // to half the width each. A grid gives every genre the same cell, and the
+    // rules become gaps showing the strip's own ground through.
     .genres .segments
-      flex-wrap: wrap
+      background: var(--rule)
+      display: grid
+      gap: 2px
+      grid-template-columns: repeat(auto-fit, minmax(148px, 1fr))
+
+      .react-aria-Radio
+        border-right: none
+
+        &:not([data-selected])
+          background: var(--field)
 
     .react-aria-Form
       display: flex

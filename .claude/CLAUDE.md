@@ -1,9 +1,13 @@
 # CLAUDE.md
 
 **Taverla** is a shelf of party games sharing one room, one QR code and one set
-of phones. **Blind test** is the first of them: one screen runs the game and
-shows the QR code, everyone else plays on the phone in their pocket, and the
-first to buzz gets to name the track.
+of screens. **Blind test** is the first of them: one screen runs the game and
+shows the QR code, everyone else plays on whatever screen they have to hand,
+and the first to buzz gets to name the track.
+
+A phone is the common case, not the contract. The room code is displayed to be
+read aloud and typed, so a laptop in the same room joins the same way — nothing
+user-facing may assume the device.
 
 Two names, two scopes, and the distinction is load-bearing. The product owns
 `@taverla/*`, the `taverla:*` storage keys and the repository name. The game
@@ -107,7 +111,8 @@ string written into a component is a bug, not a shortcut — see
 - **Room** — one game, addressed by a 4-character code from an alphabet with no
   confusable glyphs (`O`/`0`, `I`/`1`, `S`/`5`, `Z`/`2` are all excluded)
 - **Host** — the big screen. Shows the QR code, plays the audio, judges answers
-- **Player** — a phone that scanned in. Holds a seat and a score
+- **Player** — anyone who joined, by scanning the QR code or by typing the room
+  code. Holds a seat and a score
 - **Round** — one track. `lobby → countdown → playing → buzzed → revealed`
 - **Buzz** — a player claiming the answer; the server stamps when it arrived
 - **Lockout** — a player who answered wrong sits out the rest of the round

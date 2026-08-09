@@ -51,6 +51,9 @@ export const EN_DICTIONARY = {
   'error.wrong_phase': 'Too late, the game has moved on.',
 
   'host.autoAdvance': 'Chain rounds by itself',
+  'host.copied': 'Copied',
+  'host.copyCode': 'Copy the code',
+  'host.copyFailed': 'Could not copy',
   'host.endGame': 'End the game',
   'host.final.title': 'Final scores',
   'host.genre.0': 'Everything',
@@ -67,7 +70,7 @@ export const EN_DICTIONARY = {
   'host.genre.464': 'Metal',
   'host.genre.label': 'Which music',
   'host.invite.title': 'Scan to play',
-  'host.needsPlayer': 'One phone has to join before the game can start',
+  'host.needsPlayer': 'The game needs at least one player',
   'host.nextRound': 'Next round',
   'host.playAgain': 'Play again',
   'host.players.empty': 'Nobody has joined yet. The QR code is waiting.',

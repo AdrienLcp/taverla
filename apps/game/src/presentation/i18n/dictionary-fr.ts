@@ -53,6 +53,9 @@ export const FR_DICTIONARY: Dictionary = {
   'error.wrong_phase': 'Trop tard, la partie est passée à autre chose.',
 
   'host.autoAdvance': 'Enchaîner tout seul',
+  'host.copied': 'Copié',
+  'host.copyCode': 'Copier le code',
+  'host.copyFailed': 'Copie impossible',
   'host.endGame': 'Terminer la partie',
   'host.final.title': 'Score final',
   'host.genre.0': 'Tout',
@@ -69,7 +72,7 @@ export const FR_DICTIONARY: Dictionary = {
   'host.genre.464': 'Metal',
   'host.genre.label': 'Quelle musique',
   'host.invite.title': 'Scanne pour jouer',
-  'host.needsPlayer': 'Il faut qu’un téléphone rejoigne avant de lancer',
+  'host.needsPlayer': 'Il faut au moins un joueur pour lancer',
   'host.nextRound': 'Tour suivant',
   'host.playAgain': 'Rejouer',
   'host.players.empty': 'Personne n’a encore rejoint. Le QR code attend.',

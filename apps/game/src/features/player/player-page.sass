@@ -32,6 +32,23 @@
       flex-direction: column
       gap: var(--space-l)
 
+    // Anyone can play from a laptop — the code is on the host screen precisely
+    // so it can be typed rather than scanned. Left-aligned in a 620px ribbon
+    // this read as a phone screenshot dropped in the middle of the display, so
+    // on a wide one it becomes what the rest of the product already is: a title
+    // card, centred, sized to the screen it is on.
+    @media (width >= 900px)
+      &:not(.playing)
+        align-items: center
+        max-width: 760px
+        text-align: center
+
+        > header h1
+          font-size: clamp(2.75rem, 7vmin, 5rem)
+
+        .react-aria-Form
+          width: 100%
+
     .waiting
       color: var(--ink-muted)
       text-align: center
