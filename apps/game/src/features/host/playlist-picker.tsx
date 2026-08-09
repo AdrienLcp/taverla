@@ -1,5 +1,5 @@
 import type React from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import type { RoomSettings } from '@taverla/protocol/room'
 import type { TrackSource } from '@taverla/protocol/track'
@@ -45,158 +45,38 @@ type GenreId = (typeof GENRE_IDS)[number]
 const genreLabelKey = (genreId: GenreId): `host.genre.${GenreId}` =>
   `host.genre.${genreId}`
 
-type PlaylistPickerProps = {
-  onChange: (settings: RoomSettings) => void
-  settings: RoomSettings
-}
+const PREVIEWED_TITLES = 5
 
-/**
- * A blind test with the wrong decade is a wasted evening, so the pool is shown
- * before the game starts rather than discovered on the first round. The preview
- * carries no audio — preview URLs expire, so the server resolves those when a
- * round starts.
- */
-export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
-  onChange,
-  settings
-}) => {
-  const translate = useTranslate()
-  const [kind, setKind] = useState<SourceKind>(settings.source.kind)
-  const [genreId, setGenreId] = useState<GenreId>(0)
-  const [query, setQuery] = useState('')
-  const [playlistId, setPlaylistId] = useState('')
-  const [preview, setPreview] = useState<string[] | null>(null)
-  const [error, setError] = useState<TranslationKey | null>(null)
-  const [isChecking, setIsChecking] = useState(false)
-
-  const apply = async (): Promise<void> => {
-    setError(null)
-
-    const source = buildSource({ genreId, kind, playlistId, query })
-
-    if (source === null) {
-      return
-    }
-
-    if (source.kind === 'search') {
-      setIsChecking(true)
-
-      const found = await searchTracks(source.query)
-
-      setIsChecking(false)
-
-      if (found.status === 'failure') {
-        setError(apiErrorKey(found.error))
-
-        return
-      }
-
-      // Nothing well-known enough matched, so the pool would be empty and the
-      // game would fail on its first round instead of here.
-      if (found.data.length === 0) {
-        setError('host.source.none')
-        setPreview(null)
-
-        return
-      }
-
-      setPreview(found.data.slice(0, 5).map((track) => track.title))
-    } else {
-      setPreview(null)
-    }
-
-    onChange({ ...settings, source })
-  }
-
-  return (
-    <section className='playlist-picker'>
-      <SegmentedControl
-        label={translate('host.source.label')}
-        onChange={(next) => {
-          if (isSourceKind(next)) {
-            setKind(next)
-          }
-        }}
-        options={Object.entries(KIND_LABELS).map(([value, key]) => ({
-          label: translate(key),
-          value
-        }))}
-        value={kind}
-      />
-
-      {kind === 'chart' && (
-        <SegmentedControl
-          className='genres'
-          label={translate('host.genre.label')}
-          onChange={(next) => {
-            const chosen = GENRE_IDS.find((id) => String(id) === next)
-
-            if (chosen !== undefined) {
-              setGenreId(chosen)
-            }
-          }}
-          options={GENRE_IDS.map((id) => ({
-            label: translate(genreLabelKey(id)),
-            value: String(id)
-          }))}
-          value={String(genreId)}
-        />
-      )}
-
-      {kind === 'search' && (
-        <TextField
-          label={translate('host.source.query')}
-          onChange={setQuery}
-          value={query}
-        />
-      )}
-
-      {kind === 'playlist' && (
-        <TextField
-          label={translate('host.source.playlistId')}
-          onChange={setPlaylistId}
-          value={playlistId}
-        />
-      )}
-
-      <Button
-        isPending={isChecking}
-        onPress={() => {
-          void apply()
-        }}
-        variant='outlined'
-      >
-        {translate('host.source.apply')}
-      </Button>
-
-      {error !== null && (
-        <p className='error' role='alert'>
-          {translate(error)}
-        </p>
-      )}
-
-      {preview !== null && (
-        <ul className='preview'>
-          {preview.map((title) => (
-            <li key={title}>{title}</li>
-          ))}
-        </ul>
-      )}
-    </section>
-  )
-}
-
-const buildSource = ({
-  genreId,
-  kind,
-  playlistId,
-  query
-}: {
+/** What the three source kinds need, all at once, so switching kind keeps what was typed. */
+type Draft = {
   genreId: GenreId
   kind: SourceKind
   playlistId: string
   query: string
-}): TrackSource | null => {
+}
+
+/**
+ * The room's settings are the truth on mount, so the picker opens on the source
+ * the room is actually running — a genre chosen before a `play again` is still
+ * the selected one when the lobby comes back.
+ */
+const draftFromSource = (source: TrackSource): Draft => ({
+  genreId:
+    source.kind === 'chart'
+      ? (GENRE_IDS.find((id) => id === source.genreId) ?? 0)
+      : 0,
+  kind: source.kind,
+  playlistId: source.kind === 'playlist' ? source.playlistId : '',
+  query: source.kind === 'search' ? source.query : ''
+})
+
+/** `null` while the chosen kind is still missing the text it needs. */
+const sourceFromDraft = ({
+  genreId,
+  kind,
+  playlistId,
+  query
+}: Draft): TrackSource | null => {
   switch (kind) {
     case 'chart':
       return { genreId, kind: 'chart' }
@@ -209,4 +89,160 @@ const buildSource = ({
         ? null
         : { kind: 'search', query: query.trim() }
   }
+}
+
+type PlaylistPickerProps = {
+  /** Called on every edit. Must be stable — it is an effect dependency. */
+  onDraftChange: (source: TrackSource | null) => void
+  settings: RoomSettings
+}
+
+/**
+ * A blind test with the wrong decade is a wasted evening, so the pool is chosen
+ * before the game starts rather than discovered on the first round.
+ *
+ * Nothing here commits: starting the game is what sends the source, because a
+ * choice that has to be confirmed and *then* launched is two decisions where
+ * the host only made one. The search button is the exception, and it only
+ * looks — it exists because a query with no visible answer is a guess.
+ */
+export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
+  onDraftChange,
+  settings
+}) => {
+  const translate = useTranslate()
+  const [draft, setDraft] = useState<Draft>(() =>
+    draftFromSource(settings.source)
+  )
+  const [titles, setTitles] = useState<string[] | null>(null)
+  const [error, setError] = useState<TranslationKey | null>(null)
+  const [isSearching, setIsSearching] = useState(false)
+
+  // The control that commits this draft is the one that starts the game, and it
+  // lives in the console's footer rather than here.
+  useEffect(() => {
+    onDraftChange(sourceFromDraft(draft))
+  }, [draft, onDraftChange])
+
+  const revise = (patch: Partial<Draft>): void => {
+    setDraft({ ...draft, ...patch })
+    setTitles(null)
+    setError(null)
+  }
+
+  const search = async (): Promise<void> => {
+    const query = draft.query.trim()
+
+    setError(null)
+    setTitles(null)
+    setIsSearching(true)
+
+    const found = await searchTracks(query)
+
+    setIsSearching(false)
+
+    if (found.status === 'failure') {
+      setError(apiErrorKey(found.error))
+
+      return
+    }
+
+    // Nothing well-known enough matched, so the pool would be empty and the
+    // game would fail on its first round instead of here.
+    if (found.data.length === 0) {
+      setError('host.source.none')
+
+      return
+    }
+
+    setTitles(found.data.map((track) => track.title))
+  }
+
+  return (
+    <section className='playlist-picker'>
+      <SegmentedControl
+        label={translate('host.source.label')}
+        onChange={(next) => {
+          if (isSourceKind(next)) {
+            revise({ kind: next })
+          }
+        }}
+        options={Object.entries(KIND_LABELS).map(([value, key]) => ({
+          label: translate(key),
+          value
+        }))}
+        value={draft.kind}
+      />
+
+      {draft.kind === 'chart' && (
+        <SegmentedControl
+          className='genres'
+          label={translate('host.genre.label')}
+          onChange={(next) => {
+            const chosen = GENRE_IDS.find((id) => String(id) === next)
+
+            if (chosen !== undefined) {
+              revise({ genreId: chosen })
+            }
+          }}
+          options={GENRE_IDS.map((id) => ({
+            label: translate(genreLabelKey(id)),
+            value: String(id)
+          }))}
+          value={String(draft.genreId)}
+        />
+      )}
+
+      {draft.kind === 'search' && (
+        <>
+          <TextField
+            label={translate('host.source.query')}
+            onChange={(query) => {
+              revise({ query })
+            }}
+            value={draft.query}
+          />
+          <Button
+            isDisabled={draft.query.trim().length === 0}
+            isPending={isSearching}
+            onPress={() => {
+              void search()
+            }}
+            variant='ghost'
+          >
+            {translate('host.source.preview')}
+          </Button>
+        </>
+      )}
+
+      {draft.kind === 'playlist' && (
+        <TextField
+          label={translate('host.source.playlistId')}
+          onChange={(playlistId) => {
+            revise({ playlistId })
+          }}
+          value={draft.playlistId}
+        />
+      )}
+
+      {error !== null && (
+        <p className='error' role='alert'>
+          {translate(error)}
+        </p>
+      )}
+
+      {titles !== null && (
+        <div className='found'>
+          <p className='ready'>
+            {translate('host.source.ready', { count: titles.length })}
+          </p>
+          <ul className='preview'>
+            {titles.slice(0, PREVIEWED_TITLES).map((title) => (
+              <li key={title}>{title}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </section>
+  )
 }

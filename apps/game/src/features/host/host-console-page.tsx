@@ -3,7 +3,8 @@ import { useState } from 'react'
 
 import type { ClientMessage } from '@taverla/protocol/client-message'
 import type { RoomCode } from '@taverla/protocol/identifiers'
-import type { HostRoomView, RoomSettings } from '@taverla/protocol/room'
+import type { HostRoomView } from '@taverla/protocol/room'
+import type { TrackSource } from '@taverla/protocol/track'
 
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
@@ -51,6 +52,7 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
   const translate = useTranslate()
   const { clock, error, send, status, view } = useHostConnection(roomCode)
   const [volume, setVolume] = useState(readStoredVolume)
+  const [draftSource, setDraftSource] = useState<TrackSource | null>(null)
 
   useReportConnection({ clock, status })
   usePhaseField(view?.phase ?? null)
@@ -79,7 +81,13 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
         )}
       </header>
 
-      <Stage clock={clock} roomCode={roomCode} send={send} view={view} />
+      <Stage
+        clock={clock}
+        onDraftSource={setDraftSource}
+        roomCode={roomCode}
+        send={send}
+        view={view}
+      />
 
       <footer>
         {error !== null && (
@@ -96,6 +104,17 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
                 // grants permission to the element only from a real gesture,
                 // and it cannot be asked for later when the track arrives.
                 unlock()
+
+                // What the picker is showing is what the host chose, so the
+                // launch commits it. Re-sending an unchanged source is free:
+                // the server drops the pool only when it actually differs.
+                if (draftSource !== null) {
+                  send({
+                    settings: { ...view.settings, source: draftSource },
+                    type: 'host.updateSettings'
+                  })
+                }
+
                 send({ type: 'host.startRound' })
               }}
               send={send}
@@ -121,12 +140,13 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
 
 type StageProps = {
   clock: ClockEstimate | null
+  onDraftSource: (source: TrackSource | null) => void
   roomCode: RoomCode
   send: (message: ClientMessage) => boolean
   view: HostRoomView | null
 }
 
-const Stage = ({ clock, roomCode, send, view }: StageProps) => {
+const Stage = ({ clock, onDraftSource, roomCode, send, view }: StageProps) => {
   const translate = useTranslate()
 
   if (view === null) {
@@ -203,16 +223,16 @@ const Stage = ({ clock, roomCode, send, view }: StageProps) => {
     )
   }
 
-  return <Lobby roomCode={roomCode} send={send} view={view} />
+  return <Lobby onDraftSource={onDraftSource} roomCode={roomCode} view={view} />
 }
 
 const Lobby = ({
+  onDraftSource,
   roomCode,
-  send,
   view
 }: {
+  onDraftSource: (source: TrackSource | null) => void
   roomCode: RoomCode
-  send: (message: ClientMessage) => boolean
   view: HostRoomView
 }) => {
   const translate = useTranslate()
@@ -244,9 +264,7 @@ const Lobby = ({
           <Scoreboard players={view.players} />
         )}
         <PlaylistPicker
-          onChange={(settings: RoomSettings) => {
-            send({ settings, type: 'host.updateSettings' })
-          }}
+          onDraftChange={onDraftSource}
           settings={view.settings}
         />
       </section>
