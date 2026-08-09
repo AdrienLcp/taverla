@@ -123,7 +123,6 @@ describe('the two views', () => {
         artist: 'Daft Punk',
         coverUrl: null,
         id: '3135556',
-        previewUrl: 'https://cdnt-preview.dzcdn.net/secret.mp3',
         title: 'Harder, Better, Faster, Stronger'
       }
     ]

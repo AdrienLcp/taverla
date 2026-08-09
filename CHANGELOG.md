@@ -8,6 +8,12 @@ one part.
 
 ### Features
 
+- `[Server]` The round engine: a track drawn without repeats, a countdown every
+  device lands on together, buzzes ordered by arrival, the host's verdict, and
+  the reveal. A wrong answer locks that player out and the clip resumes for the
+  others from where the buzz stopped it, rather than ending the round
+- `[Server]` A round survives what a party does to it — the buzzer holder
+  locking their phone, the host reloading, a player being removed mid-answer
 - `[Shared]` The wire contract: role-scoped message unions, room views, error
   codes, and a codec that strips host-only fields from player frames
 - `[Server]` Hono server with a native WebSocket endpoint — room creation, host

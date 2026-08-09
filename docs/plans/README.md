@@ -7,8 +7,8 @@ describes the code is worse than no plan.
 | Stage | State | What it delivers |
 |---|---|---|
 | [00 — Bootstrap](00-bootstrap.md) | **done** | Contract, server, lobby, QR, join, live roster, clock sync |
-| [01 — Round engine](01-round-engine.md) | next | The server actually runs a round: pool, countdown, buzz, verdict, reveal |
-| [02 — Host console](02-host-console.md) | | Playlist picker, synchronised audio, the judging UI |
+| [01 — Round engine](01-round-engine.md) | **done** | The server actually runs a round: pool, countdown, buzz, verdict, reveal |
+| [02 — Host console](02-host-console.md) | next | Playlist picker, synchronised audio, the judging UI |
 | [03 — Player round](03-player-round.md) | | Countdown, a live buzzer, lockout, honest feedback |
 | [04 — Reveal & scoreboard](04-reveal-scoreboard.md) | | Reveal screen, running scores, end of game |
 | [05 — Design pass](05-design-pass.md) | | `/impeccable`: a visual world, motion, the real polish |

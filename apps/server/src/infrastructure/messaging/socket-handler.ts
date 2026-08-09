@@ -8,7 +8,12 @@ import {
   HOST_ONLY_MESSAGE_TYPES
 } from '@blindtest/protocol/client-message'
 import { decodeMessage } from '@blindtest/protocol/codec'
-import type { RoomCode } from '@blindtest/protocol/identifiers'
+import type {
+  PlayerId,
+  RoomCode,
+  RoundId
+} from '@blindtest/protocol/identifiers'
+import type { RoomSettings } from '@blindtest/protocol/room'
 import { PROTOCOL_VERSION } from '@blindtest/protocol/version'
 
 import { normalizeRoomCode } from '@blindtest/core/room/room-code'
@@ -17,9 +22,21 @@ import type { Room } from '@/domain/room/room'
 import {
   claimHost,
   joinAsPlayer,
-  markPlayerDisconnected
+  markPlayerDisconnected,
+  removePlayer,
+  updateSettings
 } from '@/domain/room/room-service'
 import { findRoom } from '@/domain/room/room-store'
+import {
+  applyVerdict,
+  finishGame,
+  isFinalRound,
+  registerBuzz,
+  releaseBuzz,
+  revealRound,
+  type VerdictOutcome
+} from '@/domain/round/round-service'
+import { discardPool } from '@/domain/round/track-pool'
 import { logger } from '@/infrastructure/logging/logger'
 
 import type { Connection, Outbound } from './connection'
@@ -29,6 +46,24 @@ import {
   unregisterConnection
 } from './connection-registry'
 import { broadcastRoom, sendError, sendPong, sendWelcome } from './outbound'
+import {
+  abandonRound,
+  armPlaybackTimeout,
+  beginRound,
+  holdPlaybackTimeout
+} from './round-conductor'
+
+/** Everything `dispatch` can see: `hello` and `time.ping` are answered before it. */
+type RoomActionMessage = Exclude<
+  ClientMessage,
+  { type: 'hello' } | { type: 'time.ping' }
+>
+
+const PHASES_A_HOST_MAY_CUT_SHORT = new Set<Room['phase']>([
+  'countdown',
+  'playing',
+  'buzzed'
+])
 
 /** Policy violation. The client shows the error it was just sent and stops retrying. */
 const CLOSE_CODE_POLICY = 1008
@@ -193,9 +228,10 @@ export const createRoomSocketEvents = (
   }
 
   const dispatch = (
-    message: ClientMessage,
+    message: RoomActionMessage,
     active: Connection,
-    outbound: Outbound
+    outbound: Outbound,
+    ws: WSContext
   ): void => {
     if (HOST_ONLY_MESSAGE_TYPES.has(message.type) && active.role !== 'host') {
       sendError(outbound, {
@@ -207,14 +243,221 @@ export const createRoomSocketEvents = (
       return
     }
 
-    // The round engine lands in docs/plans/02-round-engine.md. Answering
-    // `not_implemented` keeps a half-built stage honest rather than borrowing a
-    // code that means something else.
-    sendError(outbound, {
-      code: 'not_implemented',
-      fatal: false,
-      message: `"${message.type}" is not served yet`
+    const room = roomCode === null ? null : findRoom(roomCode)
+
+    if (room === null) {
+      reject(outbound, ws, 'room_not_found', 'The room is gone')
+
+      return
+    }
+
+    switch (message.type) {
+      case 'player.buzz': {
+        buzz(message.roundId, active, outbound, room)
+        break
+      }
+      case 'host.startRound': {
+        start(outbound, room)
+        break
+      }
+      case 'host.judge': {
+        judge(message, outbound, room)
+        break
+      }
+      case 'host.reveal': {
+        reveal(message.roundId, outbound, room)
+        break
+      }
+      case 'host.nextRound': {
+        advance(outbound, room)
+        break
+      }
+      case 'host.endGame': {
+        end(room)
+        break
+      }
+      case 'host.removePlayer': {
+        evict(message.playerId, room)
+        break
+      }
+      case 'host.updateSettings': {
+        reconfigure(message.settings, outbound, room)
+        break
+      }
+    }
+  }
+
+  const buzz = (
+    roundId: RoundId,
+    active: Connection,
+    outbound: Outbound,
+    room: Room
+  ): void => {
+    if (active.role !== 'player') {
+      sendError(outbound, {
+        code: 'invalid_message',
+        fatal: false,
+        message: 'Only a player holds a buzzer'
+      })
+
+      return
+    }
+
+    const registered = registerBuzz({
+      now: Date.now(),
+      playerId: active.playerId,
+      room,
+      roundId
     })
+
+    if (registered.status === 'failure') {
+      sendError(outbound, {
+        code: registered.error,
+        fatal: false,
+        message: 'That buzz was not accepted'
+      })
+
+      return
+    }
+
+    holdPlaybackTimeout(room.code)
+    broadcastRoom(room)
+  }
+
+  const start = (outbound: Outbound, room: Room): void => {
+    if (room.phase !== 'lobby') {
+      sendError(outbound, {
+        code: 'wrong_phase',
+        fatal: false,
+        message: 'The game has already started'
+      })
+
+      return
+    }
+
+    void beginRound({ hostOutbound: outbound, room })
+  }
+
+  const judge = (
+    message: Extract<RoomActionMessage, { type: 'host.judge' }>,
+    outbound: Outbound,
+    room: Room
+  ): void => {
+    const judged = applyVerdict({
+      now: Date.now(),
+      playerId: message.playerId,
+      room,
+      roundId: message.roundId,
+      verdict: message.verdict
+    })
+
+    if (judged.status === 'failure') {
+      sendError(outbound, {
+        code: judged.error,
+        fatal: false,
+        message: 'That verdict does not apply any more'
+      })
+
+      return
+    }
+
+    settle(judged.data, room)
+  }
+
+  const reveal = (roundId: RoundId, outbound: Outbound, room: Room): void => {
+    if (room.round?.id !== roundId) {
+      sendError(outbound, {
+        code: 'stale_round',
+        fatal: false,
+        message: 'That round has already moved on'
+      })
+
+      return
+    }
+
+    if (!PHASES_A_HOST_MAY_CUT_SHORT.has(room.phase)) {
+      sendError(outbound, {
+        code: 'wrong_phase',
+        fatal: false,
+        message: 'There is nothing left to reveal'
+      })
+
+      return
+    }
+
+    abandonRound(room.code)
+    revealRound(room, Date.now())
+    broadcastRoom(room)
+  }
+
+  const advance = (outbound: Outbound, room: Room): void => {
+    if (room.phase !== 'revealed') {
+      sendError(outbound, {
+        code: 'wrong_phase',
+        fatal: false,
+        message: 'The current round is still running'
+      })
+
+      return
+    }
+
+    if (isFinalRound(room)) {
+      end(room)
+
+      return
+    }
+
+    void beginRound({ hostOutbound: outbound, room })
+  }
+
+  const end = (room: Room): void => {
+    abandonRound(room.code)
+    finishGame(room, Date.now())
+    broadcastRoom(room)
+  }
+
+  // Removed from the roster before the buzz is released, so that the player
+  // being evicted cannot be the one counted as still able to answer.
+  const evict = (playerId: PlayerId, room: Room): void => {
+    removePlayer(room, playerId, Date.now())
+    settle(releaseBuzz({ now: Date.now(), playerId, room }), room)
+  }
+
+  /**
+   * The pool is dropped whatever changed. Refilling costs one request, where a
+   * pool left over from a source the host has just replaced is a bug that
+   * survives the rest of the game.
+   */
+  const reconfigure = (
+    settings: RoomSettings,
+    outbound: Outbound,
+    room: Room
+  ): void => {
+    if (room.phase !== 'lobby') {
+      sendError(outbound, {
+        code: 'wrong_phase',
+        fatal: false,
+        message: 'Settings are locked once the game starts'
+      })
+
+      return
+    }
+
+    updateSettings(room, settings, Date.now())
+    discardPool(room)
+    broadcastRoom(room)
+  }
+
+  const settle = (outcome: VerdictOutcome | null, room: Room): void => {
+    if (outcome === 'resumed') {
+      armPlaybackTimeout(room)
+    }
+
+    if (outcome === 'revealed') {
+      abandonRound(room.code)
+    }
+
+    broadcastRoom(room)
   }
 
   return {
@@ -231,11 +474,24 @@ export const createRoomSocketEvents = (
         return
       }
 
-      if (connection.role === 'player') {
-        markPlayerDisconnected(room, connection.playerId, Date.now())
+      if (connection.role !== 'player') {
+        broadcastRoom(room)
+
+        return
       }
 
-      broadcastRoom(room)
+      markPlayerDisconnected(room, connection.playerId, Date.now())
+
+      // A phone that locks its screen while holding the buzzer would otherwise
+      // hang the round on a player who cannot answer.
+      settle(
+        releaseBuzz({
+          now: Date.now(),
+          playerId: connection.playerId,
+          room
+        }),
+        room
+      )
     },
 
     onMessage(event, ws) {
@@ -308,7 +564,7 @@ export const createRoomSocketEvents = (
         return
       }
 
-      dispatch(message, connection, outbound)
+      dispatch(message, connection, outbound, ws)
     }
   }
 }

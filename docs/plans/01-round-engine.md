@@ -67,31 +67,46 @@ host actions were designed for this. Expect to need:
 If a change is bigger than a field, stop and reconsider: the contract was built
 for this stage, so a large gap probably means the state machine drifted.
 
-## Decisions left open
+## Decisions taken
 
-- **Does a wrong answer resume the track, or reveal it?** Resuming is more fun
-  and much harder — the audio has to restart mid-clip on every device, from a
-  server-supplied offset. Consider shipping "reveal on first miss" and taking
-  resume in a later stage.
-- **What happens when nobody buzzes?** Timeout → reveal, nobody scores. Confirm
-  `playbackDurationMs` should be the full 30 s.
-- **Does the host see the answer before the reveal?** They must, to judge. So
-  the host screen has to be face-away from the room — a real product constraint
-  worth stating in the UI at stage 02.
+- **A wrong answer resumes the track.** The plan called this "much harder"
+  because it assumed every device plays audio. Only the host screen has a
+  speaker, so resuming is one `play()` call — the cost was in the server knowing
+  how much clip is left, which is what `playedMs` / `playingSince` are for. The
+  miss locks that player out, records a zero-point award, and the clip carries
+  on for everyone else.
+- **Nobody buzzes** → the clip runs its full `playbackDurationMs`, then reveals
+  with no award. Kept at 30 s; it is a setting, so the tests can move it.
+- **The host sees the answer only when it is useful.** `currentTrack` is on the
+  host view throughout, but stage 02 renders it in the judging panel and at the
+  reveal, and nowhere else — so the screen can face the room except during the
+  few seconds of a verdict. Cheaper and better than a warning label.
 
-## Done when
+## Done
 
-- A script drives a full 3-round game over two sockets: countdown, buzz, judge,
-  reveal, next, final scores — with assertions, kept as
-  `apps/server/src/__tests__/round-flow.test.ts`
-- Two players buzzing within the same millisecond produce exactly one
-  `activeBuzz`, and the loser is told why
-- A miss locks the player out for that round only, and the lockout clears on
-  `nextRound`
-- No player frame ever contains a title, artist or preview URL before the
-  reveal — assert it over the whole recorded transcript, not one frame
-- A host who reloads mid-round finds the round still running
-- `pnpm validate` green
+All of it, in `apps/server/src/__tests__/round-flow.test.ts` — six tests driving
+real sockets against the app on an ephemeral port, with the Deezer adapter
+mocked at its two exported functions:
+
+- a full three-round game from the lobby to the final scores
+- two thumbs landing together produce exactly one `activeBuzz`, and the loser
+  gets `already_buzzed`
+- a miss locks that player out for the round only, the clip resumes, and the
+  lockout is gone on `nextRound`
+- a miss by the last eligible player reveals immediately rather than waiting out
+  the clip
+- a host who reloads mid-round finds the same round still playing
+- **no player frame carries the title, artist or preview URL before the
+  reveal**, asserted over every frame both phones received
+
+That last one is the test to keep honest. The first version of it filtered the
+transcript *by the field it was testing*, so a mutation that leaked the track
+into every frame also removed every frame from the check — and it passed. It now
+cuts the window by arrival order, and the mutation turns it red.
+
+Verified in a browser as well, against the real catalogue: lobby → countdown →
+playing, a buzz that registers and explains itself on the phone, and a clip
+running out to a reveal with cover art.
 
 ## Out of scope
 

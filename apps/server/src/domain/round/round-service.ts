@@ -1,0 +1,268 @@
+import { nanoid } from 'nanoid'
+
+import type { ProtocolErrorCode } from '@blindtest/protocol/error-code'
+import type { PlayerId, RoundId } from '@blindtest/protocol/identifiers'
+import type { Verdict } from '@blindtest/protocol/scoring'
+import type { HostTrack } from '@blindtest/protocol/track'
+
+import { Result } from '@blindtest/core/helpers/result'
+import {
+  type BuzzRejection,
+  findBuzzRejection,
+  hasEligibleBuzzer
+} from '@blindtest/core/round/buzz-eligibility'
+import { isMiss, pointsFor } from '@blindtest/core/scoring/award'
+
+import type { Room, Round } from '@/domain/room/room'
+import { touch } from '@/domain/room/room-service'
+
+export type VerdictRejection = Extract<
+  ProtocolErrorCode,
+  'invalid_message' | 'stale_round' | 'wrong_phase'
+>
+
+/**
+ * What the judged round does next. A miss does not end it: the player sits out
+ * and the clip picks up where the buzz stopped it, which is why the caller has
+ * to know whether to re-arm the playback timer or let the reveal stand.
+ */
+export type VerdictOutcome = 'revealed' | 'resumed'
+
+export const openRound = ({
+  now,
+  room,
+  track
+}: {
+  now: number
+  room: Room
+  track: HostTrack
+}): Round => {
+  const round: Round = {
+    activeBuzz: null,
+    audioStartsAt: now + room.settings.countdownMs,
+    awards: [],
+    id: nanoid(10),
+    index: (room.round?.index ?? 0) + 1,
+    lockedOutPlayerIds: new Set(),
+    playedMs: 0,
+    playingSince: null,
+    revealed: false,
+    track
+  }
+
+  room.round = round
+  room.phase = 'countdown'
+  touch(room, now)
+
+  return round
+}
+
+/** `false` when the countdown fired for a round that has already been left behind. */
+export const beginPlayback = ({
+  now,
+  room,
+  roundId
+}: {
+  now: number
+  room: Room
+  roundId: RoundId
+}): boolean => {
+  if (room.round === null || room.round.id !== roundId) {
+    return false
+  }
+
+  if (room.phase !== 'countdown') {
+    return false
+  }
+
+  room.phase = 'playing'
+  room.round.playingSince = now
+  touch(room, now)
+
+  return true
+}
+
+export const registerBuzz = ({
+  now,
+  playerId,
+  room,
+  roundId
+}: {
+  now: number
+  playerId: PlayerId
+  room: Room
+  roundId: RoundId
+}): Result<void, BuzzRejection> => {
+  const round = room.round
+
+  if (round === null) {
+    return Result.failure('wrong_phase')
+  }
+
+  const rejection = findBuzzRejection({
+    claimedRoundId: roundId,
+    currentRoundId: round.id,
+    hasActiveBuzz: round.activeBuzz !== null,
+    isLockedOut: round.lockedOutPlayerIds.has(playerId),
+    phase: room.phase
+  })
+
+  if (rejection !== null) {
+    return Result.failure(rejection)
+  }
+
+  round.activeBuzz = { atServerTime: now, playerId }
+  room.phase = 'buzzed'
+  pausePlayback(round, now)
+  touch(room, now)
+
+  return Result.success(undefined)
+}
+
+export const applyVerdict = ({
+  now,
+  playerId,
+  room,
+  roundId,
+  verdict
+}: {
+  now: number
+  playerId: PlayerId
+  room: Room
+  roundId: RoundId
+  verdict: Verdict
+}): Result<VerdictOutcome, VerdictRejection> => {
+  const round = room.round
+
+  if (round === null || room.phase !== 'buzzed') {
+    return Result.failure('wrong_phase')
+  }
+
+  if (round.id !== roundId) {
+    return Result.failure('stale_round')
+  }
+
+  if (round.activeBuzz?.playerId !== playerId) {
+    return Result.failure('invalid_message')
+  }
+
+  const points = pointsFor(verdict)
+  const participant = room.players.get(playerId)
+
+  if (participant !== undefined) {
+    participant.score += points
+  }
+
+  // A miss is recorded too: the reveal panel earns the right to say who tried
+  // and got it wrong, which is most of the fun of the round being over.
+  round.awards.push({ playerId, points, verdict })
+  round.activeBuzz = null
+
+  if (!isMiss(verdict)) {
+    revealRound(room, now)
+
+    return Result.success('revealed')
+  }
+
+  round.lockedOutPlayerIds.add(playerId)
+
+  return Result.success(resumeOrReveal(room, now))
+}
+
+/**
+ * The buzzer holder vanished — a locked phone, a closed tab, a host removing
+ * them. Their claim is dropped without a verdict and without a lockout, and the
+ * clip carries on for everyone else rather than the round hanging on someone
+ * who is no longer in the room.
+ */
+export const releaseBuzz = ({
+  now,
+  playerId,
+  room
+}: {
+  now: number
+  playerId: PlayerId
+  room: Room
+}): VerdictOutcome | null => {
+  const round = room.round
+
+  if (round === null || round.activeBuzz?.playerId !== playerId) {
+    return null
+  }
+
+  round.activeBuzz = null
+
+  return resumeOrReveal(room, now)
+}
+
+export const revealRound = (room: Room, now: number): void => {
+  const round = room.round
+
+  if (round === null) {
+    return
+  }
+
+  pausePlayback(round, now)
+  round.activeBuzz = null
+  round.revealed = true
+  room.phase = 'revealed'
+  touch(room, now)
+}
+
+export const finishGame = (room: Room, now: number): void => {
+  room.phase = 'finished'
+  room.round = null
+  touch(room, now)
+}
+
+export const isFinalRound = (room: Room): boolean =>
+  (room.round?.index ?? 0) >= room.settings.roundCount
+
+export const remainingPlaybackMs = (room: Room, now: number): number => {
+  const round = room.round
+
+  if (round === null) {
+    return 0
+  }
+
+  const consumed =
+    round.playedMs +
+    (round.playingSince === null ? 0 : now - round.playingSince)
+
+  return Math.max(0, room.settings.playbackDurationMs - consumed)
+}
+
+const resumeOrReveal = (room: Room, now: number): VerdictOutcome => {
+  const round = room.round
+
+  if (round === null) {
+    return 'revealed'
+  }
+
+  const canResume =
+    hasEligibleBuzzer({
+      candidates: [...room.players.values()],
+      lockedOutPlayerIds: [...round.lockedOutPlayerIds]
+    }) && remainingPlaybackMs(room, now) > 0
+
+  if (!canResume) {
+    revealRound(room, now)
+
+    return 'revealed'
+  }
+
+  room.phase = 'playing'
+  round.playingSince = now
+  touch(room, now)
+
+  return 'resumed'
+}
+
+const pausePlayback = (round: Round, now: number): void => {
+  if (round.playingSince === null) {
+    return
+  }
+
+  round.playedMs += now - round.playingSince
+  round.playingSince = null
+}

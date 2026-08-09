@@ -7,7 +7,7 @@ import type {
 } from '@blindtest/protocol/identifiers'
 import type { RoomPhase, RoomSettings } from '@blindtest/protocol/room'
 import type { Award } from '@blindtest/protocol/scoring'
-import type { HostTrack } from '@blindtest/protocol/track'
+import type { HostTrack, TrackIdentity } from '@blindtest/protocol/track'
 
 /**
  * The server's own model, deliberately richer than either wire view: it holds
@@ -22,11 +22,16 @@ export type Room = {
   hostSessionId: SessionId | null
   lastActivityAt: number
   phase: RoomPhase
+  /** Every track already used, so a pool refilled mid-game cannot repeat one. */
+  playedTrackIds: Set<string>
   players: Map<PlayerId, Participant>
   round: Round | null
   settings: RoomSettings
-  /** Tracks drawn but not yet played, so a round never repeats one. */
-  trackPool: HostTrack[]
+  /**
+   * Candidates without their audio: preview URLs are signed with an expiry, so
+   * the playable `HostTrack` is resolved when a round starts, not here.
+   */
+  trackPool: TrackIdentity[]
 }
 
 export type Participant = {
@@ -38,6 +43,11 @@ export type Participant = {
   score: number
 }
 
+/**
+ * `playedMs` and `playingSince` are the pair that makes a miss resumable: a
+ * buzz pauses the clip, and the round has to know how much of it is left rather
+ * than handing the next player a fresh thirty seconds.
+ */
 export type Round = {
   activeBuzz: { atServerTime: number; playerId: PlayerId } | null
   audioStartsAt: number | null
@@ -45,6 +55,9 @@ export type Round = {
   id: RoundId
   index: number
   lockedOutPlayerIds: Set<PlayerId>
+  playedMs: number
+  /** Server time playback last started or resumed; `null` while it is paused. */
+  playingSince: number | null
   revealed: boolean
   track: HostTrack
 }

@@ -6,7 +6,13 @@ import type {
   RoundView
 } from '@blindtest/protocol/room'
 
-import { type BuzzBlocker, findBuzzBlocker } from './buzz-eligibility'
+import {
+  type BuzzBlocker,
+  type BuzzRejection,
+  findBuzzBlocker,
+  findBuzzRejection,
+  hasEligibleBuzzer
+} from './buzz-eligibility'
 
 const runningRound: RoundView = {
   activeBuzz: null,
@@ -85,5 +91,100 @@ describe('findBuzzBlocker', () => {
     expect(
       findBuzzBlocker(viewFor('buzzed', lockedOutAndBusy))
     ).toBe<BuzzBlocker>('you_already_missed')
+  })
+})
+
+const arrivingBuzz = {
+  claimedRoundId: 'r1',
+  currentRoundId: 'r1',
+  hasActiveBuzz: false,
+  isLockedOut: false,
+  phase: 'playing'
+} as const
+
+describe('findBuzzRejection', () => {
+  it('[buzz] accepts a buzz on the running round', () => {
+    expect(findBuzzRejection(arrivingBuzz)).toBeNull()
+  })
+
+  it('[buzz] refuses a buzz when no round is running', () => {
+    expect(
+      findBuzzRejection({ ...arrivingBuzz, currentRoundId: null })
+    ).toBe<BuzzRejection>('wrong_phase')
+  })
+
+  it('[buzz] calls a thumb that landed after the round turned over stale, not misphased', () => {
+    expect(
+      findBuzzRejection({
+        ...arrivingBuzz,
+        claimedRoundId: 'r1',
+        currentRoundId: 'r2',
+        phase: 'countdown'
+      })
+    ).toBe<BuzzRejection>('stale_round')
+  })
+
+  it('[buzz] refuses a locked-out player ahead of a second buzzer', () => {
+    expect(
+      findBuzzRejection({
+        ...arrivingBuzz,
+        hasActiveBuzz: true,
+        isLockedOut: true
+      })
+    ).toBe<BuzzRejection>('player_locked_out')
+  })
+
+  it('[buzz] refuses the second thumb on the same round', () => {
+    expect(
+      findBuzzRejection({
+        ...arrivingBuzz,
+        hasActiveBuzz: true,
+        phase: 'buzzed'
+      })
+    ).toBe<BuzzRejection>('already_buzzed')
+  })
+
+  it('[buzz] refuses a buzz during the countdown', () => {
+    expect(
+      findBuzzRejection({ ...arrivingBuzz, phase: 'countdown' })
+    ).toBe<BuzzRejection>('wrong_phase')
+  })
+})
+
+describe('hasEligibleBuzzer', () => {
+  const alice = { id: 'alice', isConnected: true }
+  const bob = { id: 'bob', isConnected: true }
+
+  it('[buzz] keeps the round alive while someone can still answer', () => {
+    expect(
+      hasEligibleBuzzer({
+        candidates: [alice, bob],
+        lockedOutPlayerIds: ['alice']
+      })
+    ).toBe(true)
+  })
+
+  it('[buzz] ends the round once everyone has missed', () => {
+    expect(
+      hasEligibleBuzzer({
+        candidates: [alice, bob],
+        lockedOutPlayerIds: ['alice', 'bob']
+      })
+    ).toBe(false)
+  })
+
+  it('[buzz] does not hold the round open for a phone that dropped off', () => {
+    expect(
+      hasEligibleBuzzer({
+        candidates: [alice, { ...bob, isConnected: false }],
+        lockedOutPlayerIds: ['alice']
+      })
+    ).toBe(false)
+  })
+
+  it('[buzz] ends the round when the room emptied mid-clip', () => {
+    expect(hasEligibleBuzzer({ candidates: [], lockedOutPlayerIds: [] })).toBe(
+      false
+    )
   })
 })

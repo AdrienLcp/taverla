@@ -124,9 +124,9 @@ inventing it now is the abstraction anti-pattern with a different hat on.
 
 ## The build is staged
 
-`docs/plans/` holds one file per stage, in order, each scoped to a session. The
-bootstrap (stage 00) is done: contract, server, lobby, QR, join, live roster,
-clock sync. `not_implemented` is the honest answer to everything else, and it
-should shrink to nothing as the stages land.
+`docs/plans/` holds one file per stage, in order, each scoped to a session.
+Stages 00 (bootstrap), 01 (round engine) and 07 (language and appearance) are
+done, so **every client message is served** — the gap left is the UI around the
+engine, not the engine.
 
 Start a session by reading the stage's plan. Update it when reality diverges.

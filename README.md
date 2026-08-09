@@ -15,11 +15,15 @@ the QR code resolves for real devices without any tunnelling.
 
 ## What is here today
 
-The bootstrap is complete and playable up to the lobby: create a room, scan in,
-claim a seat, watch the roster fill live, with the clock handshake running on
-every socket. The UI speaks English and French and comes in light and dark.
-Everything past the lobby answers `not_implemented` on purpose — the round
-engine is stage 01. See [`docs/plans/`](docs/plans/).
+The server runs a whole game: create a room, scan in, claim a seat, and the
+round engine draws a track, counts everyone in, arms the buzzers, stamps who was
+first, takes the host's verdict and reveals. A wrong answer locks that player
+out and the clip picks up where the buzz stopped it. The UI speaks English and
+French and comes in light and dark.
+
+What is missing is the screens around it — the host has no audio player and no
+judging panel, and the phone has no countdown. That is stages 02 to 04; see
+[`docs/plans/`](docs/plans/).
 
 The blind test is the first game rather than the whole product: the room, the QR
 code, the seats and the anti-cheat are a shell several games will share. See
