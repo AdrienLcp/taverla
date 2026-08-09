@@ -6,66 +6,114 @@
     @include layout.stage
 
     > header
-      align-items: flex-start
+      align-items: baseline
       display: flex
+      gap: var(--space-m)
       justify-content: space-between
-
-      .eyebrow
-        @include typography.overline
-
-        color: var(--text-muted)
-
-      .room-code
-        @include typography.numeric
-
-        color: var(--accent)
-        font-size: clamp(3rem, 9vw, 7rem)
-        font-weight: 800
-        line-height: 1
+      min-height: 1.5em
 
       .round-index
-        @include typography.overline
+        @include typography.label
 
-        color: var(--text-muted)
+        color: var(--ink-muted)
 
     .stage
-      display: grid
+      display: flex
       flex: 1
+      flex-direction: column
       gap: var(--space-l)
+      min-height: 0
 
-      &.split
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))
+      // One idea, centred in the field. Every phase but the lobby and the
+      // reveal is this.
+      &.solo
+        align-items: center
+        justify-content: center
 
-      &.centred
-        align-content: center
-        gap: var(--space-m)
-        justify-items: center
+      &.lobby
+        display: grid
+        gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
+        grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr)
 
-      .listening
-        @include typography.overline
+        @media (width < 900px)
+          grid-template-columns: minmax(0, 1fr)
 
-        color: var(--text-muted)
+      &.listening
+        align-items: center
+        justify-content: center
 
-      .final-title
-        @include typography.heading
+    .final-title
+      @include typography.billboard
 
-      .scoreboard
-        min-width: min(460px, 100%)
+    // The room code is the one thing read from four metres, so it is the
+    // largest object in the product and nothing shares its line.
+    .invitation
+      align-items: flex-start
+      display: flex
+      flex-direction: column
+      gap: var(--space-l)
+      justify-content: center
+      min-width: 0
+
+      .room-code
+        @include typography.monument
+
+        font-size: clamp(4.5rem, 21vmin, 20rem)
+        width: 100%
+        word-break: break-all
+
+      .qr
+        color: var(--ink)
+        display: flex
+        flex-direction: column
+        gap: var(--space-xs)
+        max-width: 256px
+        width: 100%
+
+        svg
+          height: auto
+          width: 100%
+
+      .join-url
+        @include typography.caption
+
+        color: var(--ink-muted)
+        overflow-wrap: anywhere
+
+    .roster
+      display: flex
+      flex-direction: column
+      gap: var(--space-m)
+      min-width: 0
+
+      h2
+        @include typography.label
+
+        color: var(--ink-muted)
+
+      .empty
+        @include typography.caption
+
+        color: var(--ink-muted)
+
+    .now
+      @include typography.billboard
+
+      color: var(--ink-muted)
 
     // Width driven by a CSS animation rather than a React timer: the clip runs
     // for a duration the server already decided, and re-keying the element on a
     // resume is what restarts it after a buzz.
     .clip-progress
-      background: var(--surface-raised)
-      border-radius: var(--radius-full)
-      height: 6px
+      border: 3px solid var(--ink)
+      height: 28px
       overflow: hidden
       position: relative
-      width: min(560px, 100%)
+      width: min(900px, 100%)
 
       &::after
         animation: clip-drain var(--clip-remaining, 0ms) linear forwards
-        background: var(--accent)
+        background: var(--ink)
         content: ''
         inset: 0
         position: absolute
@@ -73,57 +121,24 @@
       @media (prefers-reduced-motion: reduce)
         &::after
           animation: none
-          opacity: 0.4
+          opacity: 0.35
 
-    h2
-      @include typography.heading
-
-      margin-bottom: var(--space-s)
-
-    .invite
-      @include layout.panel
-
-      display: flex
-      flex-direction: column
-
-      .qr
-        align-self: center
-        background: #fff
-        border-radius: var(--radius-m)
-        padding: var(--space-s)
-
-      .join-url
-        @include typography.caption
-
-        color: var(--text-faint)
-        margin-top: var(--space-s)
-        overflow-wrap: anywhere
-        text-align: center
-
-    .roster
-      @include layout.panel
-
-      .count
-        @include typography.numeric
-
-        color: var(--text-muted)
-        font-size: 0.875rem
-
-      .empty
-        @include typography.caption
-
-        color: var(--text-faint)
+    .listening .scoreboard
+      width: min(900px, 100%)
 
     > footer
       align-items: center
       display: flex
       flex-direction: column
-      gap: var(--space-s)
+      gap: var(--space-m)
 
       .error
         @include typography.caption
 
-        color: var(--danger)
+        background: var(--danger)
+        color: var(--danger-ink)
+        font-weight: 700
+        padding: var(--space-2xs) var(--space-s)
 
 @keyframes clip-drain
   from

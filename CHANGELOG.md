@@ -8,6 +8,11 @@ one part.
 
 ### Features
 
+- `[Game]` A visual world, replacing the prototype's dark-with-a-neon-accent
+  look: the screen is a title card, and the phase is the colour. Six saturated
+  fields, one per phase, so the far side of a room knows where the game is
+  before reading a word. Archivo self-hosted, hard edges, and the buzzer as the
+  one round object because it is the one physical button
 - `[Server]` One origin in production: Hono serves the built SPA with an SPA
   fallback, so `/play/K3M9` resolves on a cold load and the QR code's
   `location.origin` holds without a proxy or a second domain

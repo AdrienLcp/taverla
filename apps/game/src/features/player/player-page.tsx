@@ -20,6 +20,7 @@ import { ConnectionStatus } from '@/presentation/components/connection-status'
 import { TextField } from '@/presentation/components/text-field'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { protocolErrorKey } from '@/presentation/i18n/translation'
+import { usePhaseField } from '@/presentation/theme/use-phase-field'
 
 import { PlayerRound } from './player-round'
 
@@ -86,10 +87,8 @@ const NicknameForm = ({
   return (
     <main className='player-page'>
       <header>
-        <p className='eyebrow'>
-          {translate('player.room', { code: roomCode })}
-        </p>
         <h1>{translate('player.nickname.title')}</h1>
+        <p className='room'>{translate('player.room', { code: roomCode })}</p>
       </header>
       <Form onSubmit={submit}>
         <TextField
@@ -128,13 +127,13 @@ const Lobby = ({
   const translate = useTranslate()
   const { clock, send, status, view } = connection
 
+  usePhaseField(view?.phase ?? null)
+
   return (
     <main className='player-page playing'>
       <header>
-        <p className='eyebrow'>
-          {translate('player.room', { code: roomCode })}
-        </p>
         <ConnectionStatus clock={clock} status={status} />
+        <p className='room'>{translate('player.room', { code: roomCode })}</p>
       </header>
 
       {view === null ? (

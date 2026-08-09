@@ -3,65 +3,77 @@
 
 @layer components
   .reveal-panel
-    @include layout.panel
-
     align-items: center
-    display: flex
-    flex-wrap: wrap
-    gap: var(--space-l)
+    display: grid
+    flex: 1
+    gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
+    grid-template-columns: auto minmax(0, 1fr)
 
-    // Deezer serves covers at 250 px and nothing larger, so the layout is built
-    // around that rather than discovering the ceiling at the end.
+    @media (width < 860px)
+      align-items: start
+      grid-template-columns: minmax(0, 1fr)
+
+    @media (prefers-reduced-motion: no-preference)
+      animation: card-strike var(--transition-slow, 0) var(--timing, ease) both
+
+    // Deezer serves covers at 250 px and nothing larger, so the frame is built
+    // around that rather than discovering the ceiling at the end. It is die-cut
+    // on the field with a hard border — printed on the card, not floating.
     .cover
-      border-radius: var(--radius-m)
-      height: 250px
+      background: var(--cut)
+      border: 6px solid var(--cut)
+      height: clamp(180px, 34vmin, 320px)
       object-fit: cover
-      width: 250px
+      width: clamp(180px, 34vmin, 320px)
 
       &.placeholder
-        background: var(--surface-raised)
+        opacity: 0.25
 
     .identity
-      flex: 1
-      min-width: 220px
-
-      .eyebrow
-        @include typography.overline
-
-        color: var(--text-muted)
+      min-width: 0
 
       .title
-        font-size: clamp(1.75rem, 4vw, 3rem)
-        font-weight: 800
-        line-height: 1.05
+        @include typography.monument
+
+        font-size: clamp(2rem, 9vmin, 7rem)
 
       .artist
-        color: var(--text-muted)
-        font-size: 1.25rem
-        margin-top: var(--space-2xs)
+        @include typography.billboard
+
+        color: var(--ink-muted)
+        font-size: clamp(1.25rem, 4vmin, 2.5rem)
+        margin-top: var(--space-xs)
+
+      // Below the title, never above it: the framing is a caption on the
+      // reveal, not a label the eye has to climb over to reach the answer.
+      .framing
+        @include typography.label
+
+        color: var(--ink-muted)
+        margin-top: var(--space-m)
 
       .nobody,
       .scorers
         margin-top: var(--space-m)
 
       .nobody
-        @include typography.caption
+        @include typography.title
 
-        color: var(--text-faint)
+        color: var(--ink-muted)
 
       .scorers
         display: flex
         flex-direction: column
-        gap: var(--space-2xs)
         list-style: none
 
         li
+          @include typography.title
+
+          border-top: 2px solid var(--rule)
           display: flex
           gap: var(--space-s)
           justify-content: space-between
+          padding: var(--space-xs) 0
 
         .points
           @include typography.numeric
-
-          color: var(--accent)
-          font-weight: 700

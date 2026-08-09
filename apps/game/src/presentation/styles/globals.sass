@@ -1,8 +1,10 @@
 // The `@layer reset, tokens, base, components` order is declared in index.html,
 // where it cannot be reordered by the module graph. See the comment there.
 
+@use './fonts'
 @use './reset'
 @use './tokens'
+@use './typography'
 
 @layer base
   html,
@@ -10,22 +12,23 @@
   #root
     height: 100%
 
+  // No gradient, no glow: the field is one flat colour, and the transition
+  // between phases is the only thing that moves on it.
   body
-    background: radial-gradient(120vmax 90vmax at 15% -10%, var(--glow-top) 0%, transparent 55%), radial-gradient(100vmax 80vmax at 90% 110%, var(--glow-bottom) 0%, transparent 50%), var(--void)
-    background-attachment: fixed
-    color: var(--text)
+    background: var(--field)
+    color: var(--ink)
     font-family: var(--font-base)
+    transition: background-color var(--transition-slow, 0) var(--timing, ease)
+
+    @include typography.body
 
   #root
     display: flex
     flex-direction: column
 
-  a
-    color: var(--info)
-
   ::selection
-    background: var(--accent)
-    color: var(--accent-ink)
+    background: var(--ink)
+    color: var(--field)
 
   .visually-hidden
     clip-path: inset(50%)
@@ -34,3 +37,14 @@
     position: absolute
     white-space: nowrap
     width: 1px
+
+/// The reveal, on both surfaces: the card is struck rather than faded in. It
+/// lives here because the host screen and the phone share the moment, and
+/// because one authored motion beats the same effect written twice.
+@keyframes card-strike
+  from
+    opacity: 0
+    transform: scale(1.06)
+  to
+    opacity: 1
+    transform: scale(1)

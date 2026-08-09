@@ -8,27 +8,31 @@
     gap: var(--space-2xs)
 
     .react-aria-Label
-      @include typography.overline
+      @include typography.label
 
-      color: var(--text-muted)
+      color: var(--ink-muted)
 
+    // Ruled like a form printed on the card: a baseline to write on, not a box
+    // floating above the field.
     .react-aria-Input
-      @include focus.ring-inset
+      @include focus.ring
+      @include typography.title
 
-      background: var(--surface)
-      border: 1px solid var(--border)
-      border-radius: var(--radius-m)
-      color: var(--text)
-      min-height: 52px
-      padding: 0 var(--space-s)
+      background: transparent
+      border: none
+      border-bottom: 3px solid var(--ink)
+      color: var(--ink)
+      min-height: 56px
+      padding: 0 var(--space-2xs)
       transition: border-color var(--transition-fast, 0) var(--timing, ease)
       width: 100%
 
       &::placeholder
-        color: var(--text-faint)
+        color: var(--ink-muted)
+        opacity: 0.6
 
       &[data-hovered]
-        border-color: var(--text-faint)
+        border-color: var(--ink-muted)
 
     &[data-invalid] .react-aria-Input
       border-color: var(--danger)
@@ -36,9 +40,13 @@
     .react-aria-Text[slot='description']
       @include typography.caption
 
-      color: var(--text-faint)
+      color: var(--ink-muted)
 
     .react-aria-FieldError
       @include typography.caption
 
-      color: var(--danger)
+      align-self: flex-start
+      background: var(--danger)
+      color: var(--danger-ink)
+      font-weight: 700
+      padding: var(--space-2xs) var(--space-xs)

@@ -8,34 +8,35 @@
     gap: var(--space-2xs)
 
     .react-aria-Label
-      @include typography.overline
+      @include typography.label
 
-      color: var(--text-faint)
+      color: var(--ink-muted)
 
+    // A strip of stamps, ruled off from the field. No pill, no inner card.
     .segments
-      background: var(--surface)
-      border: 1px solid var(--border)
-      border-radius: var(--radius-full)
+      border: 2px solid var(--rule)
       display: flex
-      padding: 2px
+      flex-wrap: wrap
 
     .react-aria-Radio
-      @include focus.ring
+      @include focus.ring-inset
       @include typography.caption
 
-      border-radius: var(--radius-full)
-      color: var(--text-muted)
+      border-right: 2px solid var(--rule)
+      color: var(--ink-muted)
       cursor: pointer
+      font-weight: 700
       padding: var(--space-2xs) var(--space-s)
+      text-transform: uppercase
       transition: background-color var(--transition-fast, 0) var(--timing, ease), color var(--transition-fast, 0) var(--timing, ease)
       white-space: nowrap
 
+      &:last-child
+        border-right: none
+
       &[data-hovered]
-        color: var(--text)
+        color: var(--ink)
 
       &[data-selected]
-        background: var(--surface-raised)
-        color: var(--text)
-
-      &[data-pressed]
-        background: var(--surface-raised)
+        background: var(--ink)
+        color: var(--field)

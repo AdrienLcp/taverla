@@ -2,32 +2,36 @@
 
 @layer components
   .playlist-picker
-    border-top: 1px solid var(--border)
+    border-top: 2px solid var(--rule)
     display: flex
     flex-direction: column
     gap: var(--space-s)
-    margin-top: var(--space-m)
     padding-top: var(--space-m)
 
-    // Twelve genres do not fit one pill row on a laptop, and a horizontal
-    // scroller hides the ones at the end from a host who is standing up.
+    // Twelve genres do not fit one row on a laptop, and a horizontal scroller
+    // hides the ones at the end from a host who is standing up.
     .genres .segments
-      border-radius: var(--radius-m)
       flex-wrap: wrap
-      gap: 2px
+
+    // Sized to its label, so it never reads as a second primary action next to
+    // "start the game".
+    .button
+      align-self: flex-start
 
     .error
       @include typography.caption
 
-      color: var(--danger)
+      background: var(--danger)
+      color: var(--danger-ink)
+      font-weight: 700
+      padding: var(--space-2xs) var(--space-s)
 
     .preview
       @include typography.caption
 
-      color: var(--text-faint)
+      color: var(--ink-muted)
       display: flex
       flex-direction: column
-      gap: 2px
       list-style: none
 
       li

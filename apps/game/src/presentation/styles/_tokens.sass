@@ -1,56 +1,62 @@
+// Side-effect module: emits top-level CSS. Loaded once, from globals.sass.
+//
+// The surface IS the colour, and the colour is the phase. Six fields per
+// palette, each with the ink that survives on it — measured, not eyeballed:
+// every pair clears 4.5:1, and `--ink-muted` mixes back toward the field only
+// as far as 85%, which is where the worst pair still clears it.
+
 @mixin dark-palette
   color-scheme: dark
 
-  --void: #08080e
-  --surface: #12121c
-  --surface-raised: #1c1c2a
-  --border: #2a2a3d
+  --field-lobby: #a8330d
+  --ink-lobby: #fff2e6
+  --field-countdown: #c98a00
+  --ink-countdown: #1a1206
+  --field-playing: #0e4b44
+  --ink-playing: #eafbf6
+  --field-buzzed: #8c1027
+  --ink-buzzed: #ffedef
+  --field-revealed: #48174f
+  --ink-revealed: #f8e9fb
+  --field-finished: #14532d
+  --ink-finished: #e9fbef
 
-  --text: #f2f2f7
-  --text-muted: #9494ae
-  --text-faint: #62627a
+  --cut: #f6f1e7
+  --cut-ink: #17130d
 
-  --accent: #ff2d6f
-  --accent-strong: #ff5c8d
-  --accent-ink: #14000a
-  --info: #5b8cff
-  --success: #2ee6a8
-  --danger: #ff5a5a
-
-  --glow-top: #1b1030
-  --glow-bottom: #10203a
-
-// `--accent-strong` is the more emphatic accent, not the lighter one: hover
-// brightens on a dark ground and deepens on a light one.
 @mixin light-palette
   color-scheme: light
 
-  --void: #f6f5fb
-  --surface: #ffffff
-  --surface-raised: #eceaf5
-  --border: #d8d5e6
+  --field-lobby: #ff7a3d
+  --ink-lobby: #2b0e00
+  --field-countdown: #ffc53d
+  --ink-countdown: #2b1f00
+  --field-playing: #3fb8a6
+  --ink-playing: #04231f
+  --field-buzzed: #f2566e
+  --ink-buzzed: #2e0009
+  --field-revealed: #b77cc4
+  --ink-revealed: #25062b
+  --field-finished: #5fbf7f
+  --ink-finished: #04240f
 
-  --text: #14121f
-  --text-muted: #4f4b64
-  --text-faint: #6f6b86
-
-  --accent: #d6004f
-  --accent-strong: #ab003f
-  --accent-ink: #fff5f8
-  --info: #2b56c8
-  --success: #067a55
-  --danger: #c22020
-
-  --glow-top: #ece2ff
-  --glow-bottom: #dceaff
+  --cut: #ffffff
+  --cut-ink: #17130d
 
 @layer tokens
   \:root
     @include dark-palette
 
-    --radius-s: 8px
-    --radius-m: 14px
-    --radius-l: 24px
+    // An error is a stamped block, never tinted text, and that is a contrast
+    // decision rather than a stylistic one: a red that reads on the aubergine
+    // field is invisible on the chrome-yellow one, and text tinted from the ink
+    // tops out at 4.0:1 against the worst field. Inside its own block the
+    // contrast is fixed and total, so the stamp is the same in both palettes.
+    --danger: #b3001b
+    --danger-ink: #fff2f2
+
+    // Hard edges everywhere. The buzzer is the one round thing in the product,
+    // because it is the one thing that is a physical button.
     --radius-full: 999px
 
     --space-2xs: 4px
@@ -61,15 +67,46 @@
     --space-xl: 48px
     --space-2xl: 72px
 
-    --transition-fast: 120ms
-    --transition-base: 220ms
-    --transition-slow: 420ms
-    --timing: cubic-bezier(0.2, 0, 0, 1)
+    --transition-fast: 110ms
+    --transition-base: 260ms
+    --transition-slow: 520ms
+    // Exponential ease-out: everything arrives fast and settles, which is how
+    // a card flips rather than how a panel slides.
+    --timing: cubic-bezier(0.16, 1, 0.3, 1)
 
-    --font-base: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif
-    --font-numeric: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace
+    --font-base: 'Archivo', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif
 
-    --layout-padding: clamp(16px, 4vmin, 48px)
+    --layout-padding: clamp(16px, 4vmin, 56px)
+
+    // The active pair. Every surface reads these two and nothing else; the
+    // shell swaps which phase they point at, and that swap is the design.
+    --field: var(--field-lobby)
+    --ink: var(--ink-lobby)
+    --ink-muted: color-mix(in srgb, var(--ink) 85%, var(--field))
+    --rule: color-mix(in srgb, var(--ink) 32%, var(--field))
+
+  // `usePhaseField` stamps the attribute on the root element, so the field
+  // survives an overscroll bounce — what shows there is the document's
+  // background, not any component's.
+  \:root[data-phase='countdown']
+    --field: var(--field-countdown)
+    --ink: var(--ink-countdown)
+
+  \:root[data-phase='playing']
+    --field: var(--field-playing)
+    --ink: var(--ink-playing)
+
+  \:root[data-phase='buzzed']
+    --field: var(--field-buzzed)
+    --ink: var(--ink-buzzed)
+
+  \:root[data-phase='revealed']
+    --field: var(--field-revealed)
+    --ink: var(--ink-revealed)
+
+  \:root[data-phase='finished']
+    --field: var(--field-finished)
+    --ink: var(--ink-finished)
 
   // `ThemeProvider` stamps `data-theme` only for an explicit choice, which
   // leaves the system default to be resolved here — in CSS, before any script

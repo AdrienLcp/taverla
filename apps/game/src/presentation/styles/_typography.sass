@@ -1,40 +1,55 @@
 // Pure module: mixins only, no top-level CSS. Safe to @use from any component.
+//
+// One face, two widths. Width 125 is the title-card lettering and belongs to
+// anything the room reads from across it; width 100 is for the phone in
+// someone's hand. There is no third register — a title card has one voice.
 
-@mixin display
-  font-size: clamp(2.5rem, 7vw, 5rem)
-  font-weight: 800
+/// The room code, the countdown, the revealed title. Sized in `vmin` rather
+/// than `vw` so a phone in portrait and a television in landscape both land on
+/// something readable, and capped so it stops growing on a projector.
+@mixin monument
+  font-size: clamp(3.5rem, 17vmin, 15rem)
+  font-stretch: 125%
+  font-weight: 900
+  letter-spacing: -0.035em
+  line-height: 0.84
+  text-transform: uppercase
+
+/// One step down: the track title at a reveal, the name of whoever buzzed.
+@mixin billboard
+  font-size: clamp(1.75rem, 6vmin, 4.5rem)
+  font-stretch: 125%
+  font-weight: 900
   letter-spacing: -0.03em
-  line-height: 1
+  line-height: 0.94
 
 @mixin title
-  font-size: clamp(1.5rem, 3vw, 2.25rem)
-  font-weight: 700
-  letter-spacing: -0.02em
-
-@mixin heading
-  font-size: 1.125rem
-  font-weight: 650
-  letter-spacing: -0.01em
+  font-size: clamp(1.25rem, 3vmin, 1.75rem)
+  font-stretch: 112%
+  font-weight: 800
+  letter-spacing: -0.015em
+  line-height: 1.05
 
 @mixin body
   font-size: 1rem
-  font-weight: 400
+  font-weight: 450
+  line-height: 1.45
 
 @mixin caption
-  font-size: 0.8125rem
+  font-size: 0.875rem
   font-weight: 500
-  letter-spacing: 0.01em
+  line-height: 1.35
 
-/// Small, wide, uppercase — for the labels above a value, never for prose.
-@mixin overline
-  font-size: 0.6875rem
+/// Small, wide, uppercase — for a label that names a control, never for prose.
+@mixin label
+  font-size: 0.75rem
+  font-stretch: 112%
   font-weight: 700
-  letter-spacing: 0.14em
+  letter-spacing: 0.16em
   text-transform: uppercase
 
-/// Room codes and countdowns: tabular figures stop the layout from twitching
-/// as digits change.
+/// Tabular figures stop the layout twitching as a score goes from one digit to
+/// two, which on this screen would be a visible jolt rather than a detail.
 @mixin numeric
-  font-family: var(--font-numeric)
   font-variant-numeric: tabular-nums
-  letter-spacing: 0.08em
+  font-weight: 800

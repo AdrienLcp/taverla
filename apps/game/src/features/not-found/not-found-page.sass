@@ -10,7 +10,11 @@
     text-align: center
 
     h1
-      @include typography.title
+      @include typography.monument
+
+      font-size: clamp(2.5rem, 11vmin, 6rem)
 
     p
-      color: var(--text-muted)
+      @include typography.title
+
+      color: var(--ink-muted)

@@ -89,7 +89,6 @@ export const JoinPage = () => {
   return (
     <main className='join-page'>
       <header>
-        <p className='eyebrow'>{translate('blindtest.name')}</p>
         <h1>{translate('blindtest.tagline')}</h1>
       </header>
 

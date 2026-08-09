@@ -5,6 +5,8 @@ import type { ClientMessage } from '@blindtest/protocol/client-message'
 import type { RoomCode } from '@blindtest/protocol/identifiers'
 import type { HostRoomView, RoomSettings } from '@blindtest/protocol/room'
 
+import type { ClockEstimate } from '@blindtest/core/time/clock-sync'
+
 import { NotFoundPage } from '@/features/not-found/not-found-page'
 import { useHostConnection } from '@/infrastructure/messaging/use-host-connection'
 import {
@@ -21,6 +23,7 @@ import { Countdown } from '@/presentation/components/countdown'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { protocolErrorKey } from '@/presentation/i18n/translation'
+import { usePhaseField } from '@/presentation/theme/use-phase-field'
 
 import { HostControls } from './host-controls'
 import { PlaylistPicker } from './playlist-picker'
@@ -47,15 +50,13 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
   const translate = useTranslate()
   const { clock, error, send, status, view } = useHostConnection(roomCode)
   const [volume, setVolume] = useState(readStoredVolume)
+
+  usePhaseField(view?.phase ?? null)
   const { unlock } = useRoundAudio({ clock, view, volume })
 
   return (
     <main className='host-console-page'>
       <header>
-        <div>
-          <p className='eyebrow'>{translate('host.roomCode')}</p>
-          <p className='room-code'>{roomCode}</p>
-        </div>
         {view?.round != null && view.phase !== 'finished' && (
           <p className='round-index'>
             {translate('blindtest.round', {
@@ -70,7 +71,7 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
       {view === null ? (
         <div className='stage' />
       ) : (
-        <Stage clock={clock} send={send} view={view} />
+        <Stage clock={clock} roomCode={roomCode} send={send} view={view} />
       )}
 
       <footer>
@@ -111,18 +112,19 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
 }
 
 type StageProps = {
-  clock: Parameters<typeof Countdown>[0]['clock']
+  clock: ClockEstimate | null
+  roomCode: RoomCode
   send: (message: ClientMessage) => boolean
   view: HostRoomView
 }
 
-const Stage = ({ clock, send, view }: StageProps) => {
+const Stage = ({ clock, roomCode, send, view }: StageProps) => {
   const translate = useTranslate()
   const round = view.round
 
   if (view.phase === 'countdown' && round?.audioStartsAt != null) {
     return (
-      <div className='stage centred'>
+      <div className='stage solo'>
         <Countdown clock={clock} target={round.audioStartsAt} />
       </div>
     )
@@ -130,8 +132,8 @@ const Stage = ({ clock, send, view }: StageProps) => {
 
   if (view.phase === 'playing' && round != null) {
     return (
-      <div className='stage centred'>
-        <p className='listening'>{translate('blindtest.listening')}</p>
+      <div className='stage listening'>
+        <p className='now'>{translate('blindtest.listening')}</p>
         <div
           className='clip-progress'
           key={`${round.id}-${round.awards.length}`}
@@ -148,18 +150,17 @@ const Stage = ({ clock, send, view }: StageProps) => {
   }
 
   if (view.phase === 'buzzed' && round?.activeBuzz != null) {
-    const buzzer = view.players.find(
-      (player) => player.id === round.activeBuzz?.playerId
-    )
+    const buzzerId = round.activeBuzz.playerId
+    const buzzer = view.players.find((player) => player.id === buzzerId)
 
     return (
-      <div className='stage centred'>
+      <div className='stage solo'>
         {view.currentTrack !== null && (
           <VerdictPanel
             nickname={buzzer?.nickname ?? '—'}
             onJudge={(verdict) => {
               send({
-                playerId: round.activeBuzz?.playerId ?? '',
+                playerId: buzzerId,
                 roundId: round.id,
                 type: 'host.judge',
                 verdict
@@ -174,29 +175,30 @@ const Stage = ({ clock, send, view }: StageProps) => {
 
   if (view.phase === 'revealed' && round != null) {
     return (
-      <div className='stage split'>
+      <div className='stage'>
         <RevealPanel players={view.players} round={round} />
-        <Scoreboard players={view.players} />
       </div>
     )
   }
 
   if (view.phase === 'finished') {
     return (
-      <div className='stage centred'>
-        <h2 className='final-title'>{translate('host.final.title')}</h2>
+      <div className='stage solo'>
+        <h1 className='final-title'>{translate('host.final.title')}</h1>
         <Scoreboard players={view.players} />
       </div>
     )
   }
 
-  return <Lobby send={send} view={view} />
+  return <Lobby roomCode={roomCode} send={send} view={view} />
 }
 
 const Lobby = ({
+  roomCode,
   send,
   view
 }: {
+  roomCode: RoomCode
   send: (message: ClientMessage) => boolean
   view: HostRoomView
 }) => {
@@ -204,36 +206,36 @@ const Lobby = ({
   const joinUrl = playUrlFor(view.code)
 
   return (
-    <div className='stage split'>
-      <section className='invite'>
-        <h2>{translate('host.invite.title')}</h2>
+    <div className='stage lobby'>
+      <section className='invitation'>
+        <p className='room-code'>{roomCode}</p>
         <div className='qr'>
           <QRCodeSVG
-            bgColor='#ffffff'
-            fgColor='#08080e'
-            size={220}
+            bgColor='transparent'
+            fgColor='currentColor'
+            marginSize={0}
+            size={256}
             value={joinUrl}
           />
+          <p className='join-url'>{joinUrl}</p>
         </div>
-        <p className='join-url'>{joinUrl}</p>
-        <PlaylistPicker
-          onChange={(settings: RoomSettings) => {
-            send({ settings, type: 'host.updateSettings' })
-          }}
-          settings={view.settings}
-        />
       </section>
 
       <section className='roster'>
         <h2>
-          {translate('host.players.title')}{' '}
-          <span className='count'>{view.players.length}</span>
+          {translate('host.players.title')} {view.players.length}
         </h2>
         {view.players.length === 0 ? (
           <p className='empty'>{translate('host.players.empty')}</p>
         ) : (
           <Scoreboard players={view.players} />
         )}
+        <PlaylistPicker
+          onChange={(settings: RoomSettings) => {
+            send({ settings, type: 'host.updateSettings' })
+          }}
+          settings={view.settings}
+        />
       </section>
     </div>
   )

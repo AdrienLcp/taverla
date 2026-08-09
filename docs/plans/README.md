@@ -11,8 +11,8 @@ describes the code is worse than no plan.
 | [02 — Host console](02-host-console.md) | **done** | Playlist picker, synchronised audio, the judging UI |
 | [03 — Player round](03-player-round.md) | **done** | Countdown, a live buzzer, lockout, honest feedback |
 | [04 — Reveal & scoreboard](04-reveal-scoreboard.md) | **done** | Reveal screen, running scores, end of game |
-| [05 — Design pass](05-design-pass.md) | next | `/impeccable`: a visual world, motion, the real polish |
-| [06 — Testing](06-testing.md) | | Server socket tests, component tests, Playwright end-to-end |
+| [05 — Design pass](05-design-pass.md) | **done** | `/impeccable`: a visual world, motion, the real polish |
+| [06 — Testing](06-testing.md) | next | Server socket tests, component tests, Playwright end-to-end |
 | [07 — Language & appearance](07-i18n.md) | **done** | English and French, light and dark, a preferences bar |
 | [08 — Deploy](08-deploy.md) | | One origin serving both, somewhere friends can reach |
 

@@ -4,49 +4,46 @@
   .slider
     display: flex
     flex-direction: column
-    gap: var(--space-2xs, 6px)
+    gap: var(--space-2xs)
     min-width: 180px
 
     .slider-header
-      @include typography.overline
+      @include typography.label
 
-      color: var(--text-muted)
+      color: var(--ink-muted)
       display: flex
-      gap: var(--space-s, 12px)
+      gap: var(--space-s)
       justify-content: space-between
 
     .react-aria-SliderTrack
       align-items: center
       display: flex
-      height: 24px
+      height: 28px
       position: relative
       width: 100%
 
       &::before
-        background: var(--surface-raised)
-        border-radius: var(--radius-full)
+        border: 2px solid var(--rule)
         content: ''
-        height: 6px
+        height: 12px
         position: absolute
         width: 100%
 
     .fill
-      background: var(--accent)
-      border-radius: var(--radius-full)
-      height: 6px
+      background: var(--ink)
+      height: 12px
       position: absolute
       width: var(--fill, 0%)
 
     .react-aria-SliderThumb
-      background: var(--text)
-      border-radius: var(--radius-full)
-      height: 18px
+      background: var(--ink)
+      height: 24px
       top: 50%
-      width: 18px
+      width: 8px
 
       &[data-dragging]
-        background: var(--accent)
+        background: var(--ink-muted)
 
       &[data-focus-visible]
-        outline: 2px solid var(--info)
+        outline: 3px solid var(--ink)
         outline-offset: 3px

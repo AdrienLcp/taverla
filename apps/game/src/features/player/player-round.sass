@@ -1,3 +1,4 @@
+@use '../../presentation/styles/focus'
 @use '../../presentation/styles/typography'
 
 @layer components
@@ -12,63 +13,81 @@
       justify-content: center
       text-align: center
 
-    .eyebrow
-      @include typography.overline
+      @media (prefers-reduced-motion: no-preference)
+        animation: card-strike var(--transition-slow, 0) var(--timing, ease) both
 
-      color: var(--text-muted)
-
+    // Bigger than the shared billboard step: this is the payoff, and on a phone
+    // held at arm's length the shared size lands at twenty-eight pixels.
     .revealed-title
-      font-size: clamp(1.5rem, 7vw, 2.25rem)
-      font-weight: 800
-      line-height: 1.1
+      @include typography.billboard
+
+      font-size: clamp(2.5rem, 11vmin, 6rem)
 
     .revealed-artist
-      color: var(--text-muted)
+      @include typography.title
+
+      color: var(--ink-muted)
+
+    // Below the title for the same reason as on the host screen: the answer
+    // arrives first, the framing is a caption under it.
+    .framing
+      @include typography.label
+
+      color: var(--ink-muted)
 
     .you-scored
+      @include typography.monument
       @include typography.numeric
 
-      color: var(--accent)
-      font-size: 2.5rem
-      font-weight: 800
+      font-size: clamp(4rem, 30vmin, 12rem)
 
     .their-name
       @include typography.caption
 
-      color: var(--text-muted)
+      color: var(--ink-muted)
       text-align: center
 
   .buzzer-area
     justify-content: center
 
+    // The one round object in the product, because it is the one thing that is
+    // a physical button. Hit with a thumb by someone watching the television,
+    // so it is sized by the hand and not by the layout.
     .buzzer
+      @include focus.ring
+      @include typography.monument
+
       align-items: center
       aspect-ratio: 1
-      background: var(--accent)
+      background: var(--ink)
       border: none
       border-radius: var(--radius-full)
-      color: var(--accent-ink)
+      color: var(--field)
       display: flex
-      font-size: clamp(1.5rem, 9vw, 3rem)
-      font-weight: 800
+      font-size: clamp(2rem, 11vmin, 4rem)
       justify-content: center
       margin: 0 auto
-      text-transform: uppercase
-      transition: transform var(--transition-fast, 0), background var(--transition-fast, 0)
-      width: min(78vw, 320px)
+      touch-action: manipulation
+      transition: transform var(--transition-fast, 0) var(--timing, ease)
+      // Three limits rather than one, because this is hit on a phone held in a
+      // hand and on a laptop across a table. `vw` alone leaves it tiny on a
+      // wide screen; `vh` alone leaves it taller than a short one.
+      width: min(78vw, 42vh, 420px)
 
       &[data-pressed],
       &.claimed
-        background: var(--accent-strong, var(--accent))
-        transform: scale(0.94)
+        transform: scale(0.92)
 
       &[data-disabled]
-        background: var(--surface-raised)
-        color: var(--text-faint)
+        background: transparent
+        border: 4px solid var(--rule)
+        color: var(--ink-muted)
+        cursor: not-allowed
 
     .blocker
       @include typography.caption
 
-      color: var(--text-muted)
-      min-height: 1.5em
+      color: var(--ink-muted)
+      min-height: 2.5em
       text-align: center
+      text-wrap: balance

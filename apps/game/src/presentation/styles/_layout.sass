@@ -11,8 +11,9 @@
   padding: var(--layout-padding)
   width: 100%
 
-/// The host's surface: a laptop or a TV several metres away, so it takes the
-/// whole viewport and lets its content grow instead of centring in a column.
+/// The host's surface. It is read anywhere from forty centimetres to four
+/// metres, so it never centres in a column: it takes the whole field and lets
+/// one idea grow into it.
 @mixin stage
   display: flex
   flex: 1
@@ -21,8 +22,15 @@
   padding: var(--layout-padding)
   width: 100%
 
-@mixin panel
-  background: color-mix(in srgb, var(--surface) 70%, transparent)
-  border: 1px solid var(--border)
-  border-radius: var(--radius-l)
+/// A block die-cut out of the field: the QR card, the cover frame, the verdict
+/// panel. Hard edges and no shadow — this is printed on the card, not floating
+/// above it.
+@mixin cut
+  background: var(--cut)
+  color: var(--cut-ink)
   padding: var(--space-m)
+
+/// A hairline drawn in the field's own ink, for the rare place two regions
+/// have to be told apart without a second colour.
+@mixin ruled
+  border: 1px solid var(--rule)

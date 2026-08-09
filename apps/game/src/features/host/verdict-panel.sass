@@ -3,43 +3,51 @@
 
 @layer components
   .verdict-panel
-    @include layout.panel
-
     display: flex
     flex-direction: column
-    gap: var(--space-m)
+    gap: var(--space-l)
     text-align: center
-    width: min(720px, 100%)
+    width: min(1100px, 100%)
 
+    // Who has the floor, at the size the host reads while looking up at the
+    // room rather than down at the screen.
     h2
-      @include typography.heading
+      @include typography.billboard
 
+    // The answer is die-cut onto the field, and this is one of only two places
+    // it appears — which is what lets the screen face the room the rest of the
+    // time.
     .answer
-      background: var(--surface-raised)
-      border-radius: var(--radius-m)
-      padding: var(--space-m)
+      @include layout.cut
+
+      padding: var(--space-l)
 
       .title
-        font-size: clamp(1.5rem, 4vw, 2.5rem)
-        font-weight: 700
-        line-height: 1.1
+        @include typography.billboard
+
+        font-size: clamp(1.5rem, 5vmin, 3.5rem)
 
       .artist
-        color: var(--text-muted)
+        @include typography.title
+
         margin-top: var(--space-2xs)
+        opacity: 0.7
 
     .choices
       display: grid
       gap: var(--space-s)
-      grid-template-columns: repeat(auto-fit, minmax(148px, 1fr))
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr))
 
-    // The one destructive answer, so it reads as the odd one out rather than as
-    // a fourth equal option the host has to read to tell apart.
+    // Four verdicts have to sit side by side and their labels are sentences,
+    // so these are the one control in the product allowed to wrap.
+    .choice
+      padding-inline: var(--space-s)
+      text-wrap: balance
+      white-space: normal
+
+    // The one destructive answer is the only outlined block among three filled
+    // ones. Shape rather than a red tint, because a red that survives on the
+    // oxblood field is the field, and because the difference then survives
+    // colour blindness too.
     .choice.miss
-      --control-ink: var(--danger)
-
-      border-color: var(--danger)
-
-      &[data-hovered]
-        background: color-mix(in srgb, var(--danger) 14%, transparent)
-        border-color: var(--danger)
+      border-style: dashed
