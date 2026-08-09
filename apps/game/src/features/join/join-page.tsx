@@ -9,6 +9,7 @@ import { normalizeRoomCode } from '@taverla/core/room/room-code'
 import { createRoom, roomExists } from '@/infrastructure/api/taverla-api'
 import { hostPathFor, playPathFor } from '@/infrastructure/router/navigation'
 import { Button } from '@/presentation/components/button'
+import { Separator } from '@/presentation/components/separator'
 import { TextField } from '@/presentation/components/text-field'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import {
@@ -106,9 +107,7 @@ export const JoinPage = () => {
         </Button>
       </section>
 
-      <div aria-hidden='true' className='divider'>
-        <span>{translate('join.divider')}</span>
-      </div>
+      <Separator label={translate('join.divider')} />
 
       <section className='action'>
         <h2>{translate('join.player.title')}</h2>

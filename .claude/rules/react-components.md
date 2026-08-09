@@ -112,6 +112,31 @@ always applies. It wraps react-aria's own `composeRenderProps`, so it **always
 returns a function** — which is what makes it fit a react-aria component and not
 a plain DOM element. For a plain element, a template literal is the answer.
 
+### A line is not a `Separator`
+
+`Separator` renders `role="separator"`, which tells assistive technology that
+two *groups of content* end and begin here. Reach for it when that sentence is
+true, and for nothing else:
+
+- **Yes** — the "or" between hosting a game and joining one on the join page.
+  Two independent choices, and the boundary is the only thing between them.
+- **No** — the rules between scoreboard rows, the edge above the playlist
+  picker, the underline under the player's scoreline. Those are borders on
+  elements that already carry their own structure (a list, a section), and
+  wrapping them in separator elements adds DOM and ARIA noise for nothing.
+
+Its `className` is a plain string rather than react-aria render props, so the
+wrapper composes with a template literal and not `composeClassName`.
+
+**A label goes beside the rule, not inside it.** `Separator` takes no children,
+and one boundary should stay one element: the wrapper punches the word through
+a single rule rather than splitting it into two separators with a gap.
+
+**Never borrow a control's look from a separator.** The text field used to be a
+ruled underline in the same weight and ink as the page's dividers, so it read as
+a third divider — and taking focus drew a box around a line. It is a die-cut
+block now. Anything a user types into belongs to the `--cut` material.
+
 ### Two controls that look alike share a mixin, not a component
 
 `Button` and `Link` render different elements for different reasons — one acts,

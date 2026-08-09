@@ -15,12 +15,13 @@
 
       font-size: clamp(2.25rem, 7.5vmin, 4.5rem)
 
+    // No rule of its own: the one boundary on this page is the separator
+    // between the two ways in, and a section that draws its own edge as well
+    // gives the page three identical lines to tell apart.
     .action
-      border-top: 3px solid var(--ink)
       display: flex
       flex-direction: column
       gap: var(--space-m)
-      padding-top: var(--space-m)
 
       h2
         @include typography.title
@@ -42,11 +43,5 @@
 
         font-size: clamp(2rem, 9vmin, 3.5rem)
         letter-spacing: 0.06em
-        min-height: 76px
+        min-height: 96px
         text-align: center
-
-    .divider
-      @include typography.label
-
-      color: var(--ink-muted)
-      text-align: center

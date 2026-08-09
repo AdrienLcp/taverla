@@ -1,0 +1,33 @@
+@use '../styles/typography'
+
+@layer components
+  .separator
+    background: var(--ink)
+    border: none
+    height: 3px
+    margin: 0
+    width: 100%
+
+    &[aria-orientation='vertical']
+      height: auto
+      min-height: 2rem
+      width: 3px
+
+  // The label is punched through the rule rather than breaking it into two, so
+  // the boundary stays a single element and a single `role="separator"`.
+  .labelled-separator
+    align-items: center
+    display: flex
+    justify-content: center
+    position: relative
+
+    .separator
+      position: absolute
+
+    span
+      @include typography.label
+
+      background: var(--field)
+      color: var(--ink-muted)
+      padding: 0 var(--space-s)
+      position: relative

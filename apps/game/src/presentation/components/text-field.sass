@@ -12,27 +12,26 @@
 
       color: var(--ink-muted)
 
-    // Ruled like a form printed on the card: a baseline to write on, not a box
-    // floating above the field.
+    // A block die-cut out of the field, like the QR card and the reveal's
+    // answer — not a ruled line. An underline in this world is a separator, and
+    // a field that borrows one reads as a divider and puts a box around a line
+    // the moment it takes focus.
     .react-aria-Input
       @include focus.ring
       @include typography.title
 
-      background: transparent
-      border: none
-      border-bottom: 3px solid var(--ink)
-      color: var(--ink)
-      min-height: 56px
-      padding: 0 var(--space-2xs)
-      transition: border-color var(--transition-fast, 0) var(--timing, ease)
+      background: var(--cut)
+      // Transparent rather than absent, so turning it red for an invalid value
+      // cannot change the height of the box.
+      border: 3px solid transparent
+      color: var(--cut-ink)
+      min-height: 60px
+      padding: 0 var(--space-s)
       width: 100%
 
       &::placeholder
-        color: var(--ink-muted)
-        opacity: 0.6
-
-      &[data-hovered]
-        border-color: var(--ink-muted)
+        color: var(--cut-ink)
+        opacity: 0.45
 
     &[data-invalid] .react-aria-Input
       border-color: var(--danger)
