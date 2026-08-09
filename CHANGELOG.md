@@ -33,6 +33,8 @@ one part.
   flash the wrong ground — `data-theme` is stamped only for an explicit choice
 - `[Game]` A preferences bar on every screen, so the phone that arrived from a
   QR code can switch language without a settings page
+- `[Game]` The join form remembers what you like being called, so the second
+  room of the evening costs one tap instead of typing a name again
 
 ### Internal
 

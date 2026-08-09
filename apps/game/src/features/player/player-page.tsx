@@ -13,6 +13,10 @@ import {
   usePlayerConnection
 } from '@/infrastructure/messaging/use-player-connection'
 import { useRoomCodeParam } from '@/infrastructure/router/navigation'
+import {
+  readStoredNickname,
+  writeStoredNickname
+} from '@/infrastructure/storage/preferences-storage'
 import { Button } from '@/presentation/components/button'
 import { ConnectionStatus } from '@/presentation/components/connection-status'
 import { TextField } from '@/presentation/components/text-field'
@@ -67,16 +71,19 @@ const NicknameForm = ({
   roomCode: RoomCode
 }) => {
   const translate = useTranslate()
-  const [draft, setDraft] = useState('')
+  const [draft, setDraft] = useState(() => readStoredNickname() ?? '')
 
   const submit = (event: FormEvent): void => {
     event.preventDefault()
 
     const trimmed = draft.trim()
 
-    if (trimmed.length > 0) {
-      onSubmit(trimmed)
+    if (trimmed.length === 0) {
+      return
     }
+
+    writeStoredNickname(trimmed)
+    onSubmit(trimmed)
   }
 
   return (

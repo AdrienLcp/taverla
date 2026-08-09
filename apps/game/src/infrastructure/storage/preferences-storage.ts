@@ -1,8 +1,11 @@
+import { type Nickname, nicknameSchema } from '@blindtest/protocol/identifiers'
+
 import { isLocale, type Locale } from '@blindtest/core/i18n/locale'
 
 import { isThemePreference, type ThemePreference } from '@/helpers/theme'
 
 const LOCALE_KEY = 'blindtest:locale'
+const NICKNAME_KEY = 'blindtest:nickname'
 const THEME_KEY = 'blindtest:theme'
 
 /**
@@ -34,6 +37,21 @@ export const writeStoredThemePreference = (
   preference: ThemePreference
 ): void => {
   write(THEME_KEY, preference)
+}
+
+/**
+ * Not the seat — that is `session-storage.ts`, keyed per room, and it is what
+ * brings a reloaded phone back to its score. This is only what the player likes
+ * being called, so the join form on the *next* room arrives filled in.
+ */
+export const readStoredNickname = (): Nickname | null => {
+  const parsed = nicknameSchema.safeParse(read(NICKNAME_KEY))
+
+  return parsed.success ? parsed.data : null
+}
+
+export const writeStoredNickname = (nickname: Nickname): void => {
+  write(NICKNAME_KEY, nickname)
 }
 
 const read = (key: string): string | null => {
