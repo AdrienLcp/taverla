@@ -26,7 +26,8 @@ const translate = useTranslate()
 
 1. Add the key to `dictionary-en.ts`. Namespace it: `blindtest.*` is the only
    prefix a single game owns; `join.*`, `host.*`, `player.*`, `error.*`,
-   `connection.*` and `preferences.*` are the shell every future game reuses.
+   `connection.*`, `menu.*` and `preferences.*` are the shell every future game
+   reuses.
 2. Add it to `dictionary-fr.ts`. The compiler will insist.
 3. `{name}` is interpolated from a `Record<string, string | number>`. A missing
    value renders the placeholder rather than throwing, so it shows up in the
@@ -66,9 +67,13 @@ UI they cannot read has only the word itself to go on.
 ## Colours, and the two themes
 
 `_tokens.sass` holds `dark-palette` and `light-palette` as mixins. Every colour a
-component uses is a semantic token — `--text-muted`, `--accent`, `--surface` —
-defined once in each. **A hex in a component breaks one theme silently**, because
-nothing type-checks CSS.
+component uses is a semantic token — `--field`, `--ink`, `--ink-muted`, `--rule`,
+`--cut`, `--cut-ink` — defined once in each. **A hex in a component breaks one
+theme silently**, because nothing type-checks CSS.
+
+The pair a component reads is only ever `--field` / `--ink`: the phase decides
+which of the six they point at, and a component never names a phase. See
+`apps/game/DESIGN.md`.
 
 The cascade is:
 

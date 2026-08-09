@@ -5,8 +5,9 @@ there.
 
 **Depends on** stages 01–04. Independent of 05, 07, 08.
 
-`packages/protocol` and `packages/core` are already covered — 49 tests over the
-rules that matter. What is missing is everything with I/O.
+`packages/protocol` and `packages/core` are already covered — 85 tests over the
+rules that matter, including the server's own suite. What is missing is
+everything in the browser.
 
 ## What deserves a test here
 
@@ -32,6 +33,13 @@ off and assert the countdown still lands.
 player — through create → scan → join → buzz → judge → reveal → score. One
 journey, not a suite: it is the slowest tool available and it should only cover
 what nothing cheaper can.
+
+**The state a dead socket leaves behind**, added after it stranded a real
+session: when the server refuses with a fatal code, the client stops retrying —
+so the screen must say *disconnected* rather than *reconnecting*, replace the
+stale view with a way out, and never leave an action that silently drops its
+frame. `status === 'refused'` is the seam; drive it by pointing a host at a room
+code the server does not hold.
 
 Follow the selector discipline that works: roles and accessible names, never
 `data-testid`, and locators in a companion file rather than inline in the spec.

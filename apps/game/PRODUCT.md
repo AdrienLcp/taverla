@@ -8,9 +8,8 @@ web
 
 ## Users
 
-People in the same room, at the same time, with their own phones in their
-pockets. Two audiences that must both be served, confirmed as equally
-important:
+People in the same room, at the same time, each on a screen of their own. Two
+audiences that must both be served, confirmed as equally important:
 
 - **Adult friends at an evening party** — noise, drinks, half-attention, people
   standing up and shouting answers across the room.
@@ -19,7 +18,9 @@ important:
   tone.
 
 Nobody installs anything. One person runs the game on a screen; everyone else
-scans a QR code and plays on the phone they already have in hand.
+joins from whatever they have to hand — a phone by QR code, a laptop by typing
+the four characters on the host screen. **A phone is the common case, never the
+contract**, and nothing user-facing may name the device.
 
 There are two distinct jobs:
 

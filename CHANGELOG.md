@@ -59,6 +59,26 @@ one part.
   reach all of it without a settings page, and no screen is a dead end
 - `[Game]` The join form remembers what you like being called, so the second
   room of the evening costs one tap instead of typing a name again
+- `[Game]` The room code can be copied, for the half of joining that is not a
+  QR code: the host copies it and sends it to someone on a laptop
+
+### Improvements
+
+- `[Game]` Every screen is laid out for the screen it is opened on. The home
+  page and the nickname screen were the phone layout on a laptop — a 620px
+  ribbon down the middle, tall enough to scroll, with the second way in below
+  the fold on the very screen the host uses to make a room
+- `[Game]` Starting the game is what commits the chosen music. Confirming a
+  playlist and *then* launching it was two decisions where the host made one,
+  and it was the only control in the lobby that did not apply on selection
+- `[Game]` Inputs have a material of their own — paper behind the same ink edge
+  every control carries — instead of the bare `--cut` block that belongs to the
+  things you only look at. An input is never taller than the button that
+  submits it
+- `[Game]` An icon family, authored rather than installed, drawn on the stem
+  weight of the type beside it. A glyph never travels without its word
+- `[Game]` A `small` control size. Every secondary action in the product was a
+  52px block, which is why each of them read as a second primary action
 
 ### Fixes
 
@@ -66,9 +86,18 @@ one part.
   reading "Reconnecting…" forever over buttons that silently do nothing. The
   socket already stopped retrying on a fatal error; nothing on screen said it,
   because "given up" and "about to retry" were the same state
+- `[Game]` The launch says why it is refusing. It has always needed a player in
+  the room and has always said so only through the roster on the far side of the
+  screen, which is too far from a greyed control to read as its reason
+- `[Game]` Enter submits the track search. The field and its button sat loose in
+  a section with no form, so the only way to search was to aim at the button
+- `[Game]` Nothing user-facing assumes a phone any more. The room code is shown
+  so it can be read aloud and typed, which is how a laptop in the same room
+  joins — a phone is the common case, never the contract
 - `[Game]` Taking a seat no longer throws off a secure origin.
   `crypto.randomUUID` exists only in a secure context, and testing on real
-  phones over the LAN is plain HTTP on an IP address
+  devices over the LAN is plain HTTP on an IP address. Copying the room code
+  hits the same wall and has the same answer
 
 ### Internal
 

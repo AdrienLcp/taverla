@@ -119,12 +119,12 @@ string written into a component is a bug, not a shortcut — see
 - **Reveal** — the moment the track identity becomes public
 - **Verdict** — the host judging title and artist independently, 1 point each
 - **Session id** — minted by the client, stored per room and role; what lets a
-  phone that locked its screen come back to the same seat
+  device that locked its screen come back to the same seat
 
 ## The blind test is the first game, not the product
 
 The plan is a shelf of party games sharing one room, one QR code and one set of
-phones. That changes nothing about finishing this one — it ships whole, first —
+screens. That changes nothing about finishing this one — it ships whole, first —
 but it does mean not welding the seams shut on the way.
 
 [`docs/game-catalogue.md`](../docs/game-catalogue.md) holds the candidates and,
@@ -137,8 +137,12 @@ inventing it now is the abstraction anti-pattern with a different hat on.
 ## The build is staged
 
 `docs/plans/` holds one file per stage, in order, each scoped to a session.
-Stages 00 (bootstrap), 01 (round engine) and 07 (language and appearance) are
-done, so **every client message is served** — the gap left is the UI around the
-engine, not the engine.
+**00 through 05, 07 and 08 are done** — the game is playable end to end and
+deployed. `docs/plans/README.md` is the authority on which; do not trust this
+paragraph over that table.
+
+What is left: **06 (testing)** is the standing hole — nothing client-side has an
+automated test, so every UI claim rests on a browser pass. **09 (answer modes)**
+and **10 (per-device audio)** are the two the game asked for while being played.
 
 Start a session by reading the stage's plan. Update it when reality diverges.

@@ -134,8 +134,41 @@ a single rule rather than splitting it into two separators with a gap.
 
 **Never borrow a control's look from a separator.** The text field used to be a
 ruled underline in the same weight and ink as the page's dividers, so it read as
-a third divider — and taking focus drew a box around a line. It is a die-cut
-block now. Anything a user types into belongs to the `--cut` material.
+a third divider — and taking focus drew a box around a line.
+
+The fix for that overshot, and the correction is worth keeping because it is the
+whole material system in one example: bare `--cut` paper is the material of the
+things you only *look* at — the QR card, the cover, the reveal panel. A field
+wearing it was a filled button with the values swapped. **The edge says control,
+the ground says which kind**: `filled` is an ink block, `outlined` is the field
+behind an ink edge, an input is paper behind the same edge. See
+`apps/game/DESIGN.md`.
+
+### Three sizes, and an input is never taller than its action
+
+`small` (40px) is for an action that sits *beside* something, `medium` (52px) is
+the ordinary control, `large` (72px) is meant for a thumb or a room. Before
+`small` existed every secondary action was a 52px block, so every one of them
+read as a second primary action — that is what made the copy button beside the
+room code look broken.
+
+An input at 60px next to a 52px submit is what makes a form read as a stack of
+slabs. The field takes the same 52px.
+
+### Icons are authored here, not installed
+
+`Icon` is the whole family: a 24-unit grid, `1.25em`, 3.5 units of stroke, butt
+caps, miter joins. That lands the stroke on the stem weight of Archivo 900
+beside it, which is the point — a library's 2-unit round-capped hairline reads
+as another product's UI next to lettering this heavy, and tuning one to match
+costs more than drawing the few glyphs this product needs.
+
+A new glyph is a component that composes `Icon` and supplies only geometry
+(`copy-icon.tsx`, `check-icon.tsx`). Never a `<Icon name='copy' />` — see
+`abstraction-boundaries.md` on why a named component beats a string key.
+
+**A glyph never travels alone.** The word stays beside it: a grandparent and a
+child are both expected users, and a bare icon asks them to already know.
 
 ### Two controls that look alike share a mixin, not a component
 

@@ -34,6 +34,20 @@ through a layer costs an afternoon before a design pass and a rewrite after one.
 Everything built from here reads its strings from
 `presentation/i18n/` and its colours from `--tokens`, in both themes.
 
+## Work that is not a stage
+
+Playing the game produced a round of shell revision that belongs to no stage:
+the corner menu replacing the preferences footer, the recovery screen a dead
+socket now shows, desktop layouts for the two screens that were still phone
+shaped, the room-code copy, and a design pass on the form controls. It is
+recorded where it will be read — [`apps/game/DESIGN.md`](../../apps/game/DESIGN.md)
+for the materials and the icon family,
+[`.claude/rules/react-components.md`](../../.claude/rules/react-components.md)
+for the rules that came out of it, and the changelog for the list.
+
+Expect more of this than of stages. The plans cover what is missing; what is
+*wrong* surfaces by playing.
+
 ## Beyond the blind test
 
 This game is the first of several. [`docs/game-catalogue.md`](../game-catalogue.md)

@@ -1,8 +1,8 @@
 # Taverla
 
-A shelf of party games sharing one room, one QR code and one set of phones.
+A shelf of party games sharing one room, one QR code and one set of screens.
 **Blind test** is the first of them: one screen runs the game and shows the QR
-code, everyone else plays on the phone already in their pocket, and the first to
+code, everyone else plays on whatever screen they have to hand, and the first to
 buzz gets to name the track.
 
 The product is `Taverla`; the game is `Blind test`. Packages are scoped
@@ -14,24 +14,29 @@ pnpm install
 pnpm dev          # server on :3100, app on :5273
 ```
 
-Open `http://localhost:5273`, hit **Create a room**, and scan the QR code with a
-phone on the same Wi-Fi. The Vite dev server listens on the network address, so
-the QR code resolves for real devices without any tunnelling.
+Open `http://localhost:5273`, hit **Create a room**, and either scan the QR code
+or type the four-character code on another device on the same Wi-Fi. The Vite
+dev server listens on the network address, so the QR code resolves for real
+devices without any tunnelling.
 
 ## What is here today
 
-The server runs a whole game: create a room, scan in, claim a seat, and the
-round engine draws a track, counts everyone in, arms the buzzers, stamps who was
-first, takes the host's verdict and reveals. A wrong answer locks that player
-out and the clip picks up where the buzz stopped it. The UI speaks English and
-French and comes in light and dark.
+**A whole game, playable end to end and deployed.** Create a room, join by QR or
+by code, claim a seat that survives a locked screen. The round engine draws a
+track, counts every device in on the same instant, arms the buzzers, stamps who
+was first, takes the host's verdict and reveals with the cover art. A wrong
+answer locks that player out and the clip picks up where the buzz stopped it,
+then a running scoreboard and a final board that keeps everyone for another
+game. English and French, light and dark, on a phone or a laptop.
 
-What is missing is the screens around it — the host has no audio player and no
-judging panel, and the phone has no countdown. That is stages 02 to 04; see
-[`docs/plans/`](docs/plans/).
+What is missing is **tests** — nothing client-side has one, so every claim about
+a screen rests on someone driving a browser. That is stage 06. Stages 09 and 10
+(answer modes, per-device audio) came out of playing the game rather than out of
+planning it. See [`docs/plans/`](docs/plans/).
 
 The blind test is the first game rather than the whole product: the room, the QR
-code, the seats and the anti-cheat are a shell several games will share. See
+code, the seats, the anti-cheat and the corner menu are a shell several games
+will share. See
 [`docs/game-catalogue.md`](docs/game-catalogue.md) — and note that nothing there
 is being built in advance.
 
@@ -104,6 +109,11 @@ Fly.io and a small VPS fit the same shape. What rules a platform in or out is in
 ## Docs
 
 - [`docs/architecture.md`](docs/architecture.md) — how the pieces fit, and why
+- [`apps/game/DESIGN.md`](apps/game/DESIGN.md) — the visual world: the phase is
+  the colour, the three control materials, the icon family. Read it before
+  touching anything a user sees
+- [`apps/game/PRODUCT.md`](apps/game/PRODUCT.md) — who plays, where, and the
+  naming decisions with every rejected candidate
 - [`docs/realtime-protocol.md`](docs/realtime-protocol.md) — the wire format
 - [`docs/game-catalogue.md`](docs/game-catalogue.md) — the games after this one,
   and the seams that stay open for them

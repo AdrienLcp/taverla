@@ -107,7 +107,7 @@ Swapping catalogue means rewriting that one file.
 
 The UI is internationalised — `en` and `fr` — and themed light/dark. Both are
 lookups, not conditionals: a component asks for `player.roomSize` and for
-`--text-muted`, and the provider and the palette answer. The theme is resolved
+`--ink-muted`, and the provider and the palette answer. The theme is resolved
 in CSS rather than JavaScript, which is what keeps the first paint from flashing
 the wrong ground; `data-theme` appears on `<html>` only for an explicit choice.
 
@@ -130,8 +130,21 @@ the one shape of game (a drawing stream) that legitimately breaks the
 whole-snapshot rule. Nothing there is scheduled, and nothing there should be
 built in advance of a second game actually existing.
 
+## Where the chrome lives
+
+Everything that must exist on *every* screen is the shell's, not a page's:
+`presentation/app-shell.tsx` renders `AppMenu` — language, theme, the connection
+and the way home — beside the `Outlet`. The connection it displays is owned by a
+*page*, so `presentation/connection/` carries it upwards rather than the menu
+being mounted three times.
+
+That direction matters for the second game: the menu, the room, the seats and
+the clock are the shell, and a game supplies a surface inside it.
+
 ## What is deliberately absent
 
-No database, no authentication, no analytics, no CI. Each is a real gap rather
-than an oversight, and each has a stage in `docs/plans/` or a note there
-explaining why it is not planned.
+No database, no authentication, no analytics. Each is a real gap rather than an
+oversight, and each has a stage in `docs/plans/` or a note there explaining why
+it is not planned. CI is not among them any more —
+[`.github/workflows/ci.yaml`](../.github/workflows/ci.yaml) lints, builds and
+tests every push.
