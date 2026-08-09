@@ -87,7 +87,9 @@ mechanism racing it would only be a way to ship a build CI had not seen.
 ## Done when
 
 - A phone on mobile data can scan the QR code and play — **not verified**, no
-  deployment exists yet; everything above was checked against localhost
+  deployment exists yet. The repository is published at
+  `AdrienLcp/taverla` (private) with CI green; what remains is one action in
+  Render's own UI, which needs Adrien's account
 - `/play/K3M9` resolves on a cold load, not only via client navigation
 - The socket survives ten minutes idle — check the platform's idle timeout, and
   note that the 5-second ping already keeps it warm
