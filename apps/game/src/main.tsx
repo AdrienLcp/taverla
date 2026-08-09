@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router'
 
 import { router } from '@/infrastructure/router/routes'
+import { I18nProvider } from '@/presentation/i18n/i18n-provider'
+import { ThemeProvider } from '@/presentation/theme/theme-provider'
 
 import '@/presentation/styles/globals.sass'
 
@@ -14,6 +16,10 @@ if (container === null) {
 
 createRoot(container).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider>
+      <I18nProvider>
+        <RouterProvider router={router} />
+      </I18nProvider>
+    </ThemeProvider>
   </StrictMode>
 )

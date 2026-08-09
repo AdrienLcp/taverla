@@ -1,0 +1,146 @@
+# The catalogue beyond the blind test
+
+The blind test is the first game, not the product. The product is a room full
+of phones pointed at one screen, and the blind test is what that room does
+first. This file exists so the decisions taken while finishing it do not have to
+be undone when the second game arrives.
+
+Nothing here is scheduled. The blind test ships first, whole. What follows is a
+map of where the seams are, so that finishing it does not weld them shut.
+
+## What the shell already is
+
+Ignore the word "blindtest" in the package names for a moment and the bootstrap
+reads as a generic party-game platform:
+
+| Piece | What it is, generically |
+|---|---|
+| Room + 4-character code | A joinable session with a code humans can read aloud |
+| Host / player socket roles | One big screen, N phones |
+| Session id in `localStorage` | A seat that survives a screen lock |
+| Role-scoped message unions | **Hidden information, enforced by the compiler** |
+| `encodeChecked` | The runtime half of that: Zod strips what leaked |
+| Server-stamped arrival order | **Who was first**, unforgeable |
+| Clock handshake | Countdowns that land together on every device |
+| Whole-snapshot broadcast | No client ever holds half a state |
+| Roster, scores, connection state | The lobby every game needs |
+| i18n dictionaries, theme | Shell-level, already namespaced |
+
+Two of those are worth more than the rest. **Role-scoped views** are the
+mechanism behind every hidden-information game, not a blind-test detail — a
+werewolf's identity and a track's title are the same problem. **Server-stamped
+order** is the mechanism behind every race.
+
+## The five shapes
+
+Almost every party game worth building is one of these. The shape, not the
+theme, is what costs work.
+
+**1. Buzz-first.** A stimulus on the big screen, the first thumb wins, the host
+judges. *This is the shape the current engine already implements.* A second game
+of this shape is close to free.
+
+**2. Submit-then-vote.** Every phone types something, the screen reveals the
+answers, everyone votes. Needs a collection phase with a deadline, a reveal that
+does not leak authorship, and a vote tally. **This is the biggest reusable thing
+missing** — six of the games below want it.
+
+**3. Hidden role.** Each player gets a private payload, then discussion, then a
+vote. Needs per-player private state (the role-scoped views are half of it) and
+a phase machine with day/night.
+
+**4. Continuous stream.** A phone streams strokes or motion to the screen at
+30–60 Hz. **The only shape that breaks "state travels as a whole snapshot"** —
+see the warning below.
+
+**5. Team relay.** Two teams, a turn timer, one device passed around. Needs a
+team on the player model and a turn owner.
+
+## The catalogue
+
+| Game | Shape | What it needs that does not exist | Appetite |
+|---|---|---|---|
+| **Blind test** | Buzz-first | — | shipping |
+| **Quiz / trivia** | Buzz-first | A question bank instead of a track pool | a session |
+| **Lyrics blackout** — the line is missing, sing it | Buzz-first | Same as the blind test, different reveal | a session |
+| **Reflex race** — first to tap when the screen flips | Buzz-first | Almost nothing; it *is* the buzz | an evening |
+| **Le Fake** (Fibbage) — write a fake answer, fool the others | Submit-then-vote | Phase 2 in full | two sessions |
+| **Petit Bac** — a letter, six categories, type fast | Submit-then-vote | Phase 2, plus scoring by uniqueness | two sessions |
+| **Just One** — everyone writes one clue, duplicates cancel | Submit-then-vote | Phase 2, plus a clue-collision pass | a session after Fibbage |
+| **Qui a écrit ça ?** — answer a prompt, then guess the author | Submit-then-vote | Phase 2, plus authorship hiding | a session after Fibbage |
+| **Le curseur** (Wavelength) — a spectrum, a secret target, one clue | Submit-then-vote | A shared slider; the target is hidden from all but one | two sessions |
+| **Undercover** — same secret word for everyone but one | Hidden role | Per-player payloads, a talk phase, a vote | two sessions |
+| **Loup-garou** — the full night/day machine | Hidden role | Phase machine, timers, a narrator screen | the biggest on this list |
+| **Deux vérités, un mensonge** | Hidden role | Light: submit three, everyone votes | a session |
+| **Qui est le plus susceptible de…** | Submit-then-vote | Voting for a *player* rather than an answer | an evening |
+| **Dessine** (Skribbl) — one draws, the others guess | Continuous stream | A stroke channel, a canvas, a word list | two sessions, and read the warning |
+| **Time's Up** — three rounds, same cards, less and less speech | Team relay | Teams, turn owner, per-turn timer | two sessions |
+| **Bingo de soirée** — a grid of things that will happen tonight | Submit-then-vote | Almost nothing; grids and taps | an evening |
+
+If only one is built next, **Le Fake**. It pays for the submit-then-vote engine,
+and five other games then cost a weekend each.
+
+## The seams, and what it costs to keep them open
+
+**Room state and game state are fused today.** `RoomPhase` is
+`lobby → countdown → playing → buzzed → revealed → finished`, which is the blind
+test's life cycle wearing the room's name. The fix, when it comes, is a `game`
+field on the room carrying a discriminated union on `kind`, with `lobby` and
+`finished` staying on the room where they belong. *Do not do this now* — a union
+of one is noise, and the compiler will walk through the change in an hour when
+there are two.
+
+**Message names are blind-test verbs.** `player.buzz`, `host.judge`,
+`host.reveal`. When a second game lands, its messages take its own namespace
+(`fake.submit`, `fake.vote`) and the shell keeps `host.startRound` /
+`host.endGame`. `HOST_ONLY_MESSAGE_TYPES` partitions by prefix already, so the
+guard survives the split.
+
+**Do not dilute the role-scoped unions.** They look like ceremony until the
+second hidden-information game, at which point they are the entire anti-cheat
+story. A "generic payload" field on the room view would undo them in one commit.
+
+**One snapshot per change holds for four shapes out of five.** A drawing game
+streams 30–60 messages a second, and a whole-room snapshot per stroke is
+absurd. That game gets its own frame type carrying stroke deltas, and it is the
+*only* place a delta is right. Write that down where the next person will read
+it, or the rule will get quietly relaxed for everything.
+
+**Routes are already open.** `/host/:code` and `/play/:code` say nothing about
+which game is running, because the game is a property of the room, not of the
+URL. Keep it that way; the lobby becomes a game picker.
+
+**i18n is already namespaced.** `blindtest.*` is the only game-owned prefix;
+`join.*`, `host.*`, `player.*`, `error.*`, `connection.*` and `preferences.*`
+are shell. A new game adds its own prefix and touches nothing else.
+
+**Themes are semantic, so a game can own a colour.** Every component reads
+`--accent`, never a hex. A game that wants to be green sets `--accent` on its
+root element and the whole surface follows, with no fork of the palette.
+
+**`packages/core` holds both kinds of rule.** `time/clock-sync`, `room/room-code`
+and `i18n/locale` are cross-game; `round/buzz-eligibility` and `scoring/*` are
+the blind test's. When the second game lands, split them **by directory**, not
+by package — a package boundary with one consumer on each side buys nothing.
+
+**The `@blindtest/*` package names will be wrong.** Renaming is a mechanical
+find-and-replace that touches every import in the repo, so it is worth doing
+exactly once, on the day the second game starts — not now, and not twice.
+
+## What not to build in advance
+
+A plugin registry. A generic "game SDK". A `packages/games/*` per title. An
+abstract `GameEngine` interface with one implementation.
+
+Each of those is the anti-pattern in `.claude/rules/abstraction-boundaries.md`
+wearing a different hat: an abstraction invented before the second case exists,
+sized to the one case that does. **Two games is when the shape of the shared
+part becomes knowable.** Until then the cheapest way to stay open is the one
+this file describes — keep the seams visible, and keep the blind test from
+growing into places it does not belong.
+
+## Related
+
+- `docs/architecture.md` — how the pieces fit today
+- `docs/plans/` — the staged build of the blind test itself
+- `.claude/rules/realtime-protocol.md` — the guarantees any second game inherits

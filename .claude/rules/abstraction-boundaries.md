@@ -15,10 +15,11 @@ abstraction below it: no generic `httpClient.request()`, no neutral
 | `hono`, `@hono/*` | `apps/server/src/infrastructure/http/`, `apps/server/src/index.ts` |
 | `WebSocket` (browser) | `apps/game/src/infrastructure/messaging/use-room-socket.ts` |
 | `hono/ws` (server) | `apps/server/src/infrastructure/messaging/` |
-| `localStorage` | `apps/game/src/infrastructure/storage/session-storage.ts` |
+| `localStorage` | `apps/game/src/infrastructure/storage/session-storage.ts` (seats) and `preferences-storage.ts` (locale, theme) |
+| `navigator`, `location` | `apps/game/src/infrastructure/env.ts`, plus `location.origin` in `router/navigation.ts` |
 | `fetch` (browser) | `apps/game/src/infrastructure/api/blindtest-api.ts` |
-| `react-router` | `apps/game/src/infrastructure/router/`, plus `<Link>` in components |
-| `react-aria-components` | `apps/game/src/presentation/components/`, and a feature that genuinely needs a primitive the design system has not wrapped yet |
+| `react-router` | `apps/game/src/infrastructure/router/`, plus `useNavigate` in `presentation/app-shell.tsx` — which hands it to react-aria's `RouterProvider`, so components navigate through the design system's `Link` and never import react-router themselves |
+| `react-aria-components` | `apps/game/src/presentation/components/`, `presentation/i18n/i18n-provider.tsx` for `I18nProvider`, and a feature that genuinely needs a primitive the design system has not wrapped yet |
 
 An import of one of these anywhere else is a design bug. Fix it by moving the
 call behind the existing module, or by adding a missing one — never by adding a

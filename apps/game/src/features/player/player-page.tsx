@@ -1,13 +1,11 @@
 import { type FormEvent, useState } from 'react'
 import { Form, Button as ReactAriaButton } from 'react-aria-components'
 
+import type { ProtocolErrorCode } from '@blindtest/protocol/error-code'
 import type { RoomCode } from '@blindtest/protocol/identifiers'
 import type { PlayerRoomView } from '@blindtest/protocol/room'
 
-import {
-  type BuzzBlocker,
-  findBuzzBlocker
-} from '@blindtest/core/round/buzz-eligibility'
+import { findBuzzBlocker } from '@blindtest/core/round/buzz-eligibility'
 
 import { NotFoundPage } from '@/features/not-found/not-found-page'
 import {
@@ -18,16 +16,13 @@ import { useRoomCodeParam } from '@/infrastructure/router/navigation'
 import { Button } from '@/presentation/components/button'
 import { ConnectionStatus } from '@/presentation/components/connection-status'
 import { TextField } from '@/presentation/components/text-field'
+import { useTranslate } from '@/presentation/i18n/i18n-provider'
+import {
+  buzzBlockerKey,
+  protocolErrorKey
+} from '@/presentation/i18n/translation'
 
 import './player-page.sass'
-
-/** A dead button with no explanation is the worst thing a party game can show. */
-const BLOCKER_LABELS: Record<BuzzBlocker, string> = {
-  round_not_running: 'Waiting for the host',
-  someone_else_buzzed: 'Someone got there first',
-  you_already_missed: 'You are out for this round',
-  your_answer_is_pending: 'Say your answer out loud'
-}
 
 export const PlayerPage = () => {
   const roomCode = useRoomCodeParam()
@@ -45,14 +40,16 @@ const PlayerScreen = ({ roomCode }: { roomCode: RoomCode }) => {
 
   // A refused join is non-fatal, so the socket stays open and the form comes
   // back with the reason rather than stranding the player on a dead screen.
-  const isRejected =
+  const rejection =
     connection.error?.code === 'nickname_taken' ||
     connection.error?.code === 'room_full'
+      ? connection.error.code
+      : null
 
-  return nickname === null || isRejected ? (
+  return nickname === null || rejection !== null ? (
     <NicknameForm
-      error={isRejected ? (connection.error?.message ?? null) : null}
       onSubmit={setNickname}
+      rejection={rejection}
       roomCode={roomCode}
     />
   ) : (
@@ -61,14 +58,15 @@ const PlayerScreen = ({ roomCode }: { roomCode: RoomCode }) => {
 }
 
 const NicknameForm = ({
-  error,
   onSubmit,
+  rejection,
   roomCode
 }: {
-  error: string | null
   onSubmit: (nickname: string) => void
+  rejection: ProtocolErrorCode | null
   roomCode: RoomCode
 }) => {
+  const translate = useTranslate()
   const [draft, setDraft] = useState('')
 
   const submit = (event: FormEvent): void => {
@@ -84,15 +82,21 @@ const NicknameForm = ({
   return (
     <main className='player-page'>
       <header>
-        <p className='eyebrow'>Room {roomCode}</p>
-        <h1>What should we call you?</h1>
+        <p className='eyebrow'>
+          {translate('player.room', { code: roomCode })}
+        </p>
+        <h1>{translate('player.nickname.title')}</h1>
       </header>
       <Form onSubmit={submit}>
         <TextField
           autoComplete='nickname'
-          errorMessage={error ?? undefined}
-          isInvalid={error !== null}
-          label='Nickname'
+          errorMessage={
+            rejection === null
+              ? undefined
+              : translate(protocolErrorKey(rejection))
+          }
+          isInvalid={rejection !== null}
+          label={translate('player.nickname.label')}
           maxLength={20}
           name='nickname'
           onChange={setDraft}
@@ -103,7 +107,7 @@ const NicknameForm = ({
           size='large'
           type='submit'
         >
-          Join the game
+          {translate('player.nickname.action')}
         </Button>
       </Form>
     </main>
@@ -117,17 +121,20 @@ const Lobby = ({
   connection: PlayerConnection
   roomCode: RoomCode
 }) => {
+  const translate = useTranslate()
   const { clock, send, status, view } = connection
 
   return (
     <main className='player-page playing'>
       <header>
-        <p className='eyebrow'>Room {roomCode}</p>
+        <p className='eyebrow'>
+          {translate('player.room', { code: roomCode })}
+        </p>
         <ConnectionStatus clock={clock} status={status} />
       </header>
 
       {view === null ? (
-        <p className='waiting'>Taking your seat…</p>
+        <p className='waiting'>{translate('player.seating')}</p>
       ) : (
         <>
           <Scoreline view={view} />
@@ -144,16 +151,19 @@ const Lobby = ({
 }
 
 const Scoreline = ({ view }: { view: PlayerRoomView }) => {
+  const translate = useTranslate()
   const you = view.players.find((player) => player.id === view.youId)
 
   return (
     <section className='scoreline'>
-      <p className='you'>{you?.nickname ?? 'You'}</p>
+      <p className='you'>{you?.nickname ?? translate('player.you')}</p>
       <p className='score'>
         <span className='value'>{you?.score ?? 0}</span>
-        <span className='unit'>points</span>
+        <span className='unit'>{translate('player.points')}</span>
       </p>
-      <p className='others'>{view.players.length} in the room</p>
+      <p className='others'>
+        {translate('player.roomSize', { count: view.players.length })}
+      </p>
     </section>
   )
 }
@@ -165,6 +175,7 @@ const Buzzer = ({
   onBuzz: (roundId: string) => void
   view: PlayerRoomView
 }) => {
+  const translate = useTranslate()
   const blocker = findBuzzBlocker(view)
   const roundId = view.round?.id ?? null
 
@@ -185,12 +196,12 @@ const Buzzer = ({
           }
         }}
       >
-        Buzz
+        {translate('blindtest.buzz.action')}
       </ReactAriaButton>
       <p className='blocker' role='status'>
         {blocker === null
-          ? 'Hit it the moment you know'
-          : BLOCKER_LABELS[blocker]}
+          ? translate('blindtest.buzz.ready')
+          : translate(buzzBlockerKey(blocker))}
       </p>
     </section>
   )

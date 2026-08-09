@@ -55,7 +55,7 @@ value per render, a module-level constant is computed once per process.
 
 ## Contexts
 
-Use a `createSafeContext` helper (one per project, typically in `helpers/contexts.ts`):
+`createSafeContext` lives in `@/helpers/contexts`:
 ```typescript
 export const [MyContext, useMyContext, useOptionalMyContext] =
   createSafeContext<MyContextType>('MyContext')
@@ -66,18 +66,67 @@ Returns a `[Context, useSafe, useOptional]` tuple:
 
 ## Wrapping react-aria primitives
 
-Use a `composeClassName` helper to merge react-aria render props with your own classes:
+**Extend the primitive's props; never re-declare a subset of them.** A wrapper
+that lists `onPress`, `isDisabled` and `type` by hand has quietly removed
+`onPressStart`, `autoFocus`, `form`, `slot` and every ARIA attribute, and the
+next feature that needs one adds it back a prop at a time.
 
 ```typescript
-import { Button as ReactAriaButton, type ButtonProps } from 'react-aria-components'
+import {
+  Button as ReactAriaButton,
+  type ButtonProps as ReactAriaButtonProps
+} from 'react-aria-components'
 
-export const Button: React.FC<ButtonProps> = ({ className, ...props }) => (
+import { composeClassName } from './compose-class-name'
+
+type ButtonProps = ReactAriaButtonProps & {
+  size?: 'medium' | 'large'
+  variant?: 'filled' | 'outlined' | 'ghost'
+}
+
+export const Button: React.FC<ButtonProps> = ({
+  className,
+  size = 'medium',
+  variant = 'filled',
+  ...props
+}) => (
   <ReactAriaButton
     {...props}
-    className={composeClassName(className, 'button')}
+    className={composeClassName(className, 'button', variant, size)}
   />
 )
 ```
+
+Add a prop of your own only for something react-aria has no opinion about — a
+visual variant, a label the wrapper renders, an input attribute the primitive
+does not forward. `Omit` the props the wrapper owns: `SegmentedControl` omits
+`orientation` because its layout is horizontal by definition.
+
+**Do not re-derive what a prop already does.** `isPending` on a react-aria
+`Button` already blocks presses and hovers while keeping the button focusable
+and announced — passing `isDisabled={isDisabled || isPending}` on top of it takes
+the focusability away, which is a regression, not a belt.
+
+`composeClassName` merges a caller's `className` with the classes the wrapper
+always applies. It wraps react-aria's own `composeRenderProps`, so it **always
+returns a function** — which is what makes it fit a react-aria component and not
+a plain DOM element. For a plain element, a template literal is the answer.
+
+### Two controls that look alike share a mixin, not a component
+
+`Button` and `Link` render different elements for different reasons — one acts,
+one navigates — so neither wraps the other. What they share is the look, and
+that lives in `styles/_control.sass`. Adding a variant means editing one file.
+
+### A pending state must not resize the control
+
+`Button` renders a `Spinner` on top of its label rather than in place of it, and
+the label goes `color: transparent` instead of disappearing. The box is
+unchanged, so nothing on the screen moves — and the label stays in the
+accessibility tree, so the button keeps its name while it works.
+
+The spinner is `aria-hidden`. react-aria already announces `isPending`; a second
+live region would say the same thing twice.
 
 ## Styling — no inline styles
 

@@ -17,8 +17,14 @@ the QR code resolves for real devices without any tunnelling.
 
 The bootstrap is complete and playable up to the lobby: create a room, scan in,
 claim a seat, watch the roster fill live, with the clock handshake running on
-every socket. Everything past that answers `not_implemented` on purpose — the
-round engine is stage 01. See [`docs/plans/`](docs/plans/).
+every socket. The UI speaks English and French and comes in light and dark.
+Everything past the lobby answers `not_implemented` on purpose — the round
+engine is stage 01. See [`docs/plans/`](docs/plans/).
+
+The blind test is the first game rather than the whole product: the room, the QR
+code, the seats and the anti-cheat are a shell several games will share. See
+[`docs/game-catalogue.md`](docs/game-catalogue.md) — and note that nothing there
+is being built in advance.
 
 ## Layout
 
@@ -59,5 +65,7 @@ removed.
 
 - [`docs/architecture.md`](docs/architecture.md) — how the pieces fit, and why
 - [`docs/realtime-protocol.md`](docs/realtime-protocol.md) — the wire format
+- [`docs/game-catalogue.md`](docs/game-catalogue.md) — the games after this one,
+  and the seams that stay open for them
 - [`docs/plans/`](docs/plans/) — the staged build, one file per session
 - [`.claude/`](.claude/) — the conventions, for humans and assistants alike

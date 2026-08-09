@@ -103,8 +103,35 @@ Two properties leak into the design and should not be hidden:
 Everything above `deezer-client.ts` speaks `TrackSource` and `HostTrack`.
 Swapping catalogue means rewriting that one file.
 
+## Strings and colours
+
+The UI is internationalised — `en` and `fr` — and themed light/dark. Both are
+lookups, not conditionals: a component asks for `player.roomSize` and for
+`--text-muted`, and the provider and the palette answer. The theme is resolved
+in CSS rather than JavaScript, which is what keeps the first paint from flashing
+the wrong ground; `data-theme` appears on `<html>` only for an explicit choice.
+
+Server error codes are translated client-side. `ProtocolErrorMessage.message`
+stays English and developer-facing, because a user-visible string arriving from
+a server is a design smell — the code is already a closed enum, and mapping it
+through a function means widening the enum fails to compile until every locale
+has the string.
+
+## This is the first game, not the product
+
+The shell — a room with a readable code, a host screen, phones that hold a seat
+through a screen lock, an unforgeable arrival order, role-scoped views that make
+hidden information a compile error — is not specific to a blind test. A second
+game reuses all of it.
+
+`docs/game-catalogue.md` maps the candidates and the seams: where room state and
+game state are currently fused, which message names are blind-test verbs, and
+the one shape of game (a drawing stream) that legitimately breaks the
+whole-snapshot rule. Nothing there is scheduled, and nothing there should be
+built in advance of a second game actually existing.
+
 ## What is deliberately absent
 
-No database, no authentication, no analytics, no i18n layer, no CI. Each is a
-real gap rather than an oversight, and each has a stage in `docs/plans/` or a
-note there explaining why it is not planned.
+No database, no authentication, no analytics, no CI. Each is a real gap rather
+than an oversight, and each has a stage in `docs/plans/` or a note there
+explaining why it is not planned.

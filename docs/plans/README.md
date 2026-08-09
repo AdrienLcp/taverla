@@ -13,7 +13,7 @@ describes the code is worse than no plan.
 | [04 — Reveal & scoreboard](04-reveal-scoreboard.md) | | Reveal screen, running scores, end of game |
 | [05 — Design pass](05-design-pass.md) | | `/impeccable`: a visual world, motion, the real polish |
 | [06 — Testing](06-testing.md) | | Server socket tests, component tests, Playwright end-to-end |
-| [07 — French UI](07-i18n.md) | | An i18n layer, then French — a product decision, not a default |
+| [07 — Language & appearance](07-i18n.md) | **done** | English and French, light and dark, a preferences bar |
 | [08 — Deploy](08-deploy.md) | | One origin serving both, somewhere friends can reach |
 
 ## Order, and what can move
@@ -22,6 +22,19 @@ describes the code is worse than no plan.
 behaviour the previous one adds. 05 through 08 are independent of each other and
 can be taken in any order once 04 lands — though running the design pass before
 the screens exist wastes it.
+
+07 was taken first, out of order and deliberately: routing strings and colours
+through a layer costs an afternoon before a design pass and a rewrite after one.
+Everything built from here reads its strings from
+`presentation/i18n/` and its colours from `--tokens`, in both themes.
+
+## Beyond the blind test
+
+This game is the first of several. [`docs/game-catalogue.md`](../game-catalogue.md)
+holds the candidates, the five shapes they fall into, and — more usefully — the
+seams in the current code that should stay open, with the honest cost of each.
+It is a map, not a stage: nothing there is scheduled, and the blind test ships
+whole first.
 
 ## The shape of a stage
 

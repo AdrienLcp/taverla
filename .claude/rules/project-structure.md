@@ -32,9 +32,14 @@ exists, not before.
 src/
 ├── infrastructure/   api, messaging, router, storage, env
 ├── features/         host, player, join, not-found
-├── presentation/     components, styles
+├── presentation/     app-shell, components, styles, i18n, theme
 └── helpers/          pure utilities, no React
 ```
+
+`presentation/app-shell.tsx` is the layout route every page renders inside. It
+is where anything that must exist on *every* surface goes — the preferences bar
+lives there because a phone arriving from a QR code never passes through the
+home page.
 
 | From | Importing | Syntax |
 |---|---|---|
@@ -47,8 +52,10 @@ src/
 
 - Something both the server and the browser must agree on the *shape* of →
   `packages/protocol`.
-- A rule with no I/O — scoring, eligibility, clock maths, code generation →
-  `packages/core`, with a test.
+- A rule with no I/O — scoring, eligibility, clock maths, code generation,
+  locale negotiation → `packages/core`, with a test. Some of those are the blind
+  test's and some are the shell's; keep them in separate directories, and read
+  `docs/game-catalogue.md` before promoting either to a package.
 - Anything touching a socket, `fetch`, `localStorage`, the router →
   `apps/*/src/infrastructure/`. See `abstraction-boundaries.md`.
 - A React component used by one surface → that feature. Used by both →

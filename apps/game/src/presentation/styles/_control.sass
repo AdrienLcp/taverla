@@ -1,0 +1,76 @@
+// Pure module: mixins only.
+
+@use './focus'
+@use './typography'
+
+/// The shell shared by `Button` and `Link` — everything that makes an element
+/// look and behave like a control, minus the tag it renders. Sizes and variants
+/// stay classes rather than mixin arguments, so both components read the same
+/// class list and neither has to know the other exists.
+///
+/// `--control-ink` is the foreground of the current variant, exposed as a token
+/// because the pending spinner has to paint itself in it while the label's own
+/// `color` is turned transparent.
+@mixin control
+  @include focus.ring
+  @include typography.heading
+
+  align-items: center
+  border: 1px solid transparent
+  border-radius: var(--radius-full)
+  display: inline-flex
+  gap: var(--space-xs)
+  justify-content: center
+  position: relative
+  text-decoration: none
+  transition: background-color var(--transition-fast, 0) var(--timing, ease), border-color var(--transition-fast, 0) var(--timing, ease), color var(--transition-fast, 0) var(--timing, ease), transform var(--transition-fast, 0) var(--timing, ease)
+  white-space: nowrap
+
+  &.medium
+    min-height: 44px
+    padding: 0 var(--space-m)
+
+  &.large
+    font-size: 1.25rem
+    min-height: 60px
+    padding: 0 var(--space-l)
+
+  &.filled
+    --control-ink: var(--accent-ink)
+
+    background: var(--accent)
+    color: var(--control-ink)
+
+    &[data-hovered]
+      background: var(--accent-strong)
+
+  &.outlined
+    --control-ink: var(--text)
+
+    border-color: var(--border)
+    color: var(--control-ink)
+
+    &[data-hovered]
+      background: var(--surface-raised)
+      border-color: var(--text-faint)
+
+  &.ghost
+    --control-ink: var(--text-muted)
+
+    color: var(--control-ink)
+
+    &[data-hovered]
+      --control-ink: var(--text)
+
+  &[data-pressed]
+    transform: scale(0.97)
+
+  &[data-disabled]
+    cursor: not-allowed
+    opacity: 0.45
+
+  // After the variants on purpose: same specificity, so source order is what
+  // lets the pending state blank a label the variant just coloured.
+  &[data-pending]
+    color: transparent
+    cursor: progress

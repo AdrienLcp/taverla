@@ -5,3 +5,6 @@
  */
 export const socketOrigin = (): string =>
   `${location.protocol === 'https:' ? 'wss:' : 'ws:'}//${location.host}`
+
+/** Most-preferred first, as BCP-47 tags — `['fr-FR', 'fr', 'en-US']`. */
+export const preferredLocales = (): readonly string[] => navigator.languages

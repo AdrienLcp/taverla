@@ -10,13 +10,26 @@ import { createRoom, roomExists } from '@/infrastructure/api/blindtest-api'
 import { hostPathFor, playPathFor } from '@/infrastructure/router/navigation'
 import { Button } from '@/presentation/components/button'
 import { TextField } from '@/presentation/components/text-field'
+import { useTranslate } from '@/presentation/i18n/i18n-provider'
+import {
+  apiErrorKey,
+  type TranslationKey,
+  type TranslationValues
+} from '@/presentation/i18n/translation'
 
 import './join-page.sass'
 
+/** Held as a key rather than a rendered string, so it follows a locale switch. */
+type FieldError = {
+  key: TranslationKey
+  values?: TranslationValues
+}
+
 export const JoinPage = () => {
   const navigate = useNavigate()
+  const translate = useTranslate()
   const [code, setCode] = useState('')
-  const [codeError, setCodeError] = useState<string | null>(null)
+  const [codeError, setCodeError] = useState<FieldError | null>(null)
   const [isCreating, setIsCreating] = useState(false)
   const [isJoining, setIsJoining] = useState(false)
 
@@ -29,7 +42,7 @@ export const JoinPage = () => {
     setIsCreating(false)
 
     if (created.status === 'failure') {
-      setCodeError('Could not reach the server. Try again in a moment.')
+      setCodeError({ key: apiErrorKey(created.error) })
 
       return
     }
@@ -43,7 +56,10 @@ export const JoinPage = () => {
     const normalized = normalizeRoomCode(code)
 
     if (normalized === null) {
-      setCodeError(`A room code is ${ROOM_CODE_LENGTH} letters and digits.`)
+      setCodeError({
+        key: 'join.roomCode.invalid',
+        values: { length: ROOM_CODE_LENGTH }
+      })
 
       return
     }
@@ -56,13 +72,13 @@ export const JoinPage = () => {
     setIsJoining(false)
 
     if (found.status === 'failure') {
-      setCodeError('Could not reach the server. Try again in a moment.')
+      setCodeError({ key: apiErrorKey(found.error) })
 
       return
     }
 
     if (!found.data) {
-      setCodeError('No game is running under that code.')
+      setCodeError({ key: 'join.roomCode.unknown' })
 
       return
     }
@@ -73,13 +89,13 @@ export const JoinPage = () => {
   return (
     <main className='join-page'>
       <header>
-        <p className='eyebrow'>Blind test</p>
-        <h1>Name the track before anyone else.</h1>
+        <p className='eyebrow'>{translate('blindtest.name')}</p>
+        <h1>{translate('blindtest.tagline')}</h1>
       </header>
 
       <section className='action'>
-        <h2>Run the game</h2>
-        <p>Opens the console with the QR code your friends scan.</p>
+        <h2>{translate('join.host.title')}</h2>
+        <p>{translate('join.host.description')}</p>
         <Button
           isPending={isCreating}
           onPress={() => {
@@ -87,16 +103,16 @@ export const JoinPage = () => {
           }}
           size='large'
         >
-          Create a room
+          {translate('join.host.action')}
         </Button>
       </section>
 
       <div aria-hidden='true' className='divider'>
-        <span>or</span>
+        <span>{translate('join.divider')}</span>
       </div>
 
       <section className='action'>
-        <h2>Join a game</h2>
+        <h2>{translate('join.player.title')}</h2>
         <Form
           onSubmit={(event) => {
             void joinExisting(event)
@@ -105,10 +121,14 @@ export const JoinPage = () => {
           <TextField
             autoCapitalize='characters'
             autoComplete='off'
-            description='Shown on the host screen.'
-            errorMessage={codeError ?? undefined}
+            description={translate('join.roomCode.description')}
+            errorMessage={
+              codeError === null
+                ? undefined
+                : translate(codeError.key, codeError.values)
+            }
             isInvalid={codeError !== null}
-            label='Room code'
+            label={translate('join.roomCode.label')}
             maxLength={ROOM_CODE_LENGTH + 2}
             name='roomCode'
             onChange={(next) => {
@@ -123,7 +143,7 @@ export const JoinPage = () => {
             type='submit'
             variant='outlined'
           >
-            Join
+            {translate('join.player.action')}
           </Button>
         </Form>
       </section>

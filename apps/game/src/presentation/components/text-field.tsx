@@ -1,57 +1,46 @@
+import type React from 'react'
 import {
   FieldError,
   Input,
   Label,
   TextField as ReactAriaTextField,
+  type TextFieldProps as ReactAriaTextFieldProps,
   Text
 } from 'react-aria-components'
 
+import { composeClassName } from './compose-class-name'
+
 import './text-field.sass'
 
-type TextFieldProps = {
-  autoComplete?: string
+type TextFieldProps = ReactAriaTextFieldProps & {
   /** Forces the on-screen keyboard's letter case. `'characters'` for a room code. */
   autoCapitalize?: 'off' | 'characters'
   /** Guidance shown under the input, replaced by `errorMessage` when there is one. */
   description?: string
   errorMessage?: string
-  /** Renders the field in an invalid state; pair it with `errorMessage`. */
-  isInvalid?: boolean
   label: string
-  maxLength?: number
-  name?: string
-  onChange: (value: string) => void
-  /** Set `'numeric'` or `'text'` to pick the phone keyboard the field opens. */
-  inputMode?: 'text' | 'numeric'
-  value: string
+  placeholder?: string
 }
 
-export const TextField = ({
+export const TextField: React.FC<TextFieldProps> = ({
   autoCapitalize,
-  autoComplete,
+  className,
   description,
   errorMessage,
-  inputMode,
   isInvalid = false,
   label,
-  maxLength,
-  name,
-  onChange,
-  value
-}: TextFieldProps) => (
+  placeholder,
+  ...props
+}) => (
   <ReactAriaTextField
-    autoComplete={autoComplete}
-    className='text-field'
+    {...props}
+    className={composeClassName(className, 'text-field')}
     isInvalid={isInvalid}
-    name={name}
-    onChange={onChange}
-    value={value}
   >
     <Label>{label}</Label>
     <Input
       autoCapitalize={autoCapitalize}
-      inputMode={inputMode}
-      maxLength={maxLength}
+      placeholder={placeholder}
       spellCheck={false}
     />
     {description !== undefined && !isInvalid && (

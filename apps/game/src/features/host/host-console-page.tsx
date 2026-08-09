@@ -10,6 +10,8 @@ import {
 } from '@/infrastructure/router/navigation'
 import { Button } from '@/presentation/components/button'
 import { ConnectionStatus } from '@/presentation/components/connection-status'
+import { useTranslate } from '@/presentation/i18n/i18n-provider'
+import { protocolErrorKey } from '@/presentation/i18n/translation'
 
 import './host-console-page.sass'
 
@@ -27,6 +29,7 @@ export const HostConsolePage = () => {
 }
 
 const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
+  const translate = useTranslate()
   const { clock, error, send, status, view } = useHostConnection(roomCode)
   const joinUrl = playUrlFor(roomCode)
   const players = view?.players ?? []
@@ -35,7 +38,7 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
     <main className='host-console-page'>
       <header>
         <div>
-          <p className='eyebrow'>Room code</p>
+          <p className='eyebrow'>{translate('host.roomCode')}</p>
           <p className='room-code'>{roomCode}</p>
         </div>
         <ConnectionStatus clock={clock} status={status} />
@@ -43,7 +46,7 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
 
       <div className='stage'>
         <section className='invite'>
-          <h2>Scan to play</h2>
+          <h2>{translate('host.invite.title')}</h2>
           <div className='qr'>
             <QRCodeSVG
               bgColor='#ffffff'
@@ -57,12 +60,11 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
 
         <section className='roster'>
           <h2>
-            Players <span className='count'>{players.length}</span>
+            {translate('host.players.title')}{' '}
+            <span className='count'>{players.length}</span>
           </h2>
           {players.length === 0 ? (
-            <p className='empty'>
-              Nobody has joined yet. The QR code is waiting.
-            </p>
+            <p className='empty'>{translate('host.players.empty')}</p>
           ) : (
             <ul>
               {players.map((player) => (
@@ -82,7 +84,7 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
       <footer>
         {error !== null && (
           <p className='error' role='alert'>
-            {error.message}
+            {translate(protocolErrorKey(error.code))}
           </p>
         )}
         <Button
@@ -92,7 +94,7 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
           }}
           size='large'
         >
-          Start the game
+          {translate('host.startGame')}
         </Button>
       </footer>
     </main>

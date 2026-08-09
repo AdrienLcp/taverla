@@ -19,10 +19,26 @@ one part.
   with QR code and live roster, player screen with a buzzer that explains why it
   is disabled
 - `[Shared]` Pure domain rules with tests — clock offset estimation, room-code
-  alphabet, buzz eligibility, competition ranking
+  alphabet, buzz eligibility, competition ranking, locale negotiation
+- `[Game]` English and French, with no i18n library: the English dictionary is
+  the key type, so a missing translation does not compile. Server error codes
+  are translated client-side and the server's `message` is no longer rendered
+- `[Game]` Light and dark themes, resolved in CSS so the first paint cannot
+  flash the wrong ground — `data-theme` is stamped only for an explicit choice
+- `[Game]` A preferences bar on every screen, so the phone that arrived from a
+  QR code can switch language without a settings page
 
 ### Internal
 
+- `[Game]` Design-system wrappers extend the react-aria props they wrap rather
+  than re-declaring a subset, merged through a `composeClassName` helper
+- `[Game]` `Button` and `Link` share one control mixin, so a variant is declared
+  once; a pending button overlays a `Spinner` on a transparent label rather than
+  replacing it, which keeps the box — and the accessible name — unchanged
+- `[Game]` react-aria's `RouterProvider` wired to react-router in the app shell,
+  so an `href` navigates client-side instead of reloading and dropping the socket
+- Cross-project seams documented in `docs/game-catalogue.md`: the blind test is
+  the first game on a shared party-game shell, not the whole product
 - pnpm workspace on TypeScript 7, Biome 2.5.7, Vitest 4, React 19 with the React
   Compiler enabled
 - `@babel/core` held at 7.x: the React Compiler cannot parse Babel 8's AST for a

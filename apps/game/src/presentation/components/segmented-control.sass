@@ -1,0 +1,41 @@
+@use '../styles/focus'
+@use '../styles/typography'
+
+@layer components
+  .segmented-control
+    display: flex
+    flex-direction: column
+    gap: var(--space-2xs)
+
+    .react-aria-Label
+      @include typography.overline
+
+      color: var(--text-faint)
+
+    .segments
+      background: var(--surface)
+      border: 1px solid var(--border)
+      border-radius: var(--radius-full)
+      display: flex
+      padding: 2px
+
+    .react-aria-Radio
+      @include focus.ring
+      @include typography.caption
+
+      border-radius: var(--radius-full)
+      color: var(--text-muted)
+      cursor: pointer
+      padding: var(--space-2xs) var(--space-s)
+      transition: background-color var(--transition-fast, 0) var(--timing, ease), color var(--transition-fast, 0) var(--timing, ease)
+      white-space: nowrap
+
+      &[data-hovered]
+        color: var(--text)
+
+      &[data-selected]
+        background: var(--surface-raised)
+        color: var(--text)
+
+      &[data-pressed]
+        background: var(--surface-raised)

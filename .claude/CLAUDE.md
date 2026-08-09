@@ -47,6 +47,7 @@ Ports are offset from 3000/5173 so this repo runs beside other dev servers.
 |---|---|
 | `realtime-protocol.md` | The wire contract, anti-cheat, adding a message |
 | `project-structure.md` | Where code goes, one-app-two-surfaces, imports |
+| `i18n-and-theme.md` | Adding a string, adding a colour, the two locales |
 | `abstraction-boundaries.md` | Which module may import which library |
 | `react-components.md` | Props, the React Compiler, react-aria |
 | `sass-architecture.md` | Layers, tokens, the `index.html` cascade order |
@@ -61,6 +62,8 @@ Ports are offset from 3000/5173 so this repo runs beside other dev servers.
 
 ## Never
 
+- Write a user-visible string in a component — it belongs in the dictionary
+- Write a colour in a component — it belongs in both palettes as a token
 - Use `npm` or `yarn` — `pnpm` only
 - Use `as any`, `as unknown as`, or any unsafe cast — `as const` is fine
 - Use `// biome-ignore`, `@ts-ignore`, `@ts-expect-error`
@@ -83,11 +86,14 @@ Ports are offset from 3000/5173 so this repo runs beside other dev servers.
 
 ## Language
 
-Everything committed is **English** — code, comments, UI strings, docs, commit
-messages. Chat replies to the developer stay in French.
+Everything committed is **English** — code, comments, docs, commit messages,
+and every translation *key*. Chat replies to the developer stay in French.
 
-The UI is currently English with no i18n layer. Making it French is a product
-decision, not a default: see `docs/plans/07-i18n.md`.
+**The UI is explicitly internationalised**, which is the documented exception to
+the English-only rule: `apps/game/src/presentation/i18n/` holds an `en` and an
+`fr` dictionary, and French *values* live there and nowhere else. A user-visible
+string written into a component is a bug, not a shortcut — see
+`.claude/rules/i18n-and-theme.md`.
 
 ## Domain vocabulary
 
@@ -102,6 +108,19 @@ decision, not a default: see `docs/plans/07-i18n.md`.
 - **Verdict** — the host judging title and artist independently, 1 point each
 - **Session id** — minted by the client, stored per room and role; what lets a
   phone that locked its screen come back to the same seat
+
+## The blind test is the first game, not the product
+
+The plan is a shelf of party games sharing one room, one QR code and one set of
+phones. That changes nothing about finishing this one — it ships whole, first —
+but it does mean not welding the seams shut on the way.
+
+[`docs/game-catalogue.md`](../docs/game-catalogue.md) holds the candidates and,
+more usefully, the seams: room state versus game state, message namespaces, the
+role-scoped unions worth defending, and the one shape of game that legitimately
+breaks the snapshot rule. Read it before generalising anything — the short
+version is that **two games is when the shared shape becomes knowable**, and
+inventing it now is the abstraction anti-pattern with a different hat on.
 
 ## The build is staged
 

@@ -1,0 +1,83 @@
+import type { Dictionary } from './translation'
+
+/**
+ * French typography puts a non-breaking space before `?`, `!` and `:`. Writing
+ * it as \u00a0 keeps it visible to whoever edits this file, and survives an
+ * editor that strips invisible characters.
+ */
+export const FR_DICTIONARY: Dictionary = {
+  'blindtest.buzz.action': 'Buzz',
+  'blindtest.buzz.blocked.round_not_running': 'En attente de l’hôte',
+  'blindtest.buzz.blocked.someone_else_buzzed': 'Quelqu’un a été plus rapide',
+  'blindtest.buzz.blocked.you_already_missed': 'Tu es hors-jeu pour ce tour',
+  'blindtest.buzz.blocked.your_answer_is_pending':
+    'Donne ta réponse à voix haute',
+  'blindtest.buzz.ready': 'Appuie dès que tu sais',
+  'blindtest.name': 'Blind test',
+  'blindtest.tagline': 'Trouve le titre avant tout le monde.',
+
+  'connection.clock': '· horloge ±{milliseconds} ms',
+  'connection.closed': 'Reconnexion…',
+  'connection.connecting': 'Connexion…',
+  'connection.open': 'En direct',
+
+  'error.already_buzzed': 'Quelqu’un a été plus rapide.',
+  'error.api.rejected': 'Le serveur a refusé la demande.',
+  'error.api.unexpected_response':
+    'Le serveur a répondu quelque chose d’inattendu.',
+  'error.api.unreachable': 'Serveur injoignable. Réessaie dans un instant.',
+  'error.host_already_connected': 'Quelqu’un anime déjà ce salon.',
+  'error.host_only_action': 'Seul l’hôte peut faire ça.',
+  'error.internal_error': 'Quelque chose a cassé côté serveur.',
+  'error.invalid_message': 'Le serveur n’a pas compris ce message.',
+  'error.music_source_unavailable': 'Le service musical ne répond pas.',
+  'error.nickname_taken': 'Ce pseudo est déjà pris.',
+  'error.no_tracks_available': 'Il ne reste aucun titre à jouer.',
+  'error.not_implemented': 'Cette partie du jeu n’existe pas encore.',
+  'error.player_locked_out': 'Tu es hors-jeu pour ce tour.',
+  'error.protocol_version_mismatch':
+    'Cette page n’est plus à jour. Recharge-la.',
+  'error.room_closed': 'L’hôte a fermé le salon.',
+  'error.room_full': 'Ce salon est complet.',
+  'error.room_not_found': 'Ce salon n’existe pas.',
+  'error.stale_round': 'Ce tour est déjà terminé.',
+  'error.wrong_phase': 'Trop tard, la partie est passée à autre chose.',
+
+  'host.invite.title': 'Scanne pour jouer',
+  'host.players.empty': 'Personne n’a encore rejoint. Le QR code attend.',
+  'host.players.title': 'Joueurs',
+  'host.roomCode': 'Code du salon',
+  'host.startGame': 'Lancer la partie',
+
+  'join.divider': 'ou',
+  'join.host.action': 'Créer un salon',
+  'join.host.description':
+    'Ouvre la console avec le QR code que tes amis scannent.',
+  'join.host.title': 'Animer la partie',
+  'join.player.action': 'Rejoindre',
+  'join.player.title': 'Rejoindre une partie',
+  'join.roomCode.description': 'Affiché sur l’écran de l’hôte.',
+  'join.roomCode.invalid':
+    'Un code de salon fait {length} lettres et chiffres.',
+  'join.roomCode.label': 'Code du salon',
+  'join.roomCode.unknown': 'Aucune partie ne tourne sous ce code.',
+
+  'notFound.back': 'Retour au départ',
+  'notFound.description': 'La partie est finie, ou le code a été mal tapé.',
+  'notFound.title': 'Il n’y a rien ici',
+
+  'player.nickname.action': 'Rejoindre la partie',
+  'player.nickname.label': 'Pseudo',
+  'player.nickname.title': 'On t’appelle comment\u00a0?',
+  'player.points': 'points',
+  'player.room': 'Salon {code}',
+  'player.roomSize': '{count} dans le salon',
+  'player.seating': 'On te trouve une place…',
+  'player.you': 'Toi',
+
+  'preferences.language': 'Langue',
+  'preferences.theme': 'Thème',
+  'preferences.theme.dark': 'Sombre',
+  'preferences.theme.light': 'Clair',
+  'preferences.theme.system': 'Système'
+}

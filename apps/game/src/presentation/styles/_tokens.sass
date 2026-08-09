@@ -1,20 +1,52 @@
+@mixin dark-palette
+  color-scheme: dark
+
+  --void: #08080e
+  --surface: #12121c
+  --surface-raised: #1c1c2a
+  --border: #2a2a3d
+
+  --text: #f2f2f7
+  --text-muted: #9494ae
+  --text-faint: #62627a
+
+  --accent: #ff2d6f
+  --accent-strong: #ff5c8d
+  --accent-ink: #14000a
+  --info: #5b8cff
+  --success: #2ee6a8
+  --danger: #ff5a5a
+
+  --glow-top: #1b1030
+  --glow-bottom: #10203a
+
+// `--accent-strong` is the more emphatic accent, not the lighter one: hover
+// brightens on a dark ground and deepens on a light one.
+@mixin light-palette
+  color-scheme: light
+
+  --void: #f6f5fb
+  --surface: #ffffff
+  --surface-raised: #eceaf5
+  --border: #d8d5e6
+
+  --text: #14121f
+  --text-muted: #4f4b64
+  --text-faint: #6f6b86
+
+  --accent: #d6004f
+  --accent-strong: #ab003f
+  --accent-ink: #fff5f8
+  --info: #2b56c8
+  --success: #067a55
+  --danger: #c22020
+
+  --glow-top: #ece2ff
+  --glow-bottom: #dceaff
+
 @layer tokens
   \:root
-    --void: #08080e
-    --surface: #12121c
-    --surface-raised: #1c1c2a
-    --border: #2a2a3d
-
-    --text: #f2f2f7
-    --text-muted: #9494ae
-    --text-faint: #62627a
-
-    --accent: #ff2d6f
-    --accent-strong: #ff5c8d
-    --accent-ink: #14000a
-    --info: #5b8cff
-    --success: #2ee6a8
-    --danger: #ff5a5a
+    @include dark-palette
 
     --radius-s: 8px
     --radius-m: 14px
@@ -38,6 +70,17 @@
     --font-numeric: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace
 
     --layout-padding: clamp(16px, 4vmin, 48px)
+
+  // `ThemeProvider` stamps `data-theme` only for an explicit choice, which
+  // leaves the system default to be resolved here — in CSS, before any script
+  // has run. A JavaScript-decided theme cannot be applied until after the first
+  // paint, and that gap is the flash of the wrong ground.
+  \:root[data-theme='light']
+    @include light-palette
+
+  @media (prefers-color-scheme: light)
+    \:root:not([data-theme='dark'])
+      @include light-palette
 
   // Every duration token collapses here, which is why a `var(--transition-*)`
   // reference must fall back to `0` and never to its nominal value: if the

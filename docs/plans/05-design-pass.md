@@ -27,12 +27,17 @@ Suggested sequence:
 
 ## What already exists to build on, or to replace
 
-`presentation/styles/_tokens.sass` holds a working dark palette (deep violet
-ground, hot pink accent), a spacing scale, radii and durations. It is a
-foundation chosen for legibility, not a committed visual world — **treat it as
-evidence, not as a constraint.** If the pass wants to replace it, replace it.
+`presentation/styles/_tokens.sass` holds two palettes as mixins — a dark one
+(deep violet ground, hot pink accent) and a light one — plus a spacing scale,
+radii and durations. It is a foundation chosen for legibility, not a committed
+visual world — **treat it as evidence, not as a constraint.** If the pass wants
+to replace it, replace both.
 
-Two things must survive whatever happens:
+Three things must survive whatever happens:
+
+- **Both themes.** Every colour is a semantic token defined once per palette; no
+  component holds a hex. A pass that hard-codes a colour breaks light mode
+  silently, because nothing type-checks CSS. See stage 07.
 
 - **Every `--transition-*` collapses to `0` under `prefers-reduced-motion`,** and
   duration references fall back to `0` rather than their nominal value. See
@@ -61,7 +66,8 @@ Two things must survive whatever happens:
 - The countdown, the buzz and the reveal each have motion that means something
 - `prefers-reduced-motion` degrades to no animation, verified
 - Contrast passes at the sizes actually used
-- Verified in a real browser at 414 px and at 1920 px, and on a real phone
+- Verified in a real browser at 414 px and at 1920 px, in **both themes**, and
+  on a real phone
 - No layout shift when scores change from one digit to two
 
 ## Out of scope

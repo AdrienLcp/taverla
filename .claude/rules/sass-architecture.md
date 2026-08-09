@@ -29,7 +29,12 @@ depend on the import graph. **Do not move it into a `.sass` file.**
 them — it would reprint the whole token block into its own `<style>` tag.
 
 **Pure modules** declare only mixins and functions, and any component may
-`@use` them: `_typography.sass`, `_layout.sass`, `_focus.sass`.
+`@use` them: `_typography.sass`, `_layout.sass`, `_focus.sass`, `_control.sass`.
+
+`_control.sass` is how `Button` and `Link` end up identical: both include its
+one mixin, so the variants and sizes are declared once and each component keeps
+a single root class. The rules are printed into both stylesheets, which is the
+point — a route that only uses `Button` does not download `Link`'s CSS.
 
 If a file ever needs both, split it.
 
@@ -38,6 +43,12 @@ If a file ever needs both, split it.
 CSS custom properties on `:root`, not SASS variables — visible in DevTools,
 overridable, and settable from JS via the `style` prop when a value is computed
 at runtime. That is the **only** legitimate use of `style`:
+
+Colours come in **two palettes**, `dark-palette` and `light-palette`, declared as
+mixins in `_tokens.sass` and included from three selectors. A component never
+holds a hex: it would break one theme silently, since nothing type-checks CSS.
+See [`i18n-and-theme.md`](i18n-and-theme.md) for the cascade and why the
+`data-theme` attribute is absent for `system`.
 
 ```tsx
 <div className='cover' style={{ '--cover-url': `url(${track.coverUrl})` }}>
