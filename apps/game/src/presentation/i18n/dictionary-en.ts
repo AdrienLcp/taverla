@@ -90,6 +90,7 @@ export const EN_DICTIONARY = {
   'host.countdown': 'Countdown',
   'host.endGame': 'End the game',
   'host.final.title': 'Final scores',
+  'host.invite.title': 'Scan to play',
   'host.needsPlayer': 'The game needs at least one player',
   'host.nextRound': 'Next round',
   'host.playAgain': 'Play again',

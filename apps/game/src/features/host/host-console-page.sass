@@ -84,6 +84,14 @@
           height: auto
           width: 100%
 
+      // The room code is named by the button that copies it. Nothing named the
+      // QR card, and an address is not a verb — the URL below says where, not
+      // that scanning is what you do with it.
+      .invite
+        @include typography.label
+
+        color: var(--ink-muted)
+
       .join-url
         @include typography.caption
 

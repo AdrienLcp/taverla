@@ -105,6 +105,10 @@ one part.
 
 ### Fixes
 
+- `[Game]` The QR card says what to do with it. The room code beside it has
+  always been named by the button that copies it, and the card had nothing — an
+  address under a glyph says where, not that scanning is the way in. Both
+  captions existed in the dictionary and neither was rendered
 - `[Game]` The reveal reads in the order it is written. "It was" opens a
   sentence, and it sat *under* the title it opens on both the host screen and
   the phone, so the answer arrived before the words introducing it

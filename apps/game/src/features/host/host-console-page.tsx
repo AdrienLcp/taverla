@@ -264,6 +264,7 @@ const Lobby = ({
             size={256}
             value={joinUrl}
           />
+          <p className='invite'>{translate('host.invite.title')}</p>
           <p className='join-url'>{joinUrl}</p>
         </div>
       </section>

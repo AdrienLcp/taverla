@@ -92,6 +92,7 @@ export const FR_DICTIONARY: Dictionary = {
   'host.countdown': 'Décompte',
   'host.endGame': 'Terminer la partie',
   'host.final.title': 'Score final',
+  'host.invite.title': 'Scanne pour jouer',
   'host.needsPlayer': 'Il faut au moins un joueur pour lancer',
   'host.nextRound': 'Tour suivant',
   'host.playAgain': 'Rejouer',
