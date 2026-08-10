@@ -1,0 +1,62 @@
+@use '../../presentation/styles/focus'
+@use '../../presentation/styles/layout'
+@use '../../presentation/styles/typography'
+
+@layer components
+  .home-page
+    @include layout.screen
+
+    justify-content: center
+
+    > header
+      display: flex
+      flex-direction: column
+      gap: var(--space-xs)
+
+    .wordmark
+      @include typography.label
+
+      color: var(--ink-muted)
+
+    h1
+      @include typography.billboard
+
+    .shelf
+      display: flex
+      flex-direction: column
+      gap: var(--space-s)
+
+      h2
+        @include typography.label
+
+        color: var(--ink-muted)
+
+    // A shelf of one still reads as a shelf: the card is sized by its content
+    // and ruled like a row, so the second game lands under it without the
+    // layout being rethought.
+    .game
+      @include focus.ring
+
+      align-items: flex-start
+      border: 2px solid var(--rule)
+      color: var(--ink)
+      display: flex
+      flex-direction: column
+      gap: var(--space-2xs)
+      padding: var(--space-m)
+      text-decoration: none
+
+      &[data-hovered]
+        background: var(--cut)
+        color: var(--cut-ink)
+
+      .name
+        @include typography.title
+
+      .pitch
+        @include typography.caption
+
+        color: var(--ink-muted)
+
+      &[data-hovered] .pitch
+        color: inherit

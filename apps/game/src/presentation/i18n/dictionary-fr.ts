@@ -35,6 +35,8 @@ export const FR_DICTIONARY: Dictionary = {
   'blindtest.genre.464': 'Metal',
   'blindtest.genre.label': 'Quelle musique',
   'blindtest.genre.none': 'N’en choisis aucun et tu as tous les genres.',
+  'blindtest.home.description':
+    'Un écran joue le morceau et affiche le QR code. Tout le monde répond sur ce qu’il a dans la main, et le premier qui sait remporte le tour.',
   'blindtest.listening': 'À l’écoute…',
   'blindtest.name': 'Blind test',
   'blindtest.reveal.nobody': 'Personne n’a trouvé',
@@ -90,6 +92,11 @@ export const FR_DICTIONARY: Dictionary = {
   'error.stale_round': 'Ce tour est déjà terminé.',
   'error.wrong_phase': 'Trop tard, la partie est passée à autre chose.',
 
+  'home.games': 'Les jeux',
+  'home.tagline':
+    'Des jeux de soirée pour un écran et les téléphones de tout le monde.',
+  'home.title': 'Taverla',
+
   'host.autoAdvance': 'Enchaîner tout seul',
   'host.changeSettings': 'Changer les réglages',
   'host.copied': 'Copié',
@@ -116,7 +123,6 @@ export const FR_DICTIONARY: Dictionary = {
   'join.host.action': 'Créer un salon',
   'join.host.description':
     'Ouvre la console avec le QR code que tes amis scannent.',
-  'join.host.title': 'Animer la partie',
   'join.player.action': 'Rejoindre',
   'join.player.title': 'Rejoindre une partie',
   'join.roomCode.description': 'Affiché sur l’écran de l’hôte.',

@@ -1,0 +1,17 @@
+@use '../../presentation/styles/typography'
+
+@layer components
+  .join-with-code
+    display: flex
+    flex-direction: column
+    gap: var(--space-s)
+
+    h2
+      @include typography.title
+
+      color: var(--ink-muted)
+
+    .react-aria-Form
+      display: flex
+      flex-direction: column
+      gap: var(--space-m)

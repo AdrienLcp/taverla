@@ -1,0 +1,45 @@
+@use '../../presentation/styles/layout'
+@use '../../presentation/styles/typography'
+
+@layer components
+  .blindtest-home-page
+    @include layout.screen
+
+    justify-content: center
+
+    > header
+      display: flex
+      flex-direction: column
+      gap: var(--space-xs)
+
+    .wordmark
+      @include typography.label
+
+      color: var(--ink-muted)
+
+    h1
+      @include typography.billboard
+
+    .pitch
+      @include typography.body
+
+      color: var(--ink-muted)
+      max-width: 46ch
+
+    .start
+      display: flex
+      flex-direction: column
+      gap: var(--space-xs)
+
+    .aside
+      @include typography.caption
+
+      color: var(--ink-muted)
+
+    .error
+      @include typography.caption
+
+      background: var(--danger)
+      color: var(--danger-ink)
+      font-weight: 700
+      padding: var(--space-2xs) var(--space-s)

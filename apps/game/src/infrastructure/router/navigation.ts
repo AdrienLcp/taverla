@@ -5,6 +5,7 @@ import type { RoomCode } from '@taverla/protocol/identifiers'
 import { normalizeRoomCode } from '@taverla/core/room/room-code'
 
 export const joinPath = '/'
+export const blindtestPath = '/blindtest'
 export const hostPathFor = (code: RoomCode): string => `/host/${code}`
 export const playPathFor = (code: RoomCode): string => `/play/${code}`
 

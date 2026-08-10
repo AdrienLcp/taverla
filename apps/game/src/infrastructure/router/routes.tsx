@@ -16,8 +16,15 @@ export const router = createBrowserRouter([
       {
         index: true,
         lazy: async () => ({
-          Component: (await import('@/features/join/join-page')).JoinPage
+          Component: (await import('@/features/home/home-page')).HomePage
         })
+      },
+      {
+        lazy: async () => ({
+          Component: (await import('@/features/blindtest/blindtest-home-page'))
+            .BlindTestHomePage
+        }),
+        path: 'blindtest'
       },
       {
         lazy: async () => ({

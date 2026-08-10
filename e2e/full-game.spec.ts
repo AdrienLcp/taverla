@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-import { hostConsole, joinPage, playerScreen } from './locators'
+import { blindTestHome, homePage, hostConsole, playerScreen } from './locators'
 
 const NICKNAME = 'Zoe'
 
@@ -17,7 +17,8 @@ test('[e2e] a room, a scan, a buzz, a verdict and a point', async ({
   const player = playerScreen(phone)
 
   await bigScreen.goto('/')
-  await joinPage(bigScreen).createRoom.click()
+  await homePage(bigScreen).blindTest.click()
+  await blindTestHome(bigScreen).createRoom.click()
   await expect(bigScreen).toHaveURL(/\/host\/[A-Z0-9]{4}$/)
 
   await phone.goto(await host.joinUrl.innerText())

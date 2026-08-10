@@ -6,7 +6,12 @@ import type { Page } from '@playwright/test'
  * class because the text they point at is prose with no role of its own; that
  * is the exception, not a licence to add test ids.
  */
-export const joinPage = (page: Page) => ({
+export const homePage = (page: Page) => ({
+  /** The shelf's card for the blind test, which is where a room is opened. */
+  blindTest: page.getByRole('link', { name: 'Blind test' })
+})
+
+export const blindTestHome = (page: Page) => ({
   createRoom: page.getByRole('button', { name: 'Create a room' })
 })
 

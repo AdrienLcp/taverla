@@ -61,6 +61,13 @@ one part.
   room of the evening costs one tap instead of typing a name again
 - `[Game]` The room code can be copied, for the half of joining that is not a
   QR code: the host copies it and sends it to someone on a laptop
+- `[Game]` Two front doors. `/` is Taverla's — it names the product and shows a
+  shelf, laid out as a list rather than as a single title because the second
+  game changes nothing there — and `/blindtest` is the game's own, where a room
+  is opened. Typing a room code stays on the shelf: a code is a room, and the
+  room knows which game it is running. No `game` field on the room and no
+  registry: a union of one member is the abstraction `docs/game-catalogue.md`
+  says to wait for
 - `[Shared]` A host who walks away puts the game on hold instead of leaving it
   running in silence. Their browser is the room's speaker and its only judge, so
   a round without them burned clip time nobody could hear and hung on a verdict

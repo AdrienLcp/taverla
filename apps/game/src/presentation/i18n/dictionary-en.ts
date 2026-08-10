@@ -36,6 +36,8 @@ export const EN_DICTIONARY = {
   'blindtest.genre.464': 'Metal',
   'blindtest.genre.label': 'Which music',
   'blindtest.genre.none': 'Pick none and you get every genre.',
+  'blindtest.home.description':
+    'One screen plays the track and shows the QR code. Everyone else answers on whatever they have in their hand, and the first to know it wins the round.',
   'blindtest.listening': 'Listening…',
   'blindtest.name': 'Blind test',
   'blindtest.reveal.nobody': 'Nobody got it',
@@ -89,6 +91,10 @@ export const EN_DICTIONARY = {
   'error.stale_round': 'That round is already over.',
   'error.wrong_phase': 'Too late, the game has moved on.',
 
+  'home.games': 'The games',
+  'home.tagline': 'Party games for one screen and everyone’s phone.',
+  'home.title': 'Taverla',
+
   'host.autoAdvance': 'Chain rounds by itself',
   'host.changeSettings': 'Change the settings',
   'host.copied': 'Copied',
@@ -115,7 +121,6 @@ export const EN_DICTIONARY = {
   'join.host.action': 'Create a room',
   'join.host.description':
     'Opens the console with the QR code your friends scan.',
-  'join.host.title': 'Run the game',
   'join.player.action': 'Join',
   'join.player.title': 'Join a game',
   'join.roomCode.description': 'Shown on the host screen.',
