@@ -53,10 +53,14 @@ with the two-line `vi.mock` of the music client and its tests — never a second
 copy of the plumbing, and never a second catalogue, because the anti-cheat
 assertion searches raw frames for those exact strings.
 
-## Two journeys, and no third
+## Three journeys, and no fourth
 
-`e2e/` holds them: a whole game across two browser contexts, and the screen a
-dead socket leaves behind. They run on ports of their own against
+`e2e/` holds them: a whole buzzer game across two browser contexts, two phones
+answering over the same clip in a simultaneous one, and the screen a dead socket
+leaves behind. The third earns its place because the two shapes are opposites —
+one player taking the floor against everyone writing at once — and neither is a
+rule a socket suite could stand in for: it is two browsers, two forms, and a
+screen that has to end up showing both answers. They run on ports of their own against
 `e2e/deezer-stub.ts`, so neither the dev server nor today's charts can turn them
 red. Locators are roles and accessible names, gathered in `e2e/locators.ts` —
 never a `data-testid`.

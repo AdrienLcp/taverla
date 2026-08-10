@@ -34,6 +34,7 @@ import { protocolErrorKey } from '@/presentation/i18n/translation'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
 
 import { CopyButton } from './copy-button'
+import { FinalBoard } from './final-board'
 import { GameSettings } from './game-settings'
 import { HostControls } from './host-controls'
 import { HostSeat } from './host-seat'
@@ -259,9 +260,8 @@ const Stage = ({
 
   if (view.phase === 'finished') {
     return (
-      <div className='stage solo'>
-        <h1 className='final-title'>{translate('host.final.title')}</h1>
-        <Scoreboard players={view.players} />
+      <div className='stage'>
+        <FinalBoard players={view.players} />
       </div>
     )
   }

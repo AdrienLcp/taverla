@@ -32,6 +32,9 @@ export const hostConsole = (page: Page) => ({
   refusal: page.getByRole('heading', {
     name: 'That room does not exist.'
   }),
+  /** What a player wrote, published on the reveal and not before. */
+  revealedAnswer: (said: string) =>
+    page.getByRole('listitem').filter({ hasText: said }),
   /** The roster in the lobby, the scorers at the reveal — never both at once. */
   rowFor: (nickname: string) =>
     page.getByRole('listitem').filter({ hasText: nickname }),
@@ -43,8 +46,11 @@ export const hostConsole = (page: Page) => ({
 })
 
 export const playerScreen = (page: Page) => ({
+  answerSent: page.getByText('Answer sent', { exact: false }),
+  answerTitle: page.getByRole('textbox', { name: 'Title' }),
   buzz: page.getByRole('button', { name: 'Buzz' }),
   join: page.getByRole('button', { name: 'Join the game' }),
   nickname: page.getByRole('textbox', { name: 'Nickname' }),
-  scored: (points: number) => page.getByText(`+${points}`)
+  scored: (points: number) => page.getByText(`+${points}`),
+  sendAnswer: page.getByRole('button', { name: 'Send it' })
 })

@@ -61,6 +61,12 @@ one part.
   room of the evening costs one tap instead of typing a name again
 - `[Game]` The room code can be copied, for the half of joining that is not a
   QR code: the host copies it and sends it to someone on a laptop
+- `[Game]` A game ends on a name. The final screen already listed everyone
+  ranked, ties and all — what it never did was say who won, so a room read a
+  table instead of hearing a result. The winner is now the largest thing on the
+  screen, ties are named rather than broken, and a game nobody scored in says
+  that instead of crowning whoever sorts first. Past eight players the board
+  goes to two columns, flowing downwards so a ranking still reads 1, 2, 3
 - `[Game]` Pages settle in rather than appearing. Eight pixels and a fade,
   quieter than the reveal on purpose — a navigation must not borrow the weight
   of what a round pays out — and carried by the two layout mixins, so the six
