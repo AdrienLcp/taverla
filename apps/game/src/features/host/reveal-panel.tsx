@@ -36,9 +36,9 @@ export const RevealPanel: React.FC<RevealPanelProps> = ({ players, round }) => {
       )}
 
       <div className='identity'>
+        <p className='framing'>{translate('blindtest.reveal.title')}</p>
         <p className='title'>{track.title}</p>
         <p className='artist'>{track.artist}</p>
-        <p className='framing'>{translate('blindtest.reveal.title')}</p>
 
         {scorers.length === 0 ? (
           <p className='nobody'>{translate('blindtest.reveal.nobody')}</p>

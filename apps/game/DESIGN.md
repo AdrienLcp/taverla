@@ -141,8 +141,14 @@ it tiny on a wide screen or taller than a short one.
   position is fixed where its name first appears, so declaring it in a
   stylesheet makes the cascade depend on the module graph. This cost real time
   once already.
-- **No eyebrow above a heading.** Framing goes below the thing it frames — see
-  the reveal, where the title arrives before the words "it was".
+- **A framing label goes below the thing it frames, unless it opens a
+  sentence.** The default keeps the eye from climbing a label to reach the
+  payload. The reveal is the exception, and the copy is what decides it: "it
+  was" / "c'était" is an amorce, so it sits above the title and the two read as
+  one line. A label that merely *names* what follows ("the answer") would go
+  back below. If a locale ever lands whose copula follows the noun — Japanese,
+  Korean, Turkish — that is when the order becomes the locale's business, via
+  `order` under `:lang()`. Two locales, both amorces, is not that day.
 - **Duration references fall back to `0`,** never to a literal, or someone who
   asked for no motion gets motion when a token disappears.
 

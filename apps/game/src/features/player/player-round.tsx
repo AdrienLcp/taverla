@@ -43,9 +43,9 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
 
     return (
       <section className='player-round centred'>
+        <p className='framing'>{translate('blindtest.reveal.title')}</p>
         <p className='revealed-title'>{round.revealedTrack.title}</p>
         <p className='revealed-artist'>{round.revealedTrack.artist}</p>
-        <p className='framing'>{translate('blindtest.reveal.title')}</p>
         {yours != null && yours.points > 0 && (
           <p className='you-scored'>
             {translate('blindtest.youScored', { points: yours.points })}

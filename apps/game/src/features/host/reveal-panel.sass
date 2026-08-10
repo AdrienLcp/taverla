@@ -44,13 +44,11 @@
         font-size: clamp(1.25rem, 4vmin, 2.5rem)
         margin-top: var(--space-xs)
 
-      // Below the title, never above it: the framing is a caption on the
-      // reveal, not a label the eye has to climb over to reach the answer.
       .framing
         @include typography.label
 
         color: var(--ink-muted)
-        margin-top: var(--space-m)
+        margin-bottom: var(--space-s)
 
       .nobody,
       .scorers
