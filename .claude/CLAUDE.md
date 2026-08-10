@@ -115,6 +115,9 @@ string written into a component is a bug, not a shortcut — see
 - **Player** — anyone who joined, by scanning the QR code or by typing the room
   code. Holds a seat and a score
 - **Round** — one track. `lobby → countdown → playing → buzzed → revealed`
+- **Answer mode** — `buzzer` (one player, judged by the host), `choice` (four
+  candidates) or `typed` (two fields). The last two are everyone at once,
+  decided by the server, and scored by speed on top of being right
 - **Buzz** — a player claiming the answer; the server stamps when it arrived
 - **Lockout** — a player who answered wrong sits out the rest of the round
 - **Reveal** — the moment the track identity becomes public
@@ -138,14 +141,13 @@ inventing it now is the abstraction anti-pattern with a different hat on.
 ## The build is staged
 
 `docs/plans/` holds one file per stage, in order, each scoped to a session.
-**00 through 08 are done** — the game is playable end to end, deployed, and
-covered by socket suites plus two Playwright journeys.
+**00 through 09 are done** — the game is playable end to end in three answer
+modes, deployed, and covered by socket suites plus two Playwright journeys.
 `docs/plans/README.md` is the authority on which; do not trust this paragraph
 over that table.
 
-What is left: **09 (answer modes)** and **10 (per-device audio)**, the two the
-game asked for while being played. Note what 06 deliberately did *not* buy: no
-component runner exists here, so a claim about a single screen still rests on a
-browser pass.
+What is left: **10 (per-device audio)**. Note what 06 deliberately did *not*
+buy: no component runner exists here, so a claim about a single screen still
+rests on a browser pass.
 
 Start a session by reading the stage's plan. Update it when reality diverges.

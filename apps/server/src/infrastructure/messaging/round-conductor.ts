@@ -10,7 +10,8 @@ import {
   openRound,
   remainingPlaybackMs,
   resumePlayback,
-  revealRound
+  revealRound,
+  settleSimultaneousRound
 } from '@/domain/round/round-service'
 import {
   cancelRoundTimer,
@@ -91,7 +92,14 @@ export const armPlaybackTimeout = (room: Room): void => {
     delayMs: remainingPlaybackMs(room, Date.now()),
     kind: 'playback',
     run: () => {
-      revealRound(room, Date.now())
+      // The clip running out ends a simultaneous round the same way the last
+      // answer does, scoring included: whoever did not answer simply did not.
+      if (room.settings.answerMode === 'buzzer') {
+        revealRound(room, Date.now())
+      } else {
+        settleSimultaneousRound(room, Date.now())
+      }
+
       broadcastRoom(room)
       armAutoAdvance(room)
     }

@@ -1,4 +1,8 @@
-import type { HostTrack, TrackSource } from '@taverla/protocol/track'
+import type {
+  HostTrack,
+  TrackIdentity,
+  TrackSource
+} from '@taverla/protocol/track'
 
 import { Result } from '@taverla/core/helpers/result'
 
@@ -103,6 +107,61 @@ const refillWhenEmpty = async (
   room.trackPool = unplayed
 
   return Result.success(undefined)
+}
+
+/** Four is the shape of the question: enough to be a guess, few enough to read. */
+const CHOICES_PER_ROUND = 4
+
+/**
+ * The decoys come from the room's own pool, which is the genres the host chose.
+ * Drawing them from anywhere else hands the answer over for free — three
+ * seventies soul tracks beside one chart pop song is not a question, it is a
+ * spot-the-odd-one-out.
+ *
+ * The pool is read rather than drained: a decoy is still an unplayed track, and
+ * spending it here would burn the catalogue three times as fast.
+ */
+export const drawChoices = ({
+  room,
+  track
+}: {
+  room: Room
+  track: HostTrack
+}): { choices: TrackIdentity[]; correctIndex: number } => {
+  const answer: TrackIdentity = {
+    artist: track.artist,
+    coverUrl: track.coverUrl,
+    id: track.id,
+    title: track.title
+  }
+
+  const decoys = shuffled(
+    room.trackPool.filter((candidate) => candidate.id !== track.id)
+  ).slice(0, CHOICES_PER_ROUND - 1)
+
+  const choices = shuffled([answer, ...decoys])
+
+  return {
+    choices,
+    correctIndex: choices.findIndex((choice) => choice.id === track.id)
+  }
+}
+
+const shuffled = <TItem>(items: readonly TItem[]): TItem[] => {
+  const copy = [...items]
+
+  for (let index = copy.length - 1; index > 0; index--) {
+    const swap = Math.floor(Math.random() * (index + 1))
+    const held = copy[index]
+    const other = copy[swap]
+
+    if (held !== undefined && other !== undefined) {
+      copy[index] = other
+      copy[swap] = held
+    }
+  }
+
+  return copy
 }
 
 const takeRandom = <TItem>(items: TItem[]): TItem | null => {

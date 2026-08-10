@@ -1,0 +1,49 @@
+@use '../../presentation/styles/typography'
+
+@layer components
+  .answer-form
+    display: flex
+    flex: 1
+    flex-direction: column
+    gap: var(--space-m)
+    justify-content: center
+
+    .status
+      @include typography.caption
+
+      color: var(--ink-muted)
+      min-height: 2.5em
+      text-align: center
+      text-wrap: balance
+
+  .choices
+    ul
+      display: flex
+      flex-direction: column
+      gap: var(--space-s)
+      list-style: none
+
+    // Sized by the thumb rather than by the words: four of these are the whole
+    // screen during a round, and they are hit while looking at the big screen.
+    .button
+      align-items: flex-start
+      display: flex
+      flex-direction: column
+      gap: var(--space-2xs)
+      min-height: 72px
+      text-align: left
+      width: 100%
+
+    .title
+      @include typography.title
+
+    .artist
+      @include typography.caption
+
+      opacity: 0.75
+
+  .typed
+    .react-aria-Form
+      display: flex
+      flex-direction: column
+      gap: var(--space-m)

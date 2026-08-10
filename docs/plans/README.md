@@ -15,8 +15,8 @@ describes the code is worse than no plan.
 | [06 — Testing](06-testing.md) | **done** | Socket suites, the clock under skew, two Playwright journeys |
 | [07 — Language & appearance](07-i18n.md) | **done** | English and French, light and dark, the corner menu |
 | [08 — Deploy](08-deploy.md) | **done** | One origin serving both, somewhere friends can reach |
-| [09 — Answer modes](09-answer-modes.md) | next | Four choices or a typed answer, everyone at once, scored by speed |
-| [10 — Per-device audio](10-per-device-audio.md) | | A host switch so every phone plays the clip itself |
+| [09 — Answer modes](09-answer-modes.md) | **done** | Four choices or a typed answer, everyone at once, scored by speed |
+| [10 — Per-device audio](10-per-device-audio.md) | next | A host switch so every phone plays the clip itself |
 
 ## Order, and what can move
 

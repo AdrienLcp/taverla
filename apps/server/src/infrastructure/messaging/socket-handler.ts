@@ -25,12 +25,15 @@ import {
 import { findRoom } from '@/domain/room/room-store'
 import {
   applyVerdict,
+  everyoneHasAnswered,
   finishGame,
   isFinalRound,
+  registerAnswer,
   registerBuzz,
   releaseBuzz,
   restartGame,
   revealRound,
+  settleSimultaneousRound,
   type VerdictOutcome
 } from '@/domain/round/round-service'
 import { discardPoolIfStale } from '@/domain/round/track-pool'
@@ -267,6 +270,10 @@ export const createRoomSocketEvents = (
         buzz(message.roundId, active, outbound, room)
         break
       }
+      case 'player.answer': {
+        answer(message, active, outbound, room)
+        break
+      }
       case 'host.startRound': {
         start(outbound, room)
         break
@@ -401,9 +408,70 @@ export const createRoomSocketEvents = (
     }
 
     abandonRound(room.code)
-    revealRound(room, Date.now())
+    closeRound(room)
     broadcastRoom(room)
     armAutoAdvance(room)
+  }
+
+  /**
+   * A simultaneous round is scored on the way out rather than as answers land:
+   * the speed bonus is a rank among everyone who got it right, and nobody knows
+   * that rank until the last of them has spoken or the clip has run out.
+   */
+  const closeRound = (room: Room): void => {
+    if (room.settings.answerMode === 'buzzer') {
+      revealRound(room, Date.now())
+
+      return
+    }
+
+    settleSimultaneousRound(room, Date.now())
+  }
+
+  const answer = (
+    message: Extract<ClientMessage, { type: 'player.answer' }>,
+    active: Connection,
+    outbound: Outbound,
+    room: Room
+  ): void => {
+    if (active.role !== 'player') {
+      sendError(outbound, {
+        code: 'invalid_message',
+        fatal: false,
+        message: 'Only a player answers'
+      })
+
+      return
+    }
+
+    const registered = registerAnswer({
+      attempt: message.answer,
+      now: Date.now(),
+      playerId: active.playerId,
+      room,
+      roundId: message.roundId
+    })
+
+    if (registered.status === 'failure') {
+      sendError(outbound, {
+        code: registered.error,
+        fatal: false,
+        message: 'That answer was not accepted'
+      })
+
+      return
+    }
+
+    if (everyoneHasAnswered(room)) {
+      abandonRound(room.code)
+      closeRound(room)
+      broadcastRoom(room)
+      armAutoAdvance(room)
+
+      return
+    }
+
+    broadcastRoom(room)
   }
 
   const advance = (outbound: Outbound, room: Room): void => {

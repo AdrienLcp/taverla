@@ -7,6 +7,11 @@ import type { PlayerRoomView } from '@taverla/protocol/room'
 import { findBuzzBlocker } from '@taverla/core/round/buzz-eligibility'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
+import {
+  ChoiceAnswer,
+  type PlayerAnswer,
+  TypedAnswer
+} from '@/features/player/answer-forms'
 import { buzzFeedback } from '@/infrastructure/env'
 import { Countdown } from '@/presentation/components/countdown'
 import { Scoreboard } from '@/presentation/components/scoreboard'
@@ -18,12 +23,15 @@ import './player-round.sass'
 type PlayerRoundProps = {
   clock: ClockEstimate | null
   /** `false` from the socket means the frame was never written. */
+  onAnswer: (answer: PlayerAnswer, roundId: string) => boolean
+  /** `false` from the socket means the frame was never written. */
   onBuzz: (roundId: string) => boolean
   view: PlayerRoomView
 }
 
 export const PlayerRound: React.FC<PlayerRoundProps> = ({
   clock,
+  onAnswer,
   onBuzz,
   view
 }) => {
@@ -61,6 +69,27 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
         <Scoreboard players={view.players} youId={view.youId} />
       </section>
     )
+  }
+
+  if (view.phase === 'playing' && view.round !== null) {
+    const answerWithRound = (answer: PlayerAnswer): boolean =>
+      view.round === null ? false : onAnswer(answer, view.round.id)
+
+    if (view.settings.answerMode === 'choice') {
+      return (
+        <section className='player-round'>
+          <ChoiceAnswer onAnswer={answerWithRound} view={view} />
+        </section>
+      )
+    }
+
+    if (view.settings.answerMode === 'typed') {
+      return (
+        <section className='player-round'>
+          <TypedAnswer onAnswer={answerWithRound} view={view} />
+        </section>
+      )
+    }
   }
 
   return <Buzzer onBuzz={onBuzz} view={view} />

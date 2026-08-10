@@ -1,6 +1,10 @@
 import type React from 'react'
 
-import type { RoomSettings } from '@taverla/protocol/room'
+import {
+  type AnswerMode,
+  answerModes,
+  type RoomSettings
+} from '@taverla/protocol/room'
 import {
   type TrackDifficulty,
   trackDifficulties
@@ -32,6 +36,13 @@ const difficultyLabelKey = (
 const isDifficulty = (value: string): value is TrackDifficulty =>
   trackDifficulties.some((difficulty) => difficulty === value)
 
+const answerModeLabelKey = (
+  mode: AnswerMode
+): `blindtest.answerMode.${AnswerMode}` => `blindtest.answerMode.${mode}`
+
+const isAnswerMode = (value: string): value is AnswerMode =>
+  answerModes.some((mode) => mode === value)
+
 type GameSettingsProps = {
   /** Applied to the room as it is pressed; nothing here waits for the launch. */
   onChange: (settings: RoomSettings) => void
@@ -54,6 +65,20 @@ export const GameSettings: React.FC<GameSettingsProps> = ({
 
   return (
     <section className='game-settings'>
+      <SegmentedControl
+        label={translate('blindtest.answerMode.label')}
+        onChange={(next) => {
+          if (isAnswerMode(next)) {
+            onChange({ ...settings, answerMode: next })
+          }
+        }}
+        options={answerModes.map((mode) => ({
+          label: translate(answerModeLabelKey(mode)),
+          value: mode
+        }))}
+        value={settings.answerMode}
+      />
+
       <SegmentedControl
         label={translate('blindtest.difficulty.label')}
         onChange={(next) => {

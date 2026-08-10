@@ -6,20 +6,25 @@ import { DEFAULT_ROOM_SETTINGS, type PlayerRoomView } from './room'
 import { playerServerMessageSchema } from './server-message'
 import { PROTOCOL_VERSION } from './version'
 
+const runningRound = {
+  activeBuzz: null,
+  answers: [],
+  audioStartsAt: 1_700_000_000_000,
+  awards: [],
+  choices: [],
+  id: 'r1',
+  index: 1,
+  lockedOutPlayerIds: [],
+  revealedAnswers: [],
+  revealedTrack: null
+}
+
 const playerView: PlayerRoomView = {
   code: 'K3M9',
   isHostConnected: true,
   phase: 'playing',
   players: [{ id: 'p1', isConnected: true, nickname: 'Alice', score: 2 }],
-  round: {
-    activeBuzz: null,
-    audioStartsAt: 1_700_000_000_000,
-    awards: [],
-    id: 'r1',
-    index: 1,
-    lockedOutPlayerIds: [],
-    revealedTrack: null
-  },
+  round: runningRound,
   settings: DEFAULT_ROOM_SETTINGS,
   youId: 'p1'
 }
@@ -93,6 +98,40 @@ describe('encodeChecked', () => {
     expect(encoded).not.toContain('Harder, Better, Faster, Stronger')
     expect(encoded).not.toContain('cdnt-preview')
     expect(JSON.parse(encoded).view.youId).toBe('p1')
+  })
+
+  // Choice mode restates the rule rather than relaxing it: a player is handed
+  // four candidates and one of them *is* the answer, which is the game. What
+  // must never leave the server is which one — so the round the server holds
+  // carries the index, and the strip is what keeps it off the wire.
+  it('[anti-cheat] never tells a player which choice is the right one', () => {
+    const choices = [
+      { artist: 'Air', coverUrl: null, id: '1', title: 'Sexy Boy' },
+      { artist: 'Justice', coverUrl: null, id: '2', title: 'Genesis' }
+    ]
+
+    // Through a variable, exactly as the server would: the excess property
+    // check does not fire on one, which is the hole this test stands in.
+    const leakyView = {
+      ...playerView,
+      round: {
+        ...runningRound,
+        choices,
+        correctChoiceIndex: 1,
+        correctTrackId: '2'
+      }
+    }
+
+    const encoded = encodeChecked(playerServerMessageSchema, {
+      type: 'room.updated' as const,
+      view: leakyView
+    })
+
+    const decoded = JSON.parse(encoded)
+
+    expect(decoded.view.round.correctChoiceIndex).toBeUndefined()
+    expect(decoded.view.round.correctTrackId).toBeUndefined()
+    expect(decoded.view.round.choices).toHaveLength(2)
   })
 
   it('[codec] throws when the server builds a message it cannot honour', () => {

@@ -51,8 +51,35 @@
         margin-bottom: var(--space-s)
 
       .nobody,
+      .said,
       .scorers
         margin-top: var(--space-m)
+
+      // What everyone answered is most of what a room wants to see at a reveal,
+      // so it is a list of sentences rather than a table of results. Right and
+      // wrong are told apart by the ink, since the answer is on the same screen.
+      .said
+        display: flex
+        flex-direction: column
+        list-style: none
+
+        li
+          @include typography.title
+
+          border-top: 2px solid var(--rule)
+          display: flex
+          gap: var(--space-s)
+          justify-content: space-between
+          padding: var(--space-xs) 0
+
+          &.wrong
+            color: var(--ink-muted)
+
+        .words
+          overflow: hidden
+          text-align: right
+          text-overflow: ellipsis
+          white-space: nowrap
 
       .nobody
         @include typography.title

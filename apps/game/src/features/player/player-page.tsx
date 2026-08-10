@@ -152,6 +152,9 @@ const Lobby = ({
           <Scoreline view={view} />
           <PlayerRound
             clock={clock}
+            onAnswer={(answer, roundId) =>
+              send({ answer, roundId, type: 'player.answer' })
+            }
             onBuzz={(roundId) => send({ roundId, type: 'player.buzz' })}
             view={view}
           />

@@ -61,6 +61,19 @@ one part.
   room of the evening costs one tap instead of typing a name again
 - `[Game]` The room code can be copied, for the half of joining that is not a
   QR code: the host copies it and sends it to someone on a laptop
+- `[Shared]` Two more ways to answer, and one game rather than three. **Four
+  choices** puts the same candidates on every phone — drawn from the room's own
+  pool, because three soul tracks beside one chart hit is not a question — and
+  **typing it** takes the title and the artist as two fields worth a point
+  each, with a bonus for holding both. Both are everyone at once: the clip does
+  not stop for an answer, and the round ends when the last player is in or the
+  clip runs out. Speed is a rank among whoever got it right, +2 then +1, so
+  being quickly wrong wins nothing. The reveal then shows what everybody said,
+  which is most of the fun of the round being over
+- `[Shared]` The anti-cheat rule is restated rather than relaxed for choice
+  mode: a player is handed four candidates and one of them *is* the answer,
+  which is the game. Which one lives only in the server's round and reaches no
+  frame — asserted over a whole round's transcript, and again at the codec
 - `[Game]` Two front doors. `/` is Taverla's — it names the product and shows a
   shelf, laid out as a list rather than as a single title because the second
   game changes nothing there — and `/blindtest` is the game's own, where a room

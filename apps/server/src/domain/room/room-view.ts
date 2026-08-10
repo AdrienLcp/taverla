@@ -7,6 +7,8 @@ import type {
 } from '@taverla/protocol/room'
 import type { TrackIdentity } from '@taverla/protocol/track'
 
+import { pointsFor } from '@taverla/core/scoring/award'
+
 import { elapsedPlaybackMs } from '@/domain/round/round-service'
 
 import type { Participant, Room, Round } from './room'
@@ -65,13 +67,32 @@ const toPublicPlayer = (participant: Participant): PublicPlayer => ({
   score: participant.score
 })
 
+/**
+ * `correctChoiceIndex` is absent from this object, and that absence is the
+ * whole anti-cheat story for choice mode. Spreading the round here instead of
+ * naming its fields would ship it — `codec.test.ts` is the net under that, and
+ * this is the floor above it.
+ */
 const toRoundView = (round: Round): RoundView => ({
   activeBuzz: round.activeBuzz,
+  answers: round.answers.map(({ atServerTime, playerId }) => ({
+    atServerTime,
+    playerId
+  })),
   audioStartsAt: round.audioStartsAt,
   awards: round.awards,
+  choices: round.choices,
   id: round.id,
   index: round.index,
   lockedOutPlayerIds: [...round.lockedOutPlayerIds],
+  revealedAnswers: round.revealed
+    ? round.answers.map((answer) => ({
+        atServerTime: answer.atServerTime,
+        isCorrect: pointsFor(answer.verdict) > 0,
+        playerId: answer.playerId,
+        said: answer.said
+      }))
+    : [],
   revealedTrack: round.revealed ? toTrackIdentity(round) : null
 })
 

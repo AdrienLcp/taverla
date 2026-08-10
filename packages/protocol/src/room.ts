@@ -28,7 +28,21 @@ export const roomPhases = [
 
 export const roomPhaseSchema = z.enum(roomPhases)
 
+export const answerModes = ['buzzer', 'choice', 'typed'] as const
+
+/**
+ * How a round is answered. One game, not three: the pool, the audio, the
+ * countdown, the reveal and the scoreboard are identical, and what differs is
+ * who acts, who decides, and what scores.
+ *
+ * `buzzer` is one player, the first, judged by the host. `choice` and `typed`
+ * are everyone at once, decided by the server — exactly, then fuzzily — and
+ * scored by speed on top of being right.
+ */
+export const answerModeSchema = z.enum(answerModes)
+
 export const roomSettingsSchema = z.object({
+  answerMode: answerModeSchema,
   /**
    * How long a reveal stays on screen before the next round starts itself, or
    * `null` when the host advances by hand. The wait is served by the server for
@@ -45,6 +59,7 @@ export const roomSettingsSchema = z.object({
   source: trackSourceSchema
 })
 
+export type AnswerMode = z.infer<typeof answerModeSchema>
 export type RoomSettings = z.infer<typeof roomSettingsSchema>
 
 /**
@@ -52,6 +67,7 @@ export type RoomSettings = z.infer<typeof roomSettingsSchema>
  * the schema's ceiling is that hard limit, not a taste call.
  */
 export const DEFAULT_ROOM_SETTINGS: RoomSettings = {
+  answerMode: 'buzzer',
   autoAdvanceMs: null,
   countdownMs: 3_000,
   difficulty: 'wellKnown',
@@ -73,17 +89,48 @@ export const activeBuzzSchema = z.object({
   playerId: playerIdSchema
 })
 
+/**
+ * Who is in, and when they got there — never what they said. The room watching
+ * a screen fill up with names is the tension of a simultaneous round, and it
+ * costs nothing that could be worked backwards into the answer.
+ */
+export const roundAnswerSchema = z.object({
+  atServerTime: serverTimeSchema,
+  playerId: playerIdSchema
+})
+
+/**
+ * What each player actually answered, published at the reveal and not a moment
+ * before. `isCorrect` is the server's grade, which is only a leak once the
+ * answer is already public.
+ */
+export const revealedAnswerSchema = roundAnswerSchema.extend({
+  isCorrect: z.boolean(),
+  /** The choice they picked, or the two fields they typed. */
+  said: z.string()
+})
+
 export const roundViewSchema = z.object({
   activeBuzz: activeBuzzSchema.nullable(),
+  /** Buzzer mode leaves this empty; the other two fill it as frames arrive. */
+  answers: z.array(roundAnswerSchema),
   /** Server time the clip should start; every client schedules against its own clock offset. */
   audioStartsAt: serverTimeSchema.nullable(),
   /** Points already granted this round, in the order the host granted them. */
   awards: z.array(awardSchema),
+  /**
+   * Choice mode only, and shuffled per round. One of them is the answer, which
+   * is the game rather than a leak — **which** one lives only in the server's
+   * `Round` and reaches no frame. See `codec.test.ts`.
+   */
+  choices: z.array(trackIdentitySchema),
   id: roundIdSchema,
   /** 1-based, so it reads as "round 3 of 10" without arithmetic at the call site. */
   index: z.number().int().positive(),
   /** Answered wrong this round — cannot buzz again until the next one. */
   lockedOutPlayerIds: z.array(playerIdSchema),
+  /** Empty until the reveal, then what everyone said and whether it was right. */
+  revealedAnswers: z.array(revealedAnswerSchema),
   revealedTrack: trackIdentitySchema.nullable()
 })
 

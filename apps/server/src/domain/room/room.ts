@@ -6,7 +6,7 @@ import type {
   SessionId
 } from '@taverla/protocol/identifiers'
 import type { RoomPhase, RoomSettings } from '@taverla/protocol/room'
-import type { Award } from '@taverla/protocol/scoring'
+import type { Award, Verdict } from '@taverla/protocol/scoring'
 import type { HostTrack, TrackIdentity } from '@taverla/protocol/track'
 
 /**
@@ -48,10 +48,32 @@ export type Participant = {
  * buzz pauses the clip, and the round has to know how much of it is left rather
  * than handing the next player a fresh thirty seconds.
  */
+/**
+ * One player's answer in a simultaneous round, graded on arrival. It is held
+ * whole here and projected twice: as a name and a time while the round runs,
+ * and with what they said once the answer is public.
+ */
+export type SubmittedAnswer = {
+  atServerTime: number
+  playerId: PlayerId
+  /** What the reveal shows: the choice they picked, or the two fields they typed. */
+  said: string
+  verdict: Verdict
+}
+
 export type Round = {
   activeBuzz: { atServerTime: number; playerId: PlayerId } | null
+  /** Buzzer mode leaves this empty; the other two fill it as frames arrive. */
+  answers: SubmittedAnswer[]
   audioStartsAt: number | null
   awards: Award[]
+  /**
+   * Choice mode's four candidates, shuffled once when the round opens so the
+   * order carries nothing. `correctChoiceIndex` is the one field in the whole
+   * model that must never be projected — see `room-view.ts`.
+   */
+  choices: TrackIdentity[]
+  correctChoiceIndex: number | null
   id: RoundId
   index: number
   lockedOutPlayerIds: Set<PlayerId>

@@ -17,11 +17,14 @@ import {
 
 const runningRound: RoundView = {
   activeBuzz: null,
+  answers: [],
   audioStartsAt: 1_000,
   awards: [],
+  choices: [],
   id: 'r1',
   index: 1,
   lockedOutPlayerIds: [],
+  revealedAnswers: [],
   revealedTrack: null
 }
 

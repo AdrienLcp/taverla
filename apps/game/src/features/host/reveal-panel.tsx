@@ -21,6 +21,9 @@ export const RevealPanel: React.FC<RevealPanelProps> = ({ players, round }) => {
     return null
   }
 
+  const nameOf = (playerId: string): string =>
+    players.find((player) => player.id === playerId)?.nickname ?? '—'
+
   return (
     <section className='reveal-panel'>
       {track.coverUrl === null ? (
@@ -40,7 +43,19 @@ export const RevealPanel: React.FC<RevealPanelProps> = ({ players, round }) => {
         <p className='title'>{track.title}</p>
         <p className='artist'>{track.artist}</p>
 
-        {scorers.length === 0 ? (
+        {round.revealedAnswers.length > 0 ? (
+          <ul className='said'>
+            {round.revealedAnswers.map((answer) => (
+              <li
+                className={answer.isCorrect ? 'right' : 'wrong'}
+                key={answer.playerId}
+              >
+                <span className='nickname'>{nameOf(answer.playerId)}</span>
+                <span className='words'>{answer.said}</span>
+              </li>
+            ))}
+          </ul>
+        ) : scorers.length === 0 ? (
           <p className='nobody'>{translate('blindtest.reveal.nobody')}</p>
         ) : (
           <ul className='scorers'>

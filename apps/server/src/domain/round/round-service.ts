@@ -12,9 +12,16 @@ import {
   hasEligibleBuzzer
 } from '@taverla/core/round/buzz-eligibility'
 import { isMiss, pointsFor } from '@taverla/core/scoring/award'
+import {
+  gradeTypedAnswer,
+  pointsForTypedAnswer,
+  speedBonusForRank,
+  type TypedAttempt
+} from '@taverla/core/scoring/typed-answer'
 
-import type { Room, Round } from '@/domain/room/room'
+import type { Room, Round, SubmittedAnswer } from '@/domain/room/room'
 import { touch } from '@/domain/room/room-service'
+import { drawChoices } from '@/domain/round/track-pool'
 
 export type VerdictRejection = Extract<
   ProtocolErrorCode,
@@ -37,10 +44,16 @@ export const openRound = ({
   room: Room
   track: HostTrack
 }): Round => {
+  const choices =
+    room.settings.answerMode === 'choice' ? drawChoices({ room, track }) : null
+
   const round: Round = {
     activeBuzz: null,
+    answers: [],
     audioStartsAt: now + room.settings.countdownMs,
     awards: [],
+    choices: choices?.choices ?? [],
+    correctChoiceIndex: choices?.correctIndex ?? null,
     id: nanoid(10),
     index: (room.round?.index ?? 0) + 1,
     lockedOutPlayerIds: new Set(),
@@ -99,6 +112,12 @@ export const registerBuzz = ({
     return Result.failure('wrong_phase')
   }
 
+  // A socket is whatever its owner makes it, and a phone showing four choices
+  // can still send a buzz by hand.
+  if (room.settings.answerMode !== 'buzzer') {
+    return Result.failure('wrong_phase')
+  }
+
   const rejection = findBuzzRejection({
     claimedRoundId: roundId,
     currentRoundId: round.id,
@@ -117,6 +136,168 @@ export const registerBuzz = ({
   touch(room, now)
 
   return Result.success(undefined)
+}
+
+export type AnswerRejection = Extract<
+  ProtocolErrorCode,
+  'already_buzzed' | 'invalid_message' | 'stale_round' | 'wrong_phase'
+>
+
+/**
+ * A simultaneous round's answer. Unlike a buzz it neither pauses the clip nor
+ * claims the floor: everyone answers over the same music, and the round ends
+ * when the last of them has or when the clip runs out.
+ *
+ * `already_buzzed` is the code for a second answer from the same player —
+ * borrowed rather than invented because it says exactly the right thing, "you
+ * have had your go".
+ */
+export const registerAnswer = ({
+  attempt,
+  now,
+  playerId,
+  room,
+  roundId
+}: {
+  attempt: { kind: 'choice'; choiceIndex: number } | TypedAttempt
+  now: number
+  playerId: PlayerId
+  room: Room
+  roundId: RoundId
+}): Result<void, AnswerRejection> => {
+  const round = room.round
+
+  if (round === null || room.phase !== 'playing') {
+    return Result.failure('wrong_phase')
+  }
+
+  if (round.id !== roundId) {
+    return Result.failure('stale_round')
+  }
+
+  if (room.settings.answerMode === 'buzzer') {
+    return Result.failure('invalid_message')
+  }
+
+  if (round.answers.some((answer) => answer.playerId === playerId)) {
+    return Result.failure('already_buzzed')
+  }
+
+  const graded = grade({ attempt, round })
+
+  if (graded === null) {
+    return Result.failure('invalid_message')
+  }
+
+  round.answers.push({ ...graded, atServerTime: now, playerId })
+  touch(room, now)
+
+  return Result.success(undefined)
+}
+
+/**
+ * Whether the round has heard from everyone it is waiting for. A phone that
+ * dropped off Wi-Fi is not one of them, for the same reason a disconnected
+ * player does not hold the clip open in buzzer mode.
+ */
+export const everyoneHasAnswered = (room: Room): boolean => {
+  const round = room.round
+
+  if (round === null) {
+    return false
+  }
+
+  const expected = [...room.players.values()].filter(
+    (participant) => participant.isConnected
+  )
+
+  return (
+    expected.length > 0 &&
+    expected.every((participant) =>
+      round.answers.some((answer) => answer.playerId === participant.id)
+    )
+  )
+}
+
+/**
+ * Scores a simultaneous round and reveals it. The speed bonus is a rank among
+ * the players who *scored*, in arrival order — being quickly wrong wins
+ * nothing, and taking somebody's bonus for it would be the wrong lesson.
+ */
+export const settleSimultaneousRound = (room: Room, now: number): void => {
+  const round = room.round
+
+  if (round === null) {
+    return
+  }
+
+  let rankAmongCorrect = 0
+
+  for (const answer of [...round.answers].sort(
+    (one, other) => one.atServerTime - other.atServerTime
+  )) {
+    const earned = pointsForTypedAnswer(answer.verdict)
+
+    if (earned === 0) {
+      round.awards.push({
+        playerId: answer.playerId,
+        points: 0,
+        verdict: answer.verdict
+      })
+
+      continue
+    }
+
+    const points = earned + speedBonusForRank(rankAmongCorrect)
+
+    rankAmongCorrect += 1
+
+    const participant = room.players.get(answer.playerId)
+
+    if (participant !== undefined) {
+      participant.score += points
+    }
+
+    round.awards.push({
+      playerId: answer.playerId,
+      points,
+      verdict: answer.verdict
+    })
+  }
+
+  revealRound(room, now)
+}
+
+const grade = ({
+  attempt,
+  round
+}: {
+  attempt: { kind: 'choice'; choiceIndex: number } | TypedAttempt
+  round: Round
+}): Pick<SubmittedAnswer, 'said' | 'verdict'> | null => {
+  if (attempt.kind === 'choice') {
+    const picked = round.choices[attempt.choiceIndex]
+
+    if (picked === undefined) {
+      return null
+    }
+
+    const isRight = attempt.choiceIndex === round.correctChoiceIndex
+
+    return {
+      said: `${picked.title} — ${picked.artist}`,
+      verdict: { artistCorrect: isRight, titleCorrect: isRight }
+    }
+  }
+
+  const verdict = gradeTypedAnswer({ attempt, track: round.track })
+
+  return {
+    said: [attempt.title, attempt.artist]
+      .filter((half) => half !== '')
+      .join(' — '),
+    verdict
+  }
 }
 
 export const applyVerdict = ({

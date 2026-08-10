@@ -7,6 +7,15 @@
  * that the next game will reuse. See `docs/game-catalogue.md`.
  */
 export const EN_DICTIONARY = {
+  'blindtest.answer.artist': 'Artist',
+  'blindtest.answer.locked': 'Answer sent. Waiting for the others…',
+  'blindtest.answer.send': 'Send it',
+  'blindtest.answer.title': 'Title',
+  'blindtest.answer.waiting': '{count} in so far',
+  'blindtest.answerMode.buzzer': 'First to buzz',
+  'blindtest.answerMode.choice': 'Four choices',
+  'blindtest.answerMode.label': 'How to answer',
+  'blindtest.answerMode.typed': 'Type it',
   'blindtest.buzz.action': 'Buzz',
   'blindtest.buzz.blocked.host_away':
     'The host dropped out. Everything is on hold.',

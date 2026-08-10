@@ -45,6 +45,30 @@ export const buzzMessageSchema = z.object({
   type: z.literal('player.buzz')
 })
 
+/**
+ * The other two modes' answer, and it carries no timestamp for the same reason
+ * `player.buzz` does not: the server stamps arrival, because the speed bonus is
+ * decided by exactly that field and a client-supplied "when" is both
+ * clock-skewed and trivially edited in a console.
+ */
+export const answerMessageSchema = z.object({
+  answer: z.discriminatedUnion('kind', [
+    z.object({
+      /** An index into `round.choices`, which the server shuffled. */
+      choiceIndex: z.number().int().nonnegative(),
+      kind: z.literal('choice')
+    }),
+    z.object({
+      /** Blank when the player only knew the other half. */
+      artist: z.string().max(120),
+      kind: z.literal('typed'),
+      title: z.string().max(120)
+    })
+  ]),
+  roundId: roundIdSchema,
+  type: z.literal('player.answer')
+})
+
 export const updateSettingsMessageSchema = z.object({
   settings: roomSettingsSchema,
   type: z.literal('host.updateSettings')
@@ -111,7 +135,8 @@ export const hostClientMessageSchema = z.discriminatedUnion('type', [
 export const playerClientMessageSchema = z.discriminatedUnion('type', [
   helloMessageSchema,
   timePingMessageSchema,
-  buzzMessageSchema
+  buzzMessageSchema,
+  answerMessageSchema
 ])
 
 /** Everything the server's decoder accepts, before it knows which role sent it. */
@@ -119,6 +144,7 @@ export const clientMessageSchema = z.discriminatedUnion('type', [
   helloMessageSchema,
   timePingMessageSchema,
   buzzMessageSchema,
+  answerMessageSchema,
   updateSettingsMessageSchema,
   startRoundMessageSchema,
   judgeMessageSchema,

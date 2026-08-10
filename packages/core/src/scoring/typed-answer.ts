@@ -8,9 +8,10 @@ import {
 
 import { matchesAnswer } from '../round/answer-matching'
 
-type TypedAttempt = {
+export type TypedAttempt = {
   /** Blank when the player only knew one of the two. */
   artist: string
+  kind: 'typed'
   title: string
 }
 
