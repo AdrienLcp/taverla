@@ -11,7 +11,10 @@ import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
 import type { Room } from '@/domain/room/room'
 import { toHostView, toPlayerView } from '@/domain/room/room-view'
-import { connectionsIn } from '@/infrastructure/messaging/connection-registry'
+import {
+  connectionsIn,
+  isHostConnected
+} from '@/infrastructure/messaging/connection-registry'
 
 import type { Connection, Outbound } from './connection'
 
@@ -54,6 +57,8 @@ export const sendWelcome = (
     sessionId
   }: { room: Room; serverTime: number; sessionId: SessionId }
 ): void => {
+  const hostIsThere = isHostConnected(room.code)
+
   connection.send(
     connection.role === 'host'
       ? encodeChecked(hostServerMessageSchema, {
@@ -61,14 +66,18 @@ export const sendWelcome = (
           serverTime,
           sessionId,
           type: 'welcome',
-          view: toHostView(room)
+          view: toHostView({ isHostConnected: hostIsThere, room })
         })
       : encodeChecked(playerServerMessageSchema, {
           protocolVersion: PROTOCOL_VERSION,
           serverTime,
           sessionId,
           type: 'welcome',
-          view: toPlayerView(room, connection.playerId)
+          view: toPlayerView({
+            isHostConnected: hostIsThere,
+            room,
+            youId: connection.playerId
+          })
         })
   )
 }
@@ -80,16 +89,22 @@ export const sendWelcome = (
  * rather than shipped — see `encodeChecked`.
  */
 export const broadcastRoom = (room: Room): void => {
+  const hostIsThere = isHostConnected(room.code)
+
   for (const connection of connectionsIn(room.code)) {
     connection.send(
       connection.role === 'host'
         ? encodeChecked(hostServerMessageSchema, {
             type: 'room.updated',
-            view: toHostView(room)
+            view: toHostView({ isHostConnected: hostIsThere, room })
           })
         : encodeChecked(playerServerMessageSchema, {
             type: 'room.updated',
-            view: toPlayerView(room, connection.playerId)
+            view: toPlayerView({
+              isHostConnected: hostIsThere,
+              room,
+              youId: connection.playerId
+            })
           })
     )
   }

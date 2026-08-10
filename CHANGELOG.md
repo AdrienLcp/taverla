@@ -61,6 +61,14 @@ one part.
   room of the evening costs one tap instead of typing a name again
 - `[Game]` The room code can be copied, for the half of joining that is not a
   QR code: the host copies it and sends it to someone on a laptop
+- `[Shared]` A host who walks away puts the game on hold instead of leaving it
+  running in silence. Their browser is the room's speaker and its only judge, so
+  a round without them burned clip time nobody could hear and hung on a verdict
+  nobody could give. Everything time-driven stops, the clip keeps the seconds it
+  had left, and the countdown is handed back whole rather than resumed late —
+  its point is that every device lands on the first note together. No grace
+  period, deliberately: freezing costs nothing and undoes itself, where waiting
+  even five seconds spends five seconds of music on an empty room
 - `[Game]` A screen for anything that throws, instead of a white page: the root
   route carries an error boundary offering a reload and the way home. Reload
   rather than retry, because the likeliest way to land there is a lazy chunk

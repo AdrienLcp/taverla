@@ -48,7 +48,9 @@ import {
   armAutoAdvance,
   armPlaybackTimeout,
   beginRound,
-  holdPlaybackTimeout
+  holdPlaybackTimeout,
+  holdRoundWhileHostIsAway,
+  resumeRoundForHost
 } from './round-conductor'
 
 /** Everything `dispatch` can see: `hello` and `time.ping` are answered before it. */
@@ -132,6 +134,14 @@ export const createRoomSocketEvents = (
     connection = seated
     roomCode = code
     registerConnection(code, seated)
+
+    // After registering, never before: the resumed round is broadcast with
+    // `isHostConnected` already true, so no socket sees a frame saying the room
+    // is running and the host is gone.
+    if (seated.role === 'host') {
+      resumeRoundForHost(room)
+    }
+
     sendWelcome(seated, { room, serverTime: Date.now(), sessionId })
     broadcastRoom(room)
     logger.info('Socket joined', { code, role: seated.role })
@@ -168,6 +178,9 @@ export const createRoomSocketEvents = (
       return null
     }
 
+    // The registration that makes `isHostConnected` true happens after this
+    // returns, so the round is put back on the clock by the caller rather than
+    // here — see where the connection is registered.
     return { playerId: null, role: 'host', send: outbound.send, sessionId }
   }
 
@@ -489,6 +502,7 @@ export const createRoomSocketEvents = (
       }
 
       if (connection.role !== 'player') {
+        holdRoundWhileHostIsAway(room)
         broadcastRoom(room)
 
         return

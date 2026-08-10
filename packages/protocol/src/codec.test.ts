@@ -8,6 +8,7 @@ import { PROTOCOL_VERSION } from './version'
 
 const playerView: PlayerRoomView = {
   code: 'K3M9',
+  isHostConnected: true,
   phase: 'playing',
   players: [{ id: 'p1', isConnected: true, nickname: 'Alice', score: 2 }],
   round: {

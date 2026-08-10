@@ -30,6 +30,7 @@ const viewFor = (
   round: RoundView | null = runningRound
 ): PlayerRoomView => ({
   code: 'K3M9',
+  isHostConnected: true,
   phase,
   players: [{ id: 'me', isConnected: true, nickname: 'Alice', score: 0 }],
   round,
@@ -40,6 +41,23 @@ const viewFor = (
 describe('findBuzzBlocker', () => {
   it('[buzz] arms the buzzer while the clip is running', () => {
     expect(findBuzzBlocker(viewFor('playing'))).toBeNull()
+  })
+
+  it('[buzz] kills the buzzer while the host is away, and says so', () => {
+    expect(
+      findBuzzBlocker({ ...viewFor('playing'), isHostConnected: false })
+    ).toBe('host_away')
+  })
+
+  it('[buzz] blames the absent host rather than the player who is out', () => {
+    const lockedOut = viewFor('playing', {
+      ...runningRound,
+      lockedOutPlayerIds: ['me']
+    })
+
+    expect(findBuzzBlocker({ ...lockedOut, isHostConnected: false })).toBe(
+      'host_away'
+    )
   })
 
   it.each<[RoomPhase]>([['lobby'], ['countdown'], ['revealed'], ['finished']])(

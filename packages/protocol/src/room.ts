@@ -89,6 +89,12 @@ export const roundViewSchema = z.object({
 
 const baseRoomViewSchema = z.object({
   code: roomCodeSchema,
+  /**
+   * The host's browser is the room's speaker and its only judge, so its absence
+   * is a fact the whole room needs rather than a detail of the connection. The
+   * server freezes the round while this is `false`.
+   */
+  isHostConnected: z.boolean(),
   phase: roomPhaseSchema,
   players: z.array(publicPlayerSchema),
   round: roundViewSchema.nullable(),

@@ -3,6 +3,7 @@ import type { PlayerId, RoundId } from '@taverla/protocol/identifiers'
 import type { PlayerRoomView, RoomPhase } from '@taverla/protocol/room'
 
 export type BuzzBlocker =
+  | 'host_away'
   | 'round_not_running'
   | 'you_already_missed'
   | 'your_answer_is_pending'
@@ -23,6 +24,14 @@ export const findBuzzBlocker = (view: PlayerRoomView): BuzzBlocker | null => {
 
   if (round === null) {
     return 'round_not_running'
+  }
+
+  // Ahead of everything personal: the host holds the speaker and the verdict, so
+  // while they are gone the room is frozen for reasons that have nothing to do
+  // with this player, and saying "you are out for this round" would blame them
+  // for it.
+  if (!view.isHostConnected) {
+    return 'host_away'
   }
 
   // Checked before the buzz state because a lockout lasts the whole round: it

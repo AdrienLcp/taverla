@@ -1,13 +1,15 @@
-import type { RoomCode } from '@taverla/protocol/identifiers'
+import type { RoomCode, RoundId } from '@taverla/protocol/identifiers'
 
 import type { Room } from '@/domain/room/room'
 import { findRoom } from '@/domain/room/room-store'
 import {
   beginPlayback,
   finishGame,
+  holdPlayback,
   isFinalRound,
   openRound,
   remainingPlaybackMs,
+  resumePlayback,
   revealRound
 } from '@/domain/round/round-service'
 import {
@@ -72,20 +74,7 @@ export const beginRound = async (room: Room): Promise<void> => {
     const round = openRound({ now: Date.now(), room, track: drawn.data })
 
     broadcastRoom(room)
-
-    scheduleRoundTimer({
-      code: room.code,
-      delayMs: room.settings.countdownMs,
-      kind: 'countdown',
-      run: () => {
-        if (!beginPlayback({ now: Date.now(), room, roundId: round.id })) {
-          return
-        }
-
-        broadcastRoom(room)
-        armPlaybackTimeout(room)
-      }
-    })
+    armCountdown({ room, roundId: round.id })
   } finally {
     roomsDrawing.delete(room.code)
   }
@@ -146,6 +135,67 @@ export const armAutoAdvance = (room: Room): void => {
 
 export const holdPlaybackTimeout = (code: RoomCode): void => {
   cancelRoundTimer(code, 'playback')
+}
+
+/**
+ * The host's browser is the room's speaker and its only judge, so a game that
+ * carries on without them carries on in silence, unjudged, burning clip time
+ * nobody can hear. Everything time-driven stops instead, and the clip keeps the
+ * seconds it had left.
+ *
+ * There is no grace period on purpose. Freezing costs nothing and undoes
+ * itself, where waiting even five seconds spends five seconds of music on an
+ * empty room — a host who drops off Wi-Fi for a moment loses the pause, not the
+ * round.
+ */
+export const holdRoundWhileHostIsAway = (room: Room): void => {
+  cancelRoundTimer(room.code, 'advance')
+  cancelRoundTimer(room.code, 'countdown')
+  cancelRoundTimer(room.code, 'playback')
+  holdPlayback(room, Date.now())
+}
+
+/** The mirror, run when a host claims the room again. */
+export const resumeRoundForHost = (room: Room): void => {
+  const now = Date.now()
+
+  resumePlayback(room, now)
+
+  if (room.phase === 'countdown' && room.round !== null) {
+    armCountdown({ room, roundId: room.round.id })
+
+    return
+  }
+
+  if (room.phase === 'playing') {
+    armPlaybackTimeout(room)
+
+    return
+  }
+
+  armAutoAdvance(room)
+}
+
+const armCountdown = ({
+  room,
+  roundId
+}: {
+  room: Room
+  roundId: RoundId
+}): void => {
+  scheduleRoundTimer({
+    code: room.code,
+    delayMs: room.settings.countdownMs,
+    kind: 'countdown',
+    run: () => {
+      if (!beginPlayback({ now: Date.now(), room, roundId })) {
+        return
+      }
+
+      broadcastRoom(room)
+      armPlaybackTimeout(room)
+    }
+  })
 }
 
 export const abandonRound = (code: RoomCode): void => {

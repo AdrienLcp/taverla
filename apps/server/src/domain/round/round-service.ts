@@ -195,6 +195,46 @@ export const releaseBuzz = ({
   return resumeOrReveal(room, now)
 }
 
+/**
+ * Freezes the clip where it is, without ending anything. The buzz path already
+ * does this; the host walking away is the same situation seen from the other
+ * side, and both have to be undoable without the room losing music it paid for.
+ */
+export const holdPlayback = (room: Room, now: number): void => {
+  if (room.round === null) {
+    return
+  }
+
+  pausePlayback(room.round, now)
+  touch(room, now)
+}
+
+/**
+ * Puts the clip back on the clock. A countdown is restarted rather than
+ * resumed: its whole purpose is that every device lands on the first note
+ * together, and an `audioStartsAt` that elapsed while nobody could hear it
+ * would have the track begin mid-phrase on the screens that stayed.
+ */
+export const resumePlayback = (room: Room, now: number): void => {
+  const round = room.round
+
+  if (round === null) {
+    return
+  }
+
+  if (room.phase === 'countdown') {
+    round.audioStartsAt = now + room.settings.countdownMs
+    touch(room, now)
+
+    return
+  }
+
+  if (room.phase === 'playing') {
+    round.playingSince = now
+    touch(room, now)
+  }
+}
+
 export const revealRound = (room: Room, now: number): void => {
   const round = room.round
 

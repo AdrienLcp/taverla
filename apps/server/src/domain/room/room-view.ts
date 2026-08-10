@@ -16,21 +16,42 @@ import type { Participant, Room, Round } from './room'
  * session ids, the pool, the track being played — is dropped here, and the two
  * projections are the reason `HostTrack` cannot reach a player by accident.
  */
-export const toHostView = (room: Room): HostRoomView => ({
-  ...toBaseView(room),
+export const toHostView = ({
+  isHostConnected,
+  room
+}: {
+  isHostConnected: boolean
+  room: Room
+}): HostRoomView => ({
+  ...toBaseView({ isHostConnected, room }),
   currentTrack: room.round?.track ?? null,
   playbackElapsedMs:
     room.round === null ? 0 : elapsedPlaybackMs(room.round, Date.now()),
   remainingPoolSize: room.trackPool.length
 })
 
-export const toPlayerView = (room: Room, youId: PlayerId): PlayerRoomView => ({
-  ...toBaseView(room),
+export const toPlayerView = ({
+  isHostConnected,
+  room,
+  youId
+}: {
+  isHostConnected: boolean
+  room: Room
+  youId: PlayerId
+}): PlayerRoomView => ({
+  ...toBaseView({ isHostConnected, room }),
   youId
 })
 
-const toBaseView = (room: Room) => ({
+const toBaseView = ({
+  isHostConnected,
+  room
+}: {
+  isHostConnected: boolean
+  room: Room
+}) => ({
   code: room.code,
+  isHostConnected,
   phase: room.phase,
   players: [...room.players.values()].map(toPublicPlayer),
   round: room.round === null ? null : toRoundView(room.round),

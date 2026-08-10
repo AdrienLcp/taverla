@@ -7,6 +7,7 @@ import type { Dictionary } from './translation'
  */
 export const FR_DICTIONARY: Dictionary = {
   'blindtest.buzz.action': 'Buzz',
+  'blindtest.buzz.blocked.host_away': 'L’hôte a décroché. Tout est en pause.',
   'blindtest.buzz.blocked.round_not_running': 'En attente de l’hôte',
   'blindtest.buzz.blocked.someone_else_buzzed': 'Quelqu’un a été plus rapide',
   'blindtest.buzz.blocked.you_already_missed': 'Tu es hors-jeu pour ce tour',

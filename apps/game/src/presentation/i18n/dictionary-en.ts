@@ -8,6 +8,8 @@
  */
 export const EN_DICTIONARY = {
   'blindtest.buzz.action': 'Buzz',
+  'blindtest.buzz.blocked.host_away':
+    'The host dropped out. Everything is on hold.',
   'blindtest.buzz.blocked.round_not_running': 'Waiting for the host',
   'blindtest.buzz.blocked.someone_else_buzzed': 'Someone got there first',
   'blindtest.buzz.blocked.you_already_missed': 'You are out for this round',

@@ -129,7 +129,7 @@ describe('the two views', () => {
   })
 
   it('[room] shows the host the pool and the current track', () => {
-    const view = toHostView(room)
+    const view = toHostView({ isHostConnected: true, room })
 
     expect(view.remainingPoolSize).toBe(1)
     expect(view.currentTrack).toBeNull()
@@ -144,7 +144,9 @@ describe('the two views', () => {
       throw new Error('the fixture should have seated a player')
     }
 
-    const serialised = JSON.stringify(toPlayerView(room, player.id))
+    const serialised = JSON.stringify(
+      toPlayerView({ isHostConnected: true, room, youId: player.id })
+    )
 
     expect(serialised).not.toContain('Daft Punk')
     expect(serialised).not.toContain('cdnt-preview')
@@ -157,8 +159,11 @@ describe('the two views', () => {
 
     const [alice, bob] = [...room.players.values()]
 
-    expect(toPlayerView(room, alice?.id ?? '').youId).not.toBe(
-      toPlayerView(room, bob?.id ?? '').youId
+    expect(
+      toPlayerView({ isHostConnected: true, room, youId: alice?.id ?? '' })
+        .youId
+    ).not.toBe(
+      toPlayerView({ isHostConnected: true, room, youId: bob?.id ?? '' }).youId
     )
   })
 })
