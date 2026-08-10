@@ -61,6 +61,11 @@ one part.
   room of the evening costs one tap instead of typing a name again
 - `[Game]` The room code can be copied, for the half of joining that is not a
   QR code: the host copies it and sends it to someone on a laptop
+- `[Game]` A nickname set at display size wraps instead of leaving the screen.
+  Twenty characters is legal and nothing makes them breakable, so the winner's
+  name and the "{nickname} buzzed" heading could both push a sideways scrollbar
+  onto the page — worst on the phone, which is exactly where a host running the
+  room from their hand would see it
 - `[Game]` A game ends on a name. The final screen already listed everyone
   ranked, ties and all — what it never did was say who won, so a room read a
   table instead of hearing a result. The winner is now the largest thing on the

@@ -11,8 +11,14 @@
 
     // Who has the floor, at the size the host reads while looking up at the
     // room rather than down at the screen.
+    // Carries a nickname, so it carries whatever twenty characters someone
+    // typed. Same guard as the winner's name: a word with nowhere to break is
+    // what puts a sideways scrollbar under a host running the room on a phone.
     h2
       @include typography.billboard
+
+      overflow-wrap: anywhere
+      text-wrap: balance
 
     // The answer is die-cut onto the field, and this is one of only two places
     // it appears — which is what lets the screen face the room the rest of the

@@ -158,6 +158,14 @@ it tiny on a wide screen or taller than a short one.
   back below. If a locale ever lands whose copula follows the noun — Japanese,
   Korean, Turkish — that is when the order becomes the locale's business, via
   `order` under `:lang()`. Two locales, both amorces, is not that day.
+- **Text somebody typed, set at display size, wraps.** A nickname is up to
+  twenty characters and nothing makes them breakable: `Wolfgangamadeusmozar` in
+  `monument` left the screen and gave the whole page a sideways scrollbar. Any
+  surface that sets a nickname, a title or a search in `billboard` or above
+  needs `overflow-wrap: anywhere` and a parent that will not grow — a flex
+  item's minimum is its content, so `min-width: 0` is half the fix. The
+  scoreboard rows solve the same problem the other way, with an ellipsis,
+  because a row is a fixed height and a headline is not.
 - **Duration references fall back to `0`,** never to a literal, or someone who
   asked for no motion gets motion when a token disappears.
 

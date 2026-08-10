@@ -14,6 +14,9 @@
       display: flex
       flex-direction: column
       gap: var(--space-2xs)
+      // A flex item's minimum is its content, so without this a name too wide
+      // for the screen widens the column instead of wrapping inside it.
+      min-width: 0
       text-align: center
 
     .label
@@ -28,6 +31,13 @@
       @include typography.monument
 
       font-size: clamp(3rem, 13vmin, 11rem)
+      max-width: 100%
+      // Twenty characters is a legal nickname and `Wolfgangamadeusmozart` has
+      // nowhere to break, so at this size it left the screen and gave the page
+      // a sideways scrollbar. `anywhere` rather than `break-all`: a name with a
+      // space still breaks at the space, and a tie still breaks between names.
+      overflow-wrap: anywhere
+      text-wrap: balance
 
     .with
       @include typography.title
