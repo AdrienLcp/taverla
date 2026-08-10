@@ -71,7 +71,18 @@ const request = async <TData>(
     return Result.failure('rejected')
   }
 
-  const parsed = schema.safeParse(await response.json())
+  // A 200 is not a promise of JSON. A host waking a sleeping instance answers
+  // the first request with its own HTML holding page, and parsing that used to
+  // throw past this function into whatever was awaiting it.
+  let body: unknown
+
+  try {
+    body = await response.json()
+  } catch {
+    return Result.failure('unexpected_response')
+  }
+
+  const parsed = schema.safeParse(body)
 
   return parsed.success
     ? Result.success(parsed.data)

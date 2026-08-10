@@ -1,0 +1,28 @@
+@use '../../presentation/styles/typography'
+
+@layer components
+  .join-reminder
+    align-items: center
+    color: var(--ink)
+    display: flex
+    gap: var(--space-s)
+
+    svg
+      height: 64px
+      width: 64px
+
+    .words
+      display: flex
+      flex-direction: column
+      gap: var(--space-2xs)
+
+    .label
+      @include typography.label
+
+      color: var(--ink-muted)
+
+    .code
+      @include typography.title
+      @include typography.numeric
+
+      user-select: text

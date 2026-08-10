@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router'
 
 import { NotFoundPage } from '@/features/not-found/not-found-page'
 import { AppShell } from '@/presentation/app-shell'
+import { ErrorScreen } from '@/presentation/error-screen'
 
 /**
  * The host console and the player screen are lazily loaded, which is the whole
@@ -32,6 +33,9 @@ export const router = createBrowserRouter([
         path: 'play/:roomCode'
       },
       { Component: NotFoundPage, path: '*' }
-    ]
+    ],
+    // On the root, so a throw anywhere below replaces the shell instead of
+    // rendering a fallback inside chrome that may be part of what broke.
+    ErrorBoundary: ErrorScreen
   }
 ])

@@ -7,10 +7,13 @@
 @use './typography'
 
 @layer base
-  html,
-  body,
+  // `min-height`, and `dvh` rather than `vh` or a percentage chain. A fixed
+  // `height: 100%` pins the app to the viewport it was laid out in: taller
+  // content still scrolls on a desktop browser, but on a phone the height does
+  // not follow the URL bar retracting, and the last thing on the page becomes
+  // unreachable. `dvh` is the height that tracks it.
   #root
-    height: 100%
+    min-height: 100dvh
 
   // No gradient, no glow: the field is one flat colour, and the transition
   // between phases is the only thing that moves on it.

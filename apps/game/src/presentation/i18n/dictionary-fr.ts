@@ -82,10 +82,15 @@ export const FR_DICTIONARY: Dictionary = {
   'error.room_closed': 'L’hôte a fermé le salon.',
   'error.room_full': 'Ce salon est complet.',
   'error.room_not_found': 'Ce salon n’existe pas.',
+  'error.screen.description':
+    'Le jeu est tombé sur quelque chose dont il ne sait pas repartir. Recharger suffit presque toujours — et si le site a été mis à jour pendant que cet onglet était ouvert, toujours.',
+  'error.screen.reload': 'Recharger la page',
+  'error.screen.title': 'Quelque chose a cassé',
   'error.stale_round': 'Ce tour est déjà terminé.',
   'error.wrong_phase': 'Trop tard, la partie est passée à autre chose.',
 
   'host.autoAdvance': 'Enchaîner tout seul',
+  'host.changeSettings': 'Changer les réglages',
   'host.copied': 'Copié',
   'host.copyCode': 'Copier le code',
   'host.copyFailed': 'Copie impossible',
@@ -93,6 +98,7 @@ export const FR_DICTIONARY: Dictionary = {
   'host.endGame': 'Terminer la partie',
   'host.final.title': 'Score final',
   'host.invite.title': 'Scanne pour jouer',
+  'host.joinLate': 'Encore ouvert',
   'host.needsPlayer': 'Il faut au moins un joueur pour lancer',
   'host.nextRound': 'Tour suivant',
   'host.playAgain': 'Rejouer',

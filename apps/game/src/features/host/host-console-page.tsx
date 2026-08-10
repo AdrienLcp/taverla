@@ -21,6 +21,7 @@ import {
 import { Button } from '@/presentation/components/button'
 import { ConnectionRefused } from '@/presentation/components/connection-refused'
 import { Countdown } from '@/presentation/components/countdown'
+import { Link } from '@/presentation/components/link'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
@@ -30,6 +31,7 @@ import { usePhaseField } from '@/presentation/theme/use-phase-field'
 import { CopyButton } from './copy-button'
 import { GameSettings } from './game-settings'
 import { HostControls } from './host-controls'
+import { JoinReminder } from './join-reminder'
 import { PlaylistPicker } from './playlist-picker'
 import { RevealPanel } from './reveal-panel'
 import { useRoundAudio } from './round-audio'
@@ -81,6 +83,9 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
             })}
           </p>
         )}
+        {view !== null &&
+          view.phase !== 'lobby' &&
+          view.phase !== 'finished' && <JoinReminder roomCode={roomCode} />}
       </header>
 
       <Stage
@@ -394,15 +399,34 @@ const Actions = ({
 
   if (view.phase === 'finished') {
     return (
-      <Button
-        isDisabled={!isLive}
-        onPress={() => {
-          send({ type: 'host.playAgain' })
-        }}
-        size='large'
-      >
-        {translate('host.playAgain')}
-      </Button>
+      <>
+        <Button
+          isDisabled={!isLive || view.players.length === 0}
+          onPress={() => {
+            // Two frames rather than a new message: `host.playAgain` already
+            // means "same seats, same settings, scores at zero", and the lobby
+            // it lands in is a phase nobody needs to look at when the answer to
+            // "again?" was yes.
+            send({ type: 'host.playAgain' })
+            send({ type: 'host.startRound' })
+          }}
+          size='large'
+        >
+          {translate('host.playAgain')}
+        </Button>
+        <Button
+          isDisabled={!isLive}
+          onPress={() => {
+            send({ type: 'host.playAgain' })
+          }}
+          variant='outlined'
+        >
+          {translate('host.changeSettings')}
+        </Button>
+        <Link href='/' variant='ghost'>
+          {translate('menu.home')}
+        </Link>
+      </>
     )
   }
 

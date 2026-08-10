@@ -80,10 +80,15 @@ export const EN_DICTIONARY = {
   'error.room_closed': 'The host closed the room.',
   'error.room_full': 'That room is full.',
   'error.room_not_found': 'That room does not exist.',
+  'error.screen.description':
+    'The game hit something it could not carry on from. Reloading almost always fixes it — and if the site updated while this tab was open, it always does.',
+  'error.screen.reload': 'Reload the page',
+  'error.screen.title': 'Something broke',
   'error.stale_round': 'That round is already over.',
   'error.wrong_phase': 'Too late, the game has moved on.',
 
   'host.autoAdvance': 'Chain rounds by itself',
+  'host.changeSettings': 'Change the settings',
   'host.copied': 'Copied',
   'host.copyCode': 'Copy the code',
   'host.copyFailed': 'Could not copy',
@@ -91,6 +96,7 @@ export const EN_DICTIONARY = {
   'host.endGame': 'End the game',
   'host.final.title': 'Final scores',
   'host.invite.title': 'Scan to play',
+  'host.joinLate': 'Still open',
   'host.needsPlayer': 'The game needs at least one player',
   'host.nextRound': 'Next round',
   'host.playAgain': 'Play again',

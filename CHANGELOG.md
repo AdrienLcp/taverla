@@ -61,6 +61,17 @@ one part.
   room of the evening costs one tap instead of typing a name again
 - `[Game]` The room code can be copied, for the half of joining that is not a
   QR code: the host copies it and sends it to someone on a laptop
+- `[Game]` A screen for anything that throws, instead of a white page: the root
+  route carries an error boundary offering a reload and the way home. Reload
+  rather than retry, because the likeliest way to land there is a lazy chunk
+  that stopped existing when the site redeployed under an open tab, and
+  re-rendering asks for the same missing file
+- `[Game]` The way in stays on the host screen for the whole game — a small QR
+  and the code, in the corner. A room takes players at any phase, so someone
+  arriving at the seventh round takes a seat and plays the eighth; the screen
+  now says so
+- `[Game]` The end of a game offers three ways on: another one with the same
+  settings, back to the room to change them, or out to the home page
 - `[Shared]` Several genres at once. The pool is every chosen chart merged, with
   a track that charts in two of them kept once — otherwise the overlap would be
   twice as likely to be drawn. Picking none means every genre, which is what the
@@ -105,6 +116,14 @@ one part.
 
 ### Fixes
 
+- `[Game]` The app grows past the screen it was opened in. `html`, `body` and
+  `#root` were pinned to the viewport's height, so a lobby taller than a laptop
+  still scrolled on a desktop browser but stopped following the viewport on a
+  phone once the URL bar retracted — the footer's controls were the last thing
+  on the page and the first thing out of reach. `min-height: 100dvh`
+- `[Game]` A response that is not JSON no longer throws past the API client.
+  A host waking a sleeping instance answers the first request with its own HTML
+  holding page, and `response.json()` sat outside the `try`
 - `[Game]` Pressing the buzzer again after buzzing no longer opens Android's
   "search for SALON" sheet over the game. A press the browser will not act on —
   a control disabled because you already used it — fell through to a text

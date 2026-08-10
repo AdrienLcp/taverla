@@ -1,0 +1,42 @@
+import { QRCodeSVG } from 'qrcode.react'
+import type React from 'react'
+
+import type { RoomCode } from '@taverla/protocol/identifiers'
+
+import { playUrlFor } from '@/infrastructure/router/navigation'
+import { useTranslate } from '@/presentation/i18n/i18n-provider'
+
+import './join-reminder.sass'
+
+type JoinReminderProps = {
+  roomCode: RoomCode
+}
+
+/**
+ * A room takes players at any phase — nothing in `joinAsPlayer` looks at the
+ * phase — so someone arriving at the seventh round takes a seat and plays the
+ * eighth. The way in has to stay on the screen for that to be true in practice,
+ * rather than only in the server.
+ *
+ * Small and in the corner: it is a reminder, not the invitation the lobby
+ * makes, and the round on the rest of the screen is what the room is watching.
+ */
+export const JoinReminder: React.FC<JoinReminderProps> = ({ roomCode }) => {
+  const translate = useTranslate()
+
+  return (
+    <aside className='join-reminder'>
+      <QRCodeSVG
+        bgColor='transparent'
+        fgColor='currentColor'
+        marginSize={0}
+        size={64}
+        value={playUrlFor(roomCode)}
+      />
+      <div className='words'>
+        <p className='label'>{translate('host.joinLate')}</p>
+        <p className='code'>{roomCode}</p>
+      </div>
+    </aside>
+  )
+}
