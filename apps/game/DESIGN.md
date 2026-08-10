@@ -113,6 +113,15 @@ One authored moment per event, all of it collapsing to nothing under
 `prefers-reduced-motion` (verified in the browser: zero animated elements, all
 three duration tokens at `0ms`).
 
+- **Arriving on a page** — `page-enter`, eight pixels and a fade on `base`. It
+  is carried by the `screen` and `stage` mixins rather than written on each
+  root, so the screens cannot drift and the next one inherits it. Deliberately
+  quieter than the reveal, which uses scale on `slow`: a navigation must not
+  borrow the weight of what a round pays out.
+
+  **Nothing inside a running round animates.** The phase colour and the reveal
+  are the moving parts by design, and a screen that resettled on every snapshot
+  would read as lag on a surface that is timing people.
 - **Countdown** — each second is *struck*: it arrives oversize with open
   tracking and settles. The component re-keys on the value so it restarts every
   tick.

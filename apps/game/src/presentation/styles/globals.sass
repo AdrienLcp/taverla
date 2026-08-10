@@ -41,6 +41,18 @@
     white-space: nowrap
     width: 1px
 
+/// A page settling in, and deliberately quieter than the reveal: a few pixels
+/// and a fade where `card-strike` uses scale, on `base` where it uses `slow`.
+/// The reveal is what a round pays out, and a navigation must not borrow its
+/// weight.
+@keyframes page-enter
+  from
+    opacity: 0
+    transform: translateY(8px)
+  to
+    opacity: 1
+    transform: translateY(0)
+
 /// The reveal, on both surfaces: the card is struck rather than faded in. It
 /// lives here because the host screen and the phone share the moment, and
 /// because one authored motion beats the same effect written twice.

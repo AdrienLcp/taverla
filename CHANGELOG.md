@@ -61,6 +61,11 @@ one part.
   room of the evening costs one tap instead of typing a name again
 - `[Game]` The room code can be copied, for the half of joining that is not a
   QR code: the host copies it and sends it to someone on a laptop
+- `[Game]` Pages settle in rather than appearing. Eight pixels and a fade,
+  quieter than the reveal on purpose — a navigation must not borrow the weight
+  of what a round pays out — and carried by the two layout mixins, so the six
+  screens cannot drift and the seventh inherits it. Nothing inside a running
+  round moves: that surface is timing people
 - `[Shared]` The host can take a seat and play, which is what one phone in the
   middle of a table needs. Their screen stops being told the track the moment
   they do — the judge's copy and the speaker's copy were one field, and pulling

@@ -1,7 +1,20 @@
 // Pure module: mixins only.
 
+/// Arriving on a page, and the only motion a *navigation* is allowed. Carried
+/// by the two page mixins rather than written on each root, so the six screens
+/// cannot drift and the seventh inherits it.
+///
+/// Nothing inside a running round animates: the phase colour and the reveal are
+/// the moving parts by design, and a screen that resettled on every snapshot
+/// would read as lag on a surface that is timing people.
+@mixin arriving
+  @media (prefers-reduced-motion: no-preference)
+    animation: page-enter var(--transition-base, 0) var(--timing, ease) both
+
 /// A phone-first column. Used by every screen a player sees.
 @mixin screen
+  @include arriving
+
   display: flex
   flex: 1
   flex-direction: column
@@ -15,6 +28,8 @@
 /// metres, so it never centres in a column: it takes the whole field and lets
 /// one idea grow into it.
 @mixin stage
+  @include arriving
+
   display: flex
   flex: 1
   flex-direction: column
