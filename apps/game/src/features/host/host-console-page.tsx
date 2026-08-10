@@ -348,6 +348,26 @@ const Actions = ({
   }
 
   if (view.phase === 'revealed') {
+    // The server ends the game rather than opening a round past the last one,
+    // so on that reveal "next round" is a button that does something else than
+    // it says — and the way out beside it reads as abandoning a game that is
+    // already over. One control, named after what it opens.
+    const isLastRound = (view.round?.index ?? 0) >= view.settings.roundCount
+
+    if (isLastRound) {
+      return (
+        <Button
+          isDisabled={!isLive}
+          onPress={() => {
+            send({ type: 'host.nextRound' })
+          }}
+          size='large'
+        >
+          {translate('host.seeResults')}
+        </Button>
+      )
+    }
+
     return (
       <>
         <Button

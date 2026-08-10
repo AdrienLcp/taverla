@@ -65,10 +65,14 @@
         gap: var(--space-s)
         width: 100%
 
+      // Selectable against the reset, along with the URL below: the copy button
+      // is the fast path, and someone reading the code to a laptop still wants
+      // to be able to grab it by hand.
       .room-code
         @include typography.monument
 
         font-size: clamp(4.5rem, 21vmin, 20rem)
+        user-select: text
         width: 100%
         word-break: break-all
 
@@ -97,6 +101,7 @@
 
         color: var(--ink-muted)
         overflow-wrap: anywhere
+        user-select: text
 
     .roster
       display: flex

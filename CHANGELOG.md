@@ -105,6 +105,17 @@ one part.
 
 ### Fixes
 
+- `[Game]` Pressing the buzzer again after buzzing no longer opens Android's
+  "search for SALON" sheet over the game. A press the browser will not act on —
+  a control disabled because you already used it — fell through to a text
+  selection, and the nearest text was the room header
+- `[Game]` The press highlight follows the buzzer instead of drawing a rectangle
+  around it. It is the browser's own, it tracks the element's box rather than
+  its radius, and every control already answers a press in its own shape
+- `[Game]` The last reveal offers "See the results" rather than "Next round"
+  beside "End the game". The server has always ended the game instead of opening
+  a round past the last one; the host was choosing between a button that did
+  something else than it said and one that read as walking out
 - `[Game]` The QR card says what to do with it. The room code beside it has
   always been named by the button that copies it, and the card had nothing — an
   address under a glyph says where, not that scanning is the way in. Both

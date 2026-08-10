@@ -14,6 +14,18 @@
   body
     -webkit-font-smoothing: antialiased
     line-height: 1.5
+    // A party game is an app, not a document. A press that landed on a control
+    // Android would not act on — a buzzer disabled because you already buzzed —
+    // fell through to a text selection, and Chrome answered it with a "search
+    // for SALON" sheet over the game. The two strings worth lifting off a
+    // screen opt back in where they are styled.
+    -webkit-touch-callout: none
+    user-select: none
+    // The grey flash follows the element's box and ignores its radius, so on
+    // the one round object in the product it drew a rectangle. Every control
+    // already answers a press through react-aria's `[data-pressed]`, in its own
+    // shape.
+    -webkit-tap-highlight-color: transparent
 
   img,
   picture,
@@ -28,6 +40,10 @@
   textarea
     color: inherit
     font: inherit
+
+  input,
+  textarea
+    user-select: text
 
   button
     background: none

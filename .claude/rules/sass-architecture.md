@@ -61,6 +61,23 @@ the fallback is all that is left, and a literal duration would animate for
 someone who asked for no motion. Non-duration tokens take their real value as
 the fallback (`var(--space-m, 20px)`).
 
+## What the reset owns on a touch screen
+
+Two defaults the browser applies to a *document* and this is not one:
+
+- **`user-select: none` on `body`.** A press that lands on a control the browser
+  will not act on — a buzzer disabled because you already buzzed — falls through
+  to a text selection, and Android answers it with a "search for SALON" sheet
+  over the game. The strings genuinely worth lifting off a screen opt back in
+  where they are styled: `.room-code`, `.join-url`, and every input.
+- **`-webkit-tap-highlight-color: transparent`.** The grey flash follows the
+  element's box and ignores its radius, so on the buzzer — the one round object
+  in the product — it drew a rectangle. Nothing is lost: every control answers a
+  press through react-aria's `[data-pressed]`, in its own shape.
+
+Neither is visible on a desktop browser, and neither shows up in a screenshot.
+They surface by playing on a phone.
+
 ## Class naming
 
 Semantic names scoped by nesting, not BEM. The component's root class matches

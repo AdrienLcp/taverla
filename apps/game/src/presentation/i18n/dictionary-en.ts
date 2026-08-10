@@ -99,6 +99,7 @@ export const EN_DICTIONARY = {
   'host.reveal': 'Give it away',
   'host.rounds': 'Rounds',
   'host.seconds': '{seconds}s',
+  'host.seeResults': 'See the results',
   'host.startGame': 'Start the game',
   'host.volume': 'Volume',
 

@@ -101,6 +101,7 @@ export const FR_DICTIONARY: Dictionary = {
   'host.reveal': 'Donner la réponse',
   'host.rounds': 'Tours',
   'host.seconds': '{seconds} s',
+  'host.seeResults': 'Voir les résultats',
   'host.startGame': 'Lancer la partie',
   'host.volume': 'Volume',
 
