@@ -24,14 +24,32 @@ const translate = useTranslate()
 
 ### Adding a string
 
-1. Add the key to `dictionary-en.ts`. Namespace it: `blindtest.*` is the only
-   prefix a single game owns; `join.*`, `host.*`, `player.*`, `error.*`,
-   `connection.*`, `menu.*` and `preferences.*` are the shell every future game
-   reuses.
+1. Add the key to `dictionary-en.ts`, and namespace it by the test below.
 2. Add it to `dictionary-fr.ts`. The compiler will insist.
 3. `{name}` is interpolated from a `Record<string, string | number>`. A missing
    value renders the placeholder rather than throwing, so it shows up in the
    browser pass.
+
+### Which prefix — one question decides it
+
+> **Would the second game display this string unchanged?**
+
+If yes it is **shell**, and it goes under `join.*`, `host.*`, `player.*`,
+`error.*`, `connection.*`, `menu.*` or `preferences.*`. If no it belongs to the
+game and goes under `blindtest.*`, the only prefix a single game owns.
+
+The trap is `host.*`: it names the *screen*, and a screen shows both kinds of
+string. "Start the game", "Next round" and "Volume" are shell — every future
+game has a host console with those. "Clip length", the genres, the source picker
+and the title/artist verdict are the blind test's, and they live under
+`blindtest.*` even though they are rendered on the host console.
+
+Volume is the edge worth stating: it presupposes *audio*, not the blind test, so
+a second game that plays anything reuses it. Shell.
+
+Within `blindtest.*`, a string that belongs to **one answer mode** takes the
+mode as its next segment — `blindtest.buzz.*` already does. A string every mode
+shows keeps the bare prefix: `blindtest.reveal.*`, `blindtest.genre.*`.
 
 ### Hold a key, never a rendered string
 

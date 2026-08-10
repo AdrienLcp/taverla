@@ -8,6 +8,7 @@ import {
   trackSearchResponseSchema
 } from '@taverla/protocol/http'
 import type { RoomCode } from '@taverla/protocol/identifiers'
+import type { TrackDifficulty } from '@taverla/protocol/track'
 
 import { Result } from '@taverla/core/helpers/result'
 
@@ -31,11 +32,15 @@ export const roomExists = async (
     : Result.success(response.data.exists)
 }
 
-export const searchTracks = async (
+export const searchTracks = async ({
+  difficulty,
+  query
+}: {
+  difficulty: TrackDifficulty
   query: string
-): Promise<Result<TrackSearchResult[], ApiError>> => {
+}): Promise<Result<TrackSearchResult[], ApiError>> => {
   const response = await request(
-    `/api/tracks/search?q=${encodeURIComponent(query)}`,
+    `/api/tracks/search?q=${encodeURIComponent(query)}&difficulty=${difficulty}`,
     trackSearchResponseSchema
   )
 

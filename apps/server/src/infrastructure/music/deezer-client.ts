@@ -1,7 +1,11 @@
 import { z } from 'zod'
 
 import type { TrackSearchResult } from '@taverla/protocol/http'
-import type { HostTrack, TrackSource } from '@taverla/protocol/track'
+import type {
+  HostTrack,
+  TrackDifficulty,
+  TrackSource
+} from '@taverla/protocol/track'
 
 import { Result } from '@taverla/core/helpers/result'
 
@@ -20,10 +24,17 @@ const POOL_SIZE = 100
  * that separates a song a room will recognise from the AI-generated lo-fi and
  * bedroom uploads that free-text search is full of. Measured against the
  * catalogue: charting hits and classics sit at 830k–990k (Bohemian Rhapsody
- * 958k, Dancing Queen 946k), while the junk sits at 25k–405k. A blind test
- * nobody can answer is not a hard blind test, it is a broken one.
+ * 958k, Dancing Queen 946k), while the junk sits at 25k–405k.
+ *
+ * `obscure` therefore still holds a floor. A blind test nobody can answer is
+ * not a hard blind test, it is a broken one, and below about 50k the catalogue
+ * stops being music anyone chose to release.
  */
-const MINIMUM_TRACK_RANK = 500_000
+const MINIMUM_RANK_BY_DIFFICULTY: Record<TrackDifficulty, number> = {
+  mixed: 250_000,
+  obscure: 50_000,
+  wellKnown: 500_000
+}
 
 /**
  * Deezer answers a bad request with HTTP 200 and an `error` object, so the
@@ -61,16 +72,22 @@ type DeezerTrack = z.infer<typeof deezerTrackSchema>
  * `Access-Control-Allow-Origin` header, so every catalogue read is proxied
  * here. Audio playback is unaffected — an `<audio src>` is not a CORS request.
  */
-export const fetchTracksFor = async (
+export const fetchTracksFor = async ({
+  difficulty,
+  source
+}: {
+  difficulty: TrackDifficulty
   source: TrackSource
-): Promise<Result<TrackSearchResult[], MusicSourceError>> => {
+}): Promise<Result<TrackSearchResult[], MusicSourceError>> => {
   const fetched = await requestList(pathFor(source))
 
   if (fetched.status === 'failure') {
     return fetched
   }
 
-  const playable = fetched.data.filter(isWorthGuessing).map(toSearchResult)
+  const playable = fetched.data
+    .filter((track) => isWorthGuessing(track, difficulty))
+    .map(toSearchResult)
 
   return playable.length === 0
     ? Result.failure('no_tracks_available')
@@ -106,8 +123,12 @@ export const fetchHostTrack = async (
   })
 }
 
-const isWorthGuessing = (track: DeezerTrack): boolean =>
-  track.preview.length > 0 && (track.rank ?? 0) >= MINIMUM_TRACK_RANK
+const isWorthGuessing = (
+  track: DeezerTrack,
+  difficulty: TrackDifficulty
+): boolean =>
+  track.preview.length > 0 &&
+  (track.rank ?? 0) >= MINIMUM_RANK_BY_DIFFICULTY[difficulty]
 
 const pathFor = (source: TrackSource): string => {
   switch (source.kind) {

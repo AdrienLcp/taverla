@@ -61,6 +61,11 @@ one part.
   room of the evening costs one tap instead of typing a name again
 - `[Game]` The room code can be copied, for the half of joining that is not a
   QR code: the host copies it and sends it to someone on a laptop
+- `[Shared]` A difficulty, in three steps, from crowd-pleasers to what only the
+  experts will name. It is the popularity floor the pool already applied, made
+  adjustable — and it stays a Deezer number inside `deezer-client.ts`, because
+  the room speaks in words a second catalogue would keep. The lobby's search
+  preview carries it too, so what it counts is what the pool would hold
 - `[Game]` The lobby sets the party: how many rounds, how long a clip runs, and
   how long the countdown lasts. All three were already carried by
   `host.updateSettings` and pinned to their defaults, so every evening was ten
@@ -70,6 +75,13 @@ one part.
 
 ### Improvements
 
+- `[Game]` Translation keys are namespaced by who would reuse the string, not by
+  the screen that renders it. `host.*` names a screen, and a host console shows
+  both kinds — so the source picker, the genres, the clip length and the
+  title/artist verdict moved to `blindtest.*`, while "Start the game" and
+  "Volume" stayed. Inside `blindtest.*` a single answer mode takes the mode as
+  its next segment, which is what keeps stage 09's two new modes from colliding
+  with the buzzer's
 - `[Game]` Every screen is laid out for the screen it is opened on. The home
   page and the nickname screen were the phone layout on a laptop — a 620px
   ribbon down the middle, tall enough to scroll, with the second way in below

@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { protocolErrorCodeSchema } from './error-code'
 import { roomCodeSchema } from './identifiers'
-import { trackIdentitySchema } from './track'
+import { trackDifficultySchema, trackIdentitySchema } from './track'
 
 /**
  * The HTTP surface is deliberately tiny — create a room, check one exists,
@@ -27,7 +27,13 @@ export const roomExistsResponseSchema = z.object({
  */
 export const trackSearchResultSchema = trackIdentitySchema
 
+/**
+ * The difficulty rides along so the preview counts what the pool would actually
+ * hold. Defaulted rather than required: it is a lobby convenience, and a caller
+ * that omits it gets the same floor the room starts on.
+ */
 export const trackSearchQuerySchema = z.object({
+  difficulty: trackDifficultySchema.default('wellKnown'),
   q: z.string().trim().min(1).max(120)
 })
 

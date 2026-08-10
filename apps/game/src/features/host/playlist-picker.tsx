@@ -20,9 +20,9 @@ import './playlist-picker.sass'
 type SourceKind = TrackSource['kind']
 
 const KIND_LABELS: Record<SourceKind, TranslationKey> = {
-  chart: 'host.source.chart',
-  playlist: 'host.source.playlist',
-  search: 'host.source.search'
+  chart: 'blindtest.source.chart',
+  playlist: 'blindtest.source.playlist',
+  search: 'blindtest.source.search'
 }
 
 const isSourceKind = (value: string): value is SourceKind =>
@@ -43,8 +43,8 @@ type GenreId = (typeof GENRE_IDS)[number]
  * The literal return type is load-bearing: adding an id above without adding
  * its label to both dictionaries stops compiling here.
  */
-const genreLabelKey = (genreId: GenreId): `host.genre.${GenreId}` =>
-  `host.genre.${genreId}`
+const genreLabelKey = (genreId: GenreId): `blindtest.genre.${GenreId}` =>
+  `blindtest.genre.${genreId}`
 
 const PREVIEWED_TITLES = 5
 
@@ -138,7 +138,10 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
     setTitles(null)
     setIsSearching(true)
 
-    const found = await searchTracks(query)
+    const found = await searchTracks({
+      difficulty: settings.difficulty,
+      query
+    })
 
     setIsSearching(false)
 
@@ -151,7 +154,7 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
     // Nothing well-known enough matched, so the pool would be empty and the
     // game would fail on its first round instead of here.
     if (found.data.length === 0) {
-      setError('host.source.none')
+      setError('blindtest.source.none')
 
       return
     }
@@ -162,7 +165,7 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
   return (
     <section className='playlist-picker'>
       <SegmentedControl
-        label={translate('host.source.label')}
+        label={translate('blindtest.source.label')}
         onChange={(next) => {
           if (isSourceKind(next)) {
             revise({ kind: next })
@@ -178,7 +181,7 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
       {draft.kind === 'chart' && (
         <SegmentedControl
           className='genres'
-          label={translate('host.genre.label')}
+          label={translate('blindtest.genre.label')}
           onChange={(next) => {
             const chosen = GENRE_IDS.find((id) => String(id) === next)
 
@@ -202,7 +205,7 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
           }}
         >
           <TextField
-            label={translate('host.source.query')}
+            label={translate('blindtest.source.query')}
             onChange={(query) => {
               revise({ query })
             }}
@@ -214,14 +217,14 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
             type='submit'
             variant='ghost'
           >
-            {translate('host.source.preview')}
+            {translate('blindtest.source.preview')}
           </Button>
         </Form>
       )}
 
       {draft.kind === 'playlist' && (
         <TextField
-          label={translate('host.source.playlistId')}
+          label={translate('blindtest.source.playlistId')}
           onChange={(playlistId) => {
             revise({ playlistId })
           }}
@@ -238,7 +241,7 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
       {titles !== null && (
         <div className='found'>
           <p className='ready'>
-            {translate('host.source.ready', { count: titles.length })}
+            {translate('blindtest.source.ready', { count: titles.length })}
           </p>
           <ul className='preview'>
             {titles.slice(0, PREVIEWED_TITLES).map((title) => (

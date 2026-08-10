@@ -129,6 +129,15 @@ URL. Keep it that way; the lobby becomes a game picker.
 `join.*`, `host.*`, `player.*`, `error.*`, `connection.*` and `preferences.*`
 are shell. A new game adds its own prefix and touches nothing else.
 
+The partition is by **who would reuse the string**, not by which screen renders
+it — `host.*` names a screen, and the host console shows both kinds. The source
+picker, the genres, the clip length and the title/artist verdict moved to
+`blindtest.*` for exactly that reason, while "Start the game" and "Volume"
+stayed. Inside `blindtest.*`, one answer mode's strings take the mode as their
+next segment (`blindtest.buzz.*`), which is what keeps stage 09's two new modes
+from colliding with the buzzer's. The full test is in
+`.claude/rules/i18n-and-theme.md`.
+
 **Themes are semantic, so a game can own a colour.** Every component reads
 `--accent`, never a hex. A game that wants to be green sets `--accent` on its
 root element and the whole surface follows, with no fork of the palette.

@@ -67,8 +67,11 @@ export const registerHttpRoutes = (app: Hono): void => {
     '/api/tracks/search',
     zValidator('query', trackSearchQuerySchema),
     async (context) => {
-      const { q } = context.req.valid('query')
-      const found = await fetchTracksFor({ kind: 'search', query: q })
+      const { difficulty, q } = context.req.valid('query')
+      const found = await fetchTracksFor({
+        difficulty,
+        source: { kind: 'search', query: q }
+      })
 
       // A search that matched nothing well-known enough to guess is an empty
       // result, not a broken gateway — the caller renders "nothing here", and

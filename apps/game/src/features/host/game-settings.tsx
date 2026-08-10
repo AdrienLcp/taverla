@@ -1,6 +1,10 @@
 import type React from 'react'
 
 import type { RoomSettings } from '@taverla/protocol/room'
+import {
+  type TrackDifficulty,
+  trackDifficulties
+} from '@taverla/protocol/track'
 
 import { SegmentedControl } from '@/presentation/components/segmented-control'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
@@ -15,6 +19,18 @@ const optionFrom = <T extends number>(
   options: readonly T[],
   value: string
 ): T | undefined => options.find((option) => String(option) === value)
+
+/**
+ * The literal return type is load-bearing: adding a difficulty to the protocol
+ * without adding its label to both dictionaries stops compiling here.
+ */
+const difficultyLabelKey = (
+  difficulty: TrackDifficulty
+): `blindtest.difficulty.${TrackDifficulty}` =>
+  `blindtest.difficulty.${difficulty}`
+
+const isDifficulty = (value: string): value is TrackDifficulty =>
+  trackDifficulties.some((difficulty) => difficulty === value)
 
 type GameSettingsProps = {
   /** Applied to the room as it is pressed; nothing here waits for the launch. */
@@ -39,6 +55,20 @@ export const GameSettings: React.FC<GameSettingsProps> = ({
   return (
     <section className='game-settings'>
       <SegmentedControl
+        label={translate('blindtest.difficulty.label')}
+        onChange={(next) => {
+          if (isDifficulty(next)) {
+            onChange({ ...settings, difficulty: next })
+          }
+        }}
+        options={trackDifficulties.map((difficulty) => ({
+          label: translate(difficultyLabelKey(difficulty)),
+          value: difficulty
+        }))}
+        value={settings.difficulty}
+      />
+
+      <SegmentedControl
         label={translate('host.rounds')}
         onChange={(next) => {
           const roundCount = optionFrom(ROUND_COUNTS, next)
@@ -55,7 +85,7 @@ export const GameSettings: React.FC<GameSettingsProps> = ({
       />
 
       <SegmentedControl
-        label={translate('host.clip')}
+        label={translate('blindtest.clip')}
         onChange={(next) => {
           const playbackDurationMs = optionFrom(CLIP_DURATIONS_MS, next)
 

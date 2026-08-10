@@ -10,6 +10,7 @@ import {
 import { awardSchema } from './scoring'
 import {
   hostTrackSchema,
+  trackDifficultySchema,
   trackIdentitySchema,
   trackSourceSchema
 } from './track'
@@ -37,6 +38,7 @@ export const roomSettingsSchema = z.object({
   autoAdvanceMs: z.number().int().min(2_000).max(30_000).nullable(),
   /** Milliseconds between "start" and the first note, so every device lands together. */
   countdownMs: z.number().int().min(0).max(10_000),
+  difficulty: trackDifficultySchema,
   /** How long a clip runs unanswered before the round times out. */
   playbackDurationMs: z.number().int().min(5_000).max(30_000),
   roundCount: z.number().int().min(1).max(50),
@@ -52,6 +54,7 @@ export type RoomSettings = z.infer<typeof roomSettingsSchema>
 export const DEFAULT_ROOM_SETTINGS: RoomSettings = {
   autoAdvanceMs: null,
   countdownMs: 3_000,
+  difficulty: 'wellKnown',
   playbackDurationMs: 30_000,
   roundCount: 10,
   source: { genreId: 0, kind: 'chart' }

@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
-import type {
-  PlayerRoomView,
-  RoomPhase,
-  RoundView
+import {
+  DEFAULT_ROOM_SETTINGS,
+  type PlayerRoomView,
+  type RoomPhase,
+  type RoundView
 } from '@taverla/protocol/room'
 
 import {
@@ -32,13 +33,7 @@ const viewFor = (
   phase,
   players: [{ id: 'me', isConnected: true, nickname: 'Alice', score: 0 }],
   round,
-  settings: {
-    autoAdvanceMs: null,
-    countdownMs: 3_000,
-    playbackDurationMs: 30_000,
-    roundCount: 10,
-    source: { genreId: 0, kind: 'chart' }
-  },
+  settings: DEFAULT_ROOM_SETTINGS,
   youId: 'me'
 })
 

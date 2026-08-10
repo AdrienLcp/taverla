@@ -3,7 +3,10 @@ import type { z } from 'zod'
 
 import type { ClientMessage } from '@taverla/protocol/client-message'
 import type { CreateRoomResponse } from '@taverla/protocol/http'
-import type { RoomSettings } from '@taverla/protocol/room'
+import {
+  DEFAULT_ROOM_SETTINGS,
+  type RoomSettings
+} from '@taverla/protocol/room'
 import {
   type HostServerMessage,
   hostServerMessageSchema,
@@ -48,11 +51,10 @@ export const deezerClientStub = () => ({
 })
 
 export const FAST_GAME: RoomSettings = {
-  autoAdvanceMs: null,
+  ...DEFAULT_ROOM_SETTINGS,
   countdownMs: 20,
   playbackDurationMs: 5_000,
-  roundCount: 3,
-  source: { genreId: 0, kind: 'chart' }
+  roundCount: 3
 }
 
 export type Peer<TMessage> = {

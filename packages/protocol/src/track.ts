@@ -45,6 +45,17 @@ export const trackSourceSchema = z.discriminatedUnion('kind', [
   })
 ])
 
+export const trackDifficulties = ['wellKnown', 'mixed', 'obscure'] as const
+
+/**
+ * How obscure a track may be and still be worth guessing. Deliberately named in
+ * the room's vocabulary rather than in the catalogue's: a popularity score is a
+ * Deezer fact, and only `deezer-client.ts` may know what number each of these
+ * costs. A second catalogue with a different scale keeps these three words.
+ */
+export const trackDifficultySchema = z.enum(trackDifficulties)
+
 export type TrackIdentity = z.infer<typeof trackIdentitySchema>
 export type HostTrack = z.infer<typeof hostTrackSchema>
 export type TrackSource = z.infer<typeof trackSourceSchema>
+export type TrackDifficulty = z.infer<typeof trackDifficultySchema>

@@ -83,7 +83,10 @@ const refillWhenEmpty = async (
     return Result.success(undefined)
   }
 
-  const fetched = await fetchTracksFor(room.settings.source)
+  const fetched = await fetchTracksFor({
+    difficulty: room.settings.difficulty,
+    source: room.settings.source
+  })
 
   if (fetched.status === 'failure') {
     return fetched

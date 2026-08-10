@@ -20,22 +20,22 @@ const CHOICES: readonly {
   verdict: Verdict
 }[] = [
   {
-    key: 'host.verdict.both',
+    key: 'blindtest.verdict.both',
     tone: 'win',
     verdict: { artistCorrect: true, titleCorrect: true }
   },
   {
-    key: 'host.verdict.titleOnly',
+    key: 'blindtest.verdict.titleOnly',
     tone: 'half',
     verdict: { artistCorrect: false, titleCorrect: true }
   },
   {
-    key: 'host.verdict.artistOnly',
+    key: 'blindtest.verdict.artistOnly',
     tone: 'half',
     verdict: { artistCorrect: true, titleCorrect: false }
   },
   {
-    key: 'host.verdict.miss',
+    key: 'blindtest.verdict.miss',
     tone: 'miss',
     verdict: { artistCorrect: false, titleCorrect: false }
   }

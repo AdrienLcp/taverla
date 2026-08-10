@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { clientMessageSchema } from './client-message'
 import { decodeMessage, encodeChecked } from './codec'
-import type { PlayerRoomView } from './room'
+import { DEFAULT_ROOM_SETTINGS, type PlayerRoomView } from './room'
 import { playerServerMessageSchema } from './server-message'
 import { PROTOCOL_VERSION } from './version'
 
@@ -19,13 +19,7 @@ const playerView: PlayerRoomView = {
     lockedOutPlayerIds: [],
     revealedTrack: null
   },
-  settings: {
-    autoAdvanceMs: null,
-    countdownMs: 3000,
-    playbackDurationMs: 30_000,
-    roundCount: 10,
-    source: { genreId: 0, kind: 'chart' }
-  },
+  settings: DEFAULT_ROOM_SETTINGS,
   youId: 'p1'
 }
 
