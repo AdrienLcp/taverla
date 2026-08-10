@@ -39,7 +39,8 @@ Everything built from here reads its strings from
 Playing the game produced a round of shell revision that belongs to no stage:
 the corner menu replacing the preferences footer, the recovery screen a dead
 socket now shows, desktop layouts for the two screens that were still phone
-shaped, the room-code copy, and a design pass on the form controls. It is
+shaped, the room-code copy, a design pass on the form controls, and the lobby
+controls for the three settings the protocol always carried. It is
 recorded where it will be read — [`apps/game/DESIGN.md`](../../apps/game/DESIGN.md)
 for the materials and the icon family,
 [`.claude/rules/react-components.md`](../../.claude/rules/react-components.md)

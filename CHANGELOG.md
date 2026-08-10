@@ -61,6 +61,12 @@ one part.
   room of the evening costs one tap instead of typing a name again
 - `[Game]` The room code can be copied, for the half of joining that is not a
   QR code: the host copies it and sends it to someone on a laptop
+- `[Game]` The lobby sets the party: how many rounds, how long a clip runs, and
+  how long the countdown lasts. All three were already carried by
+  `host.updateSettings` and pinned to their defaults, so every evening was ten
+  rounds of thirty seconds. The clip length is the one that changes how a room
+  plays — thirty seconds is a long time to wait for people who knew it on the
+  intro
 
 ### Improvements
 
@@ -82,6 +88,16 @@ one part.
 
 ### Fixes
 
+- `[Game]` The reveal reads in the order it is written. "It was" opens a
+  sentence, and it sat *under* the title it opens on both the host screen and
+  the phone, so the answer arrived before the words introducing it
+- `[Game]` A room code the alphabet cannot contain is refused by naming the
+  characters — `O`, `I`, `S`, `Z`, `0`, `1`, `2` and `5` are all excluded, and
+  typing four digits used to be answered with "a room code is 4 letters and
+  digits", which is both untrue and unactionable
+- `[Game]` The host console no longer leaves an unhandled `AbortError` in its
+  console every round. A `play()` cut short by the next `load()` rejects, and so
+  does one an autoplay policy refuses; neither is actionable
 - `[Game]` A room that is gone says so and offers the way out, instead of
   reading "Reconnecting…" forever over buttons that silently do nothing. The
   socket already stopped retrying on a fatal error; nothing on screen said it,
@@ -101,11 +117,20 @@ one part.
 
 ### Internal
 
+- `[Shared]` The game is covered end to end. The socket suites share a harness
+  that boots the real server on an ephemeral port: the host-only guard, the
+  fatal hang-up, a reloading player reclaiming their seat and score, and the
+  clock handshake landing a countdown on a device four seconds out. Two
+  Playwright journeys drive the two screens — a whole round across two contexts,
+  and the screen a dead socket leaves behind — on ports of their own against a
+  stubbed catalogue. `pnpm validate` runs the lot
 - `[Game]` Design-system wrappers extend the react-aria props they wrap rather
   than re-declaring a subset, merged through a `composeClassName` helper
-- `[Game]` `Button` and `Link` share one control mixin, so a variant is declared
-  once; a pending button overlays a `Spinner` on a transparent label rather than
-  replacing it, which keeps the box — and the accessible name — unchanged
+- `[Game]` `Button` and `Link` share one control mixin and one
+  `control-appearance` module, so a size or a variant — its name, its
+  documentation and its default — is declared once rather than twice; a pending
+  button overlays a `Spinner` on a transparent label rather than replacing it,
+  which keeps the box — and the accessible name — unchanged
 - `[Game]` react-aria's `RouterProvider` wired to react-router in the app shell,
   so an `href` navigates client-side instead of reloading and dropping the socket
 - Cross-project seams documented in `docs/game-catalogue.md`: the blind test is

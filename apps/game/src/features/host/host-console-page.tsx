@@ -28,6 +28,7 @@ import { protocolErrorKey } from '@/presentation/i18n/translation'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
 
 import { CopyButton } from './copy-button'
+import { GameSettings } from './game-settings'
 import { HostControls } from './host-controls'
 import { PlaylistPicker } from './playlist-picker'
 import { RevealPanel } from './reveal-panel'
@@ -224,16 +225,25 @@ const Stage = ({ clock, onDraftSource, roomCode, send, view }: StageProps) => {
     )
   }
 
-  return <Lobby onDraftSource={onDraftSource} roomCode={roomCode} view={view} />
+  return (
+    <Lobby
+      onDraftSource={onDraftSource}
+      roomCode={roomCode}
+      send={send}
+      view={view}
+    />
+  )
 }
 
 const Lobby = ({
   onDraftSource,
   roomCode,
+  send,
   view
 }: {
   onDraftSource: (source: TrackSource | null) => void
   roomCode: RoomCode
+  send: (message: ClientMessage) => boolean
   view: HostRoomView
 }) => {
   const translate = useTranslate()
@@ -269,6 +279,12 @@ const Lobby = ({
         )}
         <PlaylistPicker
           onDraftChange={onDraftSource}
+          settings={view.settings}
+        />
+        <GameSettings
+          onChange={(settings) => {
+            send({ settings, type: 'host.updateSettings' })
+          }}
           settings={view.settings}
         />
       </section>
