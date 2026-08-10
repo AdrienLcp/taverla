@@ -115,9 +115,11 @@ string written into a component is a bug, not a shortcut — see
 - **Player** — anyone who joined, by scanning the QR code or by typing the room
   code. Holds a seat and a score
 - **Round** — one track. `lobby → countdown → playing → buzzed → revealed`
-- **Answer mode** — `buzzer` (one player, judged by the host), `choice` (four
-  candidates) or `typed` (two fields). The last two are everyone at once,
-  decided by the server, and scored by speed on top of being right
+- **Answer mode** — `typed` (two fields, the default), `choice` (four
+  candidates) or `buzzer` (one player, judged by the host). The first two are
+  everyone at once, decided by the server, and scored by speed on top of being
+  right. Typing pays 3 for the pair where a right pick pays 1: producing the
+  answer from nothing is not the same act as recognising it among four
 - **Buzz** — a player claiming the answer; the server stamps when it arrived
 - **Lockout** — a player who answered wrong sits out the rest of the round
 - **Reveal** — the moment the track identity becomes public
@@ -146,8 +148,9 @@ modes, deployed, and covered by socket suites plus two Playwright journeys.
 `docs/plans/README.md` is the authority on which; do not trust this paragraph
 over that table.
 
-What is left: **10 (per-device audio)**. Note what 06 deliberately did *not*
-buy: no component runner exists here, so a claim about a single screen still
-rests on a browser pass.
+**10 is dropped** — audio stays on the host screen, and the case it was for is
+remote play, which will get its own stage when it is wanted. The plan file keeps
+the reasoning. Note what 06 deliberately did *not* buy: no component runner
+exists here, so a claim about a single screen still rests on a browser pass.
 
 Start a session by reading the stage's plan. Update it when reality diverges.

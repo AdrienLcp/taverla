@@ -67,7 +67,11 @@ export type RoomSettings = z.infer<typeof roomSettingsSchema>
  * the schema's ceiling is that hard limit, not a taste call.
  */
 export const DEFAULT_ROOM_SETTINGS: RoomSettings = {
-  answerMode: 'buzzer',
+  /**
+   * Everyone plays every round, which is what a party wants: the buzzer gives
+   * the floor to whoever is quickest and leaves the rest of the room watching.
+   */
+  answerMode: 'typed',
   autoAdvanceMs: null,
   countdownMs: 3_000,
   difficulty: 'wellKnown',

@@ -61,6 +61,16 @@ one part.
   room of the evening costs one tap instead of typing a name again
 - `[Game]` The room code can be copied, for the half of joining that is not a
   QR code: the host copies it and sends it to someone on a laptop
+- `[Game]` The scoring is stated where there is time to read it: under the
+  control that chooses the mode on the host, and on the phone while it waits for
+  the game to start. Nothing new appears during a round — those are the two
+  moments nobody is against a clock
+- `[Shared]` Typing is the default. The buzzer gives the floor to whoever is
+  quickest and leaves the rest of the room watching, which is the wrong default
+  for a party where everyone came to play
+- `[Shared]` A right pick pays one point where typing the pair pays three.
+  Recognising the answer among four is not the act of producing it from nothing,
+  and paying them the same made the easy mode the optimal one
 - `[Shared]` Two more ways to answer, and one game rather than three. **Four
   choices** puts the same candidates on every phone — drawn from the room's own
   pool, because three soul tracks beside one chart hit is not a question — and

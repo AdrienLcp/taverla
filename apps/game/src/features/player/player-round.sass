@@ -39,10 +39,18 @@
 
       font-size: clamp(4rem, 30vmin, 12rem)
 
-    .paused
+    .paused,
+    .waiting
       @include typography.title
 
       color: var(--ink-muted)
+      text-wrap: balance
+
+    .how-it-scores
+      @include typography.body
+
+      color: var(--ink-muted)
+      max-width: 34ch
       text-wrap: balance
 
     .their-name

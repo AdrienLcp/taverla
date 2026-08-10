@@ -51,6 +51,12 @@ export const FR_DICTIONARY: Dictionary = {
   'blindtest.reveal.nobody': 'Personne n’a trouvé',
   'blindtest.reveal.title': 'C’était',
   'blindtest.round': 'Tour {index} sur {total}',
+  'blindtest.scoring.buzzer':
+    'Le premier qui buzze répond à voix haute. L’hôte juge le titre et l’artiste, 1 point chacun — une mauvaise réponse te met hors-jeu pour le reste du tour.',
+  'blindtest.scoring.choice':
+    'Tout le monde choisit, sur le même extrait. La bonne proposition rapporte 1 point, et les deux premiers à la trouver gagnent +2 et +1 en plus.',
+  'blindtest.scoring.typed':
+    'Tout le monde tape, sur le même extrait. Titre et artiste rapportent 1 point chacun, les deux ensemble 3, et les deux premiers à trouver gagnent +2 et +1 en plus.',
   'blindtest.source.chart': 'Le top du moment',
   'blindtest.source.label': 'D’où viennent les titres',
   'blindtest.source.none':

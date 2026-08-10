@@ -1,9 +1,33 @@
 # Stage 10 — Everyone hears it on their own phone
 
-**Goal.** A switch on the host console that sends the clip to every device
-instead of only the big screen, for playing at a distance or on headphones.
+> **Dropped, deliberately.** Audio stays on the host screen. Everything below is
+> kept because the reasoning is still the reasoning — but it is a record, not a
+> plan, and nothing here is scheduled.
+>
+> **Why.** In one room the physics is against it. Six phones a few tens of
+> milliseconds apart do not make the clip louder, they make it flange — which is
+> a strange thing to inflict on a game about recognising a song. And the clock
+> handshake does not fix it: it buys precision of *scheduling*, where the gap
+> that matters is precision of *starting*, which depends on decode and buffer
+> and varies per device. The stage's own target of ~100 ms is already audible as
+> a doubled sound.
+>
+> **What it was really for.** The two cases it is right for — people who are not
+> in the same room, and headphones — are not "per-device audio", they are
+> **remote play**. That is a larger thing with its own questions: no shared
+> screen, so no QR code, and the reveal has to happen somewhere. When it is
+> wanted it gets its own stage under its own name, and audio on each device
+> becomes an implementation detail of it rather than the subject.
+>
+> **The cost that made the switch a switch** is unchanged and still worth
+> knowing: sending `previewUrl` to players exposes the Deezer track id, which a
+> console can resolve into the answer.
 
-**Depends on** nothing beyond what is shipped. Small.
+**Original goal.** A switch on the host console that sends the clip to every
+device instead of only the big screen, for playing at a distance or on
+headphones.
+
+**Depended on** nothing beyond what is shipped. Small.
 
 ## Why it is off by default, and must stay off by default
 

@@ -1,3 +1,5 @@
+@use '../../presentation/styles/typography'
+
 @layer components
   .game-settings
     border-top: 2px solid var(--rule)
@@ -5,3 +7,10 @@
     flex-direction: column
     gap: var(--space-s)
     padding-top: var(--space-m)
+
+    .hint
+      @include typography.caption
+
+      color: var(--ink-muted)
+      margin-top: calc(var(--space-s) * -1 + var(--space-2xs))
+      text-wrap: balance

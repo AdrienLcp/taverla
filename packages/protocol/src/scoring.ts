@@ -13,6 +13,14 @@ export const POINTS_PER_ARTIST = 1
 export const POINTS_FOR_TITLE_AND_ARTIST = 1
 
 /**
+ * Choice mode is worth a single point, where typing the whole thing is worth
+ * three. Picking one of four is a different act from producing the answer from
+ * nothing — paying them the same makes the easy mode the optimal one, and a
+ * room that notices stops using the hard one.
+ */
+export const POINTS_FOR_A_RIGHT_CHOICE = 1
+
+/**
  * Awarded on arrival order among the players who scored this round — the first
  * of them, then the second, then nobody. A rank bonus rather than a curve
  * because a player can compute it from what they watched happen, and arguing

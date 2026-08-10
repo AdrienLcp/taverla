@@ -1,4 +1,5 @@
 import {
+  POINTS_FOR_A_RIGHT_CHOICE,
   POINTS_FOR_TITLE_AND_ARTIST,
   POINTS_PER_ARTIST,
   POINTS_PER_TITLE,
@@ -53,6 +54,10 @@ export const pointsForTypedAnswer = (verdict: Verdict): number => {
     ? halves + POINTS_FOR_TITLE_AND_ARTIST
     : halves
 }
+
+/** A right pick, before the speed bonus. Deliberately not what typing pays. */
+export const pointsForChoice = (verdict: Verdict): number =>
+  verdict.titleCorrect ? POINTS_FOR_A_RIGHT_CHOICE : 0
 
 /**
  * `rank` counts only the players who scored, in arrival order — a wrong answer

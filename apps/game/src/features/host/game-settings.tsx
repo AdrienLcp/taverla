@@ -12,6 +12,7 @@ import {
 
 import { SegmentedControl } from '@/presentation/components/segmented-control'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
+import { scoringKey } from '@/presentation/i18n/translation'
 
 import './game-settings.sass'
 
@@ -78,6 +79,12 @@ export const GameSettings: React.FC<GameSettingsProps> = ({
         }))}
         value={settings.answerMode}
       />
+      {/*
+        Under the control that chooses it rather than on the screen where it is
+        played: the lobby is the only moment nobody is against a clock, and the
+        host is the one deciding what the evening will be worth.
+      */}
+      <p className='hint'>{translate(scoringKey(settings.answerMode))}</p>
 
       <SegmentedControl
         label={translate('blindtest.difficulty.label')}

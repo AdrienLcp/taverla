@@ -121,6 +121,43 @@ describe('answering all at once', () => {
     expect(errorsIn(zoe)[0]).toMatchObject({ code: 'wrong_phase' })
   })
 
+  it('[choice] pays a right pick less than typing the whole thing', async () => {
+    const { host, max, zoe } = await roundInPlay(CHOICE_GAME)
+
+    const roundId = playerView(zoe)?.round?.id ?? ''
+    const choices = playerView(zoe)?.round?.choices ?? []
+    const right = choices.findIndex(
+      (choice) => choice.title === hostView(host)?.currentTrack?.title
+    )
+
+    zoe.send({
+      answer: { choiceIndex: right, kind: 'choice' },
+      roundId,
+      type: 'player.answer'
+    })
+    max.send({
+      answer: { choiceIndex: (right + 1) % choices.length, kind: 'choice' },
+      roundId,
+      type: 'player.answer'
+    })
+
+    await waitFor(
+      () => playerView(zoe)?.phase === 'revealed',
+      'the round to close'
+    )
+
+    const scores = new Map(
+      (playerView(zoe)?.players ?? []).map((player) => [
+        player.nickname,
+        player.score
+      ])
+    )
+
+    // One for the pick and two for being first, against five for typing it.
+    expect(scores.get('Zoe')).toBe(3)
+    expect(scores.get('Max')).toBe(0)
+  })
+
   it('[typed] scores the halves, the pair and the speed', async () => {
     const { host, max, zoe } = await roundInPlay(TYPED_GAME)
 

@@ -21,6 +21,7 @@ test('[e2e] a room, a scan, a buzz, a verdict and a point', async ({
   await blindTestHome(bigScreen).createRoom.click()
   await expect(bigScreen).toHaveURL(/\/host\/[A-Z0-9]{4}$/)
 
+  await host.buzzerMode.click()
   await phone.goto(await host.joinUrl.innerText())
   await player.nickname.fill(NICKNAME)
   await player.join.click()

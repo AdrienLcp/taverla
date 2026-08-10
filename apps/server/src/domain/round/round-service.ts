@@ -14,6 +14,7 @@ import {
 import { isMiss, pointsFor } from '@taverla/core/scoring/award'
 import {
   gradeTypedAnswer,
+  pointsForChoice,
   pointsForTypedAnswer,
   speedBonusForRank,
   type TypedAttempt
@@ -233,10 +234,15 @@ export const settleSimultaneousRound = (room: Room, now: number): void => {
 
   let rankAmongCorrect = 0
 
+  const earnedBy =
+    room.settings.answerMode === 'choice'
+      ? pointsForChoice
+      : pointsForTypedAnswer
+
   for (const answer of [...round.answers].sort(
     (one, other) => one.atServerTime - other.atServerTime
   )) {
-    const earned = pointsForTypedAnswer(answer.verdict)
+    const earned = earnedBy(answer.verdict)
 
     if (earned === 0) {
       round.awards.push({

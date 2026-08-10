@@ -18,6 +18,15 @@ export const blindTestHome = (page: Page) => ({
 export const hostConsole = (page: Page) => ({
   /** The track under the buzzer, on the host screen only. */
   answer: page.locator('.verdict-panel .title'),
+  /**
+   * Picked rather than assumed: typing is the default now, and this journey is
+   * the buzzer's.
+   *
+   * The label rather than the radio it names — react-aria hides the `<input>`
+   * under a `<label>` that takes the pointer, so the accessible name is what
+   * finds it and the label is what can be clicked.
+   */
+  buzzerMode: page.getByText('First to buzz', { exact: true }),
   /** What the QR code encodes. Following it is what scanning it does. */
   joinUrl: page.locator('.join-url'),
   refusal: page.getByRole('heading', {

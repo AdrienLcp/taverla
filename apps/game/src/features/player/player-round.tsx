@@ -16,7 +16,7 @@ import { buzzFeedback } from '@/infrastructure/env'
 import { Countdown } from '@/presentation/components/countdown'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
-import { buzzBlockerKey } from '@/presentation/i18n/translation'
+import { buzzBlockerKey, scoringKey } from '@/presentation/i18n/translation'
 
 import './player-round.sass'
 
@@ -106,6 +106,22 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
         </section>
       )
     }
+  }
+
+  // A phone waiting in a typed or choice game used to be shown a dead buzzer,
+  // which is a promise the round will not keep. The wait is also the only
+  // moment nobody is against a clock, so it is where the scoring is explained.
+  if (view.settings.answerMode !== 'buzzer') {
+    return (
+      <section className='player-round centred'>
+        <p className='waiting'>
+          {translate('blindtest.buzz.blocked.round_not_running')}
+        </p>
+        <p className='how-it-scores'>
+          {translate(scoringKey(view.settings.answerMode))}
+        </p>
+      </section>
+    )
   }
 
   return <Buzzer onBuzz={onBuzz} view={view} />

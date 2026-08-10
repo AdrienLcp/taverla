@@ -1,4 +1,5 @@
 import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
+import type { AnswerMode } from '@taverla/protocol/room'
 
 import type { BuzzBlocker } from '@taverla/core/round/buzz-eligibility'
 
@@ -40,3 +41,11 @@ export const apiErrorKey = (error: ApiError): TranslationKey =>
 
 export const buzzBlockerKey = (blocker: BuzzBlocker): TranslationKey =>
   `blindtest.buzz.blocked.${blocker}`
+
+/**
+ * How a mode pays, in one sentence. Adding a mode to the protocol fails to
+ * compile until both locales can explain it, which is the point: a scoring rule
+ * nobody states is one the room argues about.
+ */
+export const scoringKey = (mode: AnswerMode): TranslationKey =>
+  `blindtest.scoring.${mode}`

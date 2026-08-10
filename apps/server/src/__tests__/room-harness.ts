@@ -50,8 +50,14 @@ export const deezerClientStub = () => ({
   fetchTracksFor: async () => ({ data: CATALOGUE, status: 'success' })
 })
 
+/**
+ * The mode is pinned rather than inherited: the suites built on this one are
+ * about buzzing, and a fixture that follows whatever the default happens to be
+ * stops testing what its name says the day the default moves.
+ */
 export const FAST_GAME: RoomSettings = {
   ...DEFAULT_ROOM_SETTINGS,
+  answerMode: 'buzzer',
   countdownMs: 20,
   playbackDurationMs: 5_000,
   roundCount: 3

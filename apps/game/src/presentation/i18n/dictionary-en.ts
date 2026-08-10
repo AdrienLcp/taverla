@@ -52,6 +52,12 @@ export const EN_DICTIONARY = {
   'blindtest.reveal.nobody': 'Nobody got it',
   'blindtest.reveal.title': 'It was',
   'blindtest.round': 'Round {index} of {total}',
+  'blindtest.scoring.buzzer':
+    'First to buzz answers out loud. The host judges the title and the artist, a point each — a wrong answer sits you out for the rest of the round.',
+  'blindtest.scoring.choice':
+    'Everyone picks, over the same clip. The right one scores a point, and the first two to find it earn +2 and +1 on top.',
+  'blindtest.scoring.typed':
+    'Everyone types, over the same clip. Title and artist score a point each and both together score three, and the first two to get it right earn +2 and +1 on top.',
   'blindtest.source.chart': 'Top charts',
   'blindtest.source.label': 'Where the tracks come from',
   'blindtest.source.none':
