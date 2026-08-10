@@ -48,36 +48,69 @@ The decoys come from the pool for free — three other tracks the room might
 plausibly have heard. Draw them from the same genre chart, never from a
 different one, or the right answer is obvious from the odd one out.
 
-## Scoring by speed — decide this deliberately
+## Scoring by speed — decided: rank bonus
 
-The server already stamps arrival order, which is the whole mechanism. What is
-undecided is the curve, and it changes how the game feels:
+The server already stamps arrival order, which is the whole mechanism. The curve
+is a **rank bonus**: being correct is worth its own points, and on top of that
+the first correct answer of the round earns +2 and the second +1.
 
-- **Rank bonus** — correct is worth 1, the first correct answer earns +2, the
-  second +1. Simple, readable on the reveal, and brutal in a big room.
-- **Decay** — points fall from 2 to 1 across the clip's length. Smoother, but
-  nobody can compute their own score, which costs the arguing that makes a party
-  game fun.
-- **Flat** — correct is correct. Kills the tension the mode exists for.
+Chosen over a decay curve because a player can compute their own score from what
+they saw happen, and arguing about it out loud is most of what a party game is
+for. Flat scoring was never in the running — it removes the tension the mode
+exists to create.
 
-Whatever is chosen goes in `packages/core/src/scoring/` with a test, and the
-test derives its fixture from the rule rather than from the implementation.
+It goes in `packages/core/src/scoring/` with a test, and the test derives its
+fixture from the rule rather than from the implementation.
+
+**Left open:** in typed mode an answer can be half right, so "the first correct
+answer" needs a reading. The intended one is *the first player to score
+anything at all this round*, which keeps one rule across both modes. Confirm it
+against a real round before writing it down as settled.
 
 ## Typed answers need a matcher, and it is a core rule
 
-Fuzzy matching belongs in `packages/core`, pure and tested. It has to survive
-what people actually type:
+Fuzzy matching belongs in `packages/core`, pure and tested.
 
-- case and accents — `Ella elle l'a` vs `ella elle la`
-- punctuation and apostrophes, including the curly ones the phone inserts
-- the noise Deezer ships in titles: `(feat. …)`, `- Remastered 2011`,
+### Decided: both fields count, and both together are worth more
+
+Two inputs, title and artist, each worth a point on its own — getting only the
+artist still scores. Getting **both** adds a bonus point on top, so the round
+rewards the player who had the whole thing over the one who recognised a voice.
+
+That is deliberately more generous than the buzzer mode's title-and-artist pair:
+typing on a phone against a clock is harder than saying it out loud, and a mode
+where half-knowledge scores nothing goes quiet fast.
+
+### Normalising is not optional, and it comes before any distance
+
+Both sides — what the player typed and what the catalogue holds — go through the
+same normalisation before anything is compared:
+
+- lowercase, and accents folded — `Ella elle l'a` matches `ella elle la`
+- punctuation and apostrophes dropped, including the curly ones a phone inserts
+- whitespace collapsed, so `daftpunk` and `daft  punk` land on the same string
+- the noise Deezer ships in titles removed: `(feat. …)`, `- Remastered 2011`,
   `(Radio Edit)`
-- a plausible typo, which means an edit distance, which means picking a
-  threshold and defending it with cases
 
-**Decide whether the artist counts.** In buzzer mode title and artist are worth
-a point each. Typing both is a lot on a phone — probably title only, with the
-artist as an optional second field.
+Most "wrong" answers a real room produces are already fixed by this step alone.
+
+### Then, and only then, a tolerance for typos
+
+After normalisation the two strings are usually either identical or genuinely
+different — but not always: someone types `bohemian rapsody`, one letter short
+of right, and refusing that would feel broken.
+
+So the comparison allows a small number of single-character corrections —
+insert, delete, or replace one letter — between what was typed and the answer.
+That count is the **edit distance**, and the threshold is how many corrections
+are forgiven. It has to be chosen, not guessed, because it cuts both ways: too
+forgiving and `love` matches `live`, too strict and a real answer with a slipped
+finger is refused.
+
+The threshold scales with length rather than being a flat number — one
+correction on a short title, more on a long one — and it is defended by a table
+of cases in the test: real near-misses that must pass, and short wrong answers
+that must not.
 
 ## Protocol
 
@@ -93,6 +126,7 @@ artist as an optional second field.
   each of them picked
 - A typed round accepts `ella elle la` for `Ella, elle l'a (Remasterisé en 2004)`
   and refuses something genuinely wrong, both covered by tests
+- A player who typed only the artist scores, and one who typed both scores more
 - No player frame ever says which choice is correct — asserted over a whole
   round's transcript, the way stage 01 does it
 - Switching modes between rounds works, and the buzzer mode is untouched
