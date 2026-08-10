@@ -66,7 +66,11 @@ export const sendWelcome = (
           serverTime,
           sessionId,
           type: 'welcome',
-          view: toHostView({ isHostConnected: hostIsThere, room })
+          view: toHostView({
+            isHostConnected: hostIsThere,
+            isHostPlaying: connection.playerId !== null,
+            room
+          })
         })
       : encodeChecked(playerServerMessageSchema, {
           protocolVersion: PROTOCOL_VERSION,
@@ -96,7 +100,11 @@ export const broadcastRoom = (room: Room): void => {
       connection.role === 'host'
         ? encodeChecked(hostServerMessageSchema, {
             type: 'room.updated',
-            view: toHostView({ isHostConnected: hostIsThere, room })
+            view: toHostView({
+              isHostConnected: hostIsThere,
+              isHostPlaying: connection.playerId !== null,
+              room
+            })
           })
         : encodeChecked(playerServerMessageSchema, {
             type: 'room.updated',

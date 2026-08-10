@@ -28,6 +28,23 @@ it, and the test fails when the strip is removed.
 **Never send a player frame with `JSON.stringify` or bare `encodeMessage`.** Use
 `encodeChecked(playerServerMessageSchema, …)`.
 
+### A host who plays is told less, and by the server
+
+One phone can be the speaker and a player at once — the seat is taken by putting
+a nickname on the host's `hello`, so it rides the same socket and survives a
+reconnect. The moment it is taken, `toHostView` stops sending `currentTrack`:
+that screen is a player's now, and a payload it could read in a console is not
+a guarantee.
+
+What it keeps is `currentAudioUrl`, because the speaker still has to play the
+clip. Those two fields exist separately for exactly this — the judge's copy and
+the speaker's copy were one field, and conflating them is what made "host and
+player" impossible. The residual leak is the catalogue id inside the URL, and
+it is the reason the seat is offered rather than assumed.
+
+Buzzer mode does not offer it: that round needs someone reading the answer to
+judge it.
+
 ### The buzz carries no timestamp, deliberately
 
 Ordering is decided by when the frame reaches the server. A client-supplied

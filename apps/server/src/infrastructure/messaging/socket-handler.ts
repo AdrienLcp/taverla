@@ -127,7 +127,7 @@ export const createRoomSocketEvents = (
     const sessionId = message.sessionId ?? nanoid(16)
     const seated =
       message.role === 'host'
-        ? seatHost({ code, outbound, room, sessionId, ws })
+        ? seatHost({ code, message, outbound, room, sessionId, ws })
         : seatPlayer({ message, outbound, room, sessionId })
 
     if (seated === null) {
@@ -150,14 +150,22 @@ export const createRoomSocketEvents = (
     logger.info('Socket joined', { code, role: seated.role })
   }
 
+  /**
+   * A host who names themselves takes a seat as well as the room. One phone in
+   * the middle of a table is both the speaker and a player, and doing it on one
+   * socket is what lets the server know — which is what makes withholding the
+   * answer from them enforceable rather than a promise.
+   */
   const seatHost = ({
     code,
+    message,
     outbound,
     room,
     sessionId,
     ws
   }: {
     code: RoomCode
+    message: HelloMessage
     outbound: Outbound
     room: Room
     sessionId: string
@@ -181,10 +189,33 @@ export const createRoomSocketEvents = (
       return null
     }
 
+    const seat =
+      message.nickname === undefined
+        ? null
+        : joinAsPlayer({
+            nickname: message.nickname,
+            now: Date.now(),
+            room,
+            sessionId
+          })
+
+    if (seat?.status === 'failure') {
+      sendError(outbound, {
+        code: seat.error,
+        fatal: false,
+        message: 'That seat could not be taken'
+      })
+    }
+
     // The registration that makes `isHostConnected` true happens after this
     // returns, so the round is put back on the clock by the caller rather than
     // here — see where the connection is registered.
-    return { playerId: null, role: 'host', send: outbound.send, sessionId }
+    return {
+      playerId: seat?.status === 'success' ? seat.data.id : null,
+      role: 'host',
+      send: outbound.send,
+      sessionId
+    }
   }
 
   /**
@@ -315,11 +346,13 @@ export const createRoomSocketEvents = (
     outbound: Outbound,
     room: Room
   ): void => {
-    if (active.role !== 'player') {
+    // The seat, not the role: a host running the room from the phone in the
+    // middle of the table holds both.
+    if (active.playerId === null) {
       sendError(outbound, {
         code: 'invalid_message',
         fatal: false,
-        message: 'Only a player holds a buzzer'
+        message: 'Only a seated player holds a buzzer'
       })
 
       return
@@ -434,11 +467,11 @@ export const createRoomSocketEvents = (
     outbound: Outbound,
     room: Room
   ): void => {
-    if (active.role !== 'player') {
+    if (active.playerId === null) {
       sendError(outbound, {
         code: 'invalid_message',
         fatal: false,
-        message: 'Only a player answers'
+        message: 'Only a seated player answers'
       })
 
       return

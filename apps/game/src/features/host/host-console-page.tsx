@@ -9,6 +9,11 @@ import type { TrackSource } from '@taverla/protocol/track'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
 import { NotFoundPage } from '@/features/not-found/not-found-page'
+import {
+  ChoiceAnswer,
+  type PlayerAnswer,
+  TypedAnswer
+} from '@/features/player/answer-forms'
 import { useHostConnection } from '@/infrastructure/messaging/use-host-connection'
 import {
   playUrlFor,
@@ -31,6 +36,7 @@ import { usePhaseField } from '@/presentation/theme/use-phase-field'
 import { CopyButton } from './copy-button'
 import { GameSettings } from './game-settings'
 import { HostControls } from './host-controls'
+import { HostSeat } from './host-seat'
 import { JoinReminder } from './join-reminder'
 import { PlaylistPicker } from './playlist-picker'
 import { RevealPanel } from './reveal-panel'
@@ -54,7 +60,13 @@ export const HostConsolePage = () => {
 
 const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
   const translate = useTranslate()
-  const { clock, error, send, status, view } = useHostConnection(roomCode)
+  // Read once and kept for the life of the console: the socket reopens on a
+  // change of nickname, and re-seating mid-round would drop the answer.
+  const [seatNickname, setSeatNickname] = useState<string | null>(null)
+  const { clock, error, send, status, view } = useHostConnection(
+    roomCode,
+    seatNickname
+  )
   const [volume, setVolume] = useState(readStoredVolume)
   const [draftSource, setDraftSource] = useState<TrackSource | null>(null)
 
@@ -90,8 +102,11 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
 
       <Stage
         clock={clock}
+        isSeated={seatNickname !== null}
         onDraftSource={setDraftSource}
+        onTakeSeat={setSeatNickname}
         roomCode={roomCode}
+        seatNickname={seatNickname}
         send={send}
         view={view}
       />
@@ -147,13 +162,25 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
 
 type StageProps = {
   clock: ClockEstimate | null
+  isSeated: boolean
   onDraftSource: (source: TrackSource | null) => void
+  onTakeSeat: (nickname: string) => void
   roomCode: RoomCode
+  seatNickname: string | null
   send: (message: ClientMessage) => boolean
   view: HostRoomView | null
 }
 
-const Stage = ({ clock, onDraftSource, roomCode, send, view }: StageProps) => {
+const Stage = ({
+  clock,
+  isSeated,
+  onDraftSource,
+  onTakeSeat,
+  roomCode,
+  seatNickname,
+  send,
+  view
+}: StageProps) => {
   const translate = useTranslate()
 
   if (view === null) {
@@ -171,6 +198,9 @@ const Stage = ({ clock, onDraftSource, roomCode, send, view }: StageProps) => {
   }
 
   if (view.phase === 'playing' && round != null) {
+    const answerWithRound = (answer: PlayerAnswer): boolean =>
+      send({ answer, roundId: round.id, type: 'player.answer' })
+
     return (
       <div className='stage listening'>
         <p className='now'>{translate('blindtest.listening')}</p>
@@ -184,6 +214,12 @@ const Stage = ({ clock, onDraftSource, roomCode, send, view }: StageProps) => {
             )}ms`
           }}
         />
+        {isSeated && view.settings.answerMode === 'choice' && (
+          <ChoiceAnswer onAnswer={answerWithRound} round={round} />
+        )}
+        {isSeated && view.settings.answerMode === 'typed' && (
+          <TypedAnswer onAnswer={answerWithRound} round={round} />
+        )}
         <Scoreboard players={view.players} />
       </div>
     )
@@ -233,7 +269,9 @@ const Stage = ({ clock, onDraftSource, roomCode, send, view }: StageProps) => {
   return (
     <Lobby
       onDraftSource={onDraftSource}
+      onTakeSeat={onTakeSeat}
       roomCode={roomCode}
+      seatNickname={seatNickname}
       send={send}
       view={view}
     />
@@ -242,12 +280,16 @@ const Stage = ({ clock, onDraftSource, roomCode, send, view }: StageProps) => {
 
 const Lobby = ({
   onDraftSource,
+  onTakeSeat,
   roomCode,
+  seatNickname,
   send,
   view
 }: {
   onDraftSource: (source: TrackSource | null) => void
+  onTakeSeat: (nickname: string) => void
   roomCode: RoomCode
+  seatNickname: string | null
   send: (message: ClientMessage) => boolean
   view: HostRoomView
 }) => {
@@ -293,6 +335,13 @@ const Lobby = ({
           }}
           settings={view.settings}
         />
+        {/*
+          Not offered in buzzer mode: that round needs someone reading the
+          answer to judge it, and a judge who is also answering is not one.
+        */}
+        {view.settings.answerMode !== 'buzzer' && (
+          <HostSeat onTakeSeat={onTakeSeat} takenAs={seatNickname} />
+        )}
       </section>
     </div>
   )

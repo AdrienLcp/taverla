@@ -94,7 +94,7 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
     if (view.settings.answerMode === 'choice') {
       return (
         <section className='player-round'>
-          <ChoiceAnswer onAnswer={answerWithRound} view={view} />
+          <ChoiceAnswer onAnswer={answerWithRound} round={view.round} />
         </section>
       )
     }
@@ -102,7 +102,7 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
     if (view.settings.answerMode === 'typed') {
       return (
         <section className='player-round'>
-          <TypedAnswer onAnswer={answerWithRound} view={view} />
+          <TypedAnswer onAnswer={answerWithRound} round={view.round} />
         </section>
       )
     }

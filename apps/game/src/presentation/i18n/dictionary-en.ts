@@ -127,6 +127,11 @@ export const EN_DICTIONARY = {
   'host.players.title': 'Players',
   'host.reveal': 'Give it away',
   'host.rounds': 'Rounds',
+  'host.seat.action': 'Take a seat',
+  'host.seat.description':
+    'This screen stops being told the answer until the reveal.',
+  'host.seat.label': 'Play too, as',
+  'host.seat.taken': 'You are playing as {nickname}.',
   'host.seconds': '{seconds}s',
   'host.seeResults': 'See the results',
   'host.startGame': 'Start the game',

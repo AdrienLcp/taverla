@@ -158,6 +158,51 @@ describe('answering all at once', () => {
     expect(scores.get('Max')).toBe(0)
   })
 
+  it('[seat] lets a host play, and stops telling them the answer', async () => {
+    const { code, host } = await harness.openRoom(TYPED_GAME, 'Adrien')
+    const zoe = await harness.seat({ code, nickname: 'Zoe' })
+
+    host.send({ type: 'host.startRound' })
+    await waitFor(
+      () => playerView(zoe)?.phase === 'playing',
+      'the clip to start'
+    )
+
+    // The speaker still gets what it needs, and the judge's copy is gone.
+    expect(hostView(host)?.currentAudioUrl).toBeTruthy()
+    expect(hostView(host)?.currentTrack).toBeNull()
+
+    const seated = hostView(host)?.players.map((player) => player.nickname)
+
+    expect(seated).toContain('Adrien')
+  })
+
+  it('[seat] answers from the host seat like any other phone', async () => {
+    const { host } = await harness.openRoom(TYPED_GAME, 'Adrien')
+
+    host.send({ type: 'host.startRound' })
+    await waitFor(
+      () => hostView(host)?.phase === 'playing',
+      'the clip to start'
+    )
+
+    host.send({
+      answer: { artist: '', kind: 'typed', title: 'a guess' },
+      roundId: hostView(host)?.round?.id ?? '',
+      type: 'player.answer'
+    })
+
+    // One seated player, so their answer is the last one and closes the round.
+    await waitFor(
+      () => hostView(host)?.phase === 'revealed',
+      'the round to close on the host’s own answer'
+    )
+
+    expect(
+      hostView(host)?.round?.revealedAnswers.map((answer) => answer.said)
+    ).toEqual(['a guess'])
+  })
+
   it('[typed] scores the halves, the pair and the speed', async () => {
     const { host, max, zoe } = await roundInPlay(TYPED_GAME)
 

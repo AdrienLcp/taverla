@@ -129,6 +129,11 @@ export const FR_DICTIONARY: Dictionary = {
   'host.players.title': 'Joueurs',
   'host.reveal': 'Donner la réponse',
   'host.rounds': 'Tours',
+  'host.seat.action': 'Prendre une place',
+  'host.seat.description':
+    'Cet écran cesse de recevoir la réponse jusqu’au reveal.',
+  'host.seat.label': 'Jouer aussi, sous le nom de',
+  'host.seat.taken': 'Tu joues sous le nom de {nickname}.',
   'host.seconds': '{seconds} s',
   'host.seeResults': 'Voir les résultats',
   'host.startGame': 'Lancer la partie',

@@ -2,7 +2,7 @@ import type React from 'react'
 import { useState } from 'react'
 import { Form } from 'react-aria-components'
 
-import type { PlayerRoomView } from '@taverla/protocol/room'
+import type { RoundView } from '@taverla/protocol/room'
 
 import { Button } from '@/presentation/components/button'
 import { TextField } from '@/presentation/components/text-field'
@@ -10,10 +10,14 @@ import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import './answer-forms.sass'
 
+/**
+ * The round rather than a whole room view: the host console shows these too
+ * when its owner has taken a seat, and it holds a different view type.
+ */
 type AnswerFormProps = {
   /** `false` from the socket means the frame was never written. */
   onAnswer: (answer: PlayerAnswer) => boolean
-  view: PlayerRoomView
+  round: RoundView | null
 }
 
 export type PlayerAnswer =
@@ -38,9 +42,11 @@ const useAnswering = (onAnswer: (answer: PlayerAnswer) => boolean) => {
   }
 }
 
-export const ChoiceAnswer: React.FC<AnswerFormProps> = ({ onAnswer, view }) => {
+export const ChoiceAnswer: React.FC<AnswerFormProps> = ({
+  onAnswer,
+  round
+}) => {
   const { answeredRoundId, submit } = useAnswering(onAnswer)
-  const round = view.round
 
   if (round === null) {
     return null
@@ -66,17 +72,16 @@ export const ChoiceAnswer: React.FC<AnswerFormProps> = ({ onAnswer, view }) => {
           </li>
         ))}
       </ul>
-      <AnswerStatus hasAnswered={hasAnswered} view={view} />
+      <AnswerStatus hasAnswered={hasAnswered} round={round} />
     </section>
   )
 }
 
-export const TypedAnswer: React.FC<AnswerFormProps> = ({ onAnswer, view }) => {
+export const TypedAnswer: React.FC<AnswerFormProps> = ({ onAnswer, round }) => {
   const translate = useTranslate()
   const { answeredRoundId, submit } = useAnswering(onAnswer)
   const [title, setTitle] = useState('')
   const [artist, setArtist] = useState('')
-  const round = view.round
 
   if (round === null) {
     return null
@@ -120,17 +125,17 @@ export const TypedAnswer: React.FC<AnswerFormProps> = ({ onAnswer, view }) => {
           {translate('blindtest.answer.send')}
         </Button>
       </Form>
-      <AnswerStatus hasAnswered={hasAnswered} view={view} />
+      <AnswerStatus hasAnswered={hasAnswered} round={round} />
     </section>
   )
 }
 
 const AnswerStatus = ({
   hasAnswered,
-  view
+  round
 }: {
   hasAnswered: boolean
-  view: PlayerRoomView
+  round: RoundView | null
 }) => {
   const translate = useTranslate()
 
@@ -139,7 +144,7 @@ const AnswerStatus = ({
       {hasAnswered
         ? translate('blindtest.answer.locked')
         : translate('blindtest.answer.waiting', {
-            count: view.round?.answers.length ?? 0
+            count: round?.answers.length ?? 0
           })}
     </p>
   )

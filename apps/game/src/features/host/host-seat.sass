@@ -1,0 +1,19 @@
+@use '../../presentation/styles/typography'
+
+@layer components
+  .host-seat
+    border-top: 2px solid var(--rule)
+    padding-top: var(--space-m)
+
+    .react-aria-Form
+      display: flex
+      flex-direction: column
+      gap: var(--space-s)
+
+    .button
+      align-self: flex-start
+
+    &.taken
+      @include typography.caption
+
+      color: var(--ink-muted)

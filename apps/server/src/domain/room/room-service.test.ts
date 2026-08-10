@@ -129,7 +129,11 @@ describe('the two views', () => {
   })
 
   it('[room] shows the host the pool and the current track', () => {
-    const view = toHostView({ isHostConnected: true, room })
+    const view = toHostView({
+      isHostConnected: true,
+      isHostPlaying: false,
+      room
+    })
 
     expect(view.remainingPoolSize).toBe(1)
     expect(view.currentTrack).toBeNull()

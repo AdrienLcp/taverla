@@ -77,7 +77,8 @@ export type RoomHarness = {
     schema: z.ZodType<TMessage>
   ) => Promise<Peer<TMessage>>
   openRoom: (
-    settings?: RoomSettings
+    settings?: RoomSettings,
+    nickname?: string
   ) => Promise<{ code: string; host: Peer<HostServerMessage> }>
   seat: (options: {
     code: string
@@ -206,7 +207,11 @@ export const startRoomHarness = async (): Promise<RoomHarness> => {
     }
   }
 
-  const openRoom = async (settings: RoomSettings = FAST_GAME) => {
+  /** A `nickname` seats the host as a player too — the phone in the middle. */
+  const openRoom = async (
+    settings: RoomSettings = FAST_GAME,
+    nickname?: string
+  ) => {
     const response = await fetch(`http://${origin}/api/rooms`, {
       method: 'POST'
     })
@@ -215,6 +220,7 @@ export const startRoomHarness = async (): Promise<RoomHarness> => {
     const host = await connect(code, hostServerMessageSchema)
 
     host.send({
+      nickname,
       protocolVersion: PROTOCOL_VERSION,
       role: 'host',
       type: 'hello'

@@ -82,7 +82,7 @@ export const useRoundAudio = ({
 
   const phase = view?.phase ?? null
   const round = view?.round ?? null
-  const previewUrl = view?.currentTrack?.previewUrl ?? null
+  const previewUrl = view?.currentAudioUrl ?? null
   const audioStartsAt = round?.audioStartsAt ?? null
   const roundId = round?.id ?? null
   const elapsedMs = view?.playbackElapsedMs ?? 0

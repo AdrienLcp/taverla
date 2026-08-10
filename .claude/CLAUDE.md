@@ -111,7 +111,9 @@ string written into a component is a bug, not a shortcut — see
 
 - **Room** — one game, addressed by a 4-character code from an alphabet with no
   confusable glyphs (`O`/`0`, `I`/`1`, `S`/`5`, `Z`/`2` are all excluded)
-- **Host** — the big screen. Shows the QR code, plays the audio, judges answers
+- **Host** — the screen running the room. Shows the QR code, plays the audio,
+  judges answers. It can also take a **seat** and play, outside buzzer mode —
+  and the server then stops sending it the track
 - **Player** — anyone who joined, by scanning the QR code or by typing the room
   code. Holds a seat and a score
 - **Round** — one track. `lobby → countdown → playing → buzzed → revealed`

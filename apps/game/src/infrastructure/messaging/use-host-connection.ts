@@ -11,7 +11,16 @@ export type HostConnection = RoomSocket & {
   view: HostRoomView | null
 }
 
-export const useHostConnection = (roomCode: RoomCode): HostConnection => {
+/**
+ * A nickname takes a seat as well as the room: the same socket carries both,
+ * which is what lets the server withhold the answer from a host who is playing.
+ * It is part of the connection rather than a later message because the seat has
+ * to survive a reconnect the same way a player's does.
+ */
+export const useHostConnection = (
+  roomCode: RoomCode,
+  nickname: string | null
+): HostConnection => {
   const [view, setView] = useState<HostRoomView | null>(null)
 
   const onFrame = useCallback((raw: string) => {
@@ -24,7 +33,7 @@ export const useHostConnection = (roomCode: RoomCode): HostConnection => {
 
   const socket = useRoomSocket({
     enabled: true,
-    nickname: null,
+    nickname,
     onFrame,
     role: 'host',
     roomCode

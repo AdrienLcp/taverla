@@ -61,6 +61,12 @@ one part.
   room of the evening costs one tap instead of typing a name again
 - `[Game]` The room code can be copied, for the half of joining that is not a
   QR code: the host copies it and sends it to someone on a laptop
+- `[Shared]` The host can take a seat and play, which is what one phone in the
+  middle of a table needs. Their screen stops being told the track the moment
+  they do — the judge's copy and the speaker's copy were one field, and pulling
+  them apart is what made it possible to withhold one and keep the other. Not
+  offered in buzzer mode: that round needs someone reading the answer to judge
+  it, and a judge who is also answering is not one
 - `[Game]` The scoring is stated where there is time to read it: under the
   control that chooses the mode on the host, and on the phone while it waits for
   the game to start. Nothing new appears during a round — those are the two

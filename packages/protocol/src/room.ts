@@ -157,6 +157,17 @@ const baseRoomViewSchema = z.object({
  * many are left in the pool.
  */
 export const hostRoomViewSchema = baseRoomViewSchema.extend({
+  /**
+   * What the speaker needs, which is not what the judge needs. A host who is
+   * also playing gets this and not `currentTrack`, so their own screen cannot
+   * hand them the answer.
+   *
+   * The URL still carries the catalogue's track id, which a console could
+   * resolve — the same residual trade a remote mode would make, and the reason
+   * the seat is offered rather than assumed.
+   */
+  currentAudioUrl: z.url().nullable(),
+  /** `null` while the host holds a seat: a player must not read the answer. */
   currentTrack: hostTrackSchema.nullable(),
   /**
    * Clip time already consumed, buzz pauses excluded. It is what lets a host who

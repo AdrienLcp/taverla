@@ -20,13 +20,17 @@ import type { Participant, Room, Round } from './room'
  */
 export const toHostView = ({
   isHostConnected,
+  isHostPlaying,
   room
 }: {
   isHostConnected: boolean
+  /** A host who took a seat reads the same round everyone else does. */
+  isHostPlaying: boolean
   room: Room
 }): HostRoomView => ({
   ...toBaseView({ isHostConnected, room }),
-  currentTrack: room.round?.track ?? null,
+  currentAudioUrl: room.round?.track.previewUrl ?? null,
+  currentTrack: isHostPlaying ? null : (room.round?.track ?? null),
   playbackElapsedMs:
     room.round === null ? 0 : elapsedPlaybackMs(room.round, Date.now()),
   remainingPoolSize: room.trackPool.length
