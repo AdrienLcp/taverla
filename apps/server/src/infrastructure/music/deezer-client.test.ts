@@ -23,6 +23,12 @@ const trackAtRank = (rank: number) => ({
   title: `Rank ${rank}`
 })
 
+const namedTrack = (id: string, title: string) => ({
+  ...trackAtRank(CLASSIC_RANK),
+  id,
+  title
+})
+
 const catalogueHolding = (tracks: unknown[]): void => {
   vi.stubGlobal(
     'fetch',
@@ -32,6 +38,34 @@ const catalogueHolding = (tracks: unknown[]): void => {
         status: 200
       })
   )
+}
+
+/**
+ * Answers each catalogue path from the table and 502s anything absent, which is
+ * how a chart that is down is expressed. Returns the paths that were asked for,
+ * so a test can assert one request per chosen genre and no more.
+ */
+const catalogueByPath = (
+  bodyByPath: Record<string, unknown[]>
+): (() => string[]) => {
+  const requested: string[] = []
+
+  vi.stubGlobal('fetch', async (url: string) => {
+    const path = url.replace(/^https?:\/\/[^/]+/, '')
+
+    requested.push(path)
+
+    const tracks = bodyByPath[path.split('?')[0] ?? '']
+
+    return tracks === undefined
+      ? new Response('', { status: 502 })
+      : new Response(JSON.stringify({ data: tracks }), {
+          headers: { 'content-type': 'application/json' },
+          status: 200
+        })
+  })
+
+  return () => requested
 }
 
 const titlesDrawnAt = async (difficulty: TrackDifficulty) => {
@@ -84,5 +118,71 @@ describe('fetchTracksFor', () => {
     catalogueHolding([{ ...trackAtRank(CLASSIC_RANK), preview: '' }])
 
     await expect(titlesDrawnAt('wellKnown')).resolves.toEqual([])
+  })
+
+  it('[genres] merges every chosen chart and keeps a shared track once', async () => {
+    const requested = catalogueByPath({
+      '/chart/132/tracks': [
+        namedTrack('a', 'Pop one'),
+        namedTrack('c', 'Both')
+      ],
+      '/chart/152/tracks': [
+        namedTrack('b', 'Rock one'),
+        namedTrack('c', 'Both')
+      ]
+    })
+
+    const found = await fetchTracksFor({
+      difficulty: 'wellKnown',
+      source: { genreIds: [132, 152], kind: 'chart' }
+    })
+
+    expect(
+      found.status === 'success' && found.data.map((t) => t.title)
+    ).toEqual(['Pop one', 'Both', 'Rock one'])
+    expect(requested()).toHaveLength(2)
+  })
+
+  it('[genres] reads the all-genres chart when nothing was chosen', async () => {
+    const requested = catalogueByPath({
+      '/chart/0/tracks': [namedTrack('a', 'Everything')]
+    })
+
+    const found = await fetchTracksFor({
+      difficulty: 'wellKnown',
+      source: { genreIds: [], kind: 'chart' }
+    })
+
+    expect(
+      found.status === 'success' && found.data.map((t) => t.title)
+    ).toEqual(['Everything'])
+    expect(requested()).toEqual(['/chart/0/tracks?limit=100'])
+  })
+
+  it('[genres] plays on when one chart of several is down', async () => {
+    catalogueByPath({ '/chart/152/tracks': [namedTrack('b', 'Rock one')] })
+
+    const found = await fetchTracksFor({
+      difficulty: 'wellKnown',
+      source: { genreIds: [132, 152], kind: 'chart' }
+    })
+
+    expect(
+      found.status === 'success' && found.data.map((t) => t.title)
+    ).toEqual(['Rock one'])
+  })
+
+  it('[genres] refuses the round when every chart is down', async () => {
+    catalogueByPath({})
+
+    const found = await fetchTracksFor({
+      difficulty: 'wellKnown',
+      source: { genreIds: [132, 152], kind: 'chart' }
+    })
+
+    expect(found).toEqual({
+      error: 'music_source_unavailable',
+      status: 'failure'
+    })
   })
 })

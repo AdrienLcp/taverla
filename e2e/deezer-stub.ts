@@ -12,7 +12,7 @@ const PORT = Number(process.env.DEEZER_STUB_PORT) || 3199
 const AUDIBLE_NOTHING =
   'data:audio/wav;base64,UklGRiwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQgAAACAgICAgICAgA=='
 
-/** Above the client's `MINIMUM_TRACK_RANK`, or the pool would drop every one. */
+/** Above every floor in the client's difficulty table, or the pool drops them all. */
 const RANK = 900_000
 
 const TRACKS = [

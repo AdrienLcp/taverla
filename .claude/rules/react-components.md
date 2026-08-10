@@ -183,6 +183,19 @@ Adding a variant is therefore two edits, one per side, and never four. Both
 components pass `size` and `variant` straight through undefaulted; the fallback
 to `medium` / `filled` belongs to `controlClassName` so the two cannot drift.
 
+`SegmentedControl` and `ToggleGroup` are the same arrangement one layer up.
+**One answer or several is a semantic difference, not a visual one**, and the
+primitive has to match: a radio group for one, a `ToggleButtonGroup` for
+several — a screen reader announces which it is, and "several toggles limited to
+one" is a lie a user hears. So they stay two components wearing one look, held
+in `styles/_strip.sass`.
+
+Their segments carry a `.segment` class rather than react-aria's own, because
+one renders a `<label>` around a radio and the other a `<button>`. And
+`ToggleButtonGroup` does not hand its `Label` an id through context the way
+`RadioGroup` does, so `ToggleGroup` wires `aria-labelledby` itself — drop that
+and the group loses its name with nothing failing.
+
 ### A pending state must not resize the control
 
 `Button` renders a `Spinner` on top of its label rather than in place of it, and

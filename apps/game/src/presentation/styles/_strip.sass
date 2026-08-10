@@ -1,0 +1,55 @@
+// Pure module: mixins only, no top-level CSS. Safe to @use from any component.
+
+@use 'focus'
+@use 'typography'
+
+/// The look both choice strips wear — `SegmentedControl` for one answer,
+/// `ToggleGroup` for several. Declared once here rather than in a component
+/// they would both have to wrap, so a variant is one edit and never two.
+///
+/// The segments carry a class of their own rather than react-aria's, because
+/// one renders a `<label>` around a radio and the other a `<button>`.
+@mixin strip
+  display: flex
+  flex-direction: column
+  gap: var(--space-2xs)
+
+  .react-aria-Label
+    @include typography.label
+
+    color: var(--ink-muted)
+
+  // A strip of stamps, ruled off from the field. No pill, no inner card.
+  .segments
+    border: 2px solid var(--rule)
+    display: flex
+    flex-wrap: wrap
+
+  // `flex: 1` rather than content width: the segments share the strip evenly,
+  // so the trailing gap between the last one and the rule cannot appear. The
+  // basis is 0 but each segment's minimum is its own `nowrap` label, so a strip
+  // too narrow for its options wraps and then fills the row it landed on.
+  .segment
+    @include focus.ring-inset
+    @include typography.caption
+
+    border-right: 2px solid var(--rule)
+    color: var(--ink-muted)
+    cursor: pointer
+    flex: 1
+    font-weight: 700
+    padding: var(--space-2xs) var(--space-s)
+    text-align: center
+    text-transform: uppercase
+    transition: background-color var(--transition-fast, 0) var(--timing, ease), color var(--transition-fast, 0) var(--timing, ease)
+    white-space: nowrap
+
+    &:last-child
+      border-right: none
+
+    &[data-hovered]
+      color: var(--ink)
+
+    &[data-selected]
+      background: var(--ink)
+      color: var(--field)

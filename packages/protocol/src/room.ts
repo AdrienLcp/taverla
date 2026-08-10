@@ -57,7 +57,7 @@ export const DEFAULT_ROOM_SETTINGS: RoomSettings = {
   difficulty: 'wellKnown',
   playbackDurationMs: 30_000,
   roundCount: 10,
-  source: { genreId: 0, kind: 'chart' }
+  source: { genreIds: [], kind: 'chart' }
 }
 
 export const publicPlayerSchema = z.object({

@@ -45,8 +45,10 @@ case proving the index never reaches a player frame. Do not weaken
 `encodeChecked` to make this easier.
 
 The decoys come from the pool for free — three other tracks the room might
-plausibly have heard. Draw them from the same genre chart, never from a
-different one, or the right answer is obvious from the odd one out.
+plausibly have heard. Draw them from the room's own pool, never from a chart it
+did not pick, or the right answer is obvious from the odd one out — and note
+that the pool is now several charts merged, so "the same genre" is no longer a
+thing a decoy can be drawn from.
 
 ## Scoring by speed — decided: rank bonus
 

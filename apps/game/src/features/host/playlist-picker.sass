@@ -8,7 +8,17 @@
     gap: var(--space-s)
     padding-top: var(--space-m)
 
-    // Twelve genres do not fit one row on a laptop, and a horizontal scroller
+    .genres
+      display: flex
+      flex-direction: column
+      gap: var(--space-2xs)
+
+    .hint
+      @include typography.caption
+
+      color: var(--ink-muted)
+
+    // Eleven genres do not fit one row on a laptop, and a horizontal scroller
     // hides the ones at the end from a host who is standing up. A wrapped flex
     // strip is worse than it sounds here: the last row gets two chips stretched
     // to half the width each. A grid gives every genre the same cell, and the
@@ -17,10 +27,17 @@
       background: var(--rule)
       display: grid
       gap: 2px
-      grid-template-columns: repeat(auto-fit, minmax(148px, 1fr))
+      // Wide enough for `CHANSON FRANÇAISE`, which is the longest label either
+      // locale holds. At 148px it landed in a cell narrower than itself.
+      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr))
 
-      .react-aria-Radio
+      .segment
         border-right: none
+        // The shared strip keeps every label on one line, which a cell sized by
+        // the grid cannot promise. The column above is wide enough that nothing
+        // wraps today; this is what stops the next locale's longest genre from
+        // hanging over the strip's edge instead.
+        white-space: normal
 
         &:not([data-selected])
           background: var(--field)

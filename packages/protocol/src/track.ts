@@ -30,12 +30,16 @@ export const hostTrackSchema = trackIdentitySchema.extend({
  */
 export const trackSourceSchema = z.discriminatedUnion('kind', [
   /**
-   * A Deezer genre chart. `0` is the all-genres chart; the others are the
-   * numeric ids Deezer publishes at `/genre`, and each is a hundred tracks that
-   * are charting — which is the cheapest definition of "a song people know".
+   * Deezer genre charts, merged. The ids are the ones Deezer publishes at
+   * `/genre`, and each chart is a hundred tracks that are charting — the
+   * cheapest definition of "a song people know".
+   *
+   * **Empty means every genre**, which is the all-genres chart rather than an
+   * empty pool. A host who wants everything is the default state, and making
+   * them light twelve stamps to say so would be the wrong way round.
    */
   z.object({
-    genreId: z.number().int().nonnegative(),
+    genreIds: z.array(z.number().int().nonnegative()),
     kind: z.literal('chart')
   }),
   z.object({ kind: z.literal('playlist'), playlistId: z.string().min(1) }),

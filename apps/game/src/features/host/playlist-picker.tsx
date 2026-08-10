@@ -9,6 +9,7 @@ import { searchTracks } from '@/infrastructure/api/taverla-api'
 import { Button } from '@/presentation/components/button'
 import { SegmentedControl } from '@/presentation/components/segmented-control'
 import { TextField } from '@/presentation/components/text-field'
+import { ToggleGroup } from '@/presentation/components/toggle-group'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import {
   apiErrorKey,
@@ -32,9 +33,17 @@ const isSourceKind = (value: string): value is SourceKind =>
  * Deezer's own genre ids, hand-picked down to the ones a party actually asks
  * for. Each is a hundred charting tracks, so the whole list is a few thousand
  * songs a room will recognise — see the rank floor in `deezer-client.ts`.
+ *
+ * Deezer's all-genres chart is id `0`, and it is deliberately not here: picking
+ * nothing already means everything, and a stamp that says "all" beside the rest
+ * is a second way to express the same state.
+ *
+ * Twelve, not eleven: the strip is a grid whose column count follows the width,
+ * and twelve divides by two, three, four and six. Eleven left a dead cell
+ * showing the strip's own ground at every width that is not a factor of it.
  */
 const GENRE_IDS = [
-  0, 132, 116, 152, 113, 165, 106, 52, 169, 464, 144, 197
+  132, 116, 152, 113, 165, 106, 52, 169, 464, 144, 197, 129
 ] as const
 
 type GenreId = (typeof GENRE_IDS)[number]
@@ -46,11 +55,14 @@ type GenreId = (typeof GENRE_IDS)[number]
 const genreLabelKey = (genreId: GenreId): `blindtest.genre.${GenreId}` =>
   `blindtest.genre.${genreId}`
 
+const asGenreId = (value: string | number): GenreId | undefined =>
+  GENRE_IDS.find((id) => String(id) === String(value))
+
 const PREVIEWED_TITLES = 5
 
 /** What the three source kinds need, all at once, so switching kind keeps what was typed. */
 type Draft = {
-  genreId: GenreId
+  genreIds: GenreId[]
   kind: SourceKind
   playlistId: string
   query: string
@@ -58,14 +70,14 @@ type Draft = {
 
 /**
  * The room's settings are the truth on mount, so the picker opens on the source
- * the room is actually running — a genre chosen before a `play again` is still
- * the selected one when the lobby comes back.
+ * the room is actually running — genres chosen before a `play again` are still
+ * the selected ones when the lobby comes back.
  */
 const draftFromSource = (source: TrackSource): Draft => ({
-  genreId:
+  genreIds:
     source.kind === 'chart'
-      ? (GENRE_IDS.find((id) => id === source.genreId) ?? 0)
-      : 0,
+      ? source.genreIds.map(asGenreId).filter((id) => id !== undefined)
+      : [],
   kind: source.kind,
   playlistId: source.kind === 'playlist' ? source.playlistId : '',
   query: source.kind === 'search' ? source.query : ''
@@ -73,14 +85,14 @@ const draftFromSource = (source: TrackSource): Draft => ({
 
 /** `null` while the chosen kind is still missing the text it needs. */
 const sourceFromDraft = ({
-  genreId,
+  genreIds,
   kind,
   playlistId,
   query
 }: Draft): TrackSource | null => {
   switch (kind) {
     case 'chart':
-      return { genreId, kind: 'chart' }
+      return { genreIds, kind: 'chart' }
     case 'playlist':
       return playlistId.trim().length === 0
         ? null
@@ -179,22 +191,26 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
       />
 
       {draft.kind === 'chart' && (
-        <SegmentedControl
-          className='genres'
-          label={translate('blindtest.genre.label')}
-          onChange={(next) => {
-            const chosen = GENRE_IDS.find((id) => String(id) === next)
-
-            if (chosen !== undefined) {
-              revise({ genreId: chosen })
-            }
-          }}
-          options={GENRE_IDS.map((id) => ({
-            label: translate(genreLabelKey(id)),
-            value: String(id)
-          }))}
-          value={String(draft.genreId)}
-        />
+        <div className='genres'>
+          <ToggleGroup
+            label={translate('blindtest.genre.label')}
+            onSelectionChange={(keys) => {
+              revise({
+                genreIds: [...keys]
+                  .map(asGenreId)
+                  .filter((id) => id !== undefined)
+              })
+            }}
+            options={GENRE_IDS.map((id) => ({
+              label: translate(genreLabelKey(id)),
+              value: String(id)
+            }))}
+            selectedKeys={draft.genreIds.map(String)}
+          />
+          {draft.genreIds.length === 0 && (
+            <p className='hint'>{translate('blindtest.genre.none')}</p>
+          )}
+        </div>
       )}
 
       {draft.kind === 'search' && (

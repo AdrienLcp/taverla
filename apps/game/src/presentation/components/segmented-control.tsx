@@ -45,7 +45,7 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({
     <Label>{label}</Label>
     <div className='segments'>
       {options.map((option) => (
-        <Radio key={option.value} value={option.value}>
+        <Radio className='segment' key={option.value} value={option.value}>
           {option.label}
         </Radio>
       ))}

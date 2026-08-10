@@ -61,6 +61,11 @@ one part.
   room of the evening costs one tap instead of typing a name again
 - `[Game]` The room code can be copied, for the half of joining that is not a
   QR code: the host copies it and sends it to someone on a laptop
+- `[Shared]` Several genres at once. The pool is every chosen chart merged, with
+  a track that charts in two of them kept once — otherwise the overlap would be
+  twice as likely to be drawn. Picking none means every genre, which is what the
+  "all" stamp used to say and is now just the default state, and one chart being
+  down thins the pool instead of killing the round
 - `[Shared]` A difficulty, in three steps, from crowd-pleasers to what only the
   experts will name. It is the popularity floor the pool already applied, made
   adjustable — and it stays a Deezer number inside `deezer-client.ts`, because

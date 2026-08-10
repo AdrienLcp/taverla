@@ -79,13 +79,16 @@ export const fetchTracksFor = async ({
   difficulty: TrackDifficulty
   source: TrackSource
 }): Promise<Result<TrackSearchResult[], MusicSourceError>> => {
-  const fetched = await requestList(pathFor(source))
+  const fetched = await Promise.all(pathsFor(source).map(requestList))
+  const reached = fetched.filter((list) => list.status === 'success')
 
-  if (fetched.status === 'failure') {
-    return fetched
+  // One chart of several failing is a thinner pool, not a dead game. Only a
+  // source that answered nothing at all is worth refusing the round over.
+  if (reached.length === 0) {
+    return Result.failure('music_source_unavailable')
   }
 
-  const playable = fetched.data
+  const playable = withoutRepeats(reached.flatMap((list) => list.data))
     .filter((track) => isWorthGuessing(track, difficulty))
     .map(toSearchResult)
 
@@ -93,6 +96,15 @@ export const fetchTracksFor = async ({
     ? Result.failure('no_tracks_available')
     : Result.success(playable)
 }
+
+/**
+ * Deezer puts the same track on more than one genre chart, so a host who picked
+ * both rock and pop would otherwise get a pool where the overlap is twice as
+ * likely to be drawn.
+ */
+const withoutRepeats = (tracks: DeezerTrack[]): DeezerTrack[] => [
+  ...new Map(tracks.map((track) => [track.id, track])).values()
+]
 
 /**
  * Resolved when a round starts, never earlier: preview URLs are signed with an
@@ -130,14 +142,27 @@ const isWorthGuessing = (
   track.preview.length > 0 &&
   (track.rank ?? 0) >= MINIMUM_RANK_BY_DIFFICULTY[difficulty]
 
-const pathFor = (source: TrackSource): string => {
+/** `0` is Deezer's all-genres chart, which is what an empty selection means. */
+const EVERY_GENRE = 0
+
+const pathsFor = (source: TrackSource): string[] => {
   switch (source.kind) {
-    case 'chart':
-      return `/chart/${source.genreId}/tracks?limit=${POOL_SIZE}`
+    case 'chart': {
+      const genreIds =
+        source.genreIds.length === 0 ? [EVERY_GENRE] : source.genreIds
+
+      return genreIds.map(
+        (genreId) => `/chart/${genreId}/tracks?limit=${POOL_SIZE}`
+      )
+    }
     case 'playlist':
-      return `/playlist/${encodeURIComponent(source.playlistId)}/tracks?limit=${POOL_SIZE}`
+      return [
+        `/playlist/${encodeURIComponent(source.playlistId)}/tracks?limit=${POOL_SIZE}`
+      ]
     case 'search':
-      return `/search?q=${encodeURIComponent(source.query)}&limit=${POOL_SIZE}`
+      return [
+        `/search?q=${encodeURIComponent(source.query)}&limit=${POOL_SIZE}`
+      ]
   }
 }
 
