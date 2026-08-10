@@ -4,16 +4,11 @@ import {
   type LinkProps as ReactAriaLinkProps
 } from 'react-aria-components'
 
-import { composeClassName } from './compose-class-name'
+import { type ControlAppearance, controlClassName } from './control-appearance'
 
 import './link.sass'
 
-type LinkProps = ReactAriaLinkProps & {
-  /** Same scale as `Button` (default: `'medium'`). */
-  size?: 'small' | 'medium' | 'large'
-  /** Same weights as `Button` (default: `'filled'`). */
-  variant?: 'filled' | 'outlined' | 'ghost'
-}
+type LinkProps = ReactAriaLinkProps & ControlAppearance
 
 /**
  * A navigation shaped like a control. Client-side routing comes from the
@@ -25,12 +20,17 @@ type LinkProps = ReactAriaLinkProps & {
  */
 export const Link: React.FC<LinkProps> = ({
   className,
-  size = 'medium',
-  variant = 'filled',
+  size,
+  variant,
   ...props
 }) => (
   <ReactAriaLink
     {...props}
-    className={composeClassName(className, 'link', variant, size)}
+    className={controlClassName({
+      className,
+      rootClassName: 'link',
+      size,
+      variant
+    })}
   />
 )

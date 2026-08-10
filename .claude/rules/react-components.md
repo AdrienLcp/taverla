@@ -173,8 +173,15 @@ child are both expected users, and a bare icon asks them to already know.
 ### Two controls that look alike share a mixin, not a component
 
 `Button` and `Link` render different elements for different reasons — one acts,
-one navigates — so neither wraps the other. What they share is the look, and
-that lives in `styles/_control.sass`. Adding a variant means editing one file.
+one navigates — so neither wraps the other. What they share is the look, and it
+is declared once on each side: `styles/_control.sass` holds the rules, and
+`components/control-appearance.ts` holds their names — the `size` and `variant`
+unions, the prop documentation, the defaults, and the class list the two
+components hand to react-aria.
+
+Adding a variant is therefore two edits, one per side, and never four. Both
+components pass `size` and `variant` straight through undefaulted; the fallback
+to `medium` / `filled` belongs to `controlClassName` so the two cannot drift.
 
 ### A pending state must not resize the control
 
