@@ -34,3 +34,18 @@ jobs:
 
       - name: Test
         run: pnpm test
+
+      # Only Chromium: the journeys assert behaviour, not rendering, and a
+      # second engine would double the slowest step to re-check the same thing.
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Test end to end
+        run: pnpm test:e2e
+
+      - if: failure()
+        uses: actions/upload-artifact@v5
+        with:
+          name: playwright-traces
+          path: test-results
+          retention-days: 7

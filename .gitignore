@@ -12,3 +12,6 @@
 
 .claude/settings.local.json
 .playwright-mcp
+
+test-results
+playwright-report

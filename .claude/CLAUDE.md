@@ -36,7 +36,8 @@ pnpm build            # type-check every package, then build the app
 pnpm lint             # biome check --write
 pnpm test             # protocol + core + server
 pnpm test:core:watch  # the red-green loop
-pnpm validate         # build + test — run this before saying something works
+pnpm test:e2e         # two Playwright journeys, on ports of their own
+pnpm validate         # build + test + e2e — run before saying something works
 ```
 
 Ports are offset from 3000/5173 so this repo runs beside other dev servers.
@@ -137,12 +138,14 @@ inventing it now is the abstraction anti-pattern with a different hat on.
 ## The build is staged
 
 `docs/plans/` holds one file per stage, in order, each scoped to a session.
-**00 through 05, 07 and 08 are done** — the game is playable end to end and
-deployed. `docs/plans/README.md` is the authority on which; do not trust this
-paragraph over that table.
+**00 through 08 are done** — the game is playable end to end, deployed, and
+covered by socket suites plus two Playwright journeys.
+`docs/plans/README.md` is the authority on which; do not trust this paragraph
+over that table.
 
-What is left: **06 (testing)** is the standing hole — nothing client-side has an
-automated test, so every UI claim rests on a browser pass. **09 (answer modes)**
-and **10 (per-device audio)** are the two the game asked for while being played.
+What is left: **09 (answer modes)** and **10 (per-device audio)**, the two the
+game asked for while being played. Note what 06 deliberately did *not* buy: no
+component runner exists here, so a claim about a single screen still rests on a
+browser pass.
 
 Start a session by reading the stage's plan. Update it when reality diverges.

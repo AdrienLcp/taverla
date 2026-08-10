@@ -1,6 +1,8 @@
 # Tests
 
-Vitest, in plain Node. `pnpm test` runs `protocol`, `core` and `server`.
+Vitest in plain Node for the rules and the sockets, Playwright for the two
+journeys. `pnpm test` runs `protocol`, `core` and `server`; `pnpm test:e2e`
+runs the journeys; `pnpm validate` runs the lot.
 
 ## Where the tests are, and why they are there
 
@@ -19,7 +21,9 @@ its argument restates the code and gets in the way of the next refactor.
 it('[clock] recovers a known offset from a symmetric round trip', …)
 ```
 
-Tags make a targeted run possible: `pnpm test -- -t "[clock]"`.
+Tags make a targeted run possible — but `-t` is a **regex**, so pass the tag
+without its brackets: `pnpm test -- -t "clock"` matches, while `-t "[room-code]"`
+is a character class with an out-of-order range and vitest refuses to start.
 
 ## A test you have not seen fail is not a test
 
@@ -41,10 +45,33 @@ fixture computed the same way as the code under test cannot disagree with it.
 The mirror of that rule: **never compute an expected UI string from the same
 source the component reads.** Spell the literal out.
 
-## UI is verified in a browser, not asserted into existence
+## The socket suites share one harness
 
-A type-check and a green build say nothing about whether a screen works. Any
-change to what a user sees is verified by driving the real app — see
-`CLAUDE.md`. Component and end-to-end tests arrive with the stage that adds
-them (`docs/plans/`); until then the browser pass is the coverage, and saying a
-UI change is done without one is the lapse.
+`apps/server/src/__tests__/room-harness.ts` boots the app on an ephemeral port
+and hands back `connect`, `openRoom`, `seat` and `stop`. A new suite is a file
+with the two-line `vi.mock` of the music client and its tests — never a second
+copy of the plumbing, and never a second catalogue, because the anti-cheat
+assertion searches raw frames for those exact strings.
+
+## Two journeys, and no third
+
+`e2e/` holds them: a whole game across two browser contexts, and the screen a
+dead socket leaves behind. They run on ports of their own against
+`e2e/deezer-stub.ts`, so neither the dev server nor today's charts can turn them
+red. Locators are roles and accessible names, gathered in `e2e/locators.ts` —
+never a `data-testid`.
+
+Playwright is the slowest tool available. Before adding a third spec, ask what
+it covers that a socket test cannot; the answer is usually "nothing".
+
+## UI is still verified in a browser
+
+There is **no component runner in this repo** — no jsdom, no testing-library —
+and stage 06 left it out on purpose (`docs/plans/06-testing.md`). A type-check
+and a green build say nothing about whether a screen works, and neither does a
+journey that never opens the screen you changed. Any change to what a user sees
+is verified by driving the real app — see `CLAUDE.md`. Saying a UI change is
+done without one is the lapse.
+
+Where a component holds a *decision*, move it into `packages/core` and test it
+there, as `findBuzzBlocker` and `buildScoreboard` already are.
