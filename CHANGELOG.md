@@ -81,6 +81,10 @@ one part.
   room knows which game it is running. No `game` field on the room and no
   registry: a union of one member is the abstraction `docs/game-catalogue.md`
   says to wait for
+- `[Game]` The phone says the game is on hold whichever way the round is being
+  answered. The reason travelled through the buzzer's own blocker, so a grid of
+  four choices and a pair of text fields sat there looking answerable while the
+  server had frozen everything
 - `[Shared]` A host who walks away puts the game on hold instead of leaving it
   running in silence. Their browser is the room's speaker and its only judge, so
   a round without them burned clip time nobody could hear and hung on a verdict

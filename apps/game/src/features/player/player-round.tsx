@@ -2,7 +2,7 @@ import type React from 'react'
 import { useState } from 'react'
 import { Button as ReactAriaButton } from 'react-aria-components'
 
-import type { PlayerRoomView } from '@taverla/protocol/room'
+import type { PlayerRoomView, RoomPhase } from '@taverla/protocol/room'
 
 import { findBuzzBlocker } from '@taverla/core/round/buzz-eligibility'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
@@ -19,6 +19,8 @@ import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { buzzBlockerKey } from '@/presentation/i18n/translation'
 
 import './player-round.sass'
+
+const ROUND_IS_RUNNING = new Set<RoomPhase>(['buzzed', 'countdown', 'playing'])
 
 type PlayerRoundProps = {
   clock: ClockEstimate | null
@@ -37,6 +39,20 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
 }) => {
   const translate = useTranslate()
   const round = view.round
+
+  // Ahead of every mode, because the server has frozen the round and none of
+  // the three screens below would say why. The buzzer carries its own reason
+  // through `findBuzzBlocker`; a grid of choices and a pair of text fields have
+  // nowhere to put one, and would sit there looking answerable.
+  if (!view.isHostConnected && ROUND_IS_RUNNING.has(view.phase)) {
+    return (
+      <section className='player-round centred'>
+        <p className='paused'>
+          {translate('blindtest.buzz.blocked.host_away')}
+        </p>
+      </section>
+    )
+  }
 
   if (view.phase === 'countdown' && round?.audioStartsAt != null) {
     return (
