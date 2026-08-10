@@ -26,6 +26,16 @@ const SEEK_THRESHOLD_MS = 750
 const SILENCE =
   'data:audio/wav;base64,UklGRiwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQgAAACAgICAgICAgA=='
 
+/**
+ * `play()` returns a promise that rejects when the next `load()` cuts it short,
+ * and again when an autoplay policy refuses it. Neither is actionable — the
+ * round is driven by the server either way — and unhandled they reach the
+ * console of the one screen the room is looking at.
+ */
+const play = (audio: HTMLAudioElement): void => {
+  void audio.play().catch(() => {})
+}
+
 export type RoundAudio = {
   /**
    * MUST be called synchronously inside a user gesture, before the first round.
@@ -113,7 +123,7 @@ export const useRoundAudio = ({
         audio.currentTime = elapsedMs / 1_000
       }
 
-      void audio.play()
+      play(audio)
 
       return
     }
@@ -128,7 +138,7 @@ export const useRoundAudio = ({
 
     const startWhenDue = (): void => {
       if (millisecondsUntil(clockRef.current, audioStartsAt, Date.now()) <= 0) {
-        void audio.play()
+        play(audio)
 
         return
       }
@@ -161,9 +171,12 @@ export const useRoundAudio = ({
 
       audio.preload = 'auto'
       audio.volume = volumeRef.current
-      void audio.play().then(() => {
-        audio.pause()
-      })
+      void audio
+        .play()
+        .then(() => {
+          audio.pause()
+        })
+        .catch(() => {})
 
       audioRef.current = audio
     }

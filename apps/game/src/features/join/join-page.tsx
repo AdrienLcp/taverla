@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router'
 
 import { ROOM_CODE_LENGTH } from '@taverla/protocol/identifiers'
 
-import { normalizeRoomCode } from '@taverla/core/room/room-code'
+import { parseRoomCodeInput } from '@taverla/core/room/room-code'
 
 import { createRoom, roomExists } from '@/infrastructure/api/taverla-api'
 import { hostPathFor, playPathFor } from '@/infrastructure/router/navigation'
@@ -54,11 +54,20 @@ export const JoinPage = () => {
   const joinExisting = async (event: FormEvent): Promise<void> => {
     event.preventDefault()
 
-    const normalized = normalizeRoomCode(code)
+    const parsed = parseRoomCodeInput(code)
 
-    if (normalized === null) {
+    if (parsed.status === 'unsupported_characters') {
       setCodeError({
-        key: 'join.roomCode.invalid',
+        key: 'join.roomCode.unsupportedCharacters',
+        values: { characters: parsed.characters.join(', ') }
+      })
+
+      return
+    }
+
+    if (parsed.status === 'wrong_length') {
+      setCodeError({
+        key: 'join.roomCode.wrongLength',
         values: { length: ROOM_CODE_LENGTH }
       })
 
@@ -68,7 +77,7 @@ export const JoinPage = () => {
     setIsJoining(true)
     setCodeError(null)
 
-    const found = await roomExists(normalized)
+    const found = await roomExists(parsed.code)
 
     setIsJoining(false)
 
@@ -84,7 +93,7 @@ export const JoinPage = () => {
       return
     }
 
-    await navigate(playPathFor(normalized))
+    await navigate(playPathFor(parsed.code))
   }
 
   return (

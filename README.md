@@ -29,10 +29,12 @@ answer locks that player out and the clip picks up where the buzz stopped it,
 then a running scoreboard and a final board that keeps everyone for another
 game. English and French, light and dark, on a phone or a laptop.
 
-What is missing is **tests** — nothing client-side has one, so every claim about
-a screen rests on someone driving a browser. That is stage 06. Stages 09 and 10
-(answer modes, per-device audio) came out of playing the game rather than out of
-planning it. See [`docs/plans/`](docs/plans/).
+It is covered end to end: the socket suites drive a real server over real
+sockets, and two Playwright journeys drive the two screens against a stubbed
+catalogue. What is *not* covered is any single component in isolation, on
+purpose — see [`docs/plans/06-testing.md`](docs/plans/06-testing.md). Stages 09
+and 10 (answer modes, per-device audio) came out of playing the game rather than
+out of planning it. See [`docs/plans/`](docs/plans/).
 
 The blind test is the first game rather than the whole product: the room, the QR
 code, the seats, the anti-cheat and the corner menu are a shell several games
@@ -74,7 +76,8 @@ removed.
 | `pnpm lint` | Biome, with fixes applied |
 | `pnpm lint:ci` | Biome, reporting instead of fixing |
 | `pnpm test` | protocol + core + server |
-| `pnpm validate` | build + test |
+| `pnpm test:e2e` | Two Playwright journeys, on their own ports |
+| `pnpm validate` | build + test + e2e |
 
 ## CI
 

@@ -5,7 +5,11 @@ import {
   ROOM_CODE_LENGTH
 } from '@taverla/protocol/identifiers'
 
-import { generateRoomCode, normalizeRoomCode } from './room-code'
+import {
+  generateRoomCode,
+  normalizeRoomCode,
+  parseRoomCodeInput
+} from './room-code'
 
 describe('generateRoomCode', () => {
   it('[room-code] produces a code the wire schema accepts', () => {
@@ -53,6 +57,36 @@ describe('normalizeRoomCode', () => {
     '[room-code] rejects the wrong length %s',
     (input) => {
       expect(normalizeRoomCode(input)).toBeNull()
+    }
+  )
+})
+
+describe('parseRoomCodeInput', () => {
+  it('[room-code] hands back the normalized code when it is one', () => {
+    expect(parseRoomCodeInput(' k3-m9 ')).toEqual({
+      code: 'K3M9',
+      status: 'valid'
+    })
+  })
+
+  it.each([
+    ['5684', ['5']],
+    ['k0m9', ['0']],
+    ['ooo0', ['O', '0']]
+  ])(
+    '[room-code] names the characters no code can contain in %s',
+    (input, characters) => {
+      expect(parseRoomCodeInput(input)).toEqual({
+        characters,
+        status: 'unsupported_characters'
+      })
+    }
+  )
+
+  it.each(['K3M', 'K3M99', ''])(
+    '[room-code] blames the length of %s only once its characters are all legal',
+    (input) => {
+      expect(parseRoomCodeInput(input)).toEqual({ status: 'wrong_length' })
     }
   )
 })

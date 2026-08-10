@@ -53,9 +53,11 @@ export const FR_DICTIONARY: Dictionary = {
   'error.wrong_phase': 'Trop tard, la partie est passée à autre chose.',
 
   'host.autoAdvance': 'Enchaîner tout seul',
+  'host.clip': 'Durée de l’extrait',
   'host.copied': 'Copié',
   'host.copyCode': 'Copier le code',
   'host.copyFailed': 'Copie impossible',
+  'host.countdown': 'Décompte',
   'host.endGame': 'Terminer la partie',
   'host.final.title': 'Score final',
   'host.genre.0': 'Tout',
@@ -80,6 +82,7 @@ export const FR_DICTIONARY: Dictionary = {
   'host.reveal': 'Donner la réponse',
   'host.roomCode': 'Code du salon',
   'host.rounds': 'Tours',
+  'host.seconds': '{seconds} s',
   'host.source.chart': 'Le top du moment',
   'host.source.label': 'D’où viennent les titres',
   'host.source.none':
@@ -105,10 +108,11 @@ export const FR_DICTIONARY: Dictionary = {
   'join.player.action': 'Rejoindre',
   'join.player.title': 'Rejoindre une partie',
   'join.roomCode.description': 'Affiché sur l’écran de l’hôte.',
-  'join.roomCode.invalid':
-    'Un code de salon fait {length} lettres et chiffres.',
   'join.roomCode.label': 'Code du salon',
   'join.roomCode.unknown': 'Aucune partie ne tourne sous ce code.',
+  'join.roomCode.unsupportedCharacters':
+    'Un code de salon ne contient jamais {characters}.',
+  'join.roomCode.wrongLength': 'Un code de salon fait {length} caractères.',
 
   'menu.home': 'Accueil',
   'menu.label': 'Menu',

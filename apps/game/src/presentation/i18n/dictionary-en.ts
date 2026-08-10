@@ -51,9 +51,11 @@ export const EN_DICTIONARY = {
   'error.wrong_phase': 'Too late, the game has moved on.',
 
   'host.autoAdvance': 'Chain rounds by itself',
+  'host.clip': 'Clip length',
   'host.copied': 'Copied',
   'host.copyCode': 'Copy the code',
   'host.copyFailed': 'Could not copy',
+  'host.countdown': 'Countdown',
   'host.endGame': 'End the game',
   'host.final.title': 'Final scores',
   'host.genre.0': 'Everything',
@@ -78,6 +80,7 @@ export const EN_DICTIONARY = {
   'host.reveal': 'Give it away',
   'host.roomCode': 'Room code',
   'host.rounds': 'Rounds',
+  'host.seconds': '{seconds}s',
   'host.source.chart': 'Top charts',
   'host.source.label': 'Where the tracks come from',
   'host.source.none': 'Nothing well-known enough matched. Try another search.',
@@ -102,9 +105,11 @@ export const EN_DICTIONARY = {
   'join.player.action': 'Join',
   'join.player.title': 'Join a game',
   'join.roomCode.description': 'Shown on the host screen.',
-  'join.roomCode.invalid': 'A room code is {length} letters and digits.',
   'join.roomCode.label': 'Room code',
   'join.roomCode.unknown': 'No game is running under that code.',
+  'join.roomCode.unsupportedCharacters':
+    'A room code never contains {characters}.',
+  'join.roomCode.wrongLength': 'A room code is {length} characters long.',
 
   'menu.home': 'Home',
   'menu.label': 'Menu',

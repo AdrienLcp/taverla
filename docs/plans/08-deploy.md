@@ -56,11 +56,42 @@ Verified locally by running the server with `SERVE_GAME_FROM` set: index served,
 `/host/YDEQ` resolving on a cold load, the API answering, the socket connecting
 on the same port, and the QR code encoding that origin.
 
+- **It is live at `taverla.onrender.com`**, redeployed from `main` by Render
+  itself. `/api/health` answers `{"protocolVersion":2,"status":"ok"}` on a warm
+  instance in well under a second.
+
+## The free instance sleeps, and that is accepted for now
+
+After ~15 minutes without traffic Render stops the instance, and the next
+request is held behind Render's own loading page for the 30–60 seconds the
+container takes to come back. A custom domain would change nothing: the veil is
+the plan's, not the URL's.
+
+The arbitration, so it is not reopened for free:
+
+- **Render Starter (7 $/month) is the only thing that removes the cause.** It is
+  the answer the day strangers, rather than Adrien, are the first to open the
+  link.
+- **Fly's scale-to-zero wakes in a second or two and shows no interstitial**, but
+  it now wants a card and a monthly minimum of its own, plus a Dockerfile for the
+  pnpm workspace and a deploy path to replace push-to-`main`. Against Starter's
+  7 $, the migration no longer pays for itself.
+- **Keeping the instance awake with an external ping** costs 744 of the free
+  plan's 750 monthly instance-hours, which leaves no margin and only works while
+  this is the sole free service on the account.
+- **Preheating is what is actually used.** Open the host screen a minute before
+  the guests arrive; the 5-second socket ping keeps it up for the rest of the
+  party, and nobody but the host ever meets the loading page.
+
 ## Still to do
 
-- **The server still runs through `tsx`**, a dev tool, deliberately for now. It
-  costs a slower boot on a free instance that sleeps. Bundling it (`tsdown`,
-  `noExternal` the workspace packages) is the fix when the cold start annoys.
+- **The server still runs through `tsx`**, a dev tool, deliberately. Bundling it
+  (`tsdown`, `noExternal` the workspace packages) was meant as the answer to the
+  cold start, and measuring it demoted the idea: the wait is container
+  scheduling, and stripping types off a few dozen modules is seconds out of
+  tens. It is worth doing for its own sake — a single file, no `pnpm install` at
+  runtime — and it only becomes worth doing *for the boot* on a host that wakes
+  fast enough for those seconds to be the visible ones.
 - **No Dockerfile.** Render's native Node runtime handles the pnpm workspace, so
   there is nothing for one to solve yet.
 - **Rate-limit `POST /api/rooms`** — unauthenticated and it allocates memory.
@@ -86,10 +117,9 @@ mechanism racing it would only be a way to ship a build CI had not seen.
 
 ## Done when
 
-- A phone on mobile data can scan the QR code and play — **not verified**, no
-  deployment exists yet. The repository is published at
-  `AdrienLcp/taverla` (private) with CI green; what remains is one action in
-  Render's own UI, which needs Adrien's account
+- A phone on mobile data can scan the QR code and play — the deployment now
+  exists and answers, so what is left is one real game played over mobile data
+  rather than another local run
 - `/play/K3M9` resolves on a cold load, not only via client navigation
 - The socket survives ten minutes idle — check the platform's idle timeout, and
   note that the 5-second ping already keeps it warm
