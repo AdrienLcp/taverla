@@ -78,13 +78,20 @@ copy that drifted would still pass.
 
 `e2e/` holds them: a whole buzzer game across two browser contexts, two phones
 answering over the same clip in a simultaneous one, and the screen a dead socket
-leaves behind. The third earns its place because the two shapes are opposites —
+leaves behind. The second earns its place because the two shapes are opposites —
 one player taking the floor against everyone writing at once — and neither is a
 rule a socket suite could stand in for: it is two browsers, two forms, and a
 screen that has to end up showing both answers. They run on ports of their own against
 `e2e/support/deezer-stub.ts`, so neither the dev server nor today's charts can
 turn them red. Locators are roles and accessible names, gathered in
 `e2e/support/locators.ts` — never a `data-testid`.
+
+**One journey per door**, which is how the room-first flow got covered without a
+fourth: the buzzer game goes through the front page and picks its game on the
+console, and the simultaneous one goes through a game's own page. Both pages
+carry a **"Create a room"** — clicking before the navigation lands opens a room
+with no game, and that failure surfaces a minute later at a launch that stays
+greyed out, so the landing is awaited between the two clicks.
 
 **Everything Playwright owns lives in `e2e/`**, config included: `ls e2e`
 answers "which journeys exist?" and nothing else, and `support/` holds the two

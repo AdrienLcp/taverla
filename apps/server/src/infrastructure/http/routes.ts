@@ -83,7 +83,7 @@ export const registerHttpRoutes = (app: Hono): void => {
     zValidator('json', createRoomRequestSchema),
     (context) => {
       const room = createRoom({
-        game: context.req.valid('json').game,
+        game: context.req.valid('json').game ?? null,
         now: Date.now()
       })
 

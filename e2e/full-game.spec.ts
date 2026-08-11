@@ -1,17 +1,18 @@
 import { expect, test } from '@playwright/test'
 
-import {
-  blindTestHome,
-  homePage,
-  hostConsole,
-  playerScreen
-} from './support/locators'
+import { homePage, hostConsole, playerScreen } from './support/locators'
 
 const NICKNAME = 'Zoe'
 
 /** Spelled out rather than imported from the stub, which is the code under test here. */
 const CATALOGUE_TITLES = ['Around the World', 'Genesis', 'Sexy Boy']
 
+/**
+ * Through the front door, which is the ordinary way in: the room is opened with
+ * nothing chosen and the game is picked on the console while the phone arrives.
+ * A game's own page is the shortcut, and `everyone-answers.spec.ts` goes that
+ * way — one journey per door.
+ */
 test('[e2e] a room, a scan, a buzz, a verdict and a point', async ({
   browser
 }) => {
@@ -22,9 +23,13 @@ test('[e2e] a room, a scan, a buzz, a verdict and a point', async ({
   const player = playerScreen(phone)
 
   await bigScreen.goto('/')
-  await homePage(bigScreen).blindTest.click()
-  await blindTestHome(bigScreen).createRoom.click()
+  await homePage(bigScreen).createRoom.click()
   await expect(bigScreen).toHaveURL(/\/host\/[A-Z0-9]{4}$/)
+
+  // Nothing is playable until the table has decided, which is what the launch
+  // says while it is greyed out.
+  await expect(host.startGame).toBeDisabled()
+  await host.pickBlindTest.click()
 
   await host.openSettings.click()
   await host.buzzerMode.click()

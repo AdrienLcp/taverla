@@ -13,11 +13,12 @@ export const LobbyActions: React.FC<HostActionsProps> = ({
 }) => {
   const translate = useTranslate()
   const isRoomEmpty = view.players.length === 0
+  const hasNoGame = view.settings.game === null
 
   return (
     <>
       <Button
-        isDisabled={!isLive || isRoomEmpty}
+        isDisabled={!isLive || isRoomEmpty || hasNoGame}
         onPress={() => {
           onOpenRound()
           send({ type: 'host.startRound' })
@@ -26,7 +27,16 @@ export const LobbyActions: React.FC<HostActionsProps> = ({
       >
         {translate('host.startGame')}
       </Button>
-      {isRoomEmpty && <p className='reason'>{translate('host.needsPlayer')}</p>}
+      {/*
+        The game first when both are missing: it is the decision on the stage
+        the host is already looking at, where the roster fills itself as phones
+        arrive. The server refuses either way — see `no_game_chosen`.
+      */}
+      {hasNoGame ? (
+        <p className='reason'>{translate('host.needsGame')}</p>
+      ) : (
+        isRoomEmpty && <p className='reason'>{translate('host.needsPlayer')}</p>
+      )}
     </>
   )
 }

@@ -26,13 +26,21 @@ const DEFAULT_ROUND_COUNT: Record<GameKind, number | null> = {
  * What a freshly opened room is set to. The shell's defaults, with the three
  * fields the game gets a say in — which game, how it is answered, and how long
  * the evening runs.
+ *
+ * `null` is a room opened from the front door, where the code goes up before
+ * anybody has decided what to play. It is the shell's defaults and nothing
+ * else: the three fields below are the game's to answer, and there is no game
+ * yet to answer them.
  */
-export const roomSettingsFor = (game: GameKind): RoomSettings => ({
-  ...DEFAULT_ROOM_SETTINGS,
-  game: DEFAULT_GAME_SETTINGS[game],
-  mode: modeOfferedBy({ game, preferred: DEFAULT_ROOM_SETTINGS.mode }),
-  roundCount: DEFAULT_ROUND_COUNT[game]
-})
+export const roomSettingsFor = (game: GameKind | null): RoomSettings =>
+  game === null
+    ? DEFAULT_ROOM_SETTINGS
+    : {
+        ...DEFAULT_ROOM_SETTINGS,
+        game: DEFAULT_GAME_SETTINGS[game],
+        mode: modeOfferedBy({ game, preferred: DEFAULT_ROOM_SETTINGS.mode }),
+        roundCount: DEFAULT_ROUND_COUNT[game]
+      }
 
 /**
  * The same room, playing something else. The three fields a game gets a say in
@@ -84,5 +92,5 @@ export const reshapesRound = ({
   to: RoomSettings
 }): boolean =>
   from.mode.kind !== to.mode.kind ||
-  from.game.kind !== to.game.kind ||
+  from.game?.kind !== to.game?.kind ||
   roundDurationMsOf(from.game) !== roundDurationMsOf(to.game)

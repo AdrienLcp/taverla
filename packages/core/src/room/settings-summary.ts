@@ -18,9 +18,11 @@ export type SettingsSummaryPart =
 
 /**
  * What the fold says while it is closed. Only the round count is always there:
- * a game the shelf cannot name is one the room was *moved* to rather than
- * opened on, the source belongs to the blind test alone, and a game offering a
- * single answer mode has nothing to report about the choice nobody made.
+ * a room whose game nobody has picked has nothing to say about the game or
+ * about how it is answered, a game the shelf cannot name is one the room was
+ * *moved* to rather than opened on, the source belongs to the blind test alone,
+ * and a game offering a single answer mode has nothing to report about the
+ * choice nobody made.
  *
  * It reads the draft source rather than the committed one, because the picker
  * commits on the launch — a summary that waited for that would contradict the
@@ -35,6 +37,10 @@ export const settingsSummary = ({
 }): SettingsSummaryPart[] => {
   const game = settings.game
   const parts: SettingsSummaryPart[] = []
+
+  if (game === null) {
+    return [{ count: settings.roundCount, kind: 'roundCount' }]
+  }
 
   if (isShelvedGame(game.kind)) {
     parts.push({ game: game.kind, kind: 'game' })

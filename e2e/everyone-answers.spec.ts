@@ -25,8 +25,15 @@ test('[e2e] two phones type over the same clip, and the reveal says what they sa
 
   const host = hostConsole(bigScreen)
 
+  // Through the game's own page, which is the shortcut: the room opens already
+  // set to a blind test. `full-game.spec.ts` goes through the front door.
+  //
+  // The landing is awaited rather than assumed, because both pages carry a
+  // "Create a room" and clicking the wrong one opens a room with no game — a
+  // race that fails much later, at a launch that stays greyed out.
   await bigScreen.goto('/')
   await homePage(bigScreen).blindTest.click()
+  await expect(bigScreen).toHaveURL('/blindtest')
   await blindTestHome(bigScreen).createRoom.click()
   await expect(bigScreen).toHaveURL(/\/host\/[A-Z0-9]{4}$/)
 

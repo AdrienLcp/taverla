@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { DEFAULT_BLINDTEST_SETTINGS, gameSettingsSchema } from './game'
+import { gameSettingsSchema } from './game'
 import {
   nicknameSchema,
   playerIdSchema,
@@ -91,8 +91,18 @@ export const roomSettingsSchema = z.object({
   /**
    * Which game the room is playing, and the settings only that game has. The
    * room keeps what every game needs and hands the rest here — see `game.ts`.
+   *
+   * `null` until somebody chooses, because a room is opened before a game is
+   * picked: the code goes up, the phones arrive, and the table decides while
+   * they do. That is the whole reason this is nullable rather than opening on a
+   * default — a default would have the lobby and every phone name a game nobody
+   * chose, and there would be no way to say "still deciding" at all.
+   *
+   * It is also what makes the rest type-check: the guard on `host.startRound`
+   * *is* the narrowing every downstream call needs, the same way
+   * `registerBuzz`'s guard is what produces the answer window.
    */
-  game: gameSettingsSchema,
+  game: gameSettingsSchema.nullable(),
   /** How a round is answered, and the settings only that mode has. */
   mode: modeSettingsSchema,
   /**
@@ -125,7 +135,8 @@ export const DEFAULT_MODE_SETTINGS: Record<AnswerMode, ModeSettings> = {
 export const DEFAULT_ROOM_SETTINGS: RoomSettings = {
   autoAdvanceMs: null,
   countdownMs: 3_000,
-  game: DEFAULT_BLINDTEST_SETTINGS,
+  /** A freshly opened room is a code on a screen; the game is the table's first decision. */
+  game: null,
   /**
    * Everyone plays every round, which is what a party wants: the buzzer gives
    * the floor to whoever is quickest and leaves the rest of the room watching.

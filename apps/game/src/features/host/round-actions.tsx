@@ -18,8 +18,8 @@ export const RoundActions: React.FC<RoundActionsProps> = ({
   // own. A charade has no such clock: once the quickest thumbs have all missed,
   // only the host can give the round back to the room.
   const isFieldClosed =
-    view.settings.game.kind === 'buzzer' &&
-    (view.round?.lockedOutPlayerIds.length ?? 0) > 0
+    view.round?.content.kind === 'buzzer' &&
+    view.round.lockedOutPlayerIds.length > 0
 
   return (
     <>

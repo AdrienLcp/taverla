@@ -122,13 +122,19 @@ string written into a component is a bug, not a shortcut — see
   and the server then stops sending it the track
 - **Player** — anyone who joined, by scanning the QR code or by typing the room
   code. Holds a seat and a score
-- **Game** — what the room is playing. `blindtest`, `buzzer`, `quiz`;
-  `shelvedGames` is the ones a room may actually be opened for, and the
-  create-room request carries which. It holds all three today, and must not
-  collapse into `gameKinds`: it is what refuses a game that is served but has no
-  screens yet, and every game so far has spent a stage in that window. The game
-  owns its arm of `settings.game` and `round.content`, and narrows the room's
-  answer mode
+- **Game** — what the room is playing, and **`null` until somebody says**. A
+  room is opened before the table decides: the code goes up, the phones arrive,
+  and the picker is on the lobby stage beside the QR code. The guard on
+  `host.startRound` is what narrows it for everything downstream — and a round
+  already on screen is asked `round.content`, not `settings.game`, because that
+  is the game it was *opened* on.
+
+  `blindtest`, `buzzer`, `quiz`; `shelvedGames` is the ones a game's own front
+  door may open a room for, and the create-room request carries which when it
+  came through one. It holds all three today, and must not collapse into
+  `gameKinds`: it is what refuses a game that is served but has no screens yet,
+  and every game so far has spent a stage in that window. The game owns its arm
+  of `settings.game` and `round.content`, and narrows the room's answer mode
 - **Round** — one track, one question, or nothing at all.
   `lobby → countdown → playing → buzzed → revealed`. `roundCount` is nullable,
   and `null` means until the host ends it
@@ -231,6 +237,13 @@ The **question language** is a room setting the UI deliberately does not offer:
 every row in the bank is French, so shipping the control would ship an option
 that always fails. The field stays in the protocol, and a second bank makes it
 one `if` in the settings panel.
+
+**13 is done: the room comes first.** `/` creates a room with nothing chosen and
+the game is picked on the console, so `settings.game` is nullable and
+`PROTOCOL_VERSION` is 9. A game's own page keeps its button as a shortcut. Read
+`docs/plans/13-room-first.md` before touching anything that reads
+`settings.game` — three of the sites it swept were reading it where
+`round.content` was the honest source.
 
 Read the divergences at the end of `docs/plans/11-buzzer.md` before trusting a
 detail written earlier in that file: the second game corrected the first half in

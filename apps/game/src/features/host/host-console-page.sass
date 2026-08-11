@@ -100,7 +100,29 @@
         overflow-wrap: anywhere
         user-select: text
 
-    // The host's own column, beside the invitation the room is reading.
+    // The host's own column, beside the invitation the room is reading: what
+    // they are about to play, and who has turned up for it.
+    .host-side
+      display: flex
+      flex-direction: column
+      gap: clamp(var(--space-l), 4vmin, var(--space-2xl))
+      min-width: 0
+
+    // The one decision a freshly opened room is waiting on, so it is on the
+    // stage rather than folded away with the numbers.
+    .game-choice
+      display: flex
+      flex-direction: column
+      gap: var(--space-s)
+      min-width: 0
+
+      .pitch,
+      .prompt
+        @include typography.caption
+
+        color: var(--ink-muted)
+        text-wrap: pretty
+
     .roster
       display: flex
       flex-direction: column

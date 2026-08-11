@@ -8,6 +8,18 @@ one part.
 
 ### Features
 
+- **The room comes first and the game second.** The front page creates a room —
+  the code goes up, the phones arrive, and the table picks the game on the
+  console while they do, beside the QR code everyone is already looking at. A
+  game's own page keeps its button and becomes a shortcut for a host who knows
+  what they came to play; it stays a page rather than a link that opens a room,
+  because a GET that mutates is a link preview in a group chat opening rooms
+- `[Game]` A phone in a lobby says which of two things is happening: "the host
+  is choosing a game", or "you are about to play *X*" with what the evening
+  pays. That last sentence used to sit on a "waiting for the host" screen
+  reached between rounds — the lobby is where the waiting actually is, and the
+  only moment nobody is against a clock
+
 - **The quiz is the third game on the shelf**, playable in all three modes on
   1 800 French questions bundled with the server — ninety-two of them adult and
   drawn only for a room whose host asked. Everything a round needs is in the
@@ -64,6 +76,19 @@ one part.
 
 ### Internal
 
+- The game picker is on the lobby stage and in the settings fold, one at a time.
+  While the room fills up the game is the decision everyone is waiting on, so it
+  sits beside the QR code with the chosen game's pitch under it; once a round
+  has run it is a setting like the countdown
+- `useCreateRoom` holds the one trip to the network both front doors make. The
+  shelf's page opens a room with nothing chosen, a game's page carries which,
+  and the console either lands on is the same
+- **One journey per door, rather than a fourth.** `full-game.spec.ts` goes
+  through the front page and picks the game on the console — the ordinary way
+  in — and `everyone-answers.spec.ts` keeps the shortcut. Writing it turned up a
+  trap worth the comment it now carries: both pages have a "Create a room", so a
+  click landing before the navigation opens a room with no game, and the failure
+  surfaces a minute later at a launch that stays greyed out
 - The third game moved four strings out of the first two's namespaces, which is
   the i18n rule's own test working: "would the second game show this
   unchanged?". The host's right/wrong pair is `host.verdict.*` where it was the
@@ -115,6 +140,23 @@ one part.
 
 ### Breaking Changes
 
+- `[Shared]` `settings.game` is **nullable**, `POST /api/rooms` no longer
+  requires a game, and `PROTOCOL_VERSION` goes to 9. Opening on a default was
+  the cheap answer and was rejected: the lobby summary and every phone would
+  have named a game nobody chose, and "still deciding" could not be expressed at
+  all. The nullable costs a null case at some fifteen sites and buys what this
+  repo argues for everywhere else — the guard on `host.startRound` *is* the
+  narrowing that makes every downstream call type-check, exactly as
+  `registerBuzz`'s guard is what produces the answer window.
+
+  Three of those sites turned out to be reading the wrong field: `applyVerdict`,
+  `timeOutBuzz` and the lockout button ask `round.content` which game they are
+  in, because that is the game the round was *opened* on. `settings.game` is
+  what the room is set to next
+- `[Shared]` `no_game_chosen` is the refusal a room with no game answers a
+  launch with. Its own code rather than `wrong_phase`, because the phase is
+  right — the lobby is exactly where this happens — and what is missing is a
+  decision the host can make on the screen in front of them
 - `[Shared]` A room may be opened on the quiz, and `PROTOCOL_VERSION` goes to 8
   — so a tab left open across the deploy reloads instead of meeting a round it
   cannot render. `shelvedGames` and `gameKinds` now hold the same three, which

@@ -28,7 +28,8 @@ export const createRoom = ({
   game,
   now
 }: {
-  game: GameKind
+  /** `null` from the front door, where the code goes up before anybody has decided. */
+  game: GameKind | null
   now: number
 }): Room | null => {
   const code = drawUnusedCode()

@@ -331,7 +331,7 @@ export const startRoomHarness = async (): Promise<RoomHarness> => {
     nickname?: string
   ) => {
     const response = await fetch(`http://${origin}/api/rooms`, {
-      body: JSON.stringify({ game: settings.game.kind }),
+      body: JSON.stringify({ game: settings.game?.kind }),
       headers: { 'content-type': 'application/json' },
       method: 'POST'
     })

@@ -137,7 +137,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   const isHeldByRound = isDisabled || isRoundInPlay
   const game = settings.game
   const mode = settings.mode
-  const offeredModes = answerModesFor(game.kind)
+  const offeredModes = answerModesFor(game?.kind ?? null)
 
   const secondsLabel = (milliseconds: number): string =>
     translate('host.seconds', { seconds: milliseconds / 1_000 })
@@ -145,36 +145,45 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   return (
     <section className='settings-panel'>
       {/*
-        Hidden rather than disabled when the game offers one mode: a control
-        with a single segment asks the host to choose something they have no
-        choice about.
+        Nothing about answering until there is a game to answer: which modes are
+        on offer is the game's to narrow, and what a round pays is the game's to
+        say.
       */}
-      {offeredModes.length > 1 && (
-        <SegmentedControl
-          isDisabled={isHeldByRound}
-          label={translate('host.answerMode.label')}
-          onChange={(next) => {
-            if (isAnswerMode(next)) {
-              onChange({ ...settings, mode: DEFAULT_MODE_SETTINGS[next] })
-            }
-          }}
-          options={offeredModes.map((offered) => ({
-            label: translate(answerModeLabelKey(offered)),
-            value: offered
-          }))}
-          value={mode.kind}
-        />
+      {game !== null && (
+        <>
+          {/*
+            Hidden rather than disabled when the game offers one mode: a control
+            with a single segment asks the host to choose something they have no
+            choice about.
+          */}
+          {offeredModes.length > 1 && (
+            <SegmentedControl
+              isDisabled={isHeldByRound}
+              label={translate('host.answerMode.label')}
+              onChange={(next) => {
+                if (isAnswerMode(next)) {
+                  onChange({ ...settings, mode: DEFAULT_MODE_SETTINGS[next] })
+                }
+              }}
+              options={offeredModes.map((offered) => ({
+                label: translate(answerModeLabelKey(offered)),
+                value: offered
+              }))}
+              value={mode.kind}
+            />
+          )}
+          {/*
+            Under the control that chooses it rather than on the screen where it
+            is played: the lobby is the only moment nobody is against a clock,
+            and the host is the one deciding what the evening will be worth.
+          */}
+          <p className='hint'>
+            {translate(scoringKey({ answerMode: mode.kind, game: game.kind }))}
+          </p>
+        </>
       )}
-      {/*
-        Under the control that chooses it rather than on the screen where it is
-        played: the lobby is the only moment nobody is against a clock, and the
-        host is the one deciding what the evening will be worth.
-      */}
-      <p className='hint'>
-        {translate(scoringKey({ answerMode: mode.kind, game: game.kind }))}
-      </p>
 
-      {game.kind === 'blindtest' && (
+      {game?.kind === 'blindtest' && (
         <SegmentedControl
           isDisabled={isDisabled}
           label={translate('blindtest.difficulty.label')}
@@ -191,7 +200,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         />
       )}
 
-      {game.kind === 'buzzer' && (
+      {game?.kind === 'buzzer' && (
         <Switch
           isDisabled={isDisabled}
           isSelected={game.locksOutOnMiss}
@@ -202,7 +211,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         />
       )}
 
-      {game.kind === 'quiz' && (
+      {game?.kind === 'quiz' && (
         <>
           <ToggleGroup
             isDisabled={isDisabled}
@@ -255,7 +264,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         value={settings.roundCount ?? NO_LIMIT}
       />
 
-      {game.kind === 'blindtest' && (
+      {game?.kind === 'blindtest' && (
         <NumberChoice
           isDisabled={isHeldByRound}
           label={translate('blindtest.clip')}
@@ -268,7 +277,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         />
       )}
 
-      {game.kind === 'quiz' && (
+      {game?.kind === 'quiz' && (
         <NumberChoice
           isDisabled={isHeldByRound}
           label={translate('quiz.duration')}

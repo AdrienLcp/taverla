@@ -7,8 +7,10 @@ import type { Page } from '@playwright/test'
  * is the exception, not a licence to add test ids.
  */
 export const homePage = (page: Page) => ({
-  /** The shelf's card for the blind test, which is where a room is opened. */
-  blindTest: page.getByRole('link', { name: 'Blind test' })
+  /** The shelf's card for the blind test — the shortcut, not the way in. */
+  blindTest: page.getByRole('link', { name: 'Blind test' }),
+  /** The front door: a room with nothing chosen yet. */
+  createRoom: page.getByRole('button', { name: 'Create a room' })
 })
 
 export const blindTestHome = (page: Page) => ({
@@ -31,6 +33,14 @@ export const hostConsole = (page: Page) => ({
   joinUrl: page.locator('.join-url'),
   /** The settings fold away, so anything inside them is opened before it is reached. */
   openSettings: page.getByRole('button', { name: 'Settings' }),
+  /**
+   * One picker exists at a time: the lobby keeps it on the stage, every later
+   * phase keeps it with the settings. The label rather than the radio it names,
+   * same reason as `buzzerMode`.
+   */
+  pickBlindTest: page
+    .getByRole('radiogroup', { name: 'Which game' })
+    .getByText('Blind test', { exact: true }),
   refusal: page.getByRole('heading', {
     name: 'That room does not exist.'
   }),

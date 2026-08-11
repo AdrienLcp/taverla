@@ -21,6 +21,24 @@
     h1
       @include typography.billboard
 
+    .start
+      display: flex
+      flex-direction: column
+      gap: var(--space-xs)
+
+    .aside
+      @include typography.caption
+
+      color: var(--ink-muted)
+
+    .error
+      @include typography.caption
+
+      background: var(--danger)
+      color: var(--danger-ink)
+      font-weight: 700
+      padding: var(--space-2xs) var(--space-s)
+
     .shelf
       display: flex
       flex-direction: column

@@ -13,6 +13,13 @@ export const protocolErrorCodes = [
   'stale_round',
   'already_buzzed',
   'player_locked_out',
+  /**
+   * A round was asked for in a room whose game nobody has picked yet. Its own
+   * code rather than `wrong_phase`, because the phase is right — the lobby is
+   * exactly where this happens — and what is missing is a decision the host can
+   * make on the screen they are looking at.
+   */
+  'no_game_chosen',
   'no_content_available',
   'music_source_unavailable',
   'rate_limited',

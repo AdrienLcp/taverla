@@ -86,10 +86,11 @@ export type QuizSettings = Extract<GameSettings, { kind: 'quiz' }>
  * How long a round stays open unanswered, or `null` for a game that has no such
  * clock. The bare buzzer is the `null`: nothing is being played or displayed, so
  * there is nothing for the room to run out of — the round ends when someone is
- * right or when the host says so.
+ * right or when the host says so. A room with no game yet is the same answer for
+ * a different reason: there is no round to run out.
  */
-export const roundDurationMsOf = (game: GameSettings): number | null =>
-  game.kind === 'buzzer' ? null : game.roundDurationMs
+export const roundDurationMsOf = (game: GameSettings | null): number | null =>
+  game === null || game.kind === 'buzzer' ? null : game.roundDurationMs
 
 /**
  * Whether a wrong answer sits the player out for the rest of the round. Only the
@@ -97,8 +98,8 @@ export const roundDurationMsOf = (game: GameSettings): number | null =>
  * runs out on its own, so a table that could buzz forever would spend it in
  * seconds.
  */
-export const locksOutOnMissIn = (game: GameSettings): boolean =>
-  game.kind === 'buzzer' ? game.locksOutOnMiss : true
+export const locksOutOnMissIn = (game: GameSettings | null): boolean =>
+  game?.kind === 'buzzer' ? game.locksOutOnMiss : true
 
 export const DEFAULT_BLINDTEST_SETTINGS: BlindtestSettings = {
   difficulty: 'wellKnown',

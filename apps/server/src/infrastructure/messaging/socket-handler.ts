@@ -414,7 +414,30 @@ export const createRoomSocketEvents = (
       return
     }
 
+    if (refuseWithoutGame(outbound, room)) {
+      return
+    }
+
     void beginRound(room)
+  }
+
+  /**
+   * The room is opened before the table decides, so "no game yet" is an
+   * ordinary state rather than a broken one — and the console greys the launch
+   * out, which is a courtesy. This is the rule.
+   */
+  const refuseWithoutGame = (outbound: Outbound, room: Room): boolean => {
+    if (room.settings.game !== null) {
+      return false
+    }
+
+    sendError(outbound, {
+      code: 'no_game_chosen',
+      fatal: false,
+      message: 'The room has no game yet'
+    })
+
+    return true
   }
 
   const judge = (
@@ -550,6 +573,10 @@ export const createRoomSocketEvents = (
       return
     }
 
+    if (refuseWithoutGame(outbound, room)) {
+      return
+    }
+
     void beginRound(room)
   }
 
@@ -599,10 +626,12 @@ export const createRoomSocketEvents = (
   ): void => {
     // The two fields travel together and the panel sends them so, but a socket
     // is whatever its owner makes it — and a typed field over a game that
-    // serves nothing is a round no player could ever answer.
+    // serves nothing is a round no player could ever answer. A room with no
+    // game narrows nothing yet, and `movedToGame` is what narrows the mode the
+    // moment one is picked.
     if (
       !offersAnswerMode({
-        game: settings.game.kind,
+        game: settings.game?.kind ?? null,
         mode: settings.mode.kind
       })
     ) {

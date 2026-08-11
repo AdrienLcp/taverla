@@ -237,7 +237,7 @@ export const timeOutBuzz = ({
     playerId: buzzer,
     room,
     roundId,
-    verdict: nothingScored(room.settings.game.kind)
+    verdict: nothingScored(room.round.content.kind)
   })
 
   return judged.status === 'success' ? judged.data : null
@@ -596,8 +596,10 @@ export const applyVerdict = ({
   }
 
   // Two independent halves would pay twice for one charade, and a host socket
-  // is as forgeable as a player's.
-  if (verdict.kind !== verdictKindFor(room.settings.game.kind)) {
+  // is as forgeable as a player's. The round's own content says which game it
+  // was opened on, which is the truth `settings.game` can only agree with — the
+  // server refuses a game switched under a round in play.
+  if (verdict.kind !== verdictKindFor(round.content.kind)) {
     return Result.failure('invalid_message')
   }
 

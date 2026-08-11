@@ -50,6 +50,14 @@ export const beginRound = async (room: Room): Promise<void> => {
 
   const game = room.settings.game
 
+  // Nobody has chosen what the room is playing, so there is nothing to open a
+  // round on. The socket refuses `host.startRound` with a code the host can
+  // read; this is the floor under the paths nobody pressed — an auto-advance,
+  // or a game cleared between two rounds.
+  if (game === null) {
+    return
+  }
+
   // No catalogue, no network call, and nothing to fail — the room already holds
   // the question. Opening the round is the whole of serving this game.
   if (game.kind === 'buzzer') {

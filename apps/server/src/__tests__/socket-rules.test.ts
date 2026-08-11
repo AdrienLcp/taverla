@@ -8,6 +8,7 @@ import {
 } from '@taverla/protocol/server-message'
 import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
+import { roomSettingsFor } from '@taverla/core/room/room-settings'
 import {
   type ClockSample,
   estimateClockOffset,
@@ -137,6 +138,40 @@ describe('the rules every socket obeys', () => {
     expect(playerView(reloaded)?.players).toEqual([
       { id: aliceId, isConnected: true, nickname: 'Alice', score: 2 }
     ])
+  })
+
+  // The room is opened before the table decides, so a lobby with no game is an
+  // ordinary state. The console greys the launch out; this is the rule under
+  // it, and the code is its own because the phase is right and the decision is
+  // what is missing.
+  it('[settings] refuses to open a round in a room with no game', async () => {
+    const { code, host } = await room.openRoom(roomSettingsFor(null))
+
+    await room.seat({ code, nickname: 'Alice' })
+    host.send({ type: 'host.startRound' })
+    await waitFor(() => errorsIn(host).length > 0, 'the refusal')
+
+    expect(errorsIn(host)[0]).toMatchObject({
+      code: 'no_game_chosen',
+      fatal: false
+    })
+    expect(hostView(host)?.phase).toBe('lobby')
+  })
+
+  it('[settings] opens the round once the table has picked one', async () => {
+    const { code, host } = await room.openRoom(roomSettingsFor(null))
+
+    await room.seat({ code, nickname: 'Alice' })
+    host.send({ settings: FAST_GAME, type: 'host.updateSettings' })
+    await waitFor(
+      () => hostView(host)?.settings.game?.kind === 'blindtest',
+      'the game'
+    )
+
+    host.send({ type: 'host.startRound' })
+    await waitFor(() => hostView(host)?.phase === 'playing', 'the clip')
+
+    expect(errorsIn(host)).toEqual([])
   })
 
   it('[settings] takes a countdown the host moves mid-round, for the next one', async () => {

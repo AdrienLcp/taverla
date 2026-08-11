@@ -29,7 +29,8 @@ const TOO_MANY_REQUESTS = 429
  * through the socket instead — see `infrastructure/messaging`.
  */
 export const createRoom = async (
-  game: ShelvedGame
+  /** Omitted by the shelf's own front door: the room is opened, then the table decides. */
+  game?: ShelvedGame
 ): Promise<Result<CreateRoomResponse, ApiError>> =>
   request('/api/rooms', createRoomResponseSchema, {
     body: JSON.stringify({ game } satisfies CreateRoomRequest),

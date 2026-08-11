@@ -8,6 +8,7 @@ import type {
   RoundView
 } from '@taverla/protocol/room'
 
+import { isShelvedGame } from '@taverla/core/room/shelved-game'
 import { findBuzzBlocker } from '@taverla/core/round/buzz-eligibility'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
@@ -23,7 +24,11 @@ import { Countdown } from '@/presentation/components/countdown'
 import { FloorClock } from '@/presentation/components/floor-clock'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
-import { buzzBlockerKey, scoringKey } from '@/presentation/i18n/translation'
+import {
+  buzzBlockerKey,
+  gameNameKey,
+  scoringKey
+} from '@/presentation/i18n/translation'
 
 import './player-round.sass'
 
@@ -55,6 +60,17 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
     return (
       <section className='player-round centred'>
         <p className='paused'>{translate('buzz.blocked.host_away')}</p>
+      </section>
+    )
+  }
+
+  // The room fills up while the table decides, so this is where a phone waits
+  // longest — and the only moment nobody is against a clock, which is why it is
+  // where what the evening pays is explained.
+  if (view.phase === 'lobby') {
+    return (
+      <section className='player-round centred'>
+        <UpNext view={view} />
       </section>
     )
   }
@@ -122,26 +138,47 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
     }
   }
 
-  // A phone waiting in a typed or choice game used to be shown a dead buzzer,
-  // which is a promise the round will not keep. The wait is also the only
-  // moment nobody is against a clock, so it is where the scoring is explained.
+  // A phone between two rounds in a typed or choice game used to be shown a
+  // dead buzzer, which is a promise the round will not keep.
   if (view.settings.mode.kind !== 'buzzer') {
     return (
       <section className='player-round centred'>
         <p className='waiting'>{translate('buzz.blocked.round_not_running')}</p>
-        <p className='how-it-scores'>
-          {translate(
-            scoringKey({
-              answerMode: view.settings.mode.kind,
-              game: view.settings.game.kind
-            })
-          )}
-        </p>
       </section>
     )
   }
 
   return <Buzzer clock={clock} onBuzz={onBuzz} view={view} />
+}
+
+/**
+ * What this phone is about to play, which is the honest answer to a lobby: the
+ * room is opened before the table decides, so "the host is choosing" is a state
+ * and not a gap. Once they have, the game names itself and says what it pays —
+ * the same pitch the shelf shows, on the screen the player is holding.
+ */
+const UpNext = ({ view }: { view: PlayerRoomView }) => {
+  const translate = useTranslate()
+  const game = view.settings.game
+
+  if (game === null || !isShelvedGame(game.kind)) {
+    return <p className='waiting'>{translate('player.choosingGame')}</p>
+  }
+
+  return (
+    <>
+      <p className='framing'>{translate('player.upNext')}</p>
+      <p className='up-next'>{translate(gameNameKey(game.kind))}</p>
+      <p className='how-it-scores'>
+        {translate(
+          scoringKey({
+            answerMode: view.settings.mode.kind,
+            game: game.kind
+          })
+        )}
+      </p>
+    </>
+  )
 }
 
 const Buzzer = ({

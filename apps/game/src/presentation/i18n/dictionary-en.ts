@@ -135,6 +135,7 @@ export const EN_DICTIONARY = defineTranslations({
     music_source_unavailable: 'The music service is not answering.',
     nickname_taken: 'Someone already took that nickname.',
     no_content_available: 'Nothing left to play. Try other settings.',
+    no_game_chosen: 'Pick a game first.',
     not_implemented: 'That part of the game is not built yet.',
     player_locked_out: 'You are out for this round.',
     protocol_version_mismatch: 'This page is out of date. Reload it.',
@@ -182,11 +183,15 @@ export const EN_DICTIONARY = defineTranslations({
       tie: 'It is a tie',
       winner: 'The winner'
     },
-    game: 'Which game',
+    game: {
+      label: 'Which game',
+      prompt: 'Pick one and the room is set. You can change your mind later.'
+    },
     invite: {
       title: 'Scan to play'
     },
     joinLate: 'Still open',
+    needsGame: 'Pick what the room is playing',
     needsPlayer: 'The game needs at least one player',
     nextRound: 'Next round',
     playAgain: 'Play again',
@@ -265,6 +270,7 @@ export const EN_DICTIONARY = defineTranslations({
     title: 'Nothing here'
   },
   player: {
+    choosingGame: 'The host is choosing a game',
     nickname: {
       action: 'Join the game',
       label: 'Nickname',
@@ -276,6 +282,7 @@ export const EN_DICTIONARY = defineTranslations({
     room: 'Room {code}',
     roomSize: '{count:number} in the room',
     seating: 'Taking your seat…',
+    upNext: 'You are about to play',
     you: 'You'
   },
   preferences: {

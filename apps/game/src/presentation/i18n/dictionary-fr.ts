@@ -135,6 +135,7 @@ export const FR_DICTIONARY: Dictionary = {
     music_source_unavailable: 'Le service musical ne répond pas.',
     nickname_taken: 'Ce pseudo est déjà pris.',
     no_content_available: 'Il ne reste rien à jouer. Change les réglages.',
+    no_game_chosen: 'Choisis d’abord un jeu.',
     not_implemented: 'Cette partie du jeu n’existe pas encore.',
     player_locked_out: 'Tu es hors-jeu pour ce tour.',
     protocol_version_mismatch: 'Cette page n’est plus à jour. Recharge-la.',
@@ -183,11 +184,15 @@ export const FR_DICTIONARY: Dictionary = {
       tie: 'Égalité',
       winner: 'Le vainqueur'
     },
-    game: 'Quel jeu',
+    game: {
+      label: 'Quel jeu',
+      prompt: 'Choisis-en un et le salon est prêt. Tu pourras changer d’avis.'
+    },
     invite: {
       title: 'Scanne pour jouer'
     },
     joinLate: 'Encore ouvert',
+    needsGame: 'Choisis à quoi le salon joue',
     needsPlayer: 'Il faut au moins un joueur pour lancer',
     nextRound: 'Tour suivant',
     playAgain: 'Rejouer',
@@ -262,6 +267,7 @@ export const FR_DICTIONARY: Dictionary = {
     title: 'Il n’y a rien ici'
   },
   player: {
+    choosingGame: 'L’hôte choisit un jeu',
     nickname: {
       action: 'Rejoindre la partie',
       label: 'Pseudo',
@@ -273,6 +279,7 @@ export const FR_DICTIONARY: Dictionary = {
     room: 'Salon {code}',
     roomSize: '{count:number} dans le salon',
     seating: 'On te trouve une place…',
+    upNext: 'Tu vas jouer à',
     you: 'Toi'
   },
   preferences: {

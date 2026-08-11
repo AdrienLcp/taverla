@@ -102,6 +102,7 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
 
       <Stage
         clock={clock}
+        isLive={isLive}
         isSeated={seatNickname !== null}
         roomCode={roomCode}
         send={send}
@@ -131,7 +132,7 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
                 // is free: the server drops the pool only when it differs.
                 const game = view.settings.game
 
-                if (draftSource !== null && game.kind === 'blindtest') {
+                if (draftSource !== null && game?.kind === 'blindtest') {
                   send({
                     settings: {
                       ...view.settings,
@@ -176,13 +177,21 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
 
 type StageProps = {
   clock: ClockEstimate | null
+  isLive: boolean
   isSeated: boolean
   roomCode: RoomCode
   send: (message: ClientMessage) => boolean
   view: HostRoomView | null
 }
 
-const Stage = ({ clock, isSeated, roomCode, send, view }: StageProps) => {
+const Stage = ({
+  clock,
+  isLive,
+  isSeated,
+  roomCode,
+  send,
+  view
+}: StageProps) => {
   const translate = useTranslate()
 
   if (view === null) {
@@ -203,17 +212,20 @@ const Stage = ({ clock, isSeated, roomCode, send, view }: StageProps) => {
     const answerWithRound = (answer: PlayerAnswer): boolean =>
       send({ answer, roundId: round.id, type: 'player.answer' })
 
-    const game = view.settings.game
-    const roundDurationMs = roundDurationMsOf(game)
+    // The round's own content, not the settings: it is the game the round was
+    // opened on, where `settings.game` is only what the room is set to now.
+    const roundDurationMs = roundDurationMsOf(view.settings.game)
 
     return (
       <div className='stage playing'>
-        {game.kind === 'quiz' ? (
+        {round.content.kind === 'quiz' ? (
           <AskedQuestion prompt={quizContent(round)?.prompt ?? null} />
         ) : (
           <p className='now'>
             {translate(
-              game.kind === 'buzzer' ? 'buzzer.running' : 'blindtest.listening'
+              round.content.kind === 'buzzer'
+                ? 'buzzer.running'
+                : 'blindtest.listening'
             )}
           </p>
         )}
@@ -288,5 +300,7 @@ const Stage = ({ clock, isSeated, roomCode, send, view }: StageProps) => {
     )
   }
 
-  return <LobbyStage roomCode={roomCode} view={view} />
+  return (
+    <LobbyStage isLive={isLive} roomCode={roomCode} send={send} view={view} />
+  )
 }

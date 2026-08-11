@@ -254,9 +254,13 @@ it, or the rule will get quietly relaxed for everything.
 **Routes are already open.** `/host/:code` and `/play/:code` say nothing about
 which game is running, because the game is a property of the room, not of the
 URL. Keep it that way. What *is* in the URL is the shelf: `/:game` is one page
-for every game's front door, and it is where the room is created — `POST
-/api/rooms` carries the game, so the console the host lands on is already the
-right one. The lobby's picker is for changing your mind, not for choosing.
+for every game's front door, and a room opened through one arrives already set
+to it — `POST /api/rooms` carries the game when it was asked for.
+
+**The ordinary way in carries none.** The front page opens a room with nothing
+chosen and the lobby's picker is where the table decides, which is what
+`settings.game` being nullable buys: a room is a code on a screen before it is a
+game. See `docs/plans/13-room-first.md`.
 
 **i18n is namespaced by game.** A prefix per game — `blindtest.*`, `buzzer.*` —
 and `join.*`, `host.*`, `player.*`, `round.*`, `buzz.*`, `error.*`,

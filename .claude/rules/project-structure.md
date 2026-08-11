@@ -11,9 +11,10 @@ docs/plans/         → The staged build plan; each file is one session's work.
 ## One app, two surfaces
 
 `apps/game` serves the host console at `/host/:roomCode` and the player screen
-at `/play/:roomCode`, both lazily loaded. `/:game` is every game's front door,
-one component for all of them — where the room is created, and where which game
-it opens on is decided. That is not a compromise — it is what
+at `/play/:roomCode`, both lazily loaded. `/` creates a room with nothing chosen
+— the game is picked on the console — and `/:game` is every game's front door,
+one component for all of them, opening a room already set to it for a host who
+came in that way. That is not a compromise — it is what
 makes the QR code work: it encodes `location.origin`, so the phone that scans it
 lands on the same origin the host is already served from. One deployment, no
 CORS, no second domain, no environment variable pointing one app at the other.

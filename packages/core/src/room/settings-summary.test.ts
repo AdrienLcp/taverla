@@ -60,6 +60,14 @@ describe('settingsSummary', () => {
     }
   })
 
+  // The room is opened before the table decides, so the fold has to be honest
+  // about a decision nobody has made rather than name a default.
+  it('[settings-summary] says nothing about a game the room has not been given', () => {
+    expect(
+      settingsSummary({ draftSource: null, settings: roomSettingsFor(null) })
+    ).toEqual([{ count: 10, kind: 'roundCount' }])
+  })
+
   it('[settings-summary] carries a game with no last round as a count of none', () => {
     expect(
       settingsSummary({

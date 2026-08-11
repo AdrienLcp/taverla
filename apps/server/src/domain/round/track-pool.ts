@@ -66,14 +66,14 @@ export const discardPoolIfStale = ({
   previousGame,
   room
 }: {
-  previousGame: GameSettings
+  previousGame: GameSettings | null
   room: Room
 }): void => {
   const game = room.settings.game
 
   const isStale =
-    game.kind !== 'blindtest' ||
-    previousGame.kind !== 'blindtest' ||
+    game?.kind !== 'blindtest' ||
+    previousGame?.kind !== 'blindtest' ||
     !isSameSource(previousGame.source, game.source)
 
   if (isStale) {

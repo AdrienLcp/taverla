@@ -18,10 +18,21 @@ const BUZZER_ONLY = ['buzzer'] as const satisfies readonly AnswerMode[]
  * A game with one mode is a game whose host is never asked: the panel hides the
  * control rather than offering an option that would break the round.
  *
+ * A room with no game yet narrows nothing, which is what lets the settings
+ * frame carrying a mode be accepted before the table has decided. The panel
+ * still shows no strip — "how to answer" cannot be explained without a game —
+ * and `movedToGame` narrows whatever was held the moment one is picked.
+ *
  * A switch rather than a default, so that adding a game kind stops compiling
  * here instead of silently offering it a typed field it cannot grade.
  */
-export const answerModesFor = (game: GameKind): readonly AnswerMode[] => {
+export const answerModesFor = (
+  game: GameKind | null
+): readonly AnswerMode[] => {
+  if (game === null) {
+    return answerModes
+  }
+
   switch (game) {
     case 'blindtest':
     case 'quiz':
@@ -35,7 +46,7 @@ export const offersAnswerMode = ({
   game,
   mode
 }: {
-  game: GameKind
+  game: GameKind | null
   mode: AnswerMode
 }): boolean => answerModesFor(game).includes(mode)
 

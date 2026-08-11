@@ -159,7 +159,10 @@ phone). The buzzer is `min(78vw, 42vh, 420px)` — three limits, because one lea
 it tiny on a wide screen or taller than a short one.
 
 **The lobby is two columns and two audiences.** The invitation — code, QR, join
-URL — is what the room is reading; the roster and the setup are the host's own.
+URL — is what the room is reading; the game picker, the roster and the setup are
+the host's own. The picker is on the stage rather than in the fold for exactly
+as long as it is the decision everyone is waiting on: a room opens with nothing
+chosen, and once a round has run it is a setting like the countdown.
 Below 900px they stack, and that is where the setup had to learn to fold: eight
 strips of settings at the same weight as the QR code turned a title card into a
 form, and put the launch below everything. The fold is collapsed at every width,

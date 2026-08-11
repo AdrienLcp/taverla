@@ -15,7 +15,13 @@ import { movedToGame, reshapesRound, roomSettingsFor } from './room-settings'
 
 describe('roomSettingsFor', () => {
   it('[room-settings] opens a room on the game it was created for', () => {
-    expect(roomSettingsFor('buzzer').game.kind).toBe('buzzer')
+    expect(roomSettingsFor('buzzer').game?.kind).toBe('buzzer')
+  })
+
+  // The front door creates the room and the table decides afterwards, so this
+  // is the ordinary case rather than a half-built one.
+  it('[room-settings] opens a room with no game on nothing to play', () => {
+    expect(roomSettingsFor(null).game).toBeNull()
   })
 
   // The pair travels together everywhere, and a room that opened on a mode its
@@ -45,7 +51,7 @@ describe('movedToGame', () => {
 
     expect(moved.mode).toEqual(DEFAULT_MODE_SETTINGS.typed)
     expect(moved.roundCount).toBe(10)
-    expect(moved.game.kind).toBe('blindtest')
+    expect(moved.game?.kind).toBe('blindtest')
   })
 
   it('[room-settings] leaves the settings that are the host’s alone', () => {

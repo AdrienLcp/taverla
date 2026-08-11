@@ -84,14 +84,23 @@ export const SetupFold: React.FC<SetupFoldProps> = ({
       {roundInPlay && (
         <p className='held'>{translate('host.setup.roundInPlay')}</p>
       )}
-      {/* Above everything it decides, including whether the picker applies. */}
-      <GamePicker
-        isLive={isLive}
-        isRoundInPlay={roundInPlay}
-        onChange={onSettingsChange}
-        settings={view.settings}
-      />
-      {game.kind === 'blindtest' && (
+      {/*
+        Above everything it decides, including whether the picker applies — but
+        only once the game is no longer the decision the room is waiting on. In
+        the lobby it is the stage's, beside the QR code.
+
+        A round on screen is one arm of `round.content`, so a game switched
+        under it would leave the screens rendering the other; the server refuses
+        that, and the control says so first.
+      */}
+      {!isInLobby && (
+        <GamePicker
+          isDisabled={!isLive || roundInPlay}
+          onChange={onSettingsChange}
+          settings={view.settings}
+        />
+      )}
+      {game?.kind === 'blindtest' && (
         <PlaylistPicker onDraftChange={onDraftSource} settings={game} />
       )}
       <SettingsPanel

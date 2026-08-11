@@ -19,6 +19,7 @@ describes the code is worse than no plan.
 | [10 — Per-device audio](10-per-device-audio.md) | **dropped** | Audio stays on the host. See the plan for why, and what replaces it |
 | [11 — The seam, and the buzzer](11-buzzer.md) | **done** | The split between the shelf and one game on it, and the second game that proves it: a buzzer the room supplies |
 | [12 — Trivia](12-trivia.md) | **done** | A quiz through the seam, in all three modes, on 1 800 bundled French questions. The third game on the shelf |
+| [13 — The room comes first](13-room-first.md) | **done** | A room is opened before the game is chosen: `settings.game` goes nullable, and the picker moves onto the lobby stage |
 
 ## Order, and what can move
 

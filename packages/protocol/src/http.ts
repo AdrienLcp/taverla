@@ -14,13 +14,17 @@ import { trackDifficultySchema, trackIdentitySchema } from './track'
  * and it keeps `apps/game` from depending on `apps/server`.
  */
 /**
- * A room is opened *for* a game, chosen on the shelf rather than by a host
- * already standing in a lobby. Every other setting travels over the socket;
- * this one has to be right before the console renders, because it decides which
- * console that is.
+ * The room comes first and the game second: a code goes up, the phones arrive,
+ * and the table decides while they do. So the game is **optional** — omitted by
+ * the front door, and carried by a game's own page, which is a shortcut for a
+ * host who already knows what they came to play.
+ *
+ * It stays a `ShelvedGame` when it is sent. A game can be served in full before
+ * it has screens, and a room opened on one of those would render another game's
+ * round.
  */
 export const createRoomRequestSchema = z.object({
-  game: shelvedGameSchema
+  game: shelvedGameSchema.optional()
 })
 
 export const createRoomResponseSchema = z.object({

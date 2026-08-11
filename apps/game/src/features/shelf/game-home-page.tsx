@@ -1,33 +1,32 @@
-import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router'
+import { useParams } from 'react-router'
 
 import type { ShelvedGame } from '@taverla/protocol/game'
 
 import { isShelvedGame } from '@taverla/core/room/shelved-game'
 
+import { useCreateRoom } from '@/features/home/use-create-room'
 import { NotFoundPage } from '@/features/not-found/not-found-page'
-import { createRoom } from '@/infrastructure/api/taverla-api'
-import { hostPathFor } from '@/infrastructure/router/navigation'
 import { Button } from '@/presentation/components/button'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import {
-  apiErrorKey,
   gameDescriptionKey,
   gameNameKey,
-  gameTaglineKey,
-  type PlainTranslationKey
+  gameTaglineKey
 } from '@/presentation/i18n/translation'
 
 import './game-home-page.sass'
 
 /**
- * A game's own front door. Creating a room lives here rather than on the shelf
- * because a room is opened *for* a game, and the request says which — the
- * console the host lands on is already the right one.
+ * A game's own front door, and a shortcut rather than the way in: the room is
+ * opened here *for* this game, so a host who already knows what they came to
+ * play lands on a console with the question answered.
  *
- * One component for every game, because two of them have the same shape: a
- * name, a pitch and one button. Split it when one genuinely needs something the
- * other does not, and not to pre-empt that.
+ * It is a page with a button rather than a link that opens a room, because a
+ * GET that mutates is a link preview in a group chat opening rooms.
+ *
+ * One component for every game, because they have the same shape: a name, a
+ * pitch and one button. Split it when one genuinely needs something the others
+ * do not, and not to pre-empt that.
  */
 export const GameHomePage = () => {
   const { game } = useParams()
@@ -40,27 +39,8 @@ export const GameHomePage = () => {
 }
 
 const GameHome = ({ game }: { game: ShelvedGame }) => {
-  const navigate = useNavigate()
   const translate = useTranslate()
-  const [error, setError] = useState<PlainTranslationKey | null>(null)
-  const [isCreating, setIsCreating] = useState(false)
-
-  const startHosting = async (): Promise<void> => {
-    setIsCreating(true)
-    setError(null)
-
-    const created = await createRoom(game)
-
-    setIsCreating(false)
-
-    if (created.status === 'failure') {
-      setError(apiErrorKey(created.error))
-
-      return
-    }
-
-    await navigate(hostPathFor(created.data.code))
-  }
+  const { error, isCreating, open } = useCreateRoom()
 
   return (
     <main className='game-home-page'>
@@ -75,7 +55,7 @@ const GameHome = ({ game }: { game: ShelvedGame }) => {
         <Button
           isPending={isCreating}
           onPress={() => {
-            void startHosting()
+            void open(game)
           }}
           size='large'
         >
