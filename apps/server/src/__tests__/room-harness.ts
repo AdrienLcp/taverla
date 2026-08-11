@@ -12,7 +12,7 @@ import {
   type RoundContent,
   type RoundView
 } from '@taverla/protocol/room'
-import type { Verdict } from '@taverla/protocol/scoring'
+import type { HalvesVerdict, Verdict } from '@taverla/protocol/scoring'
 import {
   type HostServerMessage,
   hostServerMessageSchema,
@@ -34,6 +34,57 @@ export const CATALOGUE = [
 ]
 
 export const PREVIEW_HOST = 'preview.test'
+
+/**
+ * Three questions, and every string in them is searched for by the anti-cheat
+ * assertion — the answers, the accepted spellings and the notes. A suite that
+ * kept its own copy would drift and still pass.
+ */
+export const QUESTIONS = [
+  {
+    accepted: ['Cervin'],
+    answer: 'Le Cervin',
+    category: 'geography',
+    decoys: ['Le Chasseral', 'Le Suchet', 'Le Roti'],
+    id: 'question-1',
+    note: 'Zermatt sits at its foot.',
+    prompt: 'Which mountain is the most recognisable in Switzerland?'
+  },
+  {
+    accepted: [],
+    answer: 'Quatre',
+    category: 'geography',
+    decoys: ['Trois', 'Deux', 'Une'],
+    id: 'question-2',
+    note: 'Romansh is the fourth, spoken in Grisons.',
+    prompt: 'How many national languages does Switzerland have?'
+  },
+  {
+    accepted: [],
+    answer: 'Zurich',
+    category: 'geography',
+    decoys: ['Lausanne', 'Geneva', 'Basel'],
+    id: 'question-3',
+    note: 'More than thirty per cent of its residents are foreign.',
+    prompt: 'Which is the largest city in Switzerland by area?'
+  }
+]
+
+/**
+ * The bundled bank replaced by three questions, which also keeps the suite from
+ * parsing eighteen hundred of them on every run.
+ */
+export const questionBankStub = () => ({
+  drawQuestion: ({ playedIds }: { playedIds: ReadonlySet<string> }) =>
+    QUESTIONS.find((question) => !playedIds.has(question.id)) ?? null,
+  hostQuestionOf: <TQuestion>(question: TQuestion) => question,
+  QUESTION_BANK_ATTRIBUTION: {
+    author: 'Nobody',
+    licence: 'CC BY-SA 4.0',
+    source: 'Test bank',
+    url: 'https://example.test'
+  }
+})
 
 /**
  * A `vi.mock` factory may not close over anything the test file declares, so
@@ -74,6 +125,16 @@ export const halves = (
   titleCorrect: boolean,
   artistCorrect: boolean
 ): Verdict => ({ artistCorrect, kind: 'halves', titleCorrect })
+
+/**
+ * The halves the reader has banked, or `null` in a game judged on one claim.
+ * `yourVerdict` carries the whole union since the quiz needed the same feedback
+ * a pair of halves does.
+ */
+export const bankedHalves = (
+  view: { yourVerdict: Verdict | null } | null
+): HalvesVerdict | null =>
+  view?.yourVerdict?.kind === 'halves' ? view.yourVerdict : null
 
 export type Peer<TMessage> = {
   close: () => void
@@ -165,6 +226,20 @@ export const hostContent = (
   return content?.kind === 'blindtest' ? content : null
 }
 
+export const quizRound = (
+  view: { round: RoundView | null } | null
+): Extract<RoundContent, { kind: 'quiz' }> | null => {
+  const content = view?.round?.content
+
+  return content?.kind === 'quiz' ? content : null
+}
+
+export const hostQuestion = (host: Peer<HostServerMessage>) => {
+  const content = hostView(host)?.currentContent
+
+  return content?.kind === 'quiz' ? content.question : null
+}
+
 export const errorsIn = <TMessage extends { type: string }>(
   peer: Peer<TMessage>
 ) =>
@@ -243,13 +318,23 @@ export const startRoomHarness = async (): Promise<RoomHarness> => {
     }
   }
 
-  /** A `nickname` seats the host as a player too — the phone in the middle. */
+  /**
+   * A `nickname` seats the host as a player too — the phone in the middle.
+   *
+   * A room is created on a shelved game and then moved, because the door and
+   * the game are two different gates: the quiz is served in full and is not on
+   * the shelf yet, so `POST /api/rooms` would refuse it while
+   * `host.updateSettings` accepts it — which is exactly what a console does.
+   */
   const openRoom = async (
     settings: RoomSettings = FAST_GAME,
     nickname?: string
   ) => {
+    const shelved =
+      settings.game.kind === 'quiz' ? 'blindtest' : settings.game.kind
+
     const response = await fetch(`http://${origin}/api/rooms`, {
-      body: JSON.stringify({ game: settings.game.kind }),
+      body: JSON.stringify({ game: shelved }),
       headers: { 'content-type': 'application/json' },
       method: 'POST'
     })

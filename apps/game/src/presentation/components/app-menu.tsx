@@ -27,6 +27,7 @@ import {
 } from './connection-status'
 import { Link } from './link'
 import { SegmentedControl } from './segmented-control'
+import { TextLink } from './text-link'
 
 import './app-menu.sass'
 
@@ -43,6 +44,25 @@ const THEME_KEYS: Record<ThemePreference, PlainTranslationKey> = {
   dark: 'preferences.theme.dark',
   light: 'preferences.theme.light',
   system: 'preferences.theme.system'
+}
+
+/**
+ * CC BY-SA asks that the credit travel with the work, and the questions ship
+ * bundled with the server rather than being fetched from anyone — so nothing
+ * else in the product would ever name them. It sits in the menu because that is
+ * the one piece of chrome on every screen, and because a credit belongs in the
+ * small print rather than on the reveal, where it would take the loudest moment
+ * of the round ten times a game to say the same thing.
+ *
+ * It mirrors the `attribution` header of `question-bank.json`, which is the
+ * machine-readable copy that travels with the data itself.
+ */
+const QUESTION_CREDIT = {
+  author: 'Philippe Bresoux',
+  licence: 'CC BY-SA 4.0',
+  licenceUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
+  source: 'OpenQuizzDB',
+  sourceUrl: 'https://www.openquizzdb.org'
 }
 
 /**
@@ -137,6 +157,21 @@ export const AppMenu = () => {
                 <Link href={joinPath} onPress={close} variant='outlined'>
                   {translate('menu.home')}
                 </Link>
+
+                <p className='credit'>
+                  {translate('menu.questions', {
+                    author: QUESTION_CREDIT.author
+                  })}{' '}
+                  <TextLink href={QUESTION_CREDIT.sourceUrl} target='_blank'>
+                    {QUESTION_CREDIT.source}
+                  </TextLink>
+                  {translate('menu.questionsLicence')}{' '}
+                  <span className='fragment'>
+                    <TextLink href={QUESTION_CREDIT.licenceUrl} target='_blank'>
+                      {QUESTION_CREDIT.licence}
+                    </TextLink>
+                  </span>
+                </p>
 
                 {build !== null && (
                   <p className='build'>{translate('menu.build', { build })}</p>

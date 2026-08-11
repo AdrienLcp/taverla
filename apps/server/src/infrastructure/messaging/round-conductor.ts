@@ -8,6 +8,7 @@ import {
   holdRoundClock,
   isFinalRound,
   openRound,
+  quizContent,
   remainingRoundMs,
   resumeRoundClock,
   revealRound,
@@ -22,6 +23,10 @@ import {
 } from '@/domain/round/round-timers'
 import { drawPlayableTrack } from '@/domain/round/track-pool'
 import { logger } from '@/infrastructure/logging/logger'
+import {
+  drawQuestion,
+  hostQuestionOf
+} from '@/infrastructure/quiz/question-bank'
 
 import { hostConnectionIn } from './connection-registry'
 import { broadcastRoom, sendError } from './outbound'
@@ -62,16 +67,40 @@ export const beginRound = async (room: Room): Promise<void> => {
     return
   }
 
-  if (game.kind !== 'blindtest') {
-    const host = hostConnectionIn(room.code)
+  // The bank is bundled, so the draw is synchronous and cannot fail on someone
+  // else's web server being down. Running out of unplayed questions can still
+  // happen, and it is the room's own doing rather than an outage.
+  if (game.kind === 'quiz') {
+    const question = drawQuestion({
+      playedIds: room.playedContentIds,
+      settings: game
+    })
 
-    if (host !== null) {
-      sendError(host, {
-        code: 'not_implemented',
-        fatal: false,
-        message: 'That game cannot open a round yet'
-      })
+    if (question === null) {
+      const host = hostConnectionIn(room.code)
+
+      if (host !== null) {
+        sendError(host, {
+          code: 'no_tracks_available',
+          fatal: false,
+          message: 'No unplayed question is left in those categories'
+        })
+      }
+
+      return
     }
+
+    cancelRoundTimer(room.code, 'advance')
+    room.playedContentIds.add(question.id)
+
+    const round = openRound({
+      content: quizContent({ question: hostQuestionOf(question), room }),
+      now: Date.now(),
+      room
+    })
+
+    broadcastRoom(room)
+    armCountdown({ room, roundId: round.id })
 
     return
   }
@@ -142,12 +171,14 @@ export const armRoundTimeout = (room: Room): void => {
     delayMs: remaining,
     kind: 'round',
     run: () => {
+      const mode = room.settings.mode.kind
+
       // The round running out ends a simultaneous one the same way the last
       // answer does, scoring included: whoever did not answer simply did not.
-      if (room.settings.mode.kind === 'buzzer') {
+      if (mode === 'buzzer') {
         revealRound(room, Date.now())
       } else {
-        settleSimultaneousRound(room, Date.now())
+        settleSimultaneousRound({ mode, now: Date.now(), room })
       }
 
       broadcastRoom(room)

@@ -72,7 +72,7 @@ mixin) on the field; everything else is drawn with the ink or a `--rule`
 hairline.
 
 Controls are blocks: `filled` inverts the field, `outlined` is ruled in ink,
-`ghost` is underlined. Disabled is **ruled, never dimmed** — fading a filled
+`underlined` has neither. Disabled is **ruled, never dimmed** — fading a filled
 block takes its label's contrast with it. A choice strip obeys the same rule the
 same way: the selected stamp drops its ink ground and keeps the ink as an inset
 edge, which is what lets a host read their settings over a dead socket.

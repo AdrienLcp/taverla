@@ -67,6 +67,24 @@
       text-align: center
       user-select: text
 
+    // Not the label register the rest of this menu is set in: a person's name
+    // shouted in wide caps reads as a heading, and this is the one line here
+    // that is owed to someone rather than offered to the reader.
+    .credit
+      @include typography.caption
+
+      color: var(--ink-muted)
+      font-size: 0.8125rem
+      margin-block-start: calc(var(--space-m) * -0.5)
+      text-align: center
+      text-wrap: balance
+      user-select: text
+
+      // The separator belongs to the fragment after it, or a line break leaves
+      // it stranded at the start of the next line.
+      .fragment
+        white-space: nowrap
+
 @keyframes popover-strike
   from
     opacity: 0

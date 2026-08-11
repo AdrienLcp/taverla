@@ -21,6 +21,14 @@ export const POINTS_FOR_TITLE_AND_ARTIST = 1
 export const POINTS_FOR_A_RIGHT_CHOICE = 1
 
 /**
+ * The other side of that pair, for a game whose answer is one claim rather than
+ * two halves. It matches what the blind test's pair is worth by another road —
+ * a point per half and one more for holding both — because the ratio is the
+ * point and it has to read the same in every game on the shelf.
+ */
+export const POINTS_FOR_A_TYPED_ANSWER = 3
+
+/**
  * What a bare claim is worth. It is not a scale the host can tune, and that is
  * on purpose: the room already owns the question, so letting it own the price
  * too turns every round into a negotiation.
@@ -52,12 +60,14 @@ export const halvesVerdictSchema = z.object({
   titleCorrect: z.boolean()
 })
 
+export const singleVerdictSchema = z.object({
+  isCorrect: z.boolean(),
+  kind: z.literal('single')
+})
+
 export const verdictSchema = z.discriminatedUnion('kind', [
   halvesVerdictSchema,
-  z.object({
-    isCorrect: z.boolean(),
-    kind: z.literal('single')
-  })
+  singleVerdictSchema
 ])
 
 export const awardSchema = z.object({
@@ -68,4 +78,5 @@ export const awardSchema = z.object({
 
 export type Verdict = z.infer<typeof verdictSchema>
 export type HalvesVerdict = z.infer<typeof halvesVerdictSchema>
+export type SingleVerdict = z.infer<typeof singleVerdictSchema>
 export type Award = z.infer<typeof awardSchema>

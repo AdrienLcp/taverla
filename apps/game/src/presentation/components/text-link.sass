@@ -1,0 +1,16 @@
+@use '../styles/focus'
+
+@layer components
+  .text-link
+    @include focus.ring
+
+    color: inherit
+    cursor: pointer
+    text-decoration: underline
+    text-decoration-thickness: 1px
+    text-underline-offset: 0.2em
+    transition: text-decoration-thickness var(--transition-fast, 0) var(--timing, ease)
+
+    &[data-hovered],
+    &[data-pressed]
+      text-decoration-thickness: 2px

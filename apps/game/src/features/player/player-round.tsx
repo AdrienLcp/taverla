@@ -12,7 +12,7 @@ import {
   type PlayerAnswer,
   TypedAnswer
 } from '@/features/player/answer-forms'
-import { blindtestContent } from '@/helpers/blindtest-round'
+import { bankedHalves, blindtestContent } from '@/helpers/blindtest-round'
 import { buzzFeedback } from '@/infrastructure/env'
 import { Countdown } from '@/presentation/components/countdown'
 import { FloorClock } from '@/presentation/components/floor-clock'
@@ -113,7 +113,7 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
       return (
         <section className='player-round'>
           <TypedAnswer
-            banked={view.yourVerdict}
+            banked={bankedHalves(view.yourVerdict)}
             key={view.round.id}
             onAnswer={answerWithRound}
             round={view.round}

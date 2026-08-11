@@ -18,7 +18,7 @@ describes the code is worse than no plan.
 | [09 — Answer modes](09-answer-modes.md) | **done** | Four choices or a typed answer, everyone at once, scored by speed |
 | [10 — Per-device audio](10-per-device-audio.md) | **dropped** | Audio stays on the host. See the plan for why, and what replaces it |
 | [11 — The seam, and the buzzer](11-buzzer.md) | **done** | The split between the shelf and one game on it, and the second game that proves it: a buzzer the room supplies |
-| [12 — Trivia](12-trivia.md) | planned | A quiz through the seam: buzzer mode first, then a French API |
+| [12 — Trivia](12-trivia.md) | **server done, no UI** | A quiz through the seam, in all three modes, on 1 708 bundled French questions. Not on the shelf until it has screens |
 
 ## Order, and what can move
 

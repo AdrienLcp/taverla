@@ -5,8 +5,9 @@ import type {
   RoundId,
   SessionId
 } from '@taverla/protocol/identifiers'
+import type { HostQuestion } from '@taverla/protocol/question'
 import type { RoomPhase, RoomSettings } from '@taverla/protocol/room'
-import type { Award, HalvesVerdict } from '@taverla/protocol/scoring'
+import type { Award, Verdict } from '@taverla/protocol/scoring'
 import type { HostTrack, TrackIdentity } from '@taverla/protocol/track'
 
 /**
@@ -22,8 +23,13 @@ export type Room = {
   hostSessionId: SessionId | null
   lastActivityAt: number
   phase: RoomPhase
-  /** Every track already used, so a pool refilled mid-game cannot repeat one. */
-  playedTrackIds: Set<string>
+  /**
+   * Every track and every question already used, so a pool refilled mid-game
+   * cannot repeat one. It is the room's rather than the source's: two rooms
+   * playing at once must be free to draw the same question, and a bank that
+   * remembered would leak one party into another.
+   */
+  playedContentIds: Set<string>
   players: Map<PlayerId, Participant>
   round: Round | null
   settings: RoomSettings
@@ -50,6 +56,10 @@ export type Participant = {
  *
  * Typed mode takes as many guesses as the clip allows, so this accumulates.
  * Choice mode fills it once and refuses a second pick.
+ *
+ * The verdict is the union rather than the blind test's halves, because a game
+ * judged on one claim is answered simultaneously too — and the shape it is
+ * judged in belongs to the game, not to the mode.
  */
 export type PlayerAttempts = {
   /** Their first guess of any kind — the name appearing on the room's screen. */
@@ -66,7 +76,7 @@ export type PlayerAttempts = {
   /** Their latest guess that banked nothing — what the reveal shows when nothing landed. */
   lastMiss: string | null
   playerId: PlayerId
-  verdict: HalvesVerdict
+  verdict: Verdict
 }
 
 export type Round = {
@@ -102,6 +112,12 @@ export type Round = {
         track: HostTrack
       }
     | { kind: 'buzzer' }
+    | {
+        choices: string[]
+        correctChoiceIndex: number | null
+        kind: 'quiz'
+        question: HostQuestion
+      }
   /**
    * The round's own clock, and the pair that makes a miss resumable: a buzz
    * stops it, and the round has to know how much is left rather than handing

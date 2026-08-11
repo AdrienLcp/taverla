@@ -1,10 +1,4 @@
-import {
-  type HalvesVerdict,
-  POINTS_FOR_A_RIGHT_CHOICE,
-  POINTS_FOR_TITLE_AND_ARTIST,
-  POINTS_PER_ARTIST,
-  POINTS_PER_TITLE
-} from '@taverla/protocol/scoring'
+import type { HalvesVerdict } from '@taverla/protocol/scoring'
 
 import { answerAppearsIn } from '../round/answer-matching'
 
@@ -58,30 +52,11 @@ export const withGuessBanked = ({
   titleCorrect: banked.titleCorrect || guessed.titleCorrect
 })
 
-export const hasBothHalves = (verdict: HalvesVerdict): boolean =>
-  verdict.artistCorrect && verdict.titleCorrect
-
-export const NOTHING_BANKED: HalvesVerdict = {
-  artistCorrect: false,
+/** A right pick is the whole answer, so it lands both halves at once. */
+export const choiceVerdict = (isRight: boolean): HalvesVerdict => ({
+  artistCorrect: isRight,
   kind: 'halves',
-  titleCorrect: false
-}
+  titleCorrect: isRight
+})
 
-/**
- * Half an answer scores on its own — a player who recognised the voice but not
- * the song has earned something, and a mode where half-knowledge is worth
- * nothing goes quiet fast.
- */
-export const pointsForTypedAnswer = (verdict: HalvesVerdict): number => {
-  const halves =
-    (verdict.titleCorrect ? POINTS_PER_TITLE : 0) +
-    (verdict.artistCorrect ? POINTS_PER_ARTIST : 0)
-
-  return verdict.artistCorrect && verdict.titleCorrect
-    ? halves + POINTS_FOR_TITLE_AND_ARTIST
-    : halves
-}
-
-/** A right pick, before the speed bonus. Deliberately not what typing pays. */
-export const pointsForChoice = (verdict: HalvesVerdict): number =>
-  verdict.titleCorrect ? POINTS_FOR_A_RIGHT_CHOICE : 0
+export const NOTHING_BANKED: HalvesVerdict = choiceVerdict(false)

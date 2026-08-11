@@ -3,19 +3,20 @@ import { nanoid } from 'nanoid'
 import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
 import { locksOutOnMissIn, roundDurationMsOf } from '@taverla/protocol/game'
 import type { PlayerId, RoundId } from '@taverla/protocol/identifiers'
-import type { HalvesVerdict, Verdict } from '@taverla/protocol/scoring'
+import type { HostQuestion } from '@taverla/protocol/question'
+import type { Verdict } from '@taverla/protocol/scoring'
 import type { HostTrack } from '@taverla/protocol/track'
 
 import {
+  choiceVerdict,
   gradeGuess,
-  hasBothHalves,
   NOTHING_BANKED,
-  pointsForChoice,
-  pointsForTypedAnswer,
   type TypedAttempt,
   withGuessBanked
 } from '@taverla/core/blindtest/typed-answer'
 import { Result } from '@taverla/core/helpers/result'
+import { shuffled } from '@taverla/core/helpers/shuffle'
+import { gradeQuizGuess } from '@taverla/core/quiz/question-answer'
 import {
   type BuzzRejection,
   findBuzzRejection,
@@ -23,9 +24,12 @@ import {
 } from '@taverla/core/round/buzz-eligibility'
 import { speedBonusForRank } from '@taverla/core/scoring/speed-bonus'
 import {
+  isFullyBanked,
   isMiss,
   nothingScored,
   pointsFor,
+  pointsForSimultaneousAnswer,
+  type SimultaneousMode,
   verdictKindFor
 } from '@taverla/core/scoring/verdict'
 
@@ -65,6 +69,34 @@ export const blindtestContent = ({
     correctChoiceIndex: drawn?.correctIndex ?? null,
     kind: 'blindtest',
     track
+  }
+}
+
+/**
+ * The quiz's half of the same job, and the easier one: the decoys were authored
+ * with the question rather than drawn from what else the room might be playing.
+ * A blind test can borrow three neighbours from its pool and they are all
+ * plausible; "1789" is not a plausible wrong answer to which river runs through
+ * Paris.
+ */
+export const quizContent = ({
+  question,
+  room
+}: {
+  question: HostQuestion
+  room: Room
+}): Round['content'] => {
+  const choices =
+    room.settings.mode.kind === 'choice'
+      ? shuffled([question.answer, ...question.decoys])
+      : []
+
+  return {
+    choices,
+    correctChoiceIndex:
+      choices.length === 0 ? null : choices.indexOf(question.answer),
+    kind: 'quiz',
+    question
   }
 }
 
@@ -296,7 +328,7 @@ export const registerAnswer = ({
     return Result.failure('already_buzzed')
   }
 
-  const graded = grade({ attempt, content: round.content })
+  const graded = grade({ attempt, held, round })
 
   if (graded === null) {
     return Result.failure('invalid_message')
@@ -309,7 +341,7 @@ export const registerAnswer = ({
 }
 
 const isDone = (attempts: PlayerAttempts): boolean =>
-  hasBothHalves(attempts.verdict)
+  isFullyBanked(attempts.verdict)
 
 const bank = ({
   graded,
@@ -318,33 +350,30 @@ const bank = ({
   playerId,
   round
 }: {
-  graded: { said: string; verdict: HalvesVerdict }
+  graded: { said: string; verdict: Verdict }
   held: PlayerAttempts | undefined
   now: number
   playerId: PlayerId
   round: Round
 }): void => {
+  // `grade` hands back everything banked so far rather than this guess alone,
+  // so a guess that added something is one that raised what the verdict is
+  // worth — which reads the same over two halves and over one claim.
+  const before = held === undefined ? 0 : pointsFor(held.verdict)
+  const gained = pointsFor(graded.verdict) > before
+
   const entry = held ?? {
     firstGuessedAt: now,
     firstScoredAt: null,
     landed: [],
     lastMiss: null,
     playerId,
-    verdict: NOTHING_BANKED
+    verdict: graded.verdict
   }
 
-  const banked = withGuessBanked({
-    banked: entry.verdict,
-    guessed: graded.verdict
-  })
+  entry.verdict = graded.verdict
 
-  const landedAHalf =
-    (banked.titleCorrect && !entry.verdict.titleCorrect) ||
-    (banked.artistCorrect && !entry.verdict.artistCorrect)
-
-  entry.verdict = banked
-
-  if (landedAHalf) {
+  if (gained) {
     entry.landed.push(graded.said)
     entry.firstScoredAt ??= now
   } else {
@@ -397,7 +426,15 @@ export const everyoneIsDone = (room: Room): boolean => {
  * the players who *scored*, in arrival order — being quickly wrong wins
  * nothing, and taking somebody's bonus for it would be the wrong lesson.
  */
-export const settleSimultaneousRound = (room: Room, now: number): void => {
+export const settleSimultaneousRound = ({
+  mode,
+  now,
+  room
+}: {
+  mode: SimultaneousMode
+  now: number
+  room: Room
+}): void => {
   const round = room.round
 
   if (round === null) {
@@ -406,13 +443,11 @@ export const settleSimultaneousRound = (room: Room, now: number): void => {
 
   let rankAmongCorrect = 0
 
-  const earnedBy =
-    room.settings.mode.kind === 'choice'
-      ? pointsForChoice
-      : pointsForTypedAnswer
-
   for (const attempts of [...round.attempts].sort(byFirstScored)) {
-    const earned = earnedBy(attempts.verdict)
+    const earned = pointsForSimultaneousAnswer({
+      mode,
+      verdict: attempts.verdict
+    })
 
     if (earned === 0) {
       round.awards.push({
@@ -452,36 +487,85 @@ const byFirstScored = (one: PlayerAttempts, other: PlayerAttempts): number =>
   (one.firstScoredAt ?? Number.POSITIVE_INFINITY) -
   (other.firstScoredAt ?? Number.POSITIVE_INFINITY)
 
+type Attempt = { kind: 'choice'; choiceIndex: number } | TypedAttempt
+
+/**
+ * What this player now holds, not what this one guess was worth. The
+ * accumulation happens inside each game's arm because that is the only place
+ * both operands are known to be the same shape of verdict — a round judged in
+ * halves never meets one judged as a single claim.
+ *
+ * `null` is a frame that does not fit the round: a pick out of range, or an
+ * answer to a game that serves nothing to answer.
+ */
 const grade = ({
   attempt,
-  content
+  held,
+  round
 }: {
-  attempt: { kind: 'choice'; choiceIndex: number } | TypedAttempt
-  content: Round['content']
-}): { said: string; verdict: HalvesVerdict } | null => {
-  if (content.kind !== 'blindtest') {
-    return null
-  }
+  attempt: Attempt
+  held: PlayerAttempts | undefined
+  round: Round
+}): { said: string; verdict: Verdict } | null => {
+  const content = round.content
 
-  if (attempt.kind === 'choice') {
-    const picked = content.choices[attempt.choiceIndex]
+  if (content.kind === 'blindtest') {
+    if (attempt.kind === 'choice') {
+      const picked = content.choices[attempt.choiceIndex]
 
-    if (picked === undefined) {
-      return null
+      if (picked === undefined) {
+        return null
+      }
+
+      return {
+        said: `${picked.title} — ${picked.artist}`,
+        verdict: choiceVerdict(
+          attempt.choiceIndex === content.correctChoiceIndex
+        )
+      }
     }
-
-    const isRight = attempt.choiceIndex === content.correctChoiceIndex
 
     return {
-      said: `${picked.title} — ${picked.artist}`,
-      verdict: { artistCorrect: isRight, kind: 'halves', titleCorrect: isRight }
+      said: attempt.guess,
+      verdict: withGuessBanked({
+        banked: held?.verdict.kind === 'halves' ? held.verdict : NOTHING_BANKED,
+        guessed: gradeGuess({ guess: attempt.guess, track: content.track })
+      })
     }
   }
 
-  return {
-    said: attempt.guess,
-    verdict: gradeGuess({ guess: attempt.guess, track: content.track })
+  if (content.kind === 'quiz') {
+    if (attempt.kind === 'choice') {
+      const picked = content.choices[attempt.choiceIndex]
+
+      if (picked === undefined) {
+        return null
+      }
+
+      return {
+        said: picked,
+        verdict: {
+          isCorrect: attempt.choiceIndex === content.correctChoiceIndex,
+          kind: 'single'
+        }
+      }
+    }
+
+    const banked = held?.verdict.kind === 'single' && held.verdict.isCorrect
+
+    return {
+      said: attempt.guess,
+      verdict: {
+        isCorrect:
+          banked ||
+          gradeQuizGuess({ guess: attempt.guess, question: content.question })
+            .isCorrect,
+        kind: 'single'
+      }
+    }
   }
+
+  return null
 }
 
 export const applyVerdict = ({
@@ -649,7 +733,7 @@ export const finishGame = (room: Room, now: number): void => {
 }
 
 /**
- * The same phones in the same seats, scores at zero. `playedTrackIds` survives
+ * The same phones in the same seats, scores at zero. `playedContentIds` survives
  * on purpose: a second game in the same room should not replay the tracks the
  * first one just burnt through.
  */

@@ -1,12 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import {
-  gradeGuess,
-  hasBothHalves,
-  NOTHING_BANKED,
-  pointsForTypedAnswer,
-  withGuessBanked
-} from './typed-answer'
+import { isFullyBanked, pointsForSimultaneousAnswer } from '../scoring/verdict'
+import { gradeGuess, NOTHING_BANKED, withGuessBanked } from './typed-answer'
 
 const TRACK = { artist: 'Daft Punk', title: 'Harder, Better, Faster, Stronger' }
 
@@ -77,7 +72,7 @@ describe('withGuessBanked', () => {
       kind: 'halves',
       titleCorrect: false
     })
-    expect(hasBothHalves(after)).toBe(false)
+    expect(isFullyBanked(after)).toBe(false)
   })
 
   it('[typed] pays the pair the same whether it took one guess or two', () => {
@@ -89,7 +84,9 @@ describe('withGuessBanked', () => {
       })
     })
 
-    expect(hasBothHalves(acrossTwo)).toBe(true)
-    expect(pointsForTypedAnswer(acrossTwo)).toBe(3)
+    expect(isFullyBanked(acrossTwo)).toBe(true)
+    expect(
+      pointsForSimultaneousAnswer({ mode: 'typed', verdict: acrossTwo })
+    ).toBe(3)
   })
 })

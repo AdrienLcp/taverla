@@ -38,7 +38,7 @@ export const ErrorScreen = () => {
         <Button onPress={reload} size='large'>
           {translate('error.screen.reload')}
         </Button>
-        <Link href={joinPath} variant='ghost'>
+        <Link href={joinPath} variant='underlined'>
           {translate('menu.home')}
         </Link>
       </div>

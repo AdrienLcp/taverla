@@ -43,7 +43,7 @@ export const createRoom = ({
     hostSessionId: null,
     lastActivityAt: now,
     phase: 'lobby',
-    playedTrackIds: new Set(),
+    playedContentIds: new Set(),
     players: new Map(),
     round: null,
     settings: roomSettingsFor(game),

@@ -8,8 +8,12 @@ import {
   roundIdSchema,
   serverTimeSchema
 } from './identifiers'
-import { hostQuestionSchema, questionPromptSchema } from './question'
-import { awardSchema, halvesVerdictSchema } from './scoring'
+import {
+  hostQuestionSchema,
+  questionPromptSchema,
+  revealedQuestionSchema
+} from './question'
+import { awardSchema, verdictSchema } from './scoring'
 import { hostTrackSchema, trackIdentitySchema } from './track'
 
 export const MAX_PLAYERS_PER_ROOM = 24
@@ -201,7 +205,7 @@ export const roundContentSchema = z.discriminatedUnion('kind', [
     choices: z.array(z.string()),
     kind: z.literal('quiz'),
     prompt: questionPromptSchema,
-    revealedAnswer: z.string().nullable()
+    revealedQuestion: revealedQuestionSchema.nullable()
   })
 ])
 
@@ -244,18 +248,21 @@ const baseRoomViewSchema = z.object({
   settings: roomSettingsSchema,
   /**
    * What the reader has banked this round, and `null` before their first guess
-   * or when they hold no seat. Typed mode takes as many guesses as the clip
-   * allows, so a player has to be told which half they already hold — otherwise
+   * or when they hold no seat. Typed mode takes as many guesses as the round
+   * allows, so a player has to be told what they already hold — otherwise
    * "guess again" means guessing at what to guess at.
    *
    * Scoped to the reader on purpose. Everyone else's progress stays secret
    * until the reveal, the same way `revealedAnswers` does.
    *
-   * Halves rather than the whole verdict union, because banking is what having
-   * two of them means: a game judged on one claim has nothing to hold half of,
-   * and leaves this `null` throughout.
+   * The whole union rather than the blind test's halves, which is where the
+   * second game corrected the first: a claim judged by the server in silence
+   * needs this exactly as much as a pair of halves does. A player who has
+   * already answered the question right and is not told so keeps typing, and
+   * the refusal they eventually get says "you have had your go" — which reads
+   * as a lockout rather than as a win.
    */
-  yourVerdict: halvesVerdictSchema.nullable()
+  yourVerdict: verdictSchema.nullable()
 })
 
 /**

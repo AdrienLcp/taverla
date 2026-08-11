@@ -476,13 +476,15 @@ export const createRoomSocketEvents = (
    * that rank until the last of them has spoken or the clip has run out.
    */
   const closeRound = (room: Room): void => {
-    if (room.settings.mode.kind === 'buzzer') {
+    const mode = room.settings.mode.kind
+
+    if (mode === 'buzzer') {
       revealRound(room, Date.now())
 
       return
     }
 
-    settleSimultaneousRound(room, Date.now())
+    settleSimultaneousRound({ mode, now: Date.now(), room })
   }
 
   const answer = (

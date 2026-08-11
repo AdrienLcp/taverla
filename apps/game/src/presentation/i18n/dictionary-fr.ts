@@ -258,7 +258,9 @@ export const FR_DICTIONARY: Dictionary = {
   menu: {
     build: 'Version {build}',
     home: 'Accueil',
-    label: 'Menu'
+    label: 'Menu',
+    questions: 'Questions de {author} pour',
+    questionsLicence: ', sous'
   },
   notFound: {
     back: 'Retour au départ',

@@ -16,7 +16,7 @@ import {
   type PlayerAnswer,
   TypedAnswer
 } from '@/features/player/answer-forms'
-import { blindtestHostContent } from '@/helpers/blindtest-round'
+import { bankedHalves, blindtestHostContent } from '@/helpers/blindtest-round'
 import { useHostConnection } from '@/infrastructure/messaging/use-host-connection'
 import {
   playUrlFor,
@@ -243,7 +243,7 @@ const Stage = ({ clock, isSeated, roomCode, send, view }: StageProps) => {
         )}
         {isSeated && view.settings.mode.kind === 'typed' && (
           <TypedAnswer
-            banked={view.yourVerdict}
+            banked={bankedHalves(view.yourVerdict)}
             key={round.id}
             onAnswer={answerWithRound}
             round={round}
@@ -509,7 +509,7 @@ const Actions = ({
               send({ roundId: view.round.id, type: 'host.reveal' })
             }
           }}
-          variant='ghost'
+          variant='underlined'
         >
           {translate('host.reveal')}
         </Button>
@@ -556,7 +556,7 @@ const Actions = ({
           onPress={() => {
             send({ type: 'host.endGame' })
           }}
-          variant='ghost'
+          variant='underlined'
         >
           {translate('host.endGame')}
         </Button>
@@ -591,7 +591,7 @@ const Actions = ({
         >
           {translate('host.changeSettings')}
         </Button>
-        <Link href='/' variant='ghost'>
+        <Link href='/' variant='underlined'>
           {translate('menu.home')}
         </Link>
       </>

@@ -2,7 +2,14 @@ import { describe, expect, it } from 'vitest'
 
 import type { Verdict } from '@taverla/protocol/scoring'
 
-import { isMiss, nothingScored, pointsFor, verdictKindFor } from './verdict'
+import {
+  isFullyBanked,
+  isMiss,
+  nothingScored,
+  pointsFor,
+  pointsForSimultaneousAnswer,
+  verdictKindFor
+} from './verdict'
 
 describe('verdictKindFor', () => {
   // The whole reason the verdict is a union. A bare claim judged as halves pays
@@ -46,5 +53,70 @@ describe('isMiss', () => {
     expect(isMiss(nothingScored('buzzer'))).toBe(true)
     expect(isMiss(nothingScored('blindtest'))).toBe(true)
     expect(isMiss({ isCorrect: true, kind: 'single' })).toBe(false)
+  })
+})
+
+describe('isFullyBanked', () => {
+  // What closes typed mode for a player. Half an answer leaves the round open
+  // to them, and one claim is finished the moment it is right.
+  it('[verdict] wants both halves, and one claim only once', () => {
+    expect(isFullyBanked(halves(true, true))).toBe(true)
+    expect(isFullyBanked(halves(true, false))).toBe(false)
+    expect(isFullyBanked({ isCorrect: true, kind: 'single' })).toBe(true)
+    expect(isFullyBanked({ isCorrect: false, kind: 'single' })).toBe(false)
+  })
+})
+
+describe('pointsForSimultaneousAnswer', () => {
+  /**
+   * The gap the two modes exist to open, and it has to read the same in every
+   * game: producing the answer from nothing is not the act of recognising it
+   * among four. A room paid the same for both stops using the hard one.
+   */
+  it('[verdict] pays a typed claim three where a pick pays one', () => {
+    const verdict = { isCorrect: true, kind: 'single' } as const
+
+    expect(pointsForSimultaneousAnswer({ mode: 'typed', verdict })).toBe(3)
+    expect(pointsForSimultaneousAnswer({ mode: 'choice', verdict })).toBe(1)
+  })
+
+  it('[verdict] pays a wrong claim nothing, whichever way it was given', () => {
+    const verdict = { isCorrect: false, kind: 'single' } as const
+
+    expect(pointsForSimultaneousAnswer({ mode: 'typed', verdict })).toBe(0)
+    expect(pointsForSimultaneousAnswer({ mode: 'choice', verdict })).toBe(0)
+  })
+
+  // The blind test arrives at the same three by another road, which is the
+  // point: a point per half, and one more for holding the pair.
+  it('[verdict] pays the pair three, and half of it one', () => {
+    expect(
+      pointsForSimultaneousAnswer({
+        mode: 'typed',
+        verdict: halves(true, true)
+      })
+    ).toBe(3)
+    expect(
+      pointsForSimultaneousAnswer({
+        mode: 'typed',
+        verdict: halves(true, false)
+      })
+    ).toBe(1)
+  })
+
+  // A pick is the whole answer or nothing, so half-credit has no meaning there.
+  it('[verdict] pays a right pick one, and never half of it', () => {
+    expect(
+      pointsForSimultaneousAnswer({
+        mode: 'choice',
+        verdict: halves(true, true)
+      })
+    ).toBe(1)
+    expect(
+      pointsForSimultaneousAnswer({
+        mode: 'choice',
+        verdict: halves(false, false)
+      })
+    ).toBe(0)
   })
 })

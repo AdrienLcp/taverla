@@ -264,7 +264,7 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
             isDisabled={typed.trim().length === 0}
             isPending={isPreviewing}
             type='submit'
-            variant='ghost'
+            variant='underlined'
           >
             {translate('blindtest.source.preview')}
           </Button>

@@ -81,7 +81,7 @@ import { composeClassName } from './compose-class-name'
 
 type ButtonProps = ReactAriaButtonProps & {
   size?: 'medium' | 'large'
-  variant?: 'filled' | 'outlined' | 'ghost'
+  variant?: 'filled' | 'outlined' | 'underlined'
 }
 
 export const Button: React.FC<ButtonProps> = ({

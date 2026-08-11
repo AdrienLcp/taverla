@@ -57,6 +57,18 @@ assertion searches raw frames for those exact strings.
 `settings.game.kind`, so a suite for another game is a fixture rather than a
 second harness — `buzzer-game.test.ts` is one file and no plumbing.
 
+A game that is served but not shelved is opened on a shelved one and then moved
+with `host.updateSettings`, which is what a console does anyway: the door and
+the game are two different gates. `quiz-game.test.ts` is the case, and it stubs
+`question-bank` the way the others stub the music client — which also keeps
+eighteen hundred questions from being parsed on every run.
+
+The anti-cheat assertion is over **the whole round's transcript**, not the
+latest view: a leak in any frame is a leak, and a later frame tidying it away
+proves nothing. `QUESTIONS` lives in the harness for the same reason `CATALOGUE`
+does — the assertion searches raw frames for those exact strings, so a per-file
+copy that drifted would still pass.
+
 ## Three journeys, and no fourth
 
 `e2e/` holds them: a whole buzzer game across two browser contexts, two phones

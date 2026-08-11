@@ -27,7 +27,14 @@ export const questionSchema = z.object({
   answer: z.string().min(1),
   category: questionCategorySchema,
   decoys: z.tuple([z.string(), z.string(), z.string()]),
-  id: z.string().min(1)
+  id: z.string().min(1),
+  /**
+   * What the room is told once the answer is public — where the beach in the
+   * film actually is, why the record stood for forty years. It travels with the
+   * answer and never before it, which is why it lives here rather than on the
+   * prompt.
+   */
+  note: z.string().nullable()
 })
 
 /** The half a player may see: the question without any of its answers. */
@@ -35,6 +42,16 @@ export const questionPromptSchema = z.object({
   category: questionCategorySchema,
   id: z.string().min(1),
   prompt: z.string().min(1)
+})
+
+/**
+ * What becomes public at the reveal, and not a moment before — the mirror of
+ * the blind test's `revealedTrack`. The note travels with the answer rather
+ * than beside it, because it gives the answer away.
+ */
+export const revealedQuestionSchema = z.object({
+  answer: z.string().min(1),
+  note: z.string().nullable()
 })
 
 export const hostQuestionSchema = questionPromptSchema.extend(
@@ -54,5 +71,6 @@ export const questionLanguageSchema = z.enum(questionLanguages)
 export type QuestionCategory = z.infer<typeof questionCategorySchema>
 export type Question = z.infer<typeof questionSchema>
 export type QuestionPrompt = z.infer<typeof questionPromptSchema>
+export type RevealedQuestion = z.infer<typeof revealedQuestionSchema>
 export type HostQuestion = z.infer<typeof hostQuestionSchema>
 export type QuestionLanguage = z.infer<typeof questionLanguageSchema>

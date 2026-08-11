@@ -4,7 +4,7 @@ import { composeClassName } from './compose-class-name'
 
 export type ControlSize = 'small' | 'medium' | 'large'
 
-export type ControlVariant = 'filled' | 'outlined' | 'ghost'
+export type ControlVariant = 'filled' | 'outlined' | 'underlined'
 
 /**
  * The look `Button` and `Link` share. They render different elements for
@@ -20,10 +20,17 @@ export type ControlAppearance = {
    */
   size?: ControlSize
   /**
-   * Visual weight (default: `'filled'`):
-   * - `'filled'` — the accent action, one per screen
-   * - `'outlined'` — a secondary action of equal standing
-   * - `'ghost'` — a tertiary action that should not compete
+   * The material the control is made of (default: `'filled'`). All three name
+   * what the eye sees rather than how important the action is — an importance
+   * word among descriptive ones is a name that stops telling you what you will
+   * get:
+   * - `'filled'` — an ink block, the one action on the screen
+   * - `'outlined'` — the field behind an ink edge, an action of equal standing
+   * - `'underlined'` — no ground and no edge, a tertiary action that should not
+   *   compete. Still a control: it keeps the box, the case and the size
+   *
+   * A link inside a sentence is none of these — see `TextLink`, which is not a
+   * control at all.
    */
   variant?: ControlVariant
 }

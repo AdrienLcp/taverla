@@ -41,7 +41,7 @@ export const drawPlayableTrack = async ({
       return Result.failure('no_tracks_available')
     }
 
-    room.playedTrackIds.add(candidate.id)
+    room.playedContentIds.add(candidate.id)
 
     const resolved = await fetchHostTrack(candidate.id)
 
@@ -117,7 +117,7 @@ const refillWhenEmpty = async ({
   }
 
   const unplayed = fetched.data.filter(
-    (track) => !room.playedTrackIds.has(track.id)
+    (track) => !room.playedContentIds.has(track.id)
   )
 
   if (unplayed.length === 0) {

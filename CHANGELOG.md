@@ -6,8 +6,64 @@ one part.
 
 ## Unreleased
 
+### Features
+
+- `[Server]` The quiz is served, in all three modes, on 1 708 French questions
+  bundled with the server. Everything a round needs is in the repository: the
+  bank is a 780 KB asset rather than a network call, so a game whose data weighs
+  less than a photograph cannot go down because somebody else's web server did,
+  in the middle of a party. It is **not on the shelf yet** — the screens are the
+  next stage, and a room that could be opened on a game with no screens would
+  render the blind test's against a quiz round
+
+- `[Game]` The menu credits whoever wrote the questions. CC BY-SA asks that the
+  credit travel with the work, and the questions ship bundled rather than being
+  fetched from anyone, so nothing else in the product would ever name them. It
+  sits in the small print of the one piece of chrome on every screen rather than
+  on the reveal, where it would take the loudest moment of the round, ten times
+  a game, to say the same thing
+- `[Shared]` A host may turn on the bank's adult themes, and they are off until
+  they do. Its own field rather than a seventh category, because the six are
+  *subjects* and this is a rating — a question about a porn actress's first
+  album is a celebrities question that happens to be adult, and putting two axes
+  in one row is what makes such a control read as a mistake. The host is the
+  only one who can make the call: the room code is read aloud and anyone present
+  can scan the QR
+
+- `[Game]` `TextLink` is a link inside a sentence, and it is deliberately not a
+  fourth `Link` variant. Every variant there answers "which material is this
+  control made of", and this one would have had to answer "it is not one" — the
+  tell was a stylesheet that spent itself undoing the mixin above it, resetting
+  the box, the case, the tracking and the press. Keeping it separate is what
+  makes `size` and `variant` unavailable on it, which is the type saying the
+  true thing.
+
+  It replaced the product's only hand-written `<a>`, which had the browser's
+  blue and its visited purple on a saturated field. A sweep for the rest turned
+  up none: every other interactive element already comes from react-aria, and
+  the only hand-written `role` attributes are live regions on paragraphs.
+
+### Fixes
+
+- `[Game]` The control variants all name what the eye sees again. `ghost` named
+  how important an action was while `filled` and `outlined` named the material,
+  and it was underlined — so the moment a second underlined thing existed,
+  neither name told you which was which. It is `underlined` now, and the three
+  read as one family
+
 ### Breaking Changes
 
+- `[Shared]` A player is told what they hold in every game, not only the blind
+  test. `yourVerdict` carries the whole `Verdict` union where it carried the
+  `halves` arm alone. The reasoning that narrowed it — a game judged on one
+  claim has no half to hold — was true and beside the point: a claim the
+  *server* judges in silence needs the same feedback a pair of halves does, or a
+  player who is already right keeps typing and the refusal they finally get
+  reads as a lockout rather than as a win
+- `[Shared]` A quiz round's answer becomes public as `revealedQuestion`,
+  carrying the note as well — where the beach in the film actually is, why the
+  record stood for forty years. It travels with the answer rather than beside
+  it, because it gives the answer away
 - `[Shared]` How a round is answered is an axis with its own settings, and
   `PROTOCOL_VERSION` goes to 7. `settings.mode` is a union discriminated on
   `kind`, beside `settings.game` and for the same reason: which game the room is
@@ -242,6 +298,20 @@ one part.
 
 ### Improvements
 
+- `[Server]` Everyone-at-once is no longer the blind test's alone. The whole
+  simultaneous path — what a player has banked, how a guess is graded, when they
+  are finished, what the round pays on the way out — was typed to two halves,
+  which is one game's shape sitting on all of them. Stage 11 opened the seam on
+  the host-judged buzzer and stopped there; this opens the other half.
+  `pointsForSimultaneousAnswer` replaces the pair of halves-only prices and says
+  the rule once: typing pays three where a pick pays one, in every game, because
+  producing the answer from nothing is not the act of recognising it among four
+- `[Server]` A quiz typed answer is matched against the whole of what was typed,
+  which is where this game parts company with the blind test's matcher on
+  purpose. Searching *inside* a line is what makes one field honest when it
+  holds two claims; a question holds one, and containment would pay a player who
+  hedged — "trois ou quatre" contains the answer to how many languages
+  Switzerland has
 - `[Game]` The playlist follows the rest of the settings out of the lobby. It
   was a draft the launch committed, so once there was no launch left to press it
   had no way to apply and was hidden for the rest of the evening. Every control
@@ -410,6 +480,25 @@ one part.
 
 ### Internal
 
+- The question bank is built by a script that is committed with it,
+  `pnpm --filter @taverla/server questions:build`. It reads OpenQuizzDB's public
+  packs, folds their twenty-eight rubrics onto the six a phone can show, and
+  translates their French keys — `réponse`, `propositions`, `anecdote` — into
+  the English ones `question.ts` declares. It refuses two rubrics **with reasons
+  written down**, because a rubric that simply went missing reads as an
+  oversight: QUADRIQUIZZ asks for four answers and its packs carry one, and a
+  MOTS CROISÉS clue names the length and the first letter. It also checks, per
+  question, that there are exactly four propositions with the answer among them
+  rather than trusting it — 1 708 questions, zero rejections
+- There is no OpenQuizzDB API to take. `api.php` and `api_config.html` soft-404
+  onto the landing page and the old data mirror is a parked domain; what they
+  publish now is downloads. The stage plan's "fallback" was the only option, and
+  the better one — a bundled asset cannot go down mid-party
+- `playedTrackIds` is `playedContentIds`. A room remembers what it has already
+  asked, and half of that is no longer tracks
+- `not_implemented` is used nowhere. It existed so a half-built stage could
+  answer honestly instead of borrowing a code that meant something else, and the
+  protocol rule said it should shrink to nothing as the stages landed
 - Everything Playwright owns lives in `e2e/`. The config moves in beside the
   specs it configures, and the two files that are *not* tests move under
   `e2e/support/` — `deezer-stub.ts` most of all, which is a fake upstream

@@ -50,6 +50,18 @@ export const gameSettingsSchema = z.discriminatedUnion('kind', [
     locksOutOnMiss: z.boolean()
   }),
   z.object({
+    /**
+     * Whether the bank's adult themes are drawn from. Its own field rather than
+     * a seventh category, because the six are *subjects* and this is a rating:
+     * a question about a porn actress's first album is a celebrities question
+     * that happens to be adult, and putting the two axes in one row is what
+     * makes such a control read as a mistake.
+     *
+     * Off by default, and the host's alone to turn on — the room code is read
+     * aloud and anyone present can scan the QR, so they are the only one who
+     * knows who is in the room.
+     */
+    allowsAdultContent: z.boolean(),
     /** Empty means every category, the same way an empty genre list means every genre. */
     categories: z.array(questionCategorySchema),
     kind: z.literal('quiz'),
@@ -97,6 +109,7 @@ export const DEFAULT_BUZZER_SETTINGS: BuzzerSettings = {
 }
 
 export const DEFAULT_QUIZ_SETTINGS: QuizSettings = {
+  allowsAdultContent: false,
   categories: [],
   kind: 'quiz',
   language: 'fr',

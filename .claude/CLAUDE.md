@@ -140,7 +140,11 @@ string written into a component is a bug, not a shortcut — see
   substrings is the guard: `normalizeAnswer` drops whitespace, and on the bare
   string `Hell` is inside `Michelle`. Typed mode allows as many guesses as the
   clip does and closes for a player once they hold both halves; a pick is one
-  shot, because four candidates with retries is the answer with extra steps
+  shot, because four candidates with retries is the answer with extra steps.
+  **Searching *within* a line is the blind test's alone.** The quiz matches
+  against the whole of what was typed, because containment is what makes one
+  field honest when it holds two claims and a question holds one — "trois ou
+  quatre" contains the answer to how many languages Switzerland has
 - **Buzz** — a player claiming the answer; the server stamps when it arrived
 - **The floor** — what a buzz takes. It is held for `answerWindowMs`, or until
   the host judges when that is `null` and the screens count up instead. Running
@@ -207,7 +211,15 @@ exists here, so a claim about a single screen still rests on a browser pass.
 between the shelf and one game on it — `settings.game`, `round.content` and the
 verdict, all discriminated on `kind` — and the game that proves it: a **bare
 buzzer**, where the server serves no content at all and the room supplies
-whatever it likes. The quiz is 12, and ships buzzer mode before a French API.
+whatever it likes.
+
+**12 is served but has no screens.** The quiz runs in all three modes on 1 708
+French questions bundled with the server, and `quiz` is deliberately still out
+of `shelvedGames`: a room that could be *opened* on it would render the blind
+test's screens against a quiz round. There is no API to take — OpenQuizzDB
+publishes downloads now, which is better, because a bundled asset cannot go down
+in the middle of a party. Its real work was not the questions but the
+**simultaneous path**, which stage 11 left entirely in the blind test's shape.
 
 Read the divergences at the end of `docs/plans/11-buzzer.md` before trusting a
 detail written earlier in that file: the second game corrected the first half in

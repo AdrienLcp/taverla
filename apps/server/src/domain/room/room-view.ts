@@ -38,20 +38,38 @@ export const toHostView = ({
     room.round === null ? 0 : elapsedRoundMs(room.round, Date.now())
 })
 
+/**
+ * A seated host reads what a player reads. The blind test keeps `audioUrl`
+ * because that screen is still the room's speaker; a quiz has no such second
+ * copy — the prompt everyone can see is already on the round — so the seat
+ * takes the whole question and leaves nothing behind.
+ */
 const toHostContent = ({
   round,
   seatId
 }: {
   round: Round
   seatId: PlayerId | null
-}): HostRoundContent =>
-  round.content.kind === 'buzzer'
-    ? { kind: 'buzzer' }
-    : {
-        audioUrl: round.content.track.previewUrl,
-        kind: 'blindtest',
-        track: seatId === null ? round.content.track : null
-      }
+}): HostRoundContent => {
+  const content = round.content
+
+  if (content.kind === 'buzzer') {
+    return { kind: 'buzzer' }
+  }
+
+  if (content.kind === 'quiz') {
+    return {
+      kind: 'quiz',
+      question: seatId === null ? content.question : null
+    }
+  }
+
+  return {
+    audioUrl: content.track.previewUrl,
+    kind: 'blindtest',
+    track: seatId === null ? content.track : null
+  }
+}
 
 export const toPlayerView = ({
   isHostConnected,
@@ -140,16 +158,30 @@ const saidBy = (attempts: PlayerAttempts): string =>
     ? attempts.landed.join(' · ')
     : (attempts.lastMiss ?? '')
 
-const toContentView = (round: Round): RoundContent =>
-  round.content.kind === 'buzzer'
-    ? { kind: 'buzzer' }
-    : {
-        choices: round.content.choices,
-        kind: 'blindtest',
-        revealedTrack: round.revealed
-          ? toTrackIdentity(round.content.track)
-          : null
-      }
+const toContentView = (round: Round): RoundContent => {
+  const content = round.content
+
+  if (content.kind === 'buzzer') {
+    return { kind: 'buzzer' }
+  }
+
+  if (content.kind === 'quiz') {
+    const { answer, category, id, note, prompt } = content.question
+
+    return {
+      choices: content.choices,
+      kind: 'quiz',
+      prompt: { category, id, prompt },
+      revealedQuestion: round.revealed ? { answer, note } : null
+    }
+  }
+
+  return {
+    choices: content.choices,
+    kind: 'blindtest',
+    revealedTrack: round.revealed ? toTrackIdentity(content.track) : null
+  }
+}
 
 const toTrackIdentity = (track: HostTrack): TrackIdentity => ({
   artist: track.artist,

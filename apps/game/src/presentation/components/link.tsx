@@ -15,8 +15,8 @@ type LinkProps = ReactAriaLinkProps & ControlAppearance
  * react-aria `RouterProvider` mounted in `app-shell.tsx`; without it an `href`
  * would reload the whole page and drop the socket.
  *
- * Prose keeps a plain `<a>`, which `globals.sass` already styles — this is for
- * a navigation that carries a screen's action.
+ * A link inside a sentence is `TextLink`, not a variant of this one. There is
+ * no plain `<a>` in the product.
  */
 export const Link: React.FC<LinkProps> = ({
   className,

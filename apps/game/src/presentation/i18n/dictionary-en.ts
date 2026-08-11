@@ -255,7 +255,14 @@ export const EN_DICTIONARY = defineTranslations({
   menu: {
     build: 'Build {build}',
     home: 'Home',
-    label: 'Menu'
+    label: 'Menu',
+    /**
+     * A sentence broken around two links rather than a list of names joined by
+     * separators: an interpunct that lands at the start of a wrapped line reads
+     * as a bullet. The author's name is theirs and is never translated.
+     */
+    questions: 'Questions by {author} for',
+    questionsLicence: ', under'
   },
   notFound: {
     back: 'Back to the start',

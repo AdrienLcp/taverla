@@ -27,6 +27,10 @@ at once:
 
 A curated `bank` file stays the fallback, not the plan.
 
+> **The three unknowns are answered, and the order above is void.** See
+> [the source, settled](#the-source-settled) — there is no API, the fallback is
+> the only option, and it is the better one. Read that section before this one.
+
 ## Why this one
 
 `docs/game-catalogue.md` costed it as the cheapest game on the shelf, because it
@@ -100,3 +104,91 @@ The seam is already built — stage 11 did it. What this stage adds is arms:
 A question written from inside the app. Categories chosen per round. Images.
 Choice mode, if the source turns out not to ship decoys — say so here rather
 than authoring three hundred wrong answers to unblock it.
+
+## The source, settled
+
+**There is no OpenQuizzDB API.** `api.php` and `api_config.html` soft-404 onto
+the landing page, the API is documented only in a PDF nothing links to any more,
+and the data mirror the old docs pointed at is a parked domain. What they
+publish now is downloads, and the answers to the three unknowns fell out of
+reading one:
+
+| Unknown | Answer |
+|---|---|
+| An API key | None to get. The packs are public and need no account |
+| Licence | **CC BY-SA 4.0**, named in every pack's own header alongside its author |
+| **Decoys** | **Yes.** `propositions` is four candidates, one of which is `réponse` |
+
+So the "fallback" is the only option and it is the better one: a bundled asset
+cannot go down in the middle of a party, which a live API can and a blind test
+already does.
+
+**What the packs actually are.** 516 themed packs of **four questions each** —
+the free tier is a taster, not the 285 348 questions the site advertises
+holding. `apps/server/scripts/build-question-bank.ts` ingests them, and the
+numbers it produced are **1 708 questions over 427 packs, 780 KB, zero
+rejections**: every pack carried exactly four propositions with the answer among
+them, which is checked per question rather than trusted.
+
+Two rubrics are refused with reasons in the script, because a rubric that simply
+went missing reads as an oversight. **QUADRIQUIZZ** asks for four answers and
+the pack carries one; **MOTS CROISÉS** is a crossword clue that names the
+length and the first letter. **POUR ADULTES** is skipped as a room where anyone
+can scan the code.
+
+**The distribution is lopsided** and worth knowing before the picker is built:
+arts 636, everyday 588, science 160, geography 156, sport 116, **history 52**.
+Every category is the default, so it does not bite until a room ticks one.
+
+**`accepted` is empty on every row.** Upstream names no alternate spellings, so
+typed mode rests entirely on the matcher's own tolerance. The field is on the
+schema and can be filled later without touching it.
+
+## What the second game corrected in the first
+
+Four things, and they are the reason a second case is worth having:
+
+- **`answerAppearsIn` is not reused, contrary to what this plan said above.**
+  Searching *inside* a line is what makes the blind test's single field honest,
+  because that field holds two claims and a room types them together. A question
+  holds one, and containment would pay a hedge: "trois ou quatre" contains the
+  answer to how many languages Switzerland has. `normalizeAnswer` and
+  `matchesAnswer` are reused; `answerAppearsIn` is the blind test's.
+- **`pointsFor` never moved to `blindtest/`.** Stage 11 already found it reads
+  either shape; it lives in `scoring/verdict.ts` with `isMiss`,
+  `verdictKindFor`, `nothingScored`, and now `isFullyBanked` and
+  `pointsForSimultaneousAnswer`.
+- **`yourVerdict` is the whole union, not the halves arm.** Stage 11 reasoned
+  that a game judged on one claim has no half to hold. True, and beside the
+  point: a claim the *server* judges in silence needs the same feedback a pair
+  of halves does. Without it a player who is already right keeps typing, and the
+  refusal they eventually get says "you have had your go".
+- **The simultaneous path was still entirely the blind test's shape.** Stage 11
+  opened the seam on the host-judged buzzer only. `PlayerAttempts.verdict`,
+  `grade`, `bank`, `everyoneIsDone` and `settleSimultaneousRound` were all
+  `HalvesVerdict`, and generalising them was the real work of this stage — not
+  the questions.
+
+`not_implemented` is now used nowhere, which is what the protocol rule said
+should happen to it as the stages land.
+
+## Where this stage stopped
+
+**Done and covered**: the protocol arms, the generalised simultaneous path, the
+bank and its ingestion script, the server round in all three modes, and
+`quiz-game.test.ts` — eight tests including the whole-transcript assertion that
+no player frame carries the answer, an accepted spelling, a note, or
+`correctChoiceIndex`.
+
+**Not done, and deliberately**: the host console and player screens, and
+therefore `quiz` is **not in `shelvedGames`**. The server serves the game in
+full — a room already on the shelf can be moved onto it with
+`host.updateSettings`, which is what the socket suite does — but a room that
+could be *opened* on it would render blind-test screens against a quiz round.
+Shelving it is the last step, after the UI, exactly as this plan said.
+
+**Raised, not done**: `no_tracks_available` is the protocol code a quiz that has
+run out of questions sends, and it says "tracks". The honest name is
+`no_content_available`, and the rename touches the Deezer client's own error
+union, `routes.ts`, both dictionaries and the harness — deeper than the
+mechanical case `naming-and-quality.md` says to fold into the work in hand.

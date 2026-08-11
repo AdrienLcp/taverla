@@ -4,6 +4,7 @@ import type {
   RoundContent,
   RoundView
 } from '@taverla/protocol/room'
+import type { HalvesVerdict, Verdict } from '@taverla/protocol/scoring'
 
 /**
  * The blind test's arm of a round, or `null` when the room is playing something
@@ -20,3 +21,8 @@ export const blindtestHostContent = (
   view: HostRoomView | null | undefined
 ): Extract<HostRoundContent, { kind: 'blindtest' }> | null =>
   view?.currentContent?.kind === 'blindtest' ? view.currentContent : null
+
+/** And over what the reader has banked, which the typed field reads to know what is still owed. */
+export const bankedHalves = (
+  verdict: Verdict | null | undefined
+): HalvesVerdict | null => (verdict?.kind === 'halves' ? verdict : null)

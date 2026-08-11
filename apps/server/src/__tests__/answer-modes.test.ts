@@ -6,6 +6,7 @@ import {
 } from '@taverla/protocol/room'
 
 import {
+  bankedHalves,
   blindtestRound,
   errorsIn,
   FAST_GAME,
@@ -267,13 +268,13 @@ describe('answering all at once', () => {
     // completes the pair right behind her.
     guess(zoe, track.title)
     await waitFor(
-      () => playerView(zoe)?.yourVerdict?.titleCorrect === true,
+      () => bankedHalves(playerView(zoe))?.titleCorrect === true,
       'Zoe’s title to be banked'
     )
 
     guess(max, track.artist)
     await waitFor(
-      () => playerView(max)?.yourVerdict?.artistCorrect === true,
+      () => bankedHalves(playerView(max))?.artistCorrect === true,
       'Max’s artist to be banked'
     )
 
@@ -328,7 +329,7 @@ describe('answering all at once', () => {
     })
 
     await waitFor(
-      () => playerView(zoe)?.yourVerdict?.titleCorrect === true,
+      () => bankedHalves(playerView(zoe))?.titleCorrect === true,
       'the second guess to be banked'
     )
   })
@@ -441,7 +442,7 @@ describe('answering all at once', () => {
     // Zoe never lands anything, so she is not done and the round would run to
     // the end of the clip. The host calls it instead.
     await waitFor(
-      () => playerView(max)?.yourVerdict?.artistCorrect === true,
+      () => bankedHalves(playerView(max))?.artistCorrect === true,
       'Max to hold the pair'
     )
     host.send({ roundId, type: 'host.reveal' })
