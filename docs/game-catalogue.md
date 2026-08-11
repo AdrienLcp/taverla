@@ -175,15 +175,60 @@ tapping one of four covers is still a blind test.
 What they do change is an assumption everything shipped so far rests on:
 **exactly one player acts at a time**. That is the expensive part, not the UI.
 
+## A setting has three possible owners, not two
+
+Stage 11 split settings into "the room's" and "the game's". That is one axis
+short, and the missing one is worth naming before anybody writes another
+setting:
+
+| Owner | The test | Today |
+|---|---|---|
+| **The room** | true of any game, in any mode | `countdownMs`, `autoAdvanceMs`, `roundCount` |
+| **The game** | true of this game, whatever the mode | `difficulty`, `source`, the round's duration |
+| **The mode** | true of this way of answering, whatever the game | `answerWindowMs` — and nothing else yet |
+
+`answerWindowMs` is the one that exposes the gap. It sits on the room, and it is
+meaningless in two of the three answer modes: nothing holds the floor when
+everyone answers at once. The settings panel already hides it outside buzzer
+mode, which is the shape of the truth expressed as a UI rule rather than as a
+type.
+
+**Do not build the `mode` union yet.** It would have one field in one arm and
+two empty ones — a union invented to hold a single value, which is the same
+mistake as a `game` union built before the second game existed. The cost is real
+too: `answerMode` is read by `registerBuzz`, `registerAnswer`,
+`settleSimultaneousRound`, `findBuzzBlocker`, the scoreboard and three UI
+branches, and turning it from a string into `settings.mode.kind` changes every
+one of them.
+
+**The trigger is precise: the second mode-specific setting.** One field is a
+documented exception; two are a shape. Candidates that would pull it in — how
+many candidates choice mode shows, whether typed mode pays partial credit, how
+many thumbs a buzzer round accepts before it closes. When one of those is
+wanted, build the union and move `answerWindowMs` into it in the same change.
+
+**One thing worth fixing sooner**, because it is a naming smell rather than a
+structure: the blind test's `clipDurationMs` and the quiz's `answerDurationMs`
+are the same concept — how long a round stays open — under two names, which is
+why the server has to translate between them. Both should be `roundDurationMs`
+in their own arm, each keeping its own bounds. The blind test's ceiling is a
+thirty-second Deezer preview and the quiz's is a taste call; that is exactly why
+the field stays per-game instead of being hoisted to the room.
+
 ## The seams, and what it costs to keep them open
 
-**Room state and game state are fused today.** `RoomPhase` is
-`lobby → countdown → playing → buzzed → revealed → finished`, which is the blind
-test's life cycle wearing the room's name. The fix, when it comes, is a `game`
-field on the room carrying a discriminated union on `kind`, with `lobby` and
-`finished` staying on the room where they belong. *Do not do this now* — a union
-of one is noise, and the compiler will walk through the change in an hour when
-there are two.
+**Room state and game state were fused, and are not any more.** Stage 11 split
+them: `settings.game` and `round.content` are discriminated on `kind`, and the
+compiler did walk through the change in an afternoon, exactly as this paragraph
+predicted it would once there were two cases.
+
+What is still fused is `RoomPhase` — `lobby → countdown → playing → buzzed →
+revealed → finished`, the blind test's life cycle wearing the room's name. It
+has not been split because every phase happens to be true of the next two games
+as well: a countdown is a countdown, a reveal is a reveal, and a buzzer game
+that serves nothing still moves through all six. Split it the day a game needs a
+phase these names cannot carry — a drawing game's "everyone is drawing at once"
+has no equivalent here — and not before.
 
 **Message names are blind-test verbs.** `player.buzz`, `host.judge`,
 `host.reveal`. When a second game lands, its messages take its own namespace

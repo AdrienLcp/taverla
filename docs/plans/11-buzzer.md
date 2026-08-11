@@ -96,6 +96,28 @@ that decides how a round is answered and scored — `registerBuzz`,
 down means narrowing on the game at every one of those call sites to learn
 something the room already knows.
 
+### The third owner, and why it stays unbuilt
+
+There is a **mode** axis as well as a room and a game one, and
+`docs/game-catalogue.md` now names it: `answerWindowMs` belongs to buzzer mode
+rather than to the room, because nothing holds the floor when everyone answers
+at once. The panel already hides it outside buzzer mode, which is that truth
+expressed as a UI rule instead of as a type.
+
+It stays a UI rule for now. A `mode` union today would have one field in one arm
+and two empty ones, which is the same mistake as a `game` union built before the
+second game existed. **The trigger is the second mode-specific setting** — how
+many candidates choice mode shows, whether typed mode pays partial credit, how
+many thumbs a buzzer round takes before it closes. Build it then, and move
+`answerWindowMs` into it in the same change.
+
+One naming fix does belong in this stage, though, because it is cheap and the
+server currently pays for it: the blind test's `clipDurationMs` and the quiz's
+`answerDurationMs` are one concept — how long a round stays open — under two
+names, which is why `round-service.ts` has a `roundDurationMs` switch that
+exists only to translate between them. Rename both to `roundDurationMs` in their
+own arms, each keeping its own bounds, and the switch becomes a projection.
+
 ### What is genuinely new
 
 - **A lockout the host owns.** The blind test's lockout lasts one round, because
