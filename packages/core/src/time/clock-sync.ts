@@ -54,8 +54,9 @@ export const serverNow = (
 
 /**
  * How long this device should wait before a moment the server expressed in its
- * own clock — the countdown, and the `audioStartsAt` the host schedules
- * playback against. Never negative: a target already past means "now".
+ * own clock — the countdown, and the `startsAt` the host schedules playback
+ * against. Never negative: a target already past means "now", which is why
+ * anything measuring time *since* a moment reads `serverNow` instead.
  */
 export const millisecondsUntil = (
   estimate: ClockEstimate | null,

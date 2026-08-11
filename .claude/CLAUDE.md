@@ -132,7 +132,12 @@ string written into a component is a bug, not a shortcut — see
   clip does and closes for a player once they hold both halves; a pick is one
   shot, because four candidates with retries is the answer with extra steps
 - **Buzz** — a player claiming the answer; the server stamps when it arrived
-- **Lockout** — a player who answered wrong sits out the rest of the round
+- **The floor** — what a buzz takes. It is held for `answerWindowMs`, or until
+  the host judges when that is `null` and the screens count up instead. Running
+  out is the same outcome as answering wrong, because taking the floor and
+  saying nothing is what it cost everyone else
+- **Lockout** — a player who answered wrong, or held the floor and said nothing,
+  sits out the rest of the round
 - **Reveal** — the moment the track identity becomes public
 - **Verdict** — the host judging title and artist independently, 1 point each
 - **Session id** — minted by the client, stored per room and role; what lets a

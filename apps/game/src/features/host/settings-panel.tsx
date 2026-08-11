@@ -20,6 +20,13 @@ const ROUND_COUNTS = [5, 10, 20, 30] as const
 const CLIP_DURATIONS_MS = [10_000, 20_000, 30_000] as const
 const COUNTDOWN_DURATIONS_MS = [3_000, 5_000, 10_000] as const
 
+/**
+ * `0` stands for "no window": the strip carries strings, and a segment whose
+ * value is the empty string is one a screen reader announces as nothing.
+ */
+const NO_ANSWER_WINDOW = 0
+const ANSWER_WINDOWS_MS = [5_000, 10_000, 20_000, NO_ANSWER_WINDOW] as const
+
 const optionFrom = <T extends number>(
   options: readonly T[],
   value: string
@@ -142,6 +149,31 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
             value: String(milliseconds)
           }))}
           value={String(game.clipDurationMs)}
+        />
+      )}
+
+      {settings.answerMode === 'buzzer' && (
+        <SegmentedControl
+          isDisabled={isDisabled}
+          label={translate('host.answerWindow')}
+          onChange={(next) => {
+            const chosen = optionFrom(ANSWER_WINDOWS_MS, next)
+
+            if (chosen !== undefined) {
+              onChange({
+                ...settings,
+                answerWindowMs: chosen === NO_ANSWER_WINDOW ? null : chosen
+              })
+            }
+          }}
+          options={ANSWER_WINDOWS_MS.map((milliseconds) => ({
+            label:
+              milliseconds === NO_ANSWER_WINDOW
+                ? translate('host.answerWindow.none')
+                : secondsLabel(milliseconds),
+            value: String(milliseconds)
+          }))}
+          value={String(settings.answerWindowMs ?? NO_ANSWER_WINDOW)}
         />
       )}
 

@@ -1,0 +1,19 @@
+@use '../styles/typography'
+
+@layer components
+  .floor-clock
+    @include typography.billboard
+
+    font-variant-numeric: tabular-nums
+    line-height: 1
+
+    // The two directions read differently on purpose: a window running out is
+    // the room's pressure and takes the ink, where a floor nobody is timing is
+    // information the host glances at.
+    &.closing
+      color: var(--ink)
+
+    &.open
+      @include typography.title
+
+      color: var(--ink-muted)

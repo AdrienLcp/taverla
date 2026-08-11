@@ -41,6 +41,18 @@ export const answerModeSchema = z.enum(answerModes)
 export const roomSettingsSchema = z.object({
   answerMode: answerModeSchema,
   /**
+   * How long the floor is held after a buzz before the server takes it back, or
+   * `null` when the host decides by hand and the screens count up instead.
+   *
+   * Buzzing costs nothing on its own, so without this a thumb that was fast and
+   * a mouth that has nothing to say can hold a whole room. Running out is the
+   * same outcome as answering wrong — no points, locked out, the round resumes
+   * — because taking the floor and saying nothing is what it cost everyone
+   * else, and because a pass with no lockout lets the same thumb take it again
+   * immediately.
+   */
+  answerWindowMs: z.number().int().min(3_000).max(60_000).nullable(),
+  /**
    * How long a reveal stays on screen before the next round starts itself, or
    * `null` when the host advances by hand. The wait is served by the server for
    * the same reason the countdown is: a background tab throttles its timers,
@@ -66,6 +78,7 @@ export const DEFAULT_ROOM_SETTINGS: RoomSettings = {
    * the floor to whoever is quickest and leaves the rest of the room watching.
    */
   answerMode: 'typed',
+  answerWindowMs: 10_000,
   autoAdvanceMs: null,
   countdownMs: 3_000,
   game: DEFAULT_BLINDTEST_SETTINGS,
@@ -82,6 +95,15 @@ export const publicPlayerSchema = z.object({
 export const activeBuzzSchema = z.object({
   /** Stamped by the server on frame arrival — the only ordering anyone can trust. */
   atServerTime: serverTimeSchema,
+  /**
+   * When the server takes the floor back, or `null` when the host decides by
+   * hand — and the screens then count up from `atServerTime` instead of down.
+   *
+   * A server time rather than a duration, because the window is paused and
+   * restarted along with the round: a host who drops off Wi-Fi must not spend
+   * somebody's five seconds while nobody can hear them answer.
+   */
+  expiresAt: serverTimeSchema.nullable(),
   playerId: playerIdSchema
 })
 

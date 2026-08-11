@@ -9,6 +9,7 @@ import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 import {
   blindtestRound,
   errorsIn,
+  FAST_GAME,
   hostContent,
   hostView,
   type Peer,
@@ -133,6 +134,58 @@ describe('a whole game over real sockets', () => {
       fatal: false
     })
     expect(errorsIn(alice)).toHaveLength(0)
+  })
+
+  // Buzzing costs nothing on its own, so without a clock a fast thumb and an
+  // empty head hold the room until the host intervenes. Running out is the same
+  // outcome as answering wrong, and the lockout is the load-bearing half: a pass
+  // would let that thumb take the floor straight back.
+  it('[buzz] takes the floor back from a player who says nothing, and locks them out', async () => {
+    const { code, host } = await room.openRoom({
+      ...FAST_GAME,
+      answerWindowMs: 3_000
+    })
+    const alice = await room.seat({ code, nickname: 'Alice' })
+    await room.seat({ code, nickname: 'Bob' })
+
+    const aliceId = playerView(alice)?.youId ?? ''
+    const round = await runRoundToPlaying(host, 'host.startRound')
+
+    alice.send({ roundId: round.id, type: 'player.buzz' })
+    await waitFor(() => hostView(host)?.phase === 'buzzed', 'the buzz')
+
+    const buzz = hostView(host)?.round?.activeBuzz
+
+    expect(buzz?.expiresAt).toBeGreaterThan(buzz?.atServerTime ?? 0)
+
+    await waitFor(
+      () => hostView(host)?.phase === 'playing',
+      'the floor to be taken back',
+      6_000
+    )
+
+    expect(playerView(alice)?.round?.lockedOutPlayerIds).toContain(aliceId)
+    expect(hostView(host)?.round?.activeBuzz).toBeNull()
+  })
+
+  it('[buzz] leaves the floor open when the host is the clock', async () => {
+    const { code, host } = await room.openRoom({
+      ...FAST_GAME,
+      answerWindowMs: null
+    })
+    const alice = await room.seat({ code, nickname: 'Alice' })
+
+    const round = await runRoundToPlaying(host, 'host.startRound')
+
+    alice.send({ roundId: round.id, type: 'player.buzz' })
+    await waitFor(() => hostView(host)?.phase === 'buzzed', 'the buzz')
+
+    expect(hostView(host)?.round?.activeBuzz?.expiresAt).toBeNull()
+
+    await sleep(200)
+
+    // Still theirs: nothing but the host ends this one.
+    expect(hostView(host)?.phase).toBe('buzzed')
   })
 
   it('[round] locks a wrong answer out of this round only, and plays on', async () => {

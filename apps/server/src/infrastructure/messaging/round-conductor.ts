@@ -11,7 +11,8 @@ import {
   remainingPlaybackMs,
   resumePlayback,
   revealRound,
-  settleSimultaneousRound
+  settleSimultaneousRound,
+  timeOutBuzz
 } from '@/domain/round/round-service'
 import {
   cancelRoundTimer,
@@ -162,6 +163,49 @@ export const holdPlaybackTimeout = (code: RoomCode): void => {
 }
 
 /**
+ * The floor has a clock of its own, and it is the server's for the same reason
+ * the countdown is: the host's tab is the one most likely to be in the
+ * background, and a room watching someone say nothing should not depend on it.
+ *
+ * Idempotent, and a `null` window cancels rather than schedules — the screens
+ * then count up and the host decides when to cut in.
+ */
+export const armAnswerWindow = (room: Room): void => {
+  const expiresAt = room.round?.activeBuzz?.expiresAt
+
+  if (room.phase !== 'buzzed' || expiresAt == null || room.round === null) {
+    cancelRoundTimer(room.code, 'answer')
+
+    return
+  }
+
+  const roundId = room.round.id
+
+  scheduleRoundTimer({
+    code: room.code,
+    delayMs: expiresAt - Date.now(),
+    kind: 'answer',
+    run: () => {
+      const outcome = timeOutBuzz({ now: Date.now(), room, roundId })
+
+      if (outcome === 'resumed') {
+        armPlaybackTimeout(room)
+      }
+
+      if (outcome === 'revealed') {
+        abandonRound(room.code)
+      }
+
+      broadcastRoom(room)
+
+      if (outcome === 'revealed') {
+        armAutoAdvance(room)
+      }
+    }
+  })
+}
+
+/**
  * The host's browser is the room's speaker and its only judge, so a game that
  * carries on without them carries on in silence, unjudged, burning clip time
  * nobody can hear. Everything time-driven stops instead, and the clip keeps the
@@ -174,6 +218,7 @@ export const holdPlaybackTimeout = (code: RoomCode): void => {
  */
 export const holdRoundWhileHostIsAway = (room: Room): void => {
   cancelRoundTimer(room.code, 'advance')
+  cancelRoundTimer(room.code, 'answer')
   cancelRoundTimer(room.code, 'countdown')
   cancelRoundTimer(room.code, 'playback')
   holdPlayback(room, Date.now())
@@ -193,6 +238,12 @@ export const resumeRoundForHost = (room: Room): void => {
 
   if (room.phase === 'playing') {
     armPlaybackTimeout(room)
+
+    return
+  }
+
+  if (room.phase === 'buzzed') {
+    armAnswerWindow(room)
 
     return
   }

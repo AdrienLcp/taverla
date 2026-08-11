@@ -99,7 +99,14 @@ const toPublicPlayer = (participant: Participant): PublicPlayer => ({
  * this is the floor above it.
  */
 const toRoundView = (round: Round): RoundView => ({
-  activeBuzz: round.activeBuzz,
+  activeBuzz:
+    round.activeBuzz === null
+      ? null
+      : {
+          atServerTime: round.activeBuzz.atServerTime,
+          expiresAt: round.activeBuzz.expiresAt,
+          playerId: round.activeBuzz.playerId
+        },
   answers: round.attempts.map(({ firstGuessedAt, playerId }) => ({
     atServerTime: firstGuessedAt,
     playerId

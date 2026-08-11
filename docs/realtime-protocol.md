@@ -80,6 +80,7 @@ Shared by both:
   "phase": "playing",              // lobby | countdown | playing | buzzed | revealed | finished
   "players": [{ "id": "…", "nickname": "Alice", "score": 2, "isConnected": true }],
   "settings": { "roundCount": 10, "countdownMs": 3000, "answerMode": "typed",
+                "answerWindowMs": 10000,
                 "game": { "kind": "blindtest", "clipDurationMs": 30000,
                           "difficulty": "wellKnown",
                           "source": { "kind": "chart" } } },
@@ -87,7 +88,8 @@ Shared by both:
     "id": "…",
     "index": 3,                    // 1-based
     "startsAt": 1786215012000,     // server clock; schedule against your offset
-    "activeBuzz": { "playerId": "…", "atServerTime": 1786215014311 },
+    "activeBuzz": { "playerId": "…", "atServerTime": 1786215014311,
+                    "expiresAt": 1786215024311 },  // null → the host decides
     "lockedOutPlayerIds": ["…"],   // answered wrong, out for this round
     "awards": [{ "playerId": "…", "points": 2, "verdict": { … } }],
     "content": { "kind": "blindtest", "choices": [],

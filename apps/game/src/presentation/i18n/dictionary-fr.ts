@@ -123,6 +123,8 @@ export const FR_DICTIONARY: Dictionary = {
   'home.tagline':
     'Des jeux de soirée pour un écran et les téléphones de tout le monde.',
   'home.title': 'Taverla',
+  'host.answerWindow': 'Temps pour répondre après un buzz',
+  'host.answerWindow.none': 'Tu décides',
 
   'host.autoAdvance': 'Enchaîner tout seul',
   'host.changeSettings': 'Changer les réglages',

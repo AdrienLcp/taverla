@@ -138,12 +138,54 @@ export const registerBuzz = ({
     return Result.failure(rejection)
   }
 
-  round.activeBuzz = { atServerTime: now, playerId }
+  const window = room.settings.answerWindowMs
+
+  round.activeBuzz = {
+    atServerTime: now,
+    expiresAt: window === null ? null : now + window,
+    frozenWithMsLeft: null,
+    playerId
+  }
   room.phase = 'buzzed'
   pausePlayback(round, now)
   touch(room, now)
 
   return Result.success(undefined)
+}
+
+/**
+ * The floor ran out. It is the same outcome as answering wrong on purpose:
+ * taking the floor and saying nothing is what it cost everyone else, and a pass
+ * with no lockout would let the same thumb take it straight back.
+ */
+export const timeOutBuzz = ({
+  now,
+  room,
+  roundId
+}: {
+  now: number
+  room: Room
+  roundId: RoundId
+}): VerdictOutcome | null => {
+  const buzzer = room.round?.activeBuzz?.playerId
+
+  if (room.phase !== 'buzzed' || room.round?.id !== roundId) {
+    return null
+  }
+
+  if (buzzer === undefined) {
+    return null
+  }
+
+  const judged = applyVerdict({
+    now,
+    playerId: buzzer,
+    room,
+    roundId,
+    verdict: { artistCorrect: false, titleCorrect: false }
+  })
+
+  return judged.status === 'success' ? judged.data : null
 }
 
 export type AnswerRejection = Extract<
@@ -466,8 +508,20 @@ export const holdPlayback = (room: Room, now: number): void => {
     return
   }
 
+  freezeAnswerWindow(room.round, now)
   pausePlayback(room.round, now)
   touch(room, now)
+}
+
+const freezeAnswerWindow = (round: Round, now: number): void => {
+  const buzz = round.activeBuzz
+
+  if (buzz === null || buzz.expiresAt === null) {
+    return
+  }
+
+  buzz.frozenWithMsLeft = Math.max(0, buzz.expiresAt - now)
+  buzz.expiresAt = null
 }
 
 /**
@@ -492,6 +546,14 @@ export const resumePlayback = (room: Room, now: number): void => {
 
   if (room.phase === 'playing') {
     round.playingSince = now
+    touch(room, now)
+
+    return
+  }
+
+  if (room.phase === 'buzzed' && round.activeBuzz?.frozenWithMsLeft != null) {
+    round.activeBuzz.expiresAt = now + round.activeBuzz.frozenWithMsLeft
+    round.activeBuzz.frozenWithMsLeft = null
     touch(room, now)
   }
 }

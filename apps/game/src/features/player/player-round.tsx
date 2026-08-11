@@ -15,6 +15,7 @@ import {
 import { blindtestContent } from '@/helpers/blindtest-round'
 import { buzzFeedback } from '@/infrastructure/env'
 import { Countdown } from '@/presentation/components/countdown'
+import { FloorClock } from '@/presentation/components/floor-clock'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { buzzBlockerKey, scoringKey } from '@/presentation/i18n/translation'
@@ -132,13 +133,15 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
     )
   }
 
-  return <Buzzer onBuzz={onBuzz} view={view} />
+  return <Buzzer clock={clock} onBuzz={onBuzz} view={view} />
 }
 
 const Buzzer = ({
+  clock,
   onBuzz,
   view
 }: {
+  clock: ClockEstimate | null
   onBuzz: (roundId: string) => boolean
   view: PlayerRoomView
 }) => {
@@ -178,6 +181,10 @@ const Buzzer = ({
       >
         {translate('blindtest.buzz.action')}
       </ReactAriaButton>
+
+      {isWon && view.round?.activeBuzz != null && (
+        <FloorClock buzz={view.round.activeBuzz} clock={clock} />
+      )}
 
       <p className='blocker' role='status'>
         {hasFailed

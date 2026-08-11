@@ -75,7 +75,17 @@ export type PlayerAttempts = {
 }
 
 export type Round = {
-  activeBuzz: { atServerTime: number; playerId: PlayerId } | null
+  activeBuzz: {
+    atServerTime: number
+    /** `null` when the window is unlimited, or while the round is frozen. */
+    expiresAt: number | null
+    /**
+     * What the window had left when the host walked away, so it resumes with
+     * that rather than with a fresh go or an expiry nobody could answer into.
+     */
+    frozenWithMsLeft: number | null
+    playerId: PlayerId
+  } | null
   /** Buzzer mode leaves this empty; the other two fill it as frames arrive. */
   attempts: PlayerAttempts[]
   awards: Award[]

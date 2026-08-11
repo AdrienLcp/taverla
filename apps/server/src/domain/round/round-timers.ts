@@ -6,7 +6,7 @@ import type { RoomCode } from '@taverla/protocol/identifiers'
  * of the same kind — a countdown restarted mid-flight must not leave the first
  * one running.
  */
-export type RoundTimerKind = 'advance' | 'countdown' | 'playback'
+export type RoundTimerKind = 'advance' | 'answer' | 'countdown' | 'playback'
 
 const timersByRoom = new Map<
   RoomCode,

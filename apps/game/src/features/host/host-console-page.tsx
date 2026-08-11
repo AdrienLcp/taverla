@@ -259,6 +259,8 @@ const Stage = ({
       <div className='stage solo'>
         {track !== null && (
           <VerdictPanel
+            buzz={round.activeBuzz}
+            clock={clock}
             nickname={buzzer?.nickname ?? '—'}
             onJudge={(verdict) => {
               send({

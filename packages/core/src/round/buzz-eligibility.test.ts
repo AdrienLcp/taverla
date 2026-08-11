@@ -81,11 +81,11 @@ describe('findBuzzBlocker', () => {
   it('[buzz] distinguishes my pending answer from someone else holding the buzzer', () => {
     const mine = {
       ...runningRound,
-      activeBuzz: { atServerTime: 1_500, playerId: 'me' }
+      activeBuzz: { atServerTime: 1_500, expiresAt: null, playerId: 'me' }
     }
     const theirs = {
       ...runningRound,
-      activeBuzz: { atServerTime: 1_500, playerId: 'bob' }
+      activeBuzz: { atServerTime: 1_500, expiresAt: null, playerId: 'bob' }
     }
 
     expect(findBuzzBlocker(viewFor('buzzed', mine))).toBe<BuzzBlocker>(
@@ -101,7 +101,7 @@ describe('findBuzzBlocker', () => {
   it('[buzz] reports the lockout ahead of a transient reason', () => {
     const lockedOutAndBusy = {
       ...runningRound,
-      activeBuzz: { atServerTime: 1_500, playerId: 'bob' },
+      activeBuzz: { atServerTime: 1_500, expiresAt: null, playerId: 'bob' },
       lockedOutPlayerIds: ['me']
     }
 

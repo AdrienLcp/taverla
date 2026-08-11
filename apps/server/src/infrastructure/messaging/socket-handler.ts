@@ -48,6 +48,7 @@ import {
 import { broadcastRoom, sendError, sendPong, sendWelcome } from './outbound'
 import {
   abandonRound,
+  armAnswerWindow,
   armAutoAdvance,
   armPlaybackTimeout,
   beginRound,
@@ -376,6 +377,7 @@ export const createRoomSocketEvents = (
     }
 
     holdPlaybackTimeout(room.code)
+    armAnswerWindow(room)
     broadcastRoom(room)
   }
 
@@ -573,6 +575,9 @@ export const createRoomSocketEvents = (
   }
 
   const settle = (outcome: VerdictOutcome | null, room: Room): void => {
+    // The floor is no longer held, whatever released it.
+    armAnswerWindow(room)
+
     if (outcome === 'resumed') {
       armPlaybackTimeout(room)
     }

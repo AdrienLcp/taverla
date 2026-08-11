@@ -1,9 +1,13 @@
 import type React from 'react'
 
+import type { ActiveBuzz } from '@taverla/protocol/room'
 import type { Verdict } from '@taverla/protocol/scoring'
 import type { HostTrack } from '@taverla/protocol/track'
 
+import type { ClockEstimate } from '@taverla/core/time/clock-sync'
+
 import { Button } from '@/presentation/components/button'
+import { FloorClock } from '@/presentation/components/floor-clock'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import type { TranslationKey } from '@/presentation/i18n/translation'
 
@@ -42,6 +46,9 @@ const CHOICES: readonly {
 ]
 
 type VerdictPanelProps = {
+  /** Who holds the floor, and how long they have left of it. */
+  buzz: ActiveBuzz
+  clock: ClockEstimate | null
   /** Who is holding the buzzer. The host needs the name to look up at the room. */
   nickname: string
   onJudge: (verdict: Verdict) => void
@@ -53,6 +60,8 @@ type VerdictPanelProps = {
 }
 
 export const VerdictPanel: React.FC<VerdictPanelProps> = ({
+  buzz,
+  clock,
   nickname,
   onJudge,
   track
@@ -62,6 +71,7 @@ export const VerdictPanel: React.FC<VerdictPanelProps> = ({
   return (
     <section className='verdict-panel'>
       <h2>{translate('blindtest.theyBuzzed', { nickname })}</h2>
+      <FloorClock buzz={buzz} clock={clock} />
 
       <div className='answer'>
         <p className='title'>{track.title}</p>

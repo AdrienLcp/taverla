@@ -26,6 +26,16 @@ one part.
 
 ### Features
 
+- `[Shared]` The floor has a clock. Buzzing costs nothing on its own, so a fast
+  thumb attached to an empty head could hold a whole room until the host
+  intervened. `answerWindowMs` is how long the floor is held before the server
+  takes it back, and `null` is the same feature read from the other end: the
+  screens count *up* from the buzz and the host decides when to cut in. Running
+  out is the same outcome as answering wrong — no points, locked out, the round
+  resumes — because that is what taking the floor and saying nothing cost
+  everyone else, and because a pass with no lockout lets the same thumb take it
+  straight back. Both screens read the same number, off the server's clock
+  rather than a local timer started when the frame arrived
 - `[Game]` Typing an answer is one field and as many goes as the clip allows. A
   guess is measured against the title and the artist independently — whichever
   it matches is banked — so "jean jacques goldman on ira" takes both and

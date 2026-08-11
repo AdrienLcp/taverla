@@ -119,6 +119,8 @@ export const EN_DICTIONARY = {
   'home.games': 'The games',
   'home.tagline': 'Party games for one screen and everyone’s phone.',
   'home.title': 'Taverla',
+  'host.answerWindow': 'Time to answer after a buzz',
+  'host.answerWindow.none': 'You decide',
 
   'host.autoAdvance': 'Chain rounds by itself',
   'host.changeSettings': 'Change the settings',
