@@ -118,12 +118,14 @@ type PlaylistPickerProps = {
 
 /**
  * A blind test with the wrong decade is a wasted evening, so the pool is chosen
- * before the game starts rather than discovered on the first round.
+ * rather than discovered on the first round.
  *
- * Nothing here commits: starting the game is what sends the source, because a
- * choice that has to be confirmed and *then* launched is two decisions where
- * the host only made one. The preview button is the exception, and it only
- * looks — it exists because a query or an id with no visible answer is a guess.
+ * Nothing here commits: whatever opens the next round is what sends the source,
+ * because a choice that has to be confirmed and *then* launched is two
+ * decisions where the host only made one. That is also what lets the picker
+ * stay reachable while a game runs — a source edited mid-clip cannot touch the
+ * round already drawn. The preview button is the exception, and it only looks:
+ * a query or an id with no visible answer is a guess.
  */
 export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
   onDraftChange,

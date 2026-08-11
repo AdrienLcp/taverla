@@ -169,15 +169,26 @@ more usefully, the seams: room state versus game state, message namespaces, the
 role-scoped unions worth defending, and the one shape of game that legitimately
 breaks the snapshot rule. Read it before generalising anything.
 
-**Three is the next threshold, not two.** The `mode` axis is named there and
-deliberately unbuilt: `answerWindowMs` belongs to buzzer mode rather than to the
-room, and one field in one arm is a union invented to hold a single value. The
-trigger is the second mode-specific setting.
+**The `mode` axis is built.** `settings.mode` is a union discriminated on
+`kind`, beside `settings.game` and for the same reason: which game the room is
+playing and how it is answered are independent choices, and each owns settings
+the other cannot read. `answerWindowMs` lives in the buzzer arm alone, so the
+guard in `registerBuzz` against a hand-written buzz *is* the narrowing that
+produces the window — a mode where nobody buzzes cannot reach it.
 
-`RoomPhase` is the other one still fused — the blind test's life cycle wearing
-the room's name — and it survived the buzzer intact, because a countdown is a
-countdown and a reveal is a reveal even when there is nothing to reveal. Split
-it the day a game needs a phase these six names cannot carry.
+It was built on one field rather than the two the threshold asked for, because
+the field was in the wrong place and that is a different fault from a missing
+abstraction. A union invented for symmetry is premature; a union that makes an
+unreachable field unrepresentable pays for itself the day it is written.
+
+**`RoomPhase` stays fused, and that is a decision rather than a delay.** It is
+the one candidate with no payload: `settings.game`, `settings.mode`,
+`round.content` and `Verdict` each split because a field belonged to one arm and
+sat on all of them, and a phase carries no field at all — it is a name. All six
+mean the same thing in both games on the shelf, and splitting a name costs every
+check in the shell the ability to spell what it is checking. Revisit only when a
+game needs a phase these six cannot carry, which is a *new* name and not a
+reshuffle of these.
 
 ## The build is staged
 

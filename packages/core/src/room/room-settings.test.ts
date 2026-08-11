@@ -5,10 +5,13 @@ import {
   DEFAULT_BUZZER_SETTINGS,
   gameKinds
 } from '@taverla/protocol/game'
-import type { RoomSettings } from '@taverla/protocol/room'
+import {
+  DEFAULT_MODE_SETTINGS,
+  type RoomSettings
+} from '@taverla/protocol/room'
 
 import { offersAnswerMode } from './game-modes'
-import { reshapesRound, roomSettingsFor } from './room-settings'
+import { movedToGame, reshapesRound, roomSettingsFor } from './room-settings'
 
 describe('roomSettingsFor', () => {
   it('[room-settings] opens a room on the game it was created for', () => {
@@ -21,15 +24,47 @@ describe('roomSettingsFor', () => {
     for (const game of gameKinds) {
       const settings = roomSettingsFor(game)
 
-      expect(offersAnswerMode({ answerMode: settings.answerMode, game })).toBe(
-        true
-      )
+      expect(offersAnswerMode({ game, mode: settings.mode.kind })).toBe(true)
     }
   })
 
   it('[room-settings] leaves a game with no natural end running until the host stops it', () => {
     expect(roomSettingsFor('buzzer').roundCount).toBeNull()
     expect(roomSettingsFor('blindtest').roundCount).toBe(10)
+  })
+})
+
+describe('movedToGame', () => {
+  const onTheBuzzer = roomSettingsFor('buzzer')
+
+  // The bug this exists for: a room that came from the bare buzzer used to land
+  // on a blind test in buzzer mode, with no round limit — its own settings worn
+  // by a game that has better ones.
+  it('[room-settings] gives the new game its own mode and round count', () => {
+    const moved = movedToGame({ game: 'blindtest', settings: onTheBuzzer })
+
+    expect(moved.mode).toEqual(DEFAULT_MODE_SETTINGS.typed)
+    expect(moved.roundCount).toBe(10)
+    expect(moved.game.kind).toBe('blindtest')
+  })
+
+  it('[room-settings] leaves the settings that are the host’s alone', () => {
+    const moved = movedToGame({
+      game: 'blindtest',
+      settings: { ...onTheBuzzer, autoAdvanceMs: 8_000, countdownMs: 10_000 }
+    })
+
+    expect(moved.countdownMs).toBe(10_000)
+    expect(moved.autoAdvanceMs).toBe(8_000)
+  })
+
+  it('[room-settings] narrows to the one mode a bare buzzer can serve', () => {
+    const moved = movedToGame({
+      game: 'buzzer',
+      settings: roomSettingsFor('blindtest')
+    })
+
+    expect(moved.mode.kind).toBe('buzzer')
   })
 })
 
@@ -49,7 +84,6 @@ describe('reshapesRound', () => {
         from: blindtest,
         to: {
           ...blindtest,
-          answerWindowMs: 5_000,
           autoAdvanceMs: 8_000,
           countdownMs: 10_000,
           roundCount: null
@@ -78,9 +112,25 @@ describe('reshapesRound', () => {
     expect(
       reshapesRound({
         from: blindtest,
-        to: { ...blindtest, answerMode: 'choice' }
+        to: { ...blindtest, mode: DEFAULT_MODE_SETTINGS.choice }
       })
     ).toBe(true)
+  })
+
+  // The floor is stamped with its deadline when the buzz lands, so a window
+  // moved while one is held decides the next floor, not the one being served.
+  it('[room-settings] lets the answer window through under a held floor', () => {
+    const onBuzzer: RoomSettings = {
+      ...blindtest,
+      mode: { answerWindowMs: 10_000, kind: 'buzzer' }
+    }
+
+    expect(
+      reshapesRound({
+        from: onBuzzer,
+        to: { ...onBuzzer, mode: { answerWindowMs: null, kind: 'buzzer' } }
+      })
+    ).toBe(false)
   })
 
   it('[room-settings] stops the game the content is an arm of', () => {

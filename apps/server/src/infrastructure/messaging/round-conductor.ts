@@ -144,7 +144,7 @@ export const armRoundTimeout = (room: Room): void => {
     run: () => {
       // The round running out ends a simultaneous one the same way the last
       // answer does, scoring included: whoever did not answer simply did not.
-      if (room.settings.answerMode === 'buzzer') {
+      if (room.settings.mode.kind === 'buzzer') {
         revealRound(room, Date.now())
       } else {
         settleSimultaneousRound(room, Date.now())

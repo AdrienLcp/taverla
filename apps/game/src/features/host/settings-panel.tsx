@@ -3,6 +3,7 @@ import type React from 'react'
 import {
   type AnswerMode,
   answerModes,
+  DEFAULT_MODE_SETTINGS,
   type RoomSettings
 } from '@taverla/protocol/room'
 import {
@@ -82,6 +83,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   const isDisabled = !isLive
   const isHeldByRound = isDisabled || isRoundInPlay
   const game = settings.game
+  const mode = settings.mode
   const offeredModes = answerModesFor(game.kind)
 
   const secondsLabel = (milliseconds: number): string =>
@@ -100,14 +102,14 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           label={translate('host.answerMode.label')}
           onChange={(next) => {
             if (isAnswerMode(next)) {
-              onChange({ ...settings, answerMode: next })
+              onChange({ ...settings, mode: DEFAULT_MODE_SETTINGS[next] })
             }
           }}
-          options={offeredModes.map((mode) => ({
-            label: translate(answerModeLabelKey(mode)),
-            value: mode
+          options={offeredModes.map((offered) => ({
+            label: translate(answerModeLabelKey(offered)),
+            value: offered
           }))}
-          value={settings.answerMode}
+          value={mode.kind}
         />
       )}
       {/*
@@ -116,9 +118,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         host is the one deciding what the evening will be worth.
       */}
       <p className='hint'>
-        {translate(
-          scoringKey({ answerMode: settings.answerMode, game: game.kind })
-        )}
+        {translate(scoringKey({ answerMode: mode.kind, game: game.kind }))}
       </p>
 
       {game.kind === 'blindtest' && (
@@ -191,7 +191,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         />
       )}
 
-      {settings.answerMode === 'buzzer' && (
+      {mode.kind === 'buzzer' && (
         <SegmentedControl
           isDisabled={isDisabled}
           label={translate('host.answerWindow.label')}
@@ -201,7 +201,10 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
             if (chosen !== undefined) {
               onChange({
                 ...settings,
-                answerWindowMs: chosen === NO_LIMIT ? null : chosen
+                mode: {
+                  ...mode,
+                  answerWindowMs: chosen === NO_LIMIT ? null : chosen
+                }
               })
             }
           }}
@@ -212,7 +215,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 : secondsLabel(milliseconds),
             value: String(milliseconds)
           }))}
-          value={String(settings.answerWindowMs ?? NO_LIMIT)}
+          value={String(mode.answerWindowMs ?? NO_LIMIT)}
         />
       )}
 

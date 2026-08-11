@@ -81,7 +81,7 @@ Three cannot wait to be read, and the server refuses them while
 
 | Setting | What a mid-round change would do |
 |---|---|
-| `answerMode` | `settleSimultaneousRound` picks its scoring on the way out, so a typed round switched to `choice` pays a typed answer at a pick's rate |
+| `mode.kind` | `settleSimultaneousRound` picks its scoring on the way out, so a typed round switched to `choice` pays a typed answer at a pick's rate |
 | `game.kind` | `round.content` stays on the arm the screens are already rendering |
 | `roundDurationMs` | cut below the time already spent, it ends the round on arrival |
 
@@ -90,6 +90,12 @@ Three cannot wait to be read, and the server refuses them while
 outside it, because the gap between two rounds is when anything about them may
 change. The console greys the three out, and that is a courtesy: **the guard on
 the socket is the rule**, same reason `registerBuzz` re-checks the mode.
+
+A mode's *own* settings are not on the list. `answerWindowMs` is read when a
+buzz lands and stamped into the buzz as `expiresAt`, so moving it decides the
+next floor rather than the one being held. Neither is the blind test's source:
+the pool is drawn when a round opens, so the picker commits on whatever opens
+the next one — the launch, "next round", or "play again".
 
 ### One snapshot, not deltas
 

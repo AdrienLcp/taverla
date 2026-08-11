@@ -36,27 +36,45 @@ export const answerModes = ['buzzer', 'choice', 'typed'] as const
  * are everyone at once, decided by the server — exactly, then fuzzily — and
  * scored by speed on top of being right.
  *
- * It stays a room setting rather than moving into the game arms, because the
- * shell reads it everywhere a round is answered and scored. What the game does
- * is *narrow* it — see `answerModesFor` in `@taverla/core/room/game-modes`, and
- * the server refuses a frame that sets one the current game does not offer.
+ * It is the room's, not a game's: the shell reads it everywhere a round is
+ * answered and scored, and what a game does is *narrow* it — see
+ * `answerModesFor` in `@taverla/core/room/game-modes`, and the server refuses a
+ * frame that sets one the current game does not offer.
  */
 export const answerModeSchema = z.enum(answerModes)
 
+/**
+ * How a round is answered, and the settings only that mode has — the room's
+ * second axis, and the same shape as `gameSettingsSchema` for the same reason.
+ * Which game is being played and how it is answered are independent choices,
+ * and each owns settings the other cannot read.
+ *
+ * The buzzer arm is the only one with anything of its own so far, and that is
+ * what the union buys before it has a second: `answerWindowMs` is unreachable
+ * from a mode where nobody buzzes, so `registerBuzz`'s guard against a
+ * hand-written buzz *is* the narrowing that produces the window.
+ */
+export const modeSettingsSchema = z.discriminatedUnion('kind', [
+  z.object({
+    /**
+     * How long the floor is held after a buzz before the server takes it back,
+     * or `null` when the host decides by hand and the screens count up instead.
+     *
+     * Buzzing costs nothing on its own, so without this a thumb that was fast
+     * and a mouth that has nothing to say can hold a whole room. Running out is
+     * the same outcome as answering wrong — no points, locked out, the round
+     * resumes — because taking the floor and saying nothing is what it cost
+     * everyone else, and because a pass with no lockout lets the same thumb
+     * take it again immediately.
+     */
+    answerWindowMs: z.number().int().min(3_000).max(60_000).nullable(),
+    kind: z.literal('buzzer')
+  }),
+  z.object({ kind: z.literal('choice') }),
+  z.object({ kind: z.literal('typed') })
+])
+
 export const roomSettingsSchema = z.object({
-  answerMode: answerModeSchema,
-  /**
-   * How long the floor is held after a buzz before the server takes it back, or
-   * `null` when the host decides by hand and the screens count up instead.
-   *
-   * Buzzing costs nothing on its own, so without this a thumb that was fast and
-   * a mouth that has nothing to say can hold a whole room. Running out is the
-   * same outcome as answering wrong — no points, locked out, the round resumes
-   * — because taking the floor and saying nothing is what it cost everyone
-   * else, and because a pass with no lockout lets the same thumb take it again
-   * immediately.
-   */
-  answerWindowMs: z.number().int().min(3_000).max(60_000).nullable(),
   /**
    * How long a reveal stays on screen before the next round starts itself, or
    * `null` when the host advances by hand. The wait is served by the server for
@@ -71,6 +89,8 @@ export const roomSettingsSchema = z.object({
    * room keeps what every game needs and hands the rest here — see `game.ts`.
    */
   game: gameSettingsSchema,
+  /** How a round is answered, and the settings only that mode has. */
+  mode: modeSettingsSchema,
   /**
    * How many rounds the game runs for, or `null` for "until the host ends it".
    *
@@ -82,18 +102,31 @@ export const roomSettingsSchema = z.object({
 })
 
 export type AnswerMode = z.infer<typeof answerModeSchema>
+export type ModeSettings = z.infer<typeof modeSettingsSchema>
+export type BuzzerModeSettings = Extract<ModeSettings, { kind: 'buzzer' }>
 export type RoomSettings = z.infer<typeof roomSettingsSchema>
 
+export const DEFAULT_BUZZER_MODE_SETTINGS: BuzzerModeSettings = {
+  answerWindowMs: 10_000,
+  kind: 'buzzer'
+}
+
+/** A record rather than a switch, so a new mode without a default cannot compile. */
+export const DEFAULT_MODE_SETTINGS: Record<AnswerMode, ModeSettings> = {
+  buzzer: DEFAULT_BUZZER_MODE_SETTINGS,
+  choice: { kind: 'choice' },
+  typed: { kind: 'typed' }
+}
+
 export const DEFAULT_ROOM_SETTINGS: RoomSettings = {
+  autoAdvanceMs: null,
+  countdownMs: 3_000,
+  game: DEFAULT_BLINDTEST_SETTINGS,
   /**
    * Everyone plays every round, which is what a party wants: the buzzer gives
    * the floor to whoever is quickest and leaves the rest of the room watching.
    */
-  answerMode: 'typed',
-  answerWindowMs: 10_000,
-  autoAdvanceMs: null,
-  countdownMs: 3_000,
-  game: DEFAULT_BLINDTEST_SETTINGS,
+  mode: DEFAULT_MODE_SETTINGS.typed,
   roundCount: 10
 }
 

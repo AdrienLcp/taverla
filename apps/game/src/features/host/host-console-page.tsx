@@ -132,15 +132,17 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
           <>
             <Actions
               isLive={isLive}
-              onStart={() => {
+              onOpenRound={() => {
                 // Inside the press, never in an effect: the autoplay policy
                 // grants permission to the element only from a real gesture,
                 // and it cannot be asked for later when the track arrives.
                 unlock()
 
-                // What the picker is showing is what the host chose, so the
-                // launch commits it. Re-sending an unchanged source is free:
-                // the server drops the pool only when it actually differs.
+                // What the picker is showing is what the host chose, and a
+                // round about to be drawn is the moment that means something —
+                // which is why every control that opens one comes through here
+                // rather than the launch alone. Re-sending an unchanged source
+                // is free: the server drops the pool only when it differs.
                 const game = view.settings.game
 
                 if (draftSource !== null && game.kind === 'blindtest') {
@@ -152,8 +154,6 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
                     type: 'host.updateSettings'
                   })
                 }
-
-                send({ type: 'host.startRound' })
               }}
               send={send}
               view={view}
@@ -238,10 +238,10 @@ const Stage = ({ clock, isSeated, roomCode, send, view }: StageProps) => {
             }}
           />
         )}
-        {isSeated && view.settings.answerMode === 'choice' && (
+        {isSeated && view.settings.mode.kind === 'choice' && (
           <ChoiceAnswer onAnswer={answerWithRound} round={round} />
         )}
-        {isSeated && view.settings.answerMode === 'typed' && (
+        {isSeated && view.settings.mode.kind === 'typed' && (
           <TypedAnswer
             banked={view.yourVerdict}
             key={round.id}
@@ -353,12 +353,12 @@ const Lobby = ({
 
 /**
  * How the evening is played, beside the volume rather than inside the lobby:
- * the countdown, the round count and the answer window all land on the round
- * after the one on screen, and a host who has to end the game to reach them is
- * a host who does not change them.
+ * the countdown, the round count, the answer window and the playlist all land
+ * on the round after the one on screen, and a host who has to end the game to
+ * reach them is a host who does not change them.
  *
- * What stays behind in the lobby is what only a lobby can offer — the playlist,
- * whose search the launch commits, and the seat, which reopens the socket.
+ * The seat is the one thing still kept to the lobby, because taking it reopens
+ * the socket and a re-seat mid-round would drop the answer being typed.
  */
 const SetupFold = ({
   draftSource,
@@ -390,7 +390,7 @@ const SetupFold = ({
       ? translate(sourceKindKey((draftSource ?? game.source).kind))
       : null,
     answerModesFor(game.kind).length > 1
-      ? translate(answerModeLabelKey(view.settings.answerMode))
+      ? translate(answerModeLabelKey(view.settings.mode.kind))
       : null,
     view.settings.roundCount === null
       ? translate('host.roundCount.openSummary')
@@ -417,7 +417,7 @@ const SetupFold = ({
         onChange={onSettingsChange}
         settings={view.settings}
       />
-      {isInLobby && game.kind === 'blindtest' && (
+      {game.kind === 'blindtest' && (
         <PlaylistPicker onDraftChange={onDraftSource} settings={game} />
       )}
       <SettingsPanel
@@ -430,7 +430,7 @@ const SetupFold = ({
         Not offered in buzzer mode: that round needs someone reading the answer
         to judge it, and a judge who is also answering is not one.
       */}
-      {isInLobby && view.settings.answerMode !== 'buzzer' && (
+      {isInLobby && view.settings.mode.kind !== 'buzzer' && (
         <HostSeat onTakeSeat={onTakeSeat} takenAs={seatNickname} />
       )}
     </Disclosure>
@@ -445,12 +445,13 @@ const SetupFold = ({
  */
 const Actions = ({
   isLive,
-  onStart,
+  onOpenRound,
   send,
   view
 }: {
   isLive: boolean
-  onStart: () => void
+  /** Commits the picker's draft and blesses the audio element — every control that opens a round calls it first. */
+  onOpenRound: () => void
   send: (message: ClientMessage) => boolean
   view: HostRoomView
 }) => {
@@ -463,7 +464,10 @@ const Actions = ({
       <>
         <Button
           isDisabled={!isLive || isRoomEmpty}
-          onPress={onStart}
+          onPress={() => {
+            onOpenRound()
+            send({ type: 'host.startRound' })
+          }}
           size='large'
         >
           {translate('host.startGame')}
@@ -540,6 +544,7 @@ const Actions = ({
         <Button
           isDisabled={!isLive}
           onPress={() => {
+            onOpenRound()
             send({ type: 'host.nextRound' })
           }}
           size='large'
@@ -565,6 +570,7 @@ const Actions = ({
         <Button
           isDisabled={!isLive || view.players.length === 0}
           onPress={() => {
+            onOpenRound()
             // Two frames rather than a new message: `host.playAgain` already
             // means "same seats, same settings, scores at zero", and the lobby
             // it lands in is a phase nobody needs to look at when the answer to

@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { DEFAULT_MODE_SETTINGS } from '@taverla/protocol/room'
 import {
   hostServerMessageSchema,
   type PlayerServerMessage,
@@ -168,7 +169,7 @@ describe('the rules every socket obeys', () => {
     await waitFor(() => hostView(host)?.phase === 'playing', 'the clip')
 
     host.send({
-      settings: { ...FAST_GAME, answerMode: 'choice' },
+      settings: { ...FAST_GAME, mode: DEFAULT_MODE_SETTINGS.choice },
       type: 'host.updateSettings'
     })
     await waitFor(() => errorsIn(host).length > 0, 'the refusal')
@@ -177,7 +178,7 @@ describe('the rules every socket obeys', () => {
       code: 'wrong_phase',
       fatal: false
     })
-    expect(hostView(host)?.settings.answerMode).toBe('buzzer')
+    expect(hostView(host)?.settings.mode.kind).toBe('buzzer')
   })
 
   it('[settings] takes the same change once the round is over', async () => {
@@ -193,11 +194,11 @@ describe('the rules every socket obeys', () => {
     await waitFor(() => hostView(host)?.phase === 'revealed', 'the reveal')
 
     host.send({
-      settings: { ...FAST_GAME, answerMode: 'choice' },
+      settings: { ...FAST_GAME, mode: DEFAULT_MODE_SETTINGS.choice },
       type: 'host.updateSettings'
     })
     await waitFor(
-      () => hostView(host)?.settings.answerMode === 'choice',
+      () => hostView(host)?.settings.mode.kind === 'choice',
       'the new mode'
     )
 

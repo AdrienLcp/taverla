@@ -101,7 +101,7 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
     const answerWithRound = (answer: PlayerAnswer): boolean =>
       view.round === null ? false : onAnswer(answer, view.round.id)
 
-    if (view.settings.answerMode === 'choice') {
+    if (view.settings.mode.kind === 'choice') {
       return (
         <section className='player-round'>
           <ChoiceAnswer onAnswer={answerWithRound} round={view.round} />
@@ -109,7 +109,7 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
       )
     }
 
-    if (view.settings.answerMode === 'typed') {
+    if (view.settings.mode.kind === 'typed') {
       return (
         <section className='player-round'>
           <TypedAnswer
@@ -126,14 +126,14 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
   // A phone waiting in a typed or choice game used to be shown a dead buzzer,
   // which is a promise the round will not keep. The wait is also the only
   // moment nobody is against a clock, so it is where the scoring is explained.
-  if (view.settings.answerMode !== 'buzzer') {
+  if (view.settings.mode.kind !== 'buzzer') {
     return (
       <section className='player-round centred'>
         <p className='waiting'>{translate('buzz.blocked.round_not_running')}</p>
         <p className='how-it-scores'>
           {translate(
             scoringKey({
-              answerMode: view.settings.answerMode,
+              answerMode: view.settings.mode.kind,
               game: view.settings.game.kind
             })
           )}

@@ -1,13 +1,9 @@
 import type React from 'react'
 
-import {
-  DEFAULT_GAME_SETTINGS,
-  type ShelvedGame,
-  shelvedGames
-} from '@taverla/protocol/game'
+import { shelvedGames } from '@taverla/protocol/game'
 import type { RoomSettings } from '@taverla/protocol/room'
 
-import { answerModeForGame } from '@taverla/core/room/game-modes'
+import { movedToGame } from '@taverla/core/room/room-settings'
 
 import { SegmentedControl } from '@/presentation/components/segmented-control'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
@@ -39,27 +35,16 @@ export const GamePicker: React.FC<GamePickerProps> = ({
 }) => {
   const translate = useTranslate()
 
-  // The pair travels in one frame: the server refuses a mode the new game does
-  // not offer, and a room left on the old one between two presses would be a
-  // round nobody could answer.
-  const switchGame = (next: ShelvedGame): void => {
-    onChange({
-      ...settings,
-      answerMode: answerModeForGame({
-        answerMode: settings.answerMode,
-        game: next
-      }),
-      game: DEFAULT_GAME_SETTINGS[next]
-    })
-  }
-
   return (
     <SegmentedControl
       isDisabled={!isLive || isRoundInPlay}
       label={translate('host.game')}
       onChange={(next) => {
+        // One frame, whole settings: the server refuses a mode the new game
+        // does not offer, so a room left on the old one between two presses
+        // would be a round nobody could answer.
         if (isShelvedGame(next)) {
-          switchGame(next)
+          onChange(movedToGame({ game: next, settings }))
         }
       }}
       options={shelvedGames.map((game) => ({

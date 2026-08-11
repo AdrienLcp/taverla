@@ -144,7 +144,7 @@ describe('a whole game over real sockets', () => {
   it('[buzz] takes the floor back from a player who says nothing, and locks them out', async () => {
     const { code, host } = await room.openRoom({
       ...FAST_GAME,
-      answerWindowMs: 3_000
+      mode: { answerWindowMs: 3_000, kind: 'buzzer' }
     })
     const alice = await room.seat({ code, nickname: 'Alice' })
     await room.seat({ code, nickname: 'Bob' })
@@ -172,7 +172,7 @@ describe('a whole game over real sockets', () => {
   it('[buzz] leaves the floor open when the host is the clock', async () => {
     const { code, host } = await room.openRoom({
       ...FAST_GAME,
-      answerWindowMs: null
+      mode: { answerWindowMs: null, kind: 'buzzer' }
     })
     const alice = await room.seat({ code, nickname: 'Alice' })
 

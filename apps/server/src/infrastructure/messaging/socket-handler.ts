@@ -476,7 +476,7 @@ export const createRoomSocketEvents = (
    * that rank until the last of them has spoken or the clip has run out.
    */
   const closeRound = (room: Room): void => {
-    if (room.settings.answerMode === 'buzzer') {
+    if (room.settings.mode.kind === 'buzzer') {
       revealRound(room, Date.now())
 
       return
@@ -600,8 +600,8 @@ export const createRoomSocketEvents = (
     // serves nothing is a round no player could ever answer.
     if (
       !offersAnswerMode({
-        answerMode: settings.answerMode,
-        game: settings.game.kind
+        game: settings.game.kind,
+        mode: settings.mode.kind
       })
     ) {
       sendError(outbound, {

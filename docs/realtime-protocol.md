@@ -92,8 +92,8 @@ Shared by both:
   "phase": "playing",              // lobby | countdown | playing | buzzed | revealed | finished
   "players": [{ "id": "…", "nickname": "Alice", "score": 2, "isConnected": true }],
   "settings": { "roundCount": 10,          // null → until the host ends it
-                "countdownMs": 3000, "answerMode": "typed",
-                "answerWindowMs": 10000,
+                "countdownMs": 3000,
+                "mode": { "kind": "typed" },   // buzzer arm adds answerWindowMs
                 "game": { "kind": "blindtest", "roundDurationMs": 30000,
                           "difficulty": "wellKnown",
                           "source": { "kind": "chart" } } },
@@ -111,11 +111,11 @@ Shared by both:
 }
 ```
 
-`settings.game` and `round.content` are both discriminated on `kind`, and they
-are where the split between the shelf and one game on it is drawn: `answerMode`,
-`roundCount`, `countdownMs`, `autoAdvanceMs`, `startsAt`, the buzz, the lockout
-and the awards are every game's, and what the round is *asking* belongs to the
-game asking it. A client that does not recognise a `kind` has no business
+`settings.game`, `settings.mode` and `round.content` are all discriminated on
+`kind`. The first and the last are where the split between the shelf and one
+game on it is drawn: `roundCount`, `countdownMs`, `autoAdvanceMs`, `startsAt`,
+the buzz, the lockout and the awards are every game's, and what the round is
+*asking* belongs to the game asking it. A client that does not recognise a `kind` has no business
 rendering that room at all, which is why the shape moving bumps the version.
 
 The bare buzzer's `content` is `{ "kind": "buzzer" }` and nothing else — the
@@ -123,9 +123,12 @@ room owns the question, and the server never learns it. The arm exists rather
 than the field going `null` because "no content" and "no round" are different
 facts.
 
-`answerMode` stays a room setting, and the game *narrows* it: the buzzer offers
-only `buzzer`, and the server refuses a settings frame that sets a mode the
-current game does not serve.
+`settings.mode` is the room's second axis and is independent of the game: how a
+round is answered is not what is being played. The game *narrows* which kinds
+are on offer — the bare buzzer offers only `buzzer`, and the server refuses a
+frame that sets a mode the current game does not serve — and each kind carries
+its own settings, which is why `answerWindowMs` appears on the buzzer arm and
+nowhere else. A mode where nobody buzzes has no floor to time.
 
 The host view adds what only the host may see:
 

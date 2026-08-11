@@ -58,7 +58,7 @@ export const blindtestContent = ({
   track: HostTrack
 }): Round['content'] => {
   const drawn =
-    room.settings.answerMode === 'choice' ? drawChoices({ room, track }) : null
+    room.settings.mode.kind === 'choice' ? drawChoices({ room, track }) : null
 
   return {
     choices: drawn?.choices ?? [],
@@ -141,8 +141,11 @@ export const registerBuzz = ({
   }
 
   // A socket is whatever its owner makes it, and a phone showing four choices
-  // can still send a buzz by hand.
-  if (room.settings.answerMode !== 'buzzer') {
+  // can still send a buzz by hand. Narrowing here is also what produces the
+  // window below: it exists on no other mode.
+  const mode = room.settings.mode
+
+  if (mode.kind !== 'buzzer') {
     return Result.failure('wrong_phase')
   }
 
@@ -158,7 +161,7 @@ export const registerBuzz = ({
     return Result.failure(rejection)
   }
 
-  const window = room.settings.answerWindowMs
+  const window = mode.answerWindowMs
 
   round.activeBuzz = {
     atServerTime: now,
@@ -280,7 +283,7 @@ export const registerAnswer = ({
     return Result.failure('stale_round')
   }
 
-  if (room.settings.answerMode === 'buzzer') {
+  if (room.settings.mode.kind === 'buzzer') {
     return Result.failure('invalid_message')
   }
 
@@ -384,7 +387,7 @@ export const everyoneIsDone = (room: Room): boolean => {
         return false
       }
 
-      return room.settings.answerMode === 'choice' || isDone(held)
+      return room.settings.mode.kind === 'choice' || isDone(held)
     })
   )
 }
@@ -404,7 +407,7 @@ export const settleSimultaneousRound = (room: Room, now: number): void => {
   let rankAmongCorrect = 0
 
   const earnedBy =
-    room.settings.answerMode === 'choice'
+    room.settings.mode.kind === 'choice'
       ? pointsForChoice
       : pointsForTypedAnswer
 

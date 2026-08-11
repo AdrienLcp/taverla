@@ -1,6 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import type { RoomSettings } from '@taverla/protocol/room'
+import {
+  DEFAULT_MODE_SETTINGS,
+  type RoomSettings
+} from '@taverla/protocol/room'
 
 import {
   blindtestRound,
@@ -21,8 +24,14 @@ vi.mock('@/infrastructure/music/deezer-client', async () => {
   return deezerClientStub()
 })
 
-const CHOICE_GAME: RoomSettings = { ...FAST_GAME, answerMode: 'choice' }
-const TYPED_GAME: RoomSettings = { ...FAST_GAME, answerMode: 'typed' }
+const CHOICE_GAME: RoomSettings = {
+  ...FAST_GAME,
+  mode: DEFAULT_MODE_SETTINGS.choice
+}
+const TYPED_GAME: RoomSettings = {
+  ...FAST_GAME,
+  mode: DEFAULT_MODE_SETTINGS.typed
+}
 
 describe('answering all at once', () => {
   let harness: RoomHarness

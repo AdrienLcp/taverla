@@ -5,6 +5,7 @@ import type { ClientMessage } from '@taverla/protocol/client-message'
 import { DEFAULT_BLINDTEST_SETTINGS } from '@taverla/protocol/game'
 import type { CreateRoomResponse } from '@taverla/protocol/http'
 import {
+  DEFAULT_MODE_SETTINGS,
   DEFAULT_ROOM_SETTINGS,
   type HostRoundContent,
   type RoomSettings,
@@ -62,9 +63,9 @@ export const deezerClientStub = () => ({
  */
 export const FAST_GAME: RoomSettings = {
   ...DEFAULT_ROOM_SETTINGS,
-  answerMode: 'buzzer',
   countdownMs: 20,
   game: { ...DEFAULT_BLINDTEST_SETTINGS, roundDurationMs: 5_000 },
+  mode: DEFAULT_MODE_SETTINGS.buzzer,
   roundCount: 3
 }
 

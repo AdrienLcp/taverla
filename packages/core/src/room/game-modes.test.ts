@@ -1,12 +1,9 @@
 import { describe, expect, it } from 'vitest'
 
 import { gameKinds } from '@taverla/protocol/game'
+import { DEFAULT_MODE_SETTINGS } from '@taverla/protocol/room'
 
-import {
-  answerModeForGame,
-  answerModesFor,
-  offersAnswerMode
-} from './game-modes'
+import { answerModesFor, modeOfferedBy, offersAnswerMode } from './game-modes'
 
 describe('answerModesFor', () => {
   it('[game-modes] narrows the bare buzzer to the one mode it can serve', () => {
@@ -28,25 +25,32 @@ describe('answerModesFor', () => {
 
 describe('offersAnswerMode', () => {
   it('[game-modes] refuses a typed field to a game with nothing to type against', () => {
-    expect(offersAnswerMode({ answerMode: 'typed', game: 'buzzer' })).toBe(
-      false
-    )
-    expect(offersAnswerMode({ answerMode: 'buzzer', game: 'buzzer' })).toBe(
-      true
-    )
+    expect(offersAnswerMode({ game: 'buzzer', mode: 'typed' })).toBe(false)
+    expect(offersAnswerMode({ game: 'buzzer', mode: 'buzzer' })).toBe(true)
   })
 })
 
-describe('answerModeForGame', () => {
-  it('[game-modes] keeps a mode the game being switched to also offers', () => {
-    expect(answerModeForGame({ answerMode: 'typed', game: 'quiz' })).toBe(
-      'typed'
-    )
+describe('modeOfferedBy', () => {
+  it('[game-modes] serves the preference a game offers', () => {
+    expect(
+      modeOfferedBy({ game: 'quiz', preferred: DEFAULT_MODE_SETTINGS.typed })
+    ).toEqual({ kind: 'typed' })
   })
 
-  it('[game-modes] falls back to the only mode the new game offers', () => {
-    expect(answerModeForGame({ answerMode: 'typed', game: 'buzzer' })).toBe(
-      'buzzer'
-    )
+  it('[game-modes] falls back to the only mode a bare buzzer offers', () => {
+    expect(
+      modeOfferedBy({ game: 'buzzer', preferred: DEFAULT_MODE_SETTINGS.typed })
+    ).toEqual({ answerWindowMs: 10_000, kind: 'buzzer' })
+  })
+
+  // The kind is what a game gets a say in; the floor a host set to "you decide"
+  // is theirs, and comes through with it.
+  it('[game-modes] carries a served mode’s own settings through untouched', () => {
+    expect(
+      modeOfferedBy({
+        game: 'blindtest',
+        preferred: { answerWindowMs: null, kind: 'buzzer' }
+      })
+    ).toEqual({ answerWindowMs: null, kind: 'buzzer' })
   })
 })

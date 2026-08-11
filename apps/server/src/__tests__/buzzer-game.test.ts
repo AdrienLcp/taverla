@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { DEFAULT_BUZZER_SETTINGS } from '@taverla/protocol/game'
 import {
+  DEFAULT_MODE_SETTINGS,
   DEFAULT_ROOM_SETTINGS,
   type RoomSettings
 } from '@taverla/protocol/room'
@@ -28,9 +29,9 @@ vi.mock('@/infrastructure/music/deezer-client', async () => {
  */
 const BUZZER_GAME: RoomSettings = {
   ...DEFAULT_ROOM_SETTINGS,
-  answerMode: 'buzzer',
   countdownMs: 20,
   game: DEFAULT_BUZZER_SETTINGS,
+  mode: DEFAULT_MODE_SETTINGS.buzzer,
   roundCount: null
 }
 
@@ -225,12 +226,12 @@ describe('the modes a game offers', () => {
     const { code, host } = await room.openRoom(BUZZER_GAME)
 
     host.send({
-      settings: { ...BUZZER_GAME, answerMode: 'typed' },
+      settings: { ...BUZZER_GAME, mode: DEFAULT_MODE_SETTINGS.typed },
       type: 'host.updateSettings'
     })
     await waitFor(() => errorsIn(host).length > 0, 'the refusal')
 
-    expect(hostView(host)?.settings.answerMode).toBe('buzzer')
+    expect(hostView(host)?.settings.mode.kind).toBe('buzzer')
     expect(code).toHaveLength(4)
   })
 })
