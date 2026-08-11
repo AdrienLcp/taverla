@@ -15,6 +15,7 @@ export const protocolErrorCodes = [
   'player_locked_out',
   'no_tracks_available',
   'music_source_unavailable',
+  'rate_limited',
   /**
    * A message the contract already describes but the server does not serve yet.
    * It exists so a half-built stage answers honestly instead of borrowing a

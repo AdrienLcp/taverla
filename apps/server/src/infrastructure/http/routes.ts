@@ -16,6 +16,7 @@ import { normalizeRoomCode } from '@taverla/core/room/room-code'
 
 import { createRoom, findRoom } from '@/domain/room/room-store'
 import { env } from '@/env'
+import { limitRoomCreation } from '@/infrastructure/http/rate-limit'
 import { fetchTracksFor } from '@/infrastructure/music/deezer-client'
 
 /**
@@ -37,7 +38,7 @@ export const registerHttpRoutes = (app: Hono): void => {
     return context.json(body)
   })
 
-  app.post('/api/rooms', (context) => {
+  app.post('/api/rooms', limitRoomCreation, (context) => {
     const room = createRoom(Date.now())
 
     if (room === null) {

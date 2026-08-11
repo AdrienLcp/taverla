@@ -80,6 +80,8 @@ export type RoomHarness = {
     settings?: RoomSettings,
     nickname?: string
   ) => Promise<{ code: string; host: Peer<HostServerMessage> }>
+  /** `host:port`, for the suites that exercise the HTTP surface rather than a game. */
+  origin: string
   seat: (options: {
     code: string
     nickname: string
@@ -275,5 +277,5 @@ export const startRoomHarness = async (): Promise<RoomHarness> => {
     })
   }
 
-  return { connect, openRoom, seat, stop }
+  return { connect, openRoom, origin, seat, stop }
 }
