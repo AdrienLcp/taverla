@@ -8,6 +8,15 @@ one part.
 
 ### Breaking Changes
 
+- `[Shared]` How a round is answered is an axis with its own settings, and
+  `PROTOCOL_VERSION` goes to 7. `settings.mode` is a union discriminated on
+  `kind`, beside `settings.game` and for the same reason: which game the room is
+  playing and how it is answered are independent choices, and each owns settings
+  the other cannot read. `answerWindowMs` moves into the buzzer arm, which makes
+  `registerBuzz`'s guard against a hand-written buzz *be* the narrowing that
+  produces the window — a mode where nobody buzzes can no longer reach it. Built
+  on one field rather than the two the threshold asked for, because the field was
+  in the wrong place, and that is a different fault from a missing abstraction
 - `[Shared]` A verdict is judged in the shape its game is judged in, and
   `PROTOCOL_VERSION` goes to 6. `Verdict` was the blind test's two booleans, so
   paying a charade with both of them true would have scored one claim twice. It
@@ -63,9 +72,9 @@ one part.
   rate; `game.kind`, which would leave `round.content` on the arm the screens are
   rendering; and `roundDurationMs`, which cut below the time already spent ends
   the round on arrival. The console greys those three with a line saying they
-  wait — a courtesy, since the guard on the socket is the rule. The playlist and
-  the seat stay in the lobby, the first because its search is a draft the launch
-  commits and the second because it reopens the socket
+  wait — a courtesy, since the guard on the socket is the rule. The seat is the
+  one thing kept to the lobby, because taking it reopens the socket and a
+  re-seat mid-round would drop the answer being typed
 - `[Shared]` The floor has a clock. Buzzing costs nothing on its own, so a fast
   thumb attached to an empty head could hold a whole room until the host
   intervened. `answerWindowMs` is how long the floor is held before the server
@@ -233,6 +242,13 @@ one part.
 
 ### Improvements
 
+- `[Game]` The playlist follows the rest of the settings out of the lobby. It
+  was a draft the launch committed, so once there was no launch left to press it
+  had no way to apply and was hidden for the rest of the evening. Every control
+  that opens a round now commits it first — the launch, "next round" and "play
+  again" — which is the rule the lobby always had, read at the moment it means
+  something. A source edited mid-clip cannot touch the round already drawn, so
+  the picker stays reachable throughout
 - `[Game]` A press answers on a touch screen. Every variant painted
   `[data-hovered]` and left `[data-pressed]` a two-pixel nudge — but
   `data-hovered` never fires on a touch device, and the reset already removes
@@ -312,6 +328,17 @@ one part.
 
 ### Fixes
 
+- `[Game]` Changing game gives the new one its own settings. It kept the room's,
+  so a table coming off the bare buzzer landed on a blind test in buzzer mode
+  with no round limit — the buzzer's settings worn by a game that has better
+  ones. The three a game gets a say in change over; the countdown and the
+  auto-advance are the host's and survive
+- `[Game]` The volume slider answers a press. The rail and the thumb had no
+  cursor of their own, so a control you drag looked like text, and the press
+  state was spent dimming the thumb — under the fingertip parked on top of it,
+  which is the one place nothing can be seen. Both take `pointer`, and the thumb
+  grows at full ink instead: dimming reads as disabled, which is the rule the
+  choice strips already follow
 - `[Game]` A player holding one point reads "1 point", not "1 POINTS". The word
   was an invariant string beside a score the markup printed itself, so every
   game showed it wrong in both languages at every score of one. The final board
