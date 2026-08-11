@@ -55,23 +55,32 @@ const isAnswerMode = (value: string): value is AnswerMode =>
 type SettingsPanelProps = {
   /** The socket is open. Every control here sends a frame, so none of them work without it. */
   isLive: boolean
+  /**
+   * A round is under way, so the two controls it is *built on* are held until it
+   * ends: it is scored on the way out from the mode it closes on, and it runs
+   * for the clip length it opened with. The server refuses both — see
+   * `reshapesRound`.
+   */
+  isRoundInPlay: boolean
   /** Applied to the room as it is pressed; nothing here waits for the launch. */
   onChange: (settings: RoomSettings) => void
   settings: RoomSettings
 }
 
 /**
- * The numbers that decide how a party goes, in the lobby where the host is
- * already standing. The source next to them is a draft the launch commits,
- * because a search can come back empty; these cannot, so they land immediately.
+ * The numbers that decide how a party goes, reachable for as long as it runs.
+ * All but two land on the round after the one on screen, which is why they are
+ * not folded away with the things only a lobby can offer.
  */
 export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   isLive,
+  isRoundInPlay,
   onChange,
   settings
 }) => {
   const translate = useTranslate()
   const isDisabled = !isLive
+  const isHeldByRound = isDisabled || isRoundInPlay
   const game = settings.game
   const offeredModes = answerModesFor(game.kind)
 
@@ -87,7 +96,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       */}
       {offeredModes.length > 1 && (
         <SegmentedControl
-          isDisabled={isDisabled}
+          isDisabled={isHeldByRound}
           label={translate('host.answerMode.label')}
           onChange={(next) => {
             if (isAnswerMode(next)) {
@@ -165,7 +174,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
 
       {game.kind === 'blindtest' && (
         <SegmentedControl
-          isDisabled={isDisabled}
+          isDisabled={isHeldByRound}
           label={translate('blindtest.clip')}
           onChange={(next) => {
             const roundDurationMs = optionFrom(CLIP_DURATIONS_MS, next)

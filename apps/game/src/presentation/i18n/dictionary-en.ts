@@ -220,7 +220,10 @@ export const EN_DICTIONARY = defineTranslations({
     },
     seconds: '{seconds:number}s',
     seeResults: 'See the results',
-    setup: 'Settings',
+    setup: {
+      label: 'Settings',
+      roundInPlay: 'Some of these wait until the round is over'
+    },
     startGame: 'Start the game',
     volume: 'Volume'
   },

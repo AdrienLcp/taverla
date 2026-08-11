@@ -16,6 +16,12 @@ import { gameNameKey, isShelvedGame } from '@/presentation/i18n/translation'
 type GamePickerProps = {
   /** The socket is open. This sends a frame, so it does nothing without one. */
   isLive: boolean
+  /**
+   * A round is under way. The round on screen is one arm of `round.content`, so
+   * a game switched under it would leave the screens rendering the other —
+   * which is why the server refuses this one until the round is over.
+   */
+  isRoundInPlay: boolean
   onChange: (settings: RoomSettings) => void
   settings: RoomSettings
 }
@@ -27,6 +33,7 @@ type GamePickerProps = {
  */
 export const GamePicker: React.FC<GamePickerProps> = ({
   isLive,
+  isRoundInPlay,
   onChange,
   settings
 }) => {
@@ -48,7 +55,7 @@ export const GamePicker: React.FC<GamePickerProps> = ({
 
   return (
     <SegmentedControl
-      isDisabled={!isLive}
+      isDisabled={!isLive || isRoundInPlay}
       label={translate('host.game')}
       onChange={(next) => {
         if (isShelvedGame(next)) {

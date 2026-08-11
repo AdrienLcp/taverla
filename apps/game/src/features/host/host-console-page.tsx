@@ -3,10 +3,11 @@ import { useState } from 'react'
 
 import type { ClientMessage } from '@taverla/protocol/client-message'
 import type { RoomCode } from '@taverla/protocol/identifiers'
-import type { HostRoomView } from '@taverla/protocol/room'
+import type { HostRoomView, RoomSettings } from '@taverla/protocol/room'
 import type { TrackSource } from '@taverla/protocol/track'
 
 import { answerModesFor } from '@taverla/core/room/game-modes'
+import { isRoundInPlay } from '@taverla/core/room/room-phase'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
 import { NotFoundPage } from '@/features/not-found/not-found-page'
@@ -115,13 +116,8 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
 
       <Stage
         clock={clock}
-        draftSource={draftSource}
-        isLive={isLive}
         isSeated={seatNickname !== null}
-        onDraftSource={setDraftSource}
-        onTakeSeat={setSeatNickname}
         roomCode={roomCode}
-        seatNickname={seatNickname}
         send={send}
         view={view}
       />
@@ -174,6 +170,17 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
               settings={view.settings}
               volume={volume}
             />
+            <SetupFold
+              draftSource={draftSource}
+              isLive={isLive}
+              onDraftSource={setDraftSource}
+              onSettingsChange={(settings) => {
+                send({ settings, type: 'host.updateSettings' })
+              }}
+              onTakeSeat={setSeatNickname}
+              seatNickname={seatNickname}
+              view={view}
+            />
           </>
         )}
       </footer>
@@ -183,29 +190,13 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
 
 type StageProps = {
   clock: ClockEstimate | null
-  draftSource: TrackSource | null
-  isLive: boolean
   isSeated: boolean
-  onDraftSource: (source: TrackSource | null) => void
-  onTakeSeat: (nickname: string) => void
   roomCode: RoomCode
-  seatNickname: string | null
   send: (message: ClientMessage) => boolean
   view: HostRoomView | null
 }
 
-const Stage = ({
-  clock,
-  draftSource,
-  isLive,
-  isSeated,
-  onDraftSource,
-  onTakeSeat,
-  roomCode,
-  seatNickname,
-  send,
-  view
-}: StageProps) => {
+const Stage = ({ clock, isSeated, roomCode, send, view }: StageProps) => {
   const translate = useTranslate()
 
   if (view === null) {
@@ -313,61 +304,18 @@ const Stage = ({
     )
   }
 
-  return (
-    <Lobby
-      draftSource={draftSource}
-      isLive={isLive}
-      onDraftSource={onDraftSource}
-      onTakeSeat={onTakeSeat}
-      roomCode={roomCode}
-      seatNickname={seatNickname}
-      send={send}
-      view={view}
-    />
-  )
+  return <Lobby roomCode={roomCode} view={view} />
 }
 
 const Lobby = ({
-  draftSource,
-  isLive,
-  onDraftSource,
-  onTakeSeat,
   roomCode,
-  seatNickname,
-  send,
   view
 }: {
-  draftSource: TrackSource | null
-  isLive: boolean
-  onDraftSource: (source: TrackSource | null) => void
-  onTakeSeat: (nickname: string) => void
   roomCode: RoomCode
-  seatNickname: string | null
-  send: (message: ClientMessage) => boolean
   view: HostRoomView
 }) => {
   const translate = useTranslate()
   const joinUrl = playUrlFor(view.code)
-  const game = view.settings.game
-
-  // The draft, not the committed settings: the source is only sent on launch,
-  // and a summary that waited for that would contradict the picker above it.
-  const setupSummary = [
-    isShelvedGame(game.kind) ? translate(gameNameKey(game.kind)) : null,
-    game.kind === 'blindtest'
-      ? translate(sourceKindKey((draftSource ?? game.source).kind))
-      : null,
-    answerModesFor(game.kind).length > 1
-      ? translate(answerModeLabelKey(view.settings.answerMode))
-      : null,
-    view.settings.roundCount === null
-      ? translate('host.roundCount.openSummary')
-      : translate('host.roundCount.summary', {
-          count: view.settings.roundCount
-        })
-  ]
-    .filter((part) => part !== null)
-    .join(' · ')
 
   return (
     <div className='stage lobby'>
@@ -389,52 +337,103 @@ const Lobby = ({
         </div>
       </section>
 
-      {/*
-        Who is in, and how it will be played — the two things the host owns
-        before starting. Only the first belongs on a screen a room is reading:
-        the rest is set once an evening and folds away behind its own summary.
-      */}
-      <div className='setup'>
-        <section className='roster'>
-          <h2>
-            {translate('host.players.title')} {view.players.length}
-          </h2>
-          {view.players.length === 0 ? (
-            <p className='empty'>{translate('host.players.empty')}</p>
-          ) : (
-            <Scoreboard players={view.players} />
-          )}
-        </section>
-
-        <Disclosure label={translate('host.setup')} summary={setupSummary}>
-          {/* Above everything it decides, including whether the picker applies. */}
-          <GamePicker
-            isLive={isLive}
-            onChange={(settings) => {
-              send({ settings, type: 'host.updateSettings' })
-            }}
-            settings={view.settings}
-          />
-          {game.kind === 'blindtest' && (
-            <PlaylistPicker onDraftChange={onDraftSource} settings={game} />
-          )}
-          <SettingsPanel
-            isLive={isLive}
-            onChange={(settings) => {
-              send({ settings, type: 'host.updateSettings' })
-            }}
-            settings={view.settings}
-          />
-          {/*
-            Not offered in buzzer mode: that round needs someone reading the
-            answer to judge it, and a judge who is also answering is not one.
-          */}
-          {view.settings.answerMode !== 'buzzer' && (
-            <HostSeat onTakeSeat={onTakeSeat} takenAs={seatNickname} />
-          )}
-        </Disclosure>
-      </div>
+      <section className='roster'>
+        <h2>
+          {translate('host.players.title')} {view.players.length}
+        </h2>
+        {view.players.length === 0 ? (
+          <p className='empty'>{translate('host.players.empty')}</p>
+        ) : (
+          <Scoreboard players={view.players} />
+        )}
+      </section>
     </div>
+  )
+}
+
+/**
+ * How the evening is played, beside the volume rather than inside the lobby:
+ * the countdown, the round count and the answer window all land on the round
+ * after the one on screen, and a host who has to end the game to reach them is
+ * a host who does not change them.
+ *
+ * What stays behind in the lobby is what only a lobby can offer — the playlist,
+ * whose search the launch commits, and the seat, which reopens the socket.
+ */
+const SetupFold = ({
+  draftSource,
+  isLive,
+  onDraftSource,
+  onSettingsChange,
+  onTakeSeat,
+  seatNickname,
+  view
+}: {
+  draftSource: TrackSource | null
+  isLive: boolean
+  onDraftSource: (source: TrackSource | null) => void
+  onSettingsChange: (settings: RoomSettings) => void
+  onTakeSeat: (nickname: string) => void
+  seatNickname: string | null
+  view: HostRoomView
+}) => {
+  const translate = useTranslate()
+  const game = view.settings.game
+  const isInLobby = view.phase === 'lobby'
+  const roundInPlay = isRoundInPlay(view.phase)
+
+  // The draft, not the committed settings: the source is only sent on launch,
+  // and a summary that waited for that would contradict the picker above it.
+  const summary = [
+    isShelvedGame(game.kind) ? translate(gameNameKey(game.kind)) : null,
+    game.kind === 'blindtest'
+      ? translate(sourceKindKey((draftSource ?? game.source).kind))
+      : null,
+    answerModesFor(game.kind).length > 1
+      ? translate(answerModeLabelKey(view.settings.answerMode))
+      : null,
+    view.settings.roundCount === null
+      ? translate('host.roundCount.openSummary')
+      : translate('host.roundCount.summary', {
+          count: view.settings.roundCount
+        })
+  ]
+    .filter((part) => part !== null)
+    .join(' · ')
+
+  return (
+    <Disclosure
+      className='setup-fold'
+      label={translate('host.setup.label')}
+      summary={summary}
+    >
+      {roundInPlay && (
+        <p className='held'>{translate('host.setup.roundInPlay')}</p>
+      )}
+      {/* Above everything it decides, including whether the picker applies. */}
+      <GamePicker
+        isLive={isLive}
+        isRoundInPlay={roundInPlay}
+        onChange={onSettingsChange}
+        settings={view.settings}
+      />
+      {isInLobby && game.kind === 'blindtest' && (
+        <PlaylistPicker onDraftChange={onDraftSource} settings={game} />
+      )}
+      <SettingsPanel
+        isLive={isLive}
+        isRoundInPlay={roundInPlay}
+        onChange={onSettingsChange}
+        settings={view.settings}
+      />
+      {/*
+        Not offered in buzzer mode: that round needs someone reading the answer
+        to judge it, and a judge who is also answering is not one.
+      */}
+      {isInLobby && view.settings.answerMode !== 'buzzer' && (
+        <HostSeat onTakeSeat={onTakeSeat} takenAs={seatNickname} />
+      )}
+    </Disclosure>
   )
 }
 

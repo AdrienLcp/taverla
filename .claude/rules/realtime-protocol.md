@@ -69,6 +69,28 @@ measures but cannot remove. If that ever needs improving, the answer is
 compensating with the *measured* round trip the server already knows, never
 trusting a number the client sends.
 
+### Settings move mid-game; three of them wait
+
+`host.updateSettings` is accepted in every phase, because a party is set up
+while it runs — the countdown, the round count, the answer window and the
+difficulty all land on the round *after* the one on screen. That is the point of
+the fold living in the host's footer rather than inside the lobby.
+
+Three cannot wait to be read, and the server refuses them while
+`isRoundInPlay(room.phase)`:
+
+| Setting | What a mid-round change would do |
+|---|---|
+| `answerMode` | `settleSimultaneousRound` picks its scoring on the way out, so a typed round switched to `choice` pays a typed answer at a pick's rate |
+| `game.kind` | `round.content` stays on the arm the screens are already rendering |
+| `roundDurationMs` | cut below the time already spent, it ends the round on arrival |
+
+`reshapesRound` in `@taverla/core/room/room-settings` is the list, and
+`isRoundInPlay` in `room-phase.ts` is the window — `revealed` is deliberately
+outside it, because the gap between two rounds is when anything about them may
+change. The console greys the three out, and that is a courtesy: **the guard on
+the socket is the rule**, same reason `registerBuzz` re-checks the mode.
+
 ### One snapshot, not deltas
 
 After any state change the server sends every socket its whole role-scoped view.

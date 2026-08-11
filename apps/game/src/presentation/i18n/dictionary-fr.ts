@@ -222,7 +222,10 @@ export const FR_DICTIONARY: Dictionary = {
     },
     seconds: '{seconds:number} s',
     seeResults: 'Voir les résultats',
-    setup: 'Réglages',
+    setup: {
+      label: 'Réglages',
+      roundInPlay: 'Certains de ces réglages attendent la fin de la manche'
+    },
     startGame: 'Lancer la partie',
     volume: 'Volume'
   },
