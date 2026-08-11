@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid'
 
 import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
+import type { GameSettings } from '@taverla/protocol/game'
 import type { PlayerId, RoundId } from '@taverla/protocol/identifiers'
 import type { Verdict } from '@taverla/protocol/scoring'
 import type { HostTrack } from '@taverla/protocol/track'
@@ -471,8 +472,18 @@ export const remainingPlaybackMs = (room: Room, now: number): number =>
     ? 0
     : Math.max(
         0,
-        room.settings.playbackDurationMs - elapsedPlaybackMs(room.round, now)
+        roundDurationMs(room.settings.game) - elapsedPlaybackMs(room.round, now)
       )
+
+/** How long a round stays open unanswered — the same clock, wound by each game. */
+const roundDurationMs = (game: GameSettings): number => {
+  switch (game.kind) {
+    case 'blindtest':
+      return game.clipDurationMs
+    case 'quiz':
+      return game.answerDurationMs
+  }
+}
 
 const resumeOrReveal = (room: Room, now: number): VerdictOutcome => {
   const round = room.round

@@ -78,8 +78,10 @@ Shared by both:
   "code": "K3M9",
   "phase": "playing",              // lobby | countdown | playing | buzzed | revealed | finished
   "players": [{ "id": "…", "nickname": "Alice", "score": 2, "isConnected": true }],
-  "settings": { "roundCount": 10, "countdownMs": 3000,
-                "playbackDurationMs": 30000, "source": { "kind": "chart" } },
+  "settings": { "roundCount": 10, "countdownMs": 3000, "answerMode": "typed",
+                "game": { "kind": "blindtest", "clipDurationMs": 30000,
+                          "difficulty": "wellKnown",
+                          "source": { "kind": "chart" } } },
   "round": {
     "id": "…",
     "index": 3,                    // 1-based
@@ -91,6 +93,12 @@ Shared by both:
   }
 }
 ```
+
+`settings.game` is discriminated on `kind`, and it is where the split between the
+shelf and one game on it is drawn: `answerMode`, `roundCount`, `countdownMs` and
+`autoAdvanceMs` are every game's, and everything else belongs to the game being
+played. A client that does not recognise a `kind` has no business rendering that
+room's settings at all, which is why the shape moving bumps the version.
 
 The host view adds what only the host may see:
 

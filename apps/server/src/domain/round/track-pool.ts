@@ -1,3 +1,4 @@
+import type { BlindtestSettings, GameSettings } from '@taverla/protocol/game'
 import type {
   HostTrack,
   TrackIdentity,
@@ -20,11 +21,15 @@ import {
  */
 const MAX_DRAW_ATTEMPTS = 5
 
-export const drawPlayableTrack = async (
+export const drawPlayableTrack = async ({
+  room,
+  settings
+}: {
   room: Room
-): Promise<Result<HostTrack, MusicSourceError>> => {
+  settings: BlindtestSettings
+}): Promise<Result<HostTrack, MusicSourceError>> => {
   for (let attempt = 0; attempt < MAX_DRAW_ATTEMPTS; attempt++) {
-    const refilled = await refillWhenEmpty(room)
+    const refilled = await refillWhenEmpty({ room, settings })
 
     if (refilled.status === 'failure') {
       return refilled
@@ -52,15 +57,26 @@ export const drawPlayableTrack = async (
  * A pool left over from a source the host has just replaced would keep serving
  * the old catalogue for the rest of the game, so it is dropped — but only when
  * the source really changed, since refilling costs a request.
+ *
+ * A room that left the blind test altogether has no use for the pool either,
+ * and one that comes back to it should not inherit the tracks a source chosen
+ * two games ago put there.
  */
 export const discardPoolIfStale = ({
-  previousSource,
+  previousGame,
   room
 }: {
-  previousSource: TrackSource
+  previousGame: GameSettings
   room: Room
 }): void => {
-  if (!isSameSource(previousSource, room.settings.source)) {
+  const game = room.settings.game
+
+  const isStale =
+    game.kind !== 'blindtest' ||
+    previousGame.kind !== 'blindtest' ||
+    !isSameSource(previousGame.source, game.source)
+
+  if (isStale) {
     room.trackPool = []
   }
 }
@@ -80,16 +96,20 @@ const isSameSource = (left: TrackSource, right: TrackSource): boolean => {
   }
 }
 
-const refillWhenEmpty = async (
+const refillWhenEmpty = async ({
+  room,
+  settings
+}: {
   room: Room
-): Promise<Result<void, MusicSourceError>> => {
+  settings: BlindtestSettings
+}): Promise<Result<void, MusicSourceError>> => {
   if (room.trackPool.length > 0) {
     return Result.success(undefined)
   }
 
   const fetched = await fetchTracksFor({
-    difficulty: room.settings.difficulty,
-    source: room.settings.source
+    difficulty: settings.difficulty,
+    source: settings.source
   })
 
   if (fetched.status === 'failure') {

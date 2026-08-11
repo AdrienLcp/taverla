@@ -564,10 +564,10 @@ export const createRoomSocketEvents = (
    * dropping it on an unrelated edit costs a needless catalogue request.
    */
   const reconfigure = (settings: RoomSettings, room: Room): void => {
-    const previousSource = room.settings.source
+    const previousGame = room.settings.game
 
     updateSettings(room, settings, Date.now())
-    discardPoolIfStale({ previousSource, room })
+    discardPoolIfStale({ previousGame, room })
     broadcastRoom(room)
     armAutoAdvance(room)
   }

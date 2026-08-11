@@ -14,7 +14,7 @@ import { SegmentedControl } from '@/presentation/components/segmented-control'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { scoringKey } from '@/presentation/i18n/translation'
 
-import './game-settings.sass'
+import './settings-panel.sass'
 
 const ROUND_COUNTS = [5, 10, 20, 30] as const
 const CLIP_DURATIONS_MS = [10_000, 20_000, 30_000] as const
@@ -44,7 +44,7 @@ export const answerModeLabelKey = (
 const isAnswerMode = (value: string): value is AnswerMode =>
   answerModes.some((mode) => mode === value)
 
-type GameSettingsProps = {
+type SettingsPanelProps = {
   /** The socket is open. Every control here sends a frame, so none of them work without it. */
   isLive: boolean
   /** Applied to the room as it is pressed; nothing here waits for the launch. */
@@ -53,23 +53,24 @@ type GameSettingsProps = {
 }
 
 /**
- * The three numbers that decide how a party goes, in the lobby where the host
- * is already standing. The source next to them is a draft the launch commits,
+ * The numbers that decide how a party goes, in the lobby where the host is
+ * already standing. The source next to them is a draft the launch commits,
  * because a search can come back empty; these cannot, so they land immediately.
  */
-export const GameSettings: React.FC<GameSettingsProps> = ({
+export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   isLive,
   onChange,
   settings
 }) => {
   const translate = useTranslate()
   const isDisabled = !isLive
+  const game = settings.game
 
   const secondsLabel = (milliseconds: number): string =>
     translate('host.seconds', { seconds: milliseconds / 1_000 })
 
   return (
-    <section className='game-settings'>
+    <section className='settings-panel'>
       <SegmentedControl
         isDisabled={isDisabled}
         label={translate('blindtest.answerMode.label')}
@@ -91,20 +92,22 @@ export const GameSettings: React.FC<GameSettingsProps> = ({
       */}
       <p className='hint'>{translate(scoringKey(settings.answerMode))}</p>
 
-      <SegmentedControl
-        isDisabled={isDisabled}
-        label={translate('blindtest.difficulty.label')}
-        onChange={(next) => {
-          if (isDifficulty(next)) {
-            onChange({ ...settings, difficulty: next })
-          }
-        }}
-        options={trackDifficulties.map((difficulty) => ({
-          label: translate(difficultyLabelKey(difficulty)),
-          value: difficulty
-        }))}
-        value={settings.difficulty}
-      />
+      {game.kind === 'blindtest' && (
+        <SegmentedControl
+          isDisabled={isDisabled}
+          label={translate('blindtest.difficulty.label')}
+          onChange={(next) => {
+            if (isDifficulty(next)) {
+              onChange({ ...settings, game: { ...game, difficulty: next } })
+            }
+          }}
+          options={trackDifficulties.map((difficulty) => ({
+            label: translate(difficultyLabelKey(difficulty)),
+            value: difficulty
+          }))}
+          value={game.difficulty}
+        />
+      )}
 
       <SegmentedControl
         isDisabled={isDisabled}
@@ -123,22 +126,24 @@ export const GameSettings: React.FC<GameSettingsProps> = ({
         value={String(settings.roundCount)}
       />
 
-      <SegmentedControl
-        isDisabled={isDisabled}
-        label={translate('blindtest.clip')}
-        onChange={(next) => {
-          const playbackDurationMs = optionFrom(CLIP_DURATIONS_MS, next)
+      {game.kind === 'blindtest' && (
+        <SegmentedControl
+          isDisabled={isDisabled}
+          label={translate('blindtest.clip')}
+          onChange={(next) => {
+            const clipDurationMs = optionFrom(CLIP_DURATIONS_MS, next)
 
-          if (playbackDurationMs !== undefined) {
-            onChange({ ...settings, playbackDurationMs })
-          }
-        }}
-        options={CLIP_DURATIONS_MS.map((milliseconds) => ({
-          label: secondsLabel(milliseconds),
-          value: String(milliseconds)
-        }))}
-        value={String(settings.playbackDurationMs)}
-      />
+            if (clipDurationMs !== undefined) {
+              onChange({ ...settings, game: { ...game, clipDurationMs } })
+            }
+          }}
+          options={CLIP_DURATIONS_MS.map((milliseconds) => ({
+            label: secondsLabel(milliseconds),
+            value: String(milliseconds)
+          }))}
+          value={String(game.clipDurationMs)}
+        />
+      )}
 
       <SegmentedControl
         isDisabled={isDisabled}

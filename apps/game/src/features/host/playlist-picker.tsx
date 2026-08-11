@@ -2,7 +2,7 @@ import type React from 'react'
 import { useEffect, useState } from 'react'
 import { Form } from 'react-aria-components'
 
-import type { RoomSettings } from '@taverla/protocol/room'
+import type { BlindtestSettings } from '@taverla/protocol/game'
 import type { TrackSource } from '@taverla/protocol/track'
 
 import {
@@ -113,7 +113,7 @@ const sourceFromDraft = ({
 type PlaylistPickerProps = {
   /** Called on every edit. Must be stable — it is an effect dependency. */
   onDraftChange: (source: TrackSource | null) => void
-  settings: RoomSettings
+  settings: BlindtestSettings
 }
 
 /**

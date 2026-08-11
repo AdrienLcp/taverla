@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+import { DEFAULT_BLINDTEST_SETTINGS, gameSettingsSchema } from './game'
 import {
   nicknameSchema,
   playerIdSchema,
@@ -8,12 +9,7 @@ import {
   serverTimeSchema
 } from './identifiers'
 import { awardSchema } from './scoring'
-import {
-  hostTrackSchema,
-  trackDifficultySchema,
-  trackIdentitySchema,
-  trackSourceSchema
-} from './track'
+import { hostTrackSchema, trackIdentitySchema } from './track'
 
 export const MAX_PLAYERS_PER_ROOM = 24
 
@@ -52,20 +48,17 @@ export const roomSettingsSchema = z.object({
   autoAdvanceMs: z.number().int().min(2_000).max(30_000).nullable(),
   /** Milliseconds between "start" and the first note, so every device lands together. */
   countdownMs: z.number().int().min(0).max(10_000),
-  difficulty: trackDifficultySchema,
-  /** How long a clip runs unanswered before the round times out. */
-  playbackDurationMs: z.number().int().min(5_000).max(30_000),
-  roundCount: z.number().int().min(1).max(50),
-  source: trackSourceSchema
+  /**
+   * Which game the room is playing, and the settings only that game has. The
+   * room keeps what every game needs and hands the rest here — see `game.ts`.
+   */
+  game: gameSettingsSchema,
+  roundCount: z.number().int().min(1).max(50)
 })
 
 export type AnswerMode = z.infer<typeof answerModeSchema>
 export type RoomSettings = z.infer<typeof roomSettingsSchema>
 
-/**
- * A Deezer preview is 30 seconds, so `playbackDurationMs` cannot exceed it —
- * the schema's ceiling is that hard limit, not a taste call.
- */
 export const DEFAULT_ROOM_SETTINGS: RoomSettings = {
   /**
    * Everyone plays every round, which is what a party wants: the buzzer gives
@@ -74,10 +67,8 @@ export const DEFAULT_ROOM_SETTINGS: RoomSettings = {
   answerMode: 'typed',
   autoAdvanceMs: null,
   countdownMs: 3_000,
-  difficulty: 'wellKnown',
-  playbackDurationMs: 30_000,
-  roundCount: 10,
-  source: { genreIds: [], kind: 'chart' }
+  game: DEFAULT_BLINDTEST_SETTINGS,
+  roundCount: 10
 }
 
 export const publicPlayerSchema = z.object({

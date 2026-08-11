@@ -65,6 +65,14 @@ screen that has to end up showing both answers. They run on ports of their own a
 red. Locators are roles and accessible names, gathered in `e2e/locators.ts` —
 never a `data-testid`.
 
+**Build before running them.** Playwright starts the server with
+`pnpm --filter @taverla/server start`, which is `node dist/index.mjs` — the
+bundle, not the sources the app is served from. A `pnpm test:e2e` after a server
+or protocol edit therefore runs yesterday's server against today's client, and a
+`PROTOCOL_VERSION` bump turns every journey red at once with a refusal that has
+nothing to do with what they assert. `pnpm validate` builds first, which is the
+reason to prefer it.
+
 Playwright is the slowest tool available. Before adding a third spec, ask what
 it covers that a socket test cannot; the answer is usually "nothing".
 

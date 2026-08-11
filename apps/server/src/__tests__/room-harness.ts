@@ -2,6 +2,7 @@ import { serve } from '@hono/node-server'
 import type { z } from 'zod'
 
 import type { ClientMessage } from '@taverla/protocol/client-message'
+import { DEFAULT_BLINDTEST_SETTINGS } from '@taverla/protocol/game'
 import type { CreateRoomResponse } from '@taverla/protocol/http'
 import {
   DEFAULT_ROOM_SETTINGS,
@@ -59,7 +60,7 @@ export const FAST_GAME: RoomSettings = {
   ...DEFAULT_ROOM_SETTINGS,
   answerMode: 'buzzer',
   countdownMs: 20,
-  playbackDurationMs: 5_000,
+  game: { ...DEFAULT_BLINDTEST_SETTINGS, clipDurationMs: 5_000 },
   roundCount: 3
 }
 

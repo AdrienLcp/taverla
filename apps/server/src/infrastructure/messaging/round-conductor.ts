@@ -41,11 +41,27 @@ export const beginRound = async (room: Room): Promise<void> => {
     return
   }
 
+  const game = room.settings.game
+
+  if (game.kind !== 'blindtest') {
+    const host = hostConnectionIn(room.code)
+
+    if (host !== null) {
+      sendError(host, {
+        code: 'not_implemented',
+        fatal: false,
+        message: 'That game cannot open a round yet'
+      })
+    }
+
+    return
+  }
+
   cancelRoundTimer(room.code, 'advance')
   roomsDrawing.add(room.code)
 
   try {
-    const drawn = await drawPlayableTrack(room)
+    const drawn = await drawPlayableTrack({ room, settings: game })
 
     if (drawn.status === 'failure') {
       logger.error('Could not draw a track', {

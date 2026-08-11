@@ -36,13 +36,13 @@ import { usePhaseField } from '@/presentation/theme/use-phase-field'
 
 import { CopyButton } from './copy-button'
 import { FinalBoard } from './final-board'
-import { answerModeLabelKey, GameSettings } from './game-settings'
 import { HostControls } from './host-controls'
 import { HostSeat } from './host-seat'
 import { JoinReminder } from './join-reminder'
 import { PlaylistPicker, sourceKindKey } from './playlist-picker'
 import { RevealPanel } from './reveal-panel'
 import { useRoundAudio } from './round-audio'
+import { answerModeLabelKey, SettingsPanel } from './settings-panel'
 import { VerdictPanel } from './verdict-panel'
 
 import './host-console-page.sass'
@@ -135,9 +135,14 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
                 // What the picker is showing is what the host chose, so the
                 // launch commits it. Re-sending an unchanged source is free:
                 // the server drops the pool only when it actually differs.
-                if (draftSource !== null) {
+                const game = view.settings.game
+
+                if (draftSource !== null && game.kind === 'blindtest') {
                   send({
-                    settings: { ...view.settings, source: draftSource },
+                    settings: {
+                      ...view.settings,
+                      game: { ...game, source: draftSource }
+                    },
                     type: 'host.updateSettings'
                   })
                 }
@@ -211,19 +216,23 @@ const Stage = ({
     const answerWithRound = (answer: PlayerAnswer): boolean =>
       send({ answer, roundId: round.id, type: 'player.answer' })
 
+    const game = view.settings.game
+
     return (
       <div className='stage listening'>
         <p className='now'>{translate('blindtest.listening')}</p>
-        <div
-          className='clip-progress'
-          key={`${round.id}-${round.awards.length}`}
-          style={{
-            '--clip-remaining': `${Math.max(
-              0,
-              view.settings.playbackDurationMs - view.playbackElapsedMs
-            )}ms`
-          }}
-        />
+        {game.kind === 'blindtest' && (
+          <div
+            className='clip-progress'
+            key={`${round.id}-${round.awards.length}`}
+            style={{
+              '--clip-remaining': `${Math.max(
+                0,
+                game.clipDurationMs - view.playbackElapsedMs
+              )}ms`
+            }}
+          />
+        )}
         {isSeated && view.settings.answerMode === 'choice' && (
           <ChoiceAnswer onAnswer={answerWithRound} round={round} />
         )}
@@ -310,14 +319,19 @@ const Lobby = ({
 }) => {
   const translate = useTranslate()
   const joinUrl = playUrlFor(view.code)
+  const game = view.settings.game
 
   // The draft, not the committed settings: the source is only sent on launch,
   // and a summary that waited for that would contradict the picker above it.
   const setupSummary = [
-    translate(sourceKindKey((draftSource ?? view.settings.source).kind)),
+    game.kind === 'blindtest'
+      ? translate(sourceKindKey((draftSource ?? game.source).kind))
+      : null,
     translate(answerModeLabelKey(view.settings.answerMode)),
     translate('host.roundCount', { count: view.settings.roundCount })
-  ].join(' · ')
+  ]
+    .filter((part) => part !== null)
+    .join(' · ')
 
   return (
     <div className='stage lobby'>
@@ -357,11 +371,10 @@ const Lobby = ({
         </section>
 
         <Disclosure label={translate('host.setup')} summary={setupSummary}>
-          <PlaylistPicker
-            onDraftChange={onDraftSource}
-            settings={view.settings}
-          />
-          <GameSettings
+          {game.kind === 'blindtest' && (
+            <PlaylistPicker onDraftChange={onDraftSource} settings={game} />
+          )}
+          <SettingsPanel
             isLive={isLive}
             onChange={(settings) => {
               send({ settings, type: 'host.updateSettings' })

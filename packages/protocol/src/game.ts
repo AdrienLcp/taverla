@@ -37,15 +37,17 @@ export const gameSettingsSchema = z.discriminatedUnion('kind', [
 
 export type GameKind = z.infer<typeof gameKindSchema>
 export type GameSettings = z.infer<typeof gameSettingsSchema>
+export type BlindtestSettings = Extract<GameSettings, { kind: 'blindtest' }>
+export type QuizSettings = Extract<GameSettings, { kind: 'quiz' }>
 
-export const DEFAULT_BLINDTEST_SETTINGS: GameSettings = {
+export const DEFAULT_BLINDTEST_SETTINGS: BlindtestSettings = {
   clipDurationMs: 30_000,
   difficulty: 'wellKnown',
   kind: 'blindtest',
   source: { genreIds: [], kind: 'chart' }
 }
 
-export const DEFAULT_QUIZ_SETTINGS: GameSettings = {
+export const DEFAULT_QUIZ_SETTINGS: QuizSettings = {
   answerDurationMs: 30_000,
   categories: [],
   kind: 'quiz',
