@@ -155,6 +155,42 @@ one part.
 
 ### Improvements
 
+- `[Game]` The document says what the product is. The tab read "Blind Test", the
+  page had no description, and a link pasted into a chat unfurled as a bare URL
+  — which matters here more than search does, because this is a product people
+  share by sending someone the link. Title, description, canonical, Open Graph
+  and a Twitter card, plus a 1200×630 share image set in the product's own
+  lettering on the lobby ground
+- `[Game]` The favicon is from this design world rather than the one before it.
+  It was still the prototype's rounded near-black tile with a neon-pink dot —
+  the exact arrangement the design pass exists to refuse — and it survived that
+  pass because nothing on screen shows it. A hard-edged `T`, cream on burnt
+  orange, with a PNG beside it because iOS ignores an SVG icon
+- `[Game]` `theme-color` matches the ground it is meant to hide the seam against.
+  It was `#c2410c`, a colour in neither palette, and there was one of it where
+  the two themes need two
+- `[Game]` `robots.txt` keeps room URLs out of indexes. The SPA fallback answers
+  200 on every path, so a code pasted somewhere public could put a dead room in
+  a search result
+- `[Game]` The lobby is a title card again. It stacked the QR card, the roster
+  and eight strips of settings at one weight, which on a phone put the only
+  action that matters — starting — at the bottom of a 2100px scroll. The setup
+  folds behind one ruled row that says what it currently holds ("Top charts ·
+  Type it · 10 rounds"), so the room code and the QR code get the screen back:
+  1010px on a phone, and no scroll at all on a laptop
+- `[Game]` A Deezer playlist can be tried before the evening rests on it. The
+  source was a raw id field with no feedback, so a host who pasted the wrong
+  number learned it on the first round; it now wears the same preview the
+  search does, over the same route shape, and lists what the pool would hold
+- `[Server]` A playlist id nobody can look up is told apart from a catalogue
+  that is down. Deezer answers both with HTTP 200 and an `error` object, and
+  collapsing them meant a typo read as "the server refused that"
+- `[Game]` The corner menu says which build is running, asked for the first time
+  it is opened. It is the deployment's commit rather than the tab's bundle,
+  which is what "is my fix live?" is actually asking
+- `[Server]` `POST /api/rooms` is rate-limited — 30 per address per ten minutes,
+  the same window the sweeper clears an unjoined room in. Unauthenticated and it
+  allocates a code, and the code space is the thing worth defending
 - `[Game]` Translation keys are namespaced by who would reuse the string, not by
   the screen that renders it. `host.*` names a screen, and a host console shows
   both kinds — so the source picker, the genres, the clip length and the
@@ -180,6 +216,18 @@ one part.
 
 ### Fixes
 
+- `[Game]` A setting changed while the socket is away is no longer swallowed.
+  The launch actions were already disabled without one, but the answer mode,
+  difficulty, round count, clip and countdown each wrote a frame into a closed
+  socket: the strip showed the new value, the server never heard it, and the
+  next snapshot put it back with nothing said. The volume is exempt on purpose —
+  it never leaves the host's machine
+- `[Game]` A disabled choice strip looks disabled. It carried no `[data-disabled]`
+  rule at all, so a control that answered nothing looked exactly like one that
+  would. Ruled, never dimmed, like every other disabled control here: the
+  selected stamp drops its ink ground and keeps the ink as an edge, so nothing
+  loses contrast and a host reading their settings over a dead socket can still
+  see which one is on
 - `[Game]` The app grows past the screen it was opened in. `html`, `body` and
   `#root` were pinned to the viewport's height, so a lobby taller than a laptop
   still scrolled on a desktop browser but stopped following the viewport on a
@@ -232,6 +280,21 @@ one part.
 
 ### Internal
 
+- `[Server]` `pnpm dev` starts the server again. `tsx watch` spawns the script
+  as a child process, and under `pnpm --parallel` that child never ran: no
+  output, nothing listening on 3100, and a Vite proxy refusing every `/api` and
+  `/ws` call. Run on its own it was fine, which is what made it look like a
+  local quirk for as long as it did. Node's own watcher has no such indirection:
+  `node --watch --import tsx src/index.ts` — Node watches and restarts, tsx is
+  only the loader that resolves TypeScript and the `@/` aliases
+- `[Server]` Production runs a bundle, not `tsx`. `tsdown` emits one
+  `dist/index.mjs` with the workspace packages inlined — they ship as TypeScript
+  source, so anything leaving them external would only start under a loader. It
+  does not fix the cold start, which is container scheduling; it removes a dev
+  tool from the runtime
+- `[Shared]` `TrackSearchResponse` is `TrackListResponse`, and its `results` are
+  `tracks`. The same shape now answers both the search and the playlist preview,
+  and a name that says "search" on a playlist route is a name that lies
 - `[Shared]` The game is covered end to end. The socket suites share a harness
   that boots the real server on an ephemeral port: the host-only guard, the
   fatal hang-up, a reloading player reclaiming their seat and score, and the
