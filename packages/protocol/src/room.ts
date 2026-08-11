@@ -9,7 +9,7 @@ import {
   serverTimeSchema
 } from './identifiers'
 import { hostQuestionSchema, questionPromptSchema } from './question'
-import { awardSchema, verdictSchema } from './scoring'
+import { awardSchema, halvesVerdictSchema } from './scoring'
 import { hostTrackSchema, trackIdentitySchema } from './track'
 
 export const MAX_PLAYERS_PER_ROOM = 24
@@ -35,6 +35,11 @@ export const answerModes = ['buzzer', 'choice', 'typed'] as const
  * `buzzer` is one player, the first, judged by the host. `choice` and `typed`
  * are everyone at once, decided by the server — exactly, then fuzzily — and
  * scored by speed on top of being right.
+ *
+ * It stays a room setting rather than moving into the game arms, because the
+ * shell reads it everywhere a round is answered and scored. What the game does
+ * is *narrow* it — see `answerModesFor` in `@taverla/core/room/game-modes`, and
+ * the server refuses a frame that sets one the current game does not offer.
  */
 export const answerModeSchema = z.enum(answerModes)
 
@@ -66,7 +71,14 @@ export const roomSettingsSchema = z.object({
    * room keeps what every game needs and hands the rest here — see `game.ts`.
    */
   game: gameSettingsSchema,
-  roundCount: z.number().int().min(1).max(50)
+  /**
+   * How many rounds the game runs for, or `null` for "until the host ends it".
+   *
+   * A fixed count is the blind test's shape — a playlist runs out — and it is
+   * the wrong one for a host running a charade evening, who stops when they
+   * stop. The final board already knows how to arrive on a press.
+   */
+  roundCount: z.number().int().min(1).max(50).nullable()
 })
 
 export type AnswerMode = z.infer<typeof answerModeSchema>
@@ -133,7 +145,7 @@ export const revealedAnswerSchema = roundAnswerSchema.extend({
  * around it — who buzzed, who is locked out, what was awarded — is the shell's
  * and is the same in every game.
  *
- * Both arms are safe for a player to hold: one of the choices is the answer,
+ * Every arm is safe for a player to hold: one of the choices is the answer,
  * which is the game rather than a leak. **Which** one lives only in the
  * server's `Round` and reaches no frame — see `codec.test.ts`.
  */
@@ -144,6 +156,13 @@ export const roundContentSchema = z.discriminatedUnion('kind', [
     kind: z.literal('blindtest'),
     revealedTrack: trackIdentitySchema.nullable()
   }),
+  /**
+   * Nothing but its kind, because the room owns the question and the server
+   * never learns it. The arm still exists rather than the field going `null`:
+   * absent content and a round that has none are different facts, and only one
+   * of them means there is no round.
+   */
+  z.object({ kind: z.literal('buzzer') }),
   z.object({
     /** Choice mode only, and shuffled per round. */
     choices: z.array(z.string()),
@@ -163,7 +182,10 @@ export const roundViewSchema = z.object({
   id: roundIdSchema,
   /** 1-based, so it reads as "round 3 of 10" without arithmetic at the call site. */
   index: z.number().int().positive(),
-  /** Answered wrong this round — cannot buzz again until the next one. */
+  /**
+   * Answered wrong this round — cannot buzz again until the next one, or until
+   * the host reopens the field with `host.clearLockouts`.
+   */
   lockedOutPlayerIds: z.array(playerIdSchema),
   /** Empty until the reveal, then what everyone said and whether it was right. */
   revealedAnswers: z.array(revealedAnswerSchema),
@@ -195,14 +217,21 @@ const baseRoomViewSchema = z.object({
    *
    * Scoped to the reader on purpose. Everyone else's progress stays secret
    * until the reveal, the same way `revealedAnswers` does.
+   *
+   * Halves rather than the whole verdict union, because banking is what having
+   * two of them means: a game judged on one claim has nothing to hold half of,
+   * and leaves this `null` throughout.
    */
-  yourVerdict: verdictSchema.nullable()
+  yourVerdict: halvesVerdictSchema.nullable()
 })
 
 /**
  * The round as the one screen judging it sees it — the half no player may hold.
- * Both arms go `null` while the host holds a seat: that screen is a player's
+ * The answer goes `null` while the host holds a seat: that screen is a player's
  * then, and a payload it could read in a console is not a guarantee.
+ *
+ * The bare buzzer is the arm with nothing to withhold, which is the whole point
+ * of it: no catalogue, no network call, and no licence to answer for.
  */
 export const hostRoundContentSchema = z.discriminatedUnion('kind', [
   z.object({
@@ -219,6 +248,7 @@ export const hostRoundContentSchema = z.discriminatedUnion('kind', [
     kind: z.literal('blindtest'),
     track: hostTrackSchema.nullable()
   }),
+  z.object({ kind: z.literal('buzzer') }),
   z.object({
     kind: z.literal('quiz'),
     question: hostQuestionSchema.nullable()

@@ -29,6 +29,15 @@
       &.placeholder
         opacity: 0.25
 
+    // A game whose question the room owns reveals nothing, so the scoreline is
+    // the whole panel and takes the width the cover would have had.
+    &.bare
+      grid-template-columns: minmax(0, 1fr)
+
+      .nobody,
+      .scorers li
+        @include typography.billboard
+
     .identity
       min-width: 0
 

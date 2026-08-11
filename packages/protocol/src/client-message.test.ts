@@ -40,7 +40,7 @@ describe('playerClientMessageSchema', () => {
       playerId: 'p1',
       roundId: 'r1',
       type: 'host.judge',
-      verdict: { artistCorrect: true, titleCorrect: true }
+      verdict: { artistCorrect: true, kind: 'halves', titleCorrect: true }
     }
 
     expect(playerClientMessageSchema.safeParse(judge).success).toBe(false)

@@ -6,6 +6,7 @@ import {
   blindtestRound,
   errorsIn,
   FAST_GAME,
+  halves,
   hostContent,
   hostView,
   playerView,
@@ -309,10 +310,7 @@ describe('answering all at once', () => {
     )
 
     expect(errorsIn(zoe)).toEqual([])
-    expect(playerView(zoe)?.yourVerdict).toEqual({
-      artistCorrect: false,
-      titleCorrect: false
-    })
+    expect(playerView(zoe)?.yourVerdict).toEqual(halves(false, false))
 
     zoe.send({
       answer: { guess: track.title, kind: 'typed' },

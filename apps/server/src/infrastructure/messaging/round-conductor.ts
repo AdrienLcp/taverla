@@ -3,15 +3,16 @@ import type { RoomCode, RoundId } from '@taverla/protocol/identifiers'
 import type { Room } from '@/domain/room/room'
 import { findRoom } from '@/domain/room/room-store'
 import {
-  beginPlayback,
+  blindtestContent,
   finishGame,
-  holdPlayback,
+  holdRoundClock,
   isFinalRound,
   openRound,
-  remainingPlaybackMs,
-  resumePlayback,
+  remainingRoundMs,
+  resumeRoundClock,
   revealRound,
   settleSimultaneousRound,
+  startRoundClock,
   timeOutBuzz
 } from '@/domain/round/round-service'
 import {
@@ -34,7 +35,7 @@ const roomsDrawing = new Set<RoomCode>()
 
 /**
  * The time-driven transitions live here rather than in the socket handler: a
- * countdown that lands, a clip that runs out, and a reveal that moves on by
+ * countdown that lands, a round that runs out, and a reveal that moves on by
  * itself are not messages anyone sent, but they still end in a broadcast.
  */
 export const beginRound = async (room: Room): Promise<void> => {
@@ -43,6 +44,23 @@ export const beginRound = async (room: Room): Promise<void> => {
   }
 
   const game = room.settings.game
+
+  // No catalogue, no network call, and nothing to fail — the room already holds
+  // the question. Opening the round is the whole of serving this game.
+  if (game.kind === 'buzzer') {
+    cancelRoundTimer(room.code, 'advance')
+
+    const round = openRound({
+      content: { kind: 'buzzer' },
+      now: Date.now(),
+      room
+    })
+
+    broadcastRoom(room)
+    armCountdown({ room, roundId: round.id })
+
+    return
+  }
 
   if (game.kind !== 'blindtest') {
     const host = hostConnectionIn(room.code)
@@ -89,7 +107,11 @@ export const beginRound = async (room: Room): Promise<void> => {
       return
     }
 
-    const round = openRound({ now: Date.now(), room, track: drawn.data })
+    const round = openRound({
+      content: blindtestContent({ room, track: drawn.data }),
+      now: Date.now(),
+      room
+    })
 
     broadcastRoom(room)
     armCountdown({ room, roundId: round.id })
@@ -99,17 +121,28 @@ export const beginRound = async (room: Room): Promise<void> => {
 }
 
 /**
- * Re-armed rather than resumed: a miss consumed part of the clip, and
- * `remainingPlaybackMs` is what stops the next player getting a fresh thirty
+ * Re-armed rather than resumed: a miss consumed part of the round, and
+ * `remainingRoundMs` is what stops the next player getting a fresh thirty
  * seconds out of someone else's wrong answer.
+ *
+ * A game with no clock cancels instead. The bare buzzer serves nothing, so
+ * there is nothing for the room to run out of and the round waits for a thumb.
  */
-export const armPlaybackTimeout = (room: Room): void => {
+export const armRoundTimeout = (room: Room): void => {
+  const remaining = remainingRoundMs(room, Date.now())
+
+  if (remaining === null) {
+    cancelRoundTimer(room.code, 'round')
+
+    return
+  }
+
   scheduleRoundTimer({
     code: room.code,
-    delayMs: remainingPlaybackMs(room, Date.now()),
-    kind: 'playback',
+    delayMs: remaining,
+    kind: 'round',
     run: () => {
-      // The clip running out ends a simultaneous round the same way the last
+      // The round running out ends a simultaneous one the same way the last
       // answer does, scoring included: whoever did not answer simply did not.
       if (room.settings.answerMode === 'buzzer') {
         revealRound(room, Date.now())
@@ -158,8 +191,8 @@ export const armAutoAdvance = (room: Room): void => {
   })
 }
 
-export const holdPlaybackTimeout = (code: RoomCode): void => {
-  cancelRoundTimer(code, 'playback')
+export const holdRoundTimeout = (code: RoomCode): void => {
+  cancelRoundTimer(code, 'round')
 }
 
 /**
@@ -189,7 +222,7 @@ export const armAnswerWindow = (room: Room): void => {
       const outcome = timeOutBuzz({ now: Date.now(), room, roundId })
 
       if (outcome === 'resumed') {
-        armPlaybackTimeout(room)
+        armRoundTimeout(room)
       }
 
       if (outcome === 'revealed') {
@@ -207,9 +240,9 @@ export const armAnswerWindow = (room: Room): void => {
 
 /**
  * The host's browser is the room's speaker and its only judge, so a game that
- * carries on without them carries on in silence, unjudged, burning clip time
- * nobody can hear. Everything time-driven stops instead, and the clip keeps the
- * seconds it had left.
+ * carries on without them carries on in silence, unjudged, burning round time
+ * nobody can hear. Everything time-driven stops instead, and the round keeps
+ * the seconds it had left.
  *
  * There is no grace period on purpose. Freezing costs nothing and undoes
  * itself, where waiting even five seconds spends five seconds of music on an
@@ -220,15 +253,15 @@ export const holdRoundWhileHostIsAway = (room: Room): void => {
   cancelRoundTimer(room.code, 'advance')
   cancelRoundTimer(room.code, 'answer')
   cancelRoundTimer(room.code, 'countdown')
-  cancelRoundTimer(room.code, 'playback')
-  holdPlayback(room, Date.now())
+  cancelRoundTimer(room.code, 'round')
+  holdRoundClock(room, Date.now())
 }
 
 /** The mirror, run when a host claims the room again. */
 export const resumeRoundForHost = (room: Room): void => {
   const now = Date.now()
 
-  resumePlayback(room, now)
+  resumeRoundClock(room, now)
 
   if (room.phase === 'countdown' && room.round !== null) {
     armCountdown({ room, roundId: room.round.id })
@@ -237,7 +270,7 @@ export const resumeRoundForHost = (room: Room): void => {
   }
 
   if (room.phase === 'playing') {
-    armPlaybackTimeout(room)
+    armRoundTimeout(room)
 
     return
   }
@@ -263,12 +296,12 @@ const armCountdown = ({
     delayMs: room.settings.countdownMs,
     kind: 'countdown',
     run: () => {
-      if (!beginPlayback({ now: Date.now(), room, roundId })) {
+      if (!startRoundClock({ now: Date.now(), room, roundId })) {
         return
       }
 
       broadcastRoom(room)
-      armPlaybackTimeout(room)
+      armRoundTimeout(room)
     }
   })
 }

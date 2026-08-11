@@ -15,20 +15,6 @@ export const FR_DICTIONARY: Dictionary = {
   'blindtest.answer.send': 'Envoyer',
   'blindtest.answer.titleFound': 'Titre ✓',
   'blindtest.answer.waiting': '{count} ont répondu',
-  'blindtest.answerMode.buzzer': 'Le premier qui buzze',
-  'blindtest.answerMode.choice': 'Quatre propositions',
-  'blindtest.answerMode.label': 'Comment on répond',
-  'blindtest.answerMode.typed': 'On tape',
-  'blindtest.buzz.action': 'Buzz',
-  'blindtest.buzz.blocked.host_away': 'L’hôte a décroché. Tout est en pause.',
-  'blindtest.buzz.blocked.round_not_running': 'En attente de l’hôte',
-  'blindtest.buzz.blocked.someone_else_buzzed': 'Quelqu’un a été plus rapide',
-  'blindtest.buzz.blocked.you_already_missed': 'Tu es hors-jeu pour ce tour',
-  'blindtest.buzz.blocked.your_answer_is_pending':
-    'Donne ta réponse à voix haute',
-  'blindtest.buzz.ready': 'Appuie dès que tu sais',
-  'blindtest.buzz.sendFailed': 'Ce buzz n’est pas parti. Réappuie.',
-  'blindtest.buzz.won': 'C’est à toi. Annonce\u00a0!',
   'blindtest.clip': 'Durée de l’extrait',
   'blindtest.difficulty.label': 'À quel point c’est connu',
   'blindtest.difficulty.mixed': 'Un peu pointu',
@@ -52,9 +38,7 @@ export const FR_DICTIONARY: Dictionary = {
     'Un écran joue le morceau et affiche le QR code. Tout le monde répond sur ce qu’il a dans la main, et le premier qui sait remporte le tour.',
   'blindtest.listening': 'À l’écoute…',
   'blindtest.name': 'Blind test',
-  'blindtest.reveal.nobody': 'Personne n’a trouvé',
   'blindtest.reveal.title': 'C’était',
-  'blindtest.round': 'Tour {index} sur {total}',
   'blindtest.scoring.buzzer':
     'Le premier qui buzze répond à voix haute. L’hôte juge le titre et l’artiste, 1 point chacun — une mauvaise réponse te met hors-jeu pour le reste du tour.',
   'blindtest.scoring.choice':
@@ -76,12 +60,33 @@ export const FR_DICTIONARY: Dictionary = {
   'blindtest.source.ready': '{count} titres prêts',
   'blindtest.source.search': 'Une recherche',
   'blindtest.tagline': 'Trouve le titre avant tout le monde.',
-  'blindtest.theyBuzzed': '{nickname} a buzzé',
   'blindtest.verdict.artistOnly': 'Artiste seulement',
   'blindtest.verdict.both': 'Titre + artiste',
   'blindtest.verdict.miss': 'Raté',
   'blindtest.verdict.titleOnly': 'Titre seulement',
-  'blindtest.youScored': '+{points}',
+
+  'buzz.action': 'Buzz',
+  'buzz.blocked.host_away': 'L’hôte a décroché. Tout est en pause.',
+  'buzz.blocked.round_not_running': 'En attente de l’hôte',
+  'buzz.blocked.someone_else_buzzed': 'Quelqu’un a été plus rapide',
+  'buzz.blocked.you_already_missed': 'Tu es hors-jeu pour ce tour',
+  'buzz.blocked.your_answer_is_pending': 'Donne ta réponse à voix haute',
+  'buzz.ready': 'Appuie dès que tu sais',
+  'buzz.sendFailed': 'Ce buzz n’est pas parti. Réappuie.',
+  'buzz.theyBuzzed': '{nickname} a buzzé',
+  'buzz.won': 'C’est à toi. Annonce\u00a0!',
+
+  'buzzer.clearLockouts': 'Remettre tout le monde en jeu',
+  'buzzer.home.description':
+    'Les questions, c’est toi qui les apportes — une charade, un quiz sur une feuille, une leçon, ce que la salle veut. Cet écran décide seulement qui a posé le pouce en premier, et ça, il ne se trompe jamais.',
+  'buzzer.lockout': 'Une mauvaise réponse met hors-jeu',
+  'buzzer.name': 'Buzzer',
+  'buzzer.running': 'Pose ta question',
+  'buzzer.scoring':
+    'Le premier pouce répond à voix haute, et l’hôte dit si c’est bon. 1 point si c’est juste — et une mauvaise réponse te met hors-jeu jusqu’à ce que l’hôte te remette en jeu.',
+  'buzzer.tagline': 'Tes questions, et une course honnête au buzz.',
+  'buzzer.verdict.right': 'Bonne réponse',
+  'buzzer.verdict.wrong': 'Raté',
 
   'connection.clock': '· horloge ±{milliseconds} ms',
   'connection.closed': 'Reconnexion…',
@@ -123,9 +128,13 @@ export const FR_DICTIONARY: Dictionary = {
   'home.tagline':
     'Des jeux de soirée pour un écran et les téléphones de tout le monde.',
   'home.title': 'Taverla',
+
+  'host.answerMode.buzzer': 'Le premier qui buzze',
+  'host.answerMode.choice': 'Quatre propositions',
+  'host.answerMode.label': 'Comment on répond',
+  'host.answerMode.typed': 'On tape',
   'host.answerWindow': 'Temps pour répondre après un buzz',
   'host.answerWindow.none': 'Tu décides',
-
   'host.autoAdvance': 'Enchaîner tout seul',
   'host.changeSettings': 'Changer les réglages',
   'host.copied': 'Copié',
@@ -138,6 +147,7 @@ export const FR_DICTIONARY: Dictionary = {
   'host.final.points': '{points} points',
   'host.final.tie': 'Égalité',
   'host.final.winner': 'Le vainqueur',
+  'host.game': 'Quel jeu',
   'host.invite.title': 'Scanne pour jouer',
   'host.joinLate': 'Encore ouvert',
   'host.needsPlayer': 'Il faut au moins un joueur pour lancer',
@@ -147,6 +157,8 @@ export const FR_DICTIONARY: Dictionary = {
   'host.players.title': 'Joueurs',
   'host.reveal': 'Donner la réponse',
   'host.roundCount': '{count} tours',
+  'host.roundCount.open': 'Sans fin',
+  'host.roundCount.openSummary': 'Jusqu’à ce que tu arrêtes',
   'host.rounds': 'Tours',
   'host.seat.action': 'Prendre une place',
   'host.seat.description':
@@ -193,5 +205,10 @@ export const FR_DICTIONARY: Dictionary = {
   'preferences.theme': 'Thème',
   'preferences.theme.dark': 'Sombre',
   'preferences.theme.light': 'Clair',
-  'preferences.theme.system': 'Système'
+  'preferences.theme.system': 'Système',
+
+  'round.index': 'Tour {index} sur {total}',
+  'round.indexOpen': 'Tour {index}',
+  'round.nobody': 'Personne n’a trouvé',
+  'round.scored': '+{points}'
 }

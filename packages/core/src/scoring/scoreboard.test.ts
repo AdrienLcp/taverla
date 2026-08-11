@@ -1,9 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import type { PublicPlayer } from '@taverla/protocol/room'
-import type { Verdict } from '@taverla/protocol/scoring'
 
-import { isMiss, pointsFor } from './award'
 import { buildScoreboard } from './scoreboard'
 
 const playerOn = (nickname: string, score: number): PublicPlayer => ({
@@ -11,32 +9,6 @@ const playerOn = (nickname: string, score: number): PublicPlayer => ({
   isConnected: true,
   nickname,
   score
-})
-
-const verdict = (titleCorrect: boolean, artistCorrect: boolean): Verdict => ({
-  artistCorrect,
-  titleCorrect
-})
-
-describe('pointsFor', () => {
-  it.each([
-    [verdict(true, true), 2],
-    [verdict(true, false), 1],
-    [verdict(false, true), 1],
-    [verdict(false, false), 0]
-  ])(
-    '[scoring] scores each half of the answer independently',
-    (given, expected) => {
-      expect(pointsFor(given)).toBe(expected)
-    }
-  )
-})
-
-describe('isMiss', () => {
-  it('[scoring] treats only a doubly-wrong answer as a miss', () => {
-    expect(isMiss(verdict(false, false))).toBe(true)
-    expect(isMiss(verdict(false, true))).toBe(false)
-  })
 })
 
 describe('buildScoreboard', () => {

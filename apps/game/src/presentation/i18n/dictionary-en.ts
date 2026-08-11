@@ -2,9 +2,10 @@
  * The reference dictionary: its keys are the type every other locale is checked
  * against, so a string added here does not compile until every locale has it.
  *
- * `blindtest.*` is the one namespace that belongs to a single game. Everything
- * else — joining a room, the roster, the connection, the errors — is the shell
- * that the next game will reuse. See `docs/game-catalogue.md`.
+ * `blindtest.*` and `buzzer.*` are the namespaces a single game owns. Everything
+ * else — joining a room, the roster, the buzzer *mode*, the round counter, the
+ * connection, the errors — is the shell that the next game reuses unchanged.
+ * See `docs/game-catalogue.md`.
  */
 export const EN_DICTIONARY = {
   'blindtest.answer.anyOrder':
@@ -16,20 +17,6 @@ export const EN_DICTIONARY = {
   'blindtest.answer.send': 'Send it',
   'blindtest.answer.titleFound': 'Title ✓',
   'blindtest.answer.waiting': '{count} in so far',
-  'blindtest.answerMode.buzzer': 'First to buzz',
-  'blindtest.answerMode.choice': 'Four choices',
-  'blindtest.answerMode.label': 'How to answer',
-  'blindtest.answerMode.typed': 'Type it',
-  'blindtest.buzz.action': 'Buzz',
-  'blindtest.buzz.blocked.host_away':
-    'The host dropped out. Everything is on hold.',
-  'blindtest.buzz.blocked.round_not_running': 'Waiting for the host',
-  'blindtest.buzz.blocked.someone_else_buzzed': 'Someone got there first',
-  'blindtest.buzz.blocked.you_already_missed': 'You are out for this round',
-  'blindtest.buzz.blocked.your_answer_is_pending': 'Say your answer out loud',
-  'blindtest.buzz.ready': 'Hit it the moment you know',
-  'blindtest.buzz.sendFailed': 'That buzz did not get through. Hit it again.',
-  'blindtest.buzz.won': 'You are in. Say it out loud',
   'blindtest.clip': 'Clip length',
   'blindtest.difficulty.label': 'How well known',
   'blindtest.difficulty.mixed': 'Deep cuts too',
@@ -53,9 +40,7 @@ export const EN_DICTIONARY = {
     'One screen plays the track and shows the QR code. Everyone else answers on whatever they have in their hand, and the first to know it wins the round.',
   'blindtest.listening': 'Listening…',
   'blindtest.name': 'Blind test',
-  'blindtest.reveal.nobody': 'Nobody got it',
   'blindtest.reveal.title': 'It was',
-  'blindtest.round': 'Round {index} of {total}',
   'blindtest.scoring.buzzer':
     'First to buzz answers out loud. The host judges the title and the artist, a point each — a wrong answer sits you out for the rest of the round.',
   'blindtest.scoring.choice':
@@ -77,12 +62,33 @@ export const EN_DICTIONARY = {
   'blindtest.source.ready': '{count} tracks ready',
   'blindtest.source.search': 'A search',
   'blindtest.tagline': 'Name the track before anyone else.',
-  'blindtest.theyBuzzed': '{nickname} buzzed',
   'blindtest.verdict.artistOnly': 'Artist only',
   'blindtest.verdict.both': 'Title + artist',
   'blindtest.verdict.miss': 'Wrong',
   'blindtest.verdict.titleOnly': 'Title only',
-  'blindtest.youScored': '+{points}',
+
+  'buzz.action': 'Buzz',
+  'buzz.blocked.host_away': 'The host dropped out. Everything is on hold.',
+  'buzz.blocked.round_not_running': 'Waiting for the host',
+  'buzz.blocked.someone_else_buzzed': 'Someone got there first',
+  'buzz.blocked.you_already_missed': 'You are out for this round',
+  'buzz.blocked.your_answer_is_pending': 'Say your answer out loud',
+  'buzz.ready': 'Hit it the moment you know',
+  'buzz.sendFailed': 'That buzz did not get through. Hit it again.',
+  'buzz.theyBuzzed': '{nickname} buzzed',
+  'buzz.won': 'You are in. Say it out loud',
+
+  'buzzer.clearLockouts': 'Let everyone back in',
+  'buzzer.home.description':
+    'You bring the questions — a charade, a quiz off a sheet of paper, a lesson, whatever the room is up for. This screen only decides who put their thumb down first, and it never gets that wrong.',
+  'buzzer.lockout': 'A wrong answer sits you out',
+  'buzzer.name': 'Buzzer',
+  'buzzer.running': 'Ask away',
+  'buzzer.scoring':
+    'First thumb answers out loud, and the host says right or wrong. A point for right — and a wrong answer sits you out until the host lets you back in.',
+  'buzzer.tagline': 'Your questions, and an honest race for the floor.',
+  'buzzer.verdict.right': 'Right',
+  'buzzer.verdict.wrong': 'Wrong',
 
   'connection.clock': '· clock ±{milliseconds} ms',
   'connection.closed': 'Reconnecting',
@@ -119,9 +125,13 @@ export const EN_DICTIONARY = {
   'home.games': 'The games',
   'home.tagline': 'Party games for one screen and everyone’s phone.',
   'home.title': 'Taverla',
+
+  'host.answerMode.buzzer': 'First to buzz',
+  'host.answerMode.choice': 'Four choices',
+  'host.answerMode.label': 'How to answer',
+  'host.answerMode.typed': 'Type it',
   'host.answerWindow': 'Time to answer after a buzz',
   'host.answerWindow.none': 'You decide',
-
   'host.autoAdvance': 'Chain rounds by itself',
   'host.changeSettings': 'Change the settings',
   'host.copied': 'Copied',
@@ -134,6 +144,7 @@ export const EN_DICTIONARY = {
   'host.final.points': '{points} points',
   'host.final.tie': 'It is a tie',
   'host.final.winner': 'The winner',
+  'host.game': 'Which game',
   'host.invite.title': 'Scan to play',
   'host.joinLate': 'Still open',
   'host.needsPlayer': 'The game needs at least one player',
@@ -143,6 +154,8 @@ export const EN_DICTIONARY = {
   'host.players.title': 'Players',
   'host.reveal': 'Give it away',
   'host.roundCount': '{count} rounds',
+  'host.roundCount.open': 'No end',
+  'host.roundCount.openSummary': 'Until you stop',
   'host.rounds': 'Rounds',
   'host.seat.action': 'Take a seat',
   'host.seat.description':
@@ -189,5 +202,10 @@ export const EN_DICTIONARY = {
   'preferences.theme': 'Theme',
   'preferences.theme.dark': 'Dark',
   'preferences.theme.light': 'Light',
-  'preferences.theme.system': 'System'
+  'preferences.theme.system': 'System',
+
+  'round.index': 'Round {index} of {total}',
+  'round.indexOpen': 'Round {index}',
+  'round.nobody': 'Nobody got it',
+  'round.scored': '+{points}'
 }

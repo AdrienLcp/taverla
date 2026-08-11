@@ -21,10 +21,10 @@ export const router = createBrowserRouter([
       },
       {
         lazy: async () => ({
-          Component: (await import('@/features/blindtest/blindtest-home-page'))
-            .BlindTestHomePage
+          Component: (await import('@/features/shelf/game-home-page'))
+            .GameHomePage
         }),
-        path: 'blindtest'
+        path: ':game'
       },
       {
         lazy: async () => ({

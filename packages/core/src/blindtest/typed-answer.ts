@@ -1,10 +1,9 @@
 import {
+  type HalvesVerdict,
   POINTS_FOR_A_RIGHT_CHOICE,
   POINTS_FOR_TITLE_AND_ARTIST,
   POINTS_PER_ARTIST,
-  POINTS_PER_TITLE,
-  SPEED_BONUS_BY_RANK,
-  type Verdict
+  POINTS_PER_TITLE
 } from '@taverla/protocol/scoring'
 
 import { answerAppearsIn } from '../round/answer-matching'
@@ -21,8 +20,8 @@ type TrackAnswer = {
 
 /**
  * The server grades a typed guess where the host judges a spoken one, so this
- * returns the same `Verdict` the buzzer mode produces. Whichever way a round is
- * played, the reveal and the scoreboard read one shape.
+ * returns the same `halves` verdict the blind test's buzzer produces. Whichever
+ * way a round is played, the reveal and the scoreboard read one shape.
  *
  * One guess is measured against **both** halves rather than the player saying
  * which they meant, and each half is looked for *inside* the line rather than
@@ -36,8 +35,9 @@ export const gradeGuess = ({
 }: {
   guess: string
   track: TrackAnswer
-}): Verdict => ({
+}): HalvesVerdict => ({
   artistCorrect: answerAppearsIn({ expected: track.artist, given: guess }),
+  kind: 'halves',
   titleCorrect: answerAppearsIn({ expected: track.title, given: guess })
 })
 
@@ -50,18 +50,20 @@ export const withGuessBanked = ({
   banked,
   guessed
 }: {
-  banked: Verdict
-  guessed: Verdict
-}): Verdict => ({
+  banked: HalvesVerdict
+  guessed: HalvesVerdict
+}): HalvesVerdict => ({
   artistCorrect: banked.artistCorrect || guessed.artistCorrect,
+  kind: 'halves',
   titleCorrect: banked.titleCorrect || guessed.titleCorrect
 })
 
-export const hasBothHalves = (verdict: Verdict): boolean =>
+export const hasBothHalves = (verdict: HalvesVerdict): boolean =>
   verdict.artistCorrect && verdict.titleCorrect
 
-export const NOTHING_BANKED: Verdict = {
+export const NOTHING_BANKED: HalvesVerdict = {
   artistCorrect: false,
+  kind: 'halves',
   titleCorrect: false
 }
 
@@ -70,7 +72,7 @@ export const NOTHING_BANKED: Verdict = {
  * the song has earned something, and a mode where half-knowledge is worth
  * nothing goes quiet fast.
  */
-export const pointsForTypedAnswer = (verdict: Verdict): number => {
+export const pointsForTypedAnswer = (verdict: HalvesVerdict): number => {
   const halves =
     (verdict.titleCorrect ? POINTS_PER_TITLE : 0) +
     (verdict.artistCorrect ? POINTS_PER_ARTIST : 0)
@@ -81,13 +83,5 @@ export const pointsForTypedAnswer = (verdict: Verdict): number => {
 }
 
 /** A right pick, before the speed bonus. Deliberately not what typing pays. */
-export const pointsForChoice = (verdict: Verdict): number =>
+export const pointsForChoice = (verdict: HalvesVerdict): number =>
   verdict.titleCorrect ? POINTS_FOR_A_RIGHT_CHOICE : 0
-
-/**
- * `rank` counts only the players who scored, in arrival order — a wrong answer
- * that arrived first takes nobody's bonus, because nothing was won by being
- * quickly wrong.
- */
-export const speedBonusForRank = (rank: number): number =>
-  SPEED_BONUS_BY_RANK[rank] ?? 0

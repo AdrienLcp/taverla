@@ -6,7 +6,7 @@ import type {
   SessionId
 } from '@taverla/protocol/identifiers'
 import type { RoomPhase, RoomSettings } from '@taverla/protocol/room'
-import type { Award, Verdict } from '@taverla/protocol/scoring'
+import type { Award, HalvesVerdict } from '@taverla/protocol/scoring'
 import type { HostTrack, TrackIdentity } from '@taverla/protocol/track'
 
 /**
@@ -44,11 +44,6 @@ export type Participant = {
 }
 
 /**
- * `playedMs` and `playingSince` are the pair that makes a miss resumable: a
- * buzz pauses the clip, and the round has to know how much of it is left rather
- * than handing the next player a fresh thirty seconds.
- */
-/**
  * Everything one player did in a simultaneous round, graded as it arrived. It
  * is projected twice: as a name and a time while the round runs, and with what
  * they said once the answer is public.
@@ -71,7 +66,7 @@ export type PlayerAttempts = {
   /** Their latest guess that banked nothing — what the reveal shows when nothing landed. */
   lastMiss: string | null
   playerId: PlayerId
-  verdict: Verdict
+  verdict: HalvesVerdict
 }
 
 export type Round = {
@@ -92,23 +87,33 @@ export type Round = {
   /**
    * What the round is asking, in the vocabulary of the game asking it — and the
    * answer, which lives here and reaches the wire only through `room-view.ts`.
+   * The bare buzzer's arm carries neither: the room owns the question, and the
+   * server is only there to say who was first.
    *
    * Choice mode's candidates are shuffled once when the round opens, so their
    * order carries nothing. `correctChoiceIndex` is the one field in the whole
    * model that must never be projected.
    */
-  content: {
-    choices: TrackIdentity[]
-    correctChoiceIndex: number | null
-    kind: 'blindtest'
-    track: HostTrack
-  }
+  content:
+    | {
+        choices: TrackIdentity[]
+        correctChoiceIndex: number | null
+        kind: 'blindtest'
+        track: HostTrack
+      }
+    | { kind: 'buzzer' }
+  /**
+   * The round's own clock, and the pair that makes a miss resumable: a buzz
+   * stops it, and the round has to know how much is left rather than handing
+   * the next player a fresh thirty seconds. A game with no clock — the bare
+   * buzzer — still winds it, and nothing ever reads the total.
+   */
+  elapsedMs: number
   id: RoundId
   index: number
   lockedOutPlayerIds: Set<PlayerId>
-  playedMs: number
-  /** Server time the round last started or resumed running; `null` while paused. */
-  playingSince: number | null
   revealed: boolean
+  /** Server time the round last started or resumed running; `null` while paused. */
+  runningSince: number | null
   startsAt: number | null
 }

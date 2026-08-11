@@ -12,6 +12,7 @@ import type { PlayerId, RoomCode, RoundId } from '@taverla/protocol/identifiers'
 import type { RoomSettings } from '@taverla/protocol/room'
 import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
+import { offersAnswerMode } from '@taverla/core/room/game-modes'
 import { normalizeRoomCode } from '@taverla/core/room/room-code'
 
 import type { Room } from '@/domain/room/room'
@@ -25,6 +26,7 @@ import {
 import { findRoom } from '@/domain/room/room-store'
 import {
   applyVerdict,
+  clearLockouts,
   everyoneIsDone,
   finishGame,
   isFinalRound,
@@ -50,9 +52,9 @@ import {
   abandonRound,
   armAnswerWindow,
   armAutoAdvance,
-  armPlaybackTimeout,
+  armRoundTimeout,
   beginRound,
-  holdPlaybackTimeout,
+  holdRoundTimeout,
   holdRoundWhileHostIsAway,
   resumeRoundForHost
 } from './round-conductor'
@@ -318,6 +320,10 @@ export const createRoomSocketEvents = (
         reveal(message.roundId, outbound, room)
         break
       }
+      case 'host.clearLockouts': {
+        reopenFloor(message.roundId, outbound, room)
+        break
+      }
       case 'host.nextRound': {
         advance(outbound, room)
         break
@@ -335,7 +341,7 @@ export const createRoomSocketEvents = (
         break
       }
       case 'host.updateSettings': {
-        reconfigure(message.settings, room)
+        reconfigure(message.settings, outbound, room)
         break
       }
     }
@@ -376,8 +382,28 @@ export const createRoomSocketEvents = (
       return
     }
 
-    holdPlaybackTimeout(room.code)
+    holdRoundTimeout(room.code)
     armAnswerWindow(room)
+    broadcastRoom(room)
+  }
+
+  const reopenFloor = (
+    roundId: RoundId,
+    outbound: Outbound,
+    room: Room
+  ): void => {
+    const cleared = clearLockouts({ now: Date.now(), room, roundId })
+
+    if (cleared.status === 'failure') {
+      sendError(outbound, {
+        code: cleared.error,
+        fatal: false,
+        message: 'There is no round to reopen'
+      })
+
+      return
+    }
+
     broadcastRoom(room)
   }
 
@@ -565,7 +591,29 @@ export const createRoomSocketEvents = (
    * host has just replaced is a bug that survives the rest of the game, and
    * dropping it on an unrelated edit costs a needless catalogue request.
    */
-  const reconfigure = (settings: RoomSettings, room: Room): void => {
+  const reconfigure = (
+    settings: RoomSettings,
+    outbound: Outbound,
+    room: Room
+  ): void => {
+    // The two fields travel together and the panel sends them so, but a socket
+    // is whatever its owner makes it — and a typed field over a game that
+    // serves nothing is a round no player could ever answer.
+    if (
+      !offersAnswerMode({
+        answerMode: settings.answerMode,
+        game: settings.game.kind
+      })
+    ) {
+      sendError(outbound, {
+        code: 'invalid_message',
+        fatal: false,
+        message: 'That game does not offer that answer mode'
+      })
+
+      return
+    }
+
     const previousGame = room.settings.game
 
     updateSettings(room, settings, Date.now())
@@ -579,7 +627,7 @@ export const createRoomSocketEvents = (
     armAnswerWindow(room)
 
     if (outcome === 'resumed') {
-      armPlaybackTimeout(room)
+      armRoundTimeout(room)
     }
 
     if (outcome === 'revealed') {

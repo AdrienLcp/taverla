@@ -33,6 +33,8 @@ describe('http routes', () => {
 
     for (let attempt = 0; attempt < ATTEMPTS; attempt++) {
       const response = await fetch(`http://${harness.origin}/api/rooms`, {
+        body: JSON.stringify({ game: 'blindtest' }),
+        headers: { 'content-type': 'application/json' },
         method: 'POST'
       })
 

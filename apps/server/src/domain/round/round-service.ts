@@ -1,28 +1,33 @@
 import { nanoid } from 'nanoid'
 
 import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
-import type { GameSettings } from '@taverla/protocol/game'
+import { locksOutOnMissIn, roundDurationMsOf } from '@taverla/protocol/game'
 import type { PlayerId, RoundId } from '@taverla/protocol/identifiers'
-import type { Verdict } from '@taverla/protocol/scoring'
+import type { HalvesVerdict, Verdict } from '@taverla/protocol/scoring'
 import type { HostTrack } from '@taverla/protocol/track'
 
-import { Result } from '@taverla/core/helpers/result'
-import {
-  type BuzzRejection,
-  findBuzzRejection,
-  hasEligibleBuzzer
-} from '@taverla/core/round/buzz-eligibility'
-import { isMiss, pointsFor } from '@taverla/core/scoring/award'
 import {
   gradeGuess,
   hasBothHalves,
   NOTHING_BANKED,
   pointsForChoice,
   pointsForTypedAnswer,
-  speedBonusForRank,
   type TypedAttempt,
   withGuessBanked
-} from '@taverla/core/scoring/typed-answer'
+} from '@taverla/core/blindtest/typed-answer'
+import { Result } from '@taverla/core/helpers/result'
+import {
+  type BuzzRejection,
+  findBuzzRejection,
+  hasEligibleBuzzer
+} from '@taverla/core/round/buzz-eligibility'
+import { speedBonusForRank } from '@taverla/core/scoring/speed-bonus'
+import {
+  isMiss,
+  nothingScored,
+  pointsFor,
+  verdictKindFor
+} from '@taverla/core/scoring/verdict'
 
 import type { PlayerAttempts, Room, Round } from '@/domain/room/room'
 import { touch } from '@/domain/room/room-service'
@@ -35,39 +40,54 @@ export type VerdictRejection = Extract<
 
 /**
  * What the judged round does next. A miss does not end it: the player sits out
- * and the clip picks up where the buzz stopped it, which is why the caller has
- * to know whether to re-arm the playback timer or let the reveal stand.
+ * and the round picks up where the buzz stopped it, which is why the caller has
+ * to know whether to re-arm the round timer or let the reveal stand.
  */
 export type VerdictOutcome = 'revealed' | 'resumed'
 
-export const openRound = ({
-  now,
+/**
+ * The blind test's half of opening a round. The decoys are drawn here rather
+ * than when the pool is built, because a round is the only moment the answer is
+ * known and choice mode needs three neighbours of exactly it.
+ */
+export const blindtestContent = ({
   room,
   track
 }: {
-  now: number
   room: Room
   track: HostTrack
-}): Round => {
-  const choices =
+}): Round['content'] => {
+  const drawn =
     room.settings.answerMode === 'choice' ? drawChoices({ room, track }) : null
 
+  return {
+    choices: drawn?.choices ?? [],
+    correctChoiceIndex: drawn?.correctIndex ?? null,
+    kind: 'blindtest',
+    track
+  }
+}
+
+export const openRound = ({
+  content,
+  now,
+  room
+}: {
+  content: Round['content']
+  now: number
+  room: Room
+}): Round => {
   const round: Round = {
     activeBuzz: null,
     attempts: [],
     awards: [],
-    content: {
-      choices: choices?.choices ?? [],
-      correctChoiceIndex: choices?.correctIndex ?? null,
-      kind: 'blindtest',
-      track
-    },
+    content,
+    elapsedMs: 0,
     id: nanoid(10),
     index: (room.round?.index ?? 0) + 1,
     lockedOutPlayerIds: new Set(),
-    playedMs: 0,
-    playingSince: null,
     revealed: false,
+    runningSince: null,
     startsAt: now + room.settings.countdownMs
   }
 
@@ -79,7 +99,7 @@ export const openRound = ({
 }
 
 /** `false` when the countdown fired for a round that has already been left behind. */
-export const beginPlayback = ({
+export const startRoundClock = ({
   now,
   room,
   roundId
@@ -97,7 +117,7 @@ export const beginPlayback = ({
   }
 
   room.phase = 'playing'
-  room.round.playingSince = now
+  room.round.runningSince = now
   touch(room, now)
 
   return true
@@ -147,7 +167,7 @@ export const registerBuzz = ({
     playerId
   }
   room.phase = 'buzzed'
-  pausePlayback(round, now)
+  pauseRoundClock(round, now)
   touch(room, now)
 
   return Result.success(undefined)
@@ -182,10 +202,45 @@ export const timeOutBuzz = ({
     playerId: buzzer,
     room,
     roundId,
-    verdict: { artistCorrect: false, titleCorrect: false }
+    verdict: nothingScored(room.settings.game.kind)
   })
 
   return judged.status === 'success' ? judged.data : null
+}
+
+/**
+ * Everyone who was sat out is back in. The blind test never needs it — its
+ * round is a clip that runs out — but a host running a charade has no such
+ * clock, and a table where the quickest thumbs have all missed is a round
+ * nobody left can win.
+ */
+export const clearLockouts = ({
+  now,
+  room,
+  roundId
+}: {
+  now: number
+  room: Room
+  roundId: RoundId
+}): Result<void, VerdictRejection> => {
+  const round = room.round
+
+  if (round === null) {
+    return Result.failure('wrong_phase')
+  }
+
+  if (round.id !== roundId) {
+    return Result.failure('stale_round')
+  }
+
+  if (round.revealed) {
+    return Result.failure('wrong_phase')
+  }
+
+  round.lockedOutPlayerIds.clear()
+  touch(room, now)
+
+  return Result.success(undefined)
 }
 
 export type AnswerRejection = Extract<
@@ -238,7 +293,7 @@ export const registerAnswer = ({
     return Result.failure('already_buzzed')
   }
 
-  const graded = grade({ attempt, round })
+  const graded = grade({ attempt, content: round.content })
 
   if (graded === null) {
     return Result.failure('invalid_message')
@@ -260,7 +315,7 @@ const bank = ({
   playerId,
   round
 }: {
-  graded: { said: string; verdict: Verdict }
+  graded: { said: string; verdict: HalvesVerdict }
   held: PlayerAttempts | undefined
   now: number
   playerId: PlayerId
@@ -396,29 +451,33 @@ const byFirstScored = (one: PlayerAttempts, other: PlayerAttempts): number =>
 
 const grade = ({
   attempt,
-  round
+  content
 }: {
   attempt: { kind: 'choice'; choiceIndex: number } | TypedAttempt
-  round: Round
-}): { said: string; verdict: Verdict } | null => {
+  content: Round['content']
+}): { said: string; verdict: HalvesVerdict } | null => {
+  if (content.kind !== 'blindtest') {
+    return null
+  }
+
   if (attempt.kind === 'choice') {
-    const picked = round.content.choices[attempt.choiceIndex]
+    const picked = content.choices[attempt.choiceIndex]
 
     if (picked === undefined) {
       return null
     }
 
-    const isRight = attempt.choiceIndex === round.content.correctChoiceIndex
+    const isRight = attempt.choiceIndex === content.correctChoiceIndex
 
     return {
       said: `${picked.title} — ${picked.artist}`,
-      verdict: { artistCorrect: isRight, titleCorrect: isRight }
+      verdict: { artistCorrect: isRight, kind: 'halves', titleCorrect: isRight }
     }
   }
 
   return {
     said: attempt.guess,
-    verdict: gradeGuess({ guess: attempt.guess, track: round.content.track })
+    verdict: gradeGuess({ guess: attempt.guess, track: content.track })
   }
 }
 
@@ -449,6 +508,12 @@ export const applyVerdict = ({
     return Result.failure('invalid_message')
   }
 
+  // Two independent halves would pay twice for one charade, and a host socket
+  // is as forgeable as a player's.
+  if (verdict.kind !== verdictKindFor(room.settings.game.kind)) {
+    return Result.failure('invalid_message')
+  }
+
   const points = pointsFor(verdict)
   const participant = room.players.get(playerId)
 
@@ -467,7 +532,9 @@ export const applyVerdict = ({
     return Result.success('revealed')
   }
 
-  round.lockedOutPlayerIds.add(playerId)
+  if (locksOutOnMissIn(room.settings.game)) {
+    round.lockedOutPlayerIds.add(playerId)
+  }
 
   return Result.success(resumeOrReveal(room, now))
 }
@@ -475,8 +542,8 @@ export const applyVerdict = ({
 /**
  * The buzzer holder vanished — a locked phone, a closed tab, a host removing
  * them. Their claim is dropped without a verdict and without a lockout, and the
- * clip carries on for everyone else rather than the round hanging on someone
- * who is no longer in the room.
+ * round carries on for everyone else rather than hanging on someone who is no
+ * longer in the room.
  */
 export const releaseBuzz = ({
   now,
@@ -499,17 +566,17 @@ export const releaseBuzz = ({
 }
 
 /**
- * Freezes the clip where it is, without ending anything. The buzz path already
+ * Freezes the round where it is, without ending anything. The buzz path already
  * does this; the host walking away is the same situation seen from the other
  * side, and both have to be undoable without the room losing music it paid for.
  */
-export const holdPlayback = (room: Room, now: number): void => {
+export const holdRoundClock = (room: Room, now: number): void => {
   if (room.round === null) {
     return
   }
 
   freezeAnswerWindow(room.round, now)
-  pausePlayback(room.round, now)
+  pauseRoundClock(room.round, now)
   touch(room, now)
 }
 
@@ -525,12 +592,12 @@ const freezeAnswerWindow = (round: Round, now: number): void => {
 }
 
 /**
- * Puts the clip back on the clock. A countdown is restarted rather than
+ * Puts the round back on the clock. A countdown is restarted rather than
  * resumed: its whole purpose is that every device lands on the first note
  * together, and a `startsAt` that elapsed while nobody could hear it would have
  * the track begin mid-phrase on the screens that stayed.
  */
-export const resumePlayback = (room: Room, now: number): void => {
+export const resumeRoundClock = (room: Room, now: number): void => {
   const round = room.round
 
   if (round === null) {
@@ -545,7 +612,7 @@ export const resumePlayback = (room: Room, now: number): void => {
   }
 
   if (room.phase === 'playing') {
-    round.playingSince = now
+    round.runningSince = now
     touch(room, now)
 
     return
@@ -565,7 +632,7 @@ export const revealRound = (room: Room, now: number): void => {
     return
   }
 
-  pausePlayback(round, now)
+  pauseRoundClock(round, now)
   round.activeBuzz = null
   round.revealed = true
   room.phase = 'revealed'
@@ -593,31 +660,34 @@ export const restartGame = (room: Room, now: number): void => {
   touch(room, now)
 }
 
-export const isFinalRound = (room: Room): boolean =>
-  (room.round?.index ?? 0) >= room.settings.roundCount
+/** Never final in a room that runs until the host stops it. */
+export const isFinalRound = (room: Room): boolean => {
+  const total = room.settings.roundCount
 
-export const elapsedPlaybackMs = (round: Round, now: number): number =>
+  return total !== null && (room.round?.index ?? 0) >= total
+}
+
+export const elapsedRoundMs = (round: Round, now: number): number =>
   Math.round(
-    round.playedMs +
-      (round.playingSince === null ? 0 : now - round.playingSince)
+    round.elapsedMs +
+      (round.runningSince === null ? 0 : now - round.runningSince)
   )
 
-export const remainingPlaybackMs = (room: Room, now: number): number =>
-  room.round === null
-    ? 0
-    : Math.max(
-        0,
-        roundDurationMs(room.settings.game) - elapsedPlaybackMs(room.round, now)
-      )
+/**
+ * How much of the round is left, or `null` for a game that has no such clock —
+ * the bare buzzer serves nothing, so there is nothing for the room to run out
+ * of and the round ends on a verdict or on the host's word.
+ */
+export const remainingRoundMs = (room: Room, now: number): number | null => {
+  const total = roundDurationMsOf(room.settings.game)
 
-/** How long a round stays open unanswered — the same clock, wound by each game. */
-const roundDurationMs = (game: GameSettings): number => {
-  switch (game.kind) {
-    case 'blindtest':
-      return game.clipDurationMs
-    case 'quiz':
-      return game.answerDurationMs
+  if (room.round === null) {
+    return 0
   }
+
+  return total === null
+    ? null
+    : Math.max(0, total - elapsedRoundMs(room.round, now))
 }
 
 const resumeOrReveal = (room: Room, now: number): VerdictOutcome => {
@@ -627,11 +697,14 @@ const resumeOrReveal = (room: Room, now: number): VerdictOutcome => {
     return 'revealed'
   }
 
+  const remaining = remainingRoundMs(room, now)
+
   const canResume =
     hasEligibleBuzzer({
       candidates: [...room.players.values()],
       lockedOutPlayerIds: [...round.lockedOutPlayerIds]
-    }) && remainingPlaybackMs(room, now) > 0
+    }) &&
+    (remaining === null || remaining > 0)
 
   if (!canResume) {
     revealRound(room, now)
@@ -640,17 +713,17 @@ const resumeOrReveal = (room: Room, now: number): VerdictOutcome => {
   }
 
   room.phase = 'playing'
-  round.playingSince = now
+  round.runningSince = now
   touch(room, now)
 
   return 'resumed'
 }
 
-const pausePlayback = (round: Round, now: number): void => {
-  if (round.playingSince === null) {
+const pauseRoundClock = (round: Round, now: number): void => {
+  if (round.runningSince === null) {
     return
   }
 
-  round.playedMs += now - round.playingSince
-  round.playingSince = null
+  round.elapsedMs += now - round.runningSince
+  round.runningSince = null
 }

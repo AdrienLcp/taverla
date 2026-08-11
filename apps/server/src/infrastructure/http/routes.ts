@@ -11,6 +11,7 @@ import type {
   TrackListResponse
 } from '@taverla/protocol/http'
 import {
+  createRoomRequestSchema,
   playlistPreviewQuerySchema,
   trackSearchQuerySchema
 } from '@taverla/protocol/http'
@@ -76,22 +77,30 @@ export const registerHttpRoutes = (app: Hono): void => {
     return context.json(body)
   })
 
-  app.post('/api/rooms', limitRoomCreation, (context) => {
-    const room = createRoom(Date.now())
+  app.post(
+    '/api/rooms',
+    limitRoomCreation,
+    zValidator('json', createRoomRequestSchema),
+    (context) => {
+      const room = createRoom({
+        game: context.req.valid('json').game,
+        now: Date.now()
+      })
 
-    if (room === null) {
-      const error: ApiErrorResponse = {
-        code: 'internal_error',
-        message: 'Could not allocate a room code'
+      if (room === null) {
+        const error: ApiErrorResponse = {
+          code: 'internal_error',
+          message: 'Could not allocate a room code'
+        }
+
+        return context.json(error, 503)
       }
 
-      return context.json(error, 503)
+      const body: CreateRoomResponse = { code: room.code }
+
+      return context.json(body, 201)
     }
-
-    const body: CreateRoomResponse = { code: room.code }
-
-    return context.json(body, 201)
-  })
+  )
 
   app.get('/api/rooms/:code', (context) => {
     const code = normalizeRoomCode(context.req.param('code'))

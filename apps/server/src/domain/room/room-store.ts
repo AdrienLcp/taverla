@@ -1,7 +1,8 @@
+import type { GameKind } from '@taverla/protocol/game'
 import type { RoomCode } from '@taverla/protocol/identifiers'
-import { DEFAULT_ROOM_SETTINGS } from '@taverla/protocol/room'
 
 import { generateRoomCode } from '@taverla/core/room/room-code'
+import { roomSettingsFor } from '@taverla/core/room/room-settings'
 
 import { logger } from '@/infrastructure/logging/logger'
 
@@ -23,7 +24,13 @@ const SWEEP_INTERVAL_MS = 60 * 1000
 
 const MAX_CODE_ATTEMPTS = 20
 
-export const createRoom = (now: number): Room | null => {
+export const createRoom = ({
+  game,
+  now
+}: {
+  game: GameKind
+  now: number
+}): Room | null => {
   const code = drawUnusedCode()
 
   if (code === null) {
@@ -39,7 +46,7 @@ export const createRoom = (now: number): Room | null => {
     playedTrackIds: new Set(),
     players: new Map(),
     round: null,
-    settings: DEFAULT_ROOM_SETTINGS,
+    settings: roomSettingsFor(game),
     trackPool: []
   }
 

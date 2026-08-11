@@ -6,6 +6,7 @@ import type { RoomCode } from '@taverla/protocol/identifiers'
 import type { HostRoomView } from '@taverla/protocol/room'
 import type { TrackSource } from '@taverla/protocol/track'
 
+import { answerModesFor } from '@taverla/core/room/game-modes'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
 import { NotFoundPage } from '@/features/not-found/not-found-page'
@@ -32,18 +33,24 @@ import { Link } from '@/presentation/components/link'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
-import { protocolErrorKey } from '@/presentation/i18n/translation'
+import {
+  answerModeLabelKey,
+  gameNameKey,
+  isShelvedGame,
+  protocolErrorKey
+} from '@/presentation/i18n/translation'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
 
 import { CopyButton } from './copy-button'
 import { FinalBoard } from './final-board'
+import { GamePicker } from './game-picker'
 import { HostControls } from './host-controls'
 import { HostSeat } from './host-seat'
 import { JoinReminder } from './join-reminder'
 import { PlaylistPicker, sourceKindKey } from './playlist-picker'
 import { RevealPanel } from './reveal-panel'
 import { useRoundAudio } from './round-audio'
-import { answerModeLabelKey, SettingsPanel } from './settings-panel'
+import { SettingsPanel } from './settings-panel'
 import { VerdictPanel } from './verdict-panel'
 
 import './host-console-page.sass'
@@ -93,10 +100,12 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
       <header>
         {view?.round != null && view.phase !== 'finished' && (
           <p className='round-index'>
-            {translate('blindtest.round', {
-              index: view.round.index,
-              total: view.settings.roundCount
-            })}
+            {view.settings.roundCount === null
+              ? translate('round.indexOpen', { index: view.round.index })
+              : translate('round.index', {
+                  index: view.round.index,
+                  total: view.settings.roundCount
+                })}
           </p>
         )}
         {view !== null &&
@@ -221,7 +230,11 @@ const Stage = ({
 
     return (
       <div className='stage listening'>
-        <p className='now'>{translate('blindtest.listening')}</p>
+        <p className='now'>
+          {translate(
+            game.kind === 'buzzer' ? 'buzzer.running' : 'blindtest.listening'
+          )}
+        </p>
         {game.kind === 'blindtest' && (
           <div
             className='clip-progress'
@@ -229,7 +242,7 @@ const Stage = ({
             style={{
               '--clip-remaining': `${Math.max(
                 0,
-                game.clipDurationMs - view.roundElapsedMs
+                game.roundDurationMs - view.roundElapsedMs
               )}ms`
             }}
           />
@@ -253,14 +266,21 @@ const Stage = ({
   if (view.phase === 'buzzed' && round?.activeBuzz != null) {
     const buzzerId = round.activeBuzz.playerId
     const buzzer = view.players.find((player) => player.id === buzzerId)
+    const game = view.settings.game
     const track = blindtestHostContent(view)?.track ?? null
+
+    // A blind test host who took a seat is not sent the track, so there is
+    // nothing here to judge against — which is why the seat is refused in
+    // buzzer mode rather than the panel being shown empty.
+    const hasSomethingToJudge = game.kind !== 'blindtest' || track !== null
 
     return (
       <div className='stage solo'>
-        {track !== null && (
+        {hasSomethingToJudge && (
           <VerdictPanel
             buzz={round.activeBuzz}
             clock={clock}
+            game={game.kind}
             nickname={buzzer?.nickname ?? '—'}
             onJudge={(verdict) => {
               send({
@@ -333,11 +353,16 @@ const Lobby = ({
   // The draft, not the committed settings: the source is only sent on launch,
   // and a summary that waited for that would contradict the picker above it.
   const setupSummary = [
+    isShelvedGame(game.kind) ? translate(gameNameKey(game.kind)) : null,
     game.kind === 'blindtest'
       ? translate(sourceKindKey((draftSource ?? game.source).kind))
       : null,
-    translate(answerModeLabelKey(view.settings.answerMode)),
-    translate('host.roundCount', { count: view.settings.roundCount })
+    answerModesFor(game.kind).length > 1
+      ? translate(answerModeLabelKey(view.settings.answerMode))
+      : null,
+    view.settings.roundCount === null
+      ? translate('host.roundCount.openSummary')
+      : translate('host.roundCount', { count: view.settings.roundCount })
   ]
     .filter((part) => part !== null)
     .join(' · ')
@@ -380,6 +405,14 @@ const Lobby = ({
         </section>
 
         <Disclosure label={translate('host.setup')} summary={setupSummary}>
+          {/* Above everything it decides, including whether the picker applies. */}
+          <GamePicker
+            isLive={isLive}
+            onChange={(settings) => {
+              send({ settings, type: 'host.updateSettings' })
+            }}
+            settings={view.settings}
+          />
           {game.kind === 'blindtest' && (
             <PlaylistPicker onDraftChange={onDraftSource} settings={game} />
           )}
@@ -442,18 +475,40 @@ const Actions = ({
   }
 
   if (view.phase === 'countdown' || view.phase === 'playing') {
+    // A blind test round ends when its clip does, so a lockout expires on its
+    // own. A charade has no such clock: once the quickest thumbs have all
+    // missed, only the host can give the round back to the room.
+    const isFieldClosed =
+      view.settings.game.kind === 'buzzer' &&
+      (view.round?.lockedOutPlayerIds.length ?? 0) > 0
+
     return (
-      <Button
-        isDisabled={!isLive}
-        onPress={() => {
-          if (view.round !== null) {
-            send({ roundId: view.round.id, type: 'host.reveal' })
-          }
-        }}
-        variant='ghost'
-      >
-        {translate('host.reveal')}
-      </Button>
+      <>
+        {isFieldClosed && (
+          <Button
+            isDisabled={!isLive}
+            onPress={() => {
+              if (view.round !== null) {
+                send({ roundId: view.round.id, type: 'host.clearLockouts' })
+              }
+            }}
+            variant='outlined'
+          >
+            {translate('buzzer.clearLockouts')}
+          </Button>
+        )}
+        <Button
+          isDisabled={!isLive}
+          onPress={() => {
+            if (view.round !== null) {
+              send({ roundId: view.round.id, type: 'host.reveal' })
+            }
+          }}
+          variant='ghost'
+        >
+          {translate('host.reveal')}
+        </Button>
+      </>
     )
   }
 
@@ -462,7 +517,8 @@ const Actions = ({
     // so on that reveal "next round" is a button that does something else than
     // it says — and the way out beside it reads as abandoning a game that is
     // already over. One control, named after what it opens.
-    const isLastRound = (view.round?.index ?? 0) >= view.settings.roundCount
+    const total = view.settings.roundCount
+    const isLastRound = total !== null && (view.round?.index ?? 0) >= total
 
     if (isLastRound) {
       return (

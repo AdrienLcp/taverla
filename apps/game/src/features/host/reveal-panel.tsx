@@ -13,17 +13,24 @@ type RevealPanelProps = {
   round: RoundView
 }
 
+/**
+ * How the round went, for the screen the room is looking at. A game that served
+ * something reveals it here and nowhere else; one whose question the room owns
+ * has nothing to give away, and the panel is the scoreline alone.
+ */
 export const RevealPanel: React.FC<RevealPanelProps> = ({ players, round }) => {
   const translate = useTranslate()
   const track = blindtestContent(round)?.revealedTrack ?? null
-  const scorers = round.awards.filter((award) => award.points > 0)
 
   if (track === null) {
-    return null
+    return (
+      <section className='reveal-panel bare'>
+        <div className='identity'>
+          <Outcome players={players} round={round} />
+        </div>
+      </section>
+    )
   }
-
-  const nameOf = (playerId: string): string =>
-    players.find((player) => player.id === playerId)?.nickname ?? '—'
 
   return (
     <section className='reveal-panel'>
@@ -44,36 +51,49 @@ export const RevealPanel: React.FC<RevealPanelProps> = ({ players, round }) => {
         <p className='title'>{track.title}</p>
         <p className='artist'>{track.artist}</p>
 
-        {round.revealedAnswers.length > 0 ? (
-          <ul className='said'>
-            {round.revealedAnswers.map((answer) => (
-              <li
-                className={answer.isCorrect ? 'right' : 'wrong'}
-                key={answer.playerId}
-              >
-                <span className='nickname'>{nameOf(answer.playerId)}</span>
-                <span className='words'>{answer.said}</span>
-              </li>
-            ))}
-          </ul>
-        ) : scorers.length === 0 ? (
-          <p className='nobody'>{translate('blindtest.reveal.nobody')}</p>
-        ) : (
-          <ul className='scorers'>
-            {scorers.map((award) => (
-              <li key={award.playerId}>
-                <span className='nickname'>
-                  {players.find((player) => player.id === award.playerId)
-                    ?.nickname ?? '—'}
-                </span>
-                <span className='points'>
-                  {translate('blindtest.youScored', { points: award.points })}
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
+        <Outcome players={players} round={round} />
       </div>
     </section>
+  )
+}
+
+const Outcome = ({ players, round }: RevealPanelProps) => {
+  const translate = useTranslate()
+  const scorers = round.awards.filter((award) => award.points > 0)
+
+  const nameOf = (playerId: string): string =>
+    players.find((player) => player.id === playerId)?.nickname ?? '—'
+
+  if (round.revealedAnswers.length > 0) {
+    return (
+      <ul className='said'>
+        {round.revealedAnswers.map((answer) => (
+          <li
+            className={answer.isCorrect ? 'right' : 'wrong'}
+            key={answer.playerId}
+          >
+            <span className='nickname'>{nameOf(answer.playerId)}</span>
+            <span className='words'>{answer.said}</span>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  if (scorers.length === 0) {
+    return <p className='nobody'>{translate('round.nobody')}</p>
+  }
+
+  return (
+    <ul className='scorers'>
+      {scorers.map((award) => (
+        <li key={award.playerId}>
+          <span className='nickname'>{nameOf(award.playerId)}</span>
+          <span className='points'>
+            {translate('round.scored', { points: award.points })}
+          </span>
+        </li>
+      ))}
+    </ul>
   )
 }

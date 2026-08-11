@@ -95,6 +95,17 @@ export const revealMessageSchema = z.object({
   type: z.literal('host.reveal')
 })
 
+/**
+ * Everyone who was sat out is back in, mid-round. A blind test round is a clip
+ * that runs out, so a lockout there expires on its own; a host running a charade
+ * has no such clock, and a table where the three quickest thumbs have already
+ * missed is a round nobody can win.
+ */
+export const clearLockoutsMessageSchema = z.object({
+  roundId: roundIdSchema,
+  type: z.literal('host.clearLockouts')
+})
+
 export const nextRoundMessageSchema = z.object({
   type: z.literal('host.nextRound')
 })
@@ -130,6 +141,7 @@ export const hostClientMessageSchema = z.discriminatedUnion('type', [
   startRoundMessageSchema,
   judgeMessageSchema,
   revealMessageSchema,
+  clearLockoutsMessageSchema,
   nextRoundMessageSchema,
   endGameMessageSchema,
   playAgainMessageSchema,
@@ -153,6 +165,7 @@ export const clientMessageSchema = z.discriminatedUnion('type', [
   startRoundMessageSchema,
   judgeMessageSchema,
   revealMessageSchema,
+  clearLockoutsMessageSchema,
   nextRoundMessageSchema,
   endGameMessageSchema,
   playAgainMessageSchema,
@@ -175,6 +188,7 @@ export const HOST_ONLY_MESSAGE_TYPES = new Set<ClientMessageType>([
   'host.startRound',
   'host.judge',
   'host.reveal',
+  'host.clearLockouts',
   'host.nextRound',
   'host.endGame',
   'host.playAgain',

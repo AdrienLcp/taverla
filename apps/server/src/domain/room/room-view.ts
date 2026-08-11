@@ -9,9 +9,9 @@ import type {
 } from '@taverla/protocol/room'
 import type { HostTrack, TrackIdentity } from '@taverla/protocol/track'
 
-import { pointsFor } from '@taverla/core/scoring/award'
+import { pointsFor } from '@taverla/core/scoring/verdict'
 
-import { elapsedPlaybackMs } from '@/domain/round/round-service'
+import { elapsedRoundMs } from '@/domain/round/round-service'
 
 import type { Participant, PlayerAttempts, Room, Round } from './room'
 
@@ -35,7 +35,7 @@ export const toHostView = ({
     room.round === null ? null : toHostContent({ round: room.round, seatId }),
   remainingPoolSize: room.trackPool.length,
   roundElapsedMs:
-    room.round === null ? 0 : elapsedPlaybackMs(room.round, Date.now())
+    room.round === null ? 0 : elapsedRoundMs(room.round, Date.now())
 })
 
 const toHostContent = ({
@@ -44,11 +44,14 @@ const toHostContent = ({
 }: {
   round: Round
   seatId: PlayerId | null
-}): HostRoundContent => ({
-  audioUrl: round.content.track.previewUrl,
-  kind: 'blindtest',
-  track: seatId === null ? round.content.track : null
-})
+}): HostRoundContent =>
+  round.content.kind === 'buzzer'
+    ? { kind: 'buzzer' }
+    : {
+        audioUrl: round.content.track.previewUrl,
+        kind: 'blindtest',
+        track: seatId === null ? round.content.track : null
+      }
 
 export const toPlayerView = ({
   isHostConnected,
@@ -137,11 +140,16 @@ const saidBy = (attempts: PlayerAttempts): string =>
     ? attempts.landed.join(' · ')
     : (attempts.lastMiss ?? '')
 
-const toContentView = (round: Round): RoundContent => ({
-  choices: round.content.choices,
-  kind: 'blindtest',
-  revealedTrack: round.revealed ? toTrackIdentity(round.content.track) : null
-})
+const toContentView = (round: Round): RoundContent =>
+  round.content.kind === 'buzzer'
+    ? { kind: 'buzzer' }
+    : {
+        choices: round.content.choices,
+        kind: 'blindtest',
+        revealedTrack: round.revealed
+          ? toTrackIdentity(round.content.track)
+          : null
+      }
 
 const toTrackIdentity = (track: HostTrack): TrackIdentity => ({
   artist: track.artist,

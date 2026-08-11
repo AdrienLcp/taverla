@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { protocolErrorCodeSchema } from './error-code'
+import { shelvedGameSchema } from './game'
 import { roomCodeSchema } from './identifiers'
 import { trackDifficultySchema, trackIdentitySchema } from './track'
 
@@ -12,6 +13,16 @@ import { trackDifficultySchema, trackIdentitySchema } from './track'
  * contract?" is worth more than the handful of lines `hc<AppType>` would save,
  * and it keeps `apps/game` from depending on `apps/server`.
  */
+/**
+ * A room is opened *for* a game, chosen on the shelf rather than by a host
+ * already standing in a lobby. Every other setting travels over the socket;
+ * this one has to be right before the console renders, because it decides which
+ * console that is.
+ */
+export const createRoomRequestSchema = z.object({
+  game: shelvedGameSchema
+})
+
 export const createRoomResponseSchema = z.object({
   code: roomCodeSchema
 })
@@ -62,6 +73,7 @@ export const apiErrorResponseSchema = z.object({
   message: z.string()
 })
 
+export type CreateRoomRequest = z.infer<typeof createRoomRequestSchema>
 export type CreateRoomResponse = z.infer<typeof createRoomResponseSchema>
 export type RoomExistsResponse = z.infer<typeof roomExistsResponseSchema>
 export type CatalogueTrack = z.infer<typeof catalogueTrackSchema>

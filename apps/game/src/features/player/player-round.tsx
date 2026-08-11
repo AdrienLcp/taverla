@@ -49,9 +49,7 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
   if (!view.isHostConnected && ROUND_IS_RUNNING.has(view.phase)) {
     return (
       <section className='player-round centred'>
-        <p className='paused'>
-          {translate('blindtest.buzz.blocked.host_away')}
-        </p>
+        <p className='paused'>{translate('buzz.blocked.host_away')}</p>
       </section>
     )
   }
@@ -66,17 +64,25 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
 
   const revealedTrack = blindtestContent(round)?.revealedTrack
 
-  if (view.phase === 'revealed' && round != null && revealedTrack != null) {
+  if (view.phase === 'revealed' && round != null) {
     const yours = round.awards.find((award) => award.playerId === view.youId)
 
     return (
       <section className='player-round centred'>
-        <p className='framing'>{translate('blindtest.reveal.title')}</p>
-        <p className='revealed-title'>{revealedTrack.title}</p>
-        <p className='revealed-artist'>{revealedTrack.artist}</p>
+        {revealedTrack == null ? (
+          // A game whose question the room owns has nothing to reveal, so the
+          // standings are what this screen is for between two rounds.
+          <Scoreboard players={view.players} youId={view.youId} />
+        ) : (
+          <>
+            <p className='framing'>{translate('blindtest.reveal.title')}</p>
+            <p className='revealed-title'>{revealedTrack.title}</p>
+            <p className='revealed-artist'>{revealedTrack.artist}</p>
+          </>
+        )}
         {yours != null && yours.points > 0 && (
           <p className='you-scored'>
-            {translate('blindtest.youScored', { points: yours.points })}
+            {translate('round.scored', { points: yours.points })}
           </p>
         )}
       </section>
@@ -123,11 +129,14 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
   if (view.settings.answerMode !== 'buzzer') {
     return (
       <section className='player-round centred'>
-        <p className='waiting'>
-          {translate('blindtest.buzz.blocked.round_not_running')}
-        </p>
+        <p className='waiting'>{translate('buzz.blocked.round_not_running')}</p>
         <p className='how-it-scores'>
-          {translate(scoringKey(view.settings.answerMode))}
+          {translate(
+            scoringKey({
+              answerMode: view.settings.answerMode,
+              game: view.settings.game.kind
+            })
+          )}
         </p>
       </section>
     )
@@ -179,7 +188,7 @@ const Buzzer = ({
           setHasFailed(!onBuzz(roundId))
         }}
       >
-        {translate('blindtest.buzz.action')}
+        {translate('buzz.action')}
       </ReactAriaButton>
 
       {isWon && view.round?.activeBuzz != null && (
@@ -188,11 +197,11 @@ const Buzzer = ({
 
       <p className='blocker' role='status'>
         {hasFailed
-          ? translate('blindtest.buzz.sendFailed')
+          ? translate('buzz.sendFailed')
           : isWon
-            ? translate('blindtest.buzz.won')
+            ? translate('buzz.won')
             : blocker === null
-              ? translate('blindtest.buzz.ready')
+              ? translate('buzz.ready')
               : translate(buzzBlockerKey(blocker))}
       </p>
 
@@ -208,8 +217,6 @@ const TheirName = ({ view }: { view: PlayerRoomView }) => {
   )?.nickname
 
   return nickname === undefined ? null : (
-    <p className='their-name'>
-      {translate('blindtest.theyBuzzed', { nickname })}
-    </p>
+    <p className='their-name'>{translate('buzz.theyBuzzed', { nickname })}</p>
   )
 }

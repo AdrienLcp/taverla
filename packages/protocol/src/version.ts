@@ -5,4 +5,4 @@
  * version and the server closes the socket rather than letting a stale tab
  * desynchronise a live game.
  */
-export const PROTOCOL_VERSION = 5
+export const PROTOCOL_VERSION = 6

@@ -10,6 +10,7 @@ import {
   blindtestRound,
   errorsIn,
   FAST_GAME,
+  halves,
   hostContent,
   hostView,
   type Peer,
@@ -27,8 +28,8 @@ vi.mock('@/infrastructure/music/deezer-client', async () => {
   return deezerClientStub()
 })
 
-const WON_IT = { artistCorrect: true, titleCorrect: true }
-const MISSED_IT = { artistCorrect: false, titleCorrect: false }
+const WON_IT = halves(true, true)
+const MISSED_IT = halves(false, false)
 
 let room: RoomHarness
 

@@ -11,6 +11,7 @@ import {
   type RoundContent,
   type RoundView
 } from '@taverla/protocol/room'
+import type { Verdict } from '@taverla/protocol/scoring'
 import {
   type HostServerMessage,
   hostServerMessageSchema,
@@ -63,9 +64,15 @@ export const FAST_GAME: RoomSettings = {
   ...DEFAULT_ROOM_SETTINGS,
   answerMode: 'buzzer',
   countdownMs: 20,
-  game: { ...DEFAULT_BLINDTEST_SETTINGS, clipDurationMs: 5_000 },
+  game: { ...DEFAULT_BLINDTEST_SETTINGS, roundDurationMs: 5_000 },
   roundCount: 3
 }
+
+/** The blind test judges two halves; the shape is noise at every call site. */
+export const halves = (
+  titleCorrect: boolean,
+  artistCorrect: boolean
+): Verdict => ({ artistCorrect, kind: 'halves', titleCorrect })
 
 export type Peer<TMessage> = {
   close: () => void
@@ -241,6 +248,8 @@ export const startRoomHarness = async (): Promise<RoomHarness> => {
     nickname?: string
   ) => {
     const response = await fetch(`http://${origin}/api/rooms`, {
+      body: JSON.stringify({ game: settings.game.kind }),
+      headers: { 'content-type': 'application/json' },
       method: 'POST'
     })
     const { code } = (await response.json()) as CreateRoomResponse

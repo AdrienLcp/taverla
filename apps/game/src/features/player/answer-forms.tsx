@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Form } from 'react-aria-components'
 
 import type { RoundView } from '@taverla/protocol/room'
-import type { Verdict } from '@taverla/protocol/scoring'
+import type { HalvesVerdict } from '@taverla/protocol/scoring'
 
 import { blindtestContent } from '@/helpers/blindtest-round'
 import { Button } from '@/presentation/components/button'
@@ -86,7 +86,7 @@ export const ChoiceAnswer: React.FC<AnswerFormProps> = ({
 
 type TypedAnswerProps = AnswerFormProps & {
   /** What the server has banked for this player, and `null` before their first guess. */
-  banked: Verdict | null
+  banked: HalvesVerdict | null
 }
 
 /**
@@ -152,7 +152,7 @@ export const TypedAnswer: React.FC<TypedAnswerProps> = ({
  * been told nothing about the first. It names only what *they* banked, which is
  * why it can be shown before the reveal.
  */
-const Banked = ({ banked }: { banked: Verdict | null }) => {
+const Banked = ({ banked }: { banked: HalvesVerdict | null }) => {
   const translate = useTranslate()
 
   if (banked === null) {

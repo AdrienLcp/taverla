@@ -1,7 +1,9 @@
 import type { z } from 'zod'
 
+import type { ShelvedGame } from '@taverla/protocol/game'
 import {
   type CatalogueTrack,
+  type CreateRoomRequest,
   type CreateRoomResponse,
   createRoomResponseSchema,
   type HealthResponse,
@@ -26,9 +28,14 @@ const TOO_MANY_REQUESTS = 429
  * The whole HTTP surface of the app. Everything that happens during a game goes
  * through the socket instead — see `infrastructure/messaging`.
  */
-export const createRoom = async (): Promise<
-  Result<CreateRoomResponse, ApiError>
-> => request('/api/rooms', createRoomResponseSchema, { method: 'POST' })
+export const createRoom = async (
+  game: ShelvedGame
+): Promise<Result<CreateRoomResponse, ApiError>> =>
+  request('/api/rooms', createRoomResponseSchema, {
+    body: JSON.stringify({ game } satisfies CreateRoomRequest),
+    headers: { 'content-type': 'application/json' },
+    method: 'POST'
+  })
 
 export const fetchHealth = async (): Promise<
   Result<HealthResponse, ApiError>

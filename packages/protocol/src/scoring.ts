@@ -21,6 +21,13 @@ export const POINTS_FOR_TITLE_AND_ARTIST = 1
 export const POINTS_FOR_A_RIGHT_CHOICE = 1
 
 /**
+ * What a bare claim is worth. It is not a scale the host can tune, and that is
+ * on purpose: the room already owns the question, so letting it own the price
+ * too turns every round into a negotiation.
+ */
+export const POINTS_FOR_A_CLAIM = 1
+
+/**
  * Awarded on arrival order among the players who scored this round — the first
  * of them, then the second, then nobody. A rank bonus rather than a curve
  * because a player can compute it from what they watched happen, and arguing
@@ -29,15 +36,29 @@ export const POINTS_FOR_A_RIGHT_CHOICE = 1
 export const SPEED_BONUS_BY_RANK = [2, 1] as const
 
 /**
- * A blind test answer is two independent claims, so the host judges them
- * separately: half a guess still scores. Both false is what triggers the
- * buzzer's penalty — the player sits out the rest of the round and the track
- * resumes for everyone else.
+ * What the host granted, in the vocabulary of the game they were judging — the
+ * same seam as `round.content`, one layer down.
+ *
+ * A blind test answer is two independent claims, so `halves` judges them
+ * separately and half a guess still scores. Everything else is one claim: a
+ * charade is guessed or it is not, and there is no half of it to award.
+ *
+ * Either way, a verdict worth nothing is what locks the player out and hands
+ * the floor back to the room.
  */
-export const verdictSchema = z.object({
+export const halvesVerdictSchema = z.object({
   artistCorrect: z.boolean(),
+  kind: z.literal('halves'),
   titleCorrect: z.boolean()
 })
+
+export const verdictSchema = z.discriminatedUnion('kind', [
+  halvesVerdictSchema,
+  z.object({
+    isCorrect: z.boolean(),
+    kind: z.literal('single')
+  })
+])
 
 export const awardSchema = z.object({
   playerId: playerIdSchema,
@@ -46,4 +67,5 @@ export const awardSchema = z.object({
 })
 
 export type Verdict = z.infer<typeof verdictSchema>
+export type HalvesVerdict = z.infer<typeof halvesVerdictSchema>
 export type Award = z.infer<typeof awardSchema>

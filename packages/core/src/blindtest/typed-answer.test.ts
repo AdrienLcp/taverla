@@ -14,12 +14,13 @@ describe('gradeGuess', () => {
   it('[typed] banks whichever half the guess is, without being told which', () => {
     expect(gradeGuess({ guess: 'daft punk', track: TRACK })).toEqual({
       artistCorrect: true,
+      kind: 'halves',
       titleCorrect: false
     })
 
     expect(
       gradeGuess({ guess: 'harder better faster stronger', track: TRACK })
-    ).toEqual({ artistCorrect: false, titleCorrect: true })
+    ).toEqual({ artistCorrect: false, kind: 'halves', titleCorrect: true })
   })
 
   // What a room actually types into one field: both halves on one line, in
@@ -30,14 +31,14 @@ describe('gradeGuess', () => {
         guess: 'harder better faster stronger daft punk',
         track: TRACK
       })
-    ).toEqual({ artistCorrect: true, titleCorrect: true })
+    ).toEqual({ artistCorrect: true, kind: 'halves', titleCorrect: true })
 
     expect(
       gradeGuess({
         guess: 'daft punk harder better faster stronger',
         track: TRACK
       })
-    ).toEqual({ artistCorrect: true, titleCorrect: true })
+    ).toEqual({ artistCorrect: true, kind: 'halves', titleCorrect: true })
   })
 
   // The half they got, and the half they still owe. A line that is right about
@@ -48,7 +49,7 @@ describe('gradeGuess', () => {
         guess: 'the chemical brothers harder better faster stronger',
         track: TRACK
       })
-    ).toEqual({ artistCorrect: false, titleCorrect: true })
+    ).toEqual({ artistCorrect: false, kind: 'halves', titleCorrect: true })
   })
 
   it('[typed] forgives a slipped finger, as the matcher does everywhere', () => {
@@ -71,7 +72,11 @@ describe('withGuessBanked', () => {
       guessed: gradeGuess({ guess: 'around the world', track: TRACK })
     })
 
-    expect(after).toEqual({ artistCorrect: true, titleCorrect: false })
+    expect(after).toEqual({
+      artistCorrect: true,
+      kind: 'halves',
+      titleCorrect: false
+    })
     expect(hasBothHalves(after)).toBe(false)
   })
 

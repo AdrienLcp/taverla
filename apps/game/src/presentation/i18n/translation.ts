@@ -1,4 +1,9 @@
 import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
+import {
+  type GameKind,
+  type ShelvedGame,
+  shelvedGames
+} from '@taverla/protocol/game'
 import type { AnswerMode } from '@taverla/protocol/room'
 
 import type { BuzzBlocker } from '@taverla/core/round/buzz-eligibility'
@@ -40,12 +45,37 @@ export const apiErrorKey = (error: ApiError): TranslationKey =>
   `error.api.${error}`
 
 export const buzzBlockerKey = (blocker: BuzzBlocker): TranslationKey =>
-  `blindtest.buzz.blocked.${blocker}`
+  `buzz.blocked.${blocker}`
+
+export const answerModeLabelKey = (mode: AnswerMode): TranslationKey =>
+  `host.answerMode.${mode}`
 
 /**
- * How a mode pays, in one sentence. Adding a mode to the protocol fails to
- * compile until both locales can explain it, which is the point: a scoring rule
- * nobody states is one the room argues about.
+ * How a game pays, in one sentence. The bare buzzer's is its own: the blind
+ * test's buzzer sentence is about a title and an artist judged separately, and
+ * this game has neither half.
  */
-export const scoringKey = (mode: AnswerMode): TranslationKey =>
-  `blindtest.scoring.${mode}`
+export const scoringKey = ({
+  answerMode,
+  game
+}: {
+  answerMode: AnswerMode
+  game: GameKind
+}): TranslationKey =>
+  game === 'buzzer' ? 'buzzer.scoring' : `blindtest.scoring.${answerMode}`
+
+/**
+ * The three strings the shelf and a game's own front door read. Typed over the
+ * games a room can actually be opened for, so adding one to `shelvedGames`
+ * stops compiling until both locales can name it, pitch it and describe it.
+ */
+export const gameNameKey = (game: ShelvedGame): TranslationKey => `${game}.name`
+
+export const gameTaglineKey = (game: ShelvedGame): TranslationKey =>
+  `${game}.tagline`
+
+export const gameDescriptionKey = (game: ShelvedGame): TranslationKey =>
+  `${game}.home.description`
+
+export const isShelvedGame = (value: string): value is ShelvedGame =>
+  shelvedGames.some((game) => game === value)

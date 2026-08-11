@@ -15,7 +15,7 @@ const join = (nickname: string, sessionId: string) =>
   joinAsPlayer({ nickname, now: NOW, room, sessionId })
 
 beforeEach(() => {
-  const created = createRoom(NOW)
+  const created = createRoom({ game: 'blindtest', now: NOW })
 
   if (created === null) {
     throw new Error('the store refused to allocate a room')
@@ -190,7 +190,7 @@ describe('removePlayer', () => {
 describe('createRoom', () => {
   it('[room] issues codes the wire schema accepts, and never reuses a live one', () => {
     const codes = Array.from({ length: 50 }, () => {
-      const created = createRoom(NOW)
+      const created = createRoom({ game: 'blindtest', now: NOW })
 
       if (created === null) {
         throw new Error('the store refused to allocate a room')

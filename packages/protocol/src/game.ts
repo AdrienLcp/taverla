@@ -3,9 +3,22 @@ import { z } from 'zod'
 import { questionCategorySchema, questionLanguageSchema } from './question'
 import { trackDifficultySchema, trackSourceSchema } from './track'
 
-export const gameKinds = ['blindtest', 'quiz'] as const
+export const gameKinds = ['blindtest', 'buzzer', 'quiz'] as const
 
 export const gameKindSchema = z.enum(gameKinds)
+
+/**
+ * The games a room may actually be opened for. `gameKinds` is the vocabulary,
+ * and `quiz` is in it because its settings and its content are built while the
+ * server that would serve it is not — a stage rather than a game on a shelf.
+ * Refusing it at the door beats opening a room whose first "start" fails.
+ */
+export const shelvedGames = [
+  'blindtest',
+  'buzzer'
+] as const satisfies readonly GameKind[]
+
+export const shelvedGameSchema = z.enum(shelvedGames)
 
 /**
  * What a room is playing, and the settings only that game has. The room keeps
@@ -19,37 +32,80 @@ export const gameKindSchema = z.enum(gameKinds)
  */
 export const gameSettingsSchema = z.discriminatedUnion('kind', [
   z.object({
-    /** A Deezer preview is 30 seconds, so this ceiling is a hard limit, not a taste call. */
-    clipDurationMs: z.number().int().min(5_000).max(30_000),
     difficulty: trackDifficultySchema,
     kind: z.literal('blindtest'),
+    /** A Deezer preview is 30 seconds, so this ceiling is a hard limit, not a taste call. */
+    roundDurationMs: z.number().int().min(5_000).max(30_000),
     source: trackSourceSchema
   }),
   z.object({
-    /** How long a question stays open before the round times out. */
-    answerDurationMs: z.number().int().min(5_000).max(120_000),
+    kind: z.literal('buzzer'),
+    /**
+     * Whether a wrong answer sits the player out for the rest of the round. The
+     * blind test has no say in this — its round is a finite clip, and a table
+     * that could buzz forever would burn it in seconds — but a host running a
+     * charade does: one go each keeps a loud room honest, where an open field is
+     * what a "name five" wants. `host.clearLockouts` reopens it either way.
+     */
+    locksOutOnMiss: z.boolean()
+  }),
+  z.object({
     /** Empty means every category, the same way an empty genre list means every genre. */
     categories: z.array(questionCategorySchema),
     kind: z.literal('quiz'),
-    language: questionLanguageSchema
+    language: questionLanguageSchema,
+    /** How long a question stays open before the round times out. */
+    roundDurationMs: z.number().int().min(5_000).max(120_000)
   })
 ])
 
 export type GameKind = z.infer<typeof gameKindSchema>
+export type ShelvedGame = z.infer<typeof shelvedGameSchema>
 export type GameSettings = z.infer<typeof gameSettingsSchema>
 export type BlindtestSettings = Extract<GameSettings, { kind: 'blindtest' }>
+export type BuzzerSettings = Extract<GameSettings, { kind: 'buzzer' }>
 export type QuizSettings = Extract<GameSettings, { kind: 'quiz' }>
 
+/**
+ * How long a round stays open unanswered, or `null` for a game that has no such
+ * clock. The bare buzzer is the `null`: nothing is being played or displayed, so
+ * there is nothing for the room to run out of — the round ends when someone is
+ * right or when the host says so.
+ */
+export const roundDurationMsOf = (game: GameSettings): number | null =>
+  game.kind === 'buzzer' ? null : game.roundDurationMs
+
+/**
+ * Whether a wrong answer sits the player out for the rest of the round. Only the
+ * bare buzzer gets a say: every other game's round is a clip or a question that
+ * runs out on its own, so a table that could buzz forever would spend it in
+ * seconds.
+ */
+export const locksOutOnMissIn = (game: GameSettings): boolean =>
+  game.kind === 'buzzer' ? game.locksOutOnMiss : true
+
 export const DEFAULT_BLINDTEST_SETTINGS: BlindtestSettings = {
-  clipDurationMs: 30_000,
   difficulty: 'wellKnown',
   kind: 'blindtest',
+  roundDurationMs: 30_000,
   source: { genreIds: [], kind: 'chart' }
 }
 
+export const DEFAULT_BUZZER_SETTINGS: BuzzerSettings = {
+  kind: 'buzzer',
+  locksOutOnMiss: true
+}
+
 export const DEFAULT_QUIZ_SETTINGS: QuizSettings = {
-  answerDurationMs: 30_000,
   categories: [],
   kind: 'quiz',
-  language: 'fr'
+  language: 'fr',
+  roundDurationMs: 30_000
+}
+
+/** A record rather than a switch, so a new kind without a default cannot compile. */
+export const DEFAULT_GAME_SETTINGS: Record<GameKind, GameSettings> = {
+  blindtest: DEFAULT_BLINDTEST_SETTINGS,
+  buzzer: DEFAULT_BUZZER_SETTINGS,
+  quiz: DEFAULT_QUIZ_SETTINGS
 }

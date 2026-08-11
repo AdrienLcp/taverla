@@ -16,6 +16,7 @@ import {
 import {
   errorsIn,
   FAST_GAME,
+  halves,
   hostView,
   type Peer,
   playerView,
@@ -31,7 +32,7 @@ vi.mock('@/infrastructure/music/deezer-client', async () => {
   return deezerClientStub()
 })
 
-const WON_IT = { artistCorrect: true, titleCorrect: true }
+const WON_IT = halves(true, true)
 
 /** Long enough to read a view while the countdown is still on screen. */
 const SLOW_COUNTDOWN = { ...FAST_GAME, countdownMs: 600 }
