@@ -17,7 +17,8 @@ describes the code is worse than no plan.
 | [08 — Deploy](08-deploy.md) | **done** | One origin serving both, somewhere friends can reach |
 | [09 — Answer modes](09-answer-modes.md) | **done** | Four choices or a typed answer, everyone at once, scored by speed |
 | [10 — Per-device audio](10-per-device-audio.md) | **dropped** | Audio stays on the host. See the plan for why, and what replaces it |
-| [11 — The second game](11-quiz.md) | **in progress** | The seam between the shelf and one game on it, then a quiz through it |
+| [11 — The seam, and the buzzer](11-buzzer.md) | **in progress** | The split between the shelf and one game on it — built. Then a buzzer with no content |
+| [12 — Trivia](12-trivia.md) | planned | A quiz through the seam: buzzer mode first, then a French API |
 
 ## Order, and what can move
 
@@ -34,7 +35,13 @@ breaks the assumption that exactly one player acts at a time.
 seam between the shelf and one game on it — is the one piece that had to wait
 for a second game to exist, because inventing the shared shape before there are
 two cases to measure it against is the abstraction anti-pattern with a different
-hat on. That half has landed; the quiz itself has not.
+hat on. That half has landed; the game has not.
+
+11 and 12 were one file until the second game turned out not to be the quiz. A
+bare buzzer serves no content at all, which makes it both the cheapest game on
+the shelf and the sharpest test of the seam: it is the one that disagrees with
+what "every game needs". Trivia is a whole content question on top of a shape
+the buzzer will already have proved, so it goes second.
 
 07 was taken first, out of order and deliberately: routing strings and colours
 through a layer costs an afternoon before a design pass and a rewrite after one.

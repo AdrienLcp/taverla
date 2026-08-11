@@ -169,4 +169,10 @@ remote play, which will get its own stage when it is wanted. The plan file keeps
 the reasoning. Note what 06 deliberately did *not* buy: no component runner
 exists here, so a claim about a single screen still rests on a browser pass.
 
+**11 is half done.** The seam between the shelf and one game on it is built —
+`settings.game` and `round.content`, discriminated on `kind` — and the game that
+proves it is not. That game is a **bare buzzer**, not the quiz: the server
+serves no content at all, and the room supplies whatever it likes. The quiz is
+12, and ships buzzer mode before a French API.
+
 Start a session by reading the stage's plan. Update it when reality diverges.

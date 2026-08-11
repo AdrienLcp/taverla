@@ -112,11 +112,19 @@ mostly deletions — an optional round content, a host panel that says who buzze
 instead of what the track was, and a verdict that is one right/wrong rather than
 title-and-artist.
 
-Worth building **first**, and not only because it is nearly free: it is the only
-arm with no content pipeline and no licensing question at all, and it turns the
-product into a buzzer system for any quiz anyone already has. A family quiz on
-paper, a pub quiz, a teacher's revision game. The room, the QR code, the
-unforgeable buzz order and the scoreboard are the whole value, and they exist.
+**Since promoted out of this list: it is a game, not an arm.** Filing it under
+`QuestionSource` was the mistake of assuming the content had to be a question.
+A server that serves nothing is a buzzer system for *any* animation — a charade,
+a "name five", a lesson, a drinking game — and calling it trivia would hang a
+content pipeline off something whose whole value is not having one. It is
+[stage 11](plans/11-buzzer.md), ahead of the quiz, and the reasoning below still
+holds for why it is nearly free.
+
+It is the only game with no content pipeline and no licensing question at all,
+and it turns the product into a buzzer system for anything anyone already has. A
+family quiz on paper, a pub quiz, a teacher's revision game. The room, the QR
+code, the unforgeable buzz order and the scoreboard are the whole value, and
+they exist.
 
 **2. `bank` — a curated file, shipped with the server. A session.** A few
 hundred French questions in one JSON asset, drawn without repeats exactly as the
@@ -124,13 +132,18 @@ track pool is, with categories where the genres are. Honest limits, both fine:
 the pool is finite so a heavy evening will repeat, and adding questions means a
 deploy. It is the arm that makes the quiz a *game* rather than a buzzer.
 
-**3. `api` — a public trivia service. A session, and the least appealing.** The
-same shape as `deezer-client.ts`: one adapter, one boundary module, everything
-above it speaking the domain. The reason it ranks last is not technical. Deezer
-works because music is language-neutral; trivia is not, the free banks are thin
-and often ambiguous in French, and a blind test nobody can answer is a broken
-game — the same rule that set the popularity floor applies here and is harder to
-satisfy.
+**3. `api` — a public trivia service. A session.** The same shape as
+`deezer-client.ts`: one adapter, one boundary module, everything above it
+speaking the domain.
+
+This ranked last, and the reason was never technical: Deezer works because music
+is language-neutral, where trivia is not — the free banks are thin and often
+ambiguous in French, and a quiz nobody can answer is a broken game. **That
+objection assumed an English-first source.** It does not survive a French-first
+one, and [OpenQuizzDB](https://www.openquizzdb.org/) is exactly that. See
+[stage 12](plans/12-trivia.md) for what still has to be confirmed before it can
+ship — chiefly whether a question arrives with its own wrong answers, which is
+what decides whether choice mode is free or unbuildable.
 
 ### What it would cost that is genuinely new
 
