@@ -8,6 +8,21 @@ one part.
 
 ### Breaking Changes
 
+- `[Shared]` A verdict is judged in the shape its game is judged in, and
+  `PROTOCOL_VERSION` goes to 6. `Verdict` was the blind test's two booleans, so
+  paying a charade with both of them true would have scored one claim twice. It
+  is a union now — `halves` for two independent claims, `single` for one —
+  `verdictKindFor` says which a game takes, and `applyVerdict` refuses a shape
+  the current game is not judged in, because a host socket is as forgeable as a
+  player's. `yourVerdict` stays the `halves` arm alone: banking is what having
+  two of them means, and a game judged on one claim has no half to hold
+- `[Shared]` A room is opened *for* a game: `POST /api/rooms` carries which one,
+  and the host lands on a console already set up. The shelf already had a door
+  per game, so choosing again in the lobby was asking a question already
+  answered — the picker there is for changing your mind. What a room may be
+  opened for is `shelvedGames`, which is deliberately not `gameKinds`: the quiz
+  has both its arms and no server behind them, and refusing it at the door beats
+  refusing it at the first "start"
 - `[Shared]` The room's settings and the round's content split by game, and
   `PROTOCOL_VERSION` goes to 4. `RoomSettings` and `RoundView` were the blind
   test wearing the room's name: what every game needs — answer mode, round
@@ -26,6 +41,31 @@ one part.
 
 ### Features
 
+- `[Shared]` **A second game: a bare buzzer.** The server serves no content at
+  all — no catalogue, no network call, no licensing question — and the room
+  brings the charade, the quiz on paper or the lesson. What it guarantees is the
+  one thing a room cannot do for itself: who pressed first. It is the case the
+  seam was built for, and it disagreed with the first in four places, which is
+  what a second case is for. Its one genuinely new rule is `locksOutOnMiss`: a
+  blind test lockout expires when the clip does, but a charade has no such
+  clock, so its host chooses whether a miss sits a player out and can reopen the
+  field mid-round with `host.clearLockouts`. Everything else is deletions — a
+  `content` arm carrying nothing but its name, a round timer that cancels
+  instead of scheduling, and a reveal that is the scoreline alone
+- `[Shared]` The settings stay within reach of a game already running. They lived
+  in the lobby's fold, so the moment a game started they became unreachable — a
+  host who wanted a longer countdown had to end the evening to get one. The fold
+  moves to the host's footer, beside the volume, in every phase, and
+  `host.updateSettings` lands on the round *after* the one on screen. Three
+  settings cannot wait to be read and the server refuses them while a round is
+  in play: `answerMode`, because a simultaneous round is scored on the way out
+  and a typed round switched to `choice` would pay a typed answer at a pick's
+  rate; `game.kind`, which would leave `round.content` on the arm the screens are
+  rendering; and `roundDurationMs`, which cut below the time already spent ends
+  the round on arrival. The console greys those three with a line saying they
+  wait — a courtesy, since the guard on the socket is the rule. The playlist and
+  the seat stay in the lobby, the first because its search is a draft the launch
+  commits and the second because it reopens the socket
 - `[Shared]` The floor has a clock. Buzzing costs nothing on its own, so a fast
   thumb attached to an empty head could hold a whole room until the host
   intervened. `answerWindowMs` is how long the floor is held before the server
@@ -272,6 +312,13 @@ one part.
 
 ### Fixes
 
+- `[Game]` A player holding one point reads "1 point", not "1 POINTS". The word
+  was an invariant string beside a score the markup printed itself, so every
+  game showed it wrong in both languages at every score of one. The final board
+  had the mirror of it: two keys chosen with `topScore === 1`, which is the
+  English rule applied to French — and French counts zero as singular, so it was
+  wrong at zero too, on the biggest screen in the room. One key, one call, and
+  the plural rules come from the locale
 - `[Game]` A setting changed while the socket is away is no longer swallowed.
   The launch actions were already disabled without one, but the answer mode,
   difficulty, round count, clip and countdown each wrote a frame into a closed
@@ -336,6 +383,43 @@ one part.
 
 ### Internal
 
+- `[Shared]` A translation knows what a count does to a sentence. The dictionary
+  was `Record<TranslationKey, string>` interpolated from
+  `Record<string, string | number>`, which checks nothing: a misspelled value
+  name rendered `{count}` on a screen and a number printed however JavaScript
+  felt like it. Placeholders now carry a type, and the type decides both what
+  the caller must pass and what the dictionary owes alongside the message —
+  `{n:plural}` and `{n:enum}` choose between alternatives so they take them
+  through `defineTranslation`, while `{n:number}`, `{at:date}` and `{items:list}`
+  only configure a formatter `Intl` already defaults correctly, so a bare string
+  is the whole message. There is no empty options object anywhere. A count
+  declares `plural` the moment *any* locale inflects around it, which is why
+  English writes only `other` where French writes both. Adapted from Stargazer's
+  lib with two deliberate departures: `defineTranslations` refuses a bare string
+  that declares a plural — upstream it compiles, throws at substitution, is
+  swallowed, and puts the raw key on screen — and `DotPath` counts its recursion
+  down, because the lib is generic over the dictionary rather than reading a
+  registered one and TypeScript gives up with TS2589 without a floor
+- `[Game]` Both dictionaries are nested objects, and a key is the dotted path to
+  a leaf. The 128 call sites did not move: a dot path is the same string a flat
+  key was, so `DotPath` hands back the same literal union and
+  `` `error.${code}` `` stays assignable. Three keys were renamed because a
+  branch cannot also be a leaf — `host.answerWindow.label`,
+  `host.roundCount.summary` and `preferences.theme.label`. When a group needs a
+  name of its own, that name is a child of it
+- `[Game]` The strings a *mode* owns left the game that happened to ship first.
+  `blindtest.buzz.*` is `buzz.*`, `blindtest.round` is `round.*`, and
+  `blindtest.answerMode.*` belongs to the host console. The namespace rule was
+  already right and simply had nothing to answer against; what stays inside a
+  game's prefix is what only that game can say, and "It was" needs an it
+- `[Shared]` `pointsFor` stayed with the shell rather than moving to the blind
+  test's directory as the plan had it. It reads either shape of verdict and
+  belongs beside `isMiss`, `verdictKindFor` and `nothingScored`;
+  `blindtest/typed-answer.ts` took what knows an answer has a title and an artist
+- `[Server]` `isRoundInPlay` replaces the socket handler's own set of the three
+  phases a round is open in. Same three phases, under a name that only fitted
+  the reveal — and `reshapesRound` beside it is the list of settings that round
+  is built on
 - `[Server]` `pnpm dev` starts the server again. `tsx watch` spawns the script
   as a child process, and under `pnpm --parallel` that child never ran: no
   output, nothing listening on 3100, and a Vite proxy refusing every `/api` and

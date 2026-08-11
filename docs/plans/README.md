@@ -68,6 +68,13 @@ which half they were holding before they could say it, and one guess per round
 made a near-miss the end of it. None of that was visible until a room typed into
 it.
 
+Two more since: the i18n layer learning what a count does to a sentence — a
+scoreline that read "1 POINTS" in both languages was the visible half — and the
+settings moving into the host's footer, reachable for as long as the game runs.
+The second came with the rule underneath it, `reshapesRound`: three settings the
+round in play is built on, refused by the server until it ends. Both are the
+same lesson as the typed rework, that what is *wrong* surfaces by playing.
+
 Expect more of this than of stages. The plans cover what is missing; what is
 *wrong* surfaces by playing.
 
