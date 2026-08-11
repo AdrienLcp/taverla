@@ -42,13 +42,25 @@ second socket is a reclaim, not a stranger.
 | `host.startRound` | host | — |
 | `host.judge` | host | `roundId`, `playerId`, `verdict` |
 | `host.reveal` | host | `roundId` |
+| `host.clearLockouts` | host | `roundId` |
 | `host.nextRound` | host | — |
 | `host.endGame` | host | — |
+| `host.playAgain` | host | — |
 | `host.removePlayer` | host | `playerId` |
 
 `player.buzz` carries **no timestamp**, and must never gain one. Ordering is
 decided by arrival at the server; anything the client says about "when" is
 clock-skewed and forgeable.
+
+`verdict` is discriminated on `kind`, because what the host judged depends on
+the game: `{kind:'halves', titleCorrect, artistCorrect}` for the blind test's
+two independent claims, `{kind:'single', isCorrect}` for everything else. The
+server refuses a shape the current game is not judged in — halves over a bare
+buzzer would pay two points for one charade.
+
+`host.clearLockouts` puts everyone who missed back in, mid-round. A blind test
+round is a clip that runs out, so a lockout there expires on its own; a game
+whose question the room owns has no such clock.
 
 Every `host.*` type is listed in `HOST_ONLY_MESSAGE_TYPES`, which the server
 checks before dispatch. A test asserts the set matches the naming convention, so
@@ -79,9 +91,10 @@ Shared by both:
   "code": "K3M9",
   "phase": "playing",              // lobby | countdown | playing | buzzed | revealed | finished
   "players": [{ "id": "…", "nickname": "Alice", "score": 2, "isConnected": true }],
-  "settings": { "roundCount": 10, "countdownMs": 3000, "answerMode": "typed",
+  "settings": { "roundCount": 10,          // null → until the host ends it
+                "countdownMs": 3000, "answerMode": "typed",
                 "answerWindowMs": 10000,
-                "game": { "kind": "blindtest", "clipDurationMs": 30000,
+                "game": { "kind": "blindtest", "roundDurationMs": 30000,
                           "difficulty": "wellKnown",
                           "source": { "kind": "chart" } } },
   "round": {
@@ -104,6 +117,15 @@ are where the split between the shelf and one game on it is drawn: `answerMode`,
 and the awards are every game's, and what the round is *asking* belongs to the
 game asking it. A client that does not recognise a `kind` has no business
 rendering that room at all, which is why the shape moving bumps the version.
+
+The bare buzzer's `content` is `{ "kind": "buzzer" }` and nothing else — the
+room owns the question, and the server never learns it. The arm exists rather
+than the field going `null` because "no content" and "no round" are different
+facts.
+
+`answerMode` stays a room setting, and the game *narrows* it: the buzzer offers
+only `buzzer`, and the server refuses a settings frame that sets a mode the
+current game does not serve.
 
 The host view adds what only the host may see:
 

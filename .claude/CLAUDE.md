@@ -3,7 +3,9 @@
 **Taverla** is a shelf of party games sharing one room, one QR code and one set
 of screens. **Blind test** is the first of them: one screen runs the game and
 shows the QR code, everyone else plays on whatever screen they have to hand,
-and the first to buzz gets to name the track.
+and the first to buzz gets to name the track. **Buzzer** is the second: the same
+room, the same unforgeable race for the floor, and no content at all — the host
+brings the charade, the quiz on paper or the lesson.
 
 A phone is the common case, not the contract. The room code is displayed to be
 read aloud and typed, so a laptop in the same room joins the same way — nothing
@@ -118,12 +120,20 @@ string written into a component is a bug, not a shortcut — see
   and the server then stops sending it the track
 - **Player** — anyone who joined, by scanning the QR code or by typing the room
   code. Holds a seat and a score
-- **Round** — one track. `lobby → countdown → playing → buzzed → revealed`
+- **Game** — what the room is playing. `blindtest`, `buzzer` and (unserved)
+  `quiz`; `shelvedGames` is the two a room may actually be opened for, and the
+  create-room request carries which. The game owns its arm of `settings.game`
+  and `round.content`, and narrows the room's answer mode
+- **Round** — one track, one question, or nothing at all.
+  `lobby → countdown → playing → buzzed → revealed`. `roundCount` is nullable,
+  and `null` means until the host ends it
 - **Answer mode** — `typed` (one field, the default), `choice` (four candidates)
   or `buzzer` (one player, judged by the host). The first two are everyone at
   once, decided by the server, and scored by speed on top of being right. Typing
   pays 3 for the pair where a right pick pays 1: producing the answer from
-  nothing is not the same act as recognising it among four
+  nothing is not the same act as recognising it among four. It stays a *room*
+  setting and the game narrows it — the bare buzzer offers only `buzzer`, and
+  the server refuses a frame that sets anything else
 - **Guess** — one typed line. Each half is looked for *inside* it, over runs of
   whole words, so "jean jacques goldman on ira" banks both and "daniel balavoine
   on ira" banks the title and still owes the artist. Whole words rather than raw
@@ -137,24 +147,37 @@ string written into a component is a bug, not a shortcut — see
   out is the same outcome as answering wrong, because taking the floor and
   saying nothing is what it cost everyone else
 - **Lockout** — a player who answered wrong, or held the floor and said nothing,
-  sits out the rest of the round
-- **Reveal** — the moment the track identity becomes public
-- **Verdict** — the host judging title and artist independently, 1 point each
+  sits out the rest of the round. The blind test always locks out, because its
+  round is a clip that runs out; the bare buzzer has no such clock, so its host
+  chooses (`locksOutOnMiss`) and can reopen the field with `host.clearLockouts`
+- **Reveal** — the moment the round's answer becomes public, and the scoreline
+  alone in a game whose question the room owns
+- **Verdict** — what the host granted, in the shape the game is judged in:
+  `halves` for the blind test's title and artist, 1 point each and judged
+  independently, `single` for one claim worth one point everywhere else
 - **Session id** — minted by the client, stored per room and role; what lets a
   device that locked its screen come back to the same seat
 
 ## The blind test is the first game, not the product
 
-The plan is a shelf of party games sharing one room, one QR code and one set of
-screens. That changes nothing about finishing this one — it ships whole, first —
-but it does mean not welding the seams shut on the way.
+The shelf is real now — two games share the room, the QR code and every screen —
+but the rule that got it here has not changed: do not weld a seam shut, and do
+not invent a shared shape before there is a second case to measure it against.
 
 [`docs/game-catalogue.md`](../docs/game-catalogue.md) holds the candidates and,
 more usefully, the seams: room state versus game state, message namespaces, the
 role-scoped unions worth defending, and the one shape of game that legitimately
-breaks the snapshot rule. Read it before generalising anything — the short
-version is that **two games is when the shared shape becomes knowable**, and
-inventing it now is the abstraction anti-pattern with a different hat on.
+breaks the snapshot rule. Read it before generalising anything.
+
+**Three is the next threshold, not two.** The `mode` axis is named there and
+deliberately unbuilt: `answerWindowMs` belongs to buzzer mode rather than to the
+room, and one field in one arm is a union invented to hold a single value. The
+trigger is the second mode-specific setting.
+
+`RoomPhase` is the other one still fused — the blind test's life cycle wearing
+the room's name — and it survived the buzzer intact, because a countdown is a
+countdown and a reveal is a reveal even when there is nothing to reveal. Split
+it the day a game needs a phase these six names cannot carry.
 
 ## The build is staged
 
@@ -169,10 +192,14 @@ remote play, which will get its own stage when it is wanted. The plan file keeps
 the reasoning. Note what 06 deliberately did *not* buy: no component runner
 exists here, so a claim about a single screen still rests on a browser pass.
 
-**11 is half done.** The seam between the shelf and one game on it is built —
-`settings.game` and `round.content`, discriminated on `kind` — and the game that
-proves it is not. That game is a **bare buzzer**, not the quiz: the server
-serves no content at all, and the room supplies whatever it likes. The quiz is
-12, and ships buzzer mode before a French API.
+**11 is done, and it is the first stage that is not the blind test's.** The seam
+between the shelf and one game on it — `settings.game`, `round.content` and the
+verdict, all discriminated on `kind` — and the game that proves it: a **bare
+buzzer**, where the server serves no content at all and the room supplies
+whatever it likes. The quiz is 12, and ships buzzer mode before a French API.
+
+Read the divergences at the end of `docs/plans/11-buzzer.md` before trusting a
+detail written earlier in that file: the second game corrected the first half in
+four places, which is what a second case is for.
 
 Start a session by reading the stage's plan. Update it when reality diverges.

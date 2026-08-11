@@ -45,6 +45,18 @@ it is the reason the seat is offered rather than assumed.
 Buzzer mode does not offer it: that round needs someone reading the answer to
 judge it.
 
+### The verdict is the game's too
+
+`verdictSchema` is discriminated on `kind`, for the same reason `round.content`
+is: the blind test judges two independent claims, and everything else judges
+one. `verdictKindFor` says which a game takes, and `applyVerdict` checks it
+before scoring — a `halves` verdict over a bare buzzer would pay two points for
+one charade, and a host socket is as forgeable as a player's.
+
+`yourVerdict` on the room view is the `halves` arm alone, not the union.
+*Banking* is what having two halves means, and a game judged on one claim has no
+half to hold.
+
 ### The buzz carries no timestamp, deliberately
 
 Ordering is decided by when the frame reaches the server. A client-supplied

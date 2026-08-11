@@ -17,7 +17,7 @@ describes the code is worse than no plan.
 | [08 — Deploy](08-deploy.md) | **done** | One origin serving both, somewhere friends can reach |
 | [09 — Answer modes](09-answer-modes.md) | **done** | Four choices or a typed answer, everyone at once, scored by speed |
 | [10 — Per-device audio](10-per-device-audio.md) | **dropped** | Audio stays on the host. See the plan for why, and what replaces it |
-| [11 — The seam, and the buzzer](11-buzzer.md) | **in progress** | The split between the shelf and one game on it — built. Then a buzzer with no content |
+| [11 — The seam, and the buzzer](11-buzzer.md) | **done** | The split between the shelf and one game on it, and the second game that proves it: a buzzer the room supplies |
 | [12 — Trivia](12-trivia.md) | planned | A quiz through the seam: buzzer mode first, then a French API |
 
 ## Order, and what can move
@@ -35,7 +35,8 @@ breaks the assumption that exactly one player acts at a time.
 seam between the shelf and one game on it — is the one piece that had to wait
 for a second game to exist, because inventing the shared shape before there are
 two cases to measure it against is the abstraction anti-pattern with a different
-hat on. That half has landed; the game has not.
+hat on. Both halves have landed, and the second one is what corrected the first:
+five settings called "what every game needs" turned out to be three.
 
 11 and 12 were one file until the second game turned out not to be the quiz. A
 bare buzzer serves no content at all, which makes it both the cheapest game on

@@ -53,6 +53,10 @@ with the two-line `vi.mock` of the music client and its tests — never a second
 copy of the plumbing, and never a second catalogue, because the anti-cheat
 assertion searches raw frames for those exact strings.
 
+`openRoom` takes the whole `RoomSettings` and creates the room for
+`settings.game.kind`, so a suite for another game is a fixture rather than a
+second harness — `buzzer-game.test.ts` is one file and no plumbing.
+
 ## Three journeys, and no fourth
 
 `e2e/` holds them: a whole buzzer game across two browser contexts, two phones

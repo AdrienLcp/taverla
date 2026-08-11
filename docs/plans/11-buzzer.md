@@ -8,11 +8,11 @@ with no content at all, which the room supplies itself.
 
 ## Where it stands
 
-**The seam is built. No second game exists yet.** `beginRound` answers
-`not_implemented` for any game that is not the blind test, which is the honest
-marker of what is missing.
+**Done.** Both halves. The rest of this file is the reasoning, kept because the
+next game will need it; read the divergences at the end before trusting a
+detail.
 
-Landed:
+Landed in the first half:
 
 - `settings.game` and `round.content`, discriminated on `kind`, with the whole
   cascade — plus two things this file did not anticipate. The host's secret half
@@ -24,9 +24,18 @@ Landed:
 - `answerWindowMs`, and with it the whole idea that the floor a buzz takes has a
   clock. It belongs to the room rather than to a game — every game with a buzzer
   wants it, and this one is nothing but buzzers.
-- `PROTOCOL_VERSION` 5.
 
-Left: the buzzer game itself, below.
+Landed in the second:
+
+- The `buzzer` game kind, its settings arm, and a `content` arm that carries
+  nothing but its own name. `beginRound` opens it with no catalogue call.
+- `roundCount` nullable, `answerMode` narrowed by the game, `roundDurationMs`
+  under one name in both arms that have one.
+- `locksOutOnMiss` and `host.clearLockouts`.
+- A verdict union, `halves` | `single` — see the divergences.
+- `POST /api/rooms` carries the game, so a room opens on the one whose front
+  door the host came through.
+- `PROTOCOL_VERSION` 6, `buzzer-game.test.ts`, and a browser pass.
 
 ## The seam, and its exact shape — built
 
@@ -145,15 +154,51 @@ this game the answer mode is a constraint nobody sets.
 
 ## Done when
 
-- A host opens a room, picks the buzzer, and runs a whole game without the
+- ✅ A host opens a room, picks the buzzer, and runs a whole game without the
   server ever holding a question
-- The buzz order is unforgeable, and the floor's clock works in both directions
-- The blind test still runs in all three answer modes, unchanged
-- A player who has buzzed can be barred until the host clears it, and clearing
-  it is one press
-- Verified in a browser, on a phone and a big screen
+- ✅ The buzz order is unforgeable, and the floor's clock works in both
+  directions
+- ✅ The blind test still runs in all three answer modes, unchanged
+- ✅ A player who has buzzed can be barred until the host clears it, and
+  clearing it is one press
+- ✅ Verified in a browser, on a phone and a big screen
 
 ## Out of scope
 
 Anything the host would type into the app — a question, a category, a score
 adjustment. The whole point is that the room already has the content.
+
+## Where the build diverged from this plan
+
+**The verdict became a union too.** This file said "a verdict that is one claim"
+without saying what carried it, and `Verdict` was the blind test's two booleans.
+Paying a charade with `{titleCorrect: true, artistCorrect: true}` would have
+scored it twice, so `verdictSchema` is now discriminated on `kind` — `halves`
+for the blind test, `single` for everything else — and `verdictKindFor` decides
+which a game is judged in. The server checks the shape before applying it, for
+the same reason it re-checks everything a host socket sends.
+
+`yourVerdict` stayed the `halves` arm alone, because *banking* is what having
+two of them means. A game judged on one claim has no half to hold.
+
+**`pointsFor` did not move to the blind test's directory.** Over the union it
+covers both games and belongs to the shell, so `scoring/verdict.ts` holds it
+with `isMiss`, `verdictKindFor` and `nothingScored`; `scoring/speed-bonus.ts`
+holds the rank bonus; and `blindtest/typed-answer.ts` took everything that reads
+a title and an artist. The line in this plan predates the union.
+
+**The game is picked before the room exists, not in the lobby.** The shelf
+already had one door per game, and `POST /api/rooms` carries which — so the host
+lands on a console already set up. The lobby picker exists as well, above
+everything it decides, for the table that changes its mind while standing there.
+
+**`shelvedGames` is not `gameKinds`.** The quiz has a settings arm and a content
+arm and no server, so it is refused at the door rather than at the first
+"start". `beginRound`'s `not_implemented` branch is what that leaves behind, and
+it is the exhaustiveness arm rather than dead code.
+
+**The buzzer's strings forced the i18n namespaces open.** `blindtest.buzz.*` and
+`blindtest.round` were the *mode*'s and the *round*'s all along; they are now
+`buzz.*` and `round.*`, and `blindtest.answerMode.*` is `host.answerMode.*`. The
+rule in `.claude/rules/i18n-and-theme.md` was already the right test — this is
+the first time it had a second case to answer against.

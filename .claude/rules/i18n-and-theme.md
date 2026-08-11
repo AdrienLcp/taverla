@@ -35,21 +35,34 @@ const translate = useTranslate()
 > **Would the second game display this string unchanged?**
 
 If yes it is **shell**, and it goes under `join.*`, `host.*`, `player.*`,
-`error.*`, `connection.*`, `menu.*` or `preferences.*`. If no it belongs to the
-game and goes under `blindtest.*`, the only prefix a single game owns.
+`round.*`, `buzz.*`, `error.*`, `connection.*`, `menu.*` or `preferences.*`. If
+no it belongs to the game, and takes that game's name: `blindtest.*` or
+`buzzer.*`.
+
+A game's prefix is its `GameKind`, and three of its keys are addressed by
+function rather than by hand — `gameNameKey`, `gameTaglineKey` and
+`gameDescriptionKey` build `` `${ShelvedGame}.name` `` and its siblings, so
+putting a game on the shelf does not compile until both locales can name it,
+pitch it and describe it.
 
 The trap is `host.*`: it names the *screen*, and a screen shows both kinds of
-string. "Start the game", "Next round" and "Volume" are shell — every future
-game has a host console with those. "Clip length", the genres, the source picker
-and the title/artist verdict are the blind test's, and they live under
-`blindtest.*` even though they are rendered on the host console.
+string. "Start the game", "Next round", "How to answer" and "Volume" are shell —
+every future game has a host console with those. "Clip length", the genres, the
+source picker and the title/artist verdict are the blind test's, and they live
+under `blindtest.*` even though they are rendered on the host console.
 
 Volume is the edge worth stating: it presupposes *audio*, not the blind test, so
 a second game that plays anything reuses it. Shell.
 
-Within `blindtest.*`, a string that belongs to **one answer mode** takes the
-mode as its next segment — `blindtest.buzz.*` already does. A string every mode
-shows keeps the bare prefix: `blindtest.reveal.*`, `blindtest.genre.*`.
+**A mode is not a game.** `buzz.*` is the shell's, because `answerMode` is a
+room setting and the bare buzzer game renders every one of those strings
+unchanged — the button, the blockers, "{nickname} buzzed". It lived under
+`blindtest.*` until a second game needed it, which is the whole test working as
+intended. `round.*` is the same shape one level up: "Round 3 of 10", "+2",
+"Nobody got it" are what a *round* shows in any game.
+
+What stays inside a game's prefix is what only that game can say:
+`blindtest.reveal.title` is "It was", and a charade has no "it".
 
 ### Hold a key, never a rendered string
 

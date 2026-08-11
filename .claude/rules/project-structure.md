@@ -11,7 +11,9 @@ docs/plans/         → The staged build plan; each file is one session's work.
 ## One app, two surfaces
 
 `apps/game` serves the host console at `/host/:roomCode` and the player screen
-at `/play/:roomCode`, both lazily loaded. That is not a compromise — it is what
+at `/play/:roomCode`, both lazily loaded. `/:game` is every game's front door,
+one component for all of them — where the room is created, and where which game
+it opens on is decided. That is not a compromise — it is what
 makes the QR code work: it encodes `location.origin`, so the phone that scans it
 lands on the same origin the host is already served from. One deployment, no
 CORS, no second domain, no environment variable pointing one app at the other.
@@ -58,9 +60,12 @@ mounting their own copy of the chrome.
 - Something both the server and the browser must agree on the *shape* of →
   `packages/protocol`.
 - A rule with no I/O — scoring, eligibility, clock maths, code generation,
-  locale negotiation → `packages/core`, with a test. Some of those are the blind
-  test's and some are the shell's; keep them in separate directories, and read
-  `docs/game-catalogue.md` before promoting either to a package.
+  locale negotiation → `packages/core`, with a test. The split is by directory:
+  `time/`, `room/`, `i18n/`, `round/` and `scoring/` are the shell's, and
+  `blindtest/` holds what only that game can say. The test is whether the rule
+  still makes sense with no title and no artist — `pointsFor` does, over either
+  shape of verdict; `gradeGuess` does not. Read `docs/game-catalogue.md` before
+  promoting either side to a package.
 - Anything touching a socket, `fetch`, `localStorage`, the router →
   `apps/*/src/infrastructure/`. See `abstraction-boundaries.md`.
 - A React component used by one surface → that feature. Used by both →

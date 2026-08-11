@@ -112,13 +112,17 @@ mostly deletions — an optional round content, a host panel that says who buzze
 instead of what the track was, and a verdict that is one right/wrong rather than
 title-and-artist.
 
-**Since promoted out of this list: it is a game, not an arm.** Filing it under
+**Since promoted out of this list, built, and named `buzzer`.** Filing it under
 `QuestionSource` was the mistake of assuming the content had to be a question.
 A server that serves nothing is a buzzer system for *any* animation — a charade,
 a "name five", a lesson, a drinking game — and calling it trivia would hang a
-content pipeline off something whose whole value is not having one. It is
-[stage 11](plans/11-buzzer.md), ahead of the quiz, and the reasoning below still
-holds for why it is nearly free.
+content pipeline off something whose whole value is not having one. It shipped
+as [stage 11](plans/11-buzzer.md), ahead of the quiz, and it was as nearly free
+as this paragraph predicted: the one thing it needed that no other game does is
+a lockout the host can clear, because its round has no clip to run out.
+
+`hosted` was the wrong name — it reads as "hosted by us" and means the opposite.
+`gameKinds` is `blindtest | buzzer | quiz`.
 
 It is the only game with no content pipeline and no licensing question at all,
 and it turns the product into a buzzer system for anything anyone already has. A
@@ -207,13 +211,14 @@ many candidates choice mode shows, whether typed mode pays partial credit, how
 many thumbs a buzzer round accepts before it closes. When one of those is
 wanted, build the union and move `answerWindowMs` into it in the same change.
 
-**One thing worth fixing sooner**, because it is a naming smell rather than a
-structure: the blind test's `clipDurationMs` and the quiz's `answerDurationMs`
-are the same concept — how long a round stays open — under two names, which is
-why the server has to translate between them. Both should be `roundDurationMs`
-in their own arm, each keeping its own bounds. The blind test's ceiling is a
-thirty-second Deezer preview and the quiz's is a taste call; that is exactly why
-the field stays per-game instead of being hoisted to the room.
+**The naming smell beside it is fixed.** `clipDurationMs` and
+`answerDurationMs` were the same concept — how long a round stays open — under
+two names, and both are `roundDurationMs` now, each in its own arm with its own
+bounds. The blind test's ceiling is a thirty-second Deezer preview and the
+quiz's is a taste call, which is exactly why the field stays per-game instead of
+being hoisted to the room. The bare buzzer has no arm for it at all:
+`roundDurationMsOf` returns `null`, and a game that serves nothing has nothing
+for the room to run out of.
 
 ## The seams, and what it costs to keep them open
 
@@ -248,29 +253,39 @@ it, or the rule will get quietly relaxed for everything.
 
 **Routes are already open.** `/host/:code` and `/play/:code` say nothing about
 which game is running, because the game is a property of the room, not of the
-URL. Keep it that way; the lobby becomes a game picker.
+URL. Keep it that way. What *is* in the URL is the shelf: `/:game` is one page
+for every game's front door, and it is where the room is created — `POST
+/api/rooms` carries the game, so the console the host lands on is already the
+right one. The lobby's picker is for changing your mind, not for choosing.
 
-**i18n is already namespaced.** `blindtest.*` is the only game-owned prefix;
-`join.*`, `host.*`, `player.*`, `error.*`, `connection.*` and `preferences.*`
-are shell. A new game adds its own prefix and touches nothing else.
+**i18n is namespaced by game.** A prefix per game — `blindtest.*`, `buzzer.*` —
+and `join.*`, `host.*`, `player.*`, `round.*`, `buzz.*`, `error.*`,
+`connection.*` and `preferences.*` for the shell. A new game adds its own prefix
+and touches nothing else.
 
 The partition is by **who would reuse the string**, not by which screen renders
 it — `host.*` names a screen, and the host console shows both kinds. The source
-picker, the genres, the clip length and the title/artist verdict moved to
+picker, the genres, the clip length and the title/artist verdict are
 `blindtest.*` for exactly that reason, while "Start the game" and "Volume"
-stayed. Inside `blindtest.*`, one answer mode's strings take the mode as their
-next segment (`blindtest.buzz.*`), which is what keeps stage 09's two new modes
-from colliding with the buzzer's. The full test is in
-`.claude/rules/i18n-and-theme.md`.
+stayed shell.
+
+The second game is what proved the rest of it. `blindtest.buzz.*` was filed
+under the game because only one game had a buzzer; it is `buzz.*` now, because
+`answerMode` is a *room* setting and the bare buzzer renders every one of those
+strings unchanged. `blindtest.round` is `round.*` for the same reason. The full
+test is in `.claude/rules/i18n-and-theme.md`, and it was already the right
+test — it simply had nothing to answer against until there were two games.
 
 **Themes are semantic, so a game can own a colour.** Every component reads
 `--accent`, never a hex. A game that wants to be green sets `--accent` on its
 root element and the whole surface follows, with no fork of the palette.
 
-**`packages/core` holds both kinds of rule.** `time/clock-sync`, `room/room-code`
-and `i18n/locale` are cross-game; `round/buzz-eligibility` and `scoring/*` are
-the blind test's. When the second game lands, split them **by directory**, not
-by package — a package boundary with one consumer on each side buys nothing.
+**`packages/core` holds both kinds of rule, split by directory.** `time/*`,
+`room/*`, `i18n/*`, `round/*` and `scoring/*` are the shell's — including
+`pointsFor`, which reads a verdict of either shape. `blindtest/typed-answer.ts`
+is the game's, and holds everything that knows an answer has a title and an
+artist. A directory, not a package: a boundary with one consumer on each side
+buys nothing.
 
 **The package names are already right.** They used to be `@blindtest/*`, which
 named the first game rather than the shelf it sits on, and this file said to fix
