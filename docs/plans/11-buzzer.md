@@ -66,20 +66,35 @@ mean carrying a content pipeline it has no use for, and it would hide the fact
 that it is the one game on the shelf with no licensing question, no catalogue,
 and no network call.
 
-### What it forces us to look at
+### Two room settings that are not every room's
 
-The second game is the first honest test of what stage 11 called "what every
-game needs", and it disagrees with two of the five:
+The second game is the first honest test of what this stage called "what every
+game needs", and two of the five do not survive it:
 
 - **`answerMode`** — this game is `buzzer` by definition. Four candidates and a
-  typed answer both need something to answer *against*.
-- **`roundCount`** — a host running an evening decides when to stop. A fixed ten
-  is the blind test's shape, not the room's.
+  typed answer both need something to answer *against*, and this one serves
+  nothing.
+- **`roundCount`** — a host running a charade evening stops when they stop. A
+  fixed ten is the blind test's shape wearing the room's name, which is the
+  exact mistake this stage exists to undo.
 
-Both can simply be ignored by a game that does not use them, and the settings
-panel already hides controls a game has no use for. Do that first, and note here
-if it starts to read as a lie rather than as a default — the moment a *third*
-game disagrees with the same fields is the moment they move.
+**Fix both here rather than waiting for a third game.** The shelf is the point
+of the product, so a second case that disagrees is evidence, not an anomaly —
+and the two fixes are small:
+
+- `roundCount` becomes **nullable**: `null` is "until the host ends it". That
+  serves the buzzer and every open-ended game after it, and the final board
+  already knows how to end on a press.
+- `answerMode` **stays on the room**, and the game constrains it: the server
+  refuses a mode the current game does not offer, and the panel hides the
+  control rather than showing two options that would break the round. It is a
+  constraint, not dead weight.
+
+Do **not** move `answerMode` into the game arms. The shell reads it everywhere
+that decides how a round is answered and scored — `registerBuzz`,
+`registerAnswer`, `settleSimultaneousRound`, the scoreboard — and pushing it
+down means narrowing on the game at every one of those call sites to learn
+something the room already knows.
 
 ### What is genuinely new
 
@@ -95,12 +110,16 @@ game disagrees with the same fields is the moment they move.
   and artist judged independently. `pointsFor` is the blind test's and should
   move to its own directory as part of this.
 
-### Naming, undecided
+### Naming, decided: `buzzer`
 
-`docs/game-catalogue.md` calls the arm `hosted`, which reads as "hosted by us"
-in English and means the opposite. `spoken` is the candidate — the content is
-said, not served. Decide before writing the union arm; renaming a discriminator
-later is a protocol bump.
+`gameKinds` becomes `['blindtest', 'buzzer', 'quiz']` — three common nouns in
+one register, and the word the room actually uses for it.
+
+`docs/game-catalogue.md` called it `hosted`, which reads as "hosted by us" in
+English and means the opposite. `spoken` was the other candidate and is an
+adjective among nouns. The one objection to `buzzer` is that `answerMode` has a
+value of the same name, and it does not hold: they are different fields, and for
+this game the answer mode is a constraint nobody sets.
 
 ## Done when
 
