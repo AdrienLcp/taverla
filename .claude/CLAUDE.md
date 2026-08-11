@@ -124,10 +124,13 @@ string written into a component is a bug, not a shortcut — see
   once, decided by the server, and scored by speed on top of being right. Typing
   pays 3 for the pair where a right pick pays 1: producing the answer from
   nothing is not the same act as recognising it among four
-- **Guess** — one typed claim, graded against the title and the artist
-  independently; whichever it matches is **banked**. Typed mode allows as many
-  as the clip does and closes for a player once they hold both halves; a pick is
-  one shot, because four candidates with retries is the answer with extra steps
+- **Guess** — one typed line. Each half is looked for *inside* it, over runs of
+  whole words, so "jean jacques goldman on ira" banks both and "daniel balavoine
+  on ira" banks the title and still owes the artist. Whole words rather than raw
+  substrings is the guard: `normalizeAnswer` drops whitespace, and on the bare
+  string `Hell` is inside `Michelle`. Typed mode allows as many guesses as the
+  clip does and closes for a player once they hold both halves; a pick is one
+  shot, because four candidates with retries is the answer with extra steps
 - **Buzz** — a player claiming the answer; the server stamps when it arrived
 - **Lockout** — a player who answered wrong sits out the rest of the round
 - **Reveal** — the moment the track identity becomes public

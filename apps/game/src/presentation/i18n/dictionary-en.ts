@@ -7,12 +7,12 @@
  * that the next game will reuse. See `docs/game-catalogue.md`.
  */
 export const EN_DICTIONARY = {
+  'blindtest.answer.anyOrder':
+    'The title, the artist, or both — as many goes as you like.',
   'blindtest.answer.artistFound': 'Artist ✓',
   'blindtest.answer.bothFound': 'You have both. Sit back.',
   'blindtest.answer.guess': 'Your answer',
   'blindtest.answer.locked': 'Answer sent. Waiting for the others…',
-  'blindtest.answer.oneAtATime':
-    'The title or the artist — one at a time, as many goes as you like.',
   'blindtest.answer.send': 'Send it',
   'blindtest.answer.titleFound': 'Title ✓',
   'blindtest.answer.waiting': '{count} in so far',

@@ -22,16 +22,33 @@ describe('gradeGuess', () => {
     ).toEqual({ artistCorrect: false, titleCorrect: true })
   })
 
-  // The cost of one field, pinned rather than discovered in a room: whole
-  // strings are compared, so a line holding both halves is neither of them.
-  // It is why the field asks for one thing at a time.
-  it('[typed] matches neither half when a guess runs the two together', () => {
+  // What a room actually types into one field: both halves on one line, in
+  // whichever order, with nothing marking where one ends.
+  it('[typed] finds both halves when a guess runs the two together', () => {
     expect(
       gradeGuess({
         guess: 'harder better faster stronger daft punk',
         track: TRACK
       })
-    ).toEqual({ artistCorrect: false, titleCorrect: false })
+    ).toEqual({ artistCorrect: true, titleCorrect: true })
+
+    expect(
+      gradeGuess({
+        guess: 'daft punk harder better faster stronger',
+        track: TRACK
+      })
+    ).toEqual({ artistCorrect: true, titleCorrect: true })
+  })
+
+  // The half they got, and the half they still owe. A line that is right about
+  // one thing and wrong about the other must not be all-or-nothing.
+  it('[typed] banks the right half of a line that is half wrong', () => {
+    expect(
+      gradeGuess({
+        guess: 'the chemical brothers harder better faster stronger',
+        track: TRACK
+      })
+    ).toEqual({ artistCorrect: false, titleCorrect: true })
   })
 
   it('[typed] forgives a slipped finger, as the matcher does everywhere', () => {

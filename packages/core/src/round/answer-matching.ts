@@ -59,13 +59,10 @@ type AnswerComparison = {
   given: string
 }
 
-export const matchesAnswer = ({
-  expected,
-  given
-}: AnswerComparison): boolean => {
-  const target = normalizeAnswer(expected)
-  const attempt = normalizeAnswer(given)
+export const matchesAnswer = ({ expected, given }: AnswerComparison): boolean =>
+  matchesNormalized(normalizeAnswer(expected), normalizeAnswer(given))
 
+const matchesNormalized = (target: string, attempt: string): boolean => {
   if (target.length === 0 || attempt.length === 0) {
     return false
   }
@@ -78,6 +75,66 @@ export const matchesAnswer = ({
 
   return allowed > 0 && editDistanceWithin(target, attempt, allowed)
 }
+
+/**
+ * Whether the answer is *somewhere in* what was typed. One field takes one
+ * claim, and a room types the two halves on one line as often as not — "jean
+ * jacques goldman on ira" has to find both, and "daniel balavoine on ira" has
+ * to find the title and leave the artist still owed.
+ *
+ * The search is over **runs of whole words**, never raw substrings, and that is
+ * the guard rather than a length threshold: `normalizeAnswer` drops whitespace,
+ * so on the bare string a title of `Hell` would be found inside `Michelle` and
+ * a title of `Go` inside almost anything. Splitting on the boundaries first
+ * puts them back, so only something the player actually said can match.
+ *
+ * Every run is compared with the same forgiveness as a whole answer, so a
+ * slipped finger inside a long line still lands.
+ */
+export const answerAppearsIn = ({
+  expected,
+  given
+}: AnswerComparison): boolean => {
+  const target = normalizeAnswer(expected)
+
+  if (target.length === 0) {
+    return false
+  }
+
+  const spoken = wordsIn(given)
+
+  for (let from = 0; from < spoken.length; from++) {
+    let run = ''
+
+    for (let to = from; to < spoken.length; to++) {
+      run += spoken[to]
+
+      if (run.length > target.length + MOST_TYPOS_FORGIVEN) {
+        break
+      }
+
+      if (matchesNormalized(target, run)) {
+        return true
+      }
+    }
+  }
+
+  return false
+}
+
+/**
+ * The same folding as `normalizeAnswer`, stopping short of dropping the
+ * boundaries — `Jean-Jacques` is two words here and one there, and both are
+ * right for what each is used for.
+ */
+const wordsIn = (answer: string): string[] =>
+  answer
+    .normalize('NFD')
+    .replace(DIACRITICS, '')
+    .replace(CATALOGUE_NOISE, '')
+    .toLowerCase()
+    .split(NOT_A_LETTER_OR_DIGIT)
+    .filter((word) => word.length > 0)
 
 /**
  * Levenshtein, stopped as soon as every cell of a row exceeds the tolerance —

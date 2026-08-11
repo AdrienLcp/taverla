@@ -128,7 +128,7 @@ export const TypedAnswer: React.FC<TypedAnswerProps> = ({
       >
         <TextField
           autoComplete='off'
-          description={translate('blindtest.answer.oneAtATime')}
+          description={translate('blindtest.answer.anyOrder')}
           isDisabled={hasBoth}
           label={translate('blindtest.answer.guess')}
           onChange={setGuess}

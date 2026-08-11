@@ -7,7 +7,7 @@ import {
   type Verdict
 } from '@taverla/protocol/scoring'
 
-import { matchesAnswer } from '../round/answer-matching'
+import { answerAppearsIn } from '../round/answer-matching'
 
 export type TypedAttempt = {
   guess: string
@@ -25,10 +25,10 @@ type TrackAnswer = {
  * played, the reveal and the scoreboard read one shape.
  *
  * One guess is measured against **both** halves rather than the player saying
- * which they meant: `matchesAnswer` compares whole strings, so a guess that is
- * the title cannot accidentally be the artist. What it costs is that both
- * halves in one line match neither — which is why the field says to send one
- * thing at a time, and why the pair is reached in two guesses.
+ * which they meant, and each half is looked for *inside* the line rather than
+ * against the whole of it. That is what makes one field honest: a room types
+ * "jean jacques goldman on ira" and gets both, or "daniel balavoine on ira" and
+ * gets the title with the artist still owed.
  */
 export const gradeGuess = ({
   guess,
@@ -37,8 +37,8 @@ export const gradeGuess = ({
   guess: string
   track: TrackAnswer
 }): Verdict => ({
-  artistCorrect: matchesAnswer({ expected: track.artist, given: guess }),
-  titleCorrect: matchesAnswer({ expected: track.title, given: guess })
+  artistCorrect: answerAppearsIn({ expected: track.artist, given: guess }),
+  titleCorrect: answerAppearsIn({ expected: track.title, given: guess })
 })
 
 /**

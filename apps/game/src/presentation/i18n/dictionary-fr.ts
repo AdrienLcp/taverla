@@ -6,12 +6,12 @@ import type { Dictionary } from './translation'
  * editor that strips invisible characters.
  */
 export const FR_DICTIONARY: Dictionary = {
+  'blindtest.answer.anyOrder':
+    'Le titre, l’artiste, ou les deux — autant d’essais que tu veux.',
   'blindtest.answer.artistFound': 'Artiste ✓',
   'blindtest.answer.bothFound': 'Tu as les deux. Tranquille.',
   'blindtest.answer.guess': 'Ta réponse',
   'blindtest.answer.locked': 'Réponse envoyée. On attend les autres…',
-  'blindtest.answer.oneAtATime':
-    'Le titre ou l’artiste — un à la fois, autant d’essais que tu veux.',
   'blindtest.answer.send': 'Envoyer',
   'blindtest.answer.titleFound': 'Titre ✓',
   'blindtest.answer.waiting': '{count} ont répondu',
