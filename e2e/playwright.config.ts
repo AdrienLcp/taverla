@@ -18,6 +18,10 @@ const SERVER_URL = `http://127.0.0.1:${SERVER_PORT}`
 export default defineConfig({
   expect: { timeout: 10_000 },
   forbidOnly: Boolean(process.env.CI),
+  // Explicit, or a run started from the repository root drops `test-results/`
+  // there rather than beside the specs — which is the one thing moving this
+  // config into `e2e/` was for.
+  outputDir: './test-results',
   projects: [
     {
       name: 'chromium',
