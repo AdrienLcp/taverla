@@ -61,7 +61,7 @@ team on the player model and a turn owner.
 | Game | Shape | What it needs that does not exist | Appetite |
 |---|---|---|---|
 | **Blind test** | Buzz-first | — | shipping |
-| **Quiz / trivia** | Buzz-first | A question bank instead of a track pool | a session |
+| **Quiz / trivia** | Buzz-first | A question bank instead of a track pool — [costed below](#the-quiz-costed-and-it-needs-no-database) | an evening to a session |
 | **Lyrics blackout** — the line is missing, sing it | Buzz-first | Same as the blind test, different reveal | a session |
 | **Reflex race** — first to tap when the screen flips | Buzz-first | Almost nothing; it *is* the buzz | an evening |
 | **Le Fake** (Fibbage) — write a fake answer, fool the others | Submit-then-vote | Phase 2 in full | two sessions |
@@ -79,6 +79,73 @@ team on the player model and a turn owner.
 
 If only one is built next, **Le Fake**. It pays for the submit-then-vote engine,
 and five other games then cost a weekend each.
+
+That is the answer to "which unlocks the most". It is not the answer to "which
+is cheapest", and the quiz is cheap enough to be worth stating separately.
+
+## The quiz, costed — and it needs no database
+
+The instinct is that a quiz needs a question bank, a bank needs storage, and
+storage means a database. The first two are true and the third is not: a few
+hundred questions are a **file in git**, reviewed in a merge request, loaded
+into memory at boot. `room-store.ts` already argues the same thing about rooms.
+
+A database only becomes the answer when questions are **written from inside the
+app** — a host composing their own pack on their phone. That is a feature, not
+a prerequisite, and it is the one that should be allowed to force the decision.
+
+### Where a question would slot in
+
+The blind test's source picker is the template, and it is more reusable than it
+looks. `TrackSource` is `chart | playlist | search` — three ways to fill one
+pool, chosen in the lobby, committed by the launch. A quiz is the same picker
+with different arms, and the shape underneath is already built: the countdown,
+the buzz order, the lockout, the verdict, the reveal, the scoreboard.
+
+So `QuestionSource: hosted | bank | api`, and each arm is a separate size:
+
+**1. `hosted` — the host asks out loud. An evening.** The server serves a round
+with *no content at all*: a countdown, the buzzers open, the host reads a
+question from a book, a website or their own head, the first thumb wins and the
+host judges it. This is the existing buzzer round minus the track, and it is
+mostly deletions — an optional round content, a host panel that says who buzzed
+instead of what the track was, and a verdict that is one right/wrong rather than
+title-and-artist.
+
+Worth building **first**, and not only because it is nearly free: it is the only
+arm with no content pipeline and no licensing question at all, and it turns the
+product into a buzzer system for any quiz anyone already has. A family quiz on
+paper, a pub quiz, a teacher's revision game. The room, the QR code, the
+unforgeable buzz order and the scoreboard are the whole value, and they exist.
+
+**2. `bank` — a curated file, shipped with the server. A session.** A few
+hundred French questions in one JSON asset, drawn without repeats exactly as the
+track pool is, with categories where the genres are. Honest limits, both fine:
+the pool is finite so a heavy evening will repeat, and adding questions means a
+deploy. It is the arm that makes the quiz a *game* rather than a buzzer.
+
+**3. `api` — a public trivia service. A session, and the least appealing.** The
+same shape as `deezer-client.ts`: one adapter, one boundary module, everything
+above it speaking the domain. The reason it ranks last is not technical. Deezer
+works because music is language-neutral; trivia is not, the free banks are thin
+and often ambiguous in French, and a blind test nobody can answer is a broken
+game — the same rule that set the popularity floor applies here and is harder to
+satisfy.
+
+### What it would cost that is genuinely new
+
+Nothing structural for `hosted`. For `bank`, one core rule (drawing without
+repeats, which already exists for tracks and should be *shared* rather than
+copied) and one adapter. The real work in both is the seam this file already
+names: `RoomPhase` is the blind test's life cycle wearing the room's name, and
+a second buzz-first game is the moment that costs an hour to fix and never
+less.
+
+**The answer modes are more reusable than the table above admits.** Four
+choices and a typed answer were built as blind-test modes, and a quiz wants both
+— a multiple-choice question *is* the choice mode with a different pool. When
+the quiz lands, the mode machinery moves to the shell and the blind test keeps
+only what is about tracks.
 
 ## An answer mode is not a game
 
