@@ -6,10 +6,14 @@ import type { Dictionary } from './translation'
  * editor that strips invisible characters.
  */
 export const FR_DICTIONARY: Dictionary = {
-  'blindtest.answer.artist': 'Artiste',
+  'blindtest.answer.artistFound': 'Artiste ✓',
+  'blindtest.answer.bothFound': 'Tu as les deux. Tranquille.',
+  'blindtest.answer.guess': 'Ta réponse',
   'blindtest.answer.locked': 'Réponse envoyée. On attend les autres…',
+  'blindtest.answer.oneAtATime':
+    'Le titre ou l’artiste — un à la fois, autant d’essais que tu veux.',
   'blindtest.answer.send': 'Envoyer',
-  'blindtest.answer.title': 'Titre',
+  'blindtest.answer.titleFound': 'Titre ✓',
   'blindtest.answer.waiting': '{count} ont répondu',
   'blindtest.answerMode.buzzer': 'Le premier qui buzze',
   'blindtest.answerMode.choice': 'Quatre propositions',

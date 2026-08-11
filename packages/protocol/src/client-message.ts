@@ -59,10 +59,14 @@ export const answerMessageSchema = z.object({
       kind: z.literal('choice')
     }),
     z.object({
-      /** Blank when the player only knew the other half. */
-      artist: z.string().max(120),
-      kind: z.literal('typed'),
-      title: z.string().max(120)
+      /**
+       * One claim, graded against the title and the artist independently —
+       * whichever it matches is banked. Two fields asked a player to know which
+       * half they were holding before they could say it, and a typed round is
+       * won by firing the moment something surfaces.
+       */
+      guess: z.string().min(1).max(120),
+      kind: z.literal('typed')
     })
   ]),
   roundId: roundIdSchema,

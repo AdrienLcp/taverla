@@ -9,7 +9,7 @@ import {
   serverTimeSchema
 } from './identifiers'
 import { hostQuestionSchema, questionPromptSchema } from './question'
-import { awardSchema } from './scoring'
+import { awardSchema, verdictSchema } from './scoring'
 import { hostTrackSchema, trackIdentitySchema } from './track'
 
 export const MAX_PLAYERS_PER_ROOM = 24
@@ -164,7 +164,17 @@ const baseRoomViewSchema = z.object({
   phase: roomPhaseSchema,
   players: z.array(publicPlayerSchema),
   round: roundViewSchema.nullable(),
-  settings: roomSettingsSchema
+  settings: roomSettingsSchema,
+  /**
+   * What the reader has banked this round, and `null` before their first guess
+   * or when they hold no seat. Typed mode takes as many guesses as the clip
+   * allows, so a player has to be told which half they already hold — otherwise
+   * "guess again" means guessing at what to guess at.
+   *
+   * Scoped to the reader on purpose. Everyone else's progress stays secret
+   * until the reveal, the same way `revealedAnswers` does.
+   */
+  yourVerdict: verdictSchema.nullable()
 })
 
 /**

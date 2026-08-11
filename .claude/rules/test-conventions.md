@@ -76,6 +76,27 @@ reason to prefer it.
 Playwright is the slowest tool available. Before adding a third spec, ask what
 it covers that a socket test cannot; the answer is usually "nothing".
 
+## Mute the browser before you drive it
+
+**Every browser session opened to verify something here starts at volume 0.**
+This repo's host console plays music, the stored volume defaults to 80%, and it
+survives across sessions in `localStorage` — so a page that merely *reaches* a
+round makes noise on whatever machine is running the dev server, which is
+somebody's flat.
+
+Write the muted value **before** the first navigation rather than dragging the
+slider afterwards, because by then the clip has already played:
+
+```ts
+await context.addInitScript(() => {
+  localStorage.setItem('taverla:volume', '0')
+})
+```
+
+Raise it to 5% at most, and only when the audio itself is what is being tested —
+the countdown landing on the first note, a buzz pausing the clip, a reload
+seeking back into a round.
+
 ## UI is still verified in a browser
 
 There is **no component runner in this repo** — no jsdom, no testing-library —

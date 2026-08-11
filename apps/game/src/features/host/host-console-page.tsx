@@ -238,7 +238,12 @@ const Stage = ({
           <ChoiceAnswer onAnswer={answerWithRound} round={round} />
         )}
         {isSeated && view.settings.answerMode === 'typed' && (
-          <TypedAnswer onAnswer={answerWithRound} round={round} />
+          <TypedAnswer
+            banked={view.yourVerdict}
+            key={round.id}
+            onAnswer={answerWithRound}
+            round={round}
+          />
         )}
         <Scoreboard players={view.players} />
       </div>

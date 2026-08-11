@@ -34,6 +34,8 @@ export const hostConsole = (page: Page) => ({
   refusal: page.getByRole('heading', {
     name: 'That room does not exist.'
   }),
+  /** Ends a simultaneous round the room is not going to finish on its own. */
+  reveal: page.getByRole('button', { name: 'Give it away' }),
   /** What a player wrote, published on the reveal and not before. */
   revealedAnswer: (said: string) =>
     page.getByRole('listitem').filter({ hasText: said }),
@@ -48,8 +50,8 @@ export const hostConsole = (page: Page) => ({
 })
 
 export const playerScreen = (page: Page) => ({
-  answerSent: page.getByText('Answer sent', { exact: false }),
-  answerTitle: page.getByRole('textbox', { name: 'Title' }),
+  /** One field for either half — the server decides which one a guess was. */
+  answerGuess: page.getByRole('textbox', { name: 'Your answer' }),
   buzz: page.getByRole('button', { name: 'Buzz' }),
   join: page.getByRole('button', { name: 'Join the game' }),
   nickname: page.getByRole('textbox', { name: 'Nickname' }),

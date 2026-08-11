@@ -131,8 +131,8 @@ describe('the two views', () => {
   it('[room] shows the host the pool, and no content before a round opens', () => {
     const view = toHostView({
       isHostConnected: true,
-      isHostPlaying: false,
-      room
+      room,
+      seatId: null
     })
 
     expect(view.remainingPoolSize).toBe(1)

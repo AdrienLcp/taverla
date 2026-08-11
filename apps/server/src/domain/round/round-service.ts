@@ -14,14 +14,17 @@ import {
 } from '@taverla/core/round/buzz-eligibility'
 import { isMiss, pointsFor } from '@taverla/core/scoring/award'
 import {
-  gradeTypedAnswer,
+  gradeGuess,
+  hasBothHalves,
+  NOTHING_BANKED,
   pointsForChoice,
   pointsForTypedAnswer,
   speedBonusForRank,
-  type TypedAttempt
+  type TypedAttempt,
+  withGuessBanked
 } from '@taverla/core/scoring/typed-answer'
 
-import type { Room, Round, SubmittedAnswer } from '@/domain/room/room'
+import type { PlayerAttempts, Room, Round } from '@/domain/room/room'
 import { touch } from '@/domain/room/room-service'
 import { drawChoices } from '@/domain/round/track-pool'
 
@@ -51,7 +54,7 @@ export const openRound = ({
 
   const round: Round = {
     activeBuzz: null,
-    answers: [],
+    attempts: [],
     awards: [],
     content: {
       choices: choices?.choices ?? [],
@@ -184,7 +187,12 @@ export const registerAnswer = ({
     return Result.failure('invalid_message')
   }
 
-  if (round.answers.some((answer) => answer.playerId === playerId)) {
+  const held = round.attempts.find((entry) => entry.playerId === playerId)
+
+  // A pick is one shot — four candidates with retries is just the answer with
+  // extra steps. Typing is open until the clip runs out, and closes only once
+  // there is nothing left to win.
+  if (held !== undefined && (attempt.kind === 'choice' || isDone(held))) {
     return Result.failure('already_buzzed')
   }
 
@@ -194,18 +202,70 @@ export const registerAnswer = ({
     return Result.failure('invalid_message')
   }
 
-  round.answers.push({ ...graded, atServerTime: now, playerId })
+  bank({ graded, held, now, playerId, round })
   touch(room, now)
 
   return Result.success(undefined)
 }
 
+const isDone = (attempts: PlayerAttempts): boolean =>
+  hasBothHalves(attempts.verdict)
+
+const bank = ({
+  graded,
+  held,
+  now,
+  playerId,
+  round
+}: {
+  graded: { said: string; verdict: Verdict }
+  held: PlayerAttempts | undefined
+  now: number
+  playerId: PlayerId
+  round: Round
+}): void => {
+  const entry = held ?? {
+    firstGuessedAt: now,
+    firstScoredAt: null,
+    landed: [],
+    lastMiss: null,
+    playerId,
+    verdict: NOTHING_BANKED
+  }
+
+  const banked = withGuessBanked({
+    banked: entry.verdict,
+    guessed: graded.verdict
+  })
+
+  const landedAHalf =
+    (banked.titleCorrect && !entry.verdict.titleCorrect) ||
+    (banked.artistCorrect && !entry.verdict.artistCorrect)
+
+  entry.verdict = banked
+
+  if (landedAHalf) {
+    entry.landed.push(graded.said)
+    entry.firstScoredAt ??= now
+  } else {
+    entry.lastMiss = graded.said
+  }
+
+  if (held === undefined) {
+    round.attempts.push(entry)
+  }
+}
+
 /**
- * Whether the round has heard from everyone it is waiting for. A phone that
- * dropped off Wi-Fi is not one of them, for the same reason a disconnected
- * player does not hold the clip open in buzzer mode.
+ * Whether the round has nothing left to wait for. A phone that dropped off
+ * Wi-Fi is not one of them, for the same reason a disconnected player does not
+ * hold the clip open in buzzer mode.
+ *
+ * "Done" is per mode, and the difference is the whole point of allowing
+ * retries: a pick ends a player's round, where a typed player is only finished
+ * once they hold both halves — until then the clip is still theirs to use.
  */
-export const everyoneHasAnswered = (room: Room): boolean => {
+export const everyoneIsDone = (room: Room): boolean => {
   const round = room.round
 
   if (round === null) {
@@ -218,9 +278,17 @@ export const everyoneHasAnswered = (room: Room): boolean => {
 
   return (
     expected.length > 0 &&
-    expected.every((participant) =>
-      round.answers.some((answer) => answer.playerId === participant.id)
-    )
+    expected.every((participant) => {
+      const held = round.attempts.find(
+        (entry) => entry.playerId === participant.id
+      )
+
+      if (held === undefined) {
+        return false
+      }
+
+      return room.settings.answerMode === 'choice' || isDone(held)
+    })
   )
 }
 
@@ -243,16 +311,14 @@ export const settleSimultaneousRound = (room: Room, now: number): void => {
       ? pointsForChoice
       : pointsForTypedAnswer
 
-  for (const answer of [...round.answers].sort(
-    (one, other) => one.atServerTime - other.atServerTime
-  )) {
-    const earned = earnedBy(answer.verdict)
+  for (const attempts of [...round.attempts].sort(byFirstScored)) {
+    const earned = earnedBy(attempts.verdict)
 
     if (earned === 0) {
       round.awards.push({
-        playerId: answer.playerId,
+        playerId: attempts.playerId,
         points: 0,
-        verdict: answer.verdict
+        verdict: attempts.verdict
       })
 
       continue
@@ -262,21 +328,29 @@ export const settleSimultaneousRound = (room: Room, now: number): void => {
 
     rankAmongCorrect += 1
 
-    const participant = room.players.get(answer.playerId)
+    const participant = room.players.get(attempts.playerId)
 
     if (participant !== undefined) {
       participant.score += points
     }
 
     round.awards.push({
-      playerId: answer.playerId,
+      playerId: attempts.playerId,
       points,
-      verdict: answer.verdict
+      verdict: attempts.verdict
     })
   }
 
   revealRound(room, now)
 }
+
+/**
+ * The bonus queue: whoever banked something first heads it, and everyone who
+ * banked nothing sorts to the back where they cannot take a place.
+ */
+const byFirstScored = (one: PlayerAttempts, other: PlayerAttempts): number =>
+  (one.firstScoredAt ?? Number.POSITIVE_INFINITY) -
+  (other.firstScoredAt ?? Number.POSITIVE_INFINITY)
 
 const grade = ({
   attempt,
@@ -284,7 +358,7 @@ const grade = ({
 }: {
   attempt: { kind: 'choice'; choiceIndex: number } | TypedAttempt
   round: Round
-}): Pick<SubmittedAnswer, 'said' | 'verdict'> | null => {
+}): { said: string; verdict: Verdict } | null => {
   if (attempt.kind === 'choice') {
     const picked = round.content.choices[attempt.choiceIndex]
 
@@ -300,13 +374,9 @@ const grade = ({
     }
   }
 
-  const verdict = gradeTypedAnswer({ attempt, track: round.content.track })
-
   return {
-    said: [attempt.title, attempt.artist]
-      .filter((half) => half !== '')
-      .join(' — '),
-    verdict
+    said: attempt.guess,
+    verdict: gradeGuess({ guess: attempt.guess, track: round.content.track })
   }
 }
 

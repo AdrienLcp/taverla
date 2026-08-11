@@ -37,7 +37,8 @@ const viewFor = (
   players: [{ id: 'me', isConnected: true, nickname: 'Alice', score: 0 }],
   round,
   settings: DEFAULT_ROOM_SETTINGS,
-  youId: 'me'
+  youId: 'me',
+  yourVerdict: null
 })
 
 describe('findBuzzBlocker', () => {

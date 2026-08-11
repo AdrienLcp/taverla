@@ -48,6 +48,24 @@ describe('answering all at once', () => {
     return { code, host, max, zoe }
   }
 
+  /**
+   * One phone in the room, so it is that phone finishing that closes the round
+   * rather than the clip running out. A second seat nobody answers from costs
+   * every assertion the full clip.
+   */
+  const soloRoundInPlay = async (settings: RoomSettings) => {
+    const { code, host } = await harness.openRoom(settings)
+    const zoe = await harness.seat({ code, nickname: 'Zoe' })
+
+    host.send({ type: 'host.startRound' })
+    await waitFor(
+      () => playerView(zoe)?.phase === 'playing',
+      'the clip to start'
+    )
+
+    return { code, host, zoe }
+  }
+
   it('[choice] hands every phone the same candidates and never which is right', async () => {
     const { host, zoe } = await roundInPlay(CHOICE_GAME)
 
@@ -188,16 +206,28 @@ describe('answering all at once', () => {
       'the clip to start'
     )
 
+    // The seat is why this screen cannot read the answer off its own view, so
+    // the guess is a miss and the clip is what ends the round.
+    expect(hostContent(host)?.track).toBeNull()
+
+    const roundId = hostView(host)?.round?.id ?? ''
+
     host.send({
-      answer: { artist: '', kind: 'typed', title: 'a guess' },
-      roundId: hostView(host)?.round?.id ?? '',
+      answer: { guess: 'a guess', kind: 'typed' },
+      roundId,
       type: 'player.answer'
     })
+    await waitFor(
+      () => (hostView(host)?.round?.answers.length ?? 0) === 1,
+      'the guess to land'
+    )
 
-    // One seated player, so their answer is the last one and closes the round.
+    // Nothing was banked, so nothing closes this round by itself — the host
+    // calls it, which is the other way a simultaneous round ends.
+    host.send({ roundId, type: 'host.reveal' })
     await waitFor(
       () => hostView(host)?.phase === 'revealed',
-      'the round to close on the host’s own answer'
+      'the host to close the round'
     )
 
     expect(
@@ -205,7 +235,7 @@ describe('answering all at once', () => {
     ).toEqual(['a guess'])
   })
 
-  it('[typed] scores the halves, the pair and the speed', async () => {
+  it('[typed] banks one half at a time, and ranks on the first that landed', async () => {
     const { host, max, zoe } = await roundInPlay(TYPED_GAME)
 
     const roundId = playerView(zoe)?.round?.id ?? ''
@@ -215,27 +245,34 @@ describe('answering all at once', () => {
       throw new Error('the host should hold the track')
     }
 
-    // Zoe has the whole thing and gets there first; Max has only the artist.
-    zoe.send({
-      answer: { artist: track.artist, kind: 'typed', title: track.title },
-      roundId,
-      type: 'player.answer'
-    })
+    const guess = (peer: typeof zoe, said: string) => {
+      peer.send({
+        answer: { guess: said, kind: 'typed' },
+        roundId,
+        type: 'player.answer'
+      })
+    }
 
+    // Zoe banks the title first, so she heads the bonus queue even though Max
+    // completes the pair right behind her.
+    guess(zoe, track.title)
     await waitFor(
-      () => (playerView(max)?.round?.answers.length ?? 0) === 1,
-      'Zoe to be in'
+      () => playerView(zoe)?.yourVerdict?.titleCorrect === true,
+      'Zoe’s title to be banked'
     )
 
-    max.send({
-      answer: { artist: track.artist, kind: 'typed', title: 'nothing like it' },
-      roundId,
-      type: 'player.answer'
-    })
+    guess(max, track.artist)
+    await waitFor(
+      () => playerView(max)?.yourVerdict?.artistCorrect === true,
+      'Max’s artist to be banked'
+    )
+
+    guess(zoe, track.artist)
+    guess(max, track.title)
 
     await waitFor(
       () => playerView(zoe)?.phase === 'revealed',
-      'the round to close'
+      'the round to close once both hold the pair'
     )
 
     const scores = new Map(
@@ -245,14 +282,14 @@ describe('answering all at once', () => {
       ])
     )
 
-    // Title + artist + the pair bonus, and +2 for being the first correct one.
+    // The pair pays 3 however it was reached, and the queue is decided by who
+    // banked something first: +2 for Zoe, +1 for Max.
     expect(scores.get('Zoe')).toBe(5)
-    // The artist alone, and +1 for being the second correct answer.
-    expect(scores.get('Max')).toBe(2)
+    expect(scores.get('Max')).toBe(4)
   })
 
-  it('[typed] forgives what the room actually types', async () => {
-    const { host, max, zoe } = await roundInPlay(TYPED_GAME)
+  it('[typed] keeps a player in the round after a guess that lands nothing', async () => {
+    const { host, zoe } = await soloRoundInPlay(TYPED_GAME)
 
     const roundId = playerView(zoe)?.round?.id ?? ''
     const track = hostContent(host)?.track
@@ -262,19 +299,88 @@ describe('answering all at once', () => {
     }
 
     zoe.send({
+      answer: { guess: 'nothing like it', kind: 'typed' },
+      roundId,
+      type: 'player.answer'
+    })
+    await waitFor(
+      () => (playerView(zoe)?.round?.answers.length ?? 0) === 1,
+      'Zoe to be in'
+    )
+
+    expect(errorsIn(zoe)).toEqual([])
+    expect(playerView(zoe)?.yourVerdict).toEqual({
+      artistCorrect: false,
+      titleCorrect: false
+    })
+
+    zoe.send({
+      answer: { guess: track.title, kind: 'typed' },
+      roundId,
+      type: 'player.answer'
+    })
+
+    await waitFor(
+      () => playerView(zoe)?.yourVerdict?.titleCorrect === true,
+      'the second guess to be banked'
+    )
+  })
+
+  it('[typed] refuses a guess from a player who already holds both halves', async () => {
+    const { host, zoe } = await soloRoundInPlay(TYPED_GAME)
+
+    const roundId = playerView(zoe)?.round?.id ?? ''
+    const track = hostContent(host)?.track
+
+    if (track === undefined || track === null) {
+      throw new Error('the host should hold the track')
+    }
+
+    for (const said of [track.title, track.artist]) {
+      zoe.send({
+        answer: { guess: said, kind: 'typed' },
+        roundId,
+        type: 'player.answer'
+      })
+    }
+
+    await waitFor(
+      () => playerView(zoe)?.phase === 'revealed',
+      'the round to close'
+    )
+
+    zoe.send({
+      answer: { guess: 'one more for luck', kind: 'typed' },
+      roundId,
+      type: 'player.answer'
+    })
+
+    await waitFor(() => errorsIn(zoe).length > 0, 'the refusal')
+  })
+
+  it('[typed] forgives what the room actually types', async () => {
+    const { host, zoe } = await soloRoundInPlay(TYPED_GAME)
+
+    const roundId = playerView(zoe)?.round?.id ?? ''
+    const track = hostContent(host)?.track
+
+    if (track === undefined || track === null) {
+      throw new Error('the host should hold the track')
+    }
+
+    zoe.send({
+      answer: { guess: track.title.toLowerCase(), kind: 'typed' },
+      roundId,
+      type: 'player.answer'
+    })
+    zoe.send({
       answer: {
-        artist: track.artist.toLowerCase().replace(/\s/g, ''),
-        kind: 'typed',
-        title: track.title.toLowerCase()
+        guess: track.artist.toLowerCase().replace(/\s/g, ''),
+        kind: 'typed'
       },
       roundId,
       type: 'player.answer'
     })
-    max.send({
-      answer: { artist: '', kind: 'typed', title: '' },
-      roundId,
-      type: 'player.answer'
-    })
 
     await waitFor(
       () => playerView(zoe)?.phase === 'revealed',
@@ -289,7 +395,6 @@ describe('answering all at once', () => {
     )
 
     expect(scores.get('Zoe')).toBe(5)
-    expect(scores.get('Max')).toBe(0)
   })
 
   it('[typed] shows what everyone said, only once the answer is out', async () => {
@@ -303,7 +408,7 @@ describe('answering all at once', () => {
     }
 
     zoe.send({
-      answer: { artist: '', kind: 'typed', title: 'a wild guess' },
+      answer: { guess: 'a wild guess', kind: 'typed' },
       roundId,
       type: 'player.answer'
     })
@@ -318,17 +423,29 @@ describe('answering all at once', () => {
       'a wild guess'
     )
 
-    max.send({
-      answer: { artist: track.artist, kind: 'typed', title: track.title },
-      roundId,
-      type: 'player.answer'
-    })
+    for (const said of [track.title, track.artist]) {
+      max.send({
+        answer: { guess: said, kind: 'typed' },
+        roundId,
+        type: 'player.answer'
+      })
+    }
+
+    // Zoe never lands anything, so she is not done and the round would run to
+    // the end of the clip. The host calls it instead.
+    await waitFor(
+      () => playerView(max)?.yourVerdict?.artistCorrect === true,
+      'Max to hold the pair'
+    )
+    host.send({ roundId, type: 'host.reveal' })
 
     await waitFor(
       () => (playerView(max)?.round?.revealedAnswers.length ?? 0) === 2,
       'the answers to be published'
     )
 
+    // Hers is the miss, kept because a name with nothing beside it reads as a
+    // bug rather than as a player who tried.
     expect(
       playerView(max)?.round?.revealedAnswers.map((answer) => answer.said)
     ).toContain('a wild guess')

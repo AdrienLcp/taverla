@@ -4,8 +4,8 @@ import { blindTestHome, homePage, hostConsole, playerScreen } from './locators'
 
 /**
  * The buzzer journey covers one player taking the floor. This one covers the
- * opposite shape — two phones answering over the same clip, the round closing
- * on the last of them, and the reveal saying what each of them wrote.
+ * opposite shape — two phones guessing over the same clip, each of them free to
+ * keep firing, and the reveal saying what each of them last wrote.
  *
  * It earns its place against a socket suite because none of that is a rule: it
  * is two browsers, two forms and a screen that has to end up showing both
@@ -45,19 +45,28 @@ test('[e2e] two phones type over the same clip, and the reveal says what they sa
   const zoe = playerScreen(firstPhone)
   const max = playerScreen(secondPhone)
 
-  await zoe.answerTitle.fill('a wild guess')
+  await zoe.answerGuess.fill('a wild guess')
   await zoe.sendAnswer.click()
 
-  // One answer does not take the floor: the other phone can still write. Its
-  // field rather than its button — an empty answer is refused on its own merits.
-  await expect(zoe.answerSent).toBeVisible()
-  await expect(max.answerTitle).toBeEditable()
+  // A guess that lands nothing costs the round nothing: the field empties and
+  // is ready for the next one, which is the whole point of one field.
+  await expect(zoe.answerGuess).toHaveValue('')
+  await expect(zoe.answerGuess).toBeEditable()
 
-  await max.answerTitle.fill('another one')
+  await zoe.answerGuess.fill('and another')
+  await zoe.sendAnswer.click()
+  await expect(zoe.answerGuess).toHaveValue('')
+
+  // One phone guessing does not take the floor: the other can still write.
+  await max.answerGuess.fill('another one')
   await max.sendAnswer.click()
 
-  // The last answer closes the round for the whole room, host included.
-  await expect(host.revealedAnswer('a wild guess')).toBeVisible()
+  // Nobody found anything, so nothing closes this round by itself.
+  await host.reveal.click()
+
+  // Their latest miss, not their first: a name on the reveal with nothing
+  // beside it reads as a bug rather than as a player who tried.
+  await expect(host.revealedAnswer('and another')).toBeVisible()
   await expect(host.revealedAnswer('another one')).toBeVisible()
   await expect(firstPhone.getByText('It was')).toBeVisible()
 })

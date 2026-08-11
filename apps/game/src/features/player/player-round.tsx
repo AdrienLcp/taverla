@@ -105,7 +105,12 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
     if (view.settings.answerMode === 'typed') {
       return (
         <section className='player-round'>
-          <TypedAnswer onAnswer={answerWithRound} round={view.round} />
+          <TypedAnswer
+            banked={view.yourVerdict}
+            key={view.round.id}
+            onAnswer={answerWithRound}
+            round={view.round}
+          />
         </section>
       )
     }

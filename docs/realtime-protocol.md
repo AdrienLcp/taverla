@@ -37,6 +37,7 @@ second socket is a reclaim, not a stranger.
 | `hello` | both | `protocolVersion`, `role`, `sessionId?`, `nickname?` |
 | `time.ping` | both | `clientSentAt` |
 | `player.buzz` | player | `roundId` |
+| `player.answer` | player | `roundId`, `answer` — `{kind:'choice', choiceIndex}` or `{kind:'typed', guess}` |
 | `host.updateSettings` | host | `settings` |
 | `host.startRound` | host | — |
 | `host.judge` | host | `roundId`, `playerId`, `verdict` |
@@ -124,6 +125,12 @@ The player view adds instead:
 ```jsonc
 { "youId": "…" }
 ```
+
+Both views carry `yourVerdict`: the halves *the reader* has banked this round,
+and `null` before their first guess or when they hold no seat. Typed mode takes
+as many guesses as the clip allows, so a player has to be told which half they
+already hold. It is scoped to the reader — everyone else's progress stays secret
+until the reveal, like `revealedAnswers`.
 
 `HostTrack` reaches the wire in exactly two places: the host view, and
 `round.content.revealedTrack` once the round is over — and the reveal carries no

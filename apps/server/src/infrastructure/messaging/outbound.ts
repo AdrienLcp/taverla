@@ -68,8 +68,8 @@ export const sendWelcome = (
           type: 'welcome',
           view: toHostView({
             isHostConnected: hostIsThere,
-            isHostPlaying: connection.playerId !== null,
-            room
+            room,
+            seatId: connection.playerId
           })
         })
       : encodeChecked(playerServerMessageSchema, {
@@ -102,8 +102,8 @@ export const broadcastRoom = (room: Room): void => {
             type: 'room.updated',
             view: toHostView({
               isHostConnected: hostIsThere,
-              isHostPlaying: connection.playerId !== null,
-              room
+              room,
+              seatId: connection.playerId
             })
           })
         : encodeChecked(playerServerMessageSchema, {

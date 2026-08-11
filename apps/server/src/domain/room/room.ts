@@ -49,22 +49,35 @@ export type Participant = {
  * than handing the next player a fresh thirty seconds.
  */
 /**
- * One player's answer in a simultaneous round, graded on arrival. It is held
- * whole here and projected twice: as a name and a time while the round runs,
- * and with what they said once the answer is public.
+ * Everything one player did in a simultaneous round, graded as it arrived. It
+ * is projected twice: as a name and a time while the round runs, and with what
+ * they said once the answer is public.
+ *
+ * Typed mode takes as many guesses as the clip allows, so this accumulates.
+ * Choice mode fills it once and refuses a second pick.
  */
-export type SubmittedAnswer = {
-  atServerTime: number
+export type PlayerAttempts = {
+  /** Their first guess of any kind — the name appearing on the room's screen. */
+  firstGuessedAt: number
+  /**
+   * Their first guess that banked a half, and `null` while they have none. The
+   * speed bonus ranks on this rather than on arrival: being quickly wrong wins
+   * nothing, and with several guesses allowed it must not win a queue place
+   * either.
+   */
+  firstScoredAt: number | null
+  /** The guesses that banked a half, in the order they landed. */
+  landed: string[]
+  /** Their latest guess that banked nothing — what the reveal shows when nothing landed. */
+  lastMiss: string | null
   playerId: PlayerId
-  /** What the reveal shows: the choice they picked, or the two fields they typed. */
-  said: string
   verdict: Verdict
 }
 
 export type Round = {
   activeBuzz: { atServerTime: number; playerId: PlayerId } | null
   /** Buzzer mode leaves this empty; the other two fill it as frames arrive. */
-  answers: SubmittedAnswer[]
+  attempts: PlayerAttempts[]
   awards: Award[]
   /**
    * What the round is asking, in the vocabulary of the game asking it — and the

@@ -50,8 +50,10 @@ Ports are offset from 3000/5173 so this repo runs beside other dev servers.
 2. **The server owns time.** Buzz order is stamped on arrival; `player.buzz`
    carries no timestamp, and never will.
 3. **State travels as a whole snapshot**, never a delta.
-4. **UI is verified in a real browser.** A type-check and a green build say
-   nothing about whether a screen works.
+4. **UI is verified in a real browser, muted.** A type-check and a green build
+   say nothing about whether a screen works — and this one plays music, at a
+   stored volume that defaults to 80%. Set `taverla:volume` to `'0'` in an init
+   script before the first navigation. See `.claude/rules/test-conventions.md`.
 
 ## Rules (auto-loaded from `.claude/rules/`)
 
@@ -117,11 +119,15 @@ string written into a component is a bug, not a shortcut — see
 - **Player** — anyone who joined, by scanning the QR code or by typing the room
   code. Holds a seat and a score
 - **Round** — one track. `lobby → countdown → playing → buzzed → revealed`
-- **Answer mode** — `typed` (two fields, the default), `choice` (four
-  candidates) or `buzzer` (one player, judged by the host). The first two are
-  everyone at once, decided by the server, and scored by speed on top of being
-  right. Typing pays 3 for the pair where a right pick pays 1: producing the
-  answer from nothing is not the same act as recognising it among four
+- **Answer mode** — `typed` (one field, the default), `choice` (four candidates)
+  or `buzzer` (one player, judged by the host). The first two are everyone at
+  once, decided by the server, and scored by speed on top of being right. Typing
+  pays 3 for the pair where a right pick pays 1: producing the answer from
+  nothing is not the same act as recognising it among four
+- **Guess** — one typed claim, graded against the title and the artist
+  independently; whichever it matches is **banked**. Typed mode allows as many
+  as the clip does and closes for a player once they hold both halves; a pick is
+  one shot, because four candidates with retries is the answer with extra steps
 - **Buzz** — a player claiming the answer; the server stamps when it arrived
 - **Lockout** — a player who answered wrong sits out the rest of the round
 - **Reveal** — the moment the track identity becomes public

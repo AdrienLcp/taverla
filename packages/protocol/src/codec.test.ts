@@ -29,7 +29,8 @@ const playerView: PlayerRoomView = {
   players: [{ id: 'p1', isConnected: true, nickname: 'Alice', score: 2 }],
   round: runningRound,
   settings: DEFAULT_ROOM_SETTINGS,
-  youId: 'p1'
+  youId: 'p1',
+  yourVerdict: null
 }
 
 describe('decodeMessage', () => {

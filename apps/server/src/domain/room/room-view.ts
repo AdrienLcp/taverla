@@ -13,7 +13,7 @@ import { pointsFor } from '@taverla/core/scoring/award'
 
 import { elapsedPlaybackMs } from '@/domain/round/round-service'
 
-import type { Participant, Room, Round } from './room'
+import type { Participant, PlayerAttempts, Room, Round } from './room'
 
 /**
  * The single seam between the server's model and the wire. Everything secret —
@@ -22,34 +22,32 @@ import type { Participant, Room, Round } from './room'
  */
 export const toHostView = ({
   isHostConnected,
-  isHostPlaying,
-  room
+  room,
+  seatId
 }: {
   isHostConnected: boolean
-  /** A host who took a seat reads the same round everyone else does. */
-  isHostPlaying: boolean
   room: Room
+  /** The seat this host took, if they took one — they then read what a player reads. */
+  seatId: PlayerId | null
 }): HostRoomView => ({
-  ...toBaseView({ isHostConnected, room }),
+  ...toBaseView({ isHostConnected, room, youId: seatId }),
   currentContent:
-    room.round === null
-      ? null
-      : toHostContent({ isHostPlaying, round: room.round }),
+    room.round === null ? null : toHostContent({ round: room.round, seatId }),
   remainingPoolSize: room.trackPool.length,
   roundElapsedMs:
     room.round === null ? 0 : elapsedPlaybackMs(room.round, Date.now())
 })
 
 const toHostContent = ({
-  isHostPlaying,
-  round
+  round,
+  seatId
 }: {
-  isHostPlaying: boolean
   round: Round
+  seatId: PlayerId | null
 }): HostRoundContent => ({
   audioUrl: round.content.track.previewUrl,
   kind: 'blindtest',
-  track: isHostPlaying ? null : round.content.track
+  track: seatId === null ? round.content.track : null
 })
 
 export const toPlayerView = ({
@@ -61,23 +59,30 @@ export const toPlayerView = ({
   room: Room
   youId: PlayerId
 }): PlayerRoomView => ({
-  ...toBaseView({ isHostConnected, room }),
+  ...toBaseView({ isHostConnected, room, youId }),
   youId
 })
 
 const toBaseView = ({
   isHostConnected,
-  room
+  room,
+  youId
 }: {
   isHostConnected: boolean
   room: Room
+  youId: PlayerId | null
 }) => ({
   code: room.code,
   isHostConnected,
   phase: room.phase,
   players: [...room.players.values()].map(toPublicPlayer),
   round: room.round === null ? null : toRoundView(room.round),
-  settings: room.settings
+  settings: room.settings,
+  yourVerdict:
+    youId === null
+      ? null
+      : (room.round?.attempts.find((entry) => entry.playerId === youId)
+          ?.verdict ?? null)
 })
 
 const toPublicPlayer = (participant: Participant): PublicPlayer => ({
@@ -95,8 +100,8 @@ const toPublicPlayer = (participant: Participant): PublicPlayer => ({
  */
 const toRoundView = (round: Round): RoundView => ({
   activeBuzz: round.activeBuzz,
-  answers: round.answers.map(({ atServerTime, playerId }) => ({
-    atServerTime,
+  answers: round.attempts.map(({ firstGuessedAt, playerId }) => ({
+    atServerTime: firstGuessedAt,
     playerId
   })),
   awards: round.awards,
@@ -105,15 +110,25 @@ const toRoundView = (round: Round): RoundView => ({
   index: round.index,
   lockedOutPlayerIds: [...round.lockedOutPlayerIds],
   revealedAnswers: round.revealed
-    ? round.answers.map((answer) => ({
-        atServerTime: answer.atServerTime,
-        isCorrect: pointsFor(answer.verdict) > 0,
-        playerId: answer.playerId,
-        said: answer.said
+    ? round.attempts.map((attempts) => ({
+        atServerTime: attempts.firstGuessedAt,
+        isCorrect: pointsFor(attempts.verdict) > 0,
+        playerId: attempts.playerId,
+        said: saidBy(attempts)
       }))
     : [],
   startsAt: round.startsAt
 })
+
+/**
+ * What they got, or their last miss when they got nothing — a name on the
+ * reveal with nothing beside it reads as a bug rather than as a player who
+ * tried.
+ */
+const saidBy = (attempts: PlayerAttempts): string =>
+  attempts.landed.length > 0
+    ? attempts.landed.join(' · ')
+    : (attempts.lastMiss ?? '')
 
 const toContentView = (round: Round): RoundContent => ({
   choices: round.content.choices,

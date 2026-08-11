@@ -47,3 +47,18 @@
       display: flex
       flex-direction: column
       gap: var(--space-m)
+
+    // Only what this player banked, so it sits with their own field rather than
+    // on the room's screen — and it is empty until something lands.
+    .banked
+      display: flex
+      flex-wrap: wrap
+      gap: var(--space-xs)
+      justify-content: center
+
+    .half
+      @include typography.label
+
+      background: var(--ink)
+      color: var(--field)
+      padding: var(--space-2xs) var(--space-s)

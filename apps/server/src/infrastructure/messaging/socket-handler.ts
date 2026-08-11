@@ -25,7 +25,7 @@ import {
 import { findRoom } from '@/domain/room/room-store'
 import {
   applyVerdict,
-  everyoneHasAnswered,
+  everyoneIsDone,
   finishGame,
   isFinalRound,
   registerAnswer,
@@ -495,7 +495,7 @@ export const createRoomSocketEvents = (
       return
     }
 
-    if (everyoneHasAnswered(room)) {
+    if (everyoneIsDone(room)) {
       abandonRound(room.code)
       closeRound(room)
       broadcastRoom(room)

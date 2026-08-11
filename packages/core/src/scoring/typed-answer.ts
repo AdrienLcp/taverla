@@ -10,10 +10,8 @@ import {
 import { matchesAnswer } from '../round/answer-matching'
 
 export type TypedAttempt = {
-  /** Blank when the player only knew one of the two. */
-  artist: string
+  guess: string
   kind: 'typed'
-  title: string
 }
 
 type TrackAnswer = {
@@ -22,23 +20,50 @@ type TrackAnswer = {
 }
 
 /**
- * The server grades a typed answer where the host judges a spoken one, so this
+ * The server grades a typed guess where the host judges a spoken one, so this
  * returns the same `Verdict` the buzzer mode produces. Whichever way a round is
  * played, the reveal and the scoreboard read one shape.
+ *
+ * One guess is measured against **both** halves rather than the player saying
+ * which they meant: `matchesAnswer` compares whole strings, so a guess that is
+ * the title cannot accidentally be the artist. What it costs is that both
+ * halves in one line match neither — which is why the field says to send one
+ * thing at a time, and why the pair is reached in two guesses.
  */
-export const gradeTypedAnswer = ({
-  attempt,
+export const gradeGuess = ({
+  guess,
   track
 }: {
-  attempt: TypedAttempt
+  guess: string
   track: TrackAnswer
 }): Verdict => ({
-  artistCorrect: matchesAnswer({
-    expected: track.artist,
-    given: attempt.artist
-  }),
-  titleCorrect: matchesAnswer({ expected: track.title, given: attempt.title })
+  artistCorrect: matchesAnswer({ expected: track.artist, given: guess }),
+  titleCorrect: matchesAnswer({ expected: track.title, given: guess })
 })
+
+/**
+ * Everything a player has banked so far. Verdicts only ever gain halves within
+ * a round: a guess that misses takes nothing away, because the clip is already
+ * the cost of guessing again.
+ */
+export const withGuessBanked = ({
+  banked,
+  guessed
+}: {
+  banked: Verdict
+  guessed: Verdict
+}): Verdict => ({
+  artistCorrect: banked.artistCorrect || guessed.artistCorrect,
+  titleCorrect: banked.titleCorrect || guessed.titleCorrect
+})
+
+export const hasBothHalves = (verdict: Verdict): boolean =>
+  verdict.artistCorrect && verdict.titleCorrect
+
+export const NOTHING_BANKED: Verdict = {
+  artistCorrect: false,
+  titleCorrect: false
+}
 
 /**
  * Half an answer scores on its own — a player who recognised the voice but not
