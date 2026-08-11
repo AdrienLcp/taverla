@@ -95,9 +95,11 @@ mechanism the whole catalogue of future games inherits.
   name. Known noise, judged not to be a conflict: a small Mexican candle maker
   ("Velas Taverla") and a surname.
 
-  **`Blind test` remains the name of the game**, and nothing yet displays the
-  product name — with one game on the shelf there is no place it belongs. It
-  gets a home when the second game does.
+  **`Blind test` remains the name of the game.** The product name lives where
+  the shelf is addressed rather than where a game is played: the wordmark on the
+  home page, the document title, and what a shared link unfurls into. No game
+  screen carries it, and none should — a player who scanned a QR code is in a
+  blind test, not in Taverla.
 
   Still owed before committing commercially: INPI and EUIPO. Everything below
   was a registry and web check, never a trademark clearance.

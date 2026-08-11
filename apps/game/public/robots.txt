@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /$
+Allow: /blindtest
+
+# A room is one evening long and its code is shared by hand. The SPA fallback
+# answers 200 on any path, so without this a link pasted into a public place
+# would put a dead room in an index.
+Disallow: /host/
+Disallow: /play/

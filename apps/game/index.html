@@ -3,10 +3,47 @@
   <head>
     <meta charset="UTF-8" />
     <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
-    <meta content="#c2410c" name="theme-color" />
+
+    <!--
+      The two lobby grounds, because the lobby is what a cold load paints
+      before React decides anything. They are `--field-lobby` in each palette:
+      if that token moves, these move with it.
+    -->
+    <meta content="#a8330d" media="(prefers-color-scheme: dark)" name="theme-color" />
+    <meta content="#ff7a3d" media="(prefers-color-scheme: light)" name="theme-color" />
+
     <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+    <!-- iOS ignores an SVG icon outright, and a phone is where this is added to a home screen. -->
+    <link href="/apple-touch-icon.png" rel="apple-touch-icon" />
     <link as="font" crossorigin href="/fonts/archivo-latin.woff2" rel="preload" type="font/woff2" />
-    <title>Blind Test</title>
+
+    <title>Taverla — party games for one screen and everyone's phone</title>
+    <meta
+      content="Party games for a room full of phones. One screen runs the game, everyone joins by scanning a QR code — no install, no account. Blind test first."
+      name="description"
+    />
+    <!--
+      Absolute, because most scrapers refuse to resolve a relative one. Both
+      this and `og:url` are the deployment's origin: they change the day a
+      custom domain does, and nothing else in the app hardcodes a host.
+    -->
+    <link href="https://taverla.onrender.com/" rel="canonical" />
+
+    <meta content="website" property="og:type" />
+    <meta content="Taverla" property="og:site_name" />
+    <meta content="Taverla — party games for one screen and everyone's phone" property="og:title" />
+    <meta
+      content="One screen runs the game, everyone joins by scanning a QR code. No install, no account."
+      property="og:description"
+    />
+    <meta content="https://taverla.onrender.com/" property="og:url" />
+    <meta content="https://taverla.onrender.com/og.png" property="og:image" />
+    <meta content="1200" property="og:image:width" />
+    <meta content="630" property="og:image:height" />
+    <meta content="The Taverla wordmark on the lobby's burnt-orange field." property="og:image:alt" />
+    <meta content="en_US" property="og:locale" />
+    <meta content="fr_FR" property="og:locale:alternate" />
+    <meta content="summary_large_image" name="twitter:card" />
     <!--
       The cascade order lives here, not in a stylesheet, because a layer's
       position is fixed by where its name FIRST appears. Every component
