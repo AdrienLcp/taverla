@@ -24,7 +24,7 @@
     "preinstall": "git config core.hooksPath .githooks || true",
     "test": "pnpm --filter @taverla/protocol --filter @taverla/core --filter @taverla/server test",
     "test:core:watch": "pnpm --filter @taverla/core test:watch",
-    "test:e2e": "tsc --noEmit -p e2e && playwright test",
+    "test:e2e": "tsc --noEmit -p e2e && playwright test -c e2e",
     "validate": "pnpm build && pnpm test && pnpm test:e2e"
   },
   "type": "module",

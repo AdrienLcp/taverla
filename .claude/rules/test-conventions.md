@@ -65,9 +65,38 @@ leaves behind. The third earns its place because the two shapes are opposites �
 one player taking the floor against everyone writing at once — and neither is a
 rule a socket suite could stand in for: it is two browsers, two forms, and a
 screen that has to end up showing both answers. They run on ports of their own against
-`e2e/deezer-stub.ts`, so neither the dev server nor today's charts can turn them
-red. Locators are roles and accessible names, gathered in `e2e/locators.ts` —
-never a `data-testid`.
+`e2e/support/deezer-stub.ts`, so neither the dev server nor today's charts can
+turn them red. Locators are roles and accessible names, gathered in
+`e2e/support/locators.ts` — never a `data-testid`.
+
+**Everything Playwright owns lives in `e2e/`**, config included: `ls e2e`
+answers "which journeys exist?" and nothing else, and `support/` holds the two
+files that are not tests — the stub is a fake upstream service, not a spec.
+
+Two paths resolve from two different places, and guessing gets one of them
+wrong. `webServer.cwd` defaults to the **config's** directory, so the stub is
+started as `support/deezer-stub.ts` and not `e2e/support/deezer-stub.ts`.
+`outputDir` defaults from the **process's** working directory instead, so traces
+still land in `test-results` at the repository root — which is where CI collects
+them, and why moving the config did not move them.
+
+**`pnpm build` does not type-check `e2e/`.** It is `pnpm -r build`, per package,
+and the root `tsconfig.json` includes only `apps/**/*` and `packages/**/*` — so
+the only thing that reads a locator file is the `tsc --noEmit -p e2e` bolted to
+the front of `test:e2e`. That is accepted rather than overlooked: it runs before
+Playwright starts and costs about a second, and `pnpm validate` runs the lot.
+Closing it is one line — `"build": "pnpm -r build && tsc --noEmit -p e2e"` — for
+the day a type error in `support/` gets through a bare `pnpm build`.
+
+**The locators are shaped by screen**, which is how a spec reads, and the buzzer
+shipped without changing that. Two members of `hostConsole` have started to
+diverge — `answer` and `verdictBoth` are the blind test's, not the room's, where
+`buzzerMode` is a room setting the game narrows. The split, when it comes,
+follows the seam the domain already has: `support/locators/room.ts` beside
+`support/locators/blindtest.ts`, so a spec composes `hostConsole(page)` with
+`blindTestHost(page)`. **The trigger is the third case**, same threshold
+`CLAUDE.md` sets for the `mode` axis — the quiz bringing its own, or the first
+locator only the buzzer can use. Not the second.
 
 **Build before running them.** Playwright starts the server with
 `pnpm --filter @taverla/server start`, which is `node dist/index.mjs` — the

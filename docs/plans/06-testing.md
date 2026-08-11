@@ -36,12 +36,13 @@ room nobody holds and asserts the console is *replaced* by a reason and a way
 out, rather than annotated.
 
 The journeys run on their own ports (`5274`, `3101`, `3199`) so they never
-borrow — or evict — a dev server, and against `e2e/deezer-stub.ts` rather than
-the real catalogue, reached through the `DEEZER_API_URL` seam. Nothing about
-what is charting today can turn them red.
+borrow — or evict — a dev server, and against `e2e/support/deezer-stub.ts`
+rather than the real catalogue, reached through the `DEEZER_API_URL` seam.
+Nothing about what is charting today can turn them red.
 
-Selectors are roles and accessible names, in `e2e/locators.ts`. Two reach for a
-class because the text they point at is prose with no role of its own.
+Selectors are roles and accessible names, in `e2e/support/locators.ts`. Two
+reach for a class because the text they point at is prose with no role of its
+own.
 
 ## What it deliberately leaves out
 
@@ -63,7 +64,7 @@ genuinely cannot move into `core`.
   `tsx watch` wrapper never comes up when Playwright spawns it detached.
 - Playwright's readiness probe resolves `localhost` to `::1` and does not fall
   back, while the Node server binds IPv4 — hence `127.0.0.1` throughout
-  `playwright.config.ts`.
+  `e2e/playwright.config.ts`.
 
 ## Done when
 

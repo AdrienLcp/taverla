@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-import { hostConsole } from './locators'
+import { hostConsole } from './support/locators'
 
 /** In the alphabet, so the router accepts it — and held by no room. */
 const NOBODY_HOME = 'K3M9'

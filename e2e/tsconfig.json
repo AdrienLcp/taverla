@@ -3,5 +3,5 @@
     "types": ["node"]
   },
   "extends": "../tsconfig.json",
-  "include": [".", "../playwright.config.ts"]
+  "include": ["."]
 }

@@ -26,12 +26,12 @@ export default defineConfig({
     }
   ],
   reporter: 'list',
-  testDir: './e2e',
+  testDir: '.',
   timeout: 60_000,
   use: { baseURL: APP_URL, trace: 'retain-on-failure' },
   webServer: [
     {
-      command: 'pnpm exec tsx e2e/deezer-stub.ts',
+      command: 'pnpm exec tsx support/deezer-stub.ts',
       env: { DEEZER_STUB_PORT: String(CATALOGUE_PORT) },
       reuseExistingServer: false,
       url: `${CATALOGUE_URL}/chart/0/tracks`

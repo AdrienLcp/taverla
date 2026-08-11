@@ -410,6 +410,17 @@ one part.
 
 ### Internal
 
+- Everything Playwright owns lives in `e2e/`. The config moves in beside the
+  specs it configures, and the two files that are *not* tests move under
+  `e2e/support/` — `deezer-stub.ts` most of all, which is a fake upstream
+  service rather than a spec and sat between two of them in an alphabetical
+  listing. `ls e2e` now answers "which journeys exist?" and nothing else. The
+  directory stays package-less on purpose: a suite earns a `package.json` when
+  it needs a dependency nothing else in the repo needs or a lifecycle hook, and
+  this one needs neither. Worth knowing before the next move — `webServer.cwd`
+  defaults to the config's directory while `outputDir` defaults from the
+  process's, so the stub's command became relative and the traces CI collects
+  did not move
 - `[Shared]` A translation knows what a count does to a sentence. The dictionary
   was `Record<TranslationKey, string>` interpolated from
   `Record<string, string | number>`, which checks nothing: a misspelled value

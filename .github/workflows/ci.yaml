@@ -47,5 +47,7 @@ jobs:
         uses: actions/upload-artifact@v5
         with:
           name: playwright-traces
+          # Root, not `e2e/`: Playwright resolves `outputDir` from the working
+          # directory, not from the config beside the specs.
           path: test-results
           retention-days: 7

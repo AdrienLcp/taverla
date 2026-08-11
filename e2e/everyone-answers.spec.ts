@@ -1,6 +1,11 @@
 import { expect, test } from '@playwright/test'
 
-import { blindTestHome, homePage, hostConsole, playerScreen } from './locators'
+import {
+  blindTestHome,
+  homePage,
+  hostConsole,
+  playerScreen
+} from './support/locators'
 
 /**
  * The buzzer journey covers one player taking the floor. This one covers the

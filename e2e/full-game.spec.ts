@@ -1,6 +1,11 @@
 import { expect, test } from '@playwright/test'
 
-import { blindTestHome, homePage, hostConsole, playerScreen } from './locators'
+import {
+  blindTestHome,
+  homePage,
+  hostConsole,
+  playerScreen
+} from './support/locators'
 
 const NICKNAME = 'Zoe'
 
