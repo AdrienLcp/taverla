@@ -10,6 +10,8 @@ const envSchema = z.object({
   ALLOWED_ORIGINS: z.string().default('http://localhost:5273'),
   DEEZER_API_URL: z.url().default('https://api.deezer.com'),
   PORT: z.coerce.number().int().positive().default(3100),
+  /** Render injects the deployed commit under this name. Absent from a checkout. */
+  RENDER_GIT_COMMIT: z.string().optional(),
   /**
    * Path to the built SPA, relative to the working directory. Set in
    * production and absent in development, where Vite serves the app and
@@ -25,9 +27,12 @@ if (!parsed.success) {
   throw new Error(`Invalid environment: ${z.prettifyError(parsed.error)}`)
 }
 
+const SHORT_COMMIT_LENGTH = 7
+
 export const env = {
   ...parsed.data,
   allowedOrigins: parsed.data.ALLOWED_ORIGINS.split(',').map((origin) =>
     origin.trim()
-  )
+  ),
+  build: parsed.data.RENDER_GIT_COMMIT?.slice(0, SHORT_COMMIT_LENGTH) ?? 'dev'
 }

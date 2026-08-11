@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import type { TrackSearchResult } from '@taverla/protocol/http'
+import type { CatalogueTrack } from '@taverla/protocol/http'
 import type {
   HostTrack,
   TrackDifficulty,
@@ -36,6 +36,9 @@ const MINIMUM_RANK_BY_DIFFICULTY: Record<TrackDifficulty, number> = {
   wellKnown: 500_000
 }
 
+/** Deezer's name for "that id resolves to nothing", whatever was asked for. */
+const RESOURCE_NOT_FOUND = 'DataException'
+
 /**
  * Deezer answers a bad request with HTTP 200 and an `error` object, so the
  * status code alone never tells you whether the call worked.
@@ -65,7 +68,7 @@ type DeezerTrack = z.infer<typeof deezerTrackSchema>
 
 /**
  * The one module in the repo that knows Deezer exists. Everything above it
- * speaks `TrackSource`, `TrackSearchResult` and `HostTrack`; swapping the
+ * speaks `TrackSource`, `CatalogueTrack` and `HostTrack`; swapping the
  * catalogue means rewriting this file and nothing else.
  *
  * The browser cannot call Deezer itself: `api.deezer.com` answers without an
@@ -78,19 +81,26 @@ export const fetchTracksFor = async ({
 }: {
   difficulty: TrackDifficulty
   source: TrackSource
-}): Promise<Result<TrackSearchResult[], MusicSourceError>> => {
+}): Promise<Result<CatalogueTrack[], MusicSourceError>> => {
   const fetched = await Promise.all(pathsFor(source).map(requestList))
   const reached = fetched.filter((list) => list.status === 'success')
 
   // One chart of several failing is a thinner pool, not a dead game. Only a
   // source that answered nothing at all is worth refusing the round over.
   if (reached.length === 0) {
-    return Result.failure('music_source_unavailable')
+    const everyPathHeldNothing = fetched.every(
+      (list) =>
+        list.status === 'failure' && list.error === 'no_tracks_available'
+    )
+
+    return Result.failure(
+      everyPathHeldNothing ? 'no_tracks_available' : 'music_source_unavailable'
+    )
   }
 
   const playable = withoutRepeats(reached.flatMap((list) => list.data))
     .filter((track) => isWorthGuessing(track, difficulty))
-    .map(toSearchResult)
+    .map(toCatalogueTrack)
 
   return playable.length === 0
     ? Result.failure('no_tracks_available')
@@ -130,7 +140,7 @@ export const fetchHostTrack = async (
   }
 
   return Result.success({
-    ...toSearchResult(parsed.data),
+    ...toCatalogueTrack(parsed.data),
     previewUrl: parsed.data.preview
   })
 }
@@ -166,7 +176,7 @@ const pathsFor = (source: TrackSource): string[] => {
   }
 }
 
-const toSearchResult = (track: DeezerTrack): TrackSearchResult => ({
+const toCatalogueTrack = (track: DeezerTrack): CatalogueTrack => ({
   artist: track.artist.name,
   coverUrl: track.album?.cover_medium ?? null,
   id: track.id,
@@ -211,10 +221,19 @@ const requestJson = async (
     const declaredError = deezerErrorSchema.safeParse(body)
 
     if (declaredError.success) {
-      logger.error('Deezer reported an error', {
-        path,
-        type: declaredError.data.error.type
-      })
+      const { type } = declaredError.data.error
+
+      // An id nobody can look up is a host's typo, not an outage, and the two
+      // deserve different answers — on screen, and in the log a real outage
+      // has to be findable in. Every other declared type — quota, permission,
+      // a malformed query — really is the catalogue refusing us.
+      if (type === RESOURCE_NOT_FOUND) {
+        logger.warn('Deezer knows nothing at that path', { path })
+
+        return Result.failure('no_tracks_available')
+      }
+
+      logger.error('Deezer reported an error', { path, type })
 
       return Result.failure('music_source_unavailable')
     }

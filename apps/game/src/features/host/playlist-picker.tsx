@@ -5,7 +5,10 @@ import { Form } from 'react-aria-components'
 import type { RoomSettings } from '@taverla/protocol/room'
 import type { TrackSource } from '@taverla/protocol/track'
 
-import { searchTracks } from '@/infrastructure/api/taverla-api'
+import {
+  fetchPlaylistTracks,
+  searchTracks
+} from '@/infrastructure/api/taverla-api'
 import { Button } from '@/presentation/components/button'
 import { SegmentedControl } from '@/presentation/components/segmented-control'
 import { TextField } from '@/presentation/components/text-field'
@@ -28,6 +31,9 @@ const KIND_LABELS: Record<SourceKind, TranslationKey> = {
 
 const isSourceKind = (value: string): value is SourceKind =>
   value in KIND_LABELS
+
+export const sourceKindKey = (kind: SourceKind): TranslationKey =>
+  KIND_LABELS[kind]
 
 /**
  * Deezer's own genre ids, hand-picked down to the ones a party actually asks
@@ -116,8 +122,8 @@ type PlaylistPickerProps = {
  *
  * Nothing here commits: starting the game is what sends the source, because a
  * choice that has to be confirmed and *then* launched is two decisions where
- * the host only made one. The search button is the exception, and it only
- * looks — it exists because a query with no visible answer is a guess.
+ * the host only made one. The preview button is the exception, and it only
+ * looks — it exists because a query or an id with no visible answer is a guess.
  */
 export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
   onDraftChange,
@@ -129,7 +135,8 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
   )
   const [titles, setTitles] = useState<string[] | null>(null)
   const [error, setError] = useState<TranslationKey | null>(null)
-  const [isSearching, setIsSearching] = useState(false)
+  const [isPreviewing, setIsPreviewing] = useState(false)
+  const typed = draft.kind === 'playlist' ? draft.playlistId : draft.query
 
   // The control that commits this draft is the one that starts the game, and it
   // lives in the console's footer rather than here.
@@ -143,19 +150,24 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
     setError(null)
   }
 
-  const search = async (): Promise<void> => {
-    const query = draft.query.trim()
+  const preview = async (): Promise<void> => {
+    const isPlaylist = draft.kind === 'playlist'
 
     setError(null)
     setTitles(null)
-    setIsSearching(true)
+    setIsPreviewing(true)
 
-    const found = await searchTracks({
-      difficulty: settings.difficulty,
-      query
-    })
+    const found = isPlaylist
+      ? await fetchPlaylistTracks({
+          difficulty: settings.difficulty,
+          playlistId: typed.trim()
+        })
+      : await searchTracks({
+          difficulty: settings.difficulty,
+          query: typed.trim()
+        })
 
-    setIsSearching(false)
+    setIsPreviewing(false)
 
     if (found.status === 'failure') {
       setError(apiErrorKey(found.error))
@@ -163,10 +175,14 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
       return
     }
 
-    // Nothing well-known enough matched, so the pool would be empty and the
+    // Nothing well-known enough came back, so the pool would be empty and the
     // game would fail on its first round instead of here.
     if (found.data.length === 0) {
-      setError('blindtest.source.none')
+      setError(
+        isPlaylist
+          ? 'blindtest.source.noneInPlaylist'
+          : 'blindtest.source.noneInSearch'
+      )
 
       return
     }
@@ -213,39 +229,44 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
         </div>
       )}
 
-      {draft.kind === 'search' && (
+      {draft.kind !== 'chart' && (
         <Form
           onSubmit={(event) => {
             event.preventDefault()
-            void search()
+            void preview()
           }}
         >
-          <TextField
-            label={translate('blindtest.source.query')}
-            onChange={(query) => {
-              revise({ query })
-            }}
-            value={draft.query}
-          />
+          {draft.kind === 'search' ? (
+            <TextField
+              label={translate('blindtest.source.query')}
+              onChange={(query) => {
+                revise({ query })
+              }}
+              value={draft.query}
+            />
+          ) : (
+            <>
+              <TextField
+                label={translate('blindtest.source.playlistId')}
+                onChange={(playlistId) => {
+                  revise({ playlistId })
+                }}
+                value={draft.playlistId}
+              />
+              <p className='hint'>
+                {translate('blindtest.source.playlistIdHint')}
+              </p>
+            </>
+          )}
           <Button
-            isDisabled={draft.query.trim().length === 0}
-            isPending={isSearching}
+            isDisabled={typed.trim().length === 0}
+            isPending={isPreviewing}
             type='submit'
             variant='ghost'
           >
             {translate('blindtest.source.preview')}
           </Button>
         </Form>
-      )}
-
-      {draft.kind === 'playlist' && (
-        <TextField
-          label={translate('blindtest.source.playlistId')}
-          onChange={(playlistId) => {
-            revise({ playlistId })
-          }}
-          value={draft.playlistId}
-        />
       )}
 
       {error !== null && (

@@ -59,10 +59,14 @@ export const FR_DICTIONARY: Dictionary = {
     'Tout le monde tape, sur le même extrait. Titre et artiste rapportent 1 point chacun, les deux ensemble 3, et les deux premiers à trouver gagnent +2 et +1 en plus.',
   'blindtest.source.chart': 'Le top du moment',
   'blindtest.source.label': 'D’où viennent les titres',
-  'blindtest.source.none':
+  'blindtest.source.noneInPlaylist':
+    'Rien de jouable dans cette playlist. Vérifie l’identifiant.',
+  'blindtest.source.noneInSearch':
     'Rien d’assez connu ne correspond. Essaie une autre recherche.',
   'blindtest.source.playlist': 'Une playlist Deezer',
   'blindtest.source.playlistId': 'Identifiant de playlist',
+  'blindtest.source.playlistIdHint':
+    'Le nombre à la fin de l’adresse Deezer de la playlist.',
   'blindtest.source.preview': 'Voir ce que ça donne',
   'blindtest.source.query': 'Rechercher',
   'blindtest.source.ready': '{count} titres prêts',
@@ -82,6 +86,8 @@ export const FR_DICTIONARY: Dictionary = {
   'connection.refused': 'Déconnecté',
 
   'error.already_buzzed': 'Quelqu’un a été plus rapide.',
+  'error.api.rate_limited':
+    'Ça fait beaucoup de salons. Attends une minute et réessaie.',
   'error.api.rejected': 'Le serveur a refusé la demande.',
   'error.api.unexpected_response':
     'Le serveur a répondu quelque chose d’inattendu.',
@@ -97,6 +103,8 @@ export const FR_DICTIONARY: Dictionary = {
   'error.player_locked_out': 'Tu es hors-jeu pour ce tour.',
   'error.protocol_version_mismatch':
     'Cette page n’est plus à jour. Recharge-la.',
+  'error.rate_limited':
+    'Ça fait beaucoup de salons. Attends une minute et réessaie.',
   'error.room_closed': 'L’hôte a fermé le salon.',
   'error.room_full': 'Ce salon est complet.',
   'error.room_not_found': 'Ce salon n’existe pas.',
@@ -156,6 +164,7 @@ export const FR_DICTIONARY: Dictionary = {
     'Un code de salon ne contient jamais {characters}.',
   'join.roomCode.wrongLength': 'Un code de salon fait {length} caractères.',
 
+  'menu.build': 'Version {build}',
   'menu.home': 'Accueil',
   'menu.label': 'Menu',
 

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Dialog,
   DialogTrigger,
@@ -12,6 +13,7 @@ import {
   THEME_PREFERENCES,
   type ThemePreference
 } from '@/helpers/theme'
+import { fetchHealth } from '@/infrastructure/api/taverla-api'
 import { joinPath } from '@/infrastructure/router/navigation'
 import { useConnection } from '@/presentation/connection/connection-provider'
 import { useI18n } from '@/presentation/i18n/i18n-provider'
@@ -55,11 +57,23 @@ export const AppMenu = () => {
   const { locale, setLocale, translate } = useI18n()
   const { preference, setPreference } = useTheme()
   const connection = useConnection()
+  const [build, setBuild] = useState<string | null>(null)
 
   const alert =
     connection === null || connection.status === 'open'
       ? ''
       : translate(connectionStatusKey(connection.status))
+
+  // Asked for on the first open rather than at mount: nobody needs it during a
+  // game, and a phone waking a sleeping instance would spend its first request
+  // on this instead of on joining.
+  const loadBuild = async (): Promise<void> => {
+    const health = await fetchHealth()
+
+    if (health.status === 'success') {
+      setBuild(health.data.build)
+    }
+  }
 
   return (
     <div className='app-menu'>
@@ -69,7 +83,13 @@ export const AppMenu = () => {
         {alert}
       </p>
 
-      <DialogTrigger>
+      <DialogTrigger
+        onOpenChange={(isOpen) => {
+          if (isOpen && build === null) {
+            void loadBuild()
+          }
+        }}
+      >
         <ReactAriaButton className='trigger'>
           {connection !== null && <ConnectionDot status={connection.status} />}
           {translate('menu.label')}
@@ -117,6 +137,10 @@ export const AppMenu = () => {
                 <Link href={joinPath} onPress={close} variant='outlined'>
                   {translate('menu.home')}
                 </Link>
+
+                {build !== null && (
+                  <p className='build'>{translate('menu.build', { build })}</p>
+                )}
               </>
             )}
           </Dialog>

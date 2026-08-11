@@ -60,10 +60,14 @@ export const EN_DICTIONARY = {
     'Everyone types, over the same clip. Title and artist score a point each and both together score three, and the first two to get it right earn +2 and +1 on top.',
   'blindtest.source.chart': 'Top charts',
   'blindtest.source.label': 'Where the tracks come from',
-  'blindtest.source.none':
+  'blindtest.source.noneInPlaylist':
+    'Nothing playable in that playlist. Check the id.',
+  'blindtest.source.noneInSearch':
     'Nothing well-known enough matched. Try another search.',
   'blindtest.source.playlist': 'A Deezer playlist',
   'blindtest.source.playlistId': 'Playlist id',
+  'blindtest.source.playlistIdHint':
+    'The number at the end of the playlist’s Deezer address.',
   'blindtest.source.preview': 'See what that finds',
   'blindtest.source.query': 'Search for',
   'blindtest.source.ready': '{count} tracks ready',
@@ -83,6 +87,7 @@ export const EN_DICTIONARY = {
   'connection.refused': 'Disconnected',
 
   'error.already_buzzed': 'Someone got there first.',
+  'error.api.rate_limited': 'That is a lot of rooms. Wait a minute and retry.',
   'error.api.rejected': 'The server refused that.',
   'error.api.unexpected_response': 'The server answered something unexpected.',
   'error.api.unreachable': 'Could not reach the server. Try again in a moment.',
@@ -96,6 +101,7 @@ export const EN_DICTIONARY = {
   'error.not_implemented': 'That part of the game is not built yet.',
   'error.player_locked_out': 'You are out for this round.',
   'error.protocol_version_mismatch': 'This page is out of date. Reload it.',
+  'error.rate_limited': 'That is a lot of rooms. Wait a minute and retry.',
   'error.room_closed': 'The host closed the room.',
   'error.room_full': 'That room is full.',
   'error.room_not_found': 'That room does not exist.',
@@ -154,6 +160,7 @@ export const EN_DICTIONARY = {
     'A room code never contains {characters}.',
   'join.roomCode.wrongLength': 'A room code is {length} characters long.',
 
+  'menu.build': 'Build {build}',
   'menu.home': 'Home',
   'menu.label': 'Menu',
 

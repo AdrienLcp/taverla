@@ -1,26 +1,63 @@
 import { zValidator } from '@hono/zod-validator'
-import type { Hono } from 'hono'
+import type { Context, Hono } from 'hono'
 import { cors } from 'hono/cors'
 
 import type {
   ApiErrorResponse,
+  CatalogueTrack,
   CreateRoomResponse,
   HealthResponse,
   RoomExistsResponse,
-  TrackSearchResponse
+  TrackListResponse
 } from '@taverla/protocol/http'
-import { trackSearchQuerySchema } from '@taverla/protocol/http'
+import {
+  playlistPreviewQuerySchema,
+  trackSearchQuerySchema
+} from '@taverla/protocol/http'
 import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
+import type { Result } from '@taverla/core/helpers/result'
 import { normalizeRoomCode } from '@taverla/core/room/room-code'
 
 import { createRoom, findRoom } from '@/domain/room/room-store'
 import { env } from '@/env'
 import { limitRoomCreation } from '@/infrastructure/http/rate-limit'
-import { fetchTracksFor } from '@/infrastructure/music/deezer-client'
+import {
+  fetchTracksFor,
+  type MusicSourceError
+} from '@/infrastructure/music/deezer-client'
 
 /**
- * Four routes, and none of them run during a game — creating a room, checking
+ * A catalogue that matched nothing well-known enough to guess is an empty
+ * result, not a broken gateway — the caller renders "nothing here", and 502 is
+ * reserved for the catalogue actually being down.
+ */
+const respondWithTracks = (
+  context: Context,
+  found: Result<CatalogueTrack[], MusicSourceError>
+) => {
+  if (found.status === 'failure' && found.error === 'no_tracks_available') {
+    const empty: TrackListResponse = { tracks: [] }
+
+    return context.json(empty)
+  }
+
+  if (found.status === 'failure') {
+    const error: ApiErrorResponse = {
+      code: found.error,
+      message: 'The music catalogue is unavailable right now'
+    }
+
+    return context.json(error, 502)
+  }
+
+  const body: TrackListResponse = { tracks: found.data }
+
+  return context.json(body)
+}
+
+/**
+ * Five routes, and none of them run during a game — creating a room, checking
  * one exists, browsing the catalogue. Everything that happens while people are
  * playing is a WebSocket frame.
  */
@@ -31,6 +68,7 @@ export const registerHttpRoutes = (app: Hono): void => {
 
   app.get('/api/health', (context) => {
     const body: HealthResponse = {
+      build: env.build,
       protocolVersion: PROTOCOL_VERSION,
       status: 'ok'
     }
@@ -74,27 +112,26 @@ export const registerHttpRoutes = (app: Hono): void => {
         source: { kind: 'search', query: q }
       })
 
-      // A search that matched nothing well-known enough to guess is an empty
-      // result, not a broken gateway — the caller renders "nothing here", and
-      // 502 is reserved for the catalogue actually being down.
-      if (found.status === 'failure' && found.error === 'no_tracks_available') {
-        const empty: TrackSearchResponse = { results: [] }
+      return respondWithTracks(context, found)
+    }
+  )
 
-        return context.json(empty)
-      }
-
-      if (found.status === 'failure') {
-        const error: ApiErrorResponse = {
-          code: found.error,
-          message: 'The music catalogue is unavailable right now'
+  // A playlist id is copied out of a Deezer URL, so the host has no way of
+  // knowing they pasted the wrong one until the first round comes up empty.
+  app.get(
+    '/api/playlists/:playlistId/tracks',
+    zValidator('query', playlistPreviewQuerySchema),
+    async (context) => {
+      const { difficulty } = context.req.valid('query')
+      const found = await fetchTracksFor({
+        difficulty,
+        source: {
+          kind: 'playlist',
+          playlistId: context.req.param('playlistId')
         }
+      })
 
-        return context.json(error, 502)
-      }
-
-      const body: TrackSearchResponse = { results: found.data }
-
-      return context.json(body)
+      return respondWithTracks(context, found)
     }
   )
 }

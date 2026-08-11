@@ -25,7 +25,7 @@ export const roomExistsResponseSchema = z.object({
  * resolved when the round starts. A pool built at lobby time and played an hour
  * later would carry dead signatures.
  */
-export const trackSearchResultSchema = trackIdentitySchema
+export const catalogueTrackSchema = trackIdentitySchema
 
 /**
  * The difficulty rides along so the preview counts what the pool would actually
@@ -37,11 +37,22 @@ export const trackSearchQuerySchema = z.object({
   q: z.string().trim().min(1).max(120)
 })
 
-export const trackSearchResponseSchema = z.object({
-  results: z.array(trackSearchResultSchema)
+export const playlistPreviewQuerySchema = z.object({
+  difficulty: trackDifficultySchema.default('wellKnown')
 })
 
+/** Shared by every route that answers "what would the pool hold?", not just the search. */
+export const trackListResponseSchema = z.object({
+  tracks: z.array(catalogueTrackSchema)
+})
+
+/**
+ * `build` answers "is my fix live?" and nothing else. It is the deployment's,
+ * not the tab's: a phone holding a cached bundle still reads what the server
+ * was built from, which is the question being asked.
+ */
 export const healthResponseSchema = z.object({
+  build: z.string(),
   protocolVersion: z.number().int().positive(),
   status: z.literal('ok')
 })
@@ -53,7 +64,7 @@ export const apiErrorResponseSchema = z.object({
 
 export type CreateRoomResponse = z.infer<typeof createRoomResponseSchema>
 export type RoomExistsResponse = z.infer<typeof roomExistsResponseSchema>
-export type TrackSearchResult = z.infer<typeof trackSearchResultSchema>
-export type TrackSearchResponse = z.infer<typeof trackSearchResponseSchema>
+export type CatalogueTrack = z.infer<typeof catalogueTrackSchema>
+export type TrackListResponse = z.infer<typeof trackListResponseSchema>
 export type HealthResponse = z.infer<typeof healthResponseSchema>
 export type ApiErrorResponse = z.infer<typeof apiErrorResponseSchema>

@@ -59,6 +59,14 @@
       gap: var(--space-m)
       outline: none
 
+    .build
+      @include typography.label
+
+      color: var(--ink-muted)
+      margin-block-start: calc(var(--space-m) * -0.5)
+      text-align: center
+      user-select: text
+
 @keyframes popover-strike
   from
     opacity: 0
