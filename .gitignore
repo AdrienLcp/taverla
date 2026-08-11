@@ -15,3 +15,8 @@
 
 test-results
 playwright-report
+
+# Vendored Claude skills — third-party material (impeccable, react-aria docs,
+# vercel-react-best-practices) with no licence of their own. They are personal
+# tooling, not project code, and a public repository must not redistribute them.
+.claude/skills

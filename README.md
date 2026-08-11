@@ -29,12 +29,16 @@ answer locks that player out and the clip picks up where the buzz stopped it,
 then a running scoreboard and a final board that keeps everyone for another
 game. English and French, light and dark, on a phone or a laptop.
 
+Three ways to answer: the first thumb on the buzzer, four choices on screen, or
+everyone typing at once over the same clip — the last two decided by the server
+and scored by speed on top of being right.
+
 It is covered end to end: the socket suites drive a real server over real
-sockets, and two Playwright journeys drive the two screens against a stubbed
+sockets, and three Playwright journeys drive the two screens against a stubbed
 catalogue. What is *not* covered is any single component in isolation, on
-purpose — see [`docs/plans/06-testing.md`](docs/plans/06-testing.md). Stages 09
-and 10 (answer modes, per-device audio) came out of playing the game rather than
-out of planning it. See [`docs/plans/`](docs/plans/).
+purpose — see [`docs/plans/06-testing.md`](docs/plans/06-testing.md). The stages
+past 08 came out of playing the game rather than out of planning it. See
+[`docs/plans/`](docs/plans/).
 
 The blind test is the first game rather than the whole product: the room, the QR
 code, the seats, the anti-cheat and the corner menu are a shell several games
@@ -76,7 +80,7 @@ removed.
 | `pnpm lint` | Biome, with fixes applied |
 | `pnpm lint:ci` | Biome, reporting instead of fixing |
 | `pnpm test` | protocol + core + server |
-| `pnpm test:e2e` | Two Playwright journeys, on their own ports |
+| `pnpm test:e2e` | Three Playwright journeys, on their own ports |
 | `pnpm validate` | build + test + e2e |
 
 ## CI
@@ -122,3 +126,34 @@ Fly.io and a small VPS fit the same shape. What rules a platform in or out is in
   and the seams that stay open for them
 - [`docs/plans/`](docs/plans/) — the staged build, one file per session
 - [`.claude/`](.claude/) — the conventions, for humans and assistants alike
+
+## Contributing
+
+Issues and pull requests are welcome, and the conventions that decide a review
+are written down rather than implied: [`.claude/rules/`](.claude/rules/) holds
+them, and `CLAUDE.md` at each level says which apply where. Run `pnpm validate`
+before opening one — build, tests and journeys, in that order.
+
+**One honest caveat, so nobody wastes an evening.** A pull request that adds a
+*new game* is not something this repository can take yet, and that is a design
+position rather than an oversight. `RoomPhase` is
+`lobby → countdown → playing → buzzed → revealed → finished`, which is the blind
+test's own life cycle wearing the room's name; there is no extension point to
+add a game through, and inventing one before the second game exists would be
+guessing at a shape nobody can see yet. The reasoning, and what the seam should
+become, is in [`docs/game-catalogue.md`](docs/game-catalogue.md).
+
+Everything else is open: bugs, translations, accessibility, the design system,
+the question bank, a platform this does not run well on.
+
+## Licence
+
+[GNU AGPL-3.0](LICENSE). You may run, study, change and redistribute this — and
+if you deploy a modified version for other people to use over a network, that
+version's source has to be available to them too. The network clause is the
+whole reason for the choice: this is a thing people reach over a URL, so the
+ordinary GPL would have left the case that matters uncovered.
+
+`.claude/skills/` is deliberately untracked. Those are vendored third-party
+assistant skills with licences of their own, and they are personal tooling
+rather than part of this project.
