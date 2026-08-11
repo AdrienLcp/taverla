@@ -138,6 +138,72 @@ describe('the rules every socket obeys', () => {
     ])
   })
 
+  it('[settings] takes a countdown the host moves mid-round, for the next one', async () => {
+    const { code, host } = await room.openRoom()
+
+    await room.seat({ code, nickname: 'Alice' })
+    host.send({ type: 'host.startRound' })
+    await waitFor(() => hostView(host)?.phase === 'playing', 'the clip')
+
+    host.send({
+      settings: { ...FAST_GAME, countdownMs: 1_200 },
+      type: 'host.updateSettings'
+    })
+    await waitFor(
+      () => hostView(host)?.settings.countdownMs === 1_200,
+      'the new countdown'
+    )
+
+    expect(errorsIn(host)).toEqual([])
+  })
+
+  // The console greys the control out, which is a courtesy rather than a rule:
+  // the round is scored on the way out from whatever mode it closes on, so a
+  // frame that swapped it would pay a typed answer at a pick's rate.
+  it('[settings] refuses the mode the round in play is scored by', async () => {
+    const { code, host } = await room.openRoom()
+
+    await room.seat({ code, nickname: 'Alice' })
+    host.send({ type: 'host.startRound' })
+    await waitFor(() => hostView(host)?.phase === 'playing', 'the clip')
+
+    host.send({
+      settings: { ...FAST_GAME, answerMode: 'choice' },
+      type: 'host.updateSettings'
+    })
+    await waitFor(() => errorsIn(host).length > 0, 'the refusal')
+
+    expect(errorsIn(host)[0]).toMatchObject({
+      code: 'wrong_phase',
+      fatal: false
+    })
+    expect(hostView(host)?.settings.answerMode).toBe('buzzer')
+  })
+
+  it('[settings] takes the same change once the round is over', async () => {
+    const { code, host } = await room.openRoom()
+
+    await room.seat({ code, nickname: 'Alice' })
+    host.send({ type: 'host.startRound' })
+    await waitFor(() => hostView(host)?.phase === 'playing', 'the clip')
+
+    const roundId = hostView(host)?.round?.id ?? ''
+
+    host.send({ roundId, type: 'host.reveal' })
+    await waitFor(() => hostView(host)?.phase === 'revealed', 'the reveal')
+
+    host.send({
+      settings: { ...FAST_GAME, answerMode: 'choice' },
+      type: 'host.updateSettings'
+    })
+    await waitFor(
+      () => hostView(host)?.settings.answerMode === 'choice',
+      'the new mode'
+    )
+
+    expect(errorsIn(host)).toEqual([])
+  })
+
   // `estimateClockOffset` is unit-tested against invented samples; this is the
   // handshake that produces them, over a real socket, on a device that is four
   // seconds out. Without the correction the phone starts the clip early — the

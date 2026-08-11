@@ -14,6 +14,8 @@ import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
 import { offersAnswerMode } from '@taverla/core/room/game-modes'
 import { normalizeRoomCode } from '@taverla/core/room/room-code'
+import { isRoundInPlay } from '@taverla/core/room/room-phase'
+import { reshapesRound } from '@taverla/core/room/room-settings'
 
 import type { Room } from '@/domain/room/room'
 import {
@@ -64,12 +66,6 @@ type RoomActionMessage = Exclude<
   ClientMessage,
   { type: 'hello' } | { type: 'time.ping' }
 >
-
-const PHASES_A_HOST_MAY_CUT_SHORT = new Set<Room['phase']>([
-  'countdown',
-  'playing',
-  'buzzed'
-])
 
 /** Policy violation. The client shows the error it was just sent and stops retrying. */
 const CLOSE_CODE_POLICY = 1008
@@ -458,7 +454,7 @@ export const createRoomSocketEvents = (
       return
     }
 
-    if (!PHASES_A_HOST_MAY_CUT_SHORT.has(room.phase)) {
+    if (!isRoundInPlay(room.phase)) {
       sendError(outbound, {
         code: 'wrong_phase',
         fatal: false,
@@ -585,11 +581,14 @@ export const createRoomSocketEvents = (
   }
 
   /**
-   * Allowed in every phase, because the host has to be able to flip
-   * auto-advance on while a reveal is already on screen. The pool is dropped
-   * only when the source actually changed — a pool left over from a source the
-   * host has just replaced is a bug that survives the rest of the game, and
-   * dropping it on an unrelated edit costs a needless catalogue request.
+   * Allowed in every phase, because a party is set up while it runs: the
+   * countdown, the playlist and auto-advance are all things a host reaches for
+   * with a reveal already on screen, and they land on the next round.
+   *
+   * The pool is dropped only when the source actually changed — a pool left
+   * over from a source the host has just replaced is a bug that survives the
+   * rest of the game, and dropping it on an unrelated edit costs a needless
+   * catalogue request.
    */
   const reconfigure = (
     settings: RoomSettings,
@@ -609,6 +608,22 @@ export const createRoomSocketEvents = (
         code: 'invalid_message',
         fatal: false,
         message: 'That game does not offer that answer mode'
+      })
+
+      return
+    }
+
+    // The console greys these out while a round is under way, and a greyed-out
+    // control is not a guarantee — same reason `registerBuzz` re-checks the
+    // mode it was handed.
+    if (
+      isRoundInPlay(room.phase) &&
+      reshapesRound({ from: room.settings, to: settings })
+    ) {
+      sendError(outbound, {
+        code: 'wrong_phase',
+        fatal: false,
+        message: 'The round under way is built on those; they wait for the next'
       })
 
       return
