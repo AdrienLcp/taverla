@@ -57,8 +57,24 @@ Verified locally by running the server with `SERVE_GAME_FROM` set: index served,
 on the same port, and the QR code encoding that origin.
 
 - **It is live at `taverla.onrender.com`**, redeployed from `main` by Render
-  itself. `/api/health` answers `{"protocolVersion":2,"status":"ok"}` on a warm
-  instance in well under a second.
+  itself. `/api/health` answers `{"build":…,"protocolVersion":…,"status":"ok"}`
+  on a warm instance in well under a second.
+
+- **The server is bundled**, not run through `tsx`. `tsdown` emits one
+  `dist/index.mjs` with the workspace packages inlined — they ship as
+  TypeScript source, so anything that left them external would only start under
+  a loader. Third-party dependencies stay external; Render installs them.
+  `pnpm --filter @taverla/server start` is unchanged from Render's side.
+
+- **`POST /api/rooms` is rate-limited** — 30 per address per ten minutes, which
+  is the window the sweeper clears an unjoined room in. It answers 429 with
+  `rate_limited`, and the client tells the host to wait rather than showing the
+  generic refusal.
+
+- **The menu says which build is running.** `/api/health` carries the deployed
+  commit, short, and the corner menu asks for it the first time it is opened.
+  The deployment's, not the tab's: a phone on a cached bundle still reads what
+  the server was built from, which is the question "is my fix live?" asks.
 
 ## The free instance sleeps, and that is accepted for now
 
@@ -85,16 +101,13 @@ The arbitration, so it is not reopened for free:
 
 ## Still to do
 
-- **The server still runs through `tsx`**, a dev tool, deliberately. Bundling it
-  (`tsdown`, `noExternal` the workspace packages) was meant as the answer to the
-  cold start, and measuring it demoted the idea: the wait is container
-  scheduling, and stripping types off a few dozen modules is seconds out of
-  tens. It is worth doing for its own sake — a single file, no `pnpm install` at
-  runtime — and it only becomes worth doing *for the boot* on a host that wakes
-  fast enough for those seconds to be the visible ones.
 - **No Dockerfile.** Render's native Node runtime handles the pnpm workspace, so
   there is nothing for one to solve yet.
-- **Rate-limit `POST /api/rooms`** — unauthenticated and it allocates memory.
+- **Bundling did not fix the cold start, and was never going to.** Measuring it
+  is what demoted the idea: the wait is container scheduling, and stripping
+  types off a few dozen modules is seconds out of tens. It landed for its own
+  sake — one file, no loader in production — and would only become visible on a
+  host that wakes fast enough for those seconds to be the ones you feel.
 
 ## CI
 
@@ -105,15 +118,6 @@ on exactly the code the job exists to reject.
 
 There is no deploy job. Render redeploys from `main` itself, and a second
 mechanism racing it would only be a way to ship a build CI had not seen.
-
-## Worth adding at the same time
-
-- **Rate-limit room creation.** `POST /api/rooms` is unauthenticated and
-  allocates memory. One line with `hono-rate-limiter`.
-- **A health check** — `/api/health` already exists and returns the protocol
-  version.
-- **Something that says a deploy happened.** A version string in the footer is
-  enough to answer "is my fix live?".
 
 ## Done when
 

@@ -13,15 +13,16 @@
   "description": "Authoritative game server for the blind test",
   "devDependencies": {
     "@types/node": "^26.2.0",
+    "tsdown": "^0.22.14",
     "tsx": "^4.23.11",
     "vitest": "^4.1.10"
   },
   "name": "@taverla/server",
   "private": true,
   "scripts": {
-    "build": "tsc --noEmit",
-    "dev": "tsx watch src/index.ts",
-    "start": "tsx src/index.ts",
+    "build": "tsc --noEmit && tsdown",
+    "dev": "node --watch --import tsx src/index.ts",
+    "start": "node dist/index.mjs",
     "test": "vitest run",
     "test:watch": "vitest --watch"
   },
