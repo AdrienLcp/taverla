@@ -81,7 +81,7 @@ export const beginRound = async (room: Room): Promise<void> => {
 
       if (host !== null) {
         sendError(host, {
-          code: 'no_tracks_available',
+          code: 'no_content_available',
           fatal: false,
           message: 'No unplayed question is left in those categories'
         })

@@ -2,7 +2,11 @@ import type React from 'react'
 import { useState } from 'react'
 import { Button as ReactAriaButton } from 'react-aria-components'
 
-import type { PlayerRoomView, RoomPhase } from '@taverla/protocol/room'
+import type {
+  PlayerRoomView,
+  RoomPhase,
+  RoundView
+} from '@taverla/protocol/room'
 
 import { findBuzzBlocker } from '@taverla/core/round/buzz-eligibility'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
@@ -12,8 +16,9 @@ import {
   type PlayerAnswer,
   TypedAnswer
 } from '@/features/player/answer-forms'
-import { bankedHalves, blindtestContent } from '@/helpers/blindtest-round'
+import { blindtestContent, quizContent } from '@/helpers/round-content'
 import { buzzFeedback } from '@/infrastructure/env'
+import { AskedQuestion } from '@/presentation/components/asked-question'
 import { Countdown } from '@/presentation/components/countdown'
 import { FloorClock } from '@/presentation/components/floor-clock'
 import { Scoreboard } from '@/presentation/components/scoreboard'
@@ -62,24 +67,12 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
     )
   }
 
-  const revealedTrack = blindtestContent(round)?.revealedTrack
-
   if (view.phase === 'revealed' && round != null) {
     const yours = round.awards.find((award) => award.playerId === view.youId)
 
     return (
       <section className='player-round centred'>
-        {revealedTrack == null ? (
-          // A game whose question the room owns has nothing to reveal, so the
-          // standings are what this screen is for between two rounds.
-          <Scoreboard players={view.players} youId={view.youId} />
-        ) : (
-          <>
-            <p className='framing'>{translate('blindtest.reveal.title')}</p>
-            <p className='revealed-title'>{revealedTrack.title}</p>
-            <p className='revealed-artist'>{revealedTrack.artist}</p>
-          </>
-        )}
+        <Revealed round={round} view={view} />
         {yours != null && yours.points > 0 && (
           <p className='you-scored'>
             {translate('round.scored', { points: yours.points })}
@@ -101,9 +94,14 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
     const answerWithRound = (answer: PlayerAnswer): boolean =>
       view.round === null ? false : onAnswer(answer, view.round.id)
 
+    // Here rather than inside the forms: the host console renders those too
+    // when its owner has taken a seat, and it is already showing the question.
+    const prompt = quizContent(view.round)?.prompt ?? null
+
     if (view.settings.mode.kind === 'choice') {
       return (
         <section className='player-round'>
+          <AskedQuestion prompt={prompt} />
           <ChoiceAnswer onAnswer={answerWithRound} round={view.round} />
         </section>
       )
@@ -112,11 +110,12 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
     if (view.settings.mode.kind === 'typed') {
       return (
         <section className='player-round'>
+          <AskedQuestion prompt={prompt} />
           <TypedAnswer
-            banked={bankedHalves(view.yourVerdict)}
             key={view.round.id}
             onAnswer={answerWithRound}
             round={view.round}
+            verdict={view.yourVerdict}
           />
         </section>
       )
@@ -169,6 +168,7 @@ const Buzzer = ({
 
   return (
     <section className='player-round buzzer-area'>
+      <AskedQuestion prompt={quizContent(view.round)?.prompt ?? null} />
       {/*
         `onPressStart`, not `onPress`: a buzzer has to fire the instant the
         thumb lands, and waiting for the release costs tens of milliseconds in a
@@ -208,6 +208,45 @@ const Buzzer = ({
       {view.phase === 'buzzed' && !isWon && <TheirName view={view} />}
     </section>
   )
+}
+
+/**
+ * What the round turned out to be, on the phone. A game whose question the room
+ * owns has nothing to reveal, so the standings are what this screen is for
+ * between two rounds.
+ */
+const Revealed = ({
+  round,
+  view
+}: {
+  round: RoundView
+  view: PlayerRoomView
+}) => {
+  const translate = useTranslate()
+  const track = blindtestContent(round)?.revealedTrack ?? null
+  const question = quizContent(round)?.revealedQuestion ?? null
+
+  if (track !== null) {
+    return (
+      <>
+        <p className='framing'>{translate('blindtest.reveal.title')}</p>
+        <p className='revealed-title'>{track.title}</p>
+        <p className='revealed-artist'>{track.artist}</p>
+      </>
+    )
+  }
+
+  if (question !== null) {
+    return (
+      <>
+        <p className='framing'>{translate('quiz.reveal.title')}</p>
+        <p className='revealed-title'>{question.answer}</p>
+        {question.note !== null && <p className='note'>{question.note}</p>}
+      </>
+    )
+  }
+
+  return <Scoreboard players={view.players} youId={view.youId} />
 }
 
 const TheirName = ({ view }: { view: PlayerRoomView }) => {

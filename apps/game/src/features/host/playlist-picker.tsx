@@ -5,19 +5,14 @@ import { Form } from 'react-aria-components'
 import type { BlindtestSettings } from '@taverla/protocol/game'
 import type { TrackSource } from '@taverla/protocol/track'
 
-import {
-  fetchPlaylistTracks,
-  searchTracks
-} from '@/infrastructure/api/taverla-api'
 import { Button } from '@/presentation/components/button'
 import { SegmentedControl } from '@/presentation/components/segmented-control'
 import { TextField } from '@/presentation/components/text-field'
 import { ToggleGroup } from '@/presentation/components/toggle-group'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
-import {
-  apiErrorKey,
-  type PlainTranslationKey
-} from '@/presentation/i18n/translation'
+import type { PlainTranslationKey } from '@/presentation/i18n/translation'
+
+import { usePlaylistPreview } from './use-playlist-preview'
 
 import './playlist-picker.sass'
 
@@ -135,9 +130,9 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
   const [draft, setDraft] = useState<Draft>(() =>
     draftFromSource(settings.source)
   )
-  const [titles, setTitles] = useState<string[] | null>(null)
-  const [error, setError] = useState<PlainTranslationKey | null>(null)
-  const [isPreviewing, setIsPreviewing] = useState(false)
+  const { clear, error, isPreviewing, preview, titles } = usePlaylistPreview(
+    settings.difficulty
+  )
   const typed = draft.kind === 'playlist' ? draft.playlistId : draft.query
 
   // The control that commits this draft is the one that starts the game, and it
@@ -148,48 +143,7 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
 
   const revise = (patch: Partial<Draft>): void => {
     setDraft({ ...draft, ...patch })
-    setTitles(null)
-    setError(null)
-  }
-
-  const preview = async (): Promise<void> => {
-    const isPlaylist = draft.kind === 'playlist'
-
-    setError(null)
-    setTitles(null)
-    setIsPreviewing(true)
-
-    const found = isPlaylist
-      ? await fetchPlaylistTracks({
-          difficulty: settings.difficulty,
-          playlistId: typed.trim()
-        })
-      : await searchTracks({
-          difficulty: settings.difficulty,
-          query: typed.trim()
-        })
-
-    setIsPreviewing(false)
-
-    if (found.status === 'failure') {
-      setError(apiErrorKey(found.error))
-
-      return
-    }
-
-    // Nothing well-known enough came back, so the pool would be empty and the
-    // game would fail on its first round instead of here.
-    if (found.data.length === 0) {
-      setError(
-        isPlaylist
-          ? 'blindtest.source.noneInPlaylist'
-          : 'blindtest.source.noneInSearch'
-      )
-
-      return
-    }
-
-    setTitles(found.data.map((track) => track.title))
+    clear()
   }
 
   return (
@@ -235,7 +189,7 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
         <Form
           onSubmit={(event) => {
             event.preventDefault()
-            void preview()
+            void preview({ kind: draft.kind, typed })
           }}
         >
           {draft.kind === 'search' ? (

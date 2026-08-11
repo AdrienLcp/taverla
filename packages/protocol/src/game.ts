@@ -8,14 +8,18 @@ export const gameKinds = ['blindtest', 'buzzer', 'quiz'] as const
 export const gameKindSchema = z.enum(gameKinds)
 
 /**
- * The games a room may actually be opened for. `gameKinds` is the vocabulary,
- * and `quiz` is in it because its settings and its content are built while the
- * server that would serve it is not — a stage rather than a game on a shelf.
- * Refusing it at the door beats opening a room whose first "start" fails.
+ * The games a room may actually be opened for. It is not `gameKinds` and must
+ * not collapse into it: a game is served in full before it has screens, and a
+ * room opened on one of those would render another game's round. Refusing it at
+ * the door beats opening a room whose first "start" cannot be looked at.
+ *
+ * The two sets coincide today, which is what shipping every game looks like —
+ * not a sign the distinction was unnecessary.
  */
 export const shelvedGames = [
   'blindtest',
-  'buzzer'
+  'buzzer',
+  'quiz'
 ] as const satisfies readonly GameKind[]
 
 export const shelvedGameSchema = z.enum(shelvedGames)

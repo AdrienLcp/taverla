@@ -9,10 +9,11 @@ import { defineTranslations } from '@taverla/core/i18n/translator'
  * even where English does not — the shape of a key is the same in every
  * dictionary, so English writing only `other` is what lets French write `one`.
  *
- * `blindtest.*` and `buzzer.*` are the namespaces a single game owns. Everything
- * else — joining a room, the roster, the buzzer *mode*, the round counter, the
- * connection, the errors — is the shell that the next game reuses unchanged.
- * See `docs/game-catalogue.md`.
+ * `blindtest.*`, `buzzer.*` and `quiz.*` are the namespaces a single game owns.
+ * Everything else — joining a room, the roster, the buzzer *mode*, the field a
+ * simultaneous round is answered in, the round counter, the connection, the
+ * errors — is the shell that the next game reuses unchanged. See
+ * `docs/game-catalogue.md`.
  */
 export const EN_DICTIONARY = defineTranslations({
   blindtest: {
@@ -20,13 +21,7 @@ export const EN_DICTIONARY = defineTranslations({
       anyOrder: 'The title, the artist, or both — as many goes as you like.',
       artistFound: 'Artist ✓',
       bothFound: 'You have both. Sit back.',
-      guess: 'Your answer',
-      locked: 'Answer sent. Waiting for the others…',
-      send: 'Send it',
-      titleFound: 'Title ✓',
-      waiting: defineTranslation('{count:plural}', {
-        plural: { count: { other: '{?} in so far' } }
-      })
+      titleFound: 'Title ✓'
     },
     clip: 'Clip length',
     difficulty: {
@@ -116,11 +111,7 @@ export const EN_DICTIONARY = defineTranslations({
     running: 'Ask away',
     scoring:
       'First thumb answers out loud, and the host says right or wrong. A point for right — and a wrong answer sits you out until the host lets you back in.',
-    tagline: 'Your questions, and an honest race for the floor.',
-    verdict: {
-      right: 'Right',
-      wrong: 'Wrong'
-    }
+    tagline: 'Your questions, and an honest race for the floor.'
   },
   connection: {
     clock: '· clock ±{milliseconds:number} ms',
@@ -143,7 +134,7 @@ export const EN_DICTIONARY = defineTranslations({
     invalid_message: 'The server did not understand that message.',
     music_source_unavailable: 'The music service is not answering.',
     nickname_taken: 'Someone already took that nickname.',
-    no_tracks_available: 'There are no tracks left to play.',
+    no_content_available: 'Nothing left to play. Try other settings.',
     not_implemented: 'That part of the game is not built yet.',
     player_locked_out: 'You are out for this round.',
     protocol_version_mismatch: 'This page is out of date. Reload it.',
@@ -225,6 +216,10 @@ export const EN_DICTIONARY = defineTranslations({
       roundInPlay: 'Some of these wait until the round is over'
     },
     startGame: 'Start the game',
+    verdict: {
+      right: 'Right',
+      wrong: 'Wrong'
+    },
     volume: 'Volume'
   },
   join: {
@@ -292,7 +287,51 @@ export const EN_DICTIONARY = defineTranslations({
       system: 'System'
     }
   },
+  quiz: {
+    adult: {
+      hint: 'You are the only one who knows who is in the room.',
+      label: 'Include adult questions'
+    },
+    category: {
+      arts: 'Arts and culture',
+      everyday: 'Everyday life',
+      geography: 'Geography',
+      history: 'History',
+      label: 'Which subjects',
+      none: 'Pick none and you get every subject.',
+      science: 'Science',
+      sport: 'Sport'
+    },
+    duration: 'Time per question',
+    home: {
+      description:
+        'Questions on everything — history, science, sport, the everyday. One screen asks, everyone answers on whatever they have in their hand, and the fastest right answer takes the round.'
+    },
+    name: 'Quiz',
+    reveal: {
+      title: 'The answer was'
+    },
+    scoring: {
+      buzzer:
+        'First to buzz answers out loud, and the host says right or wrong. A point for right — and a wrong answer sits you out for the rest of the round.',
+      choice:
+        'Everyone picks from four, against the clock. The right one scores a point, and the first two to find it earn +2 and +1 on top.',
+      typed:
+        'Everyone types, against the clock. The right answer scores three, and the first two to get it right earn +2 and +1 on top.'
+    },
+    tagline: 'A question, and the first one who knows it.'
+  },
   round: {
+    answer: {
+      correct: 'You got it. Sit back.',
+      label: 'Your answer',
+      locked: 'Answer sent. Waiting for the others…',
+      retry: 'As many goes as you like.',
+      submit: 'Send it',
+      waiting: defineTranslation('{count:plural}', {
+        plural: { count: { other: '{?} in so far' } }
+      })
+    },
     index: 'Round {index:number} of {total:number}',
     indexOpen: 'Round {index:number}',
     nobody: 'Nobody got it',

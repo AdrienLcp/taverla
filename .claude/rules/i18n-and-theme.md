@@ -133,8 +133,16 @@ unchanged — the button, the blockers, "{nickname} buzzed". It lived under
 intended. `round.*` is the same shape one level up: "Round 3 of 10", "+2",
 "Nobody got it" are what a *round* shows in any game.
 
+The third game moved four more, and they are the same shape: `round.answer.*` is
+the field a *simultaneous round* is answered in — its label, its send, its
+"waiting for the others", its "as many goes as you like" — where it had been
+`blindtest.answer.*`, and `host.verdict.*` is the right/wrong pair the host taps,
+where it had been the bare buzzer's. Two games needing a string unchanged is the
+signal; one game plus a hunch is not.
+
 What stays inside a game's prefix is what only that game can say:
 `blindtest.reveal.title` is "It was", and a charade has no "it".
+`blindtest.answer.bothFound` says "both", and only a pair of halves has two.
 
 ### Hold a key, never a rendered string
 

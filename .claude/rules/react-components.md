@@ -1,5 +1,31 @@
 # React Component Conventions
 
+## When a component is worth splitting — and when its length is the point
+
+**Line count is a poor proxy here.** An audit of every component in the app
+found two signals that predict one worth cutting, and neither is its size:
+
+- it holds an **asynchronous I/O routine** — a fetch, the error mapping, the
+  "nothing came back" case. That is a hook (`usePlaylistPreview`), and what
+  stays behind is the draft the JSX is built from;
+- it computes a **decision that deserves a test**. There is no component runner
+  in this repo, so that decision is untestable where it sits: move it into
+  `packages/core` and leave the rendering behind (`settingsSummary`, and
+  `findBuzzBlocker` and `buildScoreboard` before it).
+
+A **file** holding several screen-sized components is a separate problem, and a
+real one: `host-console-page.tsx` was 602 lines and six of them. Sibling
+components sharing no state are files that have not been given names yet.
+
+What stays long, on purpose:
+
+| Shape | Why it stays |
+|---|---|
+| A page owning a socket and its state | That is its job. A `useX` hook moves the same lines behind a name |
+| A phase switch whose branches delegate to a panel each | A file per branch to write `<RevealPanel />` is worse than the switch |
+| A flat list of sibling controls with no nesting | Splitting means opening seven files to see one panel. Remove the *repetition* instead — `NumberChoice`, not seven components |
+| A design-system wrapper | Its length is the prop JSDoc the rules below require |
+
 ## Accessibility first
 
 Always use `react-aria-components` (or `react-aria` hooks) for interactive UI. Check available primitives (Dialog, Toolbar, GridList, Checkbox, etc.) BEFORE writing custom HTML with manual ARIA attributes.

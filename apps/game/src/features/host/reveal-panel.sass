@@ -7,14 +7,19 @@
     display: grid
     flex: 1
     gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
-    grid-template-columns: auto minmax(0, 1fr)
-
-    @media (width < 860px)
-      align-items: start
-      grid-template-columns: minmax(0, 1fr)
+    grid-template-columns: minmax(0, 1fr)
 
     @media (prefers-reduced-motion: no-preference)
       animation: card-strike var(--transition-slow, 0) var(--timing, ease) both
+
+    // Only the blind test has anything to print beside its words. A quiz
+    // answers in text and the bare buzzer answers in nothing at all.
+    &.with-cover
+      grid-template-columns: auto minmax(0, 1fr)
+
+      @media (width < 860px)
+        align-items: start
+        grid-template-columns: minmax(0, 1fr)
 
     // Deezer serves covers at 250 px and nothing larger, so the frame is built
     // around that rather than discovering the ceiling at the end. It is die-cut
@@ -30,10 +35,8 @@
         opacity: 0.25
 
     // A game whose question the room owns reveals nothing, so the scoreline is
-    // the whole panel and takes the width the cover would have had.
+    // the whole panel rather than the line under an answer.
     &.bare
-      grid-template-columns: minmax(0, 1fr)
-
       .nobody,
       .scorers li
         @include typography.billboard
@@ -58,6 +61,15 @@
 
         color: var(--ink-muted)
         margin-bottom: var(--space-s)
+
+      // What the room is told once the answer is public — the only prose on a
+      // screen read from across the room, so it is capped at a measure.
+      .note
+        @include typography.body
+
+        color: var(--ink-muted)
+        margin-top: var(--space-s)
+        max-width: 60ch
 
       .nobody,
       .said,

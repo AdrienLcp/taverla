@@ -14,7 +14,7 @@ import { logger } from '@/infrastructure/logging/logger'
 
 export type MusicSourceError =
   | 'music_source_unavailable'
-  | 'no_tracks_available'
+  | 'no_content_available'
 
 const REQUEST_TIMEOUT_MS = 6_000
 const POOL_SIZE = 100
@@ -90,11 +90,11 @@ export const fetchTracksFor = async ({
   if (reached.length === 0) {
     const everyPathHeldNothing = fetched.every(
       (list) =>
-        list.status === 'failure' && list.error === 'no_tracks_available'
+        list.status === 'failure' && list.error === 'no_content_available'
     )
 
     return Result.failure(
-      everyPathHeldNothing ? 'no_tracks_available' : 'music_source_unavailable'
+      everyPathHeldNothing ? 'no_content_available' : 'music_source_unavailable'
     )
   }
 
@@ -103,7 +103,7 @@ export const fetchTracksFor = async ({
     .map(toCatalogueTrack)
 
   return playable.length === 0
-    ? Result.failure('no_tracks_available')
+    ? Result.failure('no_content_available')
     : Result.success(playable)
 }
 
@@ -136,7 +136,7 @@ export const fetchHostTrack = async (
   // single-track lookup is Deezer's own `/track` endpoint, which reports a
   // different score than the list did.
   if (!parsed.success || parsed.data.preview.length === 0) {
-    return Result.failure('no_tracks_available')
+    return Result.failure('no_content_available')
   }
 
   return Result.success({
@@ -230,7 +230,7 @@ const requestJson = async (
       if (type === RESOURCE_NOT_FOUND) {
         logger.warn('Deezer knows nothing at that path', { path })
 
-        return Result.failure('no_tracks_available')
+        return Result.failure('no_content_available')
       }
 
       logger.error('Deezer reported an error', { path, type })

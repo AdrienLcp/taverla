@@ -1,0 +1,23 @@
+@use '../styles/typography'
+
+@layer components
+  .asked-question
+    display: flex
+    flex-direction: column
+    gap: var(--space-s)
+    text-align: center
+    width: min(1100px, 100%)
+
+    // A step under the billboard size: this is a sentence rather than a title,
+    // and at the nominal size a question of any length is the whole screen.
+    .prompt
+      @include typography.billboard
+
+      font-size: clamp(1.5rem, 4.5vmin, 3.25rem)
+      line-height: 1.05
+      text-wrap: balance
+
+    .category
+      @include typography.label
+
+      color: var(--ink-muted)

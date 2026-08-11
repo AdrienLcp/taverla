@@ -38,7 +38,7 @@ export const drawPlayableTrack = async ({
     const candidate = takeRandom(room.trackPool)
 
     if (candidate === null) {
-      return Result.failure('no_tracks_available')
+      return Result.failure('no_content_available')
     }
 
     room.playedContentIds.add(candidate.id)
@@ -50,7 +50,7 @@ export const drawPlayableTrack = async ({
     }
   }
 
-  return Result.failure('no_tracks_available')
+  return Result.failure('no_content_available')
 }
 
 /**
@@ -121,7 +121,7 @@ const refillWhenEmpty = async ({
   )
 
   if (unplayed.length === 0) {
-    return Result.failure('no_tracks_available')
+    return Result.failure('no_content_available')
   }
 
   room.trackPool = unplayed

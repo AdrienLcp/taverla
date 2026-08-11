@@ -95,7 +95,7 @@ export const deezerClientStub = () => ({
     const found = CATALOGUE.find((track) => track.id === trackId)
 
     return found === undefined
-      ? { error: 'no_tracks_available', status: 'failure' }
+      ? { error: 'no_content_available', status: 'failure' }
       : {
           data: {
             ...found,
@@ -321,20 +321,17 @@ export const startRoomHarness = async (): Promise<RoomHarness> => {
   /**
    * A `nickname` seats the host as a player too — the phone in the middle.
    *
-   * A room is created on a shelved game and then moved, because the door and
-   * the game are two different gates: the quiz is served in full and is not on
-   * the shelf yet, so `POST /api/rooms` would refuse it while
-   * `host.updateSettings` accepts it — which is exactly what a console does.
+   * The door takes the game and the socket takes everything else about it,
+   * which is what a console does: `POST /api/rooms` decides which arm of
+   * `round.content` the room will be rendering, and the settings frame that
+   * follows tunes it.
    */
   const openRoom = async (
     settings: RoomSettings = FAST_GAME,
     nickname?: string
   ) => {
-    const shelved =
-      settings.game.kind === 'quiz' ? 'blindtest' : settings.game.kind
-
     const response = await fetch(`http://${origin}/api/rooms`, {
-      body: JSON.stringify({ game: shelved }),
+      body: JSON.stringify({ game: settings.game.kind }),
       headers: { 'content-type': 'application/json' },
       method: 'POST'
     })

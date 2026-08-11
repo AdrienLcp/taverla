@@ -1,13 +1,11 @@
-import { QRCodeSVG } from 'qrcode.react'
 import { useState } from 'react'
 
 import type { ClientMessage } from '@taverla/protocol/client-message'
+import { roundDurationMsOf } from '@taverla/protocol/game'
 import type { RoomCode } from '@taverla/protocol/identifiers'
-import type { HostRoomView, RoomSettings } from '@taverla/protocol/room'
+import type { HostRoomView } from '@taverla/protocol/room'
 import type { TrackSource } from '@taverla/protocol/track'
 
-import { answerModesFor } from '@taverla/core/room/game-modes'
-import { isRoundInPlay } from '@taverla/core/room/room-phase'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
 import { NotFoundPage } from '@/features/not-found/not-found-page'
@@ -16,42 +14,30 @@ import {
   type PlayerAnswer,
   TypedAnswer
 } from '@/features/player/answer-forms'
-import { bankedHalves, blindtestHostContent } from '@/helpers/blindtest-round'
+import { holdsTheAnswer, quizContent } from '@/helpers/round-content'
 import { useHostConnection } from '@/infrastructure/messaging/use-host-connection'
-import {
-  playUrlFor,
-  useRoomCodeParam
-} from '@/infrastructure/router/navigation'
+import { useRoomCodeParam } from '@/infrastructure/router/navigation'
 import {
   readStoredVolume,
   writeStoredVolume
 } from '@/infrastructure/storage/preferences-storage'
-import { Button } from '@/presentation/components/button'
+import { AskedQuestion } from '@/presentation/components/asked-question'
 import { ConnectionRefused } from '@/presentation/components/connection-refused'
 import { Countdown } from '@/presentation/components/countdown'
-import { Disclosure } from '@/presentation/components/disclosure'
-import { Link } from '@/presentation/components/link'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
-import {
-  answerModeLabelKey,
-  gameNameKey,
-  isShelvedGame,
-  protocolErrorKey
-} from '@/presentation/i18n/translation'
+import { protocolErrorKey } from '@/presentation/i18n/translation'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
 
-import { CopyButton } from './copy-button'
 import { FinalBoard } from './final-board'
-import { GamePicker } from './game-picker'
+import { HostActions } from './host-actions'
 import { HostControls } from './host-controls'
-import { HostSeat } from './host-seat'
 import { JoinReminder } from './join-reminder'
-import { PlaylistPicker, sourceKindKey } from './playlist-picker'
+import { LobbyStage } from './lobby-stage'
 import { RevealPanel } from './reveal-panel'
 import { useRoundAudio } from './round-audio'
-import { SettingsPanel } from './settings-panel'
+import { SetupFold } from './setup-fold'
 import { VerdictPanel } from './verdict-panel'
 
 import './host-console-page.sass'
@@ -130,7 +116,7 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
         )}
         {view !== null && (
           <>
-            <Actions
+            <HostActions
               isLive={isLive}
               onOpenRound={() => {
                 // Inside the press, never in an effect: the autoplay policy
@@ -218,22 +204,27 @@ const Stage = ({ clock, isSeated, roomCode, send, view }: StageProps) => {
       send({ answer, roundId: round.id, type: 'player.answer' })
 
     const game = view.settings.game
+    const roundDurationMs = roundDurationMsOf(game)
 
     return (
-      <div className='stage listening'>
-        <p className='now'>
-          {translate(
-            game.kind === 'buzzer' ? 'buzzer.running' : 'blindtest.listening'
-          )}
-        </p>
-        {game.kind === 'blindtest' && (
+      <div className='stage playing'>
+        {game.kind === 'quiz' ? (
+          <AskedQuestion prompt={quizContent(round)?.prompt ?? null} />
+        ) : (
+          <p className='now'>
+            {translate(
+              game.kind === 'buzzer' ? 'buzzer.running' : 'blindtest.listening'
+            )}
+          </p>
+        )}
+        {roundDurationMs !== null && (
           <div
-            className='clip-progress'
+            className='round-progress'
             key={`${round.id}-${round.awards.length}`}
             style={{
-              '--clip-remaining': `${Math.max(
+              '--round-remaining': `${Math.max(
                 0,
-                game.roundDurationMs - view.roundElapsedMs
+                roundDurationMs - view.roundElapsedMs
               )}ms`
             }}
           />
@@ -243,10 +234,10 @@ const Stage = ({ clock, isSeated, roomCode, send, view }: StageProps) => {
         )}
         {isSeated && view.settings.mode.kind === 'typed' && (
           <TypedAnswer
-            banked={bankedHalves(view.yourVerdict)}
             key={round.id}
             onAnswer={answerWithRound}
             round={round}
+            verdict={view.yourVerdict}
           />
         )}
         <Scoreboard players={view.players} />
@@ -257,21 +248,15 @@ const Stage = ({ clock, isSeated, roomCode, send, view }: StageProps) => {
   if (view.phase === 'buzzed' && round?.activeBuzz != null) {
     const buzzerId = round.activeBuzz.playerId
     const buzzer = view.players.find((player) => player.id === buzzerId)
-    const game = view.settings.game
-    const track = blindtestHostContent(view)?.track ?? null
-
-    // A blind test host who took a seat is not sent the track, so there is
-    // nothing here to judge against — which is why the seat is refused in
-    // buzzer mode rather than the panel being shown empty.
-    const hasSomethingToJudge = game.kind !== 'blindtest' || track !== null
+    const content = view.currentContent
 
     return (
       <div className='stage solo'>
-        {hasSomethingToJudge && (
+        {content !== null && holdsTheAnswer(content) && (
           <VerdictPanel
             buzz={round.activeBuzz}
             clock={clock}
-            game={game.kind}
+            content={content}
             nickname={buzzer?.nickname ?? '—'}
             onJudge={(verdict) => {
               send({
@@ -281,7 +266,6 @@ const Stage = ({ clock, isSeated, roomCode, send, view }: StageProps) => {
                 verdict
               })
             }}
-            track={track}
           />
         )}
       </div>
@@ -304,299 +288,5 @@ const Stage = ({ clock, isSeated, roomCode, send, view }: StageProps) => {
     )
   }
 
-  return <Lobby roomCode={roomCode} view={view} />
-}
-
-const Lobby = ({
-  roomCode,
-  view
-}: {
-  roomCode: RoomCode
-  view: HostRoomView
-}) => {
-  const translate = useTranslate()
-  const joinUrl = playUrlFor(view.code)
-
-  return (
-    <div className='stage lobby'>
-      <section className='invitation'>
-        <div className='code'>
-          <p className='room-code'>{roomCode}</p>
-          <CopyButton value={roomCode} />
-        </div>
-        <div className='qr'>
-          <QRCodeSVG
-            bgColor='transparent'
-            fgColor='currentColor'
-            marginSize={0}
-            size={256}
-            value={joinUrl}
-          />
-          <p className='invite'>{translate('host.invite.title')}</p>
-          <p className='join-url'>{joinUrl}</p>
-        </div>
-      </section>
-
-      <section className='roster'>
-        <h2>
-          {translate('host.players.title')} {view.players.length}
-        </h2>
-        {view.players.length === 0 ? (
-          <p className='empty'>{translate('host.players.empty')}</p>
-        ) : (
-          <Scoreboard players={view.players} />
-        )}
-      </section>
-    </div>
-  )
-}
-
-/**
- * How the evening is played, beside the volume rather than inside the lobby:
- * the countdown, the round count, the answer window and the playlist all land
- * on the round after the one on screen, and a host who has to end the game to
- * reach them is a host who does not change them.
- *
- * The seat is the one thing still kept to the lobby, because taking it reopens
- * the socket and a re-seat mid-round would drop the answer being typed.
- */
-const SetupFold = ({
-  draftSource,
-  isLive,
-  onDraftSource,
-  onSettingsChange,
-  onTakeSeat,
-  seatNickname,
-  view
-}: {
-  draftSource: TrackSource | null
-  isLive: boolean
-  onDraftSource: (source: TrackSource | null) => void
-  onSettingsChange: (settings: RoomSettings) => void
-  onTakeSeat: (nickname: string) => void
-  seatNickname: string | null
-  view: HostRoomView
-}) => {
-  const translate = useTranslate()
-  const game = view.settings.game
-  const isInLobby = view.phase === 'lobby'
-  const roundInPlay = isRoundInPlay(view.phase)
-
-  // The draft, not the committed settings: the source is only sent on launch,
-  // and a summary that waited for that would contradict the picker above it.
-  const summary = [
-    isShelvedGame(game.kind) ? translate(gameNameKey(game.kind)) : null,
-    game.kind === 'blindtest'
-      ? translate(sourceKindKey((draftSource ?? game.source).kind))
-      : null,
-    answerModesFor(game.kind).length > 1
-      ? translate(answerModeLabelKey(view.settings.mode.kind))
-      : null,
-    view.settings.roundCount === null
-      ? translate('host.roundCount.openSummary')
-      : translate('host.roundCount.summary', {
-          count: view.settings.roundCount
-        })
-  ]
-    .filter((part) => part !== null)
-    .join(' · ')
-
-  return (
-    <Disclosure
-      className='setup-fold'
-      label={translate('host.setup.label')}
-      summary={summary}
-    >
-      {roundInPlay && (
-        <p className='held'>{translate('host.setup.roundInPlay')}</p>
-      )}
-      {/* Above everything it decides, including whether the picker applies. */}
-      <GamePicker
-        isLive={isLive}
-        isRoundInPlay={roundInPlay}
-        onChange={onSettingsChange}
-        settings={view.settings}
-      />
-      {game.kind === 'blindtest' && (
-        <PlaylistPicker onDraftChange={onDraftSource} settings={game} />
-      )}
-      <SettingsPanel
-        isLive={isLive}
-        isRoundInPlay={roundInPlay}
-        onChange={onSettingsChange}
-        settings={view.settings}
-      />
-      {/*
-        Not offered in buzzer mode: that round needs someone reading the answer
-        to judge it, and a judge who is also answering is not one.
-      */}
-      {isInLobby && view.settings.mode.kind !== 'buzzer' && (
-        <HostSeat onTakeSeat={onTakeSeat} takenAs={seatNickname} />
-      )}
-    </Disclosure>
-  )
-}
-
-/**
- * Every one of these sends a frame, and a frame written to a socket that is not
- * open is dropped with nothing to show for it. Disabled while the connection is
- * away is the honest state: the press would be a no-op, and a control that
- * answers nothing reads as a broken game rather than a broken link.
- */
-const Actions = ({
-  isLive,
-  onOpenRound,
-  send,
-  view
-}: {
-  isLive: boolean
-  /** Commits the picker's draft and blesses the audio element — every control that opens a round calls it first. */
-  onOpenRound: () => void
-  send: (message: ClientMessage) => boolean
-  view: HostRoomView
-}) => {
-  const translate = useTranslate()
-
-  if (view.phase === 'lobby') {
-    const isRoomEmpty = view.players.length === 0
-
-    return (
-      <>
-        <Button
-          isDisabled={!isLive || isRoomEmpty}
-          onPress={() => {
-            onOpenRound()
-            send({ type: 'host.startRound' })
-          }}
-          size='large'
-        >
-          {translate('host.startGame')}
-        </Button>
-        {isRoomEmpty && (
-          <p className='reason'>{translate('host.needsPlayer')}</p>
-        )}
-      </>
-    )
-  }
-
-  if (view.phase === 'countdown' || view.phase === 'playing') {
-    // A blind test round ends when its clip does, so a lockout expires on its
-    // own. A charade has no such clock: once the quickest thumbs have all
-    // missed, only the host can give the round back to the room.
-    const isFieldClosed =
-      view.settings.game.kind === 'buzzer' &&
-      (view.round?.lockedOutPlayerIds.length ?? 0) > 0
-
-    return (
-      <>
-        {isFieldClosed && (
-          <Button
-            isDisabled={!isLive}
-            onPress={() => {
-              if (view.round !== null) {
-                send({ roundId: view.round.id, type: 'host.clearLockouts' })
-              }
-            }}
-            variant='outlined'
-          >
-            {translate('buzzer.clearLockouts')}
-          </Button>
-        )}
-        <Button
-          isDisabled={!isLive}
-          onPress={() => {
-            if (view.round !== null) {
-              send({ roundId: view.round.id, type: 'host.reveal' })
-            }
-          }}
-          variant='underlined'
-        >
-          {translate('host.reveal')}
-        </Button>
-      </>
-    )
-  }
-
-  if (view.phase === 'revealed') {
-    // The server ends the game rather than opening a round past the last one,
-    // so on that reveal "next round" is a button that does something else than
-    // it says — and the way out beside it reads as abandoning a game that is
-    // already over. One control, named after what it opens.
-    const total = view.settings.roundCount
-    const isLastRound = total !== null && (view.round?.index ?? 0) >= total
-
-    if (isLastRound) {
-      return (
-        <Button
-          isDisabled={!isLive}
-          onPress={() => {
-            send({ type: 'host.nextRound' })
-          }}
-          size='large'
-        >
-          {translate('host.seeResults')}
-        </Button>
-      )
-    }
-
-    return (
-      <>
-        <Button
-          isDisabled={!isLive}
-          onPress={() => {
-            onOpenRound()
-            send({ type: 'host.nextRound' })
-          }}
-          size='large'
-        >
-          {translate('host.nextRound')}
-        </Button>
-        <Button
-          isDisabled={!isLive}
-          onPress={() => {
-            send({ type: 'host.endGame' })
-          }}
-          variant='underlined'
-        >
-          {translate('host.endGame')}
-        </Button>
-      </>
-    )
-  }
-
-  if (view.phase === 'finished') {
-    return (
-      <>
-        <Button
-          isDisabled={!isLive || view.players.length === 0}
-          onPress={() => {
-            onOpenRound()
-            // Two frames rather than a new message: `host.playAgain` already
-            // means "same seats, same settings, scores at zero", and the lobby
-            // it lands in is a phase nobody needs to look at when the answer to
-            // "again?" was yes.
-            send({ type: 'host.playAgain' })
-            send({ type: 'host.startRound' })
-          }}
-          size='large'
-        >
-          {translate('host.playAgain')}
-        </Button>
-        <Button
-          isDisabled={!isLive}
-          onPress={() => {
-            send({ type: 'host.playAgain' })
-          }}
-          variant='outlined'
-        >
-          {translate('host.changeSettings')}
-        </Button>
-        <Link href='/' variant='underlined'>
-          {translate('menu.home')}
-        </Link>
-      </>
-    )
-  }
-
-  return null
+  return <LobbyStage roomCode={roomCode} view={view} />
 }

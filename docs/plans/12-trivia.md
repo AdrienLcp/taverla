@@ -172,23 +172,71 @@ Four things, and they are the reason a second case is worth having:
 `not_implemented` is now used nowhere, which is what the protocol rule said
 should happen to it as the stages land.
 
+## What the screens turned out to be
+
+The stage shipped in two sessions: the server first, then the screens, and the
+second half is where the shelf's own vocabulary moved.
+
+**Four strings left a game's namespace**, and the i18n rule's test decided each
+one: would the second game show this unchanged? The host's right/wrong pair is
+`host.verdict.*` where it was the bare buzzer's, and the field a simultaneous
+round is answered in is `round.answer.*` where it was the blind test's. What
+stayed behind is what only one game can say — the halves, and "it was".
+
+**The clip's drain bar was the round's all along.** `.clip-progress` is
+`.round-progress`, drawn whenever `roundDurationMsOf` is not null rather than
+whenever the game is a blind test, and nothing else changed: a question has a
+duration for the same reason a clip does.
+
+**The question is rendered by the two screens, never by the answer forms.** The
+host console shows those forms too when its owner has taken a seat, and a prompt
+inside them would have been read twice on that one screen.
+
+**`AskedQuestion` is one component for both surfaces**, in
+`presentation/components/`, sized off `vmin` like everything else here. It is
+read at four metres and in a hand, and two components would have been the same
+clamp written twice.
+
+**The verdict panel takes the content, not a track.** It held a `HostTrack` and
+a `GameKind` — the same fact twice, and only the blind test's half of it. It now
+takes `HostRoundContent` and renders whichever arm it got; `holdsTheAnswer` is
+the guard that used to be a `game.kind !== 'blindtest' || track !== null`.
+
+**The reveal defaults to one column.** Only the blind test has anything to print
+beside its words, so the two-column grid is a `with-cover` modifier rather than
+the base — the quiz's answer and the bare buzzer's scoreline are the ordinary
+case now, not the exception.
+
+**One content bug surfaced the moment a screen rendered it.** Upstream keeps its
+`anecdote` field when it has nothing to say, and leaves `-`, `P` or an empty
+string there — 362 of 1 800 rows. `build-question-bank.ts` drops an anecdote
+with no sentence in it, and the bank was rebuilt from the cache.
+
+**The language control is still not shipped**, and that is a decision rather
+than an omission: every row in the bank is French, so a host who picked English
+would get an empty draw and the "nothing left to play" error —
+`question-bank.test.ts` asserts exactly that. The field stays in the protocol,
+written by no UI, which is what gives the bank's own `language` column meaning
+and makes a second bank one `if` in the settings panel. A player whose interface
+is in English is served French questions with English chrome, which is what the
+blind test already does with French titles.
+
 ## Where this stage stopped
 
 **Done and covered**: the protocol arms, the generalised simultaneous path, the
-bank and its ingestion script, the server round in all three modes, and
+bank and its ingestion script, the server round in all three modes,
 `quiz-game.test.ts` — eight tests including the whole-transcript assertion that
 no player frame carries the answer, an accepted spelling, a note, or
-`correctChoiceIndex`.
+`correctChoiceIndex` — and both screens, verified in a browser at 414 px and on
+a desktop, in both locales, muted.
 
-**Not done, and deliberately**: the host console and player screens, and
-therefore `quiz` is **not in `shelvedGames`**. The server serves the game in
-full — a room already on the shelf can be moved onto it with
-`host.updateSettings`, which is what the socket suite does — but a room that
-could be *opened* on it would render blind-test screens against a quiz round.
-Shelving it is the last step, after the UI, exactly as this plan said.
+`quiz` is **in `shelvedGames`**, and `PROTOCOL_VERSION` is 8 so a tab left open
+across the deploy reloads rather than meeting a round it cannot render. The two
+sets now hold the same three games, which is what shipping every game looks
+like: the distinction exists for the window between a game being served and
+having screens, and this one spent a stage in exactly that window.
 
-**Raised, not done**: `no_tracks_available` is the protocol code a quiz that has
-run out of questions sends, and it says "tracks". The honest name is
-`no_content_available`, and the rename touches the Deezer client's own error
-union, `routes.ts`, both dictionaries and the harness — deeper than the
-mechanical case `naming-and-quality.md` says to fold into the work in hand.
+**Raised and done**: `no_tracks_available` was the protocol code a quiz that has
+run out of questions sends, and it said "tracks". It is `no_content_available`,
+across the Deezer client's own error union, `routes.ts`, both dictionaries and
+the harness.

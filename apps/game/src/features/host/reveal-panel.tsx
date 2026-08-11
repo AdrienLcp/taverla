@@ -2,7 +2,7 @@ import type React from 'react'
 
 import type { PublicPlayer, RoundView } from '@taverla/protocol/room'
 
-import { blindtestContent } from '@/helpers/blindtest-round'
+import { blindtestContent, quizContent } from '@/helpers/round-content'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import './reveal-panel.sass'
@@ -21,11 +21,42 @@ type RevealPanelProps = {
 export const RevealPanel: React.FC<RevealPanelProps> = ({ players, round }) => {
   const translate = useTranslate()
   const track = blindtestContent(round)?.revealedTrack ?? null
+  const question = quizContent(round)?.revealedQuestion ?? null
 
-  if (track === null) {
+  if (track !== null) {
     return (
-      <section className='reveal-panel bare'>
+      <section className='reveal-panel with-cover'>
+        {track.coverUrl === null ? (
+          <div className='cover placeholder' />
+        ) : (
+          <img
+            alt=''
+            className='cover'
+            height={250}
+            src={track.coverUrl}
+            width={250}
+          />
+        )}
+
         <div className='identity'>
+          <p className='framing'>{translate('blindtest.reveal.title')}</p>
+          <p className='title'>{track.title}</p>
+          <p className='artist'>{track.artist}</p>
+
+          <Outcome players={players} round={round} />
+        </div>
+      </section>
+    )
+  }
+
+  if (question !== null) {
+    return (
+      <section className='reveal-panel'>
+        <div className='identity'>
+          <p className='framing'>{translate('quiz.reveal.title')}</p>
+          <p className='title'>{question.answer}</p>
+          {question.note !== null && <p className='note'>{question.note}</p>}
+
           <Outcome players={players} round={round} />
         </div>
       </section>
@@ -33,24 +64,8 @@ export const RevealPanel: React.FC<RevealPanelProps> = ({ players, round }) => {
   }
 
   return (
-    <section className='reveal-panel'>
-      {track.coverUrl === null ? (
-        <div className='cover placeholder' />
-      ) : (
-        <img
-          alt=''
-          className='cover'
-          height={250}
-          src={track.coverUrl}
-          width={250}
-        />
-      )}
-
+    <section className='reveal-panel bare'>
       <div className='identity'>
-        <p className='framing'>{translate('blindtest.reveal.title')}</p>
-        <p className='title'>{track.title}</p>
-        <p className='artist'>{track.artist}</p>
-
         <Outcome players={players} round={round} />
       </div>
     </section>

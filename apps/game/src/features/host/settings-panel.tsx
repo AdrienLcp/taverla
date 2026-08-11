@@ -1,6 +1,10 @@
 import type React from 'react'
 
 import {
+  type QuestionCategory,
+  questionCategories
+} from '@taverla/protocol/question'
+import {
   type AnswerMode,
   answerModes,
   DEFAULT_MODE_SETTINGS,
@@ -15,14 +19,25 @@ import { answerModesFor } from '@taverla/core/room/game-modes'
 
 import { SegmentedControl } from '@/presentation/components/segmented-control'
 import { Switch } from '@/presentation/components/switch'
+import { ToggleGroup } from '@/presentation/components/toggle-group'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
-import { answerModeLabelKey, scoringKey } from '@/presentation/i18n/translation'
+import {
+  answerModeLabelKey,
+  questionCategoryKey,
+  scoringKey
+} from '@/presentation/i18n/translation'
 
 import './settings-panel.sass'
 
 const ROUND_COUNTS = [5, 10, 20, 30] as const
 const CLIP_DURATIONS_MS = [10_000, 20_000, 30_000] as const
 const COUNTDOWN_DURATIONS_MS = [3_000, 5_000, 10_000] as const
+
+/**
+ * Longer than a clip at both ends: a question has to be read before it can be
+ * answered, and a typed answer has to be spelled out where a pick is a tap.
+ */
+const QUESTION_DURATIONS_MS = [15_000, 30_000, 60_000] as const
 
 /**
  * `0` stands for "no window" and for "no limit": the strips carry strings, and
@@ -33,10 +48,45 @@ const NO_LIMIT = 0
 const ANSWER_WINDOWS_MS = [5_000, 10_000, 20_000, NO_LIMIT] as const
 const ROUND_COUNT_OPTIONS = [...ROUND_COUNTS, NO_LIMIT] as const
 
-const optionFrom = <T extends number>(
-  options: readonly T[],
-  value: string
-): T | undefined => options.find((option) => String(option) === value)
+type NumberChoiceProps = {
+  isDisabled: boolean
+  label: string
+  onChange: (value: number) => void
+  /** How each option reads. `NO_LIMIT` arrives here like any other number. */
+  optionLabel: (value: number) => string
+  options: readonly number[]
+  value: number
+}
+
+/**
+ * A strip of numbers, which is most of this panel. react-aria addresses a
+ * segment by string, so the number has to be found again on the way back up.
+ */
+const NumberChoice: React.FC<NumberChoiceProps> = ({
+  isDisabled,
+  label,
+  onChange,
+  optionLabel,
+  options,
+  value
+}) => (
+  <SegmentedControl
+    isDisabled={isDisabled}
+    label={label}
+    onChange={(next) => {
+      const chosen = options.find((option) => String(option) === next)
+
+      if (chosen !== undefined) {
+        onChange(chosen)
+      }
+    }}
+    options={options.map((option) => ({
+      label: optionLabel(option),
+      value: String(option)
+    }))}
+    value={String(value)}
+  />
+)
 
 /**
  * The literal return type is load-bearing: adding a difficulty to the protocol
@@ -52,6 +102,9 @@ const isDifficulty = (value: string): value is TrackDifficulty =>
 
 const isAnswerMode = (value: string): value is AnswerMode =>
   answerModes.some((mode) => mode === value)
+
+const asCategory = (value: string | number): QuestionCategory | undefined =>
+  questionCategories.find((category) => category === value)
 
 type SettingsPanelProps = {
   /** The socket is open. Every control here sends a frame, so none of them work without it. */
@@ -149,91 +202,117 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         />
       )}
 
-      <SegmentedControl
+      {game.kind === 'quiz' && (
+        <>
+          <ToggleGroup
+            isDisabled={isDisabled}
+            label={translate('quiz.category.label')}
+            onSelectionChange={(keys) => {
+              onChange({
+                ...settings,
+                game: {
+                  ...game,
+                  categories: [...keys]
+                    .map(asCategory)
+                    .filter((category) => category !== undefined)
+                }
+              })
+            }}
+            options={questionCategories.map((category) => ({
+              label: translate(questionCategoryKey(category)),
+              value: category
+            }))}
+            selectedKeys={game.categories}
+          />
+          {game.categories.length === 0 && (
+            <p className='hint'>{translate('quiz.category.none')}</p>
+          )}
+          <Switch
+            isDisabled={isDisabled}
+            isSelected={game.allowsAdultContent}
+            label={translate('quiz.adult.label')}
+            onChange={(allowsAdultContent) => {
+              onChange({ ...settings, game: { ...game, allowsAdultContent } })
+            }}
+          />
+          <p className='hint'>{translate('quiz.adult.hint')}</p>
+        </>
+      )}
+
+      <NumberChoice
         isDisabled={isDisabled}
         label={translate('host.rounds')}
-        onChange={(next) => {
-          const chosen = optionFrom(ROUND_COUNT_OPTIONS, next)
-
-          if (chosen !== undefined) {
-            onChange({
-              ...settings,
-              roundCount: chosen === NO_LIMIT ? null : chosen
-            })
-          }
+        onChange={(count) => {
+          onChange({
+            ...settings,
+            roundCount: count === NO_LIMIT ? null : count
+          })
         }}
-        options={ROUND_COUNT_OPTIONS.map((count) => ({
-          label:
-            count === NO_LIMIT
-              ? translate('host.roundCount.open')
-              : String(count),
-          value: String(count)
-        }))}
-        value={String(settings.roundCount ?? NO_LIMIT)}
+        optionLabel={(count) =>
+          count === NO_LIMIT ? translate('host.roundCount.open') : String(count)
+        }
+        options={ROUND_COUNT_OPTIONS}
+        value={settings.roundCount ?? NO_LIMIT}
       />
 
       {game.kind === 'blindtest' && (
-        <SegmentedControl
+        <NumberChoice
           isDisabled={isHeldByRound}
           label={translate('blindtest.clip')}
-          onChange={(next) => {
-            const roundDurationMs = optionFrom(CLIP_DURATIONS_MS, next)
-
-            if (roundDurationMs !== undefined) {
-              onChange({ ...settings, game: { ...game, roundDurationMs } })
-            }
+          onChange={(roundDurationMs) => {
+            onChange({ ...settings, game: { ...game, roundDurationMs } })
           }}
-          options={CLIP_DURATIONS_MS.map((milliseconds) => ({
-            label: secondsLabel(milliseconds),
-            value: String(milliseconds)
-          }))}
-          value={String(game.roundDurationMs)}
+          optionLabel={secondsLabel}
+          options={CLIP_DURATIONS_MS}
+          value={game.roundDurationMs}
+        />
+      )}
+
+      {game.kind === 'quiz' && (
+        <NumberChoice
+          isDisabled={isHeldByRound}
+          label={translate('quiz.duration')}
+          onChange={(roundDurationMs) => {
+            onChange({ ...settings, game: { ...game, roundDurationMs } })
+          }}
+          optionLabel={secondsLabel}
+          options={QUESTION_DURATIONS_MS}
+          value={game.roundDurationMs}
         />
       )}
 
       {mode.kind === 'buzzer' && (
-        <SegmentedControl
+        <NumberChoice
           isDisabled={isDisabled}
           label={translate('host.answerWindow.label')}
-          onChange={(next) => {
-            const chosen = optionFrom(ANSWER_WINDOWS_MS, next)
-
-            if (chosen !== undefined) {
-              onChange({
-                ...settings,
-                mode: {
-                  ...mode,
-                  answerWindowMs: chosen === NO_LIMIT ? null : chosen
-                }
-              })
-            }
+          onChange={(chosen) => {
+            onChange({
+              ...settings,
+              mode: {
+                ...mode,
+                answerWindowMs: chosen === NO_LIMIT ? null : chosen
+              }
+            })
           }}
-          options={ANSWER_WINDOWS_MS.map((milliseconds) => ({
-            label:
-              milliseconds === NO_LIMIT
-                ? translate('host.answerWindow.none')
-                : secondsLabel(milliseconds),
-            value: String(milliseconds)
-          }))}
-          value={String(mode.answerWindowMs ?? NO_LIMIT)}
+          optionLabel={(milliseconds) =>
+            milliseconds === NO_LIMIT
+              ? translate('host.answerWindow.none')
+              : secondsLabel(milliseconds)
+          }
+          options={ANSWER_WINDOWS_MS}
+          value={mode.answerWindowMs ?? NO_LIMIT}
         />
       )}
 
-      <SegmentedControl
+      <NumberChoice
         isDisabled={isDisabled}
         label={translate('host.countdown')}
-        onChange={(next) => {
-          const countdownMs = optionFrom(COUNTDOWN_DURATIONS_MS, next)
-
-          if (countdownMs !== undefined) {
-            onChange({ ...settings, countdownMs })
-          }
+        onChange={(countdownMs) => {
+          onChange({ ...settings, countdownMs })
         }}
-        options={COUNTDOWN_DURATIONS_MS.map((milliseconds) => ({
-          label: secondsLabel(milliseconds),
-          value: String(milliseconds)
-        }))}
-        value={String(settings.countdownMs)}
+        optionLabel={secondsLabel}
+        options={COUNTDOWN_DURATIONS_MS}
+        value={settings.countdownMs}
       />
     </section>
   )

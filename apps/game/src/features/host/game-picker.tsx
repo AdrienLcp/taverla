@@ -4,10 +4,11 @@ import { shelvedGames } from '@taverla/protocol/game'
 import type { RoomSettings } from '@taverla/protocol/room'
 
 import { movedToGame } from '@taverla/core/room/room-settings'
+import { isShelvedGame } from '@taverla/core/room/shelved-game'
 
 import { SegmentedControl } from '@/presentation/components/segmented-control'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
-import { gameNameKey, isShelvedGame } from '@/presentation/i18n/translation'
+import { gameNameKey } from '@/presentation/i18n/translation'
 
 type GamePickerProps = {
   /** The socket is open. This sends a frame, so it does nothing without one. */

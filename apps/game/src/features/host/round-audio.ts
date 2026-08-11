@@ -7,7 +7,7 @@ import {
   millisecondsUntil
 } from '@taverla/core/time/clock-sync'
 
-import { blindtestHostContent } from '@/helpers/blindtest-round'
+import { blindtestHostContent } from '@/helpers/round-content'
 
 /**
  * `setTimeout` is only accurate to a handful of milliseconds under load, which

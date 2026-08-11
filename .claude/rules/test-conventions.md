@@ -57,11 +57,16 @@ assertion searches raw frames for those exact strings.
 `settings.game.kind`, so a suite for another game is a fixture rather than a
 second harness — `buzzer-game.test.ts` is one file and no plumbing.
 
-A game that is served but not shelved is opened on a shelved one and then moved
-with `host.updateSettings`, which is what a console does anyway: the door and
-the game are two different gates. `quiz-game.test.ts` is the case, and it stubs
-`question-bank` the way the others stub the music client — which also keeps
-eighteen hundred questions from being parsed on every run.
+It then sends those settings on the socket, which is what a console does: the
+door decides which arm of `round.content` the room will be rendering, and the
+frame that follows tunes it. While the quiz was served and unshelved the harness
+opened its rooms on a *different* game and moved them — the door and the game
+being two different gates — and that special case went when the quiz went on the
+shelf. It comes back the day another game is served before it has screens.
+
+`quiz-game.test.ts` stubs `question-bank` the way the others stub the music
+client, which also keeps eighteen hundred questions from being parsed on every
+run.
 
 The anti-cheat assertion is over **the whole round's transcript**, not the
 latest view: a leak in any frame is a leak, and a later frame tidying it away

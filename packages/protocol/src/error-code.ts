@@ -13,7 +13,7 @@ export const protocolErrorCodes = [
   'stale_round',
   'already_buzzed',
   'player_locked_out',
-  'no_tracks_available',
+  'no_content_available',
   'music_source_unavailable',
   'rate_limited',
   /**

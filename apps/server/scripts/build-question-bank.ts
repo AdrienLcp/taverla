@@ -195,6 +195,23 @@ const fetchPack = async (packId: number): Promise<UpstreamPack | null> => {
 const rejections: string[] = []
 
 /**
+ * Upstream keeps the `anecdote` field even when it has nothing to say, and what
+ * it leaves behind is `-`, `P` or the empty string — a fifth of the bank. A
+ * stray dash under the answer on a screen the whole room is reading looks like
+ * a rendering fault, so an anecdote with no sentence in it is no anecdote.
+ *
+ * Four characters is a wide margin rather than a guess: every placeholder is one
+ * character or none, and the shortest real note runs to twenty.
+ */
+const SHORTEST_NOTE = 4
+
+const noteIn = (question: UpstreamQuestion): string | null => {
+  const anecdote = question.anecdote?.trim() ?? ''
+
+  return anecdote.length < SHORTEST_NOTE ? null : anecdote
+}
+
+/**
  * Every pack sampled while writing this carried exactly four propositions with
  * the answer among them, which is what makes choice mode free. It is checked
  * rather than trusted: a pack that broke the shape would otherwise reach the
@@ -239,7 +256,7 @@ const toBankedQuestion = ({
     id: `oqdb-${packId}-${question.id}`,
     isAdult,
     language: LANGUAGE,
-    note: question.anecdote ?? null,
+    note: noteIn(question),
     prompt: question.question,
     theme
   }

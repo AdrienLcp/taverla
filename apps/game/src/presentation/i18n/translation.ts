@@ -1,9 +1,6 @@
 import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
-import {
-  type GameKind,
-  type ShelvedGame,
-  shelvedGames
-} from '@taverla/protocol/game'
+import type { GameKind, ShelvedGame } from '@taverla/protocol/game'
+import type { QuestionCategory } from '@taverla/protocol/question'
 import type { AnswerMode } from '@taverla/protocol/room'
 
 import type {
@@ -59,9 +56,12 @@ export const answerModeLabelKey = (
 ): BuiltKey<`host.answerMode.${AnswerMode}`> => `host.answerMode.${mode}`
 
 /**
- * How a game pays, in one sentence. The bare buzzer's is its own: the blind
- * test's buzzer sentence is about a title and an artist judged separately, and
- * this game has neither half.
+ * How a game pays, in one sentence — its own, because the amounts differ and so
+ * does what is being paid for: the blind test's buzzer sentence is about a title
+ * and an artist judged separately, and neither other game has a half.
+ *
+ * A switch rather than a ternary, so a game added to the protocol stops
+ * compiling here instead of quietly borrowing the blind test's prices.
  */
 export const scoringKey = ({
   answerMode,
@@ -69,8 +69,24 @@ export const scoringKey = ({
 }: {
   answerMode: AnswerMode
   game: GameKind
-}): BuiltKey<'buzzer.scoring' | `blindtest.scoring.${AnswerMode}`> =>
-  game === 'buzzer' ? 'buzzer.scoring' : `blindtest.scoring.${answerMode}`
+}): BuiltKey<
+  | 'buzzer.scoring'
+  | `blindtest.scoring.${AnswerMode}`
+  | `quiz.scoring.${AnswerMode}`
+> => {
+  switch (game) {
+    case 'blindtest':
+      return `blindtest.scoring.${answerMode}`
+    case 'buzzer':
+      return 'buzzer.scoring'
+    case 'quiz':
+      return `quiz.scoring.${answerMode}`
+  }
+}
+
+export const questionCategoryKey = (
+  category: QuestionCategory
+): BuiltKey<`quiz.category.${QuestionCategory}`> => `quiz.category.${category}`
 
 /**
  * The three strings the shelf and a game's own front door read. Typed over the
@@ -88,6 +104,3 @@ export const gameTaglineKey = (
 export const gameDescriptionKey = (
   game: ShelvedGame
 ): BuiltKey<`${ShelvedGame}.home.description`> => `${game}.home.description`
-
-export const isShelvedGame = (value: string): value is ShelvedGame =>
-  shelvedGames.some((game) => game === value)

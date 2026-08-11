@@ -33,6 +33,14 @@
 
       color: var(--ink-muted)
 
+    // What the room is told once the answer is public. Prose on a phone, so it
+    // is the one thing on this screen set at reading size.
+    .note
+      @include typography.body
+
+      color: var(--ink-muted)
+      text-wrap: pretty
+
     .you-scored
       @include typography.monument
       @include typography.numeric

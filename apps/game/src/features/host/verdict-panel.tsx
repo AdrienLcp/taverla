@@ -1,9 +1,7 @@
 import type React from 'react'
 
-import type { GameKind } from '@taverla/protocol/game'
-import type { ActiveBuzz } from '@taverla/protocol/room'
+import type { ActiveBuzz, HostRoundContent } from '@taverla/protocol/room'
 import type { Verdict } from '@taverla/protocol/scoring'
-import type { HostTrack } from '@taverla/protocol/track'
 
 import { verdictKindFor } from '@taverla/core/scoring/verdict'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
@@ -51,12 +49,12 @@ const HALVES_CHOICES: readonly VerdictChoice[] = [
 
 const SINGLE_CHOICES: readonly VerdictChoice[] = [
   {
-    key: 'buzzer.verdict.right',
+    key: 'host.verdict.right',
     tone: 'win',
     verdict: { isCorrect: true, kind: 'single' }
   },
   {
-    key: 'buzzer.verdict.wrong',
+    key: 'host.verdict.wrong',
     tone: 'miss',
     verdict: { isCorrect: false, kind: 'single' }
   }
@@ -66,42 +64,33 @@ type VerdictPanelProps = {
   /** Who holds the floor, and how long they have left of it. */
   buzz: ActiveBuzz
   clock: ClockEstimate | null
-  /** Which game is being judged — two halves, or one claim. */
-  game: GameKind
+  /**
+   * The round in the vocabulary of the game asking it, which decides both what
+   * is printed here and whether the verdict has halves.
+   */
+  content: HostRoundContent
   /** Who is holding the buzzer. The host needs the name to look up at the room. */
   nickname: string
   onJudge: (verdict: Verdict) => void
-  /**
-   * The answer, shown here and at the reveal and nowhere else — so the host
-   * screen can face the room for the rest of the round. `null` in a game whose
-   * question the room owns, where the host is already holding it.
-   */
-  track: HostTrack | null
 }
 
 export const VerdictPanel: React.FC<VerdictPanelProps> = ({
   buzz,
   clock,
-  game,
+  content,
   nickname,
-  onJudge,
-  track
+  onJudge
 }) => {
   const translate = useTranslate()
   const choices =
-    verdictKindFor(game) === 'halves' ? HALVES_CHOICES : SINGLE_CHOICES
+    verdictKindFor(content.kind) === 'halves' ? HALVES_CHOICES : SINGLE_CHOICES
 
   return (
     <section className='verdict-panel'>
       <h2>{translate('buzz.theyBuzzed', { nickname })}</h2>
       <FloorClock buzz={buzz} clock={clock} />
 
-      {track !== null && (
-        <div className='answer'>
-          <p className='title'>{track.title}</p>
-          <p className='artist'>{track.artist}</p>
-        </div>
-      )}
+      <Answer content={content} />
 
       <div className='choices'>
         {choices.map((choice) => (
@@ -120,4 +109,30 @@ export const VerdictPanel: React.FC<VerdictPanelProps> = ({
       </div>
     </section>
   )
+}
+
+/**
+ * The answer, shown here and at the reveal and nowhere else — so the host screen
+ * can face the room for the rest of the round. A game whose question the room
+ * owns has nothing to print, and neither has a host who took a seat: the server
+ * stops sending them what they are meant to be guessing.
+ */
+const Answer = ({ content }: { content: HostRoundContent }) => {
+  switch (content.kind) {
+    case 'blindtest':
+      return content.track === null ? null : (
+        <div className='answer'>
+          <p className='title'>{content.track.title}</p>
+          <p className='artist'>{content.track.artist}</p>
+        </div>
+      )
+    case 'buzzer':
+      return null
+    case 'quiz':
+      return content.question === null ? null : (
+        <div className='answer'>
+          <p className='title'>{content.question.answer}</p>
+        </div>
+      )
+  }
 }

@@ -3,9 +3,11 @@ import { useState } from 'react'
 import { Form } from 'react-aria-components'
 
 import type { RoundView } from '@taverla/protocol/room'
-import type { HalvesVerdict } from '@taverla/protocol/scoring'
+import type { HalvesVerdict, Verdict } from '@taverla/protocol/scoring'
 
-import { blindtestContent } from '@/helpers/blindtest-round'
+import { isFullyBanked, verdictKindFor } from '@taverla/core/scoring/verdict'
+
+import { bankedHalves } from '@/helpers/round-content'
 import { Button } from '@/presentation/components/button'
 import { TextField } from '@/presentation/components/text-field'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
@@ -45,6 +47,39 @@ const useAnswering = (onAnswer: (answer: PlayerAnswer) => boolean) => {
   }
 }
 
+/**
+ * Every arm of a choice round in the one shape a column of buttons needs. A
+ * quiz candidate is a single claim; the blind test's is a track, and a title
+ * with no artist under it is not one of four distinguishable answers.
+ */
+type Candidate = {
+  key: string
+  /** The blind test's second line, and `null` for a candidate that is one line. */
+  subtitle: string | null
+  title: string
+}
+
+const candidatesIn = (round: RoundView): Candidate[] => {
+  const content = round.content
+
+  switch (content.kind) {
+    case 'blindtest':
+      return content.choices.map((choice) => ({
+        key: choice.id,
+        subtitle: choice.artist,
+        title: choice.title
+      }))
+    case 'buzzer':
+      return []
+    case 'quiz':
+      return content.choices.map((choice) => ({
+        key: choice,
+        subtitle: null,
+        title: choice
+      }))
+  }
+}
+
 export const ChoiceAnswer: React.FC<AnswerFormProps> = ({
   onAnswer,
   round
@@ -60,8 +95,8 @@ export const ChoiceAnswer: React.FC<AnswerFormProps> = ({
   return (
     <section className='answer-form choices'>
       <ul>
-        {(blindtestContent(round)?.choices ?? []).map((choice, index) => (
-          <li key={choice.id}>
+        {candidatesIn(round).map((candidate, index) => (
+          <li key={candidate.key}>
             <Button
               isDisabled={hasAnswered}
               onPress={() => {
@@ -69,14 +104,16 @@ export const ChoiceAnswer: React.FC<AnswerFormProps> = ({
               }}
               variant='outlined'
             >
-              <span className='title'>{choice.title}</span>
-              <span className='artist'>{choice.artist}</span>
+              <span className='title'>{candidate.title}</span>
+              {candidate.subtitle !== null && (
+                <span className='subtitle'>{candidate.subtitle}</span>
+              )}
             </Button>
           </li>
         ))}
       </ul>
       <AnswerStatus
-        doneKey='blindtest.answer.locked'
+        doneKey='round.answer.locked'
         hasAnswered={hasAnswered}
         round={round}
       />
@@ -85,20 +122,24 @@ export const ChoiceAnswer: React.FC<AnswerFormProps> = ({
 }
 
 type TypedAnswerProps = AnswerFormProps & {
-  /** What the server has banked for this player, and `null` before their first guess. */
-  banked: HalvesVerdict | null
+  /**
+   * What the server has banked for this player, and `null` before their first
+   * guess. Two halves in the blind test, one claim everywhere else — and the
+   * field closes once it holds everything the round had for them.
+   */
+  verdict: Verdict | null
 }
 
 /**
- * One field and as many goes as the clip allows. Two fields asked a player to
+ * One field and as many goes as the round allows. Two fields asked a player to
  * know which half they were holding before they could say it, where a typed
  * round is won by firing the moment something surfaces — so the guess goes in
- * whole and the server decides which half it was.
+ * whole and the server decides what it was worth.
  */
 export const TypedAnswer: React.FC<TypedAnswerProps> = ({
-  banked,
   onAnswer,
-  round
+  round,
+  verdict
 }) => {
   const translate = useTranslate()
   const [guess, setGuess] = useState('')
@@ -107,13 +148,14 @@ export const TypedAnswer: React.FC<TypedAnswerProps> = ({
     return null
   }
 
-  const hasBoth = banked?.artistCorrect === true && banked.titleCorrect === true
+  const judgedInHalves = verdictKindFor(round.content.kind) === 'halves'
+  const isDone = verdict !== null && isFullyBanked(verdict)
   const isEmpty = guess.trim() === ''
 
   return (
     <section className='answer-form typed'>
       {/* Above the field, because it is the context for the next guess. */}
-      <Banked banked={banked} />
+      <Banked banked={bankedHalves(verdict)} />
       <Form
         onSubmit={(event) => {
           event.preventDefault()
@@ -128,19 +170,23 @@ export const TypedAnswer: React.FC<TypedAnswerProps> = ({
       >
         <TextField
           autoComplete='off'
-          description={translate('blindtest.answer.anyOrder')}
-          isDisabled={hasBoth}
-          label={translate('blindtest.answer.guess')}
+          description={translate(
+            judgedInHalves ? 'blindtest.answer.anyOrder' : 'round.answer.retry'
+          )}
+          isDisabled={isDone}
+          label={translate('round.answer.label')}
           onChange={setGuess}
           value={guess}
         />
-        <Button isDisabled={hasBoth || isEmpty} size='large' type='submit'>
-          {translate('blindtest.answer.send')}
+        <Button isDisabled={isDone || isEmpty} size='large' type='submit'>
+          {translate('round.answer.submit')}
         </Button>
       </Form>
       <AnswerStatus
-        doneKey='blindtest.answer.bothFound'
-        hasAnswered={hasBoth}
+        doneKey={
+          judgedInHalves ? 'blindtest.answer.bothFound' : 'round.answer.correct'
+        }
+        hasAnswered={isDone}
         round={round}
       />
     </section>
@@ -150,7 +196,8 @@ export const TypedAnswer: React.FC<TypedAnswerProps> = ({
 /**
  * Without this a second guess is a guess at what to guess at: the player has
  * been told nothing about the first. It names only what *they* banked, which is
- * why it can be shown before the reveal.
+ * why it can be shown before the reveal — and only a pair of halves has
+ * anything to say here, since one claim is either held or still owed.
  */
 const Banked = ({ banked }: { banked: HalvesVerdict | null }) => {
   const translate = useTranslate()
@@ -189,7 +236,7 @@ const AnswerStatus = ({
     <p className='status' role='status'>
       {hasAnswered
         ? translate(doneKey)
-        : translate('blindtest.answer.waiting', {
+        : translate('round.answer.waiting', {
             count: round?.answers.length ?? 0
           })}
     </p>

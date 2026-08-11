@@ -5,16 +5,18 @@ of screens. **Blind test** is the first of them: one screen runs the game and
 shows the QR code, everyone else plays on whatever screen they have to hand,
 and the first to buzz gets to name the track. **Buzzer** is the second: the same
 room, the same unforgeable race for the floor, and no content at all — the host
-brings the charade, the quiz on paper or the lesson.
+brings the charade, the quiz on paper or the lesson. **Quiz** is the third, and
+it serves its own: 1 800 French questions bundled with the server.
 
 A phone is the common case, not the contract. The room code is displayed to be
 read aloud and typed, so a laptop in the same room joins the same way — nothing
 user-facing may assume the device.
 
 Two names, two scopes, and the distinction is load-bearing. The product owns
-`@taverla/*`, the `taverla:*` storage keys and the repository name. The game
-owns the `blindtest.*` translation prefix and nothing else. When the second game
-lands it takes its own prefix and touches none of the first's.
+`@taverla/*`, the `taverla:*` storage keys and the repository name. A game owns
+its own translation prefix — `blindtest.*`, `buzzer.*`, `quiz.*` — and nothing
+else. A string the next game would show unchanged belongs to the shell, and the
+third game moved four of them there.
 
 ## Tech stack
 
@@ -120,10 +122,13 @@ string written into a component is a bug, not a shortcut — see
   and the server then stops sending it the track
 - **Player** — anyone who joined, by scanning the QR code or by typing the room
   code. Holds a seat and a score
-- **Game** — what the room is playing. `blindtest`, `buzzer` and (unserved)
-  `quiz`; `shelvedGames` is the two a room may actually be opened for, and the
-  create-room request carries which. The game owns its arm of `settings.game`
-  and `round.content`, and narrows the room's answer mode
+- **Game** — what the room is playing. `blindtest`, `buzzer`, `quiz`;
+  `shelvedGames` is the ones a room may actually be opened for, and the
+  create-room request carries which. It holds all three today, and must not
+  collapse into `gameKinds`: it is what refuses a game that is served but has no
+  screens yet, and every game so far has spent a stage in that window. The game
+  owns its arm of `settings.game` and `round.content`, and narrows the room's
+  answer mode
 - **Round** — one track, one question, or nothing at all.
   `lobby → countdown → playing → buzzed → revealed`. `roundCount` is nullable,
   and `null` means until the host ends it
@@ -213,13 +218,19 @@ verdict, all discriminated on `kind` — and the game that proves it: a **bare
 buzzer**, where the server serves no content at all and the room supplies
 whatever it likes.
 
-**12 is served but has no screens.** The quiz runs in all three modes on 1 708
-French questions bundled with the server, and `quiz` is deliberately still out
-of `shelvedGames`: a room that could be *opened* on it would render the blind
-test's screens against a quiz round. There is no API to take — OpenQuizzDB
-publishes downloads now, which is better, because a bundled asset cannot go down
-in the middle of a party. Its real work was not the questions but the
-**simultaneous path**, which stage 11 left entirely in the blind test's shape.
+**12 is done, and the quiz is the third game on the shelf.** It runs in all
+three modes on 1 800 French questions bundled with the server — ninety-two of
+them adult and off until the host says otherwise. There is no API to take —
+OpenQuizzDB publishes downloads now, which is better, because a bundled asset
+cannot go down in the middle of a party. Its real work was not the questions but
+the **simultaneous path**, which stage 11 left entirely in the blind test's
+shape, and then the four shell strings the screens forced out of a game's
+namespace.
+
+The **question language** is a room setting the UI deliberately does not offer:
+every row in the bank is French, so shipping the control would ship an option
+that always fails. The field stays in the protocol, and a second bank makes it
+one `if` in the settings panel.
 
 Read the divergences at the end of `docs/plans/11-buzzer.md` before trusting a
 detail written earlier in that file: the second game corrected the first half in

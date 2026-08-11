@@ -37,7 +37,7 @@ const respondWithTracks = (
   context: Context,
   found: Result<CatalogueTrack[], MusicSourceError>
 ) => {
-  if (found.status === 'failure' && found.error === 'no_tracks_available') {
+  if (found.status === 'failure' && found.error === 'no_content_available') {
     const empty: TrackListResponse = { tracks: [] }
 
     return context.json(empty)

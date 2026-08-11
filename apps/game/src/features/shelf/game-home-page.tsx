@@ -3,6 +3,8 @@ import { useNavigate, useParams } from 'react-router'
 
 import type { ShelvedGame } from '@taverla/protocol/game'
 
+import { isShelvedGame } from '@taverla/core/room/shelved-game'
+
 import { NotFoundPage } from '@/features/not-found/not-found-page'
 import { createRoom } from '@/infrastructure/api/taverla-api'
 import { hostPathFor } from '@/infrastructure/router/navigation'
@@ -13,7 +15,6 @@ import {
   gameDescriptionKey,
   gameNameKey,
   gameTaglineKey,
-  isShelvedGame,
   type PlainTranslationKey
 } from '@/presentation/i18n/translation'
 

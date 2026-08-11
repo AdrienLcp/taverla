@@ -8,13 +8,19 @@ one part.
 
 ### Features
 
-- `[Server]` The quiz is served, in all three modes, on 1 708 French questions
-  bundled with the server. Everything a round needs is in the repository: the
-  bank is a 780 KB asset rather than a network call, so a game whose data weighs
-  less than a photograph cannot go down because somebody else's web server did,
-  in the middle of a party. It is **not on the shelf yet** — the screens are the
-  next stage, and a room that could be opened on a game with no screens would
-  render the blind test's against a quiz round
+- **The quiz is the third game on the shelf**, playable in all three modes on
+  1 800 French questions bundled with the server — ninety-two of them adult and
+  drawn only for a room whose host asked. Everything a round needs is in the
+  repository: the bank is a 780 KB asset rather than a network call, so a game
+  whose data weighs less than a photograph cannot go down because somebody
+  else's web server did, in the middle of a party
+
+- `[Game]` The question is the stimulus, so it is what the screens show. It
+  stands where the clip's "listening…" stood on the host console and above the
+  answer on every phone, with its subject in small caps underneath and the same
+  drain bar running out below — a quiz round has a duration too, which is why
+  that bar is no longer the blind test's. The reveal carries the answer and its
+  note, the anecdote that travels *with* the answer because it gives it away
 
 - `[Game]` The menu credits whoever wrote the questions. CC BY-SA asks that the
   credit travel with the work, and the questions ship bundled rather than being
@@ -45,14 +51,76 @@ one part.
 
 ### Fixes
 
+- `[Server]` A question with nothing to add says nothing. Upstream keeps its
+  `anecdote` field even when it is empty, and what it leaves there is `-`, `P`
+  or the empty string — 362 of the 1 800 rows, so one round in five put a stray
+  dash under the answer on the screen the whole room is reading. The ingestion
+  script drops an anecdote with no sentence in it, and the bank is rebuilt
 - `[Game]` The control variants all name what the eye sees again. `ghost` named
   how important an action was while `filled` and `outlined` named the material,
   and it was underlined — so the moment a second underlined thing existed,
   neither name told you which was which. It is `underlined` now, and the three
   read as one family
 
+### Internal
+
+- The third game moved four strings out of the first two's namespaces, which is
+  the i18n rule's own test working: "would the second game show this
+  unchanged?". The host's right/wrong pair is `host.verdict.*` where it was the
+  bare buzzer's, and the field a simultaneous round is answered in — its label,
+  its send, its "waiting for the others", its "as many goes as you like" — is
+  `round.answer.*` where it was the blind test's. What stayed game-owned is what
+  only that game can say: the halves, and "it was"
+- `AskedQuestion` is one component on both surfaces, sized off the viewport
+  rather than off which screen is rendering it. The question is read at four
+  metres and in a hand, and two components would have been the same clamp twice.
+  It is rendered by the console and by the player screen rather than inside the
+  answer forms, which the console also shows — a seated host would have read the
+  question twice
+- `holdsTheAnswer` says whether the host still has what the round is judged
+  against, over every arm of `HostRoundContent`. The verdict panel took a
+  `HostTrack` and a `GameKind`, which is the same fact spelled twice and only
+  the blind test's half of it
+- The socket harness opens a room on the game its settings name. It opened one
+  on a shelved game and moved it, because the quiz was served and not shelved;
+  that gate closed when the quiz went on the shelf
+- The host console is eight files where it was one. 602 lines held six
+  components, and the five sets of controls a phase offers — the lobby's launch,
+  the round's reveal, the two ways out of a reveal, the three out of a finished
+  game — shared no state with each other and nothing but their props with the
+  page. `HostActions` is now a switch over the phase and one file per branch,
+  including the branch that answers nothing: while the floor is held the only
+  decision left is the verdict, and the stage owns that
+- **Line count turned out to be a poor proxy for a component worth cutting.**
+  The two signals that predicted one here were an *asynchronous I/O routine* and
+  a *decision that deserves a test* — recorded in `react-components.md`, along
+  with the components the audit deliberately left long. `Stage` is 111 lines of
+  phase branches that delegate to a panel each, and a file per branch to write
+  `<RevealPanel />` is worse than the switch
+- The line the setup fold shows while it is closed is `settingsSummary` in
+  `@taverla/core/room/settings-summary`, and it has a test. It is not UI: it
+  decides which of four fields a room has anything to say about — the game only
+  when the shelf can name it, the source only for a blind test, the answer mode
+  only where more than one is offered — and it reads the *draft* source rather
+  than the committed one, because the picker commits on the launch and a summary
+  that waited would contradict the control above it
+- `isShelvedGame` is `@taverla/core/room/shelved-game`. It sat beside the
+  translation-key builders, which is where it was needed first rather than what
+  it is about, and the summary was about to be its second definition
+- `usePlaylistPreview` holds the picker's one trip to the network. The component
+  keeps the draft it renders from, and the hook keeps what came back
+- Four strips in the settings panel each spelled out the same round trip —
+  `String()` on the way down, a lookup and a guard on the way back, because
+  react-aria addresses a segment by string. `NumberChoice` says it once
+
 ### Breaking Changes
 
+- `[Shared]` A room may be opened on the quiz, and `PROTOCOL_VERSION` goes to 8
+  — so a tab left open across the deploy reloads instead of meeting a round it
+  cannot render. `shelvedGames` and `gameKinds` now hold the same three, which
+  is what shipping every game looks like rather than a sign the distinction was
+  unnecessary: it exists for the window between a game being served and having
+  screens, and the quiz spent a stage in exactly that window
 - `[Shared]` A player is told what they hold in every game, not only the blind
   test. `yourVerdict` carries the whole `Verdict` union where it carried the
   `halves` arm alone. The reasoning that narrowed it — a game judged on one

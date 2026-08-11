@@ -18,13 +18,7 @@ export const FR_DICTIONARY: Dictionary = {
         'Le titre, l’artiste, ou les deux — autant d’essais que tu veux.',
       artistFound: 'Artiste ✓',
       bothFound: 'Tu as les deux. Tranquille.',
-      guess: 'Ta réponse',
-      locked: 'Réponse envoyée. On attend les autres…',
-      send: 'Envoyer',
-      titleFound: 'Titre ✓',
-      waiting: defineTranslation('{count:plural}', {
-        plural: { count: { one: '{?} a répondu', other: '{?} ont répondu' } }
-      })
+      titleFound: 'Titre ✓'
     },
     clip: 'Durée de l’extrait',
     difficulty: {
@@ -116,11 +110,7 @@ export const FR_DICTIONARY: Dictionary = {
     running: 'Pose ta question',
     scoring:
       'Le premier pouce répond à voix haute, et l’hôte dit si c’est bon. 1 point si c’est juste — et une mauvaise réponse te met hors-jeu jusqu’à ce que l’hôte te remette en jeu.',
-    tagline: 'Tes questions, et une course honnête au buzz.',
-    verdict: {
-      right: 'Bonne réponse',
-      wrong: 'Raté'
-    }
+    tagline: 'Tes questions, et une course honnête au buzz.'
   },
   connection: {
     clock: '· horloge ±{milliseconds:number} ms',
@@ -144,7 +134,7 @@ export const FR_DICTIONARY: Dictionary = {
     invalid_message: 'Le serveur n’a pas compris ce message.',
     music_source_unavailable: 'Le service musical ne répond pas.',
     nickname_taken: 'Ce pseudo est déjà pris.',
-    no_tracks_available: 'Il ne reste aucun titre à jouer.',
+    no_content_available: 'Il ne reste rien à jouer. Change les réglages.',
     not_implemented: 'Cette partie du jeu n’existe pas encore.',
     player_locked_out: 'Tu es hors-jeu pour ce tour.',
     protocol_version_mismatch: 'Cette page n’est plus à jour. Recharge-la.',
@@ -227,6 +217,10 @@ export const FR_DICTIONARY: Dictionary = {
       roundInPlay: 'Certains de ces réglages attendent la fin de la manche'
     },
     startGame: 'Lancer la partie',
+    verdict: {
+      right: 'Bonne réponse',
+      wrong: 'Raté'
+    },
     volume: 'Volume'
   },
   join: {
@@ -290,7 +284,51 @@ export const FR_DICTIONARY: Dictionary = {
       system: 'Système'
     }
   },
+  quiz: {
+    adult: {
+      hint: 'Tu es le seul à savoir qui est dans la salle.',
+      label: 'Inclure les questions pour adultes'
+    },
+    category: {
+      arts: 'Arts et culture',
+      everyday: 'Vie quotidienne',
+      geography: 'Géographie',
+      history: 'Histoire',
+      label: 'Sur quels sujets',
+      none: 'N’en choisis aucun et tu as tous les sujets.',
+      science: 'Sciences',
+      sport: 'Sport'
+    },
+    duration: 'Temps par question',
+    home: {
+      description:
+        'Des questions sur tout — l’histoire, les sciences, le sport, la vie de tous les jours. Un écran pose la question, tout le monde répond sur ce qu’il a dans la main, et la bonne réponse la plus rapide remporte le tour.'
+    },
+    name: 'Quiz',
+    reveal: {
+      title: 'La réponse était'
+    },
+    scoring: {
+      buzzer:
+        'Le premier qui buzze répond à voix haute, et l’hôte dit si c’est bon. 1 point si c’est juste — et une mauvaise réponse te met hors-jeu pour le reste du tour.',
+      choice:
+        'Tout le monde choisit parmi quatre, contre la montre. La bonne proposition rapporte 1 point, et les deux premiers à la trouver gagnent +2 et +1 en plus.',
+      typed:
+        'Tout le monde tape, contre la montre. La bonne réponse rapporte 3 points, et les deux premiers à trouver gagnent +2 et +1 en plus.'
+    },
+    tagline: 'Une question, et le premier qui sait.'
+  },
   round: {
+    answer: {
+      correct: 'Tu l’as. Tranquille.',
+      label: 'Ta réponse',
+      locked: 'Réponse envoyée. On attend les autres…',
+      retry: 'Autant d’essais que tu veux.',
+      submit: 'Envoyer',
+      waiting: defineTranslation('{count:plural}', {
+        plural: { count: { one: '{?} a répondu', other: '{?} ont répondu' } }
+      })
+    },
     index: 'Tour {index:number} sur {total:number}',
     indexOpen: 'Tour {index:number}',
     nobody: 'Personne n’a trouvé',

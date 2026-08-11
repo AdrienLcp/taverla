@@ -39,7 +39,7 @@
         @media (width < 900px)
           grid-template-columns: minmax(0, 1fr)
 
-      &.listening
+      &.playing
         align-items: center
         justify-content: center
 
@@ -122,10 +122,10 @@
 
       color: var(--ink-muted)
 
-    // Width driven by a CSS animation rather than a React timer: the clip runs
+    // Width driven by a CSS animation rather than a React timer: the round runs
     // for a duration the server already decided, and re-keying the element on a
     // resume is what restarts it after a buzz.
-    .clip-progress
+    .round-progress
       border: 3px solid var(--ink)
       height: 28px
       overflow: hidden
@@ -133,7 +133,7 @@
       width: min(900px, 100%)
 
       &::after
-        animation: clip-drain var(--clip-remaining, 0ms) linear forwards
+        animation: round-drain var(--round-remaining, 0ms) linear forwards
         background: var(--ink)
         content: ''
         inset: 0
@@ -144,7 +144,7 @@
           animation: none
           opacity: 0.35
 
-    .listening .scoreboard
+    .playing .scoreboard
       width: min(900px, 100%)
 
     > footer
@@ -180,7 +180,7 @@
 
           color: var(--ink-muted)
 
-@keyframes clip-drain
+@keyframes round-drain
   from
     transform: translateX(0)
   to

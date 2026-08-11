@@ -1,13 +1,17 @@
 # Taverla
 
-A shelf of party games sharing one room, one QR code and one set of screens.
-**Blind test** is the first of them: one screen runs the game and shows the QR
-code, everyone else plays on whatever screen they have to hand, and the first to
-buzz gets to name the track.
+A shelf of party games sharing one room, one QR code and one set of screens. One
+screen runs the game and shows the code, everyone else plays on whatever they
+have to hand, and the first to know it takes the round.
 
-The product is `Taverla`; the game is `Blind test`. Packages are scoped
+Three games are on the shelf. **Blind test** plays a clip and asks for the title
+and the artist. **Buzzer** serves no content at all — the host brings the
+charade, the quiz on paper or the lesson, and the room only needs an honest race
+for the floor. **Quiz** asks 1 800 French questions bundled with the server.
+
+The product is `Taverla`; a game is one thing on it. Packages are scoped
 `@taverla/*` because they belong to the shelf, while the translation keys a
-single game owns keep its own `blindtest.*` prefix.
+single game owns keep its own prefix — `blindtest.*`, `buzzer.*`, `quiz.*`.
 
 ```bash
 pnpm install
@@ -21,17 +25,17 @@ devices without any tunnelling.
 
 ## What is here today
 
-**A whole game, playable end to end and deployed.** Create a room, join by QR or
-by code, claim a seat that survives a locked screen. The round engine draws a
-track, counts every device in on the same instant, arms the buzzers, stamps who
-was first, takes the host's verdict and reveals with the cover art. A wrong
-answer locks that player out and the clip picks up where the buzz stopped it,
-then a running scoreboard and a final board that keeps everyone for another
-game. English and French, light and dark, on a phone or a laptop.
+**Three games, playable end to end and deployed.** Create a room, join by QR or
+by code, claim a seat that survives a locked screen. The round engine draws what
+the game serves, counts every device in on the same instant, arms the buzzers,
+stamps who was first, takes the host's verdict and reveals. A wrong answer locks
+that player out and the round picks up where the buzz stopped it, then a running
+scoreboard and a final board that keeps everyone for another game. English and
+French, light and dark, on a phone or a laptop.
 
-Three ways to answer: the first thumb on the buzzer, four choices on screen, or
-everyone typing at once over the same clip — the last two decided by the server
-and scored by speed on top of being right.
+Three ways to answer, and the game narrows them: the first thumb on the buzzer,
+four choices on screen, or everyone typing at once against the same clock — the
+last two decided by the server and scored by speed on top of being right.
 
 It is covered end to end: the socket suites drive a real server over real
 sockets, and three Playwright journeys drive the two screens against a stubbed
@@ -40,9 +44,10 @@ purpose — see [`docs/plans/06-testing.md`](docs/plans/06-testing.md). The stag
 past 08 came out of playing the game rather than out of planning it. See
 [`docs/plans/`](docs/plans/).
 
-The blind test is the first game rather than the whole product: the room, the QR
-code, the seats, the anti-cheat and the corner menu are a shell several games
-will share. See
+No game is the whole product: the room, the QR code, the seats, the anti-cheat
+and the corner menu are a shell the three of them share, and the seam between
+the shell and one game on it — `settings.game`, `round.content`, the verdict —
+was cut only once there were two cases to measure it against. See
 [`docs/game-catalogue.md`](docs/game-catalogue.md) — and note that nothing there
 is being built in advance.
 
