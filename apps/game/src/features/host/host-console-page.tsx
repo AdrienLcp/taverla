@@ -26,6 +26,7 @@ import {
 import { Button } from '@/presentation/components/button'
 import { ConnectionRefused } from '@/presentation/components/connection-refused'
 import { Countdown } from '@/presentation/components/countdown'
+import { Disclosure } from '@/presentation/components/disclosure'
 import { Link } from '@/presentation/components/link'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
@@ -35,11 +36,11 @@ import { usePhaseField } from '@/presentation/theme/use-phase-field'
 
 import { CopyButton } from './copy-button'
 import { FinalBoard } from './final-board'
-import { GameSettings } from './game-settings'
+import { answerModeLabelKey, GameSettings } from './game-settings'
 import { HostControls } from './host-controls'
 import { HostSeat } from './host-seat'
 import { JoinReminder } from './join-reminder'
-import { PlaylistPicker } from './playlist-picker'
+import { PlaylistPicker, sourceKindKey } from './playlist-picker'
 import { RevealPanel } from './reveal-panel'
 import { useRoundAudio } from './round-audio'
 import { VerdictPanel } from './verdict-panel'
@@ -74,6 +75,7 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
   useReportConnection({ clock, status })
   usePhaseField(view?.phase ?? null)
   const { unlock } = useRoundAudio({ clock, view, volume })
+  const isLive = status === 'open'
 
   if (status === 'refused') {
     return (
@@ -103,6 +105,8 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
 
       <Stage
         clock={clock}
+        draftSource={draftSource}
+        isLive={isLive}
         isSeated={seatNickname !== null}
         onDraftSource={setDraftSource}
         onTakeSeat={setSeatNickname}
@@ -121,7 +125,7 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
         {view !== null && (
           <>
             <Actions
-              isLive={status === 'open'}
+              isLive={isLive}
               onStart={() => {
                 // Inside the press, never in an effect: the autoplay policy
                 // grants permission to the element only from a real gesture,
@@ -144,6 +148,7 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
               view={view}
             />
             <HostControls
+              isLive={isLive}
               onSettingsChange={(settings) => {
                 send({ settings, type: 'host.updateSettings' })
               }}
@@ -163,6 +168,8 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
 
 type StageProps = {
   clock: ClockEstimate | null
+  draftSource: TrackSource | null
+  isLive: boolean
   isSeated: boolean
   onDraftSource: (source: TrackSource | null) => void
   onTakeSeat: (nickname: string) => void
@@ -174,6 +181,8 @@ type StageProps = {
 
 const Stage = ({
   clock,
+  draftSource,
+  isLive,
   isSeated,
   onDraftSource,
   onTakeSeat,
@@ -268,6 +277,8 @@ const Stage = ({
 
   return (
     <Lobby
+      draftSource={draftSource}
+      isLive={isLive}
       onDraftSource={onDraftSource}
       onTakeSeat={onTakeSeat}
       roomCode={roomCode}
@@ -279,6 +290,8 @@ const Stage = ({
 }
 
 const Lobby = ({
+  draftSource,
+  isLive,
   onDraftSource,
   onTakeSeat,
   roomCode,
@@ -286,6 +299,8 @@ const Lobby = ({
   send,
   view
 }: {
+  draftSource: TrackSource | null
+  isLive: boolean
   onDraftSource: (source: TrackSource | null) => void
   onTakeSeat: (nickname: string) => void
   roomCode: RoomCode
@@ -295,6 +310,14 @@ const Lobby = ({
 }) => {
   const translate = useTranslate()
   const joinUrl = playUrlFor(view.code)
+
+  // The draft, not the committed settings: the source is only sent on launch,
+  // and a summary that waited for that would contradict the picker above it.
+  const setupSummary = [
+    translate(sourceKindKey((draftSource ?? view.settings.source).kind)),
+    translate(answerModeLabelKey(view.settings.answerMode)),
+    translate('host.roundCount', { count: view.settings.roundCount })
+  ].join(' · ')
 
   return (
     <div className='stage lobby'>
@@ -316,33 +339,44 @@ const Lobby = ({
         </div>
       </section>
 
-      <section className='roster'>
-        <h2>
-          {translate('host.players.title')} {view.players.length}
-        </h2>
-        {view.players.length === 0 ? (
-          <p className='empty'>{translate('host.players.empty')}</p>
-        ) : (
-          <Scoreboard players={view.players} />
-        )}
-        <PlaylistPicker
-          onDraftChange={onDraftSource}
-          settings={view.settings}
-        />
-        <GameSettings
-          onChange={(settings) => {
-            send({ settings, type: 'host.updateSettings' })
-          }}
-          settings={view.settings}
-        />
-        {/*
-          Not offered in buzzer mode: that round needs someone reading the
-          answer to judge it, and a judge who is also answering is not one.
-        */}
-        {view.settings.answerMode !== 'buzzer' && (
-          <HostSeat onTakeSeat={onTakeSeat} takenAs={seatNickname} />
-        )}
-      </section>
+      {/*
+        Who is in, and how it will be played — the two things the host owns
+        before starting. Only the first belongs on a screen a room is reading:
+        the rest is set once an evening and folds away behind its own summary.
+      */}
+      <div className='setup'>
+        <section className='roster'>
+          <h2>
+            {translate('host.players.title')} {view.players.length}
+          </h2>
+          {view.players.length === 0 ? (
+            <p className='empty'>{translate('host.players.empty')}</p>
+          ) : (
+            <Scoreboard players={view.players} />
+          )}
+        </section>
+
+        <Disclosure label={translate('host.setup')} summary={setupSummary}>
+          <PlaylistPicker
+            onDraftChange={onDraftSource}
+            settings={view.settings}
+          />
+          <GameSettings
+            isLive={isLive}
+            onChange={(settings) => {
+              send({ settings, type: 'host.updateSettings' })
+            }}
+            settings={view.settings}
+          />
+          {/*
+            Not offered in buzzer mode: that round needs someone reading the
+            answer to judge it, and a judge who is also answering is not one.
+          */}
+          {view.settings.answerMode !== 'buzzer' && (
+            <HostSeat onTakeSeat={onTakeSeat} takenAs={seatNickname} />
+          )}
+        </Disclosure>
+      </div>
     </div>
   )
 }

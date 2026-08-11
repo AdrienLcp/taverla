@@ -140,6 +140,7 @@ export const FR_DICTIONARY: Dictionary = {
   'host.players.empty': 'Personne n’a encore rejoint. Le QR code attend.',
   'host.players.title': 'Joueurs',
   'host.reveal': 'Donner la réponse',
+  'host.roundCount': '{count} tours',
   'host.rounds': 'Tours',
   'host.seat.action': 'Prendre une place',
   'host.seat.description':
@@ -148,6 +149,7 @@ export const FR_DICTIONARY: Dictionary = {
   'host.seat.taken': 'Tu joues sous le nom de {nickname}.',
   'host.seconds': '{seconds} s',
   'host.seeResults': 'Voir les résultats',
+  'host.setup': 'Réglages',
   'host.startGame': 'Lancer la partie',
   'host.volume': 'Volume',
 

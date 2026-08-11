@@ -1,0 +1,62 @@
+@use '../styles/focus'
+@use '../styles/typography'
+
+@layer components
+  .disclosure
+    border-top: 2px solid var(--rule)
+
+    // react-aria stamps `data-expanded` on the root, never on the trigger, so
+    // the glyph has to be reached from here.
+    &[data-expanded] .trigger svg
+      transform: rotate(180deg)
+
+    .react-aria-Heading
+      margin: 0
+
+    .trigger
+      @include focus.ring-inset
+
+      align-items: center
+      background: none
+      border: none
+      color: var(--ink)
+      cursor: pointer
+      display: flex
+      gap: var(--space-m)
+      justify-content: space-between
+      min-height: 52px
+      padding: var(--space-s) 0
+      text-align: start
+      width: 100%
+
+      svg
+        flex: none
+        transition: transform var(--transition-fast, 0) var(--timing, ease)
+
+      &[data-hovered] .summary,
+      &[data-pressed] .summary
+        color: var(--ink)
+
+    .naming
+      display: flex
+      flex-direction: column
+      gap: var(--space-2xs)
+      min-width: 0
+
+    .name
+      @include typography.label
+
+    // The values themselves, not a count of them: "three settings" tells a host
+    // nothing they can decide on, and this line exists to be decided on.
+    .summary
+      @include typography.caption
+
+      color: var(--ink-muted)
+      overflow-wrap: anywhere
+      transition: color var(--transition-fast, 0) var(--timing, ease)
+
+    .panel
+      display: flex
+      flex-direction: column
+      gap: var(--space-m)
+      padding-block-end: var(--space-m)

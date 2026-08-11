@@ -136,6 +136,7 @@ export const EN_DICTIONARY = {
   'host.players.empty': 'Nobody has joined yet. The QR code is waiting.',
   'host.players.title': 'Players',
   'host.reveal': 'Give it away',
+  'host.roundCount': '{count} rounds',
   'host.rounds': 'Rounds',
   'host.seat.action': 'Take a seat',
   'host.seat.description':
@@ -144,6 +145,7 @@ export const EN_DICTIONARY = {
   'host.seat.taken': 'You are playing as {nickname}.',
   'host.seconds': '{seconds}s',
   'host.seeResults': 'See the results',
+  'host.setup': 'Settings',
   'host.startGame': 'Start the game',
   'host.volume': 'Volume',
 

@@ -37,7 +37,7 @@ const difficultyLabelKey = (
 const isDifficulty = (value: string): value is TrackDifficulty =>
   trackDifficulties.some((difficulty) => difficulty === value)
 
-const answerModeLabelKey = (
+export const answerModeLabelKey = (
   mode: AnswerMode
 ): `blindtest.answerMode.${AnswerMode}` => `blindtest.answerMode.${mode}`
 
@@ -45,6 +45,8 @@ const isAnswerMode = (value: string): value is AnswerMode =>
   answerModes.some((mode) => mode === value)
 
 type GameSettingsProps = {
+  /** The socket is open. Every control here sends a frame, so none of them work without it. */
+  isLive: boolean
   /** Applied to the room as it is pressed; nothing here waits for the launch. */
   onChange: (settings: RoomSettings) => void
   settings: RoomSettings
@@ -56,10 +58,12 @@ type GameSettingsProps = {
  * because a search can come back empty; these cannot, so they land immediately.
  */
 export const GameSettings: React.FC<GameSettingsProps> = ({
+  isLive,
   onChange,
   settings
 }) => {
   const translate = useTranslate()
+  const isDisabled = !isLive
 
   const secondsLabel = (milliseconds: number): string =>
     translate('host.seconds', { seconds: milliseconds / 1_000 })
@@ -67,6 +71,7 @@ export const GameSettings: React.FC<GameSettingsProps> = ({
   return (
     <section className='game-settings'>
       <SegmentedControl
+        isDisabled={isDisabled}
         label={translate('blindtest.answerMode.label')}
         onChange={(next) => {
           if (isAnswerMode(next)) {
@@ -87,6 +92,7 @@ export const GameSettings: React.FC<GameSettingsProps> = ({
       <p className='hint'>{translate(scoringKey(settings.answerMode))}</p>
 
       <SegmentedControl
+        isDisabled={isDisabled}
         label={translate('blindtest.difficulty.label')}
         onChange={(next) => {
           if (isDifficulty(next)) {
@@ -101,6 +107,7 @@ export const GameSettings: React.FC<GameSettingsProps> = ({
       />
 
       <SegmentedControl
+        isDisabled={isDisabled}
         label={translate('host.rounds')}
         onChange={(next) => {
           const roundCount = optionFrom(ROUND_COUNTS, next)
@@ -117,6 +124,7 @@ export const GameSettings: React.FC<GameSettingsProps> = ({
       />
 
       <SegmentedControl
+        isDisabled={isDisabled}
         label={translate('blindtest.clip')}
         onChange={(next) => {
           const playbackDurationMs = optionFrom(CLIP_DURATIONS_MS, next)
@@ -133,6 +141,7 @@ export const GameSettings: React.FC<GameSettingsProps> = ({
       />
 
       <SegmentedControl
+        isDisabled={isDisabled}
         label={translate('host.countdown')}
         onChange={(next) => {
           const countdownMs = optionFrom(COUNTDOWN_DURATIONS_MS, next)

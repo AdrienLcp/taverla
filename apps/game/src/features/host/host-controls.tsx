@@ -16,6 +16,8 @@ import './host-controls.sass'
 const AUTO_ADVANCE_MS = 8_000
 
 type HostControlsProps = {
+  /** The socket is open. The volume ignores it: that one never leaves this machine. */
+  isLive: boolean
   onSettingsChange: (settings: RoomSettings) => void
   onVolumeChange: (volume: number) => void
   settings: RoomSettings
@@ -24,6 +26,7 @@ type HostControlsProps = {
 }
 
 export const HostControls: React.FC<HostControlsProps> = ({
+  isLive,
   onSettingsChange,
   onVolumeChange,
   settings,
@@ -43,6 +46,7 @@ export const HostControls: React.FC<HostControlsProps> = ({
         value={volume}
       />
       <Switch
+        isDisabled={!isLive}
         isSelected={settings.autoAdvanceMs !== null}
         label={translate('host.autoAdvance')}
         onChange={(isSelected) => {

@@ -73,7 +73,16 @@ hairline.
 
 Controls are blocks: `filled` inverts the field, `outlined` is ruled in ink,
 `ghost` is underlined. Disabled is **ruled, never dimmed** — fading a filled
-block takes its label's contrast with it.
+block takes its label's contrast with it. A choice strip obeys the same rule the
+same way: the selected stamp drops its ink ground and keeps the ink as an inset
+edge, which is what lets a host read their settings over a dead socket.
+
+**A section a reader opens is a ruled row, not a block.** A bordered control
+beside the one action on the screen reads as a second one, so `Disclosure`'s
+trigger carries no edge of its own — only the rule it shares with every other
+section boundary. Its summary line is what makes the fold honest: it names the
+values, never a count of them, because a section whose state is invisible is a
+section nobody knows to open.
 
 **The edge says control, the ground says which kind.** Three materials, and the
 distinction only works because all three carry the same 3px ink edge:
@@ -106,6 +115,13 @@ two or three glyphs this product actually needs.
 
 A glyph never travels alone: it sits beside the word, because a grandparent and
 a child are both expected users and a bare icon asks them to already know.
+
+**The mark is the wordmark's initial**, cream on the lobby ground, hard-edged
+and square — the one place a `T` stands alone, because a favicon has no room for
+a word beside it. It replaced a rounded near-black tile with a neon-pink dot,
+which was the prototype's world and had outlived it by a whole design pass. The
+share card is the same two colours with the wordmark set in `monument`, rendered
+at 1200×630 rather than drawn: it is the type, so it should come from the type.
 
 ## Motion
 
@@ -141,6 +157,13 @@ card flips rather than the way a panel slides.
 phone (620px, widening to 900px in game because not every player is on a
 phone). The buzzer is `min(78vw, 42vh, 420px)` — three limits, because one leaves
 it tiny on a wide screen or taller than a short one.
+
+**The lobby is two columns and two audiences.** The invitation — code, QR, join
+URL — is what the room is reading; the roster and the setup are the host's own.
+Below 900px they stack, and that is where the setup had to learn to fold: eight
+strips of settings at the same weight as the QR code turned a title card into a
+form, and put the launch below everything. The fold is collapsed at every width,
+because the desktop column was the same wall with more room to hide in.
 
 ## What must not be broken
 

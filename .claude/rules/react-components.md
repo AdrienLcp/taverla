@@ -196,6 +196,14 @@ one renders a `<label>` around a radio and the other a `<button>`. And
 `RadioGroup` does, so `ToggleGroup` wires `aria-labelledby` itself — drop that
 and the group loses its name with nothing failing.
 
+### A state attribute is not always on the element you are styling
+
+`Disclosure` stamps `data-expanded` on its **root**, never on the trigger button
+inside it — so `.trigger[data-expanded]` silently matches nothing and the
+chevron never turns. The build stays green and the type-check says nothing;
+only opening it in a browser does. Read the attribute off the rendered DOM
+before styling a state, rather than assuming it sits where the interaction does.
+
 ### A pending state must not resize the control
 
 `Button` renders a `Spinner` on top of its label rather than in place of it, and

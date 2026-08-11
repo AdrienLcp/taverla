@@ -29,6 +29,8 @@ export const hostConsole = (page: Page) => ({
   buzzerMode: page.getByText('First to buzz', { exact: true }),
   /** What the QR code encodes. Following it is what scanning it does. */
   joinUrl: page.locator('.join-url'),
+  /** The settings fold away, so anything inside them is opened before it is reached. */
+  openSettings: page.getByRole('button', { name: 'Settings' }),
   refusal: page.getByRole('heading', {
     name: 'That room does not exist.'
   }),
