@@ -17,6 +17,7 @@
 
     .react-aria-SliderTrack
       align-items: center
+      cursor: pointer
       display: flex
       height: 28px
       position: relative
@@ -37,12 +38,18 @@
 
     .react-aria-SliderThumb
       background: var(--ink)
+      cursor: pointer
       height: 24px
       top: 50%
       width: 8px
 
+      // Grown rather than dimmed. `[data-dragging]` is the one press state that
+      // fires on a touch screen, and it fires with a fingertip parked on top of
+      // the thumb — a colour change under there is invisible, and dimming reads
+      // as disabled besides.
       &[data-dragging]
-        background: var(--ink-muted)
+        height: 28px
+        width: 12px
 
       &[data-focus-visible]
         outline: 3px solid var(--ink)
