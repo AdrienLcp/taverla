@@ -9,14 +9,17 @@ import { PROTOCOL_VERSION } from './version'
 const runningRound = {
   activeBuzz: null,
   answers: [],
-  audioStartsAt: 1_700_000_000_000,
   awards: [],
-  choices: [],
+  content: {
+    choices: [],
+    kind: 'blindtest' as const,
+    revealedTrack: null
+  },
   id: 'r1',
   index: 1,
   lockedOutPlayerIds: [],
   revealedAnswers: [],
-  revealedTrack: null
+  startsAt: 1_700_000_000_000
 }
 
 const playerView: PlayerRoomView = {
@@ -79,12 +82,16 @@ describe('encodeChecked', () => {
   it('[anti-cheat] drops host-only fields from a player frame', () => {
     const leakyView = {
       ...playerView,
-      currentTrack: {
-        artist: 'Daft Punk',
-        coverUrl: null,
-        id: '3135556',
-        previewUrl: 'https://cdnt-preview.dzcdn.net/leak.mp3',
-        title: 'Harder, Better, Faster, Stronger'
+      currentContent: {
+        audioUrl: 'https://cdnt-preview.dzcdn.net/leak.mp3',
+        kind: 'blindtest' as const,
+        track: {
+          artist: 'Daft Punk',
+          coverUrl: null,
+          id: '3135556',
+          previewUrl: 'https://cdnt-preview.dzcdn.net/leak.mp3',
+          title: 'Harder, Better, Faster, Stronger'
+        }
       },
       remainingPoolSize: 7
     }
@@ -116,9 +123,12 @@ describe('encodeChecked', () => {
       ...playerView,
       round: {
         ...runningRound,
-        choices,
-        correctChoiceIndex: 1,
-        correctTrackId: '2'
+        content: {
+          ...runningRound.content,
+          choices,
+          correctChoiceIndex: 1,
+          correctTrackId: '2'
+        }
       }
     }
 
@@ -129,9 +139,9 @@ describe('encodeChecked', () => {
 
     const decoded = JSON.parse(encoded)
 
-    expect(decoded.view.round.correctChoiceIndex).toBeUndefined()
-    expect(decoded.view.round.correctTrackId).toBeUndefined()
-    expect(decoded.view.round.choices).toHaveLength(2)
+    expect(decoded.view.round.content.correctChoiceIndex).toBeUndefined()
+    expect(decoded.view.round.content.correctTrackId).toBeUndefined()
+    expect(decoded.view.round.content.choices).toHaveLength(2)
   })
 
   it('[codec] throws when the server builds a message it cannot honour', () => {

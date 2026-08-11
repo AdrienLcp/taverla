@@ -3,8 +3,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { RoomSettings } from '@taverla/protocol/room'
 
 import {
+  blindtestRound,
   errorsIn,
   FAST_GAME,
+  hostContent,
   hostView,
   playerView,
   type RoomHarness,
@@ -49,7 +51,7 @@ describe('answering all at once', () => {
   it('[choice] hands every phone the same candidates and never which is right', async () => {
     const { host, zoe } = await roundInPlay(CHOICE_GAME)
 
-    const choices = playerView(zoe)?.round?.choices ?? []
+    const choices = blindtestRound(playerView(zoe))?.choices ?? []
 
     expect(choices.length).toBeGreaterThan(1)
 
@@ -58,7 +60,7 @@ describe('answering all at once', () => {
     const everythingZoeWasSent = zoe.frames.map(({ raw }) => raw).join('')
 
     expect(everythingZoeWasSent).not.toContain('correctChoiceIndex')
-    expect(hostView(host)?.currentTrack?.title).toBeDefined()
+    expect(hostContent(host)?.track?.title).toBeDefined()
   })
 
   it('[choice] ends the round when the last player has answered', async () => {
@@ -125,9 +127,9 @@ describe('answering all at once', () => {
     const { host, max, zoe } = await roundInPlay(CHOICE_GAME)
 
     const roundId = playerView(zoe)?.round?.id ?? ''
-    const choices = playerView(zoe)?.round?.choices ?? []
+    const choices = blindtestRound(playerView(zoe))?.choices ?? []
     const right = choices.findIndex(
-      (choice) => choice.title === hostView(host)?.currentTrack?.title
+      (choice) => choice.title === hostContent(host)?.track?.title
     )
 
     zoe.send({
@@ -169,8 +171,8 @@ describe('answering all at once', () => {
     )
 
     // The speaker still gets what it needs, and the judge's copy is gone.
-    expect(hostView(host)?.currentAudioUrl).toBeTruthy()
-    expect(hostView(host)?.currentTrack).toBeNull()
+    expect(hostContent(host)?.audioUrl).toBeTruthy()
+    expect(hostContent(host)?.track).toBeNull()
 
     const seated = hostView(host)?.players.map((player) => player.nickname)
 
@@ -207,7 +209,7 @@ describe('answering all at once', () => {
     const { host, max, zoe } = await roundInPlay(TYPED_GAME)
 
     const roundId = playerView(zoe)?.round?.id ?? ''
-    const track = hostView(host)?.currentTrack
+    const track = hostContent(host)?.track
 
     if (track === undefined || track === null) {
       throw new Error('the host should hold the track')
@@ -253,7 +255,7 @@ describe('answering all at once', () => {
     const { host, max, zoe } = await roundInPlay(TYPED_GAME)
 
     const roundId = playerView(zoe)?.round?.id ?? ''
-    const track = hostView(host)?.currentTrack
+    const track = hostContent(host)?.track
 
     if (track === undefined || track === null) {
       throw new Error('the host should hold the track')
@@ -294,7 +296,7 @@ describe('answering all at once', () => {
     const { host, max, zoe } = await roundInPlay(TYPED_GAME)
 
     const roundId = playerView(zoe)?.round?.id ?? ''
-    const track = hostView(host)?.currentTrack
+    const track = hostContent(host)?.track
 
     if (track === undefined || track === null) {
       throw new Error('the host should hold the track')

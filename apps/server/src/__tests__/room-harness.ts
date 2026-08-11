@@ -6,7 +6,10 @@ import { DEFAULT_BLINDTEST_SETTINGS } from '@taverla/protocol/game'
 import type { CreateRoomResponse } from '@taverla/protocol/http'
 import {
   DEFAULT_ROOM_SETTINGS,
-  type RoomSettings
+  type HostRoundContent,
+  type RoomSettings,
+  type RoundContent,
+  type RoundView
 } from '@taverla/protocol/room'
 import {
   type HostServerMessage,
@@ -130,6 +133,28 @@ export const playerView = (player: Peer<PlayerServerMessage>) => {
   }
 
   return null
+}
+
+/**
+ * The blind test's arm of a view's round, or `null` when the room is on another
+ * game. Every suite here plays a blind test, so the narrowing is noise at the
+ * call site and belongs once, in the harness.
+ */
+export const blindtestRound = (
+  view: { round: RoundView | null } | null
+): Extract<RoundContent, { kind: 'blindtest' }> | null => {
+  const content = view?.round?.content
+
+  return content?.kind === 'blindtest' ? content : null
+}
+
+/** The same narrowing over the half only the host is sent. */
+export const hostContent = (
+  host: Peer<HostServerMessage>
+): Extract<HostRoundContent, { kind: 'blindtest' }> | null => {
+  const content = hostView(host)?.currentContent
+
+  return content?.kind === 'blindtest' ? content : null
 }
 
 export const errorsIn = <TMessage extends { type: string }>(

@@ -7,6 +7,8 @@ import {
   millisecondsUntil
 } from '@taverla/core/time/clock-sync'
 
+import { blindtestHostContent } from '@/helpers/blindtest-round'
+
 /**
  * `setTimeout` is only accurate to a handful of milliseconds under load, which
  * is the wrong order of magnitude for a countdown a room watches together. It
@@ -82,10 +84,10 @@ export const useRoundAudio = ({
 
   const phase = view?.phase ?? null
   const round = view?.round ?? null
-  const previewUrl = view?.currentAudioUrl ?? null
-  const audioStartsAt = round?.audioStartsAt ?? null
+  const previewUrl = blindtestHostContent(view)?.audioUrl ?? null
+  const startsAt = round?.startsAt ?? null
   const roundId = round?.id ?? null
-  const elapsedMs = view?.playbackElapsedMs ?? 0
+  const elapsedMs = view?.roundElapsedMs ?? 0
 
   useEffect(() => {
     const audio = audioRef.current
@@ -118,7 +120,7 @@ export const useRoundAudio = ({
 
     if (phase === 'playing') {
       // Either the clip was paused by a buzz, or this host just reloaded into a
-      // round already running — `playbackElapsedMs` is what tells the two apart.
+      // round already running — `roundElapsedMs` is what tells the two apart.
       if (audio.currentTime * 1_000 < elapsedMs - SEEK_THRESHOLD_MS) {
         audio.currentTime = elapsedMs / 1_000
       }
@@ -128,7 +130,7 @@ export const useRoundAudio = ({
       return
     }
 
-    if (audioStartsAt === null) {
+    if (startsAt === null) {
       return
     }
 
@@ -137,7 +139,7 @@ export const useRoundAudio = ({
     let frame = 0
 
     const startWhenDue = (): void => {
-      if (millisecondsUntil(clockRef.current, audioStartsAt, Date.now()) <= 0) {
+      if (millisecondsUntil(clockRef.current, startsAt, Date.now()) <= 0) {
         play(audio)
 
         return
@@ -150,8 +152,7 @@ export const useRoundAudio = ({
       startWhenDue,
       Math.max(
         0,
-        millisecondsUntil(clockRef.current, audioStartsAt, Date.now()) -
-          SPIN_LEAD_MS
+        millisecondsUntil(clockRef.current, startsAt, Date.now()) - SPIN_LEAD_MS
       )
     )
 
@@ -159,7 +160,7 @@ export const useRoundAudio = ({
       window.clearTimeout(timer)
       cancelAnimationFrame(frame)
     }
-  }, [audioStartsAt, elapsedMs, phase, previewUrl, roundId])
+  }, [elapsedMs, phase, previewUrl, roundId, startsAt])
 
   return {
     unlock: () => {

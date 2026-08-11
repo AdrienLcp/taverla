@@ -14,6 +14,7 @@ import {
   type PlayerAnswer,
   TypedAnswer
 } from '@/features/player/answer-forms'
+import { blindtestHostContent } from '@/helpers/blindtest-round'
 import { useHostConnection } from '@/infrastructure/messaging/use-host-connection'
 import {
   playUrlFor,
@@ -204,10 +205,10 @@ const Stage = ({
 
   const round = view.round
 
-  if (view.phase === 'countdown' && round?.audioStartsAt != null) {
+  if (view.phase === 'countdown' && round?.startsAt != null) {
     return (
       <div className='stage solo'>
-        <Countdown clock={clock} target={round.audioStartsAt} />
+        <Countdown clock={clock} target={round.startsAt} />
       </div>
     )
   }
@@ -228,7 +229,7 @@ const Stage = ({
             style={{
               '--clip-remaining': `${Math.max(
                 0,
-                game.clipDurationMs - view.playbackElapsedMs
+                game.clipDurationMs - view.roundElapsedMs
               )}ms`
             }}
           />
@@ -247,10 +248,11 @@ const Stage = ({
   if (view.phase === 'buzzed' && round?.activeBuzz != null) {
     const buzzerId = round.activeBuzz.playerId
     const buzzer = view.players.find((player) => player.id === buzzerId)
+    const track = blindtestHostContent(view)?.track ?? null
 
     return (
       <div className='stage solo'>
-        {view.currentTrack !== null && (
+        {track !== null && (
           <VerdictPanel
             nickname={buzzer?.nickname ?? '—'}
             onJudge={(verdict) => {
@@ -261,7 +263,7 @@ const Stage = ({
                 verdict
               })
             }}
-            track={view.currentTrack}
+            track={track}
           />
         )}
       </div>

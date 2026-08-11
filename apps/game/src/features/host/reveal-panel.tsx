@@ -2,6 +2,7 @@ import type React from 'react'
 
 import type { PublicPlayer, RoundView } from '@taverla/protocol/room'
 
+import { blindtestContent } from '@/helpers/blindtest-round'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import './reveal-panel.sass'
@@ -14,7 +15,7 @@ type RevealPanelProps = {
 
 export const RevealPanel: React.FC<RevealPanelProps> = ({ players, round }) => {
   const translate = useTranslate()
-  const track = round.revealedTrack
+  const track = blindtestContent(round)?.revealedTrack ?? null
   const scorers = round.awards.filter((award) => award.points > 0)
 
   if (track === null) {

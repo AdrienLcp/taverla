@@ -92,7 +92,7 @@ describe('a host who walks away', () => {
       'the host to reclaim the room'
     )
 
-    const elapsed = hostView(returned)?.playbackElapsedMs ?? 0
+    const elapsed = hostView(returned)?.roundElapsedMs ?? 0
 
     // Both halves are load-bearing. The floor proves the seconds the room had
     // already heard were banked rather than thrown away by the resume — drop
@@ -115,7 +115,7 @@ describe('a host who walks away', () => {
       'the countdown to open'
     )
 
-    const firstStart = playerView(player)?.round?.audioStartsAt ?? 0
+    const firstStart = playerView(player)?.round?.startsAt ?? 0
 
     host.close()
     await sleep(AWAY_FOR_MS)
@@ -128,7 +128,7 @@ describe('a host who walks away', () => {
       type: 'hello'
     })
     await waitFor(
-      () => (hostView(returned)?.round?.audioStartsAt ?? 0) > firstStart,
+      () => (hostView(returned)?.round?.startsAt ?? 0) > firstStart,
       'the countdown to be given back'
     )
 

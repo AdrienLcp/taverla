@@ -65,21 +65,27 @@ export type Round = {
   activeBuzz: { atServerTime: number; playerId: PlayerId } | null
   /** Buzzer mode leaves this empty; the other two fill it as frames arrive. */
   answers: SubmittedAnswer[]
-  audioStartsAt: number | null
   awards: Award[]
   /**
-   * Choice mode's four candidates, shuffled once when the round opens so the
+   * What the round is asking, in the vocabulary of the game asking it — and the
+   * answer, which lives here and reaches the wire only through `room-view.ts`.
+   *
+   * Choice mode's candidates are shuffled once when the round opens, so their
    * order carries nothing. `correctChoiceIndex` is the one field in the whole
-   * model that must never be projected — see `room-view.ts`.
+   * model that must never be projected.
    */
-  choices: TrackIdentity[]
-  correctChoiceIndex: number | null
+  content: {
+    choices: TrackIdentity[]
+    correctChoiceIndex: number | null
+    kind: 'blindtest'
+    track: HostTrack
+  }
   id: RoundId
   index: number
   lockedOutPlayerIds: Set<PlayerId>
   playedMs: number
-  /** Server time playback last started or resumed; `null` while it is paused. */
+  /** Server time the round last started or resumed running; `null` while paused. */
   playingSince: number | null
   revealed: boolean
-  track: HostTrack
+  startsAt: number | null
 }

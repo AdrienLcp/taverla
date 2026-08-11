@@ -32,13 +32,13 @@ it, and the test fails when the strip is removed.
 
 One phone can be the speaker and a player at once — the seat is taken by putting
 a nickname on the host's `hello`, so it rides the same socket and survives a
-reconnect. The moment it is taken, `toHostView` stops sending `currentTrack`:
-that screen is a player's now, and a payload it could read in a console is not
-a guarantee.
+reconnect. The moment it is taken, `toHostView` nulls the answer inside
+`currentContent` — `track` for the blind test — because that screen is a
+player's now, and a payload it could read in a console is not a guarantee.
 
-What it keeps is `currentAudioUrl`, because the speaker still has to play the
-clip. Those two fields exist separately for exactly this — the judge's copy and
-the speaker's copy were one field, and conflating them is what made "host and
+What it keeps is `audioUrl`, because the speaker still has to play the clip.
+Those two fields exist separately for exactly this — the judge's copy and the
+speaker's copy were one field, and conflating them is what made "host and
 player" impossible. The residual leak is the catalogue id inside the URL, and
 it is the reason the seat is offered rather than assumed.
 
@@ -65,7 +65,7 @@ so the snapshot is a few hundred bytes — and it removes every way for a client
 to sit on a partially-applied delta after a dropped frame or a reconnect.
 
 Do not add per-event messages for things that are state. "Someone buzzed" is
-`round.activeBuzz`; "the answer is out" is `round.revealedTrack`; "she scored"
+`round.activeBuzz`; "the answer is out" is `round.content.revealedTrack`; "she scored"
 is `round.awards`. A client that wants to animate a change diffs two views.
 
 ### Time is the server's, estimated locally

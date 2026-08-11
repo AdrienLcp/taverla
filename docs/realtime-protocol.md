@@ -85,30 +85,39 @@ Shared by both:
   "round": {
     "id": "…",
     "index": 3,                    // 1-based
-    "audioStartsAt": 1786215012000,// server clock; schedule against your offset
+    "startsAt": 1786215012000,     // server clock; schedule against your offset
     "activeBuzz": { "playerId": "…", "atServerTime": 1786215014311 },
     "lockedOutPlayerIds": ["…"],   // answered wrong, out for this round
     "awards": [{ "playerId": "…", "points": 2, "verdict": { … } }],
-    "revealedTrack": null          // filled at reveal, for everyone
+    "content": { "kind": "blindtest", "choices": [],
+                 "revealedTrack": null }  // filled at reveal, for everyone
   }
 }
 ```
 
-`settings.game` is discriminated on `kind`, and it is where the split between the
-shelf and one game on it is drawn: `answerMode`, `roundCount`, `countdownMs` and
-`autoAdvanceMs` are every game's, and everything else belongs to the game being
-played. A client that does not recognise a `kind` has no business rendering that
-room's settings at all, which is why the shape moving bumps the version.
+`settings.game` and `round.content` are both discriminated on `kind`, and they
+are where the split between the shelf and one game on it is drawn: `answerMode`,
+`roundCount`, `countdownMs`, `autoAdvanceMs`, `startsAt`, the buzz, the lockout
+and the awards are every game's, and what the round is *asking* belongs to the
+game asking it. A client that does not recognise a `kind` has no business
+rendering that room at all, which is why the shape moving bumps the version.
 
 The host view adds what only the host may see:
 
 ```jsonc
 {
-  "currentTrack": { "id": "…", "title": "…", "artist": "…",
-                    "coverUrl": "…", "previewUrl": "https://cdnt-preview…" },
-  "remainingPoolSize": 7
+  "currentContent": { "kind": "blindtest",
+                      "audioUrl": "https://cdnt-preview…",
+                      "track": { "id": "…", "title": "…", "artist": "…",
+                                 "coverUrl": "…", "previewUrl": "…" } },
+  "remainingPoolSize": 7,
+  "roundElapsedMs": 8200
 }
 ```
+
+`audioUrl` and `track` are separate because a host who has taken a seat keeps
+the first and gets `null` for the second: that screen still has to play the
+clip, and must not be handed the answer.
 
 The player view adds instead:
 
@@ -117,7 +126,7 @@ The player view adds instead:
 ```
 
 `HostTrack` reaches the wire in exactly two places: the host view, and
-`round.revealedTrack` once the round is over — and the reveal carries no
+`round.content.revealedTrack` once the round is over — and the reveal carries no
 `previewUrl`.
 
 This is enforced twice. `HostServerMessage` and `PlayerServerMessage` are

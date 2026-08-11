@@ -162,15 +162,15 @@ describe('the rules every socket obeys', () => {
       'the countdown'
     )
 
-    const audioStartsAt = playerView(alice)?.round?.audioStartsAt ?? 0
-    const trulyRemainingMs = audioStartsAt - Date.now()
+    const startsAt = playerView(alice)?.round?.startsAt ?? 0
+    const trulyRemainingMs = startsAt - Date.now()
 
     expect(trulyRemainingMs).toBeGreaterThan(100)
-    expect(millisecondsUntil(estimate, audioStartsAt, deviceNow())).toBeCloseTo(
+    expect(millisecondsUntil(estimate, startsAt, deviceNow())).toBeCloseTo(
       trulyRemainingMs,
       -2
     )
-    expect(millisecondsUntil(null, audioStartsAt, deviceNow())).toBe(0)
+    expect(millisecondsUntil(null, startsAt, deviceNow())).toBe(0)
   })
 })
 

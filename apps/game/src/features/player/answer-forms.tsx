@@ -4,6 +4,7 @@ import { Form } from 'react-aria-components'
 
 import type { RoundView } from '@taverla/protocol/room'
 
+import { blindtestContent } from '@/helpers/blindtest-round'
 import { Button } from '@/presentation/components/button'
 import { TextField } from '@/presentation/components/text-field'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
@@ -57,7 +58,7 @@ export const ChoiceAnswer: React.FC<AnswerFormProps> = ({
   return (
     <section className='answer-form choices'>
       <ul>
-        {round.choices.map((choice, index) => (
+        {(blindtestContent(round)?.choices ?? []).map((choice, index) => (
           <li key={choice.id}>
             <Button
               isDisabled={hasAnswered}

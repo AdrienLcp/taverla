@@ -1,11 +1,13 @@
 import type { PlayerId } from '@taverla/protocol/identifiers'
 import type {
   HostRoomView,
+  HostRoundContent,
   PlayerRoomView,
   PublicPlayer,
+  RoundContent,
   RoundView
 } from '@taverla/protocol/room'
-import type { TrackIdentity } from '@taverla/protocol/track'
+import type { HostTrack, TrackIdentity } from '@taverla/protocol/track'
 
 import { pointsFor } from '@taverla/core/scoring/award'
 
@@ -29,11 +31,25 @@ export const toHostView = ({
   room: Room
 }): HostRoomView => ({
   ...toBaseView({ isHostConnected, room }),
-  currentAudioUrl: room.round?.track.previewUrl ?? null,
-  currentTrack: isHostPlaying ? null : (room.round?.track ?? null),
-  playbackElapsedMs:
-    room.round === null ? 0 : elapsedPlaybackMs(room.round, Date.now()),
-  remainingPoolSize: room.trackPool.length
+  currentContent:
+    room.round === null
+      ? null
+      : toHostContent({ isHostPlaying, round: room.round }),
+  remainingPoolSize: room.trackPool.length,
+  roundElapsedMs:
+    room.round === null ? 0 : elapsedPlaybackMs(room.round, Date.now())
+})
+
+const toHostContent = ({
+  isHostPlaying,
+  round
+}: {
+  isHostPlaying: boolean
+  round: Round
+}): HostRoundContent => ({
+  audioUrl: round.content.track.previewUrl,
+  kind: 'blindtest',
+  track: isHostPlaying ? null : round.content.track
 })
 
 export const toPlayerView = ({
@@ -83,9 +99,8 @@ const toRoundView = (round: Round): RoundView => ({
     atServerTime,
     playerId
   })),
-  audioStartsAt: round.audioStartsAt,
   awards: round.awards,
-  choices: round.choices,
+  content: toContentView(round),
   id: round.id,
   index: round.index,
   lockedOutPlayerIds: [...round.lockedOutPlayerIds],
@@ -97,12 +112,18 @@ const toRoundView = (round: Round): RoundView => ({
         said: answer.said
       }))
     : [],
-  revealedTrack: round.revealed ? toTrackIdentity(round) : null
+  startsAt: round.startsAt
 })
 
-const toTrackIdentity = (round: Round): TrackIdentity => ({
-  artist: round.track.artist,
-  coverUrl: round.track.coverUrl,
-  id: round.track.id,
-  title: round.track.title
+const toContentView = (round: Round): RoundContent => ({
+  choices: round.content.choices,
+  kind: 'blindtest',
+  revealedTrack: round.revealed ? toTrackIdentity(round.content.track) : null
+})
+
+const toTrackIdentity = (track: HostTrack): TrackIdentity => ({
+  artist: track.artist,
+  coverUrl: track.coverUrl,
+  id: track.id,
+  title: track.title
 })

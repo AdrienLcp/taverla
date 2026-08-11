@@ -8,6 +8,7 @@ import {
   roundIdSchema,
   serverTimeSchema
 } from './identifiers'
+import { hostQuestionSchema, questionPromptSchema } from './question'
 import { awardSchema } from './scoring'
 import { hostTrackSchema, trackIdentitySchema } from './track'
 
@@ -105,20 +106,38 @@ export const revealedAnswerSchema = roundAnswerSchema.extend({
   said: z.string()
 })
 
+/**
+ * What the round is asking, in the vocabulary of the game asking it. Everything
+ * around it — who buzzed, who is locked out, what was awarded — is the shell's
+ * and is the same in every game.
+ *
+ * Both arms are safe for a player to hold: one of the choices is the answer,
+ * which is the game rather than a leak. **Which** one lives only in the
+ * server's `Round` and reaches no frame — see `codec.test.ts`.
+ */
+export const roundContentSchema = z.discriminatedUnion('kind', [
+  z.object({
+    /** Choice mode only, and shuffled per round. */
+    choices: z.array(trackIdentitySchema),
+    kind: z.literal('blindtest'),
+    revealedTrack: trackIdentitySchema.nullable()
+  }),
+  z.object({
+    /** Choice mode only, and shuffled per round. */
+    choices: z.array(z.string()),
+    kind: z.literal('quiz'),
+    prompt: questionPromptSchema,
+    revealedAnswer: z.string().nullable()
+  })
+])
+
 export const roundViewSchema = z.object({
   activeBuzz: activeBuzzSchema.nullable(),
   /** Buzzer mode leaves this empty; the other two fill it as frames arrive. */
   answers: z.array(roundAnswerSchema),
-  /** Server time the clip should start; every client schedules against its own clock offset. */
-  audioStartsAt: serverTimeSchema.nullable(),
   /** Points already granted this round, in the order the host granted them. */
   awards: z.array(awardSchema),
-  /**
-   * Choice mode only, and shuffled per round. One of them is the answer, which
-   * is the game rather than a leak — **which** one lives only in the server's
-   * `Round` and reaches no frame. See `codec.test.ts`.
-   */
-  choices: z.array(trackIdentitySchema),
+  content: roundContentSchema,
   id: roundIdSchema,
   /** 1-based, so it reads as "round 3 of 10" without arithmetic at the call site. */
   index: z.number().int().positive(),
@@ -126,7 +145,12 @@ export const roundViewSchema = z.object({
   lockedOutPlayerIds: z.array(playerIdSchema),
   /** Empty until the reveal, then what everyone said and whether it was right. */
   revealedAnswers: z.array(revealedAnswerSchema),
-  revealedTrack: trackIdentitySchema.nullable()
+  /**
+   * Server time the round opens on — the first note, or the question appearing.
+   * Every client schedules against its own clock offset, which is what lands the
+   * countdown on every device together.
+   */
+  startsAt: serverTimeSchema.nullable()
 })
 
 const baseRoomViewSchema = z.object({
@@ -144,29 +168,44 @@ const baseRoomViewSchema = z.object({
 })
 
 /**
- * Adds everything a player must not see: the track currently playing, and how
- * many are left in the pool.
+ * The round as the one screen judging it sees it — the half no player may hold.
+ * Both arms go `null` while the host holds a seat: that screen is a player's
+ * then, and a payload it could read in a console is not a guarantee.
+ */
+export const hostRoundContentSchema = z.discriminatedUnion('kind', [
+  z.object({
+    /**
+     * What the speaker needs, which is not what the judge needs. A seated host
+     * keeps this and loses `track`, so their own screen cannot hand them the
+     * answer while it still plays the clip.
+     *
+     * The URL carries the catalogue's track id, which a console could resolve —
+     * the same residual trade a remote mode would make, and the reason the seat
+     * is offered rather than assumed.
+     */
+    audioUrl: z.url().nullable(),
+    kind: z.literal('blindtest'),
+    track: hostTrackSchema.nullable()
+  }),
+  z.object({
+    kind: z.literal('quiz'),
+    question: hostQuestionSchema.nullable()
+  })
+])
+
+/**
+ * Adds everything a player must not see: the answer to the round in play, and
+ * how much of the catalogue is left.
  */
 export const hostRoomViewSchema = baseRoomViewSchema.extend({
+  currentContent: hostRoundContentSchema.nullable(),
+  remainingPoolSize: z.number().int().nonnegative(),
   /**
-   * What the speaker needs, which is not what the judge needs. A host who is
-   * also playing gets this and not `currentTrack`, so their own screen cannot
-   * hand them the answer.
-   *
-   * The URL still carries the catalogue's track id, which a console could
-   * resolve — the same residual trade a remote mode would make, and the reason
-   * the seat is offered rather than assumed.
-   */
-  currentAudioUrl: z.url().nullable(),
-  /** `null` while the host holds a seat: a player must not read the answer. */
-  currentTrack: hostTrackSchema.nullable(),
-  /**
-   * Clip time already consumed, buzz pauses excluded. It is what lets a host who
-   * reloaded mid-round seek back to where the room actually is, rather than
+   * Round time already consumed, buzz pauses excluded. It is what lets a host
+   * who reloaded mid-round seek back to where the room actually is, rather than
    * restarting the track under everyone.
    */
-  playbackElapsedMs: z.number().int().nonnegative(),
-  remainingPoolSize: z.number().int().nonnegative()
+  roundElapsedMs: z.number().int().nonnegative()
 })
 
 export const playerRoomViewSchema = baseRoomViewSchema.extend({
@@ -176,6 +215,8 @@ export const playerRoomViewSchema = baseRoomViewSchema.extend({
 export type RoomPhase = z.infer<typeof roomPhaseSchema>
 export type PublicPlayer = z.infer<typeof publicPlayerSchema>
 export type ActiveBuzz = z.infer<typeof activeBuzzSchema>
+export type RoundContent = z.infer<typeof roundContentSchema>
+export type HostRoundContent = z.infer<typeof hostRoundContentSchema>
 export type RoundView = z.infer<typeof roundViewSchema>
 export type HostRoomView = z.infer<typeof hostRoomViewSchema>
 export type PlayerRoomView = z.infer<typeof playerRoomViewSchema>

@@ -128,7 +128,7 @@ describe('the two views', () => {
     ]
   })
 
-  it('[room] shows the host the pool and the current track', () => {
+  it('[room] shows the host the pool, and no content before a round opens', () => {
     const view = toHostView({
       isHostConnected: true,
       isHostPlaying: false,
@@ -136,7 +136,7 @@ describe('the two views', () => {
     })
 
     expect(view.remainingPoolSize).toBe(1)
-    expect(view.currentTrack).toBeNull()
+    expect(view.currentContent).toBeNull()
   })
 
   // The projection is the seam the whole anti-cheat guarantee rests on: a player

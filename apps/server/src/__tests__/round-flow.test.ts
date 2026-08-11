@@ -7,7 +7,9 @@ import {
 import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
 import {
+  blindtestRound,
   errorsIn,
+  hostContent,
   hostView,
   type Peer,
   PREVIEW_HOST,
@@ -93,7 +95,9 @@ describe('a whole game over real sockets', () => {
         'the reveal to land'
       )
 
-      expect(hostView(host)?.round?.revealedTrack?.title).toBeTypeOf('string')
+      expect(blindtestRound(hostView(host))?.revealedTrack?.title).toBeTypeOf(
+        'string'
+      )
     }
 
     host.send({ type: 'host.nextRound' })
@@ -154,7 +158,7 @@ describe('a whole game over real sockets', () => {
     )
 
     expect(playerView(alice)?.round?.lockedOutPlayerIds).toContain(aliceId)
-    expect(playerView(alice)?.round?.revealedTrack).toBeNull()
+    expect(blindtestRound(playerView(alice))?.revealedTrack).toBeNull()
 
     bob.send({ roundId: first.id, type: 'player.buzz' })
     await waitFor(() => hostView(host)?.phase === 'buzzed', 'Bob to take over')
@@ -229,7 +233,7 @@ describe('a whole game over real sockets', () => {
     const bob = await room.seat({ code, nickname: 'Bob' })
 
     const round = await runRoundToPlaying(host, 'host.startRound')
-    const secret = hostView(host)?.currentTrack
+    const secret = hostContent(host)?.track
 
     if (secret == null) {
       throw new Error('The host was not given a track to play')
@@ -267,6 +271,8 @@ describe('a whole game over real sockets', () => {
 
     // And the reveal, when it comes, does carry it — otherwise the assertion
     // above would pass on a socket that simply never said anything.
-    expect(playerView(alice)?.round?.revealedTrack?.title).toBe(secret.title)
+    expect(blindtestRound(playerView(alice))?.revealedTrack?.title).toBe(
+      secret.title
+    )
   })
 })

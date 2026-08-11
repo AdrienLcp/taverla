@@ -52,17 +52,20 @@ export const openRound = ({
   const round: Round = {
     activeBuzz: null,
     answers: [],
-    audioStartsAt: now + room.settings.countdownMs,
     awards: [],
-    choices: choices?.choices ?? [],
-    correctChoiceIndex: choices?.correctIndex ?? null,
+    content: {
+      choices: choices?.choices ?? [],
+      correctChoiceIndex: choices?.correctIndex ?? null,
+      kind: 'blindtest',
+      track
+    },
     id: nanoid(10),
     index: (room.round?.index ?? 0) + 1,
     lockedOutPlayerIds: new Set(),
     playedMs: 0,
     playingSince: null,
     revealed: false,
-    track
+    startsAt: now + room.settings.countdownMs
   }
 
   room.round = round
@@ -283,13 +286,13 @@ const grade = ({
   round: Round
 }): Pick<SubmittedAnswer, 'said' | 'verdict'> | null => {
   if (attempt.kind === 'choice') {
-    const picked = round.choices[attempt.choiceIndex]
+    const picked = round.content.choices[attempt.choiceIndex]
 
     if (picked === undefined) {
       return null
     }
 
-    const isRight = attempt.choiceIndex === round.correctChoiceIndex
+    const isRight = attempt.choiceIndex === round.content.correctChoiceIndex
 
     return {
       said: `${picked.title} — ${picked.artist}`,
@@ -297,7 +300,7 @@ const grade = ({
     }
   }
 
-  const verdict = gradeTypedAnswer({ attempt, track: round.track })
+  const verdict = gradeTypedAnswer({ attempt, track: round.content.track })
 
   return {
     said: [attempt.title, attempt.artist]
@@ -400,8 +403,8 @@ export const holdPlayback = (room: Room, now: number): void => {
 /**
  * Puts the clip back on the clock. A countdown is restarted rather than
  * resumed: its whole purpose is that every device lands on the first note
- * together, and an `audioStartsAt` that elapsed while nobody could hear it
- * would have the track begin mid-phrase on the screens that stayed.
+ * together, and a `startsAt` that elapsed while nobody could hear it would have
+ * the track begin mid-phrase on the screens that stayed.
  */
 export const resumePlayback = (room: Room, now: number): void => {
   const round = room.round
@@ -411,7 +414,7 @@ export const resumePlayback = (room: Room, now: number): void => {
   }
 
   if (room.phase === 'countdown') {
-    round.audioStartsAt = now + room.settings.countdownMs
+    round.startsAt = now + room.settings.countdownMs
     touch(room, now)
 
     return

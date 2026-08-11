@@ -12,6 +12,7 @@ import {
   type PlayerAnswer,
   TypedAnswer
 } from '@/features/player/answer-forms'
+import { blindtestContent } from '@/helpers/blindtest-round'
 import { buzzFeedback } from '@/infrastructure/env'
 import { Countdown } from '@/presentation/components/countdown'
 import { Scoreboard } from '@/presentation/components/scoreboard'
@@ -54,22 +55,24 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
     )
   }
 
-  if (view.phase === 'countdown' && round?.audioStartsAt != null) {
+  if (view.phase === 'countdown' && round?.startsAt != null) {
     return (
       <section className='player-round centred'>
-        <Countdown clock={clock} target={round.audioStartsAt} />
+        <Countdown clock={clock} target={round.startsAt} />
       </section>
     )
   }
 
-  if (view.phase === 'revealed' && round?.revealedTrack != null) {
+  const revealedTrack = blindtestContent(round)?.revealedTrack
+
+  if (view.phase === 'revealed' && round != null && revealedTrack != null) {
     const yours = round.awards.find((award) => award.playerId === view.youId)
 
     return (
       <section className='player-round centred'>
         <p className='framing'>{translate('blindtest.reveal.title')}</p>
-        <p className='revealed-title'>{round.revealedTrack.title}</p>
-        <p className='revealed-artist'>{round.revealedTrack.artist}</p>
+        <p className='revealed-title'>{revealedTrack.title}</p>
+        <p className='revealed-artist'>{revealedTrack.artist}</p>
         {yours != null && yours.points > 0 && (
           <p className='you-scored'>
             {translate('blindtest.youScored', { points: yours.points })}
