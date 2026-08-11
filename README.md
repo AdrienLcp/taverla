@@ -136,12 +136,22 @@ before opening one — build, tests and journeys, in that order.
 
 **One honest caveat, so nobody wastes an evening.** A pull request that adds a
 *new game* is not something this repository can take yet, and that is a design
-position rather than an oversight. `RoomPhase` is
-`lobby → countdown → playing → buzzed → revealed → finished`, which is the blind
-test's own life cycle wearing the room's name; there is no extension point to
-add a game through, and inventing one before the second game exists would be
-guessing at a shape nobody can see yet. The reasoning, and what the seam should
-become, is in [`docs/game-catalogue.md`](docs/game-catalogue.md).
+position rather than an oversight.
+
+Half the seam now exists: `settings.game` and `round.content` are unions
+discriminated on the game, so what a game asks and what it is configured with
+are separated from what every game needs. What does not exist is an *extension
+point*. A second game is added by editing those unions — not by registering
+anything — and that is deliberate: two implementations are enough to see the
+shared shape and not enough to abstract it, so there is no plugin interface to
+write against and none is planned before a third case makes one knowable.
+
+`RoomPhase` is still `lobby → countdown → playing → buzzed → revealed →
+finished`, which is the blind test's life cycle wearing the room's name. Every
+phase happens to be true of a quiz too — a countdown is a countdown and a reveal
+is a reveal — so it has not been split, and the day it is wrong for a game is
+the day it should move. The reasoning is in
+[`docs/game-catalogue.md`](docs/game-catalogue.md).
 
 Everything else is open: bugs, translations, accessibility, the design system,
 the question bank, a platform this does not run well on.

@@ -6,6 +6,54 @@ is: the first thumb on the buzzer, four choices, or everyone typing at once.
 **Depends on** stages 01–04 and 09. It is the first stage that is not about the
 blind test, and the first that changes the shell.
 
+## Where it stands
+
+**The seam is built; no quiz round exists yet.** `beginRound` answers
+`not_implemented` when the room's game is a quiz, which is the honest marker of
+what is missing.
+
+Landed:
+
+- `settings.game` and `round.content`, discriminated on `kind`, with the whole
+  cascade — plus two things this file did not anticipate. The host's secret half
+  became one `currentContent` union rather than staying `currentTrack` +
+  `currentAudioUrl`, because a quiz host needs the question the way a blind test
+  host needs the track. And `audioStartsAt` / `playbackElapsedMs` became
+  `startsAt` / `roundElapsedMs`: a question appearing is as much a round opening
+  as a first note is.
+- `PROTOCOL_VERSION` 4.
+- `packages/protocol/src/question.ts` and the quiz arm of `gameSettingsSchema`,
+  still imported by nothing that runs.
+
+Left, in order:
+
+1. Split `packages/core/src/scoring/`. It is flat and mixes owners: `pointsFor`,
+   `isMiss`, `pointsForTypedAnswer` and `pointsForChoice` are the blind test's;
+   `speedBonusForRank`, `scoreboard` and `answer-matching` are the shell's and
+   serve both games.
+2. The server's quiz round — the source, the draw without repeats, the quiz arm
+   of the server's `Round`, of `room-view.ts`, and of the grading.
+3. The content, whose size depends on the decision below.
+4. The screens, including the lobby's game picker, then `pnpm validate` and a
+   browser pass over both games × three modes.
+
+**One decision is open again**, and it changes the size of 3 by an order of
+magnitude: which `QuestionSource` arm ships first. This file assumed `bank`;
+`docs/game-catalogue.md` ranks `hosted` first and costs it at an evening,
+because the server serves a round with no content at all and the host reads the
+question from wherever they like. Read that section before writing a question.
+
+## What the typed rework changed under this stage
+
+Not planned here, and it moves what a quiz answer has to be. Typed mode is now
+**one field with as many guesses as the clip allows**, each guess graded against
+both halves and banked as it lands. A quiz answer is one claim rather than two,
+so it inherits the field and the retries and needs neither halved.
+
+`answerAppearsIn` is the matcher it inherits: whole-word runs inside a line,
+with the same typo forgiveness. A quiz answer typed inside a sentence — "je
+crois que c'est la Seine" — therefore already works.
+
 ## Why this one, and why now
 
 `docs/game-catalogue.md` costed it as the cheapest game on the shelf, because it
@@ -19,14 +67,14 @@ knowable**, and refuses to invent it before then. This is that moment. The seam
 below is not built in advance — it is built because a second case now exists to
 measure it against.
 
-## The seam, and its exact shape
+## The seam, and its exact shape — built
 
-Today `RoomSettings` and `RoundView` are the blind test's, wearing the room's
-name. Three fields are the game's rather than the room's — `difficulty`,
+`RoomSettings` and `RoundView` were the blind test's, wearing the room's name.
+Three fields were the game's rather than the room's — `difficulty`,
 `playbackDurationMs`, `source` — and three more on the round: `audioStartsAt`,
 `choices` typed as tracks, `revealedTrack`.
 
-The fix is one discriminated union in each place, keyed on the game:
+The fix was one discriminated union in each place, keyed on the game:
 
 ```ts
 RoomSettings = {

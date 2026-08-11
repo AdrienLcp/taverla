@@ -6,8 +6,36 @@ one part.
 
 ## Unreleased
 
+### Breaking Changes
+
+- `[Shared]` The room's settings and the round's content split by game, and
+  `PROTOCOL_VERSION` goes to 4. `RoomSettings` and `RoundView` were the blind
+  test wearing the room's name: what every game needs — answer mode, round
+  count, countdown, auto-advance, when the round opens, the buzz, the lockout,
+  the awards — stays on the room, and what the game *is asking* moves behind
+  `settings.game` and `round.content`, unions discriminated on `kind`. The
+  host's secret half moves the same way, into one `currentContent` that keeps
+  the reason `currentTrack` and `currentAudioUrl` were ever two fields: a seated
+  host still loses the track and keeps the audio. Built now because a second
+  game exists to measure it against, which is the only moment the shared shape
+  is knowable — see `docs/game-catalogue.md`
+- `[Shared]` A typed answer is one `guess` where it was a `title` and an
+  `artist`. Two fields asked a player to know *which* half they were holding
+  before they could say it, and a typed round is won by firing the moment
+  something surfaces
+
 ### Features
 
+- `[Game]` Typing an answer is one field and as many goes as the clip allows. A
+  guess is measured against the title and the artist independently — whichever
+  it matches is banked — so "jean jacques goldman on ira" takes both and
+  "daniel balavoine on ira" takes the title and still owes the artist. The pair
+  pays 3 however it was reached, and the speed bonus ranks on the first guess
+  that *banked* something rather than on arrival, or being quickly wrong would
+  buy a place in the queue. A pick stays one shot: four candidates with retries
+  is the answer with extra steps. `yourVerdict` carries what the reader holds,
+  scoped to them — without it a second guess is a guess at what to guess at, and
+  everyone else's progress stays secret until the reveal
 - `[Game]` A visual world, replacing the prototype's dark-with-a-neon-accent
   look: the screen is a title card, and the phase is the colour. Six saturated
   fields, one per phase, so the far side of a room knows where the game is
@@ -155,6 +183,24 @@ one part.
 
 ### Improvements
 
+- `[Game]` A press answers on a touch screen. Every variant painted
+  `[data-hovered]` and left `[data-pressed]` a two-pixel nudge — but
+  `data-hovered` never fires on a touch device, and the reset already removes
+  the browser's tap highlight, so on the phone most of these screens are aimed
+  at, pressing anything changed nothing. The game card on the home page had no
+  pressed rule at all. Whatever a hover paints, a press now paints too
+- `[Game]` The settings panel opens and closes on an animation rather than
+  blinking. The panel is a grid row going `0fr → 1fr`, because `height: auto` is
+  not a length and will not transition; it works in both directions because
+  react-aria collapses with `hidden="until-found"` — `content-visibility`, not
+  `display: none` — so the box survives to be animated, and `allow-discrete`
+  holds the hiding back until the row has finished closing
+- `[Shared]` The answer matcher looks for each half *inside* what was typed
+  instead of only as the whole of it. It compared whole strings, so "jean
+  jacques goldman on ira" found neither half — which is exactly what a room
+  types into one field. The search is over runs of **whole words**, and that is
+  the guard rather than a length threshold: `normalizeAnswer` drops whitespace
+  on purpose, and on the bare string a title of `Hell` is inside `Michelle`
 - `[Game]` The document says what the product is. The tab read "Blind Test", the
   page had no description, and a link pasted into a chat unfurled as a bare URL
   — which matters here more than search does, because this is a product people

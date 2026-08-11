@@ -17,6 +17,7 @@ describes the code is worse than no plan.
 | [08 — Deploy](08-deploy.md) | **done** | One origin serving both, somewhere friends can reach |
 | [09 — Answer modes](09-answer-modes.md) | **done** | Four choices or a typed answer, everyone at once, scored by speed |
 | [10 — Per-device audio](10-per-device-audio.md) | **dropped** | Audio stays on the host. See the plan for why, and what replaces it |
+| [11 — The second game](11-quiz.md) | **in progress** | The seam between the shelf and one game on it, then a quiz through it |
 
 ## Order, and what can move
 
@@ -28,6 +29,12 @@ the screens exist wastes it.
 09 and 10 are the first stages added after the game shipped, from playing it
 rather than from planning it. 09 is much the larger: it is the first thing that
 breaks the assumption that exactly one player acts at a time.
+
+11 is the first stage that is not about the blind test. Its front half — the
+seam between the shelf and one game on it — is the one piece that had to wait
+for a second game to exist, because inventing the shared shape before there are
+two cases to measure it against is the abstraction anti-pattern with a different
+hat on. That half has landed; the quiz itself has not.
 
 07 was taken first, out of order and deliberately: routing strings and colours
 through a layer costs an afternoon before a design pass and a rewrite after one.
@@ -45,6 +52,13 @@ recorded where it will be read — [`apps/game/DESIGN.md`](../../apps/game/DESIG
 for the materials and the icon family,
 [`.claude/rules/react-components.md`](../../.claude/rules/react-components.md)
 for the rules that came out of it, and the changelog for the list.
+
+The typed mode's rework is the largest of these so far, and it came from the
+same place: one field instead of two, as many guesses as the clip allows, and a
+matcher that finds each half *inside* a line. Two fields asked a player to know
+which half they were holding before they could say it, and one guess per round
+made a near-miss the end of it. None of that was visible until a room typed into
+it.
 
 Expect more of this than of stages. The plans cover what is missing; what is
 *wrong* surfaces by playing.
