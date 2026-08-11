@@ -1,211 +1,291 @@
+import { defineTranslation } from '@taverla/core/i18n/define-translation'
+import { defineTranslations } from '@taverla/core/i18n/translator'
+
 /**
  * The reference dictionary: its keys are the type every other locale is checked
  * against, so a string added here does not compile until every locale has it.
+ *
+ * A count declares `plural` here the moment *any* locale inflects around it,
+ * even where English does not — the shape of a key is the same in every
+ * dictionary, so English writing only `other` is what lets French write `one`.
  *
  * `blindtest.*` and `buzzer.*` are the namespaces a single game owns. Everything
  * else — joining a room, the roster, the buzzer *mode*, the round counter, the
  * connection, the errors — is the shell that the next game reuses unchanged.
  * See `docs/game-catalogue.md`.
  */
-export const EN_DICTIONARY = {
-  'blindtest.answer.anyOrder':
-    'The title, the artist, or both — as many goes as you like.',
-  'blindtest.answer.artistFound': 'Artist ✓',
-  'blindtest.answer.bothFound': 'You have both. Sit back.',
-  'blindtest.answer.guess': 'Your answer',
-  'blindtest.answer.locked': 'Answer sent. Waiting for the others…',
-  'blindtest.answer.send': 'Send it',
-  'blindtest.answer.titleFound': 'Title ✓',
-  'blindtest.answer.waiting': '{count} in so far',
-  'blindtest.clip': 'Clip length',
-  'blindtest.difficulty.label': 'How well known',
-  'blindtest.difficulty.mixed': 'Deep cuts too',
-  'blindtest.difficulty.obscure': 'For the experts',
-  'blindtest.difficulty.wellKnown': 'Crowd-pleasers',
-  'blindtest.genre.52': 'French songs',
-  'blindtest.genre.106': 'Electro',
-  'blindtest.genre.113': 'Dance',
-  'blindtest.genre.116': 'Rap and hip hop',
-  'blindtest.genre.129': 'Jazz',
-  'blindtest.genre.132': 'Pop',
-  'blindtest.genre.144': 'Reggae',
-  'blindtest.genre.152': 'Rock',
-  'blindtest.genre.165': 'R&B',
-  'blindtest.genre.169': 'Soul and funk',
-  'blindtest.genre.197': 'Latin',
-  'blindtest.genre.464': 'Metal',
-  'blindtest.genre.label': 'Which music',
-  'blindtest.genre.none': 'Pick none and you get every genre.',
-  'blindtest.home.description':
-    'One screen plays the track and shows the QR code. Everyone else answers on whatever they have in their hand, and the first to know it wins the round.',
-  'blindtest.listening': 'Listening…',
-  'blindtest.name': 'Blind test',
-  'blindtest.reveal.title': 'It was',
-  'blindtest.scoring.buzzer':
-    'First to buzz answers out loud. The host judges the title and the artist, a point each — a wrong answer sits you out for the rest of the round.',
-  'blindtest.scoring.choice':
-    'Everyone picks, over the same clip. The right one scores a point, and the first two to find it earn +2 and +1 on top.',
-  'blindtest.scoring.typed':
-    'Everyone types, over the same clip. Title and artist score a point each and both together score three, and the first two to get it right earn +2 and +1 on top.',
-  'blindtest.source.chart': 'Top charts',
-  'blindtest.source.label': 'Where the tracks come from',
-  'blindtest.source.noneInPlaylist':
-    'Nothing playable in that playlist. Check the id.',
-  'blindtest.source.noneInSearch':
-    'Nothing well-known enough matched. Try another search.',
-  'blindtest.source.playlist': 'A Deezer playlist',
-  'blindtest.source.playlistId': 'Playlist id',
-  'blindtest.source.playlistIdHint':
-    'The number at the end of the playlist’s Deezer address.',
-  'blindtest.source.preview': 'See what that finds',
-  'blindtest.source.query': 'Search for',
-  'blindtest.source.ready': '{count} tracks ready',
-  'blindtest.source.search': 'A search',
-  'blindtest.tagline': 'Name the track before anyone else.',
-  'blindtest.verdict.artistOnly': 'Artist only',
-  'blindtest.verdict.both': 'Title + artist',
-  'blindtest.verdict.miss': 'Wrong',
-  'blindtest.verdict.titleOnly': 'Title only',
-
-  'buzz.action': 'Buzz',
-  'buzz.blocked.host_away': 'The host dropped out. Everything is on hold.',
-  'buzz.blocked.round_not_running': 'Waiting for the host',
-  'buzz.blocked.someone_else_buzzed': 'Someone got there first',
-  'buzz.blocked.you_already_missed': 'You are out for this round',
-  'buzz.blocked.your_answer_is_pending': 'Say your answer out loud',
-  'buzz.ready': 'Hit it the moment you know',
-  'buzz.sendFailed': 'That buzz did not get through. Hit it again.',
-  'buzz.theyBuzzed': '{nickname} buzzed',
-  'buzz.won': 'You are in. Say it out loud',
-
-  'buzzer.clearLockouts': 'Let everyone back in',
-  'buzzer.home.description':
-    'You bring the questions — a charade, a quiz off a sheet of paper, a lesson, whatever the room is up for. This screen only decides who put their thumb down first, and it never gets that wrong.',
-  'buzzer.lockout': 'A wrong answer sits you out',
-  'buzzer.name': 'Buzzer',
-  'buzzer.running': 'Ask away',
-  'buzzer.scoring':
-    'First thumb answers out loud, and the host says right or wrong. A point for right — and a wrong answer sits you out until the host lets you back in.',
-  'buzzer.tagline': 'Your questions, and an honest race for the floor.',
-  'buzzer.verdict.right': 'Right',
-  'buzzer.verdict.wrong': 'Wrong',
-
-  'connection.clock': '· clock ±{milliseconds} ms',
-  'connection.closed': 'Reconnecting',
-  'connection.connecting': 'Connecting',
-  'connection.open': 'Live',
-  'connection.refused': 'Disconnected',
-
-  'error.already_buzzed': 'Someone got there first.',
-  'error.api.rate_limited': 'That is a lot of rooms. Wait a minute and retry.',
-  'error.api.rejected': 'The server refused that.',
-  'error.api.unexpected_response': 'The server answered something unexpected.',
-  'error.api.unreachable': 'Could not reach the server. Try again in a moment.',
-  'error.host_already_connected': 'Someone is already hosting this room.',
-  'error.host_only_action': 'Only the host can do that.',
-  'error.internal_error': 'Something broke on the server.',
-  'error.invalid_message': 'The server did not understand that message.',
-  'error.music_source_unavailable': 'The music service is not answering.',
-  'error.nickname_taken': 'Someone already took that nickname.',
-  'error.no_tracks_available': 'There are no tracks left to play.',
-  'error.not_implemented': 'That part of the game is not built yet.',
-  'error.player_locked_out': 'You are out for this round.',
-  'error.protocol_version_mismatch': 'This page is out of date. Reload it.',
-  'error.rate_limited': 'That is a lot of rooms. Wait a minute and retry.',
-  'error.room_closed': 'The host closed the room.',
-  'error.room_full': 'That room is full.',
-  'error.room_not_found': 'That room does not exist.',
-  'error.screen.description':
-    'The game hit something it could not carry on from. Reloading almost always fixes it — and if the site updated while this tab was open, it always does.',
-  'error.screen.reload': 'Reload the page',
-  'error.screen.title': 'Something broke',
-  'error.stale_round': 'That round is already over.',
-  'error.wrong_phase': 'Too late, the game has moved on.',
-
-  'home.games': 'The games',
-  'home.tagline': 'Party games for one screen and everyone’s phone.',
-  'home.title': 'Taverla',
-
-  'host.answerMode.buzzer': 'First to buzz',
-  'host.answerMode.choice': 'Four choices',
-  'host.answerMode.label': 'How to answer',
-  'host.answerMode.typed': 'Type it',
-  'host.answerWindow': 'Time to answer after a buzz',
-  'host.answerWindow.none': 'You decide',
-  'host.autoAdvance': 'Chain rounds by itself',
-  'host.changeSettings': 'Change the settings',
-  'host.copied': 'Copied',
-  'host.copyCode': 'Copy the code',
-  'host.copyFailed': 'Could not copy',
-  'host.countdown': 'Countdown',
-  'host.endGame': 'End the game',
-  'host.final.nobody': 'Nobody scored',
-  'host.final.point': '1 point',
-  'host.final.points': '{points} points',
-  'host.final.tie': 'It is a tie',
-  'host.final.winner': 'The winner',
-  'host.game': 'Which game',
-  'host.invite.title': 'Scan to play',
-  'host.joinLate': 'Still open',
-  'host.needsPlayer': 'The game needs at least one player',
-  'host.nextRound': 'Next round',
-  'host.playAgain': 'Play again',
-  'host.players.empty': 'Nobody has joined yet. The QR code is waiting.',
-  'host.players.title': 'Players',
-  'host.reveal': 'Give it away',
-  'host.roundCount': '{count} rounds',
-  'host.roundCount.open': 'No end',
-  'host.roundCount.openSummary': 'Until you stop',
-  'host.rounds': 'Rounds',
-  'host.seat.action': 'Take a seat',
-  'host.seat.description':
-    'This screen stops being told the answer until the reveal.',
-  'host.seat.label': 'Play too, as',
-  'host.seat.taken': 'You are playing as {nickname}.',
-  'host.seconds': '{seconds}s',
-  'host.seeResults': 'See the results',
-  'host.setup': 'Settings',
-  'host.startGame': 'Start the game',
-  'host.volume': 'Volume',
-
-  'join.divider': 'or',
-  'join.host.action': 'Create a room',
-  'join.host.description':
-    'Opens the console with the QR code your friends scan.',
-  'join.player.action': 'Join',
-  'join.player.title': 'Join a game',
-  'join.roomCode.description': 'Shown on the host screen.',
-  'join.roomCode.label': 'Room code',
-  'join.roomCode.unknown': 'No game is running under that code.',
-  'join.roomCode.unsupportedCharacters':
-    'A room code never contains {characters}.',
-  'join.roomCode.wrongLength': 'A room code is {length} characters long.',
-
-  'menu.build': 'Build {build}',
-  'menu.home': 'Home',
-  'menu.label': 'Menu',
-
-  'notFound.back': 'Back to the start',
-  'notFound.description': 'That game is over, or the code was mistyped.',
-  'notFound.title': 'Nothing here',
-
-  'player.nickname.action': 'Join the game',
-  'player.nickname.label': 'Nickname',
-  'player.nickname.title': 'What should we call you?',
-  'player.points': 'points',
-  'player.room': 'Room {code}',
-  'player.roomSize': '{count} in the room',
-  'player.seating': 'Taking your seat…',
-  'player.you': 'You',
-
-  'preferences.language': 'Language',
-  'preferences.theme': 'Theme',
-  'preferences.theme.dark': 'Dark',
-  'preferences.theme.light': 'Light',
-  'preferences.theme.system': 'System',
-
-  'round.index': 'Round {index} of {total}',
-  'round.indexOpen': 'Round {index}',
-  'round.nobody': 'Nobody got it',
-  'round.scored': '+{points}'
-}
+export const EN_DICTIONARY = defineTranslations({
+  blindtest: {
+    answer: {
+      anyOrder: 'The title, the artist, or both — as many goes as you like.',
+      artistFound: 'Artist ✓',
+      bothFound: 'You have both. Sit back.',
+      guess: 'Your answer',
+      locked: 'Answer sent. Waiting for the others…',
+      send: 'Send it',
+      titleFound: 'Title ✓',
+      waiting: defineTranslation('{count:plural}', {
+        plural: { count: { other: '{?} in so far' } }
+      })
+    },
+    clip: 'Clip length',
+    difficulty: {
+      label: 'How well known',
+      mixed: 'Deep cuts too',
+      obscure: 'For the experts',
+      wellKnown: 'Crowd-pleasers'
+    },
+    genre: {
+      '52': 'French songs',
+      '106': 'Electro',
+      '113': 'Dance',
+      '116': 'Rap and hip hop',
+      '129': 'Jazz',
+      '132': 'Pop',
+      '144': 'Reggae',
+      '152': 'Rock',
+      '165': 'R&B',
+      '169': 'Soul and funk',
+      '197': 'Latin',
+      '464': 'Metal',
+      label: 'Which music',
+      none: 'Pick none and you get every genre.'
+    },
+    home: {
+      description:
+        'One screen plays the track and shows the QR code. Everyone else answers on whatever they have in their hand, and the first to know it wins the round.'
+    },
+    listening: 'Listening…',
+    name: 'Blind test',
+    reveal: {
+      title: 'It was'
+    },
+    scoring: {
+      buzzer:
+        'First to buzz answers out loud. The host judges the title and the artist, a point each — a wrong answer sits you out for the rest of the round.',
+      choice:
+        'Everyone picks, over the same clip. The right one scores a point, and the first two to find it earn +2 and +1 on top.',
+      typed:
+        'Everyone types, over the same clip. Title and artist score a point each and both together score three, and the first two to get it right earn +2 and +1 on top.'
+    },
+    source: {
+      chart: 'Top charts',
+      label: 'Where the tracks come from',
+      noneInPlaylist: 'Nothing playable in that playlist. Check the id.',
+      noneInSearch: 'Nothing well-known enough matched. Try another search.',
+      playlist: 'A Deezer playlist',
+      playlistId: 'Playlist id',
+      playlistIdHint: 'The number at the end of the playlist’s Deezer address.',
+      preview: 'See what that finds',
+      query: 'Search for',
+      ready: defineTranslation('{count:plural}', {
+        plural: { count: { one: '{?} track ready', other: '{?} tracks ready' } }
+      }),
+      search: 'A search'
+    },
+    tagline: 'Name the track before anyone else.',
+    verdict: {
+      artistOnly: 'Artist only',
+      both: 'Title + artist',
+      miss: 'Wrong',
+      titleOnly: 'Title only'
+    }
+  },
+  buzz: {
+    action: 'Buzz',
+    blocked: {
+      host_away: 'The host dropped out. Everything is on hold.',
+      round_not_running: 'Waiting for the host',
+      someone_else_buzzed: 'Someone got there first',
+      you_already_missed: 'You are out for this round',
+      your_answer_is_pending: 'Say your answer out loud'
+    },
+    ready: 'Hit it the moment you know',
+    sendFailed: 'That buzz did not get through. Hit it again.',
+    theyBuzzed: '{nickname} buzzed',
+    won: 'You are in. Say it out loud'
+  },
+  buzzer: {
+    clearLockouts: 'Let everyone back in',
+    home: {
+      description:
+        'You bring the questions — a charade, a quiz off a sheet of paper, a lesson, whatever the room is up for. This screen only decides who put their thumb down first, and it never gets that wrong.'
+    },
+    lockout: 'A wrong answer sits you out',
+    name: 'Buzzer',
+    running: 'Ask away',
+    scoring:
+      'First thumb answers out loud, and the host says right or wrong. A point for right — and a wrong answer sits you out until the host lets you back in.',
+    tagline: 'Your questions, and an honest race for the floor.',
+    verdict: {
+      right: 'Right',
+      wrong: 'Wrong'
+    }
+  },
+  connection: {
+    clock: '· clock ±{milliseconds:number} ms',
+    closed: 'Reconnecting',
+    connecting: 'Connecting',
+    open: 'Live',
+    refused: 'Disconnected'
+  },
+  error: {
+    already_buzzed: 'Someone got there first.',
+    api: {
+      rate_limited: 'That is a lot of rooms. Wait a minute and retry.',
+      rejected: 'The server refused that.',
+      unexpected_response: 'The server answered something unexpected.',
+      unreachable: 'Could not reach the server. Try again in a moment.'
+    },
+    host_already_connected: 'Someone is already hosting this room.',
+    host_only_action: 'Only the host can do that.',
+    internal_error: 'Something broke on the server.',
+    invalid_message: 'The server did not understand that message.',
+    music_source_unavailable: 'The music service is not answering.',
+    nickname_taken: 'Someone already took that nickname.',
+    no_tracks_available: 'There are no tracks left to play.',
+    not_implemented: 'That part of the game is not built yet.',
+    player_locked_out: 'You are out for this round.',
+    protocol_version_mismatch: 'This page is out of date. Reload it.',
+    rate_limited: 'That is a lot of rooms. Wait a minute and retry.',
+    room_closed: 'The host closed the room.',
+    room_full: 'That room is full.',
+    room_not_found: 'That room does not exist.',
+    screen: {
+      description:
+        'The game hit something it could not carry on from. Reloading almost always fixes it — and if the site updated while this tab was open, it always does.',
+      reload: 'Reload the page',
+      title: 'Something broke'
+    },
+    stale_round: 'That round is already over.',
+    wrong_phase: 'Too late, the game has moved on.'
+  },
+  home: {
+    games: 'The games',
+    tagline: 'Party games for one screen and everyone’s phone.',
+    title: 'Taverla'
+  },
+  host: {
+    answerMode: {
+      buzzer: 'First to buzz',
+      choice: 'Four choices',
+      label: 'How to answer',
+      typed: 'Type it'
+    },
+    answerWindow: {
+      label: 'Time to answer after a buzz',
+      none: 'You decide'
+    },
+    autoAdvance: 'Chain rounds by itself',
+    changeSettings: 'Change the settings',
+    copied: 'Copied',
+    copyCode: 'Copy the code',
+    copyFailed: 'Could not copy',
+    countdown: 'Countdown',
+    endGame: 'End the game',
+    final: {
+      nobody: 'Nobody scored',
+      score: defineTranslation('{points:plural}', {
+        plural: { points: { one: '{?} point', other: '{?} points' } }
+      }),
+      tie: 'It is a tie',
+      winner: 'The winner'
+    },
+    game: 'Which game',
+    invite: {
+      title: 'Scan to play'
+    },
+    joinLate: 'Still open',
+    needsPlayer: 'The game needs at least one player',
+    nextRound: 'Next round',
+    playAgain: 'Play again',
+    players: {
+      empty: 'Nobody has joined yet. The QR code is waiting.',
+      title: 'Players'
+    },
+    reveal: 'Give it away',
+    roundCount: {
+      open: 'No end',
+      openSummary: 'Until you stop',
+      summary: defineTranslation('{count:plural}', {
+        plural: { count: { one: '{?} round', other: '{?} rounds' } }
+      })
+    },
+    rounds: 'Rounds',
+    seat: {
+      action: 'Take a seat',
+      description: 'This screen stops being told the answer until the reveal.',
+      label: 'Play too, as',
+      taken: 'You are playing as {nickname}.'
+    },
+    seconds: '{seconds:number}s',
+    seeResults: 'See the results',
+    setup: 'Settings',
+    startGame: 'Start the game',
+    volume: 'Volume'
+  },
+  join: {
+    divider: 'or',
+    host: {
+      action: 'Create a room',
+      description: 'Opens the console with the QR code your friends scan.'
+    },
+    player: {
+      action: 'Join',
+      title: 'Join a game'
+    },
+    roomCode: {
+      description: 'Shown on the host screen.',
+      label: 'Room code',
+      unknown: 'No game is running under that code.',
+      unsupportedCharacters: 'A room code never contains {characters}.',
+      wrongLength: defineTranslation('{length:plural}', {
+        plural: {
+          length: {
+            one: 'A room code is {?} character long.',
+            other: 'A room code is {?} characters long.'
+          }
+        }
+      })
+    }
+  },
+  menu: {
+    build: 'Build {build}',
+    home: 'Home',
+    label: 'Menu'
+  },
+  notFound: {
+    back: 'Back to the start',
+    description: 'That game is over, or the code was mistyped.',
+    title: 'Nothing here'
+  },
+  player: {
+    nickname: {
+      action: 'Join the game',
+      label: 'Nickname',
+      title: 'What should we call you?'
+    },
+    points: defineTranslation('{points:plural}', {
+      plural: { points: { one: 'point', other: 'points' } }
+    }),
+    room: 'Room {code}',
+    roomSize: '{count:number} in the room',
+    seating: 'Taking your seat…',
+    you: 'You'
+  },
+  preferences: {
+    language: 'Language',
+    theme: {
+      dark: 'Dark',
+      label: 'Theme',
+      light: 'Light',
+      system: 'System'
+    }
+  },
+  round: {
+    index: 'Round {index:number} of {total:number}',
+    indexOpen: 'Round {index:number}',
+    nobody: 'Nobody got it',
+    scored: '+{points:number}'
+  }
+})

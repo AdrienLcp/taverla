@@ -9,7 +9,7 @@ import { blindtestContent } from '@/helpers/blindtest-round'
 import { Button } from '@/presentation/components/button'
 import { TextField } from '@/presentation/components/text-field'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
-import type { TranslationKey } from '@/presentation/i18n/translation'
+import type { PlainTranslationKey } from '@/presentation/i18n/translation'
 
 import './answer-forms.sass'
 
@@ -179,7 +179,7 @@ const AnswerStatus = ({
   round
 }: {
   /** What a player who has nothing left to do is told — the two modes end differently. */
-  doneKey: TranslationKey
+  doneKey: PlainTranslationKey
   hasAnswered: boolean
   round: RoundView | null
 }) => {

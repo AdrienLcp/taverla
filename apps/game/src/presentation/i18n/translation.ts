@@ -6,49 +6,57 @@ import {
 } from '@taverla/protocol/game'
 import type { AnswerMode } from '@taverla/protocol/room'
 
+import type {
+  DotPath,
+  PlainKey,
+  TranslationsLike,
+  Translator
+} from '@taverla/core/i18n/translator'
 import type { BuzzBlocker } from '@taverla/core/round/buzz-eligibility'
 
 import type { ApiError } from '@/infrastructure/api/taverla-api'
 
 import type { EN_DICTIONARY } from './dictionary-en'
 
-export type TranslationKey = keyof typeof EN_DICTIONARY
+export type TranslationKey = DotPath<typeof EN_DICTIONARY>
 
-export type Dictionary = Record<TranslationKey, string>
+/**
+ * A key whose message carries no placeholder, so it renders from nothing but
+ * itself. It is what a lookup table or a piece of state may hold: a key needing
+ * values cannot be translated by whoever ends up reading it back.
+ */
+export type PlainTranslationKey = PlainKey<typeof EN_DICTIONARY>
 
-export type TranslationValues = Record<string, string | number>
+export type Dictionary = TranslationsLike<typeof EN_DICTIONARY>
 
-export type Translate = (
-  key: TranslationKey,
-  values?: TranslationValues
-) => string
+export type Translate = Translator<typeof EN_DICTIONARY>
 
-export const createTranslate =
-  (dictionary: Dictionary): Translate =>
-  (key, values) =>
-    values === undefined
-      ? dictionary[key]
-      : dictionary[key].replace(
-          /\{(\w+)\}/g,
-          (placeholder, name: string) => `${values[name] ?? placeholder}`
-        )
+/**
+ * Narrows a builder to the handful of keys it can return while checking that
+ * the dictionary has every one of them — widening the enum underneath fails to
+ * compile here until both locales carry the new string.
+ */
+type BuiltKey<Key extends PlainTranslationKey> = Key
 
 /**
  * The server writes `message` in English for a developer reading a log. What a
- * player sees comes from the code, which is a closed enum — so widening it in
- * `error-code.ts` fails to compile here until the string exists in every locale.
+ * player sees comes from the code, which is a closed enum.
  */
-export const protocolErrorKey = (code: ProtocolErrorCode): TranslationKey =>
-  `error.${code}`
+export const protocolErrorKey = (
+  code: ProtocolErrorCode
+): BuiltKey<`error.${ProtocolErrorCode}`> => `error.${code}`
 
-export const apiErrorKey = (error: ApiError): TranslationKey =>
-  `error.api.${error}`
+export const apiErrorKey = (
+  error: ApiError
+): BuiltKey<`error.api.${ApiError}`> => `error.api.${error}`
 
-export const buzzBlockerKey = (blocker: BuzzBlocker): TranslationKey =>
-  `buzz.blocked.${blocker}`
+export const buzzBlockerKey = (
+  blocker: BuzzBlocker
+): BuiltKey<`buzz.blocked.${BuzzBlocker}`> => `buzz.blocked.${blocker}`
 
-export const answerModeLabelKey = (mode: AnswerMode): TranslationKey =>
-  `host.answerMode.${mode}`
+export const answerModeLabelKey = (
+  mode: AnswerMode
+): BuiltKey<`host.answerMode.${AnswerMode}`> => `host.answerMode.${mode}`
 
 /**
  * How a game pays, in one sentence. The bare buzzer's is its own: the blind
@@ -61,7 +69,7 @@ export const scoringKey = ({
 }: {
   answerMode: AnswerMode
   game: GameKind
-}): TranslationKey =>
+}): BuiltKey<'buzzer.scoring' | `blindtest.scoring.${AnswerMode}`> =>
   game === 'buzzer' ? 'buzzer.scoring' : `blindtest.scoring.${answerMode}`
 
 /**
@@ -69,13 +77,17 @@ export const scoringKey = ({
  * games a room can actually be opened for, so adding one to `shelvedGames`
  * stops compiling until both locales can name it, pitch it and describe it.
  */
-export const gameNameKey = (game: ShelvedGame): TranslationKey => `${game}.name`
+export const gameNameKey = (
+  game: ShelvedGame
+): BuiltKey<`${ShelvedGame}.name`> => `${game}.name`
 
-export const gameTaglineKey = (game: ShelvedGame): TranslationKey =>
-  `${game}.tagline`
+export const gameTaglineKey = (
+  game: ShelvedGame
+): BuiltKey<`${ShelvedGame}.tagline`> => `${game}.tagline`
 
-export const gameDescriptionKey = (game: ShelvedGame): TranslationKey =>
-  `${game}.home.description`
+export const gameDescriptionKey = (
+  game: ShelvedGame
+): BuiltKey<`${ShelvedGame}.home.description`> => `${game}.home.description`
 
 export const isShelvedGame = (value: string): value is ShelvedGame =>
   shelvedGames.some((game) => game === value)

@@ -1,214 +1,294 @@
+import { defineTranslation } from '@taverla/core/i18n/define-translation'
+
 import type { Dictionary } from './translation'
 
 /**
  * French typography puts a non-breaking space before `?`, `!` and `:`. Writing
  * it as \u00a0 keeps it visible to whoever edits this file, and survives an
  * editor that strips invisible characters.
+ *
+ * French counts 0 as singular. Every `one` form below therefore covers both 0
+ * and 1, which is the whole reason these keys carry plural forms rather than a
+ * word chosen at the call site.
  */
 export const FR_DICTIONARY: Dictionary = {
-  'blindtest.answer.anyOrder':
-    'Le titre, l’artiste, ou les deux — autant d’essais que tu veux.',
-  'blindtest.answer.artistFound': 'Artiste ✓',
-  'blindtest.answer.bothFound': 'Tu as les deux. Tranquille.',
-  'blindtest.answer.guess': 'Ta réponse',
-  'blindtest.answer.locked': 'Réponse envoyée. On attend les autres…',
-  'blindtest.answer.send': 'Envoyer',
-  'blindtest.answer.titleFound': 'Titre ✓',
-  'blindtest.answer.waiting': '{count} ont répondu',
-  'blindtest.clip': 'Durée de l’extrait',
-  'blindtest.difficulty.label': 'À quel point c’est connu',
-  'blindtest.difficulty.mixed': 'Un peu pointu',
-  'blindtest.difficulty.obscure': 'Pour les experts',
-  'blindtest.difficulty.wellKnown': 'Grand public',
-  'blindtest.genre.52': 'Chanson française',
-  'blindtest.genre.106': 'Électro',
-  'blindtest.genre.113': 'Dance',
-  'blindtest.genre.116': 'Rap et hip-hop',
-  'blindtest.genre.129': 'Jazz',
-  'blindtest.genre.132': 'Pop',
-  'blindtest.genre.144': 'Reggae',
-  'blindtest.genre.152': 'Rock',
-  'blindtest.genre.165': 'R&B',
-  'blindtest.genre.169': 'Soul et funk',
-  'blindtest.genre.197': 'Latino',
-  'blindtest.genre.464': 'Metal',
-  'blindtest.genre.label': 'Quelle musique',
-  'blindtest.genre.none': 'N’en choisis aucun et tu as tous les genres.',
-  'blindtest.home.description':
-    'Un écran joue le morceau et affiche le QR code. Tout le monde répond sur ce qu’il a dans la main, et le premier qui sait remporte le tour.',
-  'blindtest.listening': 'À l’écoute…',
-  'blindtest.name': 'Blind test',
-  'blindtest.reveal.title': 'C’était',
-  'blindtest.scoring.buzzer':
-    'Le premier qui buzze répond à voix haute. L’hôte juge le titre et l’artiste, 1 point chacun — une mauvaise réponse te met hors-jeu pour le reste du tour.',
-  'blindtest.scoring.choice':
-    'Tout le monde choisit, sur le même extrait. La bonne proposition rapporte 1 point, et les deux premiers à la trouver gagnent +2 et +1 en plus.',
-  'blindtest.scoring.typed':
-    'Tout le monde tape, sur le même extrait. Titre et artiste rapportent 1 point chacun, les deux ensemble 3, et les deux premiers à trouver gagnent +2 et +1 en plus.',
-  'blindtest.source.chart': 'Le top du moment',
-  'blindtest.source.label': 'D’où viennent les titres',
-  'blindtest.source.noneInPlaylist':
-    'Rien de jouable dans cette playlist. Vérifie l’identifiant.',
-  'blindtest.source.noneInSearch':
-    'Rien d’assez connu ne correspond. Essaie une autre recherche.',
-  'blindtest.source.playlist': 'Une playlist Deezer',
-  'blindtest.source.playlistId': 'Identifiant de playlist',
-  'blindtest.source.playlistIdHint':
-    'Le nombre à la fin de l’adresse Deezer de la playlist.',
-  'blindtest.source.preview': 'Voir ce que ça donne',
-  'blindtest.source.query': 'Rechercher',
-  'blindtest.source.ready': '{count} titres prêts',
-  'blindtest.source.search': 'Une recherche',
-  'blindtest.tagline': 'Trouve le titre avant tout le monde.',
-  'blindtest.verdict.artistOnly': 'Artiste seulement',
-  'blindtest.verdict.both': 'Titre + artiste',
-  'blindtest.verdict.miss': 'Raté',
-  'blindtest.verdict.titleOnly': 'Titre seulement',
-
-  'buzz.action': 'Buzz',
-  'buzz.blocked.host_away': 'L’hôte a décroché. Tout est en pause.',
-  'buzz.blocked.round_not_running': 'En attente de l’hôte',
-  'buzz.blocked.someone_else_buzzed': 'Quelqu’un a été plus rapide',
-  'buzz.blocked.you_already_missed': 'Tu es hors-jeu pour ce tour',
-  'buzz.blocked.your_answer_is_pending': 'Donne ta réponse à voix haute',
-  'buzz.ready': 'Appuie dès que tu sais',
-  'buzz.sendFailed': 'Ce buzz n’est pas parti. Réappuie.',
-  'buzz.theyBuzzed': '{nickname} a buzzé',
-  'buzz.won': 'C’est à toi. Annonce\u00a0!',
-
-  'buzzer.clearLockouts': 'Remettre tout le monde en jeu',
-  'buzzer.home.description':
-    'Les questions, c’est toi qui les apportes — une charade, un quiz sur une feuille, une leçon, ce que la salle veut. Cet écran décide seulement qui a posé le pouce en premier, et ça, il ne se trompe jamais.',
-  'buzzer.lockout': 'Une mauvaise réponse met hors-jeu',
-  'buzzer.name': 'Buzzer',
-  'buzzer.running': 'Pose ta question',
-  'buzzer.scoring':
-    'Le premier pouce répond à voix haute, et l’hôte dit si c’est bon. 1 point si c’est juste — et une mauvaise réponse te met hors-jeu jusqu’à ce que l’hôte te remette en jeu.',
-  'buzzer.tagline': 'Tes questions, et une course honnête au buzz.',
-  'buzzer.verdict.right': 'Bonne réponse',
-  'buzzer.verdict.wrong': 'Raté',
-
-  'connection.clock': '· horloge ±{milliseconds} ms',
-  'connection.closed': 'Reconnexion…',
-  'connection.connecting': 'Connexion…',
-  'connection.open': 'En direct',
-  'connection.refused': 'Déconnecté',
-
-  'error.already_buzzed': 'Quelqu’un a été plus rapide.',
-  'error.api.rate_limited':
-    'Ça fait beaucoup de salons. Attends une minute et réessaie.',
-  'error.api.rejected': 'Le serveur a refusé la demande.',
-  'error.api.unexpected_response':
-    'Le serveur a répondu quelque chose d’inattendu.',
-  'error.api.unreachable': 'Serveur injoignable. Réessaie dans un instant.',
-  'error.host_already_connected': 'Quelqu’un anime déjà ce salon.',
-  'error.host_only_action': 'Seul l’hôte peut faire ça.',
-  'error.internal_error': 'Quelque chose a cassé côté serveur.',
-  'error.invalid_message': 'Le serveur n’a pas compris ce message.',
-  'error.music_source_unavailable': 'Le service musical ne répond pas.',
-  'error.nickname_taken': 'Ce pseudo est déjà pris.',
-  'error.no_tracks_available': 'Il ne reste aucun titre à jouer.',
-  'error.not_implemented': 'Cette partie du jeu n’existe pas encore.',
-  'error.player_locked_out': 'Tu es hors-jeu pour ce tour.',
-  'error.protocol_version_mismatch':
-    'Cette page n’est plus à jour. Recharge-la.',
-  'error.rate_limited':
-    'Ça fait beaucoup de salons. Attends une minute et réessaie.',
-  'error.room_closed': 'L’hôte a fermé le salon.',
-  'error.room_full': 'Ce salon est complet.',
-  'error.room_not_found': 'Ce salon n’existe pas.',
-  'error.screen.description':
-    'Le jeu est tombé sur quelque chose dont il ne sait pas repartir. Recharger suffit presque toujours — et si le site a été mis à jour pendant que cet onglet était ouvert, toujours.',
-  'error.screen.reload': 'Recharger la page',
-  'error.screen.title': 'Quelque chose a cassé',
-  'error.stale_round': 'Ce tour est déjà terminé.',
-  'error.wrong_phase': 'Trop tard, la partie est passée à autre chose.',
-
-  'home.games': 'Les jeux',
-  'home.tagline':
-    'Des jeux de soirée pour un écran et les téléphones de tout le monde.',
-  'home.title': 'Taverla',
-
-  'host.answerMode.buzzer': 'Le premier qui buzze',
-  'host.answerMode.choice': 'Quatre propositions',
-  'host.answerMode.label': 'Comment on répond',
-  'host.answerMode.typed': 'On tape',
-  'host.answerWindow': 'Temps pour répondre après un buzz',
-  'host.answerWindow.none': 'Tu décides',
-  'host.autoAdvance': 'Enchaîner tout seul',
-  'host.changeSettings': 'Changer les réglages',
-  'host.copied': 'Copié',
-  'host.copyCode': 'Copier le code',
-  'host.copyFailed': 'Copie impossible',
-  'host.countdown': 'Décompte',
-  'host.endGame': 'Terminer la partie',
-  'host.final.nobody': 'Personne n’a marqué',
-  'host.final.point': '1 point',
-  'host.final.points': '{points} points',
-  'host.final.tie': 'Égalité',
-  'host.final.winner': 'Le vainqueur',
-  'host.game': 'Quel jeu',
-  'host.invite.title': 'Scanne pour jouer',
-  'host.joinLate': 'Encore ouvert',
-  'host.needsPlayer': 'Il faut au moins un joueur pour lancer',
-  'host.nextRound': 'Tour suivant',
-  'host.playAgain': 'Rejouer',
-  'host.players.empty': 'Personne n’a encore rejoint. Le QR code attend.',
-  'host.players.title': 'Joueurs',
-  'host.reveal': 'Donner la réponse',
-  'host.roundCount': '{count} tours',
-  'host.roundCount.open': 'Sans fin',
-  'host.roundCount.openSummary': 'Jusqu’à ce que tu arrêtes',
-  'host.rounds': 'Tours',
-  'host.seat.action': 'Prendre une place',
-  'host.seat.description':
-    'Cet écran cesse de recevoir la réponse jusqu’au reveal.',
-  'host.seat.label': 'Jouer aussi, sous le nom de',
-  'host.seat.taken': 'Tu joues sous le nom de {nickname}.',
-  'host.seconds': '{seconds} s',
-  'host.seeResults': 'Voir les résultats',
-  'host.setup': 'Réglages',
-  'host.startGame': 'Lancer la partie',
-  'host.volume': 'Volume',
-
-  'join.divider': 'ou',
-  'join.host.action': 'Créer un salon',
-  'join.host.description':
-    'Ouvre la console avec le QR code que tes amis scannent.',
-  'join.player.action': 'Rejoindre',
-  'join.player.title': 'Rejoindre une partie',
-  'join.roomCode.description': 'Affiché sur l’écran de l’hôte.',
-  'join.roomCode.label': 'Code du salon',
-  'join.roomCode.unknown': 'Aucune partie ne tourne sous ce code.',
-  'join.roomCode.unsupportedCharacters':
-    'Un code de salon ne contient jamais {characters}.',
-  'join.roomCode.wrongLength': 'Un code de salon fait {length} caractères.',
-
-  'menu.build': 'Version {build}',
-  'menu.home': 'Accueil',
-  'menu.label': 'Menu',
-
-  'notFound.back': 'Retour au départ',
-  'notFound.description': 'La partie est finie, ou le code a été mal tapé.',
-  'notFound.title': 'Il n’y a rien ici',
-
-  'player.nickname.action': 'Rejoindre la partie',
-  'player.nickname.label': 'Pseudo',
-  'player.nickname.title': 'On t’appelle comment\u00a0?',
-  'player.points': 'points',
-  'player.room': 'Salon {code}',
-  'player.roomSize': '{count} dans le salon',
-  'player.seating': 'On te trouve une place…',
-  'player.you': 'Toi',
-
-  'preferences.language': 'Langue',
-  'preferences.theme': 'Thème',
-  'preferences.theme.dark': 'Sombre',
-  'preferences.theme.light': 'Clair',
-  'preferences.theme.system': 'Système',
-
-  'round.index': 'Tour {index} sur {total}',
-  'round.indexOpen': 'Tour {index}',
-  'round.nobody': 'Personne n’a trouvé',
-  'round.scored': '+{points}'
+  blindtest: {
+    answer: {
+      anyOrder:
+        'Le titre, l’artiste, ou les deux — autant d’essais que tu veux.',
+      artistFound: 'Artiste ✓',
+      bothFound: 'Tu as les deux. Tranquille.',
+      guess: 'Ta réponse',
+      locked: 'Réponse envoyée. On attend les autres…',
+      send: 'Envoyer',
+      titleFound: 'Titre ✓',
+      waiting: defineTranslation('{count:plural}', {
+        plural: { count: { one: '{?} a répondu', other: '{?} ont répondu' } }
+      })
+    },
+    clip: 'Durée de l’extrait',
+    difficulty: {
+      label: 'À quel point c’est connu',
+      mixed: 'Un peu pointu',
+      obscure: 'Pour les experts',
+      wellKnown: 'Grand public'
+    },
+    genre: {
+      '52': 'Chanson française',
+      '106': 'Électro',
+      '113': 'Dance',
+      '116': 'Rap et hip-hop',
+      '129': 'Jazz',
+      '132': 'Pop',
+      '144': 'Reggae',
+      '152': 'Rock',
+      '165': 'R&B',
+      '169': 'Soul et funk',
+      '197': 'Latino',
+      '464': 'Metal',
+      label: 'Quelle musique',
+      none: 'N’en choisis aucun et tu as tous les genres.'
+    },
+    home: {
+      description:
+        'Un écran joue le morceau et affiche le QR code. Tout le monde répond sur ce qu’il a dans la main, et le premier qui sait remporte le tour.'
+    },
+    listening: 'À l’écoute…',
+    name: 'Blind test',
+    reveal: {
+      title: 'C’était'
+    },
+    scoring: {
+      buzzer:
+        'Le premier qui buzze répond à voix haute. L’hôte juge le titre et l’artiste, 1 point chacun — une mauvaise réponse te met hors-jeu pour le reste du tour.',
+      choice:
+        'Tout le monde choisit, sur le même extrait. La bonne proposition rapporte 1 point, et les deux premiers à la trouver gagnent +2 et +1 en plus.',
+      typed:
+        'Tout le monde tape, sur le même extrait. Titre et artiste rapportent 1 point chacun, les deux ensemble 3, et les deux premiers à trouver gagnent +2 et +1 en plus.'
+    },
+    source: {
+      chart: 'Le top du moment',
+      label: 'D’où viennent les titres',
+      noneInPlaylist:
+        'Rien de jouable dans cette playlist. Vérifie l’identifiant.',
+      noneInSearch:
+        'Rien d’assez connu ne correspond. Essaie une autre recherche.',
+      playlist: 'Une playlist Deezer',
+      playlistId: 'Identifiant de playlist',
+      playlistIdHint: 'Le nombre à la fin de l’adresse Deezer de la playlist.',
+      preview: 'Voir ce que ça donne',
+      query: 'Rechercher',
+      ready: defineTranslation('{count:plural}', {
+        plural: { count: { one: '{?} titre prêt', other: '{?} titres prêts' } }
+      }),
+      search: 'Une recherche'
+    },
+    tagline: 'Trouve le titre avant tout le monde.',
+    verdict: {
+      artistOnly: 'Artiste seulement',
+      both: 'Titre + artiste',
+      miss: 'Raté',
+      titleOnly: 'Titre seulement'
+    }
+  },
+  buzz: {
+    action: 'Buzz',
+    blocked: {
+      host_away: 'L’hôte a décroché. Tout est en pause.',
+      round_not_running: 'En attente de l’hôte',
+      someone_else_buzzed: 'Quelqu’un a été plus rapide',
+      you_already_missed: 'Tu es hors-jeu pour ce tour',
+      your_answer_is_pending: 'Donne ta réponse à voix haute'
+    },
+    ready: 'Appuie dès que tu sais',
+    sendFailed: 'Ce buzz n’est pas parti. Réappuie.',
+    theyBuzzed: '{nickname} a buzzé',
+    won: 'C’est à toi. Annonce\u00a0!'
+  },
+  buzzer: {
+    clearLockouts: 'Remettre tout le monde en jeu',
+    home: {
+      description:
+        'Les questions, c’est toi qui les apportes — une charade, un quiz sur une feuille, une leçon, ce que la salle veut. Cet écran décide seulement qui a posé le pouce en premier, et ça, il ne se trompe jamais.'
+    },
+    lockout: 'Une mauvaise réponse met hors-jeu',
+    name: 'Buzzer',
+    running: 'Pose ta question',
+    scoring:
+      'Le premier pouce répond à voix haute, et l’hôte dit si c’est bon. 1 point si c’est juste — et une mauvaise réponse te met hors-jeu jusqu’à ce que l’hôte te remette en jeu.',
+    tagline: 'Tes questions, et une course honnête au buzz.',
+    verdict: {
+      right: 'Bonne réponse',
+      wrong: 'Raté'
+    }
+  },
+  connection: {
+    clock: '· horloge ±{milliseconds:number} ms',
+    closed: 'Reconnexion…',
+    connecting: 'Connexion…',
+    open: 'En direct',
+    refused: 'Déconnecté'
+  },
+  error: {
+    already_buzzed: 'Quelqu’un a été plus rapide.',
+    api: {
+      rate_limited:
+        'Ça fait beaucoup de salons. Attends une minute et réessaie.',
+      rejected: 'Le serveur a refusé la demande.',
+      unexpected_response: 'Le serveur a répondu quelque chose d’inattendu.',
+      unreachable: 'Serveur injoignable. Réessaie dans un instant.'
+    },
+    host_already_connected: 'Quelqu’un anime déjà ce salon.',
+    host_only_action: 'Seul l’hôte peut faire ça.',
+    internal_error: 'Quelque chose a cassé côté serveur.',
+    invalid_message: 'Le serveur n’a pas compris ce message.',
+    music_source_unavailable: 'Le service musical ne répond pas.',
+    nickname_taken: 'Ce pseudo est déjà pris.',
+    no_tracks_available: 'Il ne reste aucun titre à jouer.',
+    not_implemented: 'Cette partie du jeu n’existe pas encore.',
+    player_locked_out: 'Tu es hors-jeu pour ce tour.',
+    protocol_version_mismatch: 'Cette page n’est plus à jour. Recharge-la.',
+    rate_limited: 'Ça fait beaucoup de salons. Attends une minute et réessaie.',
+    room_closed: 'L’hôte a fermé le salon.',
+    room_full: 'Ce salon est complet.',
+    room_not_found: 'Ce salon n’existe pas.',
+    screen: {
+      description:
+        'Le jeu est tombé sur quelque chose dont il ne sait pas repartir. Recharger suffit presque toujours — et si le site a été mis à jour pendant que cet onglet était ouvert, toujours.',
+      reload: 'Recharger la page',
+      title: 'Quelque chose a cassé'
+    },
+    stale_round: 'Ce tour est déjà terminé.',
+    wrong_phase: 'Trop tard, la partie est passée à autre chose.'
+  },
+  home: {
+    games: 'Les jeux',
+    tagline:
+      'Des jeux de soirée pour un écran et les téléphones de tout le monde.',
+    title: 'Taverla'
+  },
+  host: {
+    answerMode: {
+      buzzer: 'Le premier qui buzze',
+      choice: 'Quatre propositions',
+      label: 'Comment on répond',
+      typed: 'On tape'
+    },
+    answerWindow: {
+      label: 'Temps pour répondre après un buzz',
+      none: 'Tu décides'
+    },
+    autoAdvance: 'Enchaîner tout seul',
+    changeSettings: 'Changer les réglages',
+    copied: 'Copié',
+    copyCode: 'Copier le code',
+    copyFailed: 'Copie impossible',
+    countdown: 'Décompte',
+    endGame: 'Terminer la partie',
+    final: {
+      nobody: 'Personne n’a marqué',
+      score: defineTranslation('{points:plural}', {
+        plural: { points: { one: '{?} point', other: '{?} points' } }
+      }),
+      tie: 'Égalité',
+      winner: 'Le vainqueur'
+    },
+    game: 'Quel jeu',
+    invite: {
+      title: 'Scanne pour jouer'
+    },
+    joinLate: 'Encore ouvert',
+    needsPlayer: 'Il faut au moins un joueur pour lancer',
+    nextRound: 'Tour suivant',
+    playAgain: 'Rejouer',
+    players: {
+      empty: 'Personne n’a encore rejoint. Le QR code attend.',
+      title: 'Joueurs'
+    },
+    reveal: 'Donner la réponse',
+    roundCount: {
+      open: 'Sans fin',
+      openSummary: 'Jusqu’à ce que tu arrêtes',
+      summary: defineTranslation('{count:plural}', {
+        plural: { count: { one: '{?} tour', other: '{?} tours' } }
+      })
+    },
+    rounds: 'Tours',
+    seat: {
+      action: 'Prendre une place',
+      description: 'Cet écran cesse de recevoir la réponse jusqu’au reveal.',
+      label: 'Jouer aussi, sous le nom de',
+      taken: 'Tu joues sous le nom de {nickname}.'
+    },
+    seconds: '{seconds:number} s',
+    seeResults: 'Voir les résultats',
+    setup: 'Réglages',
+    startGame: 'Lancer la partie',
+    volume: 'Volume'
+  },
+  join: {
+    divider: 'ou',
+    host: {
+      action: 'Créer un salon',
+      description: 'Ouvre la console avec le QR code que tes amis scannent.'
+    },
+    player: {
+      action: 'Rejoindre',
+      title: 'Rejoindre une partie'
+    },
+    roomCode: {
+      description: 'Affiché sur l’écran de l’hôte.',
+      label: 'Code du salon',
+      unknown: 'Aucune partie ne tourne sous ce code.',
+      unsupportedCharacters:
+        'Un code de salon ne contient jamais {characters}.',
+      wrongLength: defineTranslation('{length:plural}', {
+        plural: {
+          length: {
+            one: 'Un code de salon fait {?} caractère.',
+            other: 'Un code de salon fait {?} caractères.'
+          }
+        }
+      })
+    }
+  },
+  menu: {
+    build: 'Version {build}',
+    home: 'Accueil',
+    label: 'Menu'
+  },
+  notFound: {
+    back: 'Retour au départ',
+    description: 'La partie est finie, ou le code a été mal tapé.',
+    title: 'Il n’y a rien ici'
+  },
+  player: {
+    nickname: {
+      action: 'Rejoindre la partie',
+      label: 'Pseudo',
+      title: 'On t’appelle comment\u00a0?'
+    },
+    points: defineTranslation('{points:plural}', {
+      plural: { points: { one: 'point', other: 'points' } }
+    }),
+    room: 'Salon {code}',
+    roomSize: '{count:number} dans le salon',
+    seating: 'On te trouve une place…',
+    you: 'Toi'
+  },
+  preferences: {
+    language: 'Langue',
+    theme: {
+      dark: 'Sombre',
+      label: 'Thème',
+      light: 'Clair',
+      system: 'Système'
+    }
+  },
+  round: {
+    index: 'Tour {index:number} sur {total:number}',
+    indexOpen: 'Tour {index:number}',
+    nobody: 'Personne n’a trouvé',
+    scored: '+{points:number}'
+  }
 }

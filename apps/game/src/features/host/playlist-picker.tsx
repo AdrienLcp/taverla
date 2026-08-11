@@ -16,14 +16,14 @@ import { ToggleGroup } from '@/presentation/components/toggle-group'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import {
   apiErrorKey,
-  type TranslationKey
+  type PlainTranslationKey
 } from '@/presentation/i18n/translation'
 
 import './playlist-picker.sass'
 
 type SourceKind = TrackSource['kind']
 
-const KIND_LABELS: Record<SourceKind, TranslationKey> = {
+const KIND_LABELS: Record<SourceKind, PlainTranslationKey> = {
   chart: 'blindtest.source.chart',
   playlist: 'blindtest.source.playlist',
   search: 'blindtest.source.search'
@@ -32,7 +32,7 @@ const KIND_LABELS: Record<SourceKind, TranslationKey> = {
 const isSourceKind = (value: string): value is SourceKind =>
   value in KIND_LABELS
 
-export const sourceKindKey = (kind: SourceKind): TranslationKey =>
+export const sourceKindKey = (kind: SourceKind): PlainTranslationKey =>
   KIND_LABELS[kind]
 
 /**
@@ -134,7 +134,7 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
     draftFromSource(settings.source)
   )
   const [titles, setTitles] = useState<string[] | null>(null)
-  const [error, setError] = useState<TranslationKey | null>(null)
+  const [error, setError] = useState<PlainTranslationKey | null>(null)
   const [isPreviewing, setIsPreviewing] = useState(false)
   const typed = draft.kind === 'playlist' ? draft.playlistId : draft.query
 

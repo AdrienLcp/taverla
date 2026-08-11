@@ -2,7 +2,7 @@ import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
 import type { SocketStatus } from '@/infrastructure/messaging/use-room-socket'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
-import type { TranslationKey } from '@/presentation/i18n/translation'
+import type { PlainTranslationKey } from '@/presentation/i18n/translation'
 
 import './connection-status.sass'
 
@@ -11,8 +11,9 @@ import './connection-status.sass'
  * `protocolErrorKey`: adding a state to `SocketStatus` fails to compile until
  * every locale has named it.
  */
-export const connectionStatusKey = (status: SocketStatus): TranslationKey =>
-  `connection.${status}`
+export const connectionStatusKey = (
+  status: SocketStatus
+): PlainTranslationKey => `connection.${status}`
 
 type ConnectionDotProps = {
   /** Told apart by shape and motion — a hue that reads on one field vanishes on another. */

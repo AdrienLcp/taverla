@@ -11,12 +11,12 @@ import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 import { Button } from '@/presentation/components/button'
 import { FloorClock } from '@/presentation/components/floor-clock'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
-import type { TranslationKey } from '@/presentation/i18n/translation'
+import type { PlainTranslationKey } from '@/presentation/i18n/translation'
 
 import './verdict-panel.sass'
 
 type VerdictChoice = {
-  key: TranslationKey
+  key: PlainTranslationKey
   tone: 'win' | 'half' | 'miss'
   verdict: Verdict
 }

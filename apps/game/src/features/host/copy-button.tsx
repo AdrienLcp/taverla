@@ -5,14 +5,14 @@ import { Button } from '@/presentation/components/button'
 import { CheckIcon } from '@/presentation/components/check-icon'
 import { CopyIcon } from '@/presentation/components/copy-icon'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
-import type { TranslationKey } from '@/presentation/i18n/translation'
+import type { PlainTranslationKey } from '@/presentation/i18n/translation'
 
 /** Long enough to be read from where the host is standing, gone before the next glance. */
 const CONFIRMATION_MS = 2_000
 
 type CopyState = 'copied' | 'failed' | 'idle'
 
-const COPY_KEYS: Record<CopyState, TranslationKey> = {
+const COPY_KEYS: Record<CopyState, PlainTranslationKey> = {
   copied: 'host.copied',
   failed: 'host.copyFailed',
   idle: 'host.copyCode'

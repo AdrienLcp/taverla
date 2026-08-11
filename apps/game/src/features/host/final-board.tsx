@@ -48,16 +48,8 @@ export const FinalBoard: React.FC<FinalBoardProps> = ({ players }) => {
             <h1 className='winners'>
               {winners.map((entry) => entry.player.nickname).join(' · ')}
             </h1>
-            {/*
-              Two keys rather than one with a `{points}` word after it. There is
-              no plural machinery here on purpose, and "1 points" on the biggest
-              screen in the room is exactly where its absence would show.
-            */}
             <p className='with'>
-              {translate(
-                topScore === 1 ? 'host.final.point' : 'host.final.points',
-                { points: topScore }
-              )}
+              {translate('host.final.score', { points: topScore })}
             </p>
           </>
         )}

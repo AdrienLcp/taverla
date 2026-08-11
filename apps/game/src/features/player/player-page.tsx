@@ -167,13 +167,16 @@ const Lobby = ({
 const Scoreline = ({ view }: { view: PlayerRoomView }) => {
   const translate = useTranslate()
   const you = view.players.find((player) => player.id === view.youId)
+  const score = you?.score ?? 0
 
   return (
     <section className='scoreline'>
       <p className='you'>{you?.nickname ?? translate('player.you')}</p>
       <p className='score'>
-        <span className='value'>{you?.score ?? 0}</span>
-        <span className='unit'>{translate('player.points')}</span>
+        <span className='value'>{score}</span>
+        <span className='unit'>
+          {translate('player.points', { points: score })}
+        </span>
       </p>
       <p className='others'>
         {translate('player.roomSize', { count: view.players.length })}

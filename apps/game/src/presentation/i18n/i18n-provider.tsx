@@ -2,6 +2,7 @@ import { type ReactNode, useEffect, useState } from 'react'
 import { I18nProvider as ReactAriaI18nProvider } from 'react-aria-components'
 
 import { type Locale, pickLocale } from '@taverla/core/i18n/locale'
+import { createTranslator } from '@taverla/core/i18n/translator'
 
 import { createSafeContext } from '@/helpers/contexts'
 import { preferredLocales } from '@/infrastructure/env'
@@ -12,7 +13,7 @@ import {
 
 import { EN_DICTIONARY } from './dictionary-en'
 import { FR_DICTIONARY } from './dictionary-fr'
-import { createTranslate, type Dictionary, type Translate } from './translation'
+import type { Dictionary, Translate } from './translation'
 
 const DICTIONARIES: Record<Locale, Dictionary> = {
   en: EN_DICTIONARY,
@@ -60,7 +61,10 @@ export const I18nProvider = ({ children }: { children: ReactNode }) => {
       value={{
         locale,
         setLocale: chooseLocale,
-        translate: createTranslate(DICTIONARIES[locale])
+        translate: createTranslator<typeof EN_DICTIONARY>({
+          locale,
+          translations: DICTIONARIES[locale]
+        })
       }}
     >
       <ReactAriaI18nProvider locale={REACT_ARIA_LOCALES[locale]}>

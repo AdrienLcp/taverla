@@ -14,7 +14,7 @@ import {
   gameNameKey,
   gameTaglineKey,
   isShelvedGame,
-  type TranslationKey
+  type PlainTranslationKey
 } from '@/presentation/i18n/translation'
 
 import './game-home-page.sass'
@@ -41,7 +41,7 @@ export const GameHomePage = () => {
 const GameHome = ({ game }: { game: ShelvedGame }) => {
   const navigate = useNavigate()
   const translate = useTranslate()
-  const [error, setError] = useState<TranslationKey | null>(null)
+  const [error, setError] = useState<PlainTranslationKey | null>(null)
   const [isCreating, setIsCreating] = useState(false)
 
   const startHosting = async (): Promise<void> => {

@@ -17,7 +17,7 @@ import { fetchHealth } from '@/infrastructure/api/taverla-api'
 import { joinPath } from '@/infrastructure/router/navigation'
 import { useConnection } from '@/presentation/connection/connection-provider'
 import { useI18n } from '@/presentation/i18n/i18n-provider'
-import type { TranslationKey } from '@/presentation/i18n/translation'
+import type { PlainTranslationKey } from '@/presentation/i18n/translation'
 import { useTheme } from '@/presentation/theme/theme-provider'
 
 import {
@@ -39,7 +39,7 @@ const LOCALE_LABELS: Record<Locale, string> = {
   fr: 'Français'
 }
 
-const THEME_KEYS: Record<ThemePreference, TranslationKey> = {
+const THEME_KEYS: Record<ThemePreference, PlainTranslationKey> = {
   dark: 'preferences.theme.dark',
   light: 'preferences.theme.light',
   system: 'preferences.theme.system'
@@ -121,7 +121,7 @@ export const AppMenu = () => {
                 />
 
                 <SegmentedControl
-                  label={translate('preferences.theme')}
+                  label={translate('preferences.theme.label')}
                   onChange={(next) => {
                     if (isThemePreference(next)) {
                       setPreference(next)

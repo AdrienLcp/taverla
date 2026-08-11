@@ -362,7 +362,9 @@ const Lobby = ({
       : null,
     view.settings.roundCount === null
       ? translate('host.roundCount.openSummary')
-      : translate('host.roundCount', { count: view.settings.roundCount })
+      : translate('host.roundCount.summary', {
+          count: view.settings.roundCount
+        })
   ]
     .filter((part) => part !== null)
     .join(' · ')

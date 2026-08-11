@@ -13,17 +13,19 @@ import { TextField } from '@/presentation/components/text-field'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import {
   apiErrorKey,
-  type TranslationKey,
-  type TranslationValues
+  type PlainTranslationKey
 } from '@/presentation/i18n/translation'
 
 import './join-with-code.sass'
 
 /** Held as a key rather than a rendered string, so it follows a locale switch. */
-type FieldError = {
-  key: TranslationKey
-  values?: TranslationValues
-}
+type FieldError =
+  | { key: PlainTranslationKey }
+  | {
+      key: 'join.roomCode.unsupportedCharacters'
+      values: { characters: string }
+    }
+  | { key: 'join.roomCode.wrongLength'; values: { length: number } }
 
 /**
  * The half of joining that is not a QR code, and shell rather than blind test:
@@ -97,7 +99,9 @@ export const JoinWithCode = () => {
           errorMessage={
             codeError === null
               ? undefined
-              : translate(codeError.key, codeError.values)
+              : 'values' in codeError
+                ? translate(codeError.key, codeError.values)
+                : translate(codeError.key)
           }
           isInvalid={codeError !== null}
           label={translate('join.roomCode.label')}

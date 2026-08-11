@@ -185,7 +185,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       {settings.answerMode === 'buzzer' && (
         <SegmentedControl
           isDisabled={isDisabled}
-          label={translate('host.answerWindow')}
+          label={translate('host.answerWindow.label')}
           onChange={(next) => {
             const chosen = optionFrom(ANSWER_WINDOWS_MS, next)
 
