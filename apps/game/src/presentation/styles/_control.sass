@@ -46,15 +46,18 @@
     min-height: 72px
     padding: 0 var(--space-xl)
 
-  // The ink block: the strongest thing on the field, and the only one that
-  // inverts it.
+  // A press paints whatever a hover paints, always. `data-hovered` never fires
+  // on a touch screen, and the product is aimed at phones — a variant that
+  // changed colour only on hover left every thumb with the 2px nudge below as
+  // its entire feedback, under a finger that covers the control.
   &.filled
     --control-ink: var(--field)
 
     background: var(--ink)
     color: var(--control-ink)
 
-    &[data-hovered]
+    &[data-hovered],
+    &[data-pressed]
       background: var(--ink-muted)
 
   &.outlined
@@ -63,7 +66,8 @@
     border-color: var(--ink)
     color: var(--control-ink)
 
-    &[data-hovered]
+    &[data-hovered],
+    &[data-pressed]
       background: var(--ink)
       color: var(--field)
 
@@ -75,7 +79,8 @@
     text-decoration-thickness: 2px
     text-underline-offset: 5px
 
-    &[data-hovered]
+    &[data-hovered],
+    &[data-pressed]
       --control-ink: var(--ink)
 
   &[data-pressed]

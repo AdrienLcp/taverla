@@ -49,6 +49,13 @@ export const Disclosure: React.FC<DisclosureProps> = ({
         <ChevronIcon />
       </ReactAriaButton>
     </Heading>
-    <DisclosurePanel className='panel'>{children}</DisclosurePanel>
+    {/*
+      The inner element is what the animation needs: a grid row cannot collapse
+      a box that sets its own padding, so the panel owns the row and this owns
+      the layout.
+    */}
+    <DisclosurePanel className='panel'>
+      <div className='panel-content'>{children}</div>
+    </DisclosurePanel>
   </ReactAriaDisclosure>
 )

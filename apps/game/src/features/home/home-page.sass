@@ -46,9 +46,15 @@
       padding: var(--space-m)
       text-decoration: none
 
-      &[data-hovered]
+      // A press paints what a hover paints: `data-hovered` never fires on a
+      // touch screen, and this card is the first thing a phone lands on.
+      &[data-hovered],
+      &[data-pressed]
         background: var(--cut)
         color: var(--cut-ink)
+
+      &[data-pressed]
+        transform: translateY(2px)
 
       .name
         @include typography.title
@@ -58,5 +64,6 @@
 
         color: var(--ink-muted)
 
-      &[data-hovered] .pitch
+      &[data-hovered] .pitch,
+      &[data-pressed] .pitch
         color: inherit

@@ -55,8 +55,24 @@
       overflow-wrap: anywhere
       transition: color var(--transition-fast, 0) var(--timing, ease)
 
+    // A single grid row going 0fr → 1fr, because `height: auto` is not a length
+    // and will not transition. react-aria collapses the panel with
+    // `hidden="until-found"`, which is `content-visibility: hidden` rather than
+    // `display: none` — so the box survives and the row has something to
+    // animate. `allow-discrete` is what holds that hiding back until the row
+    // has finished closing, instead of blanking the content on the first frame.
     .panel
+      display: grid
+      grid-template-rows: 1fr
+      transition: grid-template-rows var(--transition-base, 0) var(--timing, ease), content-visibility var(--transition-base, 0) allow-discrete
+
+      &[hidden]
+        grid-template-rows: 0fr
+
+    .panel-content
       display: flex
       flex-direction: column
       gap: var(--space-m)
+      min-height: 0
+      overflow: hidden
       padding-block-end: var(--space-m)
