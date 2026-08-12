@@ -258,9 +258,13 @@ touching it:
   to do with it.
 
 English has **no anecdotes and no adult rating**, so a reveal there shows the
-answer alone and `allowsAdultContent` filters nothing. Its `arts` category is
-55% of the bank, a fifth of it video games; the draw is left uniform, and
-`docs/plans/14-question-languages.md` records why.
+answer alone and the adult switch is not shown at all — `hasAdultContent` decides
+that, and a server test keeps it honest against the bank.
+
+**A question is drawn by picking its category first.** Ticking nothing means
+every *subject*, which is not the same as every *question* unless a bank is flat,
+and neither is: `arts` is 55% of the English bank and `history` 3% of the French.
+Reach for uniform-over-questions only if a bank is ever built to be flat.
 
 Read the divergences at the end of `docs/plans/11-buzzer.md` before trusting a
 detail written earlier in that file: the second game corrected the first half in

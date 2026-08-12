@@ -17,6 +17,7 @@ import {
   trackDifficulties
 } from '@taverla/protocol/track'
 
+import { hasAdultContent } from '@taverla/core/quiz/adult-content'
 import { answerModesFor } from '@taverla/core/room/game-modes'
 
 import { SegmentedControl } from '@/presentation/components/segmented-control'
@@ -263,15 +264,29 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           {game.categories.length === 0 && (
             <p className='hint'>{translate('quiz.category.none')}</p>
           )}
-          <Switch
-            isDisabled={isDisabled}
-            isSelected={game.allowsAdultContent}
-            label={translate('quiz.adult.label')}
-            onChange={(allowsAdultContent) => {
-              onChange({ ...settings, game: { ...game, allowsAdultContent } })
-            }}
-          />
-          <p className='hint'>{translate('quiz.adult.hint')}</p>
+          {/*
+            Hidden where the bank has nothing to rate, for the same reason the
+            mode strip is hidden when a game offers one: this one would keep its
+            promise and change nothing. The value is left alone rather than
+            reset, so a host who turns it on in French still has it on when they
+            come back.
+          */}
+          {hasAdultContent(game.language) && (
+            <>
+              <Switch
+                isDisabled={isDisabled}
+                isSelected={game.allowsAdultContent}
+                label={translate('quiz.adult.label')}
+                onChange={(allowsAdultContent) => {
+                  onChange({
+                    ...settings,
+                    game: { ...game, allowsAdultContent }
+                  })
+                }}
+              />
+              <p className='hint'>{translate('quiz.adult.hint')}</p>
+            </>
+          )}
         </>
       )}
 

@@ -4,9 +4,16 @@ import {
   DEFAULT_QUIZ_SETTINGS,
   type QuizSettings
 } from '@taverla/protocol/game'
-import { questionLanguages } from '@taverla/protocol/question'
+import {
+  type QuestionCategory,
+  questionCategories,
+  questionLanguages
+} from '@taverla/protocol/question'
+
+import { hasAdultContent } from '@taverla/core/quiz/adult-content'
 
 import { drawQuestion } from './question-bank'
+import bank from './question-bank.json' with { type: 'json' }
 
 const NOTHING_PLAYED: ReadonlySet<string> = new Set()
 
@@ -86,6 +93,41 @@ describe('drawQuestion', () => {
    * hundred draws over a bank where more than two rows in three are English
    * would surface one immediately if the filter were absent.
    */
+  /**
+   * The mix, and the whole reason the category is drawn before the question.
+   * Over twelve hundred draws with nothing ticked each of the six subjects is
+   * expected about two hundred times; drawing uniformly over questions instead
+   * gave French history — 52 rows of 1 708 — about thirty-five, which is what
+   * this floor catches. It is far enough below the expected count that chance
+   * cannot reach it and far enough above the old behaviour to fail on it.
+   */
+  it('[bank] mixes the subjects evenly when the host has ticked none', () => {
+    const counts = new Map<QuestionCategory, number>()
+
+    for (const question of drawMany(DEFAULT_QUIZ_SETTINGS, 1_200)) {
+      counts.set(question.category, (counts.get(question.category) ?? 0) + 1)
+    }
+
+    expect(counts.size).toBe(questionCategories.length)
+    expect(Math.min(...counts.values())).toBeGreaterThan(100)
+  })
+
+  /**
+   * `hasAdultContent` is what the console reads to decide whether the switch is
+   * worth showing at all, and it is a claim held in core rather than a fact read
+   * off the bank — the bank is the server's. This is what keeps the two honest,
+   * and what goes red the day a rated source lands in a language that had none.
+   */
+  it('[bank] agrees with what the console is told about adult content', () => {
+    for (const language of questionLanguages) {
+      expect(hasAdultContent(language)).toBe(
+        bank.questions.some(
+          (question) => question.language === language && question.isAdult
+        )
+      )
+    }
+  })
+
   it('[bank] stays inside the language the room is playing', () => {
     for (const language of questionLanguages) {
       const drawn = drawMany({ ...DEFAULT_QUIZ_SETTINGS, language })

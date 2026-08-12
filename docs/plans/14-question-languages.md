@@ -75,11 +75,20 @@ Folded onto the six categories a host picks from:
 | history | 52 (3%) | 466 (10%) |
 
 Nine of OpenTDB's twenty-four rubrics are Entertainment, and video games alone
-are 1 017 rows — a fifth of the English bank. A room that ticks no category will
-meet a video-game question about once in five. **Left as it is**: the draw is
-uniform over what is eligible, weighting it is a different change from ingesting
-a bank, and `categories` already lets a table narrow. Recorded here so the next
-person does not discover it mid-party.
+are 1 017 rows — a fifth of the English bank.
+
+**So the category is drawn before the question**, which is the correction this
+table forced. Ticking nothing was documented as "every subject" and behaved as
+"every question", and those are only the same sentence when a bank is flat.
+Neither is: a room that ticked nothing met a video-game question every five
+rounds in English and a history question every twenty in French. Drawing a
+category first and a question inside it makes "every subject" mean what it says,
+in either language and whatever the next bank looks like — and it self-corrects
+as an evening runs, because a category whose rows have all been played leaves
+`eligible` and stops being offered.
+
+It applies with categories ticked too, for the same reason: history and sport
+together should be a mix, not three parts history.
 
 The one place English is better is `history`, which French has 52 of.
 
@@ -130,10 +139,16 @@ posts. `PROTOCOL_VERSION` is therefore unchanged — no peer can mis-read a fram
   the answer alone where a French one has something to read out. The field was
   already nullable; nothing broke, and the asymmetry is visible on screen.
 - **No adult rating.** `allowsAdultContent` filters nothing in English because
-  nothing upstream is flagged. **The switch stays visible**: the setting is still
-  honest — draw adult questions if there are any — and a control that appears and
-  disappears as a language is flipped is worse than one with nothing to filter.
-  Revisit if an English source with a rating ever lands.
+  nothing upstream is flagged, so **the switch is not shown there** — the same
+  rule the answer-mode strip already follows when a game offers one mode: a
+  control that keeps its promise and changes nothing is worse than no control.
+  Its *value* is left alone rather than reset, so a host who turned it on in
+  French still has it on when they come back.
+
+  `hasAdultContent` in `@taverla/core/quiz/adult-content` is the claim the
+  console reads, held in core because the bank is the server's — and
+  `question-bank.test.ts` compares it against what is actually banked, so it goes
+  red the day a rated source lands in a language that had none.
 
 ## Done when
 

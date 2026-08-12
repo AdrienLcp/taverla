@@ -77,6 +77,19 @@ one part.
 
 ### Improvements
 
+- `[Server]` **Ticking no subject now mixes them.** It always meant "every
+  subject" and always behaved as "every question", which are the same sentence
+  only when a bank is flat — and neither is: a room got a video-game question
+  every five rounds in English and a history question every twenty in French.
+  The category is drawn first and the question inside it, so the six subjects
+  come up evenly whatever the bank looks like. It applies with subjects ticked
+  too: history and sport together is a mix, not three parts history
+- `[Game]` The adult switch is not shown where the bank has nothing to rate.
+  English questions carry no rating at all, so the control kept its promise and
+  changed nothing — the same reason the answer-mode strip is hidden when a game
+  offers one mode. Its value survives: a host who turned it on in French still
+  has it on when they come back
+
 - `[Game]` **A wide screen stops being a phone's screen blown up.** The two front
   doors were a 620px column whatever the display, while the type is sized in
   `vmin` — so a 72px headline wrapped the tagline onto eight lines. The column

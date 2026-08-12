@@ -4,6 +4,7 @@ import type { QuizSettings } from '@taverla/protocol/game'
 import {
   type HostQuestion,
   hostQuestionSchema,
+  type QuestionCategory,
   questionLanguageSchema
 } from '@taverla/protocol/question'
 
@@ -68,6 +69,14 @@ export const hostQuestionOf = ({
  *
  * An empty `categories` means every category, the same way an empty genre list
  * does for the blind test.
+ *
+ * **The category is drawn first, then a question inside it**, which is what
+ * makes "every subject" a mix rather than a reflection of how lopsided a bank
+ * happens to be. Drawing uniformly over questions gave an English room a video
+ * game once every five rounds and a history question once every twenty, because
+ * `arts` is 55% of that bank and `history` 10%. It self-corrects as an evening
+ * runs: a category whose questions have all been played is not in `eligible`
+ * any more, so it stops being offered.
  */
 export const drawQuestion = ({
   playedIds,
@@ -85,5 +94,17 @@ export const drawQuestion = ({
         settings.categories.includes(question.category))
   )
 
-  return eligible[Math.floor(Math.random() * eligible.length)] ?? null
+  const byCategory = new Map<QuestionCategory, BankedQuestion[]>()
+
+  for (const question of eligible) {
+    byCategory.set(question.category, [
+      ...(byCategory.get(question.category) ?? []),
+      question
+    ])
+  }
+
+  return pickOne(pickOne([...byCategory.values()]) ?? [])
 }
+
+const pickOne = <TItem>(from: readonly TItem[]): TItem | null =>
+  from[Math.floor(Math.random() * from.length)] ?? null
