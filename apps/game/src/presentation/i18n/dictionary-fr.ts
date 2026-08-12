@@ -181,7 +181,13 @@ export const FR_DICTIONARY: Dictionary = {
       label: 'Temps pour répondre après un buzz'
     },
     autoAdvance: 'Enchaîner tout seul',
-    changeSettings: 'Changer les réglages',
+    backToRoom: 'Retour au salon',
+    closeRoom: {
+      confirm: 'Oui, fermer',
+      label: 'Fermer le salon',
+      warning:
+        'Tout le monde sera déconnecté, et le code cessera de fonctionner.'
+    },
     copied: 'Copié',
     copyCode: 'Copier le code',
     copyFailed: 'Copie impossible',

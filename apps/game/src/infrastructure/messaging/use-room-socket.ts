@@ -183,7 +183,16 @@ export const useRoomSocket = ({
         }
 
         setError(control.message)
-        giveUp = giveUp || control.message.fatal
+
+        // The end of the line is what the frame says, not what the socket does
+        // next. Waiting for a close left a phone on a stale scoreboard when the
+        // host closed the room: it is the one fatal refusal a socket can carry
+        // while staying open, since the server is answering a *third* party.
+        if (control.message.fatal) {
+          giveUp = true
+          setStatus('refused')
+          socket.close()
+        }
       })
 
       socket.addEventListener('close', () => {

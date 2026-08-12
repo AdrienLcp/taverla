@@ -139,6 +139,22 @@ so the socket stays open and the form can retry on it.
 instead of borrowing a code that means something else. It should shrink to
 nothing as the stages in `docs/plans/` land.
 
+### A fatal frame ends the session on its own, without waiting for a close
+
+`fatal` is the end of the line, and the client acts on the **frame** rather than
+on the socket closing after it. That distinction was invisible while every fatal
+refusal came from `reject`, which sends and then closes: a client that only
+gave up in its `close` listener behaved identically.
+
+`host.closeRoom` broke the tie. The server is answering a *third party* — the
+host's frame is what disbands the room, and the error lands on two dozen player
+sockets that nobody is closing. Every phone sat on a stale scoreboard, live and
+lying, while the room no longer existed. `use-room-socket.ts` now sets `refused`
+and closes the socket itself the moment `fatal` arrives.
+
+So a fatal code may be sent to a socket the server keeps open, and that is not a
+loose end to tidy up by closing it too — it is the guarantee the client owes.
+
 ### An error outlives its moment, so the client forgets it on a phase change
 
 The socket keeps its last error until it reconnects, which is far longer than a

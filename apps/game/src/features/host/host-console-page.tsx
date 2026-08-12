@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import type { ClientMessage } from '@taverla/protocol/client-message'
 import { roundDurationMsOf } from '@taverla/protocol/game'
@@ -6,6 +6,7 @@ import type { RoomCode } from '@taverla/protocol/identifiers'
 import type { HostRoomView } from '@taverla/protocol/room'
 import type { TrackSource } from '@taverla/protocol/track'
 
+import { isGameInPlay } from '@taverla/core/room/room-phase'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
 import { NotFoundPage } from '@/features/not-found/not-found-page'
@@ -25,11 +26,13 @@ import {
   readStoredVolume,
   writeStoredVolume
 } from '@/infrastructure/storage/preferences-storage'
+import { forgetSessionId } from '@/infrastructure/storage/session-storage'
 import { AskedQuestion } from '@/presentation/components/asked-question'
 import { ConnectionRefused } from '@/presentation/components/connection-refused'
 import { Countdown } from '@/presentation/components/countdown'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
+import { useReportRoomExits } from '@/presentation/exits/room-exits-provider'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { protocolErrorKey } from '@/presentation/i18n/translation'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
@@ -75,6 +78,27 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
   usePhaseField(view?.phase ?? null)
   const { unlock } = useRoundAudio({ clock, view, volume })
   const isLive = status === 'open'
+
+  const endGame = useCallback(() => {
+    send({ type: 'host.endGame' })
+  }, [send])
+
+  // The frame goes first: navigating away closes the socket, and a room closed
+  // after that is a room nobody was told about. The stored claim goes with it —
+  // it is worth nothing once the code stops resolving.
+  const closeRoom = useCallback(() => {
+    send({ type: 'host.closeRoom' })
+    forgetSessionId({ role: 'host', roomCode })
+  }, [roomCode, send])
+
+  // Offered to the menu above, which owns the only way off this screen. What a
+  // dead socket takes away is the *press*, which the menu greys out itself —
+  // dropping the item would make the menu's contents flap on a Wi-Fi blink.
+  useReportRoomExits({
+    closeRoom,
+    endGame: view !== null && isGameInPlay(view.phase) ? endGame : null,
+    leaveSeat: null
+  })
 
   if (status === 'refused') {
     return (

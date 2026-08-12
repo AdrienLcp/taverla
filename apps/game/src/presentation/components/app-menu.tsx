@@ -18,12 +18,13 @@ import {
 import { fetchHealth } from '@/infrastructure/api/taverla-api'
 import { creditsPath, joinPath } from '@/infrastructure/router/navigation'
 import { useConnection } from '@/presentation/connection/connection-provider'
-import { useI18n } from '@/presentation/i18n/i18n-provider'
+import { useRoomExits } from '@/presentation/exits/room-exits-provider'
+import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
 import { LANGUAGE_NAMES } from '@/presentation/i18n/language-names'
 import type { PlainTranslationKey } from '@/presentation/i18n/translation'
-import { useLeaveSeat } from '@/presentation/seat/seat-provider'
 import { useTheme } from '@/presentation/theme/theme-provider'
 
+import { Button } from './button'
 import {
   ConnectionDot,
   ConnectionStatus,
@@ -34,6 +35,88 @@ import { SegmentedControl } from './segmented-control'
 import { TextLink } from './text-link'
 
 import './app-menu.sass'
+
+/**
+ * The ways out of a room, in the one piece of chrome that is on every screen at
+ * every phase. A stage carries the action the room is waiting on and nothing
+ * else, so an exit that must be reachable mid-round lives here instead — behind
+ * a popover, where it cannot be pressed by a thumb aiming at the game.
+ *
+ * Closing asks twice, because it is the only one that cannot be undone: the
+ * code stops resolving, so a phone cannot reload its way back in.
+ */
+const RoomExit = ({ onDone }: { onDone: () => void }) => {
+  const { closeRoom, endGame, leaveSeat } = useRoomExits()
+  const [isConfirmingClose, setIsConfirmingClose] = useState(false)
+  const connection = useConnection()
+  const translate = useTranslate()
+  // Every exit here but the plain navigation sends a frame, and a frame written
+  // to a socket that is not open is dropped with nothing to show for it.
+  const isLive = connection?.status === 'open'
+
+  // Leaving the room is what pressing this *means* on a screen that holds a
+  // seat, and saying so is the only way the roster on the big screen can be
+  // true rather than true in ten minutes. A closing socket cannot carry it: a
+  // phone that locks its screen closes one too, and that seat has to come back.
+  if (closeRoom === null) {
+    return (
+      <div className='exits'>
+        <Link
+          href={joinPath}
+          onPress={() => {
+            leaveSeat?.()
+            onDone()
+          }}
+          variant='outlined'
+        >
+          {translate(leaveSeat === null ? 'menu.home' : 'menu.leaveRoom')}
+        </Link>
+      </div>
+    )
+  }
+
+  return (
+    <div className='exits'>
+      {endGame !== null && (
+        <Button
+          isDisabled={!isLive}
+          onPress={() => {
+            endGame()
+            onDone()
+          }}
+          variant='outlined'
+        >
+          {translate('host.endGame')}
+        </Button>
+      )}
+
+      {isConfirmingClose ? (
+        <>
+          <p className='warning'>{translate('host.closeRoom.warning')}</p>
+          <Link
+            href={joinPath}
+            onPress={() => {
+              closeRoom()
+              onDone()
+            }}
+          >
+            {translate('host.closeRoom.confirm')}
+          </Link>
+        </>
+      ) : (
+        <Button
+          isDisabled={!isLive}
+          onPress={() => {
+            setIsConfirmingClose(true)
+          }}
+          variant='outlined'
+        >
+          {translate('host.closeRoom.label')}
+        </Button>
+      )}
+    </div>
+  )
+}
 
 const THEME_KEYS: Record<ThemePreference, PlainTranslationKey> = {
   dark: 'preferences.theme.dark',
@@ -50,7 +133,6 @@ const THEME_KEYS: Record<ThemePreference, PlainTranslationKey> = {
  * takes room on the screen once it is worth interrupting a game for.
  */
 export const AppMenu = () => {
-  const leaveSeat = useLeaveSeat()
   const { locale, setLocale, translate } = useI18n()
   const { preference, setPreference } = useTheme()
   const connection = useConnection()
@@ -131,25 +213,7 @@ export const AppMenu = () => {
                   value={preference}
                 />
 
-                {/*
-                  Leaving the room is what pressing this *means* on a screen
-                  that holds a seat, and saying so is the only way the roster on
-                  the big screen can be true rather than true in ten minutes. A
-                  closing socket cannot carry it: a phone that locks its screen
-                  closes one too, and that seat has to come back.
-                */}
-                <Link
-                  href={joinPath}
-                  onPress={() => {
-                    leaveSeat?.()
-                    close()
-                  }}
-                  variant='outlined'
-                >
-                  {translate(
-                    leaveSeat === null ? 'menu.home' : 'menu.leaveRoom'
-                  )}
-                </Link>
+                <RoomExit onDone={close} />
 
                 {/*
                   The credit itself is a page. CC BY-SA §3(a)(2) names a link to

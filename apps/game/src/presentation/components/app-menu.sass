@@ -63,6 +63,30 @@
       gap: var(--space-m)
       outline: none
 
+    // Its own column rather than the dialog's, so the two exits sit closer to
+    // each other than to the preferences above them: they are one group, and
+    // the second only exists once the first has been passed over.
+    .exits
+      display: flex
+      flex-direction: column
+      gap: var(--space-s)
+
+      // The control register is sized in `vmin` and this box is not: at a fixed
+      // 320px, a host console on a television burst every one of these labels
+      // out of its block, and `Quitter le salon` was already doing it on a
+      // laptop. Same rule as the room code — what is sized against the viewport
+      // has to be sized against its container once the container stops being
+      // the viewport.
+      .button,
+      .link
+        font-size: 1rem
+
+    .warning
+      @include typography.caption
+
+      color: var(--ink-muted)
+      text-wrap: balance
+
     .build
       @include typography.label
 

@@ -163,6 +163,15 @@ export const removePlayerMessageSchema = z.object({
 })
 
 /**
+ * The room is gone and everyone is out, which is the one exit `host.endGame`
+ * deliberately is not. Irreversible: the code stops resolving, so the phones
+ * that scanned it cannot come back to it even by reloading.
+ */
+export const closeRoomMessageSchema = z.object({
+  type: z.literal('host.closeRoom')
+})
+
+/**
  * What a host socket may send. Splitting the union by role means a player
  * screen cannot even construct `host.judge` — the server still enforces it,
  * because a socket is whatever its owner makes it, but the client code gets the
@@ -179,7 +188,8 @@ export const hostClientMessageSchema = z.discriminatedUnion('type', [
   nextRoundMessageSchema,
   endGameMessageSchema,
   playAgainMessageSchema,
-  removePlayerMessageSchema
+  removePlayerMessageSchema,
+  closeRoomMessageSchema
 ])
 
 export const playerClientMessageSchema = z.discriminatedUnion('type', [
@@ -209,7 +219,8 @@ export const clientMessageSchema = z.discriminatedUnion('type', [
   nextRoundMessageSchema,
   endGameMessageSchema,
   playAgainMessageSchema,
-  removePlayerMessageSchema
+  removePlayerMessageSchema,
+  closeRoomMessageSchema
 ])
 
 export type ConnectionRole = z.infer<typeof connectionRoleSchema>
@@ -232,5 +243,6 @@ export const HOST_ONLY_MESSAGE_TYPES = new Set<ClientMessageType>([
   'host.nextRound',
   'host.endGame',
   'host.playAgain',
-  'host.removePlayer'
+  'host.removePlayer',
+  'host.closeRoom'
 ])

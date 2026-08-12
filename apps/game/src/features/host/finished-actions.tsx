@@ -1,7 +1,6 @@
 import type React from 'react'
 
 import { Button } from '@/presentation/components/button'
-import { Link } from '@/presentation/components/link'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import type { HostActionsProps } from './host-actions'
@@ -31,6 +30,12 @@ export const FinishedActions: React.FC<HostActionsProps> = ({
       >
         {translate('host.playAgain')}
       </Button>
+      {/*
+        The lobby it lands on *is* the room's front door — the game picker, the
+        settings and the roster, in that order — so the label names the
+        destination rather than one of the things you can do once you are there.
+        Leaving for good is an exit and lives in the menu, with every other one.
+      */}
       <Button
         isDisabled={!isLive}
         onPress={() => {
@@ -38,11 +43,8 @@ export const FinishedActions: React.FC<HostActionsProps> = ({
         }}
         variant='outlined'
       >
-        {translate('host.changeSettings')}
+        {translate('host.backToRoom')}
       </Button>
-      <Link href='/' variant='underlined'>
-        {translate('menu.home')}
-      </Link>
     </>
   )
 }

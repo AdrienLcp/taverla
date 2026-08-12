@@ -186,7 +186,12 @@ export const EN_DICTIONARY = defineTranslations({
       label: 'Time to answer after a buzz'
     },
     autoAdvance: 'Chain rounds by itself',
-    changeSettings: 'Change the settings',
+    backToRoom: 'Back to the room',
+    closeRoom: {
+      confirm: 'Yes, close it',
+      label: 'Close the room',
+      warning: 'Everyone is disconnected, and the code stops working.'
+    },
     copied: 'Copied',
     copyCode: 'Copy the code',
     copyFailed: 'Could not copy',

@@ -20,9 +20,9 @@ import { Button } from '@/presentation/components/button'
 import { ConnectionRefused } from '@/presentation/components/connection-refused'
 import { TextField } from '@/presentation/components/text-field'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
+import { useReportRoomExits } from '@/presentation/exits/room-exits-provider'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { protocolErrorKey } from '@/presentation/i18n/translation'
-import { useReportSeat } from '@/presentation/seat/seat-provider'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
 
 import { PlayerRound } from './player-round'
@@ -52,7 +52,11 @@ const PlayerScreen = ({ roomCode }: { roomCode: RoomCode }) => {
     forgetSessionId({ role: 'player', roomCode })
   }, [roomCode, send])
 
-  useReportSeat(nickname === null ? null : leave)
+  useReportRoomExits({
+    closeRoom: null,
+    endGame: null,
+    leaveSeat: nickname === null ? null : leave
+  })
 
   // A refused join is non-fatal, so the socket stays open and the form comes
   // back with the reason rather than stranding the player on a dead screen.

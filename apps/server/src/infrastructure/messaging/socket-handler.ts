@@ -25,7 +25,7 @@ import {
   removePlayer,
   updateSettings
 } from '@/domain/room/room-service'
-import { findRoom } from '@/domain/room/room-store'
+import { deleteRoom, findRoom } from '@/domain/room/room-store'
 import {
   applyVerdict,
   clearLockouts,
@@ -48,6 +48,7 @@ import { logger } from '@/infrastructure/logging/logger'
 
 import type { Connection, Outbound } from './connection'
 import {
+  connectionsIn,
   isHostConnected,
   registerConnection,
   unregisterConnection
@@ -350,6 +351,10 @@ export const createRoomSocketEvents = (
       }
       case 'host.removePlayer': {
         evict(message.playerId, room)
+        break
+      }
+      case 'host.closeRoom': {
+        disband(room)
         break
       }
       case 'host.updateSettings': {
@@ -701,6 +706,28 @@ export const createRoomSocketEvents = (
     abandonRound(room.code)
     finishGame(room, Date.now())
     broadcastRoom(room)
+  }
+
+  /**
+   * The host going home, which no other exit does: the ten-minute grace exists
+   * so a reload keeps the game, and a host who says they are done should not
+   * have to wait it out. Every socket is told before the room goes, because a
+   * phone left on a stale scoreboard has no other way to learn the evening is
+   * over — the error is fatal, so it stops reconnecting to a code that no
+   * longer resolves.
+   */
+  const disband = (room: Room): void => {
+    abandonRound(room.code)
+
+    for (const connection of connectionsIn(room.code)) {
+      sendError(connection, {
+        code: 'room_closed',
+        fatal: true,
+        message: 'The host closed the room'
+      })
+    }
+
+    deleteRoom(room.code)
   }
 
   const replay = (outbound: Outbound, room: Room): void => {

@@ -122,7 +122,10 @@ string written into a component is a bug, not a shortcut — see
   confusable glyphs (`O`/`0`, `I`/`1`, `S`/`5`, `Z`/`2` are all excluded)
 - **Host** — the screen running the room. Shows the QR code, plays the audio,
   judges answers. It can also take a **seat** and play, outside buzzer mode —
-  and the server then stops sending it the track
+  and the server then stops sending it the track. It is the only role that can
+  **close** the room, which is the third and last rung of a ladder the menu
+  carries at every phase: a seat, a game, a room. Leaving the *page* is none of
+  them — see `Exits` below
 - **Player** — anyone who joined, by scanning the QR code or by typing the room
   code. Holds a seat and a score
 - **Game** — what the room is playing, and **`null` until somebody says**. A
@@ -174,6 +177,14 @@ string written into a component is a bug, not a shortcut — see
 - **Verdict** — what the host granted, in the shape the game is judged in:
   `halves` for the blind test's title and artist, 1 point each and judged
   independently, `single` for one claim worth one point everywhere else
+- **Exits** — three nested scopes, never one "back". `player.leave` gives up a
+  **seat**, `host.endGame` ends a **game** and puts the final board up,
+  `host.closeRoom` disbands the **room** — everyone is sent a fatal
+  `room_closed` and the code stops resolving. The stage carries the exit the
+  moment asks for and nothing else, so the two that must be reachable mid-round
+  live in `AppMenu`, which is on every screen at every phase and behind a
+  popover no thumb aiming at the game can hit. A room outlives its host by ten
+  minutes so a reload keeps the game; closing is what says otherwise
 - **Session id** — minted by the client, stored per room and role; what lets a
   device that locked its screen come back to the same seat
 

@@ -99,6 +99,38 @@ describe('the rules every socket obeys', () => {
     })
   })
 
+  it('[room] tells everyone and drops the code when the host closes the room', async () => {
+    const { code, host } = await room.openRoom()
+    const alice = await room.seat({ code, nickname: 'Alice' })
+
+    await waitFor(
+      () => hostView(host)?.players.length === 1,
+      'Alice to be on the roster'
+    )
+
+    host.send({ type: 'host.closeRoom' })
+
+    await waitFor(() => errorsIn(alice).length > 0, 'Alice to be told')
+
+    expect(errorsIn(alice)[0]).toMatchObject({
+      code: 'room_closed',
+      fatal: true
+    })
+
+    // The ten-minute grace is what a reload survives on, so the room going now
+    // is the whole difference between this and a host who merely walked away.
+    const late = await room.connect(code, hostServerMessageSchema)
+
+    late.send({
+      protocolVersion: PROTOCOL_VERSION,
+      role: 'host',
+      type: 'hello'
+    })
+
+    expect(await late.whenClosed).toBe(1008)
+    expect(errorsIn(late)[0]).toMatchObject({ code: 'room_not_found' })
+  })
+
   it('[seat] gives a reloading player back the same seat and score', async () => {
     const { code, host } = await room.openRoom()
     const alice = await room.seat({
