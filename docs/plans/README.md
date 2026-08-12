@@ -73,9 +73,11 @@ it.
 A third: the large screen. Both front doors were a 620px column at every width
 while the type scaled with the viewport, and the host's console had no maximum at
 all — so one read as a phone screenshot enlarged and the other sprawled across a
-21:9 display. Recorded in [`apps/game/DESIGN.md`](../../apps/game/DESIGN.md),
-where the three rules that fell out of the ceiling are worth more than the
-ceiling.
+21:9 display. It landed in two passes, and the second is the one worth having:
+bounding the field and widening the column only stopped the page being wrong,
+where splitting the front doors into a poster past 1 200px is what the width is
+actually *for*. Recorded in [`apps/game/DESIGN.md`](../../apps/game/DESIGN.md),
+where the rules that fell out of the ceiling are worth more than the ceiling.
 
 Two more before it: the i18n layer learning what a count does to a sentence — a
 scoreline that read "1 POINTS" in both languages was the visible half — and the
