@@ -26,6 +26,13 @@ one part.
   the truth on the board twice and leave the vote with nothing to find
 - `[Shared]` A short table gets a full board: the question's own authored decoys
   top it up to five lines, which beats demanding a fourth player
+- `[Shared]` A long one gets a readable board. Past ten lines a vote stops being
+  a vote — by the tenth the third is gone — so a bigger room's surplus lies are
+  cut, the ones a single player wrote before the ones two arrived at
+  independently, since one such line keeps two players in the round. Nine
+  writers and the truth still fit whole, so an ordinary table never loses a line;
+  and being cut costs only the points a lie earns, never the vote or the two for
+  finding the truth
 - `[Game]` The host screen is told nothing the room cannot already see. Everyone
   is looking at it while they write, so the answer reaches it the way it reaches
   a phone — unlabelled on the board, then marked at the tally

@@ -169,6 +169,26 @@ the type-checker and to every test:
   this game is built around was therefore unrecoverable. Both are recorded in
   `.claude/rules/`.
 
+## Settled after the stage shipped
+
+**The board is capped at ten lines.** It shipped uncapped, and twenty-four
+players meant twenty-five lines — a list nobody can hold in their head is not a
+vote. The cost of capping is that a lie left off the board cannot be voted for,
+so its author cannot be fooled *for*; that is real, and it is bounded twice.
+`MAXIMUM_BOARD_SIZE` sits at ten so nine writers and the truth fit whole and no
+ordinary table ever loses a line, and the half of the round a cut player keeps
+is the larger one — they still vote, and finding the truth still pays two.
+
+The surplus goes loneliest-first, at random among equals: a line two players
+arrived at independently keeps two of them in the round for one slot, so it
+outbids a line with a single author. Rotating who is cut across rounds was
+considered and left out — it needs per-room state across rounds for a case
+(ten or more writers) that is already degraded, and random is unforgeable.
+
+Nobody is told their line was cut. At the sizes where the cap bites, the board
+is already too long to audit for your own lie; if that ever needs saying, it is
+a reveal-time string and a field on the player's view, not a change here.
+
 `writtenPlayerIds` exists for a related reason: the shell's `answers` is
 projected from the attempts a *graded* round accumulates, and a lie is graded by
 nobody, so the count of who has written had to be the game's own.

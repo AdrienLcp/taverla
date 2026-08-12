@@ -1,8 +1,26 @@
 import { describe, expect, it } from 'vitest'
 
-import { type BoardEntry, buildLieBoard, MINIMUM_BOARD_SIZE } from './lie-board'
+import {
+  type BoardEntry,
+  buildLieBoard,
+  MAXIMUM_BOARD_SIZE,
+  MINIMUM_BOARD_SIZE,
+  type WrittenLie
+} from './lie-board'
 
 const DECOYS = ['a drum', 'a pigeon', 'a ladder']
+
+const soloWriters = (count: number): WrittenLie[] =>
+  Array.from({ length: count }, (_, index) => ({
+    playerId: `p${index}`,
+    text: `a rope of length ${index}`
+  }))
+
+const pairedWriters = (count: number): WrittenLie[] =>
+  Array.from({ length: count }, (_, index) => [
+    { playerId: `x${index}`, text: `a knot of size ${index}` },
+    { playerId: `y${index}`, text: `A Knot Of Size ${index}` }
+  ]).flat()
 
 const lineSaying = (board: readonly BoardEntry[], text: string): BoardEntry => {
   const found = board.find((entry) => entry.text === text)
@@ -102,6 +120,33 @@ describe('buildLieBoard', () => {
       board.filter((entry) => entry.text.toLowerCase() === 'a drum')
     ).toHaveLength(1)
     expect(lineSaying(board, 'A Drum').authorIds).toEqual(['ana'])
+  })
+
+  it('[lefake] cuts a table writing more lines than the room can vote on', () => {
+    const board = buildLieBoard({
+      decoys: DECOYS,
+      lies: soloWriters(23),
+      truth: 'a beam'
+    })
+
+    expect(board).toHaveLength(MAXIMUM_BOARD_SIZE)
+    expect(board.filter((entry) => entry.isTruth)).toHaveLength(1)
+  })
+
+  it('[lefake] cuts the lines one player wrote before those two arrived at', () => {
+    const board = buildLieBoard({
+      decoys: DECOYS,
+      lies: [
+        ...soloWriters(MAXIMUM_BOARD_SIZE * 2),
+        ...pairedWriters(MAXIMUM_BOARD_SIZE - 1)
+      ],
+      truth: 'a beam'
+    })
+
+    expect(board).toHaveLength(MAXIMUM_BOARD_SIZE)
+    expect(
+      board.filter((entry) => !entry.isTruth && entry.authorIds.length === 2)
+    ).toHaveLength(MAXIMUM_BOARD_SIZE - 1)
   })
 
   it('[lefake] gives every line a distinct id', () => {
