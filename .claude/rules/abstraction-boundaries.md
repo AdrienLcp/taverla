@@ -12,7 +12,7 @@ abstraction below it: no generic `httpClient.request()`, no neutral
 | Library | The only module allowed to import it |
 |---|---|
 | Deezer (via `fetch`) | `apps/server/src/infrastructure/music/deezer-client.ts` |
-| the question banks | `apps/server/src/infrastructure/quiz/question-bank.ts` |
+| the question banks | `apps/server/src/infrastructure/questions/question-bank.ts` |
 | `hono`, `@hono/*`, `hono-rate-limiter` | `apps/server/src/infrastructure/http/`, `apps/server/src/index.ts` |
 | `WebSocket` (browser) | `apps/game/src/infrastructure/messaging/use-room-socket.ts` |
 | `hono/ws` (server) | `apps/server/src/infrastructure/messaging/` |

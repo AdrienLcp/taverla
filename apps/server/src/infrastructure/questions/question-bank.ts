@@ -1,10 +1,10 @@
 import { z } from 'zod'
 
-import type { QuizSettings } from '@taverla/protocol/game'
 import {
   type HostQuestion,
   hostQuestionSchema,
   type QuestionCategory,
+  type QuestionDrawSettings,
   questionLanguageSchema
 } from '@taverla/protocol/question'
 
@@ -44,6 +44,13 @@ const QUESTIONS = z.array(bankedQuestionSchema).parse(bank.questions)
  */
 export type BankedQuestion = (typeof QUESTIONS)[number]
 
+/**
+ * Split once, at boot, because a room only ever draws from one of them: the two
+ * banks are separate downloads from separate sources, and scanning the other
+ * four and a half thousand rows on every draw was work that could never match.
+ */
+const BY_LANGUAGE = Map.groupBy(QUESTIONS, (question) => question.language)
+
 export const hostQuestionOf = ({
   accepted,
   answer,
@@ -77,21 +84,28 @@ export const hostQuestionOf = ({
  * `arts` is 55% of that bank and `history` 10%. It self-corrects as an evening
  * runs: a category whose questions have all been played is not in `eligible`
  * any more, so it stops being offered.
+ *
+ * `isUsable` is how a game asks for a shape of question rather than a subject.
+ * Le Fake passes one because a quarter of the English bank presupposes the four
+ * candidates it is normally read beside; the quiz passes none, because there
+ * every banked question is a question it can ask.
  */
 export const drawQuestion = ({
+  isUsable,
   playedIds,
   settings
 }: {
+  isUsable?: (question: BankedQuestion) => boolean
   playedIds: ReadonlySet<string>
-  settings: QuizSettings
+  settings: QuestionDrawSettings
 }): BankedQuestion | null => {
-  const eligible = QUESTIONS.filter(
+  const eligible = (BY_LANGUAGE.get(settings.language) ?? []).filter(
     (question) =>
-      question.language === settings.language &&
       !playedIds.has(question.id) &&
       (settings.allowsAdultContent || !question.isAdult) &&
       (settings.categories.length === 0 ||
-        settings.categories.includes(question.category))
+        settings.categories.includes(question.category)) &&
+      (isUsable === undefined || isUsable(question))
   )
 
   const byCategory = new Map<QuestionCategory, BankedQuestion[]>()

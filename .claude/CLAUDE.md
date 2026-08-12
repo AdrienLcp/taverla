@@ -6,7 +6,10 @@ shows the QR code, everyone else plays on whatever screen they have to hand,
 and the first to buzz gets to name the track. **Buzzer** is the second: the same
 room, the same unforgeable race for the floor, and no content at all — the host
 brings the charade, the quiz on paper or the lesson. **Quiz** is the third, and
-it serves its own: 1 800 French questions bundled with the server.
+it serves its own: 1 800 French questions bundled with the server. **Le Fake**
+is the fourth, and the first where a wrong answer scores: everyone writes a lie
+about a real question, the screen shows them all beside the truth, and the room
+votes.
 
 A phone is the common case, not the contract. The room code is displayed to be
 read aloud and typed, so a laptop in the same room joins the same way — nothing
@@ -14,8 +17,8 @@ user-facing may assume the device.
 
 Two names, two scopes, and the distinction is load-bearing. The product owns
 `@taverla/*`, the `taverla:*` storage keys and the repository name. A game owns
-its own translation prefix — `blindtest.*`, `buzzer.*`, `quiz.*` — and nothing
-else. A string the next game would show unchanged belongs to the shell, and the
+its own translation prefix — `blindtest.*`, `buzzer.*`, `quiz.*`, `lefake.*` —
+and nothing else. A string the next game would show unchanged belongs to the shell, and the
 third game moved four of them there.
 
 ## Tech stack
@@ -129,15 +132,16 @@ string written into a component is a bug, not a shortcut — see
   already on screen is asked `round.content`, not `settings.game`, because that
   is the game it was *opened* on.
 
-  `blindtest`, `buzzer`, `quiz`; `shelvedGames` is the ones a game's own front
+  `blindtest`, `buzzer`, `lefake`, `quiz`; `shelvedGames` is the ones a game's own front
   door may open a room for, and the create-room request carries which when it
   came through one. It holds all three today, and must not collapse into
   `gameKinds`: it is what refuses a game that is served but has no screens yet,
   and every game so far has spent a stage in that window. The game owns its arm
   of `settings.game` and `round.content`, and narrows the room's answer mode
 - **Round** — one track, one question, or nothing at all.
-  `lobby → countdown → playing → buzzed → revealed`. `roundCount` is nullable,
-  and `null` means until the host ends it
+  `lobby → countdown → playing → buzzed → voting → revealed`. `roundCount` is
+  nullable, and `null` means until the host ends it. `voting` is Le Fake's
+  alone; every other game goes from `playing` straight to a reveal
 - **Answer mode** — `typed` (one field, the default), `choice` (four candidates)
   or `buzzer` (one player, judged by the host). The first two are everyone at
   once, decided by the server, and scored by speed on top of being right. Typing
@@ -175,7 +179,7 @@ string written into a component is a bug, not a shortcut — see
 
 ## The blind test is the first game, not the product
 
-The shelf is real now — two games share the room, the QR code and every screen —
+The shelf is real now — four games share the room, the QR code and every screen —
 but the rule that got it here has not changed: do not weld a seam shut, and do
 not invent a shared shape before there is a second case to measure it against.
 
@@ -196,14 +200,21 @@ the field was in the wrong place and that is a different fault from a missing
 abstraction. A union invented for symmetry is premature; a union that makes an
 unreachable field unrepresentable pays for itself the day it is written.
 
-**`RoomPhase` stays fused, and that is a decision rather than a delay.** It is
-the one candidate with no payload: `settings.game`, `settings.mode`,
-`round.content` and `Verdict` each split because a field belonged to one arm and
-sat on all of them, and a phase carries no field at all — it is a name. All six
-mean the same thing in both games on the shelf, and splitting a name costs every
-check in the shell the ability to spell what it is checking. Revisit only when a
-game needs a phase these six cannot carry, which is a *new* name and not a
-reshuffle of these.
+**`RoomPhase` stays fused, and Le Fake is what proved the rule rather than
+breaking it.** It is the one candidate with no payload: `settings.game`,
+`settings.mode`, `round.content` and `Verdict` each split because a field
+belonged to one arm and sat on all of them, and a phase carries no field at all
+— it is a name. Splitting a name costs every check in the shell the ability to
+spell what it is checking.
+
+The rule was "revisit when a game needs a phase these cannot carry, which is a
+*new name* and not a reshuffle", and that is exactly what happened: the submit-
+then-vote shape needed **one** name, `voting`, and got it. Not two — its writing
+phase *is* `playing`, because "everyone submitting against a deadline" is what a
+simultaneous round already means and `answers` already carries the names filling
+the screen. Adding a member keeps the enum shared and hands the next
+submit-then-vote game its phase for nothing. Read `docs/plans/16-le-fake.md`
+before touching it.
 
 ## The build is staged
 
@@ -256,6 +267,17 @@ touching it:
   `pickLocale` is a rule and stayed in core. The door carries the shell's fact —
   what the host *reads* — rather than a quiz setting, and each game decides what
   to do with it.
+
+**16 is done, and Le Fake is the fourth game.** It bought the submit-then-vote
+phase seven of the remaining catalogue is waiting on, for one new `RoomPhase`
+name and no new content: it runs on the same question bank the quiz does, minus
+two shapes of question that cannot carry a round — one that names candidates the
+room cannot see, and one whose answer is a bare number. Three things to know
+before touching it, all in `docs/plans/16-le-fake.md`: the answer mode narrows to
+`choice` rather than gaining a fourth member, the host screen is sent *nothing*
+because the whole room is looking at it, and the two shell bugs it surfaced —
+an error outliving its phase, and a react-aria field whose refusal silently
+killed the form — are in `.claude/rules/`.
 
 English has **no anecdotes and no adult rating**, so a reveal there shows the
 answer alone and the adult switch is not shown at all — `hasAdultContent` decides

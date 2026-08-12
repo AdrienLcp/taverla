@@ -5,6 +5,7 @@ import type { RoomCode } from '@taverla/protocol/identifiers'
 import type { HostRoomView } from '@taverla/protocol/room'
 import { hostServerMessageSchema } from '@taverla/protocol/server-message'
 
+import { useForgetErrorOnPhaseChange } from './use-forget-error-on-phase-change'
 import { type RoomSocket, useRoomSocket } from './use-room-socket'
 
 export type HostConnection = RoomSocket & {
@@ -38,6 +39,8 @@ export const useHostConnection = (
     role: 'host',
     roomCode
   })
+
+  useForgetErrorOnPhaseChange({ clearError: socket.clearError, view })
 
   return { ...socket, view }
 }

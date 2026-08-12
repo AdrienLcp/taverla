@@ -222,6 +222,28 @@ one renders a `<label>` around a radio and the other a `<button>`. And
 `RadioGroup` does, so `ToggleGroup` wires `aria-labelledby` itself — drop that
 and the group loses its name with nothing failing.
 
+### An `isInvalid` field stops the form submitting, natively
+
+`TextField` inside a react-aria `Form` sets the input's **native** custom
+validity from `isInvalid`. So a controlled error that stays on screen leaves
+`form.checkValidity()` false and `requestSubmit()` a silent no-op: the button
+looks alive, the press does nothing, and nothing is logged.
+
+That turns a recoverable refusal into a dead end. Le Fake found it — writing the
+real answer is refused on purpose and the player is meant to try again, and they
+could not. **Clear the error as the value changes**, which is what a form should
+do anyway:
+
+```tsx
+onChange={(next) => {
+  setLie(next)
+  setSentForRoundId(null)   // drops `isInvalid`, and the field submits again
+}}
+```
+
+Verify it the only way it shows: read `input.validationMessage` in a browser
+after a refusal, then again after typing. A type-check says nothing here.
+
 ### A state attribute is not always on the element you are styling
 
 `Disclosure` stamps `data-expanded` on its **root**, never on the trigger button

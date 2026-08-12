@@ -10,6 +10,9 @@ import type { RoomPhase, RoomSettings } from '@taverla/protocol/room'
 import type { Award, Verdict } from '@taverla/protocol/scoring'
 import type { HostTrack, TrackIdentity } from '@taverla/protocol/track'
 
+import type { BoardEntry, WrittenLie } from '@taverla/core/lefake/lie-board'
+import type { Vote } from '@taverla/core/lefake/tally'
+
 /**
  * The server's own model, deliberately richer than either wire view: it holds
  * the session ids that let a reloaded phone reclaim its seat, and the track
@@ -112,6 +115,18 @@ export type Round = {
         track: HostTrack
       }
     | { kind: 'buzzer' }
+    | {
+        /**
+         * Assembled the moment the writing closes, and `null` for as long as it
+         * is open — which is also what tells the two phases apart in every
+         * projection: a board is a room that has stopped writing.
+         */
+        board: BoardEntry[] | null
+        kind: 'lefake'
+        lies: WrittenLie[]
+        question: HostQuestion
+        votes: Vote[]
+      }
     | {
         choices: string[]
         correctChoiceIndex: number | null

@@ -2,7 +2,8 @@ import {
   DEFAULT_GAME_SETTINGS,
   type GameKind,
   type GameSettings,
-  roundDurationMsOf
+  roundDurationMsOf,
+  voteDurationMsOf
 } from '@taverla/protocol/game'
 import type { Locale } from '@taverla/protocol/locale'
 import {
@@ -22,6 +23,8 @@ import { modeOfferedBy } from './game-modes'
 const DEFAULT_ROUND_COUNT: Record<GameKind, number | null> = {
   blindtest: 10,
   buzzer: null,
+  /** Writing, reading a board aloud and voting is three of a quiz round; ten would be an evening on one game. */
+  lefake: 5,
   quiz: 10
 }
 
@@ -54,8 +57,9 @@ export const roomSettingsFor = ({
 
 /**
  * The game's own defaults, with the one field that cannot have a fixed one. A
- * quiz drawn in a language the host does not read is the wrong game, and the
- * protocol's default has no way of knowing which that is.
+ * question drawn in a language the host does not read is the wrong game, and the
+ * protocol's default has no way of knowing which that is — so both games that
+ * draw from the bank take the host's.
  */
 const openedGameSettings = ({
   game,
@@ -66,7 +70,7 @@ const openedGameSettings = ({
 }): GameSettings => {
   const opened = DEFAULT_GAME_SETTINGS[game]
 
-  return opened.kind === 'quiz'
+  return opened.kind === 'quiz' || opened.kind === 'lefake'
     ? { ...opened, language: questionLanguageFor(locale) }
     : opened
 }
@@ -114,6 +118,11 @@ export const movedToGame = ({
  * A mode's own settings are not on the list. `answerWindowMs` is read when a
  * buzz lands and stamped into the buzz, so moving it decides the next floor
  * rather than the one being held.
+ *
+ * `voteDurationMs` is on it for the same reason as `roundDurationMs`, and it is
+ * one field rather than a fourth clause: Le Fake's two open phases run off the
+ * one round clock, so a vote window cut below the time already spent ends the
+ * vote on arrival exactly as a shortened round does.
  */
 export const reshapesRound = ({
   from,
@@ -124,4 +133,5 @@ export const reshapesRound = ({
 }): boolean =>
   from.mode.kind !== to.mode.kind ||
   from.game?.kind !== to.game?.kind ||
-  roundDurationMsOf(from.game) !== roundDurationMsOf(to.game)
+  roundDurationMsOf(from.game) !== roundDurationMsOf(to.game) ||
+  voteDurationMsOf(from.game) !== voteDurationMsOf(to.game)

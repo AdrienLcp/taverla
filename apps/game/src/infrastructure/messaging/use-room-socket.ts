@@ -32,6 +32,13 @@ import { ensureSessionId } from '@/infrastructure/storage/session-storage'
 export type SocketStatus = 'connecting' | 'open' | 'closed' | 'refused'
 
 export type RoomSocket = {
+  /**
+   * Forgets the last refusal. The socket itself only clears one on reconnect,
+   * which is far too long a life for a message about a moment: a room that has
+   * moved to another phase is being told why something it is no longer doing was
+   * refused. The connection hooks call this when the phase turns over.
+   */
+  clearError: () => void
   clock: ClockEstimate | null
   error: ProtocolErrorMessage | null
   /** `false` when the frame could not be written — the socket is down. */
@@ -223,5 +230,9 @@ export const useRoomSocket = ({
     return true
   }, [])
 
-  return { clock, error, send, status }
+  const clearError = useCallback(() => {
+    setError(null)
+  }, [])
+
+  return { clearError, clock, error, send, status }
 }

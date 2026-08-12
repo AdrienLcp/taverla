@@ -6,6 +6,7 @@ import {
   roundIdSchema,
   sessionIdSchema
 } from './identifiers'
+import { lieSchema } from './lefake'
 import { roomSettingsSchema } from './room'
 import { verdictSchema } from './scoring'
 
@@ -71,6 +72,29 @@ export const answerMessageSchema = z.object({
   ]),
   roundId: roundIdSchema,
   type: z.literal('player.answer')
+})
+
+/**
+ * A game's own namespace rather than `player.*`, because these two are the only
+ * client frames on the shelf that no other game could receive: every other
+ * message names something the shell does — buzz, answer, judge — where writing a
+ * lie and voting on a board exist nowhere else.
+ *
+ * Neither carries a timestamp, and here that is not even about forgery: nothing
+ * in this round is ranked by speed. Being quick to invent something is not the
+ * game, and a bonus for voting first would pay a room for not reading the board.
+ */
+export const submitLieMessageSchema = z.object({
+  lie: lieSchema,
+  roundId: roundIdSchema,
+  type: z.literal('lefake.submit')
+})
+
+/** `candidateId` rather than an index: the board is shuffled, and a vote must survive it. */
+export const voteMessageSchema = z.object({
+  candidateId: z.string().min(1),
+  roundId: roundIdSchema,
+  type: z.literal('lefake.vote')
 })
 
 export const updateSettingsMessageSchema = z.object({
@@ -152,7 +176,9 @@ export const playerClientMessageSchema = z.discriminatedUnion('type', [
   helloMessageSchema,
   timePingMessageSchema,
   buzzMessageSchema,
-  answerMessageSchema
+  answerMessageSchema,
+  submitLieMessageSchema,
+  voteMessageSchema
 ])
 
 /** Everything the server's decoder accepts, before it knows which role sent it. */
@@ -161,6 +187,8 @@ export const clientMessageSchema = z.discriminatedUnion('type', [
   timePingMessageSchema,
   buzzMessageSchema,
   answerMessageSchema,
+  submitLieMessageSchema,
+  voteMessageSchema,
   updateSettingsMessageSchema,
   startRoundMessageSchema,
   judgeMessageSchema,

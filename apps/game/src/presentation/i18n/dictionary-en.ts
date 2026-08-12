@@ -128,10 +128,12 @@ export const EN_DICTIONARY = defineTranslations({
       unexpected_response: 'The server answered something unexpected.',
       unreachable: 'Could not reach the server. Try again in a moment.'
     },
+    cannot_vote_for_own_lie: 'That one is yours. Pick another.',
     host_already_connected: 'Someone is already hosting this room.',
     host_only_action: 'Only the host can do that.',
     internal_error: 'Something broke on the server.',
     invalid_message: 'The server did not understand that message.',
+    lie_is_the_answer: 'That is the real answer. Make something up instead.',
     music_source_unavailable: 'The music service is not answering.',
     nickname_taken: 'Someone already took that nickname.',
     no_content_available: 'Nothing left to play. Try other settings.',
@@ -249,6 +251,49 @@ export const EN_DICTIONARY = defineTranslations({
             other: 'A room code is {?} characters long.'
           }
         }
+      })
+    }
+  },
+  lefake: {
+    home: {
+      description:
+        'One screen asks a question whose answer nobody sees coming. Everyone invents a convincing wrong one, the screen puts them all up beside the truth, and the room votes. You score for spotting the real answer — and for every player who falls for yours.'
+    },
+    name: 'Le Fake',
+    reveal: {
+      fooled: defineTranslation('{count:plural}', {
+        plural: { count: { other: '{?} fell for it' } }
+      }),
+      found: defineTranslation('{count:plural}', {
+        plural: { count: { one: '{?} found it', other: '{?} found it' } }
+      }),
+      nobody: 'Nobody wrote that one',
+      title: 'The truth was'
+    },
+    scoring:
+      'Everyone writes a fake answer, then the room votes on the lot. Two points for finding the real one, and one more for every player who falls for yours.',
+    tagline: 'Write a lie. Fool the table.',
+    vote: {
+      done: 'Your vote is in. Waiting for the others…',
+      duration: 'Time to vote',
+      title: 'Which one is true?',
+      waiting: defineTranslation('{count:plural}', {
+        plural: { count: { other: '{?} voted so far' } }
+      }),
+      yours: 'Yours'
+    },
+    write: {
+      description: 'Something they will believe. The real answer gets refused.',
+      duration: 'Time to write',
+      label: 'Your lie',
+      sent: 'Your lie is in. Waiting for the others…',
+      /**
+       * Its own rather than the shell's `round.answer.waiting`: nobody is
+       * answering anything yet, and "0 answered" over a field asking for a lie
+       * reads as a round that has already gone wrong.
+       */
+      waiting: defineTranslation('{count:plural}', {
+        plural: { count: { other: '{?} written so far' } }
       })
     }
   },

@@ -1,7 +1,11 @@
 import { nanoid } from 'nanoid'
 
 import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
-import { locksOutOnMissIn, roundDurationMsOf } from '@taverla/protocol/game'
+import {
+  locksOutOnMissIn,
+  roundDurationMsOf,
+  voteDurationMsOf
+} from '@taverla/protocol/game'
 import type { PlayerId, RoundId } from '@taverla/protocol/identifiers'
 import type { HostQuestion } from '@taverla/protocol/question'
 import type { Verdict } from '@taverla/protocol/scoring'
@@ -16,6 +20,8 @@ import {
 } from '@taverla/core/blindtest/typed-answer'
 import { Result } from '@taverla/core/helpers/result'
 import { shuffled } from '@taverla/core/helpers/shuffle'
+import { buildLieBoard } from '@taverla/core/lefake/lie-board'
+import { tallyLieBoard } from '@taverla/core/lefake/tally'
 import { gradeQuizGuess } from '@taverla/core/quiz/question-answer'
 import {
   type BuzzRejection,
@@ -480,6 +486,224 @@ export const settleSimultaneousRound = ({
 }
 
 /**
+ * Le Fake's half of opening a round, and the only one that opens on nothing but
+ * a question: the board it is voted on is written by the room over the next
+ * minute, so it cannot exist yet.
+ */
+export const lefakeContent = (question: HostQuestion): Round['content'] => ({
+  board: null,
+  kind: 'lefake',
+  lies: [],
+  question,
+  votes: []
+})
+
+export type LieRejection = Extract<
+  ProtocolErrorCode,
+  'already_buzzed' | 'lie_is_the_answer' | 'stale_round' | 'wrong_phase'
+>
+
+/**
+ * One lie, written against the writing deadline. A player gets one — unlike a
+ * typed guess, which is open until the clip runs out, because there is nothing
+ * here to get progressively closer to.
+ *
+ * The truth being refused is the guard the game cannot ship without: accepted,
+ * it would put the answer on the board twice and leave the vote with no right
+ * line to find. It is a refusal the player can act on, so it says so rather than
+ * failing as an invalid frame.
+ */
+export const registerLie = ({
+  lie,
+  now,
+  playerId,
+  room,
+  roundId
+}: {
+  lie: string
+  now: number
+  playerId: PlayerId
+  room: Room
+  roundId: RoundId
+}): Result<void, LieRejection> => {
+  const round = room.round
+
+  if (round === null || room.phase !== 'playing') {
+    return Result.failure('wrong_phase')
+  }
+
+  if (round.id !== roundId) {
+    return Result.failure('stale_round')
+  }
+
+  const content = round.content
+
+  if (content.kind !== 'lefake') {
+    return Result.failure('wrong_phase')
+  }
+
+  if (content.lies.some((written) => written.playerId === playerId)) {
+    return Result.failure('already_buzzed')
+  }
+
+  if (gradeQuizGuess({ guess: lie, question: content.question }).isCorrect) {
+    return Result.failure('lie_is_the_answer')
+  }
+
+  content.lies.push({ playerId, text: lie })
+  touch(room, now)
+
+  return Result.success(undefined)
+}
+
+/**
+ * The board goes up. It is the one transition of the round nobody sends a
+ * message for and no clock has to reach — the last player finishing their lie
+ * gets there just as often as the deadline does.
+ *
+ * The round clock is wound back rather than a second one started: both open
+ * phases run off it, so freezing the room while the host is away already covers
+ * the vote.
+ */
+export const closeWriting = (room: Room, now: number): void => {
+  const content = room.round?.content
+
+  if (room.round === null || content?.kind !== 'lefake') {
+    return
+  }
+
+  content.board = buildLieBoard({
+    decoys: content.question.decoys,
+    lies: content.lies,
+    truth: content.question.answer
+  })
+
+  room.phase = 'voting'
+  room.round.elapsedMs = 0
+  room.round.runningSince = now
+  touch(room, now)
+}
+
+export type VoteRejection = Extract<
+  ProtocolErrorCode,
+  | 'already_buzzed'
+  | 'cannot_vote_for_own_lie'
+  | 'invalid_message'
+  | 'stale_round'
+  | 'wrong_phase'
+>
+
+export const registerVote = ({
+  candidateId,
+  now,
+  playerId,
+  room,
+  roundId
+}: {
+  candidateId: string
+  now: number
+  playerId: PlayerId
+  room: Room
+  roundId: RoundId
+}): Result<void, VoteRejection> => {
+  const round = room.round
+
+  if (round === null || room.phase !== 'voting') {
+    return Result.failure('wrong_phase')
+  }
+
+  if (round.id !== roundId) {
+    return Result.failure('stale_round')
+  }
+
+  const content = round.content
+
+  if (content.kind !== 'lefake' || content.board === null) {
+    return Result.failure('wrong_phase')
+  }
+
+  if (content.votes.some((vote) => vote.playerId === playerId)) {
+    return Result.failure('already_buzzed')
+  }
+
+  const candidate = content.board.find((entry) => entry.id === candidateId)
+
+  if (candidate === undefined) {
+    return Result.failure('invalid_message')
+  }
+
+  // The screen greys this line out, and a merged lie means a player can hold one
+  // they never typed the exact words of. The guard is here because a socket is
+  // whatever its owner makes it, and voting for yourself is free points.
+  if (candidate.authorIds.includes(playerId)) {
+    return Result.failure('cannot_vote_for_own_lie')
+  }
+
+  content.votes.push({ candidateId, playerId })
+  touch(room, now)
+
+  return Result.success(undefined)
+}
+
+/**
+ * Whether the phase the room is in has nothing left to wait for. A phone that
+ * dropped off Wi-Fi is not one of them, the same way it does not hold a clip
+ * open — and a player who wrote no lie still votes, which is what keeps someone
+ * who arrived late in the round.
+ */
+export const everyoneHasActed = (room: Room): boolean => {
+  const content = room.round?.content
+
+  if (content?.kind !== 'lefake') {
+    return false
+  }
+
+  const seated = [...room.players.values()].filter(
+    (participant) => participant.isConnected
+  )
+
+  if (seated.length === 0) {
+    return false
+  }
+
+  const acted =
+    room.phase === 'voting'
+      ? new Set(content.votes.map((vote) => vote.playerId))
+      : new Set(content.lies.map((lie) => lie.playerId))
+
+  return seated.every((participant) => acted.has(participant.id))
+}
+
+/**
+ * Scores the board and reveals it. No speed bonus, and it is the only settle on
+ * the shelf without one: voting quickly is voting without reading, which is the
+ * half of the round worth having.
+ */
+export const settleLieBoard = (room: Room, now: number): void => {
+  const round = room.round
+  const content = round?.content
+
+  if (round == null || content?.kind !== 'lefake' || content.board === null) {
+    return
+  }
+
+  for (const award of tallyLieBoard({
+    board: content.board,
+    votes: content.votes
+  })) {
+    const participant = room.players.get(award.playerId)
+
+    if (participant !== undefined) {
+      participant.score += award.points
+    }
+
+    round.awards.push(award)
+  }
+
+  revealRound(room, now)
+}
+
+/**
  * The bonus queue: whoever banked something first heads it, and everyone who
  * banked nothing sorts to the back where they cannot take a place.
  */
@@ -700,7 +924,7 @@ export const resumeRoundClock = (room: Room, now: number): void => {
     return
   }
 
-  if (room.phase === 'playing') {
+  if (room.phase === 'playing' || room.phase === 'voting') {
     round.runningSince = now
     touch(room, now)
 
@@ -763,12 +987,23 @@ export const elapsedRoundMs = (round: Round, now: number): number =>
   )
 
 /**
- * How much of the round is left, or `null` for a game that has no such clock —
- * the bare buzzer serves nothing, so there is nothing for the room to run out
- * of and the round ends on a verdict or on the host's word.
+ * How long the phase the room is *in* runs for. Every game but one answers with
+ * the round duration, because they have a single open phase; Le Fake writes and
+ * then votes, and the round clock is wound back between the two rather than the
+ * vote growing a clock of its own.
+ */
+const openPhaseDurationMs = (room: Room): number | null =>
+  room.phase === 'voting'
+    ? voteDurationMsOf(room.settings.game)
+    : roundDurationMsOf(room.settings.game)
+
+/**
+ * How much of the open phase is left, or `null` for a game that has no such
+ * clock — the bare buzzer serves nothing, so there is nothing for the room to
+ * run out of and the round ends on a verdict or on the host's word.
  */
 export const remainingRoundMs = (room: Room, now: number): number | null => {
-  const total = roundDurationMsOf(room.settings.game)
+  const total = openPhaseDurationMs(room)
 
   if (room.round === null) {
     return 0

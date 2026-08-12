@@ -1,5 +1,6 @@
 import type React from 'react'
 
+import type { GameSettings } from '@taverla/protocol/game'
 import {
   type QuestionCategory,
   type QuestionLanguage,
@@ -42,6 +43,14 @@ const COUNTDOWN_DURATIONS_MS = [3_000, 5_000, 10_000] as const
  * answered, and a typed answer has to be spelled out where a pick is a tap.
  */
 const QUESTION_DURATIONS_MS = [15_000, 30_000, 60_000] as const
+
+/**
+ * Longer again at both ends, and for two different jobs: inventing something
+ * believable takes longer than recalling an answer, and reading five lies off a
+ * screen before choosing takes longer than reading four candidates.
+ */
+const WRITING_DURATIONS_MS = [30_000, 60_000, 90_000] as const
+const VOTING_DURATIONS_MS = [20_000, 30_000, 45_000] as const
 
 /**
  * `0` stands for "no window" and for "no limit": the strips carry strings, and
@@ -91,6 +100,91 @@ const NumberChoice: React.FC<NumberChoiceProps> = ({
     value={String(value)}
   />
 )
+
+/**
+ * Both games that draw from the bank, in the one type their shared controls
+ * need. It is an `Extract` rather than a new protocol type because what they
+ * share is three settings, not a shape worth naming on the wire.
+ */
+type BankDrawingGame = Extract<GameSettings, { kind: 'lefake' | 'quiz' }>
+
+/**
+ * The three questions the bank asks whoever is drawing from it. Extracted the
+ * moment a second game asked them, and not before — the quiz carried them
+ * inline while it was the only one.
+ */
+const QuestionBankSettings: React.FC<{
+  game: BankDrawingGame
+  isDisabled: boolean
+  onChange: (game: BankDrawingGame) => void
+}> = ({ game, isDisabled, onChange }) => {
+  const translate = useTranslate()
+
+  return (
+    <>
+      {/*
+        The host's alone, and never the reader's: the interface locale is stored
+        per device, so two players in one room can hold different ones and
+        drawing from them would deal each phone its own question. It opens on
+        whatever the host was reading and moves independently after that — a
+        room can play in French on an English console.
+      */}
+      <SegmentedControl
+        isDisabled={isDisabled}
+        label={translate('quiz.language')}
+        onChange={(next) => {
+          if (isQuestionLanguage(next)) {
+            onChange({ ...game, language: next })
+          }
+        }}
+        options={questionLanguages.map((language) => ({
+          label: LANGUAGE_NAMES[language],
+          value: language
+        }))}
+        value={game.language}
+      />
+      <ToggleGroup
+        isDisabled={isDisabled}
+        label={translate('quiz.category.label')}
+        onSelectionChange={(keys) => {
+          onChange({
+            ...game,
+            categories: [...keys]
+              .map(asCategory)
+              .filter((category) => category !== undefined)
+          })
+        }}
+        options={questionCategories.map((category) => ({
+          label: translate(questionCategoryKey(category)),
+          value: category
+        }))}
+        selectedKeys={game.categories}
+      />
+      {game.categories.length === 0 && (
+        <p className='hint'>{translate('quiz.category.none')}</p>
+      )}
+      {/*
+        Hidden where the bank has nothing to rate, for the same reason the mode
+        strip is hidden when a game offers one: this one would keep its promise
+        and change nothing. The value is left alone rather than reset, so a host
+        who turns it on in French still has it on when they come back.
+      */}
+      {hasAdultContent(game.language) && (
+        <>
+          <Switch
+            isDisabled={isDisabled}
+            isSelected={game.allowsAdultContent}
+            label={translate('quiz.adult.label')}
+            onChange={(allowsAdultContent) => {
+              onChange({ ...game, allowsAdultContent })
+            }}
+          />
+          <p className='hint'>{translate('quiz.adult.hint')}</p>
+        </>
+      )}
+    </>
+  )
+}
 
 /**
  * The literal return type is load-bearing: adding a difficulty to the protocol
@@ -218,76 +312,14 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         />
       )}
 
-      {game?.kind === 'quiz' && (
-        <>
-          {/*
-            The host's alone, and never the reader's: the interface locale is
-            stored per device, so two players in one room can hold different
-            ones and drawing from them would deal each phone its own question.
-            It opens on whatever the host was reading and moves independently
-            after that — a room can play in French on an English console.
-          */}
-          <SegmentedControl
-            isDisabled={isDisabled}
-            label={translate('quiz.language')}
-            onChange={(next) => {
-              if (isQuestionLanguage(next)) {
-                onChange({ ...settings, game: { ...game, language: next } })
-              }
-            }}
-            options={questionLanguages.map((language) => ({
-              label: LANGUAGE_NAMES[language],
-              value: language
-            }))}
-            value={game.language}
-          />
-          <ToggleGroup
-            isDisabled={isDisabled}
-            label={translate('quiz.category.label')}
-            onSelectionChange={(keys) => {
-              onChange({
-                ...settings,
-                game: {
-                  ...game,
-                  categories: [...keys]
-                    .map(asCategory)
-                    .filter((category) => category !== undefined)
-                }
-              })
-            }}
-            options={questionCategories.map((category) => ({
-              label: translate(questionCategoryKey(category)),
-              value: category
-            }))}
-            selectedKeys={game.categories}
-          />
-          {game.categories.length === 0 && (
-            <p className='hint'>{translate('quiz.category.none')}</p>
-          )}
-          {/*
-            Hidden where the bank has nothing to rate, for the same reason the
-            mode strip is hidden when a game offers one: this one would keep its
-            promise and change nothing. The value is left alone rather than
-            reset, so a host who turns it on in French still has it on when they
-            come back.
-          */}
-          {hasAdultContent(game.language) && (
-            <>
-              <Switch
-                isDisabled={isDisabled}
-                isSelected={game.allowsAdultContent}
-                label={translate('quiz.adult.label')}
-                onChange={(allowsAdultContent) => {
-                  onChange({
-                    ...settings,
-                    game: { ...game, allowsAdultContent }
-                  })
-                }}
-              />
-              <p className='hint'>{translate('quiz.adult.hint')}</p>
-            </>
-          )}
-        </>
+      {(game?.kind === 'lefake' || game?.kind === 'quiz') && (
+        <QuestionBankSettings
+          game={game}
+          isDisabled={isDisabled}
+          onChange={(next) => {
+            onChange({ ...settings, game: next })
+          }}
+        />
       )}
 
       <NumberChoice
@@ -330,6 +362,31 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           options={QUESTION_DURATIONS_MS}
           value={game.roundDurationMs}
         />
+      )}
+
+      {game?.kind === 'lefake' && (
+        <>
+          <NumberChoice
+            isDisabled={isHeldByRound}
+            label={translate('lefake.write.duration')}
+            onChange={(roundDurationMs) => {
+              onChange({ ...settings, game: { ...game, roundDurationMs } })
+            }}
+            optionLabel={secondsLabel}
+            options={WRITING_DURATIONS_MS}
+            value={game.roundDurationMs}
+          />
+          <NumberChoice
+            isDisabled={isHeldByRound}
+            label={translate('lefake.vote.duration')}
+            onChange={(voteDurationMs) => {
+              onChange({ ...settings, game: { ...game, voteDurationMs } })
+            }}
+            optionLabel={secondsLabel}
+            options={VOTING_DURATIONS_MS}
+            value={game.voteDurationMs}
+          />
+        </>
       )}
 
       {mode.kind === 'buzzer' && (

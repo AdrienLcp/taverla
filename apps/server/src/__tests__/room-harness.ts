@@ -75,8 +75,18 @@ export const QUESTIONS = [
  * parsing eighteen hundred of them on every run.
  */
 export const questionBankStub = () => ({
-  drawQuestion: ({ playedIds }: { playedIds: ReadonlySet<string> }) =>
-    QUESTIONS.find((question) => !playedIds.has(question.id)) ?? null,
+  drawQuestion: ({
+    isUsable,
+    playedIds
+  }: {
+    isUsable?: (question: (typeof QUESTIONS)[number]) => boolean
+    playedIds: ReadonlySet<string>
+  }) =>
+    QUESTIONS.find(
+      (question) =>
+        !playedIds.has(question.id) &&
+        (isUsable === undefined || isUsable(question))
+    ) ?? null,
   hostQuestionOf: <TQuestion>(question: TQuestion) => question
 })
 
@@ -232,6 +242,20 @@ export const hostQuestion = (host: Peer<HostServerMessage>) => {
   const content = hostView(host)?.currentContent
 
   return content?.kind === 'quiz' ? content.question : null
+}
+
+export const lefakeRound = (
+  view: { round: RoundView | null } | null
+): Extract<RoundContent, { kind: 'lefake' }> | null => {
+  const content = view?.round?.content
+
+  return content?.kind === 'lefake' ? content : null
+}
+
+export const hostLefakeContent = (host: Peer<HostServerMessage>) => {
+  const content = hostView(host)?.currentContent
+
+  return content?.kind === 'lefake' ? content : null
 }
 
 export const errorsIn = <TMessage extends { type: string }>(

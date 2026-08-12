@@ -152,10 +152,17 @@ const Lobby = ({
           <Scoreline view={view} />
           <PlayerRound
             clock={clock}
+            error={error?.code ?? null}
             onAnswer={(answer, roundId) =>
               send({ answer, roundId, type: 'player.answer' })
             }
             onBuzz={(roundId) => send({ roundId, type: 'player.buzz' })}
+            onSubmitLie={(lie, roundId) =>
+              send({ lie, roundId, type: 'lefake.submit' })
+            }
+            onVote={(candidateId, roundId) =>
+              send({ candidateId, roundId, type: 'lefake.vote' })
+            }
             view={view}
           />
         </>

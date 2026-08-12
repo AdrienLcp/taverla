@@ -40,8 +40,27 @@ export const POINTS_FOR_A_CLAIM = 1
  * of them, then the second, then nobody. A rank bonus rather than a curve
  * because a player can compute it from what they watched happen, and arguing
  * about it out loud is most of what a party game is for.
+ *
+ * Le Fake pays no such bonus, and it is the only game on the shelf that does
+ * not: voting quickly is voting without reading the board, which is the half of
+ * that round worth having.
  */
 export const SPEED_BONUS_BY_RANK = [2, 1] as const
+
+/**
+ * Picking the truth out of a board of lies. Twice what a right pick is worth in
+ * every other game, because the wrong answers here were written by people in the
+ * room trying to catch you rather than authored to be plausible.
+ */
+export const POINTS_FOR_FINDING_THE_TRUTH = 2
+
+/**
+ * Per player who voted for your lie — and the first thing on the shelf that pays
+ * for a wrong answer. It is deliberately not capped: a lie the whole table fell
+ * for is the round everyone remembers, and shaving it would be scoring against
+ * the point of the game.
+ */
+export const POINTS_PER_PLAYER_FOOLED = 1
 
 /**
  * What the host granted, in the vocabulary of the game they were judging — the

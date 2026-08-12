@@ -1,9 +1,9 @@
 import { z } from 'zod'
 
-import { questionCategorySchema, questionLanguageSchema } from './question'
+import { questionDrawSettingsSchema } from './question'
 import { trackDifficultySchema, trackSourceSchema } from './track'
 
-export const gameKinds = ['blindtest', 'buzzer', 'quiz'] as const
+export const gameKinds = ['blindtest', 'buzzer', 'lefake', 'quiz'] as const
 
 export const gameKindSchema = z.enum(gameKinds)
 
@@ -19,6 +19,7 @@ export const gameKindSchema = z.enum(gameKinds)
 export const shelvedGames = [
   'blindtest',
   'buzzer',
+  'lefake',
   'quiz'
 ] as const satisfies readonly GameKind[]
 
@@ -53,23 +54,20 @@ export const gameSettingsSchema = z.discriminatedUnion('kind', [
      */
     locksOutOnMiss: z.boolean()
   }),
-  z.object({
+  questionDrawSettingsSchema.extend({
+    kind: z.literal('lefake'),
     /**
-     * Whether the bank's adult themes are drawn from. Its own field rather than
-     * a seventh category, because the six are *subjects* and this is a rating:
-     * a question about a porn actress's first album is a celebrities question
-     * that happens to be adult, and putting the two axes in one row is what
-     * makes such a control read as a mistake.
-     *
-     * Off by default, and the host's alone to turn on — the room code is read
-     * aloud and anyone present can scan the QR, so they are the only one who
-     * knows who is in the room.
+     * How long the room has to write a lie, which is what `playing` means in
+     * this game — the one phase every other game spends answering. It is longer
+     * than a question stays open because inventing something believable is a
+     * slower act than recognising the truth.
      */
-    allowsAdultContent: z.boolean(),
-    /** Empty means every category, the same way an empty genre list means every genre. */
-    categories: z.array(questionCategorySchema),
+    roundDurationMs: z.number().int().min(15_000).max(180_000),
+    /** How long the board stays open once everyone has written. */
+    voteDurationMs: z.number().int().min(10_000).max(120_000)
+  }),
+  questionDrawSettingsSchema.extend({
     kind: z.literal('quiz'),
-    language: questionLanguageSchema,
     /** How long a question stays open before the round times out. */
     roundDurationMs: z.number().int().min(5_000).max(120_000)
   })
@@ -80,6 +78,7 @@ export type ShelvedGame = z.infer<typeof shelvedGameSchema>
 export type GameSettings = z.infer<typeof gameSettingsSchema>
 export type BlindtestSettings = Extract<GameSettings, { kind: 'blindtest' }>
 export type BuzzerSettings = Extract<GameSettings, { kind: 'buzzer' }>
+export type LefakeSettings = Extract<GameSettings, { kind: 'lefake' }>
 export type QuizSettings = Extract<GameSettings, { kind: 'quiz' }>
 
 /**
@@ -91,6 +90,14 @@ export type QuizSettings = Extract<GameSettings, { kind: 'quiz' }>
  */
 export const roundDurationMsOf = (game: GameSettings | null): number | null =>
   game === null || game.kind === 'buzzer' ? null : game.roundDurationMs
+
+/**
+ * How long the board stays open, for the one game that has a second open phase.
+ * `null` everywhere else, which is what lets the round clock be re-armed from a
+ * single accessor rather than the voting phase growing a clock of its own.
+ */
+export const voteDurationMsOf = (game: GameSettings | null): number | null =>
+  game?.kind === 'lefake' ? game.voteDurationMs : null
 
 /**
  * Whether a wrong answer sits the player out for the rest of the round. Only the
@@ -113,6 +120,15 @@ export const DEFAULT_BUZZER_SETTINGS: BuzzerSettings = {
   locksOutOnMiss: true
 }
 
+export const DEFAULT_LEFAKE_SETTINGS: LefakeSettings = {
+  allowsAdultContent: false,
+  categories: [],
+  kind: 'lefake',
+  language: 'fr',
+  roundDurationMs: 60_000,
+  voteDurationMs: 45_000
+}
+
 export const DEFAULT_QUIZ_SETTINGS: QuizSettings = {
   allowsAdultContent: false,
   categories: [],
@@ -125,5 +141,6 @@ export const DEFAULT_QUIZ_SETTINGS: QuizSettings = {
 export const DEFAULT_GAME_SETTINGS: Record<GameKind, GameSettings> = {
   blindtest: DEFAULT_BLINDTEST_SETTINGS,
   buzzer: DEFAULT_BUZZER_SETTINGS,
+  lefake: DEFAULT_LEFAKE_SETTINGS,
   quiz: DEFAULT_QUIZ_SETTINGS
 }

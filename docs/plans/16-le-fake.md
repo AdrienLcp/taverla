@@ -4,7 +4,8 @@
 a **lie**, the screen shows every lie beside the truth, and the room votes. You
 score for finding the truth *and* for every player who fell for yours.
 
-**Not started.** This file is the brief for the session that does.
+**Done.** The brief below is left as written; where the build disagreed with it,
+the divergences at the end are the record — read those first.
 
 ## Why this one is next
 
@@ -126,3 +127,48 @@ the anti-pattern this repository names in three places.
 - A three-player table gets a full board
 - The other three games still run, unchanged
 - Verified in a browser, muted, both locales, at 414 px and on a desktop
+
+## What the build disagreed with
+
+Five, and the last three are the ones worth reading.
+
+**`RoomPhase` gained one name, not two, and did not split.** The brief expected
+the writing phase to be new. It is not: "everyone submitting against a deadline"
+is exactly what `playing` already means, and `answers` already carries the names
+filling the screen. Only `voting` was missing. Adding a member to the fused enum
+is the opposite of the split the catalogue warns against — it keeps every shell
+check able to spell what it is checking, and the next submit-then-vote game gets
+it free.
+
+**The answer mode narrows to `choice` rather than gaining a fourth member.** The
+vote *is* a pick from a shuffled list. A fourth `AnswerMode` would have forced
+`blindtest.scoring.vote` and `quiz.scoring.vote` into both dictionaries —
+`scoringKey` is a cross product — for two strings that mean nothing. The writing
+phase belongs to the game, not the mode: the mode says how a round is answered,
+the game says what ends up on the board.
+
+**The vote pays no speed bonus**, and it is the only settle on the shelf without
+one. Voting quickly is voting without reading the board, which is the half of
+that round worth having.
+
+**The host screen is sent nothing at all** — its arm is `{ kind: 'lefake' }`,
+the second to end up empty and for a different reason from the bare buzzer's.
+Everyone in the room is looking at that screen while they write, so an answer
+rendered there is an answer on the wall. The brief had it carrying the question
+"so the host knows which line is not a lie"; they learn that at the tally, like
+everybody else. This came out of building the screen, not of reasoning about it.
+
+**Two shell bugs surfaced that belong to no game**, and both were invisible to
+the type-checker and to every test:
+
+- the socket keeps its last error until it reconnects, so a refusal from the
+  writing phase was still on screen under the board — the first game with two
+  phases in one round is the first place that could show;
+- react-aria sets a **native** custom validity from `isInvalid`, so a form
+  holding a refused field silently ignores `requestSubmit()`. The one refusal
+  this game is built around was therefore unrecoverable. Both are recorded in
+  `.claude/rules/`.
+
+`writtenPlayerIds` exists for a related reason: the shell's `answers` is
+projected from the attempts a *graded* round accumulates, and a lie is graded by
+nobody, so the count of who has written had to be the game's own.

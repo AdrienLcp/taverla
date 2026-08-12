@@ -68,6 +68,33 @@ export const questionLanguages = ['en', 'fr'] as const
 
 export const questionLanguageSchema = z.enum(questionLanguages)
 
+/**
+ * What any game drawing from the bank has to choose. It is shared because two
+ * games draw from it and ask it the same three things — not because a game's
+ * settings are expected to have a common shape. The quiz and Le Fake each keep
+ * their own durations beside these, and a third game that wants the bank on
+ * different terms takes what it needs rather than widening this.
+ */
+export const questionDrawSettingsSchema = z.object({
+  /**
+   * Whether the bank's adult themes are drawn from. Its own field rather than a
+   * seventh category, because the six are *subjects* and this is a rating: a
+   * question about a porn actress's first album is a celebrities question that
+   * happens to be adult, and putting the two axes in one row is what makes such
+   * a control read as a mistake.
+   *
+   * Off by default, and the host's alone to turn on — the room code is read
+   * aloud and anyone present can scan the QR, so they are the only one who knows
+   * who is in the room.
+   */
+  allowsAdultContent: z.boolean(),
+  /** Empty means every category, the same way an empty genre list means every genre. */
+  categories: z.array(questionCategorySchema),
+  language: questionLanguageSchema
+})
+
+export type QuestionDrawSettings = z.infer<typeof questionDrawSettingsSchema>
+
 export type QuestionCategory = z.infer<typeof questionCategorySchema>
 export type Question = z.infer<typeof questionSchema>
 export type QuestionPrompt = z.infer<typeof questionPromptSchema>

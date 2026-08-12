@@ -139,6 +139,19 @@ so the socket stays open and the form can retry on it.
 instead of borrowing a code that means something else. It should shrink to
 nothing as the stages in `docs/plans/` land.
 
+### An error outlives its moment, so the client forgets it on a phase change
+
+The socket keeps its last error until it reconnects, which is far longer than a
+message about a moment deserves. Le Fake is where that first hurt: its round has
+two collection phases, so `lie_is_the_answer` — refused while the room was
+writing — was still on screen under the board a minute later, reading as a
+refused *vote*.
+
+`useForgetErrorOnPhaseChange` clears it when `view.phase` turns over, and both
+connection hooks call it. A form that wants to know whether a refusal is *its
+own* checks that it has acted this round; before that, any error is somebody
+else's news.
+
 ## Related
 
 - `docs/realtime-protocol.md` — the wire format itself, with examples

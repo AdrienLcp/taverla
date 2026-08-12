@@ -29,11 +29,14 @@ import { findRoom } from '@/domain/room/room-store'
 import {
   applyVerdict,
   clearLockouts,
+  everyoneHasActed,
   everyoneIsDone,
   finishGame,
   isFinalRound,
   registerAnswer,
   registerBuzz,
+  registerLie,
+  registerVote,
   releaseBuzz,
   restartGame,
   revealRound,
@@ -56,6 +59,7 @@ import {
   armAutoAdvance,
   armRoundTimeout,
   beginRound,
+  closeLefakePhase,
   holdRoundTimeout,
   holdRoundWhileHostIsAway,
   resumeRoundForHost
@@ -304,6 +308,14 @@ export const createRoomSocketEvents = (
         answer(message, active, outbound, room)
         break
       }
+      case 'lefake.submit': {
+        writeLie(message, active, outbound, room)
+        break
+      }
+      case 'lefake.vote': {
+        castVote(message, active, outbound, room)
+        break
+      }
       case 'host.startRound': {
         start(outbound, room)
         break
@@ -487,6 +499,15 @@ export const createRoomSocketEvents = (
       return
     }
 
+    // The one game where "move on" is not always "reveal": a host pressing this
+    // over a room still writing wants the board up, not the round abandoned
+    // before anybody has voted on it.
+    if (room.round?.content.kind === 'lefake') {
+      closeLefakePhase(room)
+
+      return
+    }
+
     abandonRound(room.code)
     closeRound(room)
     broadcastRoom(room)
@@ -549,6 +570,98 @@ export const createRoomSocketEvents = (
       closeRound(room)
       broadcastRoom(room)
       armAutoAdvance(room)
+
+      return
+    }
+
+    broadcastRoom(room)
+  }
+
+  /**
+   * The two frames only Le Fake receives. Neither closes its phase on its own:
+   * that is `everyoneHasActed`, which is the same courtesy the simultaneous
+   * modes get — a table that has all finished should not sit watching a deadline
+   * it has nothing left to spend.
+   */
+  const writeLie = (
+    message: Extract<ClientMessage, { type: 'lefake.submit' }>,
+    active: Connection,
+    outbound: Outbound,
+    room: Room
+  ): void => {
+    if (active.playerId === null) {
+      sendError(outbound, {
+        code: 'invalid_message',
+        fatal: false,
+        message: 'Only a seated player writes a lie'
+      })
+
+      return
+    }
+
+    const registered = registerLie({
+      lie: message.lie,
+      now: Date.now(),
+      playerId: active.playerId,
+      room,
+      roundId: message.roundId
+    })
+
+    if (registered.status === 'failure') {
+      sendError(outbound, {
+        code: registered.error,
+        fatal: false,
+        message: 'That lie was not accepted'
+      })
+
+      return
+    }
+
+    if (everyoneHasActed(room)) {
+      closeLefakePhase(room)
+
+      return
+    }
+
+    broadcastRoom(room)
+  }
+
+  const castVote = (
+    message: Extract<ClientMessage, { type: 'lefake.vote' }>,
+    active: Connection,
+    outbound: Outbound,
+    room: Room
+  ): void => {
+    if (active.playerId === null) {
+      sendError(outbound, {
+        code: 'invalid_message',
+        fatal: false,
+        message: 'Only a seated player votes'
+      })
+
+      return
+    }
+
+    const registered = registerVote({
+      candidateId: message.candidateId,
+      now: Date.now(),
+      playerId: active.playerId,
+      room,
+      roundId: message.roundId
+    })
+
+    if (registered.status === 'failure') {
+      sendError(outbound, {
+        code: registered.error,
+        fatal: false,
+        message: 'That vote was not accepted'
+      })
+
+      return
+    }
+
+    if (everyoneHasActed(room)) {
+      closeLefakePhase(room)
 
       return
     }

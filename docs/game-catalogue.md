@@ -2,11 +2,12 @@
 
 The blind test is the first game, not the product. The product is a room full
 of phones pointed at one screen, and the blind test is what that room does
-first. This file exists so the decisions taken while finishing it do not have to
-be undone when the second game arrives.
+first. This file was written so the decisions taken while finishing it would not
+have to be undone when the second game arrived.
 
-Nothing here is scheduled. The blind test ships first, whole. What follows is a
-map of where the seams are, so that finishing it does not weld them shut.
+Four have arrived since, and the seams held. What follows is still a map rather
+than a schedule: the shapes below, the honest cost of each, and — the part worth
+re-reading — which seams are open and which were deliberately left welded.
 
 ## What the shell already is
 
@@ -42,9 +43,18 @@ of this shape is close to free.
 
 **2. Submit-then-vote.** Every phone types something, the screen reveals the
 answers, everyone votes. Needs a collection phase with a deadline, a reveal that
-does not leak authorship, and a vote tally. **This is the biggest reusable thing
-missing** — seven of the fourteen games left below want it, which is half the
-remaining catalogue behind one engine.
+does not leak authorship, and a vote tally. **This was the biggest reusable thing
+missing, and stage 16 built it** — six of the games left below still want it,
+which is most of what remains behind one engine that now exists.
+
+What Le Fake paid for, and what a second game of this shape inherits: the
+`voting` phase, a collection that closes on the last player or on a deadline, a
+board assembled from what the room wrote with duplicates merged, and a reveal
+that withholds authorship until the tally. What it did **not** generalise, on
+purpose: the board lives in `round.content`'s `lefake` arm and the tally in
+`@taverla/core/lefake/`. Generalising before there are two cases is the
+anti-pattern this file names three times — the second game is what earns the
+shared shape, and it is the one that will show which half was Le Fake's alone.
 
 **3. Hidden role.** Each player gets a private payload, then discussion, then a
 vote. Needs per-player private state (the role-scoped views are half of it) and
@@ -66,10 +76,10 @@ team on the player model and a turn owner.
 | **Quiz / trivia** | Buzz-first | — | **shipped** ([12](plans/12-trivia.md), [14](plans/14-question-languages.md)) |
 | **Lyrics blackout** — the line is missing, sing it | Buzz-first | Same as the blind test, different reveal | a session |
 | **Reflex race** — first to tap when the screen flips | Buzz-first | Almost nothing; it *is* the buzz | an evening |
-| **Le Fake** (Fibbage) — write a fake answer, fool the others | Submit-then-vote | Phase 2 in full | two sessions |
-| **Petit Bac** — a letter, six categories, type fast | Submit-then-vote | Phase 2, plus scoring by uniqueness | two sessions |
-| **Just One** — everyone writes one clue, duplicates cancel | Submit-then-vote | Phase 2, plus a clue-collision pass | a session after Fibbage |
-| **Qui a écrit ça ?** — answer a prompt, then guess the author | Submit-then-vote | Phase 2, plus authorship hiding | a session after Fibbage |
+| **Le Fake** (Fibbage) — write a fake answer, fool the others | Submit-then-vote | — | **shipped** ([stage 16](plans/16-le-fake.md)) |
+| **Petit Bac** — a letter, six categories, type fast | Submit-then-vote | Scoring by uniqueness | a session |
+| **Just One** — everyone writes one clue, duplicates cancel | Submit-then-vote | A clue-collision pass | a session |
+| **Qui a écrit ça ?** — answer a prompt, then guess the author | Submit-then-vote | Authorship survives the reveal, where Le Fake buries it | a session |
 | **Le curseur** (Wavelength) — a spectrum, a secret target, one clue | Submit-then-vote | A shared slider; the target is hidden from all but one | two sessions |
 | **Undercover** — same secret word for everyone but one | Hidden role | Per-player payloads, a talk phase, a vote | two sessions |
 | **Loup-garou** — the full night/day machine | Hidden role | Phase machine, timers, a narrator screen | the biggest on this list |
@@ -79,14 +89,14 @@ team on the player model and a turn owner.
 | **Time's Up** — three rounds, same cards, less and less speech | Team relay | Teams, turn owner, per-turn timer | two sessions |
 | **Bingo de soirée** — a grid of things that will happen tonight | Submit-then-vote | Almost nothing; grids and taps | an evening |
 
-If only one is built next, **Le Fake**. It pays for the submit-then-vote engine,
-and the six other games of that shape then cost a weekend each.
+Le Fake was the one that unlocked the most, and it shipped. Six games of that
+shape are left and each is now a session rather than two plus an engine, which
+is the whole return on having built it once.
 
-That is the answer to "which unlocks the most", and it is not the answer to
-"which is cheapest". **The cheapest is Reflex race**: an evening, and it needs
-nothing that does not exist — it is the buzz already built, with the screen
-flipping instead of a clip playing. Worth knowing they are different questions,
-because the cheap one adds a game to the shelf and the expensive one adds seven.
+**The cheapest is still Reflex race**: an evening, and it needs nothing that
+does not exist — it is the buzz already built, with the screen flipping instead
+of a clip playing. It was always a different question from "which unlocks the
+most", and now that the expensive one is paid for, cheap is the only axis left.
 
 ## The quiz, costed — and it needs no database
 

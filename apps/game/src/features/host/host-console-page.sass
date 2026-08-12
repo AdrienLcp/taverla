@@ -151,6 +151,25 @@
 
       color: var(--ink-muted)
 
+    // The board is what the room reads and argues over, so it is sized for the
+    // far side of a table rather than for the screen it happens to be on. The
+    // column is bounded because a line of five candidates spread across a
+    // twenty-one by nine display is a row nobody can scan.
+    .lie-board
+      display: flex
+      flex-direction: column
+      gap: var(--space-s)
+      list-style: none
+      width: min(900px, 100%)
+
+      li
+        @include typography.billboard
+
+        border-bottom: 1px solid var(--rule)
+        color: var(--ink)
+        padding-bottom: var(--space-s)
+        text-wrap: balance
+
     // Width driven by a CSS animation rather than a React timer: the round runs
     // for a duration the server already decided, and re-keying the element on a
     // resume is what restarts it after a buzz.

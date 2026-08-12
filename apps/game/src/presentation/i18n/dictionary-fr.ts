@@ -110,7 +110,7 @@ export const FR_DICTIONARY: Dictionary = {
     running: 'Pose ta question',
     scoring:
       'Le premier pouce répond à voix haute, et l’hôte dit si c’est bon. 1 point si c’est juste — et une mauvaise réponse te met hors-jeu jusqu’à ce que l’hôte te remette en jeu.',
-    tagline: 'Tes questions, et une course honnête au buzz.'
+    tagline: 'Tes questions, et une course au buzz.'
   },
   connection: {
     clock: '· horloge ±{milliseconds:number} ms',
@@ -128,10 +128,12 @@ export const FR_DICTIONARY: Dictionary = {
       unexpected_response: 'Le serveur a répondu quelque chose d’inattendu.',
       unreachable: 'Serveur injoignable. Réessaie dans un instant.'
     },
+    cannot_vote_for_own_lie: 'Celle-là est la tienne. Choisis-en une autre.',
     host_already_connected: 'Quelqu’un anime déjà ce salon.',
     host_only_action: 'Seul l’hôte peut faire ça.',
     internal_error: 'Quelque chose a cassé côté serveur.',
     invalid_message: 'Le serveur n’a pas compris ce message.',
+    lie_is_the_answer: 'C’est la vraie réponse. Invente autre chose.',
     music_source_unavailable: 'Le service musical ne répond pas.',
     nickname_taken: 'Ce pseudo est déjà pris.',
     no_content_available: 'Il ne reste rien à jouer. Change les réglages.',
@@ -251,6 +253,52 @@ export const FR_DICTIONARY: Dictionary = {
             other: 'Un code de salon fait {?} caractères.'
           }
         }
+      })
+    }
+  },
+  lefake: {
+    home: {
+      description:
+        'Un écran pose une question dont personne ne voit venir la réponse. Chacun en invente une fausse mais crédible, l’écran les affiche toutes à côté de la vraie, et la salle vote. Tu marques en trouvant la vraie — et à chaque joueur qui tombe dans la tienne.'
+    },
+    name: 'Le Fake',
+    reveal: {
+      fooled: defineTranslation('{count:plural}', {
+        plural: {
+          count: {
+            one: '{?} personne a mordu',
+            other: '{?} personnes ont mordu'
+          }
+        }
+      }),
+      found: defineTranslation('{count:plural}', {
+        plural: {
+          count: { one: '{?} l’a trouvée', other: '{?} l’ont trouvée' }
+        }
+      }),
+      nobody: 'Personne n’a écrit celle-là',
+      title: 'La vérité, c’était'
+    },
+    scoring:
+      'Chacun écrit une fausse réponse, puis la salle vote sur le tout. 2 points pour trouver la vraie, et 1 de plus par joueur qui tombe dans la tienne.',
+    tagline: 'Écris un mensonge. Fais mordre la table.',
+    vote: {
+      done: 'Ton vote est parti. On attend les autres…',
+      duration: 'Temps pour voter',
+      title: 'Laquelle est vraie ?',
+      waiting: defineTranslation('{count:plural}', {
+        plural: { count: { one: '{?} a voté', other: '{?} ont voté' } }
+      }),
+      yours: 'La tienne'
+    },
+    write: {
+      description:
+        'Quelque chose qu’ils croiront. La vraie réponse est refusée.',
+      duration: 'Temps pour écrire',
+      label: 'Ton mensonge',
+      sent: 'Ton mensonge est parti. On attend les autres…',
+      waiting: defineTranslation('{count:plural}', {
+        plural: { count: { one: '{?} a écrit', other: '{?} ont écrit' } }
       })
     }
   },

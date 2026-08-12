@@ -64,6 +64,10 @@ const toHostContent = ({
     }
   }
 
+  if (content.kind === 'lefake') {
+    return { kind: 'lefake' }
+  }
+
   return {
     audioUrl: content.track.previewUrl,
     kind: 'blindtest',
@@ -97,7 +101,7 @@ const toBaseView = ({
   isHostConnected,
   phase: room.phase,
   players: [...room.players.values()].map(toPublicPlayer),
-  round: room.round === null ? null : toRoundView(room.round),
+  round: room.round === null ? null : toRoundView({ round: room.round, youId }),
   settings: room.settings,
   yourVerdict:
     youId === null
@@ -119,7 +123,13 @@ const toPublicPlayer = (participant: Participant): PublicPlayer => ({
  * naming its fields would ship it — `codec.test.ts` is the net under that, and
  * this is the floor above it.
  */
-const toRoundView = (round: Round): RoundView => ({
+const toRoundView = ({
+  round,
+  youId
+}: {
+  round: Round
+  youId: PlayerId | null
+}): RoundView => ({
   activeBuzz:
     round.activeBuzz === null
       ? null
@@ -133,7 +143,7 @@ const toRoundView = (round: Round): RoundView => ({
     playerId
   })),
   awards: round.awards,
-  content: toContentView(round),
+  content: toContentView({ round, youId }),
   id: round.id,
   index: round.index,
   lockedOutPlayerIds: [...round.lockedOutPlayerIds],
@@ -158,11 +168,44 @@ const saidBy = (attempts: PlayerAttempts): string =>
     ? attempts.landed.join(' · ')
     : (attempts.lastMiss ?? '')
 
-const toContentView = (round: Round): RoundContent => {
+const toContentView = ({
+  round,
+  youId
+}: {
+  round: Round
+  youId: PlayerId | null
+}): RoundContent => {
   const content = round.content
 
   if (content.kind === 'buzzer') {
     return { kind: 'buzzer' }
+  }
+
+  if (content.kind === 'lefake') {
+    const { category, id, prompt } = content.question
+
+    return {
+      board:
+        content.board?.map((entry) => ({ id: entry.id, text: entry.text })) ??
+        null,
+      kind: 'lefake',
+      prompt: { category, id, prompt },
+      revealedBoard: round.revealed
+        ? (content.board?.map((entry) => ({
+            ...entry,
+            voterIds: content.votes
+              .filter((vote) => vote.candidateId === entry.id)
+              .map((vote) => vote.playerId)
+          })) ?? null)
+        : null,
+      votedPlayerIds: content.votes.map((vote) => vote.playerId),
+      writtenPlayerIds: content.lies.map((lie) => lie.playerId),
+      yourCandidateId:
+        youId === null
+          ? null
+          : (content.board?.find((entry) => entry.authorIds.includes(youId))
+              ?.id ?? null)
+    }
   }
 
   if (content.kind === 'quiz') {

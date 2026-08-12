@@ -2,6 +2,7 @@ import type React from 'react'
 import { useState } from 'react'
 import { Button as ReactAriaButton } from 'react-aria-components'
 
+import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
 import type {
   PlayerRoomView,
   RoomPhase,
@@ -17,11 +18,17 @@ import {
   type PlayerAnswer,
   TypedAnswer
 } from '@/features/player/answer-forms'
-import { blindtestContent, quizContent } from '@/helpers/round-content'
+import { LieForm, VoteBoard } from '@/features/player/lefake-forms'
+import {
+  blindtestContent,
+  lefakeContent,
+  quizContent
+} from '@/helpers/round-content'
 import { buzzFeedback } from '@/infrastructure/env'
 import { AskedQuestion } from '@/presentation/components/asked-question'
 import { Countdown } from '@/presentation/components/countdown'
 import { FloorClock } from '@/presentation/components/floor-clock'
+import { RevealedLieBoard } from '@/presentation/components/revealed-lie-board'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import {
@@ -32,21 +39,39 @@ import {
 
 import './player-round.sass'
 
-const ROUND_IS_RUNNING = new Set<RoomPhase>(['buzzed', 'countdown', 'playing'])
+const ROUND_IS_RUNNING = new Set<RoomPhase>([
+  'buzzed',
+  'countdown',
+  'playing',
+  'voting'
+])
 
 type PlayerRoundProps = {
   clock: ClockEstimate | null
+  /**
+   * The last refusal the socket carried. Only the two Le Fake forms read it: a
+   * buzz says why it is blocked through `findBuzzBlocker`, and a graded answer
+   * cannot be refused for anything the player could act on.
+   */
+  error: ProtocolErrorCode | null
   /** `false` from the socket means the frame was never written. */
   onAnswer: (answer: PlayerAnswer, roundId: string) => boolean
   /** `false` from the socket means the frame was never written. */
   onBuzz: (roundId: string) => boolean
+  /** `false` from the socket means the frame was never written. */
+  onSubmitLie: (lie: string, roundId: string) => boolean
+  /** `false` from the socket means the frame was never written. */
+  onVote: (candidateId: string, roundId: string) => boolean
   view: PlayerRoomView
 }
 
 export const PlayerRound: React.FC<PlayerRoundProps> = ({
   clock,
+  error,
   onAnswer,
   onBuzz,
+  onSubmitLie,
+  onVote,
   view
 }) => {
   const translate = useTranslate()
@@ -106,19 +131,53 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
     )
   }
 
+  if (view.phase === 'voting' && view.round !== null) {
+    const round = view.round
+
+    return (
+      <section className='player-round'>
+        <AskedQuestion prompt={lefakeContent(round)?.prompt ?? null} />
+        <VoteBoard
+          error={error}
+          onVote={(candidateId) => onVote(candidateId, round.id)}
+          round={round}
+          youId={view.youId}
+        />
+      </section>
+    )
+  }
+
   if (view.phase === 'playing' && view.round !== null) {
+    const round = view.round
+
     const answerWithRound = (answer: PlayerAnswer): boolean =>
-      view.round === null ? false : onAnswer(answer, view.round.id)
+      onAnswer(answer, round.id)
 
     // Here rather than inside the forms: the host console renders those too
     // when its owner has taken a seat, and it is already showing the question.
-    const prompt = quizContent(view.round)?.prompt ?? null
+    const prompt =
+      quizContent(round)?.prompt ?? lefakeContent(round)?.prompt ?? null
+
+    if (round.content.kind === 'lefake') {
+      return (
+        <section className='player-round'>
+          <AskedQuestion prompt={prompt} />
+          <LieForm
+            error={error}
+            key={round.id}
+            onSubmitLie={(lie) => onSubmitLie(lie, round.id)}
+            round={round}
+            youId={view.youId}
+          />
+        </section>
+      )
+    }
 
     if (view.settings.mode.kind === 'choice') {
       return (
         <section className='player-round'>
           <AskedQuestion prompt={prompt} />
-          <ChoiceAnswer onAnswer={answerWithRound} round={view.round} />
+          <ChoiceAnswer onAnswer={answerWithRound} round={round} />
         </section>
       )
     }
@@ -128,9 +187,9 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
         <section className='player-round'>
           <AskedQuestion prompt={prompt} />
           <TypedAnswer
-            key={view.round.id}
+            key={round.id}
             onAnswer={answerWithRound}
-            round={view.round}
+            round={round}
             verdict={view.yourVerdict}
           />
         </section>
@@ -262,6 +321,11 @@ const Revealed = ({
   const translate = useTranslate()
   const track = blindtestContent(round)?.revealedTrack ?? null
   const question = quizContent(round)?.revealedQuestion ?? null
+  const lieBoard = lefakeContent(round)?.revealedBoard ?? null
+
+  if (lieBoard !== null) {
+    return <RevealedLieBoard board={lieBoard} players={view.players} />
+  }
 
   if (track !== null) {
     return (

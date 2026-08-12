@@ -22,7 +22,7 @@ describes the code is worse than no plan.
 | [13 — The room comes first](13-room-first.md) | **done** | A room is opened before the game is chosen: `settings.game` goes nullable, and the picker moves onto the lobby stage |
 | [14 — Question languages](14-question-languages.md) | **done** | A second bank, 4 506 English questions, and the control that picks between them — defaulted to what the host reads, independent of it after |
 | [15 — Room social](15-room-social.md) | **dropped** | A chat in the room, and public rooms with a directory. Both evaluated and declined; the file holds why, and the smaller thing worth building in each case |
-| [16 — Le Fake](16-le-fake.md) | **next** | The fourth game: write a lie, fool the table. It buys the submit-then-vote phase seven of the remaining games want, and it runs on the quiz bank |
+| [16 — Le Fake](16-le-fake.md) | **done** | The fourth game: write a lie, fool the table. It bought the submit-then-vote phase seven of the remaining games want, on the quiz bank and for one new `RoomPhase` name |
 
 ## Order, and what can move
 

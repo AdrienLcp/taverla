@@ -8,6 +8,28 @@ one part.
 
 ### Features
 
+- **Le Fake is the fourth game on the shelf.** A question with a surprising
+  answer, everyone writes a convincing lie, the screen puts them all up beside
+  the truth, and the room votes. Two points for finding the real answer, and one
+  more for every player who falls for yours — the first game here where a wrong
+  answer is worth something, which is what keeps a table that does not know the
+  answer in the game
+- `[Shared]` It runs on the question bank the quiz already ships, so there is no
+  second download and nothing new to keep online. Two shapes of question are
+  filtered out because they cannot carry a round: one that names candidates the
+  room cannot see (*"which of these was cut from Melee?"*) and one whose answer
+  is a bare number, where every lie is another year and the vote goes back to
+  being trivia. That leaves 5 247 usable prompts across the two languages
+- `[Shared]` Two players who write the same lie become **one line credited to
+  both**, rather than the second being told to think of another. A lie that *is*
+  the answer is refused, and the player writes another — accepting it would put
+  the truth on the board twice and leave the vote with nothing to find
+- `[Shared]` A short table gets a full board: the question's own authored decoys
+  top it up to five lines, which beats demanding a fourth player
+- `[Game]` The host screen is told nothing the room cannot already see. Everyone
+  is looking at it while they write, so the answer reaches it the way it reaches
+  a phone — unlabelled on the board, then marked at the tally
+
 - **The quiz plays in English too**, on 4 506 questions from Open Trivia DB —
   human-verified, under the same CC BY-SA 4.0 as the French bank and bundled the
   same way, so neither language depends on anybody's uptime. The host picks the
@@ -111,6 +133,15 @@ one part.
 
 ### Fixes
 
+- `[Game]` A refusal no longer outlives the moment it was about. The socket kept
+  its last error until it reconnected, so a message about something the room had
+  stopped doing stayed on screen — visible for the first time in a game whose
+  round has two phases, where "that is the real answer" sat under the vote a
+  minute after it was written
+- `[Game]` A field the server refused can be used again. react-aria marks an
+  invalid field on the *form*, so a native submit of it silently did nothing —
+  the button looked alive and the press was swallowed. Typing now clears the
+  refusal, which is what a form should do anyway
 - `[Game]` The front door's tagline no longer runs under the corner menu. A
   centred column only clears that corner once the viewport is far wider than the
   column, so it collided at every width from a phone up to about 1 200px. The

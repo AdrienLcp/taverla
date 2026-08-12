@@ -19,7 +19,7 @@ import {
   waitFor
 } from './room-harness'
 
-vi.mock('@/infrastructure/quiz/question-bank', async () => {
+vi.mock('@/infrastructure/questions/question-bank', async () => {
   const { questionBankStub } = await import('./room-harness')
 
   return questionBankStub()

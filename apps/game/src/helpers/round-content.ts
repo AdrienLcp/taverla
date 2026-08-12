@@ -25,6 +25,11 @@ export const quizContent = (
 ): Extract<RoundContent, { kind: 'quiz' }> | null =>
   round?.content.kind === 'quiz' ? round.content : null
 
+export const lefakeContent = (
+  round: RoundView | null | undefined
+): Extract<RoundContent, { kind: 'lefake' }> | null =>
+  round?.content.kind === 'lefake' ? round.content : null
+
 /** The same over the half only the host is sent. */
 export const blindtestHostContent = (
   view: HostRoomView | null | undefined
@@ -35,6 +40,11 @@ export const quizHostContent = (
   view: HostRoomView | null | undefined
 ): Extract<HostRoundContent, { kind: 'quiz' }> | null =>
   view?.currentContent?.kind === 'quiz' ? view.currentContent : null
+
+export const lefakeHostContent = (
+  view: HostRoomView | null | undefined
+): Extract<HostRoundContent, { kind: 'lefake' }> | null =>
+  view?.currentContent?.kind === 'lefake' ? view.currentContent : null
 
 /**
  * Whether the host still holds what this round is judged against. A host who
@@ -49,7 +59,11 @@ export const holdsTheAnswer = (content: HostRoundContent): boolean => {
   switch (content.kind) {
     case 'blindtest':
       return content.track !== null
+    // Neither hands this screen an answer a seat could take away: the bare
+    // buzzer's question is the room's, and Le Fake's is judged by the server —
+    // and never rendered here at all, since everyone can see the host screen.
     case 'buzzer':
+    case 'lefake':
       return true
     case 'quiz':
       return content.question !== null

@@ -9,6 +9,15 @@ import {
 const BUZZER_ONLY = ['buzzer'] as const satisfies readonly AnswerMode[]
 
 /**
+ * Le Fake's round ends in a pick from a shuffled list, which is exactly what
+ * `choice` means — so it narrows to that rather than adding a fourth mode for
+ * itself. What is new there is the phase *before* the pick, and a phase belongs
+ * to the game: the mode says how a round is answered, the game says what ends up
+ * on the board.
+ */
+const CHOICE_ONLY = ['choice'] as const satisfies readonly AnswerMode[]
+
+/**
  * Which answer modes a game offers. The mode is the room's because the shell
  * reads it everywhere a round is answered and scored; what a game does is
  * narrow it, and the bare buzzer narrows it to one — four candidates and a
@@ -39,6 +48,8 @@ export const answerModesFor = (
       return answerModes
     case 'buzzer':
       return BUZZER_ONLY
+    case 'lefake':
+      return CHOICE_ONLY
   }
 }
 

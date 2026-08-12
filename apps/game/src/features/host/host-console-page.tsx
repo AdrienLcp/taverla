@@ -14,7 +14,11 @@ import {
   type PlayerAnswer,
   TypedAnswer
 } from '@/features/player/answer-forms'
-import { holdsTheAnswer, quizContent } from '@/helpers/round-content'
+import {
+  holdsTheAnswer,
+  lefakeContent,
+  quizContent
+} from '@/helpers/round-content'
 import { useHostConnection } from '@/infrastructure/messaging/use-host-connection'
 import { useRoomCodeParam } from '@/infrastructure/router/navigation'
 import {
@@ -218,9 +222,26 @@ const Stage = ({
 
     return (
       <div className='stage playing'>
-        {round.content.kind === 'quiz' ? (
+        {round.content.kind === 'quiz' && (
           <AskedQuestion prompt={quizContent(round)?.prompt ?? null} />
-        ) : (
+        )}
+        {/*
+          The prompt *and* a line saying what the room is doing with it: unlike
+          every other game, seeing the question here does not tell you what the
+          screen is waiting for.
+        */}
+        {round.content.kind === 'lefake' && (
+          <>
+            <AskedQuestion prompt={lefakeContent(round)?.prompt ?? null} />
+            <p className='now'>
+              {translate('lefake.write.waiting', {
+                count: lefakeContent(round)?.writtenPlayerIds.length ?? 0
+              })}
+            </p>
+          </>
+        )}
+        {(round.content.kind === 'blindtest' ||
+          round.content.kind === 'buzzer') && (
           <p className='now'>
             {translate(
               round.content.kind === 'buzzer'
@@ -252,6 +273,29 @@ const Stage = ({
             verdict={view.yourVerdict}
           />
         )}
+        <Scoreboard players={view.players} />
+      </div>
+    )
+  }
+
+  // The board on the big screen, which is where this game is actually played:
+  // the room reads it, argues about it, and votes on their phones.
+  if (view.phase === 'voting' && round != null) {
+    const board = lefakeContent(round)?.board ?? []
+
+    return (
+      <div className='stage playing'>
+        <AskedQuestion prompt={lefakeContent(round)?.prompt ?? null} />
+        <ul className='lie-board'>
+          {board.map((candidate) => (
+            <li key={candidate.id}>{candidate.text}</li>
+          ))}
+        </ul>
+        <p className='now'>
+          {translate('lefake.vote.waiting', {
+            count: lefakeContent(round)?.votedPlayerIds.length ?? 0
+          })}
+        </p>
         <Scoreboard players={view.players} />
       </div>
     )
