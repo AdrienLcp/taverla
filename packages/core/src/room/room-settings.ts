@@ -8,6 +8,7 @@ import {
 import type { Locale } from '@taverla/protocol/locale'
 import {
   DEFAULT_ROOM_SETTINGS,
+  type ModeSettings,
   type RoomSettings
 } from '@taverla/protocol/room'
 
@@ -29,9 +30,20 @@ const DEFAULT_ROUND_COUNT: Record<GameKind, number | null> = {
 }
 
 /**
+ * The three fields a game gets a say in, as one value: which game, how it is
+ * answered, and how long the evening runs. It is the seam `movedToGame` has
+ * always turned on, and naming it is what lets a *remembered* answer come
+ * through the same door the game's own defaults do.
+ */
+export type GameSetup = {
+  game: GameSettings
+  mode: ModeSettings
+  roundCount: RoomSettings['roundCount']
+}
+
+/**
  * What a freshly opened room is set to. The shell's defaults, with the three
- * fields the game gets a say in — which game, how it is answered, and how long
- * the evening runs.
+ * fields the game gets a say in.
  *
  * `null` is a room opened from the front door, where the code goes up before
  * anybody has decided what to play. It is the shell's defaults and nothing
@@ -48,12 +60,20 @@ export const roomSettingsFor = ({
 }): RoomSettings =>
   game === null
     ? DEFAULT_ROOM_SETTINGS
-    : {
-        ...DEFAULT_ROOM_SETTINGS,
-        game: openedGameSettings({ game, locale }),
-        mode: modeOfferedBy({ game, preferred: DEFAULT_ROOM_SETTINGS.mode }),
-        roundCount: DEFAULT_ROUND_COUNT[game]
-      }
+    : { ...DEFAULT_ROOM_SETTINGS, ...openedSetup({ game, locale }) }
+
+/** What a game answers before anybody has told it otherwise. */
+const openedSetup = ({
+  game,
+  locale
+}: {
+  game: GameKind
+  locale: Locale
+}): GameSetup => ({
+  game: openedGameSettings({ game, locale }),
+  mode: modeOfferedBy({ game, preferred: DEFAULT_ROOM_SETTINGS.mode }),
+  roundCount: DEFAULT_ROUND_COUNT[game]
+})
 
 /**
  * The game's own defaults, with the one field that cannot have a fixed one. A
@@ -80,28 +100,27 @@ const openedGameSettings = ({
  * take that game's answer, and the rest is the host's and survives: a countdown
  * they lengthened is not undone by changing their mind about the game.
  *
- * The three reset rather than carry, because carrying them is what put a room
- * on a blind test with no round limit that nobody could type an answer into —
- * the bare buzzer's settings, worn by a game that has its own.
+ * The three never carry over from the outgoing game, because carrying them is
+ * what put a room on a blind test with no round limit that nobody could type an
+ * answer into — the bare buzzer's settings, worn by a game that has its own.
+ * What they may carry from is this host's *last evening on the incoming game*,
+ * which is a different thing entirely and the only reason `remembered` exists.
  */
 export const movedToGame = ({
   game,
   locale,
+  remembered,
   settings
 }: {
   game: GameKind
   locale: Locale
+  /** What this host last left this game set to, or `null` if they never have. */
+  remembered: GameSetup | null
   settings: RoomSettings
-}): RoomSettings => {
-  const opened = roomSettingsFor({ game, locale })
-
-  return {
-    ...settings,
-    game: opened.game,
-    mode: opened.mode,
-    roundCount: opened.roundCount
-  }
-}
+}): RoomSettings => ({
+  ...settings,
+  ...(remembered ?? openedSetup({ game, locale }))
+})
 
 /**
  * Whether the change would alter what a round already under way is *built on*.

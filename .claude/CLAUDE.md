@@ -187,6 +187,15 @@ string written into a component is a bug, not a shortcut — see
   minutes so a reload keeps the game; closing is what says otherwise
 - **Session id** — minted by the client, stored per room and role; what lets a
   device that locked its screen come back to the same seat
+- **The host's setup** — `HostPreferences`, stored on the console's own machine
+  and split on the seam `movedToGame` turns on. A game answers three of the
+  room's settings — `game`, `mode`, `roundCount`, named together as `GameSetup` —
+  so those are remembered *per game*; everything no game answers is remembered
+  once and survives every switch. It is applied by the console, over what the
+  door decided, as one `host.updateSettings` in the **lobby** and only on the
+  first view it draws: a mid-game reload must re-apply nothing, because the
+  server would refuse the three settings a round is built on and the rest would
+  rearrange somebody's evening between two rounds
 
 ## The blind test is the first game, not the product
 

@@ -146,6 +146,25 @@ one part.
   up none: every other interactive element already comes from react-aria, and
   the only hand-written `role` attributes are live regions on paragraphs.
 
+- `[Game]` **A host's setup survives the room it was made in.** Every setting the
+  console can change is kept on that machine, so the next party opens on last
+  week's evening instead of on the defaults — the countdown, chaining rounds, how
+  many rounds, the answer mode, the clip length, the difficulty, the question
+  language and the categories. Nothing travels: it is stored per browser, like
+  the volume, and a room a host opens is set up from their own screen
+- `[Shared]` **A game answers three of them, so those are remembered per game.**
+  Which game, how it is answered and how many rounds are the game's to say — five
+  rounds of Le Fake is an evening where five of the quiz is a warm-up — so
+  choosing Le Fake restores what Le Fake was left on and choosing the quiz
+  restores the quiz's. Everything no game answers is remembered once and survives
+  every switch: a countdown you lengthened is not undone by changing your mind
+  about what to play. A game never played still opens on its own defaults, with
+  the host's countdown over the top
+- `[Game]` It only ever applies to a room in its **lobby**, and only to the first
+  screen the console draws. A console that reloads in the middle of a game
+  re-applies nothing — the server refuses the three settings a round is built on,
+  and the rest would be somebody's evening quietly rearranged between two rounds
+
 ### Improvements
 
 - `[Game]` **The question banks are credited on a page of their own**, reachable

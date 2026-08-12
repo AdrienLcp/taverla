@@ -3,6 +3,7 @@ import type React from 'react'
 import type { HostRoomView, RoomSettings } from '@taverla/protocol/room'
 import type { TrackSource } from '@taverla/protocol/track'
 
+import type { HostPreferences } from '@taverla/core/room/host-preferences'
 import { isRoundInPlay } from '@taverla/core/room/room-phase'
 import {
   type SettingsSummaryPart,
@@ -30,6 +31,8 @@ type SetupFoldProps = {
   onDraftSource: (source: TrackSource | null) => void
   onSettingsChange: (settings: RoomSettings) => void
   onTakeSeat: (nickname: string) => void
+  /** What this host last left each game set to, so picking one restores it. */
+  preferences: HostPreferences | null
   /** The nickname the host is playing under, or `null` while they only run the room. */
   seatNickname: string | null
   view: HostRoomView
@@ -50,6 +53,7 @@ export const SetupFold: React.FC<SetupFoldProps> = ({
   onDraftSource,
   onSettingsChange,
   onTakeSeat,
+  preferences,
   seatNickname,
   view
 }) => {
@@ -97,6 +101,7 @@ export const SetupFold: React.FC<SetupFoldProps> = ({
         <GamePicker
           isDisabled={!isLive || roundInPlay}
           onChange={onSettingsChange}
+          preferences={preferences}
           settings={view.settings}
         />
       )}

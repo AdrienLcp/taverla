@@ -56,6 +56,7 @@ describe('movedToGame', () => {
     const moved = movedToGame({
       game: 'blindtest',
       locale: 'fr',
+      remembered: null,
       settings: onTheBuzzer
     })
 
@@ -68,6 +69,7 @@ describe('movedToGame', () => {
     const moved = movedToGame({
       game: 'blindtest',
       locale: 'fr',
+      remembered: null,
       settings: { ...onTheBuzzer, autoAdvanceMs: 8_000, countdownMs: 10_000 }
     })
 
@@ -79,10 +81,33 @@ describe('movedToGame', () => {
     const moved = movedToGame({
       game: 'buzzer',
       locale: 'fr',
+      remembered: null,
       settings: roomSettingsFor({ game: 'blindtest', locale: 'fr' })
     })
 
     expect(moved.mode.kind).toBe('buzzer')
+  })
+
+  // The one thing that may carry into a switch, and it comes from this host's
+  // last evening on the incoming game rather than from the outgoing one.
+  it('[room-settings] takes what the host last left this game set to', () => {
+    const moved = movedToGame({
+      game: 'blindtest',
+      locale: 'fr',
+      remembered: {
+        game: { ...DEFAULT_BLINDTEST_SETTINGS, difficulty: 'obscure' },
+        mode: DEFAULT_MODE_SETTINGS.choice,
+        roundCount: 30
+      },
+      settings: onTheBuzzer
+    })
+
+    expect(moved.mode).toEqual(DEFAULT_MODE_SETTINGS.choice)
+    expect(moved.roundCount).toBe(30)
+    expect(moved.game).toEqual({
+      ...DEFAULT_BLINDTEST_SETTINGS,
+      difficulty: 'obscure'
+    })
   })
 })
 

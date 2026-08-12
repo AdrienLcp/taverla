@@ -3,9 +3,13 @@ import { useCallback, useState } from 'react'
 import type { ClientMessage } from '@taverla/protocol/client-message'
 import { roundDurationMsOf } from '@taverla/protocol/game'
 import type { RoomCode } from '@taverla/protocol/identifiers'
-import type { HostRoomView } from '@taverla/protocol/room'
+import type { HostRoomView, RoomSettings } from '@taverla/protocol/room'
 import type { TrackSource } from '@taverla/protocol/track'
 
+import {
+  type HostPreferences,
+  rememberSettings
+} from '@taverla/core/room/host-preferences'
 import { isGameInPlay } from '@taverla/core/room/room-phase'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
@@ -23,7 +27,9 @@ import {
 import { useHostConnection } from '@/infrastructure/messaging/use-host-connection'
 import { useRoomCodeParam } from '@/infrastructure/router/navigation'
 import {
+  readStoredHostPreferences,
   readStoredVolume,
+  writeStoredHostPreferences,
   writeStoredVolume
 } from '@/infrastructure/storage/preferences-storage'
 import { forgetSessionId } from '@/infrastructure/storage/session-storage'
@@ -45,6 +51,7 @@ import { LobbyStage } from './lobby-stage'
 import { RevealPanel } from './reveal-panel'
 import { useRoundAudio } from './round-audio'
 import { SetupFold } from './setup-fold'
+import { useRestoreStoredSetup } from './use-restore-stored-setup'
 import { VerdictPanel } from './verdict-panel'
 
 import './host-console-page.sass'
@@ -73,11 +80,32 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
   )
   const [volume, setVolume] = useState(readStoredVolume)
   const [draftSource, setDraftSource] = useState<TrackSource | null>(null)
+  const [preferences, setPreferences] = useState(readStoredHostPreferences)
 
   useReportConnection({ clock, status })
   usePhaseField(view?.phase ?? null)
   const { unlock } = useRoundAudio({ clock, view, volume })
   const isLive = status === 'open'
+
+  // Every way the console has of changing a setting comes through here, so what
+  // the next room opens on is whatever this one was last left on. The stored
+  // value is re-read rather than taken from state: two controls pressed in one
+  // tick would otherwise have the second overwrite the first's.
+  const changeSettings = useCallback(
+    (settings: RoomSettings) => {
+      const remembered = rememberSettings({
+        preferences: readStoredHostPreferences(),
+        settings
+      })
+
+      writeStoredHostPreferences(remembered)
+      setPreferences(remembered)
+      send({ settings, type: 'host.updateSettings' })
+    },
+    [send]
+  )
+
+  useRestoreStoredSetup({ onRestore: changeSettings, preferences, view })
 
   const endGame = useCallback(() => {
     send({ type: 'host.endGame' })
@@ -132,6 +160,8 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
         clock={clock}
         isLive={isLive}
         isSeated={seatNickname !== null}
+        onSettingsChange={changeSettings}
+        preferences={preferences}
         roomCode={roomCode}
         send={send}
         view={view}
@@ -161,12 +191,9 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
                 const game = view.settings.game
 
                 if (draftSource !== null && game?.kind === 'blindtest') {
-                  send({
-                    settings: {
-                      ...view.settings,
-                      game: { ...game, source: draftSource }
-                    },
-                    type: 'host.updateSettings'
+                  changeSettings({
+                    ...view.settings,
+                    game: { ...game, source: draftSource }
                   })
                 }
               }}
@@ -175,9 +202,7 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
             />
             <HostControls
               isLive={isLive}
-              onSettingsChange={(settings) => {
-                send({ settings, type: 'host.updateSettings' })
-              }}
+              onSettingsChange={changeSettings}
               onVolumeChange={(next) => {
                 setVolume(next)
                 writeStoredVolume(next)
@@ -189,10 +214,9 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
               draftSource={draftSource}
               isLive={isLive}
               onDraftSource={setDraftSource}
-              onSettingsChange={(settings) => {
-                send({ settings, type: 'host.updateSettings' })
-              }}
+              onSettingsChange={changeSettings}
               onTakeSeat={setSeatNickname}
+              preferences={preferences}
               seatNickname={seatNickname}
               view={view}
             />
@@ -207,6 +231,9 @@ type StageProps = {
   clock: ClockEstimate | null
   isLive: boolean
   isSeated: boolean
+  onSettingsChange: (settings: RoomSettings) => void
+  /** What this host last left each game set to, for the lobby's picker. */
+  preferences: HostPreferences | null
   roomCode: RoomCode
   send: (message: ClientMessage) => boolean
   view: HostRoomView | null
@@ -216,6 +243,8 @@ const Stage = ({
   clock,
   isLive,
   isSeated,
+  onSettingsChange,
+  preferences,
   roomCode,
   send,
   view
@@ -375,6 +404,13 @@ const Stage = ({
   }
 
   return (
-    <LobbyStage isLive={isLive} roomCode={roomCode} send={send} view={view} />
+    <LobbyStage
+      isLive={isLive}
+      onSettingsChange={onSettingsChange}
+      preferences={preferences}
+      roomCode={roomCode}
+      send={send}
+      view={view}
+    />
   )
 }

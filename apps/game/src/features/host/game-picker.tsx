@@ -3,6 +3,10 @@ import type React from 'react'
 import { shelvedGames } from '@taverla/protocol/game'
 import type { RoomSettings } from '@taverla/protocol/room'
 
+import {
+  type HostPreferences,
+  rememberedSetupFor
+} from '@taverla/core/room/host-preferences'
 import { movedToGame } from '@taverla/core/room/room-settings'
 import { isShelvedGame } from '@taverla/core/room/shelved-game'
 
@@ -14,6 +18,8 @@ type GamePickerProps = {
   /** The socket is closed, or a round is under way and the server would refuse the switch. */
   isDisabled: boolean
   onChange: (settings: RoomSettings) => void
+  /** What this host last left each game set to, or `null` if they never set anything. */
+  preferences: HostPreferences | null
   settings: RoomSettings
 }
 
@@ -26,6 +32,7 @@ type GamePickerProps = {
 export const GamePicker: React.FC<GamePickerProps> = ({
   isDisabled,
   onChange,
+  preferences,
   settings
 }) => {
   const { locale, translate } = useI18n()
@@ -39,7 +46,14 @@ export const GamePicker: React.FC<GamePickerProps> = ({
         // does not offer, so a room left on the old one between two presses
         // would be a round nobody could answer.
         if (isShelvedGame(next)) {
-          onChange(movedToGame({ game: next, locale, settings }))
+          onChange(
+            movedToGame({
+              game: next,
+              locale,
+              remembered: rememberedSetupFor({ game: next, preferences }),
+              settings
+            })
+          )
         }
       }}
       options={shelvedGames.map((game) => ({

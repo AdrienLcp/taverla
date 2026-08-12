@@ -1,14 +1,39 @@
+import { z } from 'zod'
+
+import { gameKindSchema, gameSettingsSchema } from '@taverla/protocol/game'
 import { type Nickname, nicknameSchema } from '@taverla/protocol/identifiers'
 import type { Locale } from '@taverla/protocol/locale'
+import { modeSettingsSchema, roomSettingsSchema } from '@taverla/protocol/room'
 
 import { isLocale } from '@taverla/core/i18n/locale'
+import type { HostPreferences } from '@taverla/core/room/host-preferences'
 
 import { isThemePreference, type ThemePreference } from '@/helpers/theme'
 
+const HOST_SETUP_KEY = 'taverla:host-setup'
 const LOCALE_KEY = 'taverla:locale'
 const NICKNAME_KEY = 'taverla:nickname'
 const THEME_KEY = 'taverla:theme'
 const VOLUME_KEY = 'taverla:volume'
+
+/**
+ * Composed out of the protocol's own schemas rather than restated, so a setting
+ * that changes shape on the wire stops parsing here instead of being restored
+ * into a room that no longer accepts it. `omit` is what keeps the two halves
+ * from drifting: whatever the room grows that no game answers is remembered
+ * without an edit.
+ */
+const hostPreferencesSchema = z.object({
+  games: z.partialRecord(
+    gameKindSchema,
+    z.object({
+      game: gameSettingsSchema,
+      mode: modeSettingsSchema,
+      roundCount: roomSettingsSchema.shape.roundCount
+    })
+  ),
+  room: roomSettingsSchema.omit({ game: true, mode: true, roundCount: true })
+})
 
 export const DEFAULT_VOLUME = 0.8
 
@@ -72,6 +97,42 @@ export const readStoredVolume = (): number => {
 
 export const writeStoredVolume = (volume: number): void => {
   write(VOLUME_KEY, String(volume))
+}
+
+/**
+ * How this host left the last room they ran, so the next one opens on it rather
+ * than on the shell's defaults.
+ *
+ * `null` is a host who has never changed a setting, and it is deliberately not
+ * "the defaults": the caller skips the restore entirely instead of opening every
+ * room ever with a frame that says nothing. A blob that no longer parses is the
+ * same answer — a shape this build cannot read is worth less than the defaults
+ * it would replace.
+ */
+export const readStoredHostPreferences = (): HostPreferences | null => {
+  const stored = read(HOST_SETUP_KEY)
+
+  if (stored === null) {
+    return null
+  }
+
+  const parsed = hostPreferencesSchema.safeParse(parseJson(stored))
+
+  return parsed.success ? parsed.data : null
+}
+
+export const writeStoredHostPreferences = (
+  preferences: HostPreferences
+): void => {
+  write(HOST_SETUP_KEY, JSON.stringify(preferences))
+}
+
+const parseJson = (raw: string): unknown => {
+  try {
+    return JSON.parse(raw)
+  } catch {
+    return null
+  }
 }
 
 const read = (key: string): string | null => {
