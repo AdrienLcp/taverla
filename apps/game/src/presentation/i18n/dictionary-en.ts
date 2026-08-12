@@ -111,7 +111,7 @@ export const EN_DICTIONARY = defineTranslations({
     running: 'Ask away',
     scoring:
       'First thumb answers out loud, and the host says right or wrong. A point for right — and a wrong answer sits you out until the host lets you back in.',
-    tagline: 'Your questions, and an honest race for the floor.'
+    tagline: 'Your questions, and a race to the buzzer.'
   },
   connection: {
     clock: '· clock ±{milliseconds:number} ms',
