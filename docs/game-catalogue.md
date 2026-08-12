@@ -43,7 +43,8 @@ of this shape is close to free.
 **2. Submit-then-vote.** Every phone types something, the screen reveals the
 answers, everyone votes. Needs a collection phase with a deadline, a reveal that
 does not leak authorship, and a vote tally. **This is the biggest reusable thing
-missing** — six of the games below want it.
+missing** — seven of the fourteen games left below want it, which is half the
+remaining catalogue behind one engine.
 
 **3. Hidden role.** Each player gets a private payload, then discussion, then a
 vote. Needs per-player private state (the role-scoped views are half of it) and
@@ -79,10 +80,13 @@ team on the player model and a turn owner.
 | **Bingo de soirée** — a grid of things that will happen tonight | Submit-then-vote | Almost nothing; grids and taps | an evening |
 
 If only one is built next, **Le Fake**. It pays for the submit-then-vote engine,
-and five other games then cost a weekend each.
+and the six other games of that shape then cost a weekend each.
 
-That is the answer to "which unlocks the most". It is not the answer to "which
-is cheapest", and the quiz is cheap enough to be worth stating separately.
+That is the answer to "which unlocks the most", and it is not the answer to
+"which is cheapest". **The cheapest is Reflex race**: an evening, and it needs
+nothing that does not exist — it is the buzz already built, with the screen
+flipping instead of a clip playing. Worth knowing they are different questions,
+because the cheap one adds a game to the shelf and the expensive one adds seven.
 
 ## The quiz, costed — and it needs no database
 
