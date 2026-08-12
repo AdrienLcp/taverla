@@ -119,6 +119,16 @@ export const FR_DICTIONARY: Dictionary = {
     open: 'En direct',
     refused: 'Déconnecté'
   },
+  credits: {
+    openquizzdb:
+      'Ses rubriques ont été rattachées aux six sujets utilisés ici, ses anecdotes conservées comme la ligne affichée une fois la réponse dévoilée, et ses questions classées adulte signalées pour qu’un hôte puisse les laisser de côté. Les questions qui ne portaient pas exactement trois mauvaises réponses ont été écartées.',
+    opentdb:
+      'Son texte arrive encodé en HTML et a été décodé, ses catégories ont été rattachées aux six sujets utilisés ici, et les questions qui ne portaient pas exactement trois mauvaises réponses ont été écartées.',
+    shareAlike:
+      'La banque assemblée est diffusée sous la même licence, et le code qui l’assemble est ouvert.',
+    title: 'Crédits',
+    whatChanged: 'Ce qu’on a changé'
+  },
   error: {
     already_buzzed: 'Quelqu’un a été plus rapide.',
     api: {
@@ -305,9 +315,7 @@ export const FR_DICTIONARY: Dictionary = {
   menu: {
     build: 'Version {build}',
     home: 'Accueil',
-    label: 'Menu',
-    questions: 'Questions de {author} pour',
-    questionsLicence: ', sous'
+    label: 'Menu'
   },
   notFound: {
     back: 'Retour au départ',

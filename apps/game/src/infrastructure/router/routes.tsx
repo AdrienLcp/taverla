@@ -19,6 +19,16 @@ export const router = createBrowserRouter([
           Component: (await import('@/features/home/home-page')).HomePage
         })
       },
+      // Before `:game` to read in the order it resolves, though the ranking
+      // does not depend on it: react-router prefers a static segment to a
+      // dynamic one wherever it is declared.
+      {
+        lazy: async () => ({
+          Component: (await import('@/features/credits/credits-page'))
+            .CreditsPage
+        }),
+        path: 'credits'
+      },
       {
         lazy: async () => ({
           Component: (await import('@/features/shelf/game-home-page'))

@@ -99,6 +99,13 @@ one part.
 
 ### Improvements
 
+- `[Game]` **The question banks are credited on a page of their own**, reachable
+  from the menu, instead of two paragraphs of small print inside the popover you
+  open to switch language mid-game. CC BY-SA 4.0 names a link to a resource
+  holding the required information as a reasonable way to satisfy attribution,
+  and the page is the only place with room for the parts that were missing: what
+  the ingestion changed about each bank — which the licence asks for
+  unconditionally — and the licence the assembled bank is itself shared under
 - `[Server]` **Ticking no subject now mixes them.** It always meant "every
   subject" and always behaved as "every question", which are the same sentence
   only when a bank is flat — and neither is: a room got a video-game question

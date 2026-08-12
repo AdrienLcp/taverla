@@ -1,0 +1,57 @@
+@use '../../presentation/styles/layout'
+@use '../../presentation/styles/typography'
+
+@layer components
+  .credits-page
+    @include layout.screen
+
+    gap: var(--space-xl)
+    justify-content: center
+    padding-block-start: var(--menu-block-inset)
+
+    h1
+      @include typography.billboard
+
+    .banks
+      display: flex
+      flex-direction: column
+      gap: var(--space-xl)
+      list-style: none
+
+      li
+        display: flex
+        flex-direction: column
+        gap: var(--space-3xs)
+
+    .source
+      @include typography.title
+
+    .author,
+    .licence
+      @include typography.body
+
+      color: var(--ink-muted)
+
+    // The indication the licence asks for, set as a label so it reads as the
+    // heading of what follows rather than as another line about the source.
+    .what-changed
+      @include typography.label
+
+      color: var(--ink-muted)
+      padding-block-start: var(--space-s)
+
+    // The measure goes on the prose rather than on the page, the way the front
+    // door's pitch does: the column itself grows with the viewport because the
+    // type does, and only the sentences hold a line length worth reading.
+    .changes,
+    .share-alike
+      @include typography.body
+
+      color: var(--ink-muted)
+      max-width: 60ch
+      text-wrap: pretty
+
+    .share-alike
+      border-top: 1px solid var(--rule)
+      padding-block-start: var(--space-m)
+      width: 100%

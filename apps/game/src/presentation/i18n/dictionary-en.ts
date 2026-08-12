@@ -120,6 +120,22 @@ export const EN_DICTIONARY = defineTranslations({
     open: 'Live',
     refused: 'Disconnected'
   },
+  /**
+   * These two sentences are not blurb. CC BY-SA 4.0 §3(a)(1)(B) asks that a
+   * modification be indicated, and it is the one item on that list owed
+   * whatever the upstream supplied — so each has to stay true to what the
+   * ingestion in `apps/server/scripts/` actually does to that bank.
+   */
+  credits: {
+    openquizzdb:
+      'Its rubrics were mapped onto the six subjects used here, its anecdotes kept as the line shown once an answer is public, and its adult-rated questions marked so a host can leave them out. Questions that did not carry exactly three wrong answers were left behind.',
+    opentdb:
+      'Its text arrives HTML-encoded and was decoded, its categories were mapped onto the six subjects used here, and questions that did not carry exactly three wrong answers were left behind.',
+    shareAlike:
+      'The assembled bank is shared under the same licence, and the code that assembles it is open.',
+    title: 'Credits',
+    whatChanged: 'What we changed'
+  },
   error: {
     already_buzzed: 'Someone got there first.',
     api: {
@@ -300,14 +316,7 @@ export const EN_DICTIONARY = defineTranslations({
   menu: {
     build: 'Build {build}',
     home: 'Home',
-    label: 'Menu',
-    /**
-     * A sentence broken around two links rather than a list of names joined by
-     * separators: an interpunct that lands at the start of a wrapped line reads
-     * as a bullet. The author's name is theirs and is never translated.
-     */
-    questions: 'Questions by {author} for',
-    questionsLicence: ', under'
+    label: 'Menu'
   },
   notFound: {
     back: 'Back to the start',

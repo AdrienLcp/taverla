@@ -16,7 +16,7 @@ import {
   type ThemePreference
 } from '@/helpers/theme'
 import { fetchHealth } from '@/infrastructure/api/taverla-api'
-import { joinPath } from '@/infrastructure/router/navigation'
+import { creditsPath, joinPath } from '@/infrastructure/router/navigation'
 import { useConnection } from '@/presentation/connection/connection-provider'
 import { useI18n } from '@/presentation/i18n/i18n-provider'
 import { LANGUAGE_NAMES } from '@/presentation/i18n/language-names'
@@ -39,40 +39,6 @@ const THEME_KEYS: Record<ThemePreference, PlainTranslationKey> = {
   light: 'preferences.theme.light',
   system: 'preferences.theme.system'
 }
-
-const LICENCE = {
-  name: 'CC BY-SA 4.0',
-  url: 'https://creativecommons.org/licenses/by-sa/4.0/'
-}
-
-/**
- * CC BY-SA asks that the credit travel with the work, and the questions ship
- * bundled with the server rather than being fetched from anyone — so nothing
- * else in the product would ever name them. It sits in the menu because that is
- * the one piece of chrome on every screen, and because a credit belongs in the
- * small print rather than on the reveal, where it would take the loudest moment
- * of the round ten times a game to say the same thing.
- *
- * One entry per language, because the bank is written in each rather than
- * translated from one into the other, and the two halves have different authors.
- * Both are named whatever the room is playing: the credit is for the data that
- * shipped, not for the rows a given evening happened to draw.
- *
- * It mirrors the `attributions` header of `question-bank.json`, which is the
- * machine-readable copy that travels with the data itself.
- */
-const QUESTION_CREDITS = [
-  {
-    author: 'Philippe Bresoux',
-    source: 'OpenQuizzDB',
-    sourceUrl: 'https://www.openquizzdb.org'
-  },
-  {
-    author: 'PIXELTAIL GAMES LLC',
-    source: 'Open Trivia DB',
-    sourceUrl: 'https://opentdb.com'
-  }
-]
 
 /**
  * The one piece of chrome on every screen, including the ones a phone reaches
@@ -167,20 +133,18 @@ export const AppMenu = () => {
                   {translate('menu.home')}
                 </Link>
 
-                {QUESTION_CREDITS.map((credit) => (
-                  <p className='credit' key={credit.source}>
-                    {translate('menu.questions', { author: credit.author })}{' '}
-                    <TextLink href={credit.sourceUrl} target='_blank'>
-                      {credit.source}
-                    </TextLink>
-                    {translate('menu.questionsLicence')}{' '}
-                    <span className='fragment'>
-                      <TextLink href={LICENCE.url} target='_blank'>
-                        {LICENCE.name}
-                      </TextLink>
-                    </span>
-                  </p>
-                ))}
+                {/*
+                  The credit itself is a page. CC BY-SA §3(a)(2) names a link to
+                  a resource holding the required information as a reasonable
+                  way to satisfy attribution, and the list it asks for is longer
+                  than what anybody should meet while opening this to switch
+                  language mid-game.
+                */}
+                <p className='credit'>
+                  <TextLink href={creditsPath} onPress={close}>
+                    {translate('credits.title')}
+                  </TextLink>
+                </p>
 
                 {build !== null && (
                   <p className='build'>{translate('menu.build', { build })}</p>
