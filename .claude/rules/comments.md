@@ -1,3 +1,10 @@
+---
+description: The default is zero — a comment carries a fact absent from the code
+paths:
+  - "**/*.ts"
+  - "**/*.tsx"
+---
+
 # Comments: the default is zero
 
 A comment is not documentation. It is an admission that the code could not say

@@ -1,3 +1,11 @@
+---
+description: The wire contract — role-scoped unions, anti-cheat strip, server-owned time
+paths:
+  - "packages/protocol/**"
+  - "apps/server/src/**"
+  - "apps/game/src/infrastructure/messaging/**"
+---
+
 # The realtime protocol
 
 Everything that happens during a game is a WebSocket frame described in

@@ -1,3 +1,10 @@
+---
+description: const arrows, inline type imports, null is an absence never a state
+paths:
+  - "**/*.ts"
+  - "**/*.tsx"
+---
+
 # Code Style: const, arrow functions, imports
 
 ## Variables: `const` by default

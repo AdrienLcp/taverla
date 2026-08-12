@@ -1,3 +1,10 @@
+---
+description: Layers, the index.html cascade order, tokens over SASS variables
+paths:
+  - "**/*.sass"
+  - "apps/game/index.html"
+---
+
 # SASS architecture
 
 Indented `.sass`, one file per component, co-located with the `.tsx` that

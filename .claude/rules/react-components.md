@@ -1,3 +1,9 @@
+---
+description: React components — react-aria wrappers, the compiler owns memoization, props JSDoc
+paths:
+  - "**/*.tsx"
+---
+
 # React Component Conventions
 
 ## When a component is worth splitting — and when its length is the point

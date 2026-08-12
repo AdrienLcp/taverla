@@ -1,3 +1,12 @@
+---
+description: Strings live in a dictionary, colours in both palettes — never in a component
+paths:
+  - "**/*.tsx"
+  - "**/*.sass"
+  - "packages/core/src/i18n/**"
+  - "packages/protocol/src/locale.ts"
+---
+
 # Strings and colours
 
 Two rules, and they have the same shape: **nothing user-visible is written where

@@ -1,3 +1,11 @@
+---
+description: Bracketed tags, mutation checks, the socket harness, the three journeys
+paths:
+  - "**/*.test.ts"
+  - "e2e/**"
+  - "apps/server/src/__tests__/**"
+---
+
 # Tests
 
 Vitest in plain Node for the rules and the sockets, Playwright for the two

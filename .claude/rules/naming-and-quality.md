@@ -1,3 +1,11 @@
+---
+description: Name a new symbol on its merits, not to match a badly named neighbour — and offer to rename the neighbour
+paths:
+  - "apps/**/src/**"
+  - "packages/**/src/**"
+  - "scripts/**"
+---
+
 # Naming & quality over legacy consistency
 
 ## Don't match an existing pattern if it's suboptimal

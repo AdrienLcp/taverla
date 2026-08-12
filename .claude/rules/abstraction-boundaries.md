@@ -1,11 +1,20 @@
+---
+description: Which module may import which external library
+paths:
+  - "apps/**/src/**"
+  - "packages/**/src/**"
+---
+
 # Abstraction boundaries
 
 **Abstract capabilities, not libraries.** The repository, the adapter wrapping
 an SDK, the design-system component — each of those already IS the boundary
 between the application and an external library. Do not stack a second, thinner
 abstraction below it: no generic `httpClient.request()`, no neutral
-`storage.get()`, no "message bus" under the socket. Full rationale in
-`C:/git/.claude/CLAUDE.md`.
+`storage.get()`, no "message bus" under the socket. The full rationale — leakage,
+the absent migration payoff, the permanent cost — is in
+`C:/git/.claude/CLAUDE.md`, which is *not* loaded in this project; open it if the
+summary above is not enough.
 
 ## Where an external library may be imported
 

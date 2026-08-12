@@ -1,3 +1,9 @@
+---
+description: CSS custom properties over SASS variables
+paths:
+  - "**/*.sass"
+---
+
 # CSS Custom Properties over SASS Variables
 
 Default to **CSS custom properties** (`--name: value` + `var(--name)`) for any constant or token used inside a `.sass`/`.scss` file. SASS variables (`$name`) only appear when they bring something CSS custom properties cannot — typically compile-time math, `@if`/`@for` inside mixins, or values consumed by other SASS files at compile time.
