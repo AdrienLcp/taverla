@@ -1,0 +1,128 @@
+# Stage 16 — Le Fake
+
+**Goal.** The fourth game: a question with a surprising answer, everyone writes
+a **lie**, the screen shows every lie beside the truth, and the room votes. You
+score for finding the truth *and* for every player who fell for yours.
+
+**Not started.** This file is the brief for the session that does.
+
+## Why this one is next
+
+It pays for **submit-then-vote**, the phase seven of the fourteen remaining games
+in [`game-catalogue.md`](../game-catalogue.md) are waiting on — half the
+catalogue behind one engine. Le Fake is the smallest game that exercises it
+completely, which is what makes it the right one to build it against: collection
+with a deadline, a reveal that does not leak authorship, a vote, a tally.
+
+It is also the first game whose **wrong answers are worth points**. Every game on
+the shelf so far pays for being right; this one pays for being convincing, which
+is what keeps a table that does not know the answer in the game.
+
+## The content question is already answered
+
+The obvious worry — "it needs a bank of fill-in-the-blank statements, in French,
+and nothing like OpenQuizzDB exists for that" — dissolves on inspection.
+
+**The fill-in-the-blank shape is Jackbox styling, not a requirement.** What the
+game actually needs is a question with a short, factual, surprising answer. The
+repository holds **6 306 of those**, in two languages, with categories and an
+adult rating, already drawn without repeats.
+
+So Le Fake runs on the quiz bank. No second ingestion, no licensing question, no
+deploy pipeline — the largest cost this stage looked like it had is not there.
+
+Two consequences worth taking seriously before writing code:
+
+- **The decoys become padding.** Three players produce three lies and one truth,
+  which is a thin board. `decoys` already holds three authored wrong answers per
+  question, so a short table can be topped up from them. That is a better answer
+  than a minimum player count, and it exists for free.
+- **Not every quiz question makes a good prompt.** The ones that work have an
+  answer you can lie about plausibly; the ones that do not are those whose answer
+  is a bare number, or where every wrong answer is obviously wrong. This is a
+  judgement call on real data — draw a hundred at random and read them before
+  deciding whether the bank needs a flag, a category filter, or nothing at all.
+
+## What is genuinely new
+
+**The submit-then-vote phase.** Everything else on the shelf has exactly one
+player acting, or everyone racing the same clock to the same answer. This is the
+first round with two collection phases and a tally:
+
+1. **Write** — every seated player submits one lie, against a deadline.
+2. **Vote** — the board is shuffled and shown; every player picks one.
+3. **Tally** — points for the truth, points per player fooled.
+
+`RoomPhase` is the thing to watch. It is `lobby → countdown → playing → buzzed →
+revealed → finished`, and [`game-catalogue.md`](../game-catalogue.md) has said
+since the beginning that it stays fused until a game needs a phase these names
+cannot carry. **This is plausibly that game** — "everyone is voting" is not
+`playing`, and forcing it into `buzzed` would be a lie. Decide it deliberately in
+the session, with the catalogue's own argument in hand: splitting a phase costs
+every check in the shell the ability to spell what it is checking.
+
+## What it reuses unchanged
+
+The room, the code, the seats, the roster, the clock handshake, the snapshot
+broadcast, the scoreboard, the final board, both themes, both locales — and two
+that matter more:
+
+- **The role-scoped unions.** The truth must not reach a player's phone before
+  the reveal, and neither must the authorship of a lie. That is the same problem
+  as the blind test's title, with the same mechanism: separate host and player
+  message unions plus `encodeChecked` stripping what leaked. Assert it over the
+  whole round's transcript, as every game before it does.
+- **`normalizeAnswer` / `matchesAnswer`.** Needed for the first guard below, and
+  already tolerant of accents, case and a slipped finger.
+
+## The two guards the game cannot ship without
+
+Small, and non-negotiable — they are why this is two sessions rather than one:
+
+- **A player writes the truth by accident.** It has to be detected and refused
+  with "try another", or the true answer appears twice on the board and the vote
+  is meaningless. `matchesAnswer` is the comparison.
+- **Two players write the same lie.** Merge them and credit both, or ask one to
+  rewrite. Merging is the better game — being twinned is funny and the scoring
+  stays honest.
+
+## Protocol
+
+- A `lefake` arm of `RoomSettings.game` and of `round.content`, host and player
+  scoped as ever: the player's arm carries the prompt and, at vote time, the
+  shuffled board — never the truth and never an author.
+- Its own message namespace, per the catalogue: `lefake.submit`, `lefake.vote`.
+  `HOST_ONLY_MESSAGE_TYPES` partitions by prefix, so the guard survives.
+- `verdictSchema` needs nothing: this round is scored by the server, not judged
+  by the host.
+- Bump `PROTOCOL_VERSION`, because an older client meets a `round.content` arm it
+  cannot render.
+
+## Decisions left open for the session
+
+- **Does the answer mode axis apply at all?** Le Fake is neither `typed`,
+  `choice` nor `buzzer` — voting is its own thing. Most likely it offers exactly
+  one mode and the strip hides itself, the way the bare buzzer already does.
+- **Does the host play?** The seat mechanism exists, but the host reads the board
+  aloud and sees the truth. Probably not, and the reason is the same as buzzer
+  mode's.
+- **How long is each phase, and is it a setting?** A writing deadline is not a
+  round duration; it may be the second mode-specific setting the catalogue is
+  waiting for.
+
+## Out of scope
+
+Custom prompts written from inside the app. Images. Any second submit-then-vote
+game — the engine is proved by one, and generalising it before there are two is
+the anti-pattern this repository names in three places.
+
+## Done when
+
+- A full round runs: write, vote, tally, reveal, scoreboard
+- No player frame carries the truth before the reveal, or the author of a lie
+  ever — asserted over the whole round's transcript
+- A lie that *is* the truth is refused; two identical lies are merged and both
+  credited
+- A three-player table gets a full board
+- The other three games still run, unchanged
+- Verified in a browser, muted, both locales, at 414 px and on a desktop
