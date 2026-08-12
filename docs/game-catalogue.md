@@ -60,8 +60,9 @@ team on the player model and a turn owner.
 
 | Game | Shape | What it needs that does not exist | Appetite |
 |---|---|---|---|
-| **Blind test** | Buzz-first | — | shipping |
-| **Quiz / trivia** | Buzz-first | A question bank instead of a track pool — [costed below](#the-quiz-costed-and-it-needs-no-database) | an evening to a session |
+| **Blind test** | Buzz-first | — | **shipped** |
+| **Buzzer** — the room brings its own content | Buzz-first | — | **shipped** ([stage 11](plans/11-buzzer.md)) |
+| **Quiz / trivia** | Buzz-first | — | **shipped** ([12](plans/12-trivia.md), [14](plans/14-question-languages.md)) |
 | **Lyrics blackout** — the line is missing, sing it | Buzz-first | Same as the blind test, different reveal | a session |
 | **Reflex race** — first to tap when the screen flips | Buzz-first | Almost nothing; it *is* the buzz | an evening |
 | **Le Fake** (Fibbage) — write a fake answer, fool the others | Submit-then-vote | Phase 2 in full | two sessions |
