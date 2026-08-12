@@ -26,6 +26,11 @@ one part.
   the truth on the board twice and leave the vote with nothing to find
 - `[Shared]` A short table gets a full board: the question's own authored decoys
   top it up to five lines, which beats demanding a fourth player
+- `[Game]` The volume only appears under a game that plays something. It is the
+  blind test's alone today — nothing else carries an `audioUrl` — so on the
+  buzzer, the quiz and Le Fake the slider commanded nothing at all. Chaining
+  rounds stays under every game, because that one is the room's setting rather
+  than a game's
 - `[Shared]` Both of Le Fake's clocks can be turned off. **Tu décides** joins the
   writing and the voting ladders, and the phase then stays open until the host
   gives the answer — the same control that put the board up. Neither clock was

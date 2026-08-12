@@ -1,5 +1,6 @@
 import type React from 'react'
 
+import { playsAudioIn } from '@taverla/protocol/game'
 import type { RoomSettings } from '@taverla/protocol/room'
 
 import { Slider } from '@/presentation/components/slider'
@@ -36,15 +37,23 @@ export const HostControls: React.FC<HostControlsProps> = ({
 
   return (
     <div className='host-controls'>
-      <Slider
-        formatOptions={{ style: 'percent' }}
-        label={translate('host.volume')}
-        maxValue={1}
-        minValue={0}
-        onChange={onVolumeChange}
-        step={0.05}
-        value={volume}
-      />
+      {/*
+        Hidden rather than disabled under a game with no sound, the same way the
+        mode strip is hidden when a game offers one mode: a control that commands
+        nothing asks the host to decide something that has no effect. Chaining
+        rounds is the room's, so it stays under every game.
+      */}
+      {playsAudioIn(settings.game) && (
+        <Slider
+          formatOptions={{ style: 'percent' }}
+          label={translate('host.volume')}
+          maxValue={1}
+          minValue={0}
+          onChange={onVolumeChange}
+          step={0.05}
+          value={volume}
+        />
+      )}
       <Switch
         isDisabled={!isLive}
         isSelected={settings.autoAdvanceMs !== null}
