@@ -164,6 +164,19 @@ to, and where the lobby splits in two. `layout.$wide-screen` is the source and
 `--column-wide-max-width` is derived from it, because a media query cannot read
 a custom property and two literals drift.
 
+**A front door becomes a poster at `$poster-screen`** — the name and the promise
+down one side, everything you can act on down the other, on the lobby's own
+`1.35fr / 1fr` because it is the same composition one screen earlier. The second
+breakpoint is content-driven rather than a device size: 1200px is where a 72px
+headline still falls in three or four lines once the field is split, and below it
+two columns are worse than one.
+
+The mixin takes **two children exactly**, `> header` and `> .actions`, and the
+grouping is in the markup on purpose. Spanning the header down the rows instead
+does not work and fails quietly: with no explicit rows to span, `grid-row: 1 /
+-1` resolves back to row one, so the headline shares a row with the first control
+and stretches it to a height that depends on how long the tagline is.
+
 **Everything is bounded, including the stage.** Type here is sized in `vmin`, so
 it stops growing with the *shorter* axis — past the width the composition needs,
 more width is void rather than a bigger title card. On a 21:9 display the

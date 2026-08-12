@@ -49,26 +49,28 @@ const GameHome = ({ game }: { game: ShelvedGame }) => {
         <h1>{translate(gameTaglineKey(game))}</h1>
       </header>
 
-      <p className='pitch'>{translate(gameDescriptionKey(game))}</p>
+      <div className='actions'>
+        <p className='pitch'>{translate(gameDescriptionKey(game))}</p>
 
-      <div className='start'>
-        <Button
-          isPending={isCreating}
-          onPress={() => {
-            void open(game)
-          }}
-          size='large'
-        >
-          {translate('join.host.action')}
-        </Button>
-        <p className='aside'>{translate('join.host.description')}</p>
+        <div className='start'>
+          <Button
+            isPending={isCreating}
+            onPress={() => {
+              void open(game)
+            }}
+            size='large'
+          >
+            {translate('join.host.action')}
+          </Button>
+          <p className='aside'>{translate('join.host.description')}</p>
+        </div>
+
+        {error !== null && (
+          <p className='error' role='alert'>
+            {translate(error)}
+          </p>
+        )}
       </div>
-
-      {error !== null && (
-        <p className='error' role='alert'>
-          {translate(error)}
-        </p>
-      )}
     </main>
   )
 }

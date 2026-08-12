@@ -97,6 +97,11 @@ one part.
   is where the console splits its lobby in two and where the player's screen
   widens for the buzzer. The shelf of games goes two across in the room that
   frees up
+- `[Game]` **And past 1 200px it becomes a poster**: the name and the promise
+  down one side, everything you can act on down the other, on the same ratio the
+  lobby already splits its own two audiences by. The second breakpoint is where
+  a headline at full size still falls in three or four lines once the field is
+  halved — below it, two columns are worse than one
 - `[Game]` The host's console no longer sprawls. It had no maximum at all, so on
   a 21:9 display it ran the full 3 440px with the QR code pinned to one edge, the
   roster to the other, a thousand pixels of field between them and a game

@@ -39,37 +39,44 @@ export const HomePage = () => {
         <h1>{translate('home.tagline')}</h1>
       </header>
 
-      <section className='start'>
-        <Button
-          isPending={isCreating}
-          onPress={() => {
-            void open()
-          }}
-          size='large'
-        >
-          {translate('join.host.action')}
-        </Button>
-        <p className='aside'>{translate('join.host.description')}</p>
-        {error !== null && (
-          <p className='error' role='alert'>
-            {translate(error)}
-          </p>
-        )}
-      </section>
+      {/*
+        Everything you can act on, against the name and the promise beside it.
+        The grouping is what the poster layout is made of on a wide screen, and
+        it costs nothing on a narrow one: the same column, the same gap.
+      */}
+      <div className='actions'>
+        <section className='start'>
+          <Button
+            isPending={isCreating}
+            onPress={() => {
+              void open()
+            }}
+            size='large'
+          >
+            {translate('join.host.action')}
+          </Button>
+          <p className='aside'>{translate('join.host.description')}</p>
+          {error !== null && (
+            <p className='error' role='alert'>
+              {translate(error)}
+            </p>
+          )}
+        </section>
 
-      <Separator label={translate('join.divider')} />
+        <Separator label={translate('join.divider')} />
 
-      <JoinWithCode />
+        <JoinWithCode />
 
-      <section className='shelf'>
-        <h2>{translate('home.games')}</h2>
-        {shelvedGames.map((game) => (
-          <Link className='game' href={gameHomePathFor(game)} key={game}>
-            <span className='name'>{translate(gameNameKey(game))}</span>
-            <span className='pitch'>{translate(gameTaglineKey(game))}</span>
-          </Link>
-        ))}
-      </section>
+        <section className='shelf'>
+          <h2>{translate('home.games')}</h2>
+          {shelvedGames.map((game) => (
+            <Link className='game' href={gameHomePathFor(game)} key={game}>
+              <span className='name'>{translate(gameNameKey(game))}</span>
+              <span className='pitch'>{translate(gameTaglineKey(game))}</span>
+            </Link>
+          ))}
+        </section>
+      </div>
     </main>
   )
 }
