@@ -210,6 +210,8 @@ export const FR_DICTIONARY: Dictionary = {
     playAgain: 'Rejouer',
     players: {
       empty: 'Personne n’a encore rejoint. Le QR code attend.',
+      remove: 'Retirer',
+      removeNamed: 'Retirer {nickname}',
       title: 'Joueurs'
     },
     reveal: 'Donner la réponse',
@@ -315,7 +317,8 @@ export const FR_DICTIONARY: Dictionary = {
   menu: {
     build: 'Version {build}',
     home: 'Accueil',
-    label: 'Menu'
+    label: 'Menu',
+    leaveRoom: 'Quitter le salon'
   },
   notFound: {
     back: 'Retour au départ',

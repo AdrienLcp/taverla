@@ -19,7 +19,12 @@ import type { Room } from './room'
  */
 const rooms = new Map<RoomCode, Room>()
 
-/** How long a room with nobody connected is kept, so a host who reloads keeps their game. */
+/**
+ * How long a room with nobody connected is kept, so a host who reloads keeps
+ * their game. `ABANDONED_SEAT_MS` is the same ten minutes on purpose — a seat
+ * and a room are the same sentence with a different subject, and the two must
+ * move together.
+ */
 const ABANDONED_ROOM_GRACE_MS = 10 * 60 * 1000
 const SWEEP_INTERVAL_MS = 60 * 1000
 
@@ -67,6 +72,9 @@ export const deleteRoom = (code: RoomCode): void => {
 }
 
 export const countRooms = (): number => rooms.size
+
+/** A copy, so a caller that removes a player mid-pass is not iterating the map it mutates. */
+export const allRooms = (): Room[] => [...rooms.values()]
 
 /**
  * The sweeper only sees rooms nobody is attached to, so `hasConnections` is

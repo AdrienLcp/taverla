@@ -26,6 +26,23 @@ one part.
   the truth on the board twice and leave the vote with nothing to find
 - `[Shared]` A short table gets a full board: the question's own authored decoys
   top it up to five lines, which beats demanding a fourth player
+- `[Shared]` **Leaving a room is something a player says.** The menu's way out
+  reads *Quitter le salon* on a screen holding a seat, gives it up on the
+  server, and the roster on the big screen loses the name at once rather than
+  keeping it greyed out. A closed socket could never carry that: a phone that
+  locks its screen closes one too, and that seat has to come back
+- `[Shared]` A seat nobody has been behind for ten minutes is released on its
+  own — the same patience the server already gives a room with nobody connected
+  at all. A room outlives a game and chains several, so a phone that closed its
+  browser during the first would otherwise sit on the scoreboard through every
+  game after it. The host can drop a name from the roster on the spot when they
+  know somebody has gone
+- `[Shared]` **Fixed: a network blink could end a round on everybody else.** The
+  room closes a phase the moment everyone has acted, and a player whose socket
+  dropped stopped being counted instantly — so a stutter in the second their
+  table-mate answered closed the round on the players who remained, and they
+  came back to something they were never able to answer. A dropped phone now
+  holds its place for fifteen seconds
 - `[Game]` The volume only appears under a game that plays something. It is the
   blind test's alone today — nothing else carries an `audioUrl` — so on the
   buzzer, the quiz and Le Fake the slider commanded nothing at all. Chaining

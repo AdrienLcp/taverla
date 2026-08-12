@@ -140,6 +140,61 @@ describe('the rules every socket obeys', () => {
     ])
   })
 
+  /**
+   * The mirror of the test above, and the reason both exist: a closed socket
+   * means "hold this seat", so giving it up has to be something the player
+   * *says*. Nothing else can tell a locked phone from somebody who has left.
+   */
+  it('[seat] drops a player who says they are leaving, at once', async () => {
+    const { code, host } = await room.openRoom()
+    const alice = await room.seat({ code, nickname: 'Alice' })
+
+    await waitFor(
+      () => hostView(host)?.players.length === 1,
+      'Alice to be on the roster'
+    )
+
+    alice.send({ type: 'player.leave' })
+
+    await waitFor(
+      () => hostView(host)?.players.length === 0,
+      'the roster to lose her'
+    )
+
+    expect(hostView(host)?.players).toEqual([])
+  })
+
+  /**
+   * A phone whose Wi-Fi blinks in the second its table-mate answers used to end
+   * the round on everybody else: it stopped being counted the instant its socket
+   * closed, so the room had "nothing left to wait for" while it was still there.
+   */
+  it('[seat] still waits for a player whose socket just dropped', async () => {
+    const { code, host } = await room.openRoom({
+      ...FAST_GAME,
+      mode: DEFAULT_MODE_SETTINGS.choice
+    })
+    const alice = await room.seat({ code, nickname: 'Alice' })
+    const bob = await room.seat({ code, nickname: 'Bob' })
+
+    host.send({ type: 'host.startRound' })
+    await waitFor(() => playerView(alice)?.phase === 'playing', 'the clip')
+
+    const roundId = playerView(alice)?.round?.id ?? ''
+
+    bob.close()
+    await sleep(30)
+
+    alice.send({
+      answer: { choiceIndex: 0, kind: 'choice' },
+      roundId,
+      type: 'player.answer'
+    })
+    await sleep(120)
+
+    expect(hostView(host)?.phase).toBe('playing')
+  })
+
   // The room is opened before the table decides, so a lobby with no game is an
   // ordinary state. The console greys the launch out; this is the rule under
   // it, and the code is its own because the phase is right and the decision is

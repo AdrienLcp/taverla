@@ -23,6 +23,7 @@ import { shuffled } from '@taverla/core/helpers/shuffle'
 import { buildLieBoard } from '@taverla/core/lefake/lie-board'
 import { tallyLieBoard } from '@taverla/core/lefake/tally'
 import { gradeQuizGuess } from '@taverla/core/quiz/question-answer'
+import { isStillExpected } from '@taverla/core/room/seat-presence'
 import {
   type BuzzRejection,
   findBuzzRejection,
@@ -393,22 +394,24 @@ const bank = ({
 
 /**
  * Whether the round has nothing left to wait for. A phone that dropped off
- * Wi-Fi is not one of them, for the same reason a disconnected player does not
- * hold the clip open in buzzer mode.
+ * Wi-Fi holds it for `RECONNECT_GRACE_MS` and no longer, for the same reason a
+ * disconnected player does not hold the clip open in buzzer mode — but the
+ * blink has to be absorbed first, or a network stutter in the second the last
+ * player answers ends the round on everybody else.
  *
  * "Done" is per mode, and the difference is the whole point of allowing
  * retries: a pick ends a player's round, where a typed player is only finished
  * once they hold both halves — until then the clip is still theirs to use.
  */
-export const everyoneIsDone = (room: Room): boolean => {
+export const everyoneIsDone = (room: Room, now: number): boolean => {
   const round = room.round
 
   if (round === null) {
     return false
   }
 
-  const expected = [...room.players.values()].filter(
-    (participant) => participant.isConnected
+  const expected = [...room.players.values()].filter((participant) =>
+    isStillExpected(participant, now)
   )
 
   return (
@@ -647,19 +650,19 @@ export const registerVote = ({
 
 /**
  * Whether the phase the room is in has nothing left to wait for. A phone that
- * dropped off Wi-Fi is not one of them, the same way it does not hold a clip
- * open — and a player who wrote no lie still votes, which is what keeps someone
- * who arrived late in the round.
+ * dropped off Wi-Fi holds it only for `RECONNECT_GRACE_MS`, the same way it
+ * does not hold a clip open — and a player who wrote no lie still votes, which
+ * is what keeps someone who arrived late in the round.
  */
-export const everyoneHasActed = (room: Room): boolean => {
+export const everyoneHasActed = (room: Room, now: number): boolean => {
   const content = room.round?.content
 
   if (content?.kind !== 'lefake') {
     return false
   }
 
-  const seated = [...room.players.values()].filter(
-    (participant) => participant.isConnected
+  const seated = [...room.players.values()].filter((participant) =>
+    isStillExpected(participant, now)
   )
 
   if (seated.length === 0) {

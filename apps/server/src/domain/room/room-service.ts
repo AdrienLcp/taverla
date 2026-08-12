@@ -8,6 +8,7 @@ import type {
 import { MAX_PLAYERS_PER_ROOM, type RoomSettings } from '@taverla/protocol/room'
 
 import { Result } from '@taverla/core/helpers/result'
+import { isAbandoned } from '@taverla/core/room/seat-presence'
 
 import type { Participant, Room } from './room'
 
@@ -42,6 +43,7 @@ export const joinAsPlayer = ({
   )
 
   if (existing !== undefined) {
+    existing.disconnectedAt = null
     existing.isConnected = true
     existing.nickname = nickname
 
@@ -57,6 +59,7 @@ export const joinAsPlayer = ({
   }
 
   const participant: Participant = {
+    disconnectedAt: null,
     id: nanoid(12),
     isConnected: true,
     nickname,
@@ -109,6 +112,7 @@ export const markPlayerDisconnected = (
   const participant = room.players.get(playerId)
 
   if (participant !== undefined) {
+    participant.disconnectedAt = now
     participant.isConnected = false
   }
 
@@ -123,6 +127,27 @@ export const removePlayer = (
   room.players.delete(playerId)
   room.round?.lockedOutPlayerIds.delete(playerId)
   touch(room, now)
+}
+
+/**
+ * Gives up the seats nobody has been behind for long enough that they are not
+ * coming back. A greyed row costs nothing for a minute; a game runs half an
+ * hour, and a phone whose battery died in the first round should not be on the
+ * scoreboard at the end of it.
+ *
+ * Returns who went, because the caller has to release whatever they were
+ * holding — the floor, most of all — before it broadcasts.
+ */
+export const releaseAbandonedSeats = (room: Room, now: number): PlayerId[] => {
+  const released = [...room.players.values()]
+    .filter((participant) => isAbandoned(participant, now))
+    .map((participant) => participant.id)
+
+  for (const playerId of released) {
+    removePlayer(room, playerId, now)
+  }
+
+  return released
 }
 
 export const updateSettings = (

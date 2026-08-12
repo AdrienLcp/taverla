@@ -5,6 +5,7 @@ import { startRoomSweeper } from '@/domain/room/room-store'
 import { env } from '@/env'
 import { logger } from '@/infrastructure/logging/logger'
 import { hasConnections } from '@/infrastructure/messaging/connection-registry'
+import { startSeatSweeper } from '@/infrastructure/messaging/round-conductor'
 
 const { app, injectWebSocket } = createApp()
 
@@ -14,3 +15,4 @@ const server = serve({ fetch: app.fetch, port: env.PORT }, ({ port }) => {
 
 injectWebSocket(server)
 startRoomSweeper(hasConnections)
+startSeatSweeper()

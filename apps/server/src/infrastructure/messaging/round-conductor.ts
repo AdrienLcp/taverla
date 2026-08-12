@@ -3,7 +3,8 @@ import type { RoomCode, RoundId } from '@taverla/protocol/identifiers'
 import { isEligiblePrompt } from '@taverla/core/lefake/prompt-eligibility'
 
 import type { Room } from '@/domain/room/room'
-import { findRoom } from '@/domain/room/room-store'
+import { releaseAbandonedSeats } from '@/domain/room/room-service'
+import { allRooms, findRoom } from '@/domain/room/room-store'
 import {
   blindtestContent,
   closeWriting,
@@ -13,6 +14,7 @@ import {
   lefakeContent,
   openRound,
   quizContent,
+  releaseBuzz,
   remainingRoundMs,
   resumeRoundClock,
   revealRound,
@@ -393,4 +395,44 @@ const armCountdown = ({
 
 export const abandonRound = (code: RoomCode): void => {
   cancelRoundTimers(code)
+}
+
+/** Coarse on purpose: the window it enforces is ten minutes wide. */
+const SEAT_SWEEP_INTERVAL_MS = 60 * 1_000
+
+/**
+ * Gives up the seats nobody has been behind long enough to have gone, in every
+ * room at once. It is here rather than beside the room sweeper for the reason
+ * this file exists: the store has no business broadcasting, and a seat leaving
+ * the roster is something every screen has to be told about.
+ *
+ * The floor is released with them. A room whose answer window is the host's own
+ * word can otherwise hold a buzz forever on behalf of a phone that is long gone.
+ */
+export const startSeatSweeper = (): (() => void) => {
+  const timer = setInterval(() => {
+    const now = Date.now()
+
+    for (const room of allRooms()) {
+      const released = releaseAbandonedSeats(room, now)
+
+      if (released.length === 0) {
+        continue
+      }
+
+      for (const playerId of released) {
+        releaseBuzz({ now, playerId, room })
+      }
+
+      logger.info('Released abandoned seats', {
+        released: released.length,
+        room: room.code
+      })
+      broadcastRoom(room)
+    }
+  }, SEAT_SWEEP_INTERVAL_MS)
+
+  return () => {
+    clearInterval(timer)
+  }
 }

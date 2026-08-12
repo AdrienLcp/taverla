@@ -300,6 +300,10 @@ export const createRoomSocketEvents = (
     }
 
     switch (message.type) {
+      case 'player.leave': {
+        depart(active, room)
+        break
+      }
       case 'player.buzz': {
         buzz(message.roundId, active, outbound, room)
         break
@@ -565,7 +569,7 @@ export const createRoomSocketEvents = (
       return
     }
 
-    if (everyoneIsDone(room)) {
+    if (everyoneIsDone(room, Date.now())) {
       abandonRound(room.code)
       closeRound(room)
       broadcastRoom(room)
@@ -617,7 +621,7 @@ export const createRoomSocketEvents = (
       return
     }
 
-    if (everyoneHasActed(room)) {
+    if (everyoneHasActed(room, Date.now())) {
       closeLefakePhase(room)
 
       return
@@ -660,7 +664,7 @@ export const createRoomSocketEvents = (
       return
     }
 
-    if (everyoneHasActed(room)) {
+    if (everyoneHasActed(room, Date.now())) {
       closeLefakePhase(room)
 
       return
@@ -720,6 +724,21 @@ export const createRoomSocketEvents = (
   const evict = (playerId: PlayerId, room: Room): void => {
     removePlayer(room, playerId, Date.now())
     settle(releaseBuzz({ now: Date.now(), playerId, room }), room)
+  }
+
+  /**
+   * Leaving on purpose, which is the one thing a closing socket cannot say: a
+   * locked phone closes one too, and that seat has to come back. So the seat
+   * goes now rather than in ten minutes.
+   *
+   * The socket closing a beat later is harmless — `markPlayerDisconnected`
+   * looks the seat up and finds nothing, which is exactly the right answer for
+   * somebody who has already gone.
+   */
+  const depart = (active: Connection, room: Room): void => {
+    if (active.playerId !== null) {
+      evict(active.playerId, room)
+    }
   }
 
   /**

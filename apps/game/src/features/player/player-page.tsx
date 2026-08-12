@@ -1,4 +1,4 @@
-import { type FormEvent, useState } from 'react'
+import { type FormEvent, useCallback, useState } from 'react'
 import { Form } from 'react-aria-components'
 
 import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
@@ -15,12 +15,14 @@ import {
   readStoredNickname,
   writeStoredNickname
 } from '@/infrastructure/storage/preferences-storage'
+import { forgetSessionId } from '@/infrastructure/storage/session-storage'
 import { Button } from '@/presentation/components/button'
 import { ConnectionRefused } from '@/presentation/components/connection-refused'
 import { TextField } from '@/presentation/components/text-field'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { protocolErrorKey } from '@/presentation/i18n/translation'
+import { useReportSeat } from '@/presentation/seat/seat-provider'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
 
 import { PlayerRound } from './player-round'
@@ -40,6 +42,17 @@ export const PlayerPage = () => {
 const PlayerScreen = ({ roomCode }: { roomCode: RoomCode }) => {
   const [nickname, setNickname] = useState<string | null>(null)
   const connection = usePlayerConnection({ nickname, roomCode })
+  const { send } = connection
+
+  // Offered to the menu above, which owns the only way off this screen. The
+  // frame goes first: navigating away closes the socket, and a seat given up
+  // after that is a seat nobody was told about.
+  const leave = useCallback(() => {
+    send({ type: 'player.leave' })
+    forgetSessionId({ role: 'player', roomCode })
+  }, [roomCode, send])
+
+  useReportSeat(nickname === null ? null : leave)
 
   // A refused join is non-fatal, so the socket stays open and the form comes
   // back with the reason rather than stranding the player on a dead screen.

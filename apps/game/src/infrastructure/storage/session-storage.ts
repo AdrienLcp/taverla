@@ -54,6 +54,20 @@ const mintSessionId = (): SessionId =>
   crypto.randomUUID?.() ??
   `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`
 
+/**
+ * Called when a player gives their seat up on purpose. Keeping the id would not
+ * break anything — the server no longer knows it, so a return would be a new
+ * arrival either way — but a claim on a seat that has been handed back is a lie
+ * this device would carry until the browser is cleared.
+ */
+export const forgetSessionId = (scope: SessionScope): void => {
+  try {
+    localStorage.removeItem(keyFor(scope))
+  } catch {
+    return
+  }
+}
+
 const read = (scope: SessionScope): SessionId | null => {
   try {
     return localStorage.getItem(keyFor(scope))

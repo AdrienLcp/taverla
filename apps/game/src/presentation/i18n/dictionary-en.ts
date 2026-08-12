@@ -215,6 +215,8 @@ export const EN_DICTIONARY = defineTranslations({
     playAgain: 'Play again',
     players: {
       empty: 'Nobody has joined yet. The QR code is waiting.',
+      remove: 'Remove',
+      removeNamed: 'Remove {nickname}',
       title: 'Players'
     },
     reveal: 'Give it away',
@@ -316,7 +318,8 @@ export const EN_DICTIONARY = defineTranslations({
   menu: {
     build: 'Build {build}',
     home: 'Home',
-    label: 'Menu'
+    label: 'Menu',
+    leaveRoom: 'Leave the room'
   },
   notFound: {
     back: 'Back to the start',

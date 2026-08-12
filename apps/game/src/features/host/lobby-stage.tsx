@@ -79,7 +79,12 @@ export const LobbyStage: React.FC<LobbyStageProps> = ({
           {view.players.length === 0 ? (
             <p className='empty'>{translate('host.players.empty')}</p>
           ) : (
-            <Scoreboard players={view.players} />
+            <Scoreboard
+              onRemove={(playerId) => {
+                send({ playerId, type: 'host.removePlayer' })
+              }}
+              players={view.players}
+            />
           )}
         </section>
       </div>

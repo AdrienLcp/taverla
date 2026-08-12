@@ -44,6 +44,12 @@ export type Room = {
 }
 
 export type Participant = {
+  /**
+   * When the socket closed, and `null` while it is open. It is what tells a
+   * phone that locked its screen apart from a player who has gone: see
+   * `@taverla/core/room/seat-presence` for the two windows it feeds.
+   */
+  disconnectedAt: number | null
   id: PlayerId
   isConnected: boolean
   nickname: Nickname

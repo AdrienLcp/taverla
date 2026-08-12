@@ -21,6 +21,7 @@ import { useConnection } from '@/presentation/connection/connection-provider'
 import { useI18n } from '@/presentation/i18n/i18n-provider'
 import { LANGUAGE_NAMES } from '@/presentation/i18n/language-names'
 import type { PlainTranslationKey } from '@/presentation/i18n/translation'
+import { useLeaveSeat } from '@/presentation/seat/seat-provider'
 import { useTheme } from '@/presentation/theme/theme-provider'
 
 import {
@@ -49,6 +50,7 @@ const THEME_KEYS: Record<ThemePreference, PlainTranslationKey> = {
  * takes room on the screen once it is worth interrupting a game for.
  */
 export const AppMenu = () => {
+  const leaveSeat = useLeaveSeat()
   const { locale, setLocale, translate } = useI18n()
   const { preference, setPreference } = useTheme()
   const connection = useConnection()
@@ -129,8 +131,24 @@ export const AppMenu = () => {
                   value={preference}
                 />
 
-                <Link href={joinPath} onPress={close} variant='outlined'>
-                  {translate('menu.home')}
+                {/*
+                  Leaving the room is what pressing this *means* on a screen
+                  that holds a seat, and saying so is the only way the roster on
+                  the big screen can be true rather than true in ten minutes. A
+                  closing socket cannot carry it: a phone that locks its screen
+                  closes one too, and that seat has to come back.
+                */}
+                <Link
+                  href={joinPath}
+                  onPress={() => {
+                    leaveSeat?.()
+                    close()
+                  }}
+                  variant='outlined'
+                >
+                  {translate(
+                    leaveSeat === null ? 'menu.home' : 'menu.leaveRoom'
+                  )}
                 </Link>
 
                 {/*

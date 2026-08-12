@@ -47,6 +47,16 @@ export const buzzMessageSchema = z.object({
 })
 
 /**
+ * Giving the seat up on purpose, which a closed socket cannot say on its own: a
+ * phone that locks its screen closes one too, and that seat has to survive.
+ * Leaving is therefore something a player *says*, and it is what makes the
+ * roster on the big screen true rather than eventually true.
+ */
+export const leaveMessageSchema = z.object({
+  type: z.literal('player.leave')
+})
+
+/**
  * The other two modes' answer, and it carries no timestamp for the same reason
  * `player.buzz` does not: the server stamps arrival, because the speed bonus is
  * decided by exactly that field and a client-supplied "when" is both
@@ -175,6 +185,7 @@ export const hostClientMessageSchema = z.discriminatedUnion('type', [
 export const playerClientMessageSchema = z.discriminatedUnion('type', [
   helloMessageSchema,
   timePingMessageSchema,
+  leaveMessageSchema,
   buzzMessageSchema,
   answerMessageSchema,
   submitLieMessageSchema,
@@ -185,6 +196,7 @@ export const playerClientMessageSchema = z.discriminatedUnion('type', [
 export const clientMessageSchema = z.discriminatedUnion('type', [
   helloMessageSchema,
   timePingMessageSchema,
+  leaveMessageSchema,
   buzzMessageSchema,
   answerMessageSchema,
   submitLieMessageSchema,
