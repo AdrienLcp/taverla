@@ -34,6 +34,13 @@ import {
 
 import './settings-panel.sass'
 
+/**
+ * `0` stands for "no window", "no limit" and "the host says when": the strips
+ * carry strings, and a segment whose value is the empty string is one a screen
+ * reader announces as nothing.
+ */
+const NO_LIMIT = 0
+
 const ROUND_COUNTS = [5, 10, 20, 30] as const
 const CLIP_DURATIONS_MS = [10_000, 20_000, 30_000] as const
 const COUNTDOWN_DURATIONS_MS = [3_000, 5_000, 10_000] as const
@@ -49,15 +56,15 @@ const QUESTION_DURATIONS_MS = [15_000, 30_000, 60_000] as const
  * believable takes longer than recalling an answer, and reading five lies off a
  * screen before choosing takes longer than reading four candidates.
  */
-const WRITING_DURATIONS_MS = [30_000, 60_000, 90_000] as const
-const VOTING_DURATIONS_MS = [20_000, 30_000, 45_000] as const
+const WRITING_DURATIONS_MS = [30_000, 60_000, 90_000, NO_LIMIT] as const
 
 /**
- * `0` stands for "no window" and for "no limit": the strips carry strings, and
- * a segment whose value is the empty string is one a screen reader announces as
- * nothing.
+ * The floor is 20 rather than the 10 the other ladders start at: this one is
+ * spent reading a board that holds up to ten lines somebody else wrote, and a
+ * choice offered where nobody could have finished reading is a trap.
  */
-const NO_LIMIT = 0
+const VOTING_DURATIONS_MS = [20_000, 30_000, 60_000, NO_LIMIT] as const
+
 const ANSWER_WINDOWS_MS = [5_000, 10_000, 20_000, NO_LIMIT] as const
 const ROUND_COUNT_OPTIONS = [...ROUND_COUNTS, NO_LIMIT] as const
 
@@ -243,6 +250,11 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   const secondsLabel = (milliseconds: number): string =>
     translate('host.seconds', { seconds: milliseconds / 1_000 })
 
+  const openEndedSecondsLabel = (milliseconds: number): string =>
+    milliseconds === NO_LIMIT
+      ? translate('host.hostDecides')
+      : secondsLabel(milliseconds)
+
   return (
     <section className='settings-panel'>
       {/*
@@ -369,22 +381,34 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           <NumberChoice
             isDisabled={isHeldByRound}
             label={translate('lefake.write.duration')}
-            onChange={(roundDurationMs) => {
-              onChange({ ...settings, game: { ...game, roundDurationMs } })
+            onChange={(chosen) => {
+              onChange({
+                ...settings,
+                game: {
+                  ...game,
+                  roundDurationMs: chosen === NO_LIMIT ? null : chosen
+                }
+              })
             }}
-            optionLabel={secondsLabel}
+            optionLabel={openEndedSecondsLabel}
             options={WRITING_DURATIONS_MS}
-            value={game.roundDurationMs}
+            value={game.roundDurationMs ?? NO_LIMIT}
           />
           <NumberChoice
             isDisabled={isHeldByRound}
             label={translate('lefake.vote.duration')}
-            onChange={(voteDurationMs) => {
-              onChange({ ...settings, game: { ...game, voteDurationMs } })
+            onChange={(chosen) => {
+              onChange({
+                ...settings,
+                game: {
+                  ...game,
+                  voteDurationMs: chosen === NO_LIMIT ? null : chosen
+                }
+              })
             }}
-            optionLabel={secondsLabel}
+            optionLabel={openEndedSecondsLabel}
             options={VOTING_DURATIONS_MS}
-            value={game.voteDurationMs}
+            value={game.voteDurationMs ?? NO_LIMIT}
           />
         </>
       )}
@@ -402,11 +426,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
               }
             })
           }}
-          optionLabel={(milliseconds) =>
-            milliseconds === NO_LIMIT
-              ? translate('host.answerWindow.none')
-              : secondsLabel(milliseconds)
-          }
+          optionLabel={openEndedSecondsLabel}
           options={ANSWER_WINDOWS_MS}
           value={mode.answerWindowMs ?? NO_LIMIT}
         />

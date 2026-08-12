@@ -26,6 +26,26 @@ one part.
   the truth on the board twice and leave the vote with nothing to find
 - `[Shared]` A short table gets a full board: the question's own authored decoys
   top it up to five lines, which beats demanding a fourth player
+- `[Shared]` Both of Le Fake's clocks can be turned off. **Tu décides** joins the
+  writing and the voting ladders, and the phase then stays open until the host
+  gives the answer — the same control that put the board up. Neither clock was
+  ever what ended a phase in the ordinary case: both close the moment everybody
+  has acted, and the deadline is only there for the table that is one player
+  short. The vote's choices are 20 / 30 / 60 seconds now rather than 20 / 30 / 45,
+  and the host gains an action during the vote, where the screen previously
+  offered none
+- `[Game]` The board splits the screen rather than stacking under the question:
+  the question and the count of who has voted take a column, the candidates take
+  a wider one. That is what turns six visible lines into ten on a 1080p screen,
+  because the board now runs against the whole height of the field instead of
+  what was left under the question. Its type is sized from the box it is given,
+  so a table of five still reads at full size and only a room that wrote ten
+  reads them smaller
+- `[Game]` A candidate too long for one line wraps on the phone instead of
+  running off the side of it. The list was pushing the whole page sideways —
+  a flex item's minimum is its content, so `Le Grand Chasseral` fitted and
+  `A suspension bridge over the Rhone` did not. The rows grew with it, and the
+  labels stepped down a size now that ten of them are read in a column
 - `[Shared]` A long one gets a readable board. Past ten lines a vote stops being
   a vote — by the tenth the third is gone — so a bigger room's surplus lies are
   cut, the ones a single player wrote before the ones two arrived at

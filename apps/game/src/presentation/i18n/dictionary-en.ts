@@ -183,8 +183,7 @@ export const EN_DICTIONARY = defineTranslations({
       typed: 'Type it'
     },
     answerWindow: {
-      label: 'Time to answer after a buzz',
-      none: 'You decide'
+      label: 'Time to answer after a buzz'
     },
     autoAdvance: 'Chain rounds by itself',
     changeSettings: 'Change the settings',
@@ -205,6 +204,7 @@ export const EN_DICTIONARY = defineTranslations({
       label: 'Which game',
       prompt: 'Pick one and the room is set. You can change your mind later.'
     },
+    hostDecides: 'You decide',
     invite: {
       title: 'Scan to play'
     },

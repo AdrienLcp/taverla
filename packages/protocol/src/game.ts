@@ -61,10 +61,15 @@ export const gameSettingsSchema = z.discriminatedUnion('kind', [
      * this game — the one phase every other game spends answering. It is longer
      * than a question stays open because inventing something believable is a
      * slower act than recognising the truth.
+     *
+     * `null` is the host's own word, the same as `roundCount` and the buzzer's
+     * `answerWindowMs`: both of this game's phases close the moment everybody
+     * has acted, so the clock is what covers the table that is one player short
+     * of finishing — not what ends the phase in the ordinary case.
      */
-    roundDurationMs: z.number().int().min(15_000).max(180_000),
-    /** How long the board stays open once everyone has written. */
-    voteDurationMs: z.number().int().min(10_000).max(120_000)
+    roundDurationMs: z.number().int().min(15_000).max(180_000).nullable(),
+    /** How long the board stays open once everyone has written; `null` for the host's word. */
+    voteDurationMs: z.number().int().min(10_000).max(120_000).nullable()
   }),
   questionDrawSettingsSchema.extend({
     kind: z.literal('quiz'),
@@ -126,7 +131,7 @@ export const DEFAULT_LEFAKE_SETTINGS: LefakeSettings = {
   kind: 'lefake',
   language: 'fr',
   roundDurationMs: 60_000,
-  voteDurationMs: 45_000
+  voteDurationMs: 30_000
 }
 
 export const DEFAULT_QUIZ_SETTINGS: QuizSettings = {

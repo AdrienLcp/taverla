@@ -178,8 +178,7 @@ export const FR_DICTIONARY: Dictionary = {
       typed: 'On tape'
     },
     answerWindow: {
-      label: 'Temps pour répondre après un buzz',
-      none: 'Tu décides'
+      label: 'Temps pour répondre après un buzz'
     },
     autoAdvance: 'Enchaîner tout seul',
     changeSettings: 'Changer les réglages',
@@ -200,6 +199,7 @@ export const FR_DICTIONARY: Dictionary = {
       label: 'Quel jeu',
       prompt: 'Choisis-en un et le salon est prêt. Tu pourras changer d’avis.'
     },
+    hostDecides: 'Tu décides',
     invite: {
       title: 'Scanne pour jouer'
     },

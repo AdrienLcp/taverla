@@ -28,25 +28,41 @@
       color: var(--ink-muted)
       text-align: center
 
+    // A flex item's minimum is its content, so without this a candidate nobody
+    // can break — one long word, or a phrase set at row size — pushes the list
+    // wider than the phone and takes the whole page sideways with it.
     ul
       display: flex
       flex-direction: column
       gap: var(--space-s)
       list-style: none
+      min-width: 0
+
+      li
+        min-width: 0
 
     // A board runs longer than the four candidates a choice round offers, so a
-    // line wraps rather than being sized by the thumb alone.
+    // line wraps rather than being sized by the thumb alone. The height is a
+    // floor and never a ceiling: the row grows to hold what somebody wrote.
     .button
       align-items: flex-start
       display: flex
       flex-direction: column
       gap: var(--space-2xs)
       min-height: 64px
+      min-width: 0
       text-align: left
       width: 100%
 
+    // Ten of these are read in a column on a phone, where a control label is
+    // read one at a time — so this row steps below `title`'s floor rather than
+    // shouting each candidate at the size of a button that acts.
     .title
       @include typography.title
+
+      font-size: clamp(1rem, 4.2vw, 1.25rem)
+      overflow-wrap: anywhere
+      text-wrap: pretty
 
     .subtitle
       @include typography.caption

@@ -171,6 +171,35 @@ the type-checker and to every test:
 
 ## Settled after the stage shipped
 
+**The screen was built for a table, and a room of ten broke it.** The board
+stacked under the question, so it started 307 px down a 1080 px screen and ran
+off the bottom: five of ten lines were visible, and the page was 2 797 px tall on
+a television nobody scrolls. The vote is now two columns — the question and the
+count of who has voted beside the candidates — and the board's type is divided
+out of the box it is given rather than fixed, so a table of five keeps the full
+billboard and only a room that wrote ten reads them smaller.
+
+Two things that came out of measuring rather than reasoning:
+
+- **Sub-columns inside the board would help, and cannot be had in CSS.** Ten
+  lines fit at 20 px in one column on a 1366×768 screen and at 31 px in two —
+  the extra wrapping does not eat the gain, which is what I first assumed. But
+  the size can only be found by measuring the text: a `height ÷ rows` formula
+  says 72 px where 51 px fits, and one conservative enough never to overflow
+  lands back on 20 px. It needs a runtime fit pass, and that is the open call.
+- **The scoreboard left the voting phase.** At ten players it was nearly 900 px
+  and set the height of the whole grid, for standings nobody reads while they
+  are choosing. It is one press away on the reveal.
+
+**Both clocks are optional now.** `roundDurationMs` and `voteDurationMs` are
+nullable, and the settings offer *Tu décides* beside the seconds. Nothing else
+had to change on the server: `roundDurationMsOf` and `voteDurationMsOf` already
+returned `number | null` for the games without them, `remainingRoundMs` already
+answered `null`, and `host.reveal` already closed whichever of the two phases was
+open. What was missing was on the screen — `HostActions` had no `voting` case at
+all, so the host had no control during the vote, which only ever worked because
+the clock always arrived.
+
 **The board is capped at ten lines.** It shipped uncapped, and twenty-four
 players meant twenty-five lines — a list nobody can hold in their head is not a
 vote. The cost of capping is that a lie left off the board cannot be voted for,

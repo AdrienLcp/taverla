@@ -83,8 +83,8 @@ describe('le fake', () => {
     await harness.stop()
   })
 
-  const openWriting = async () => {
-    const { code, host } = await harness.openRoom(LE_FAKE)
+  const openWriting = async (settings: RoomSettings = LE_FAKE) => {
+    const { code, host } = await harness.openRoom(settings)
     const ana = await harness.seat({ code, nickname: 'Ana' })
     const bo = await harness.seat({ code, nickname: 'Bo' })
     const cy = await harness.seat({ code, nickname: 'Cy' })
@@ -378,5 +378,40 @@ describe('le fake', () => {
 
     expect(playerView(cy)?.phase).toBe('voting')
     expect(boardOf(cy)).toHaveLength(5)
+  })
+
+  /**
+   * The clock is optional in both of this game's phases, and a room that turned
+   * it off has nothing but the host to close the board. The reveal is the same
+   * control that put it up, one press later.
+   */
+  it('[lefake] closes a board with no clock on the host word alone', async () => {
+    const { ana, bo, cy, host } = await openWriting({
+      ...LE_FAKE,
+      game: {
+        ...DEFAULT_LEFAKE_SETTINGS,
+        roundDurationMs: null,
+        voteDurationMs: null
+      }
+    })
+    const roundId = roundIdOf(ana)
+
+    ana.send({ lie: 'Le Mont Rose', roundId, type: 'lefake.submit' })
+    bo.send({ lie: 'Le Mont Blanc', roundId, type: 'lefake.submit' })
+    cy.send({ lie: 'Le Mont Bleu', roundId, type: 'lefake.submit' })
+
+    await waitFor(
+      () => playerView(cy)?.phase === 'voting',
+      'the board to go up once everybody has written'
+    )
+
+    host.send({ roundId, type: 'host.reveal' })
+
+    await waitFor(
+      () => playerView(cy)?.phase === 'revealed',
+      'the host to close a board nothing else would have closed'
+    )
+
+    expect(playerView(cy)?.phase).toBe('revealed')
   })
 })

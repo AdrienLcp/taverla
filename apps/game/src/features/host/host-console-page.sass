@@ -43,6 +43,48 @@
         align-items: center
         justify-content: center
 
+      // The one stage where the payload is a list rather than a single object,
+      // and the room has to read all of it at once. Splitting it puts the board
+      // against the full height of the field instead of against what is left
+      // under the question — which is the difference between ten lines fitting
+      // and six of them fitting.
+      //
+      // The wider column is the board, where the lobby's wider column is the
+      // invitation: both times it is the half the room is looking at.
+      &.voting
+        display: grid
+        gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr)
+
+        @media (width < layout.$wide-screen)
+          grid-template-columns: minmax(0, 1fr)
+
+        // Above the split the stage owns the height, so the row can be bounded
+        // by it and the board's box becomes a measurement of the room it has
+        // rather than the sum of its own type. That is what lets the lines be
+        // sized from the box instead of from a guess at how much chrome sits
+        // around it.
+        //
+        // `container-type: size` belongs to that case alone: it makes the box
+        // ignore its contents, which is only safe while something else is
+        // giving it a height. Stacked, the row is sized by what is in it, the
+        // page scrolls anyway, and the fallback below governs.
+        @media (width >= layout.$wide-screen)
+          grid-template-rows: minmax(0, 1fr)
+
+          .lie-board
+            container-type: size
+
+            li
+              font-size: clamp(1.25rem, calc(100cqh / var(--board-lines, 5) - 2rem), 4.5rem)
+
+        .asking
+          display: flex
+          flex-direction: column
+          gap: var(--space-l)
+          justify-content: center
+          min-width: 0
+
     // The room code is the one thing read from four metres, so it is the
     // largest object in the product and nothing shares its line.
     .invitation
@@ -151,22 +193,40 @@
 
       color: var(--ink-muted)
 
+    // On its own — "listen", "ask away" — this line is the whole screen and
+    // takes the billboard size. Under a question it is a status beside the
+    // thing being asked, and at the nominal size it shouts louder than the
+    // question does: the prompt is already a step below billboard.
+    .asked-question + .now
+      font-size: clamp(1.25rem, 3vmin, 2rem)
+
     // The board is what the room reads and argues over, so it is sized for the
-    // far side of a table rather than for the screen it happens to be on. The
-    // column is bounded because a line of five candidates spread across a
-    // twenty-one by nine display is a row nobody can scan.
+    // far side of a table rather than for the screen it happens to be on.
+    //
+    // Its type is the one size in the product that is not fixed. `--board-lines`
+    // carries how many candidates there are and the space is divided by it, so
+    // a table of five keeps the full billboard and only a room that wrote ten
+    // reads them smaller — which is the room with more to read. The subtraction
+    // in each formula is a row's own furniture: the rule and the gap under it,
+    // plus slack for a couple of candidates too long to sit on one line.
+    //
+    // Stacked, there is no box to measure, so this divides the viewport instead
+    // and the page takes whatever is left over.
     .lie-board
       display: flex
       flex-direction: column
       gap: var(--space-s)
+      justify-content: center
       list-style: none
-      width: min(900px, 100%)
+      min-height: 0
+      width: 100%
 
       li
         @include typography.billboard
 
         border-bottom: 1px solid var(--rule)
         color: var(--ink)
+        font-size: clamp(1.25rem, calc(60vmin / var(--board-lines, 5) - 1.5rem), 4.5rem)
         padding-bottom: var(--space-s)
         text-wrap: balance
 

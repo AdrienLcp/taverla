@@ -284,19 +284,25 @@ const Stage = ({
     const board = lefakeContent(round)?.board ?? []
 
     return (
-      <div className='stage playing'>
-        <AskedQuestion prompt={lefakeContent(round)?.prompt ?? null} />
-        <ul className='lie-board'>
+      <div className='stage voting'>
+        {/*
+          No scoreboard here, unlike every other stage: it is as tall as the
+          room is large, and the board is the one thing everybody has to read at
+          once. The standings are a press away, on the reveal this leads to.
+        */}
+        <div className='asking'>
+          <AskedQuestion prompt={lefakeContent(round)?.prompt ?? null} />
+          <p className='now'>
+            {translate('lefake.vote.waiting', {
+              count: lefakeContent(round)?.votedPlayerIds.length ?? 0
+            })}
+          </p>
+        </div>
+        <ul className='lie-board' style={{ '--board-lines': board.length }}>
           {board.map((candidate) => (
             <li key={candidate.id}>{candidate.text}</li>
           ))}
         </ul>
-        <p className='now'>
-          {translate('lefake.vote.waiting', {
-            count: lefakeContent(round)?.votedPlayerIds.length ?? 0
-          })}
-        </p>
-        <Scoreboard players={view.players} />
       </div>
     )
   }

@@ -31,6 +31,11 @@ export const HostActions: React.FC<HostActionsProps> = (props) => {
       return <LobbyActions {...props} />
     case 'countdown':
     case 'playing':
+    // The board is up and the room is choosing. It is the same control as the
+    // phase before it — `host.reveal` over this game closes whichever half of
+    // the round is open rather than abandoning it — and without it a vote with
+    // no clock would have nothing to end it.
+    case 'voting':
       return <RoundActions {...props} />
     // The floor is held, and the only thing left to decide is the verdict —
     // which the stage owns, beside the answer it is judged against.
