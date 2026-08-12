@@ -1,8 +1,4 @@
-export const LOCALES = ['en', 'fr'] as const
-
-export type Locale = (typeof LOCALES)[number]
-
-export const DEFAULT_LOCALE: Locale = 'en'
+import { DEFAULT_LOCALE, LOCALES, type Locale } from '@taverla/protocol/locale'
 
 export const isLocale = (value: string): value is Locale =>
   LOCALES.some((locale) => locale === value)

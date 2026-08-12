@@ -8,6 +8,20 @@ one part.
 
 ### Features
 
+- **The quiz plays in English too**, on 4 506 questions from Open Trivia DB —
+  human-verified, under the same CC BY-SA 4.0 as the French bank and bundled the
+  same way, so neither language depends on anybody's uptime. The host picks the
+  language in the quiz's settings, and it opens on whatever language *they* are
+  reading the interface in
+- `[Shared]` The language belongs to the room and never to the reader. Two
+  players in the same room can hold different interface languages, so drawing
+  from theirs would deal each phone its own question — a player may switch their
+  app between English and French mid-game and it changes their chrome and nothing
+  else. Only the host moves the questions
+- `[Game]` The menu credits both banks. They are written in each language rather
+  than translated from one into the other, and the two halves have different
+  authors, so both are named whatever a room happens to be playing
+
 - **The room comes first and the game second.** The front page creates a room —
   the code goes up, the phones arrive, and the table picks the game on the
   console while they do, beside the QR code everyone is already looking at. A

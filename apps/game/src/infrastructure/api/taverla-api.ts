@@ -12,6 +12,7 @@ import {
   trackListResponseSchema
 } from '@taverla/protocol/http'
 import type { RoomCode } from '@taverla/protocol/identifiers'
+import type { Locale } from '@taverla/protocol/locale'
 import type { TrackDifficulty } from '@taverla/protocol/track'
 
 import { Result } from '@taverla/core/helpers/result'
@@ -28,12 +29,17 @@ const TOO_MANY_REQUESTS = 429
  * The whole HTTP surface of the app. Everything that happens during a game goes
  * through the socket instead — see `infrastructure/messaging`.
  */
-export const createRoom = async (
+export const createRoom = async ({
+  game,
+  locale
+}: {
   /** Omitted by the shelf's own front door: the room is opened, then the table decides. */
   game?: ShelvedGame
-): Promise<Result<CreateRoomResponse, ApiError>> =>
+  /** What the host reads, which is what a quiz opens on until they say otherwise. */
+  locale: Locale
+}): Promise<Result<CreateRoomResponse, ApiError>> =>
   request('/api/rooms', createRoomResponseSchema, {
-    body: JSON.stringify({ game } satisfies CreateRoomRequest),
+    body: JSON.stringify({ game, locale } satisfies CreateRoomRequest),
     headers: { 'content-type': 'application/json' },
     method: 'POST'
   })

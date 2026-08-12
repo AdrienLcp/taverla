@@ -1,5 +1,6 @@
 import type { GameKind } from '@taverla/protocol/game'
 import type { RoomCode } from '@taverla/protocol/identifiers'
+import type { Locale } from '@taverla/protocol/locale'
 
 import { generateRoomCode } from '@taverla/core/room/room-code'
 import { roomSettingsFor } from '@taverla/core/room/room-settings'
@@ -26,10 +27,13 @@ const MAX_CODE_ATTEMPTS = 20
 
 export const createRoom = ({
   game,
+  locale,
   now
 }: {
   /** `null` from the front door, where the code goes up before anybody has decided. */
   game: GameKind | null
+  /** The host's, so a quiz opens in a language they read rather than in a fixed one. */
+  locale: Locale
   now: number
 }): Room | null => {
   const code = drawUnusedCode()
@@ -47,7 +51,7 @@ export const createRoom = ({
     playedContentIds: new Set(),
     players: new Map(),
     round: null,
-    settings: roomSettingsFor(game),
+    settings: roomSettingsFor({ game, locale }),
     trackPool: []
   }
 

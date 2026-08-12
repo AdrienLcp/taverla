@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { protocolErrorCodeSchema } from './error-code'
 import { shelvedGameSchema } from './game'
 import { roomCodeSchema } from './identifiers'
+import { DEFAULT_LOCALE, localeSchema } from './locale'
 import { trackDifficultySchema, trackIdentitySchema } from './track'
 
 /**
@@ -24,7 +25,17 @@ import { trackDifficultySchema, trackIdentitySchema } from './track'
  * round.
  */
 export const createRoomRequestSchema = z.object({
-  game: shelvedGameSchema.optional()
+  game: shelvedGameSchema.optional(),
+  /**
+   * The host's interface language, and the only thing a room can go on for a
+   * setting nobody has been asked about yet — the quiz has to be drawn in *some*
+   * language before the console has rendered. It is the shell's fact rather than
+   * that game's: what the host reads, not what the room plays.
+   *
+   * Defaulted rather than required, because this door has no version handshake
+   * the way the socket does: a tab opened before the field existed still posts.
+   */
+  locale: localeSchema.default(DEFAULT_LOCALE)
 })
 
 export const createRoomResponseSchema = z.object({

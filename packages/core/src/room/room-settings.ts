@@ -1,13 +1,16 @@
 import {
   DEFAULT_GAME_SETTINGS,
   type GameKind,
+  type GameSettings,
   roundDurationMsOf
 } from '@taverla/protocol/game'
+import type { Locale } from '@taverla/protocol/locale'
 import {
   DEFAULT_ROOM_SETTINGS,
   type RoomSettings
 } from '@taverla/protocol/room'
 
+import { questionLanguageFor } from '../quiz/question-language'
 import { modeOfferedBy } from './game-modes'
 
 /**
@@ -32,15 +35,41 @@ const DEFAULT_ROUND_COUNT: Record<GameKind, number | null> = {
  * else: the three fields below are the game's to answer, and there is no game
  * yet to answer them.
  */
-export const roomSettingsFor = (game: GameKind | null): RoomSettings =>
+export const roomSettingsFor = ({
+  game,
+  locale
+}: {
+  game: GameKind | null
+  /** The host's, and the only evidence available for what a room has not been asked. */
+  locale: Locale
+}): RoomSettings =>
   game === null
     ? DEFAULT_ROOM_SETTINGS
     : {
         ...DEFAULT_ROOM_SETTINGS,
-        game: DEFAULT_GAME_SETTINGS[game],
+        game: openedGameSettings({ game, locale }),
         mode: modeOfferedBy({ game, preferred: DEFAULT_ROOM_SETTINGS.mode }),
         roundCount: DEFAULT_ROUND_COUNT[game]
       }
+
+/**
+ * The game's own defaults, with the one field that cannot have a fixed one. A
+ * quiz drawn in a language the host does not read is the wrong game, and the
+ * protocol's default has no way of knowing which that is.
+ */
+const openedGameSettings = ({
+  game,
+  locale
+}: {
+  game: GameKind
+  locale: Locale
+}): GameSettings => {
+  const opened = DEFAULT_GAME_SETTINGS[game]
+
+  return opened.kind === 'quiz'
+    ? { ...opened, language: questionLanguageFor(locale) }
+    : opened
+}
 
 /**
  * The same room, playing something else. The three fields a game gets a say in
@@ -53,12 +82,14 @@ export const roomSettingsFor = (game: GameKind | null): RoomSettings =>
  */
 export const movedToGame = ({
   game,
+  locale,
   settings
 }: {
   game: GameKind
+  locale: Locale
   settings: RoomSettings
 }): RoomSettings => {
-  const opened = roomSettingsFor(game)
+  const opened = roomSettingsFor({ game, locale })
 
   return {
     ...settings,

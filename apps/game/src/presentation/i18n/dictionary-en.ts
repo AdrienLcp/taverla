@@ -314,6 +314,7 @@ export const EN_DICTIONARY = defineTranslations({
       description:
         'Questions on everything — history, science, sport, the everyday. One screen asks, everyone answers on whatever they have in their hand, and the fastest right answer takes the round.'
     },
+    language: 'Question language',
     name: 'Quiz',
     reveal: {
       title: 'The answer was'

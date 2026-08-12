@@ -168,16 +168,25 @@ log. The user sees the translation of `code`.
 ### The two lists that must agree
 
 Adding a locale means editing three places: `LOCALES` in
-`packages/core/src/i18n/locale.ts`, `REACT_ARIA_LOCALES` and `DICTIONARIES` in
+`packages/protocol/src/locale.ts`, `REACT_ARIA_LOCALES` and `DICTIONARIES` in
 `i18n-provider.tsx`, and the `optimizeLocales` array in `vite.config.ts`. The
-compiler catches the first two. **It cannot catch the third**, and the symptom
-is react-aria's own strings — `FieldError`, press announcements, live regions —
-silently falling back to English.
+compiler catches the first two — and `LANGUAGE_NAMES`, and the quiz's
+`questionLanguageFor` test, both of which go red on the new member. **It cannot
+catch the third**, and the symptom is react-aria's own strings — `FieldError`,
+press announcements, live regions — silently falling back to English.
+
+`LOCALES` sits in the protocol rather than in core because `POST /api/rooms`
+carries the host's locale: it is a shape both sides agree on. `pickLocale`, which
+negotiates one out of `navigator.languages`, is a rule and stayed in core.
 
 ### Language names are not translated
 
 `English` / `Français`, in every locale. Someone hunting for their language in a
-UI they cannot read has only the word itself to go on.
+UI they cannot read has only the word itself to go on. They are not dictionary
+keys at all: `LANGUAGE_NAMES` in `presentation/i18n/language-names.ts` is the one
+map, keyed by `Locale | QuestionLanguage`, and that union is what makes it a
+guard — the interface language and the language a quiz is drawn in are different
+settings written in the same words, and neither can gain a member without a name.
 
 ## Colours, and the two themes
 

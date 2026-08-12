@@ -77,13 +77,7 @@ export const QUESTIONS = [
 export const questionBankStub = () => ({
   drawQuestion: ({ playedIds }: { playedIds: ReadonlySet<string> }) =>
     QUESTIONS.find((question) => !playedIds.has(question.id)) ?? null,
-  hostQuestionOf: <TQuestion>(question: TQuestion) => question,
-  QUESTION_BANK_ATTRIBUTION: {
-    author: 'Nobody',
-    licence: 'CC BY-SA 4.0',
-    source: 'Test bank',
-    url: 'https://example.test'
-  }
+  hostQuestionOf: <TQuestion>(question: TQuestion) => question
 })
 
 /**

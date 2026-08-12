@@ -5,6 +5,7 @@ import type { ShelvedGame } from '@taverla/protocol/game'
 
 import { createRoom } from '@/infrastructure/api/taverla-api'
 import { hostPathFor } from '@/infrastructure/router/navigation'
+import { useI18n } from '@/presentation/i18n/i18n-provider'
 import {
   apiErrorKey,
   type PlainTranslationKey
@@ -18,6 +19,7 @@ import {
  */
 export const useCreateRoom = () => {
   const navigate = useNavigate()
+  const { locale } = useI18n()
   const [error, setError] = useState<PlainTranslationKey | null>(null)
   const [isCreating, setIsCreating] = useState(false)
 
@@ -28,7 +30,7 @@ export const useCreateRoom = () => {
       setIsCreating(true)
       setError(null)
 
-      const created = await createRoom(game)
+      const created = await createRoom({ game, locale })
 
       setIsCreating(false)
 

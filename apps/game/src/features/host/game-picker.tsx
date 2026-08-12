@@ -7,7 +7,7 @@ import { movedToGame } from '@taverla/core/room/room-settings'
 import { isShelvedGame } from '@taverla/core/room/shelved-game'
 
 import { SegmentedControl } from '@/presentation/components/segmented-control'
-import { useTranslate } from '@/presentation/i18n/i18n-provider'
+import { useI18n } from '@/presentation/i18n/i18n-provider'
 import { gameNameKey } from '@/presentation/i18n/translation'
 
 type GamePickerProps = {
@@ -28,7 +28,7 @@ export const GamePicker: React.FC<GamePickerProps> = ({
   onChange,
   settings
 }) => {
-  const translate = useTranslate()
+  const { locale, translate } = useI18n()
 
   return (
     <SegmentedControl
@@ -39,7 +39,7 @@ export const GamePicker: React.FC<GamePickerProps> = ({
         // does not offer, so a room left on the old one between two presses
         // would be a round nobody could answer.
         if (isShelvedGame(next)) {
-          onChange(movedToGame({ game: next, settings }))
+          onChange(movedToGame({ game: next, locale, settings }))
         }
       }}
       options={shelvedGames.map((game) => ({

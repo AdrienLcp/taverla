@@ -6,7 +6,9 @@ import {
   Button as ReactAriaButton
 } from 'react-aria-components'
 
-import { isLocale, LOCALES, type Locale } from '@taverla/core/i18n/locale'
+import { LOCALES } from '@taverla/protocol/locale'
+
+import { isLocale } from '@taverla/core/i18n/locale'
 
 import {
   isThemePreference,
@@ -17,6 +19,7 @@ import { fetchHealth } from '@/infrastructure/api/taverla-api'
 import { joinPath } from '@/infrastructure/router/navigation'
 import { useConnection } from '@/presentation/connection/connection-provider'
 import { useI18n } from '@/presentation/i18n/i18n-provider'
+import { LANGUAGE_NAMES } from '@/presentation/i18n/language-names'
 import type { PlainTranslationKey } from '@/presentation/i18n/translation'
 import { useTheme } from '@/presentation/theme/theme-provider'
 
@@ -31,19 +34,15 @@ import { TextLink } from './text-link'
 
 import './app-menu.sass'
 
-/**
- * A language is named in its own language and never translated — someone who
- * landed on a UI they cannot read has only the word itself to navigate by.
- */
-const LOCALE_LABELS: Record<Locale, string> = {
-  en: 'English',
-  fr: 'Français'
-}
-
 const THEME_KEYS: Record<ThemePreference, PlainTranslationKey> = {
   dark: 'preferences.theme.dark',
   light: 'preferences.theme.light',
   system: 'preferences.theme.system'
+}
+
+const LICENCE = {
+  name: 'CC BY-SA 4.0',
+  url: 'https://creativecommons.org/licenses/by-sa/4.0/'
 }
 
 /**
@@ -54,16 +53,26 @@ const THEME_KEYS: Record<ThemePreference, PlainTranslationKey> = {
  * small print rather than on the reveal, where it would take the loudest moment
  * of the round ten times a game to say the same thing.
  *
- * It mirrors the `attribution` header of `question-bank.json`, which is the
+ * One entry per language, because the bank is written in each rather than
+ * translated from one into the other, and the two halves have different authors.
+ * Both are named whatever the room is playing: the credit is for the data that
+ * shipped, not for the rows a given evening happened to draw.
+ *
+ * It mirrors the `attributions` header of `question-bank.json`, which is the
  * machine-readable copy that travels with the data itself.
  */
-const QUESTION_CREDIT = {
-  author: 'Philippe Bresoux',
-  licence: 'CC BY-SA 4.0',
-  licenceUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
-  source: 'OpenQuizzDB',
-  sourceUrl: 'https://www.openquizzdb.org'
-}
+const QUESTION_CREDITS = [
+  {
+    author: 'Philippe Bresoux',
+    source: 'OpenQuizzDB',
+    sourceUrl: 'https://www.openquizzdb.org'
+  },
+  {
+    author: 'PIXELTAIL GAMES LLC',
+    source: 'Open Trivia DB',
+    sourceUrl: 'https://opentdb.com'
+  }
+]
 
 /**
  * The one piece of chrome on every screen, including the ones a phone reaches
@@ -134,7 +143,7 @@ export const AppMenu = () => {
                     }
                   }}
                   options={LOCALES.map((value) => ({
-                    label: LOCALE_LABELS[value],
+                    label: LANGUAGE_NAMES[value],
                     value
                   }))}
                   value={locale}
@@ -158,20 +167,20 @@ export const AppMenu = () => {
                   {translate('menu.home')}
                 </Link>
 
-                <p className='credit'>
-                  {translate('menu.questions', {
-                    author: QUESTION_CREDIT.author
-                  })}{' '}
-                  <TextLink href={QUESTION_CREDIT.sourceUrl} target='_blank'>
-                    {QUESTION_CREDIT.source}
-                  </TextLink>
-                  {translate('menu.questionsLicence')}{' '}
-                  <span className='fragment'>
-                    <TextLink href={QUESTION_CREDIT.licenceUrl} target='_blank'>
-                      {QUESTION_CREDIT.licence}
+                {QUESTION_CREDITS.map((credit) => (
+                  <p className='credit' key={credit.source}>
+                    {translate('menu.questions', { author: credit.author })}{' '}
+                    <TextLink href={credit.sourceUrl} target='_blank'>
+                      {credit.source}
                     </TextLink>
-                  </span>
-                </p>
+                    {translate('menu.questionsLicence')}{' '}
+                    <span className='fragment'>
+                      <TextLink href={LICENCE.url} target='_blank'>
+                        {LICENCE.name}
+                      </TextLink>
+                    </span>
+                  </p>
+                ))}
 
                 {build !== null && (
                   <p className='build'>{translate('menu.build', { build })}</p>

@@ -62,13 +62,6 @@ export const hostQuestionOf = ({
 })
 
 /**
- * Who wrote these and under what terms. CC BY-SA asks for the credit to travel
- * with the work, so it is served to the room rather than buried in a repository
- * nobody at the party is reading.
- */
-export const QUESTION_BANK_ATTRIBUTION = bank.attribution
-
-/**
  * One question the room has not had yet. `playedIds` is the room's memory
  * rather than this module's: two rooms playing at once must be able to draw the
  * same question, and a bank that remembered would leak one party into another.

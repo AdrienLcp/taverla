@@ -2,7 +2,9 @@ import type React from 'react'
 
 import {
   type QuestionCategory,
-  questionCategories
+  type QuestionLanguage,
+  questionCategories,
+  questionLanguages
 } from '@taverla/protocol/question'
 import {
   type AnswerMode,
@@ -21,6 +23,7 @@ import { SegmentedControl } from '@/presentation/components/segmented-control'
 import { Switch } from '@/presentation/components/switch'
 import { ToggleGroup } from '@/presentation/components/toggle-group'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
+import { LANGUAGE_NAMES } from '@/presentation/i18n/language-names'
 import {
   answerModeLabelKey,
   questionCategoryKey,
@@ -105,6 +108,9 @@ const isAnswerMode = (value: string): value is AnswerMode =>
 
 const asCategory = (value: string | number): QuestionCategory | undefined =>
   questionCategories.find((category) => category === value)
+
+const isQuestionLanguage = (value: string): value is QuestionLanguage =>
+  questionLanguages.some((language) => language === value)
 
 type SettingsPanelProps = {
   /** The socket is open. Every control here sends a frame, so none of them work without it. */
@@ -213,6 +219,27 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
 
       {game?.kind === 'quiz' && (
         <>
+          {/*
+            The host's alone, and never the reader's: the interface locale is
+            stored per device, so two players in one room can hold different
+            ones and drawing from them would deal each phone its own question.
+            It opens on whatever the host was reading and moves independently
+            after that — a room can play in French on an English console.
+          */}
+          <SegmentedControl
+            isDisabled={isDisabled}
+            label={translate('quiz.language')}
+            onChange={(next) => {
+              if (isQuestionLanguage(next)) {
+                onChange({ ...settings, game: { ...game, language: next } })
+              }
+            }}
+            options={questionLanguages.map((language) => ({
+              label: LANGUAGE_NAMES[language],
+              value: language
+            }))}
+            value={game.language}
+          />
           <ToggleGroup
             isDisabled={isDisabled}
             label={translate('quiz.category.label')}

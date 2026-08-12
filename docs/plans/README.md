@@ -20,6 +20,7 @@ describes the code is worse than no plan.
 | [11 — The seam, and the buzzer](11-buzzer.md) | **done** | The split between the shelf and one game on it, and the second game that proves it: a buzzer the room supplies |
 | [12 — Trivia](12-trivia.md) | **done** | A quiz through the seam, in all three modes, on 1 800 bundled French questions. The third game on the shelf |
 | [13 — The room comes first](13-room-first.md) | **done** | A room is opened before the game is chosen: `settings.game` goes nullable, and the picker moves onto the lobby stage |
+| [14 — Question languages](14-question-languages.md) | **done** | A second bank, 4 506 English questions, and the control that picks between them — defaulted to what the host reads, independent of it after |
 
 ## Order, and what can move
 

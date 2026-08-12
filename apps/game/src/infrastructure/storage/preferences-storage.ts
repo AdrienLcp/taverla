@@ -1,6 +1,7 @@
 import { type Nickname, nicknameSchema } from '@taverla/protocol/identifiers'
+import type { Locale } from '@taverla/protocol/locale'
 
-import { isLocale, type Locale } from '@taverla/core/i18n/locale'
+import { isLocale } from '@taverla/core/i18n/locale'
 
 import { isThemePreference, type ThemePreference } from '@/helpers/theme'
 

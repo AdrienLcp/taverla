@@ -145,7 +145,9 @@ describe('the rules every socket obeys', () => {
   // it, and the code is its own because the phase is right and the decision is
   // what is missing.
   it('[settings] refuses to open a round in a room with no game', async () => {
-    const { code, host } = await room.openRoom(roomSettingsFor(null))
+    const { code, host } = await room.openRoom(
+      roomSettingsFor({ game: null, locale: 'fr' })
+    )
 
     await room.seat({ code, nickname: 'Alice' })
     host.send({ type: 'host.startRound' })
@@ -159,7 +161,9 @@ describe('the rules every socket obeys', () => {
   })
 
   it('[settings] opens the round once the table has picked one', async () => {
-    const { code, host } = await room.openRoom(roomSettingsFor(null))
+    const { code, host } = await room.openRoom(
+      roomSettingsFor({ game: null, locale: 'fr' })
+    )
 
     await room.seat({ code, nickname: 'Alice' })
     host.send({ settings: FAST_GAME, type: 'host.updateSettings' })

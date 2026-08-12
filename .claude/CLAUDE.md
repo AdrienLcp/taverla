@@ -233,17 +233,34 @@ the **simultaneous path**, which stage 11 left entirely in the blind test's
 shape, and then the four shell strings the screens forced out of a game's
 namespace.
 
-The **question language** is a room setting the UI deliberately does not offer:
-every row in the bank is French, so shipping the control would ship an option
-that always fails. The field stays in the protocol, and a second bank makes it
-one `if` in the settings panel.
-
 **13 is done: the room comes first.** `/` creates a room with nothing chosen and
 the game is picked on the console, so `settings.game` is nullable and
 `PROTOCOL_VERSION` is 9. A game's own page keeps its button as a shortcut. Read
 `docs/plans/13-room-first.md` before touching anything that reads
 `settings.game` — three of the sites it swept were reading it where
 `round.content` was the honest source.
+
+**14 is done, and the quiz has two banks.** 4 506 English questions from Open
+Trivia DB beside the 1 800 French, same CC BY-SA 4.0, same bundled asset, and the
+control stage 12 deliberately withheld. Three things worth knowing before
+touching it:
+
+- **The language is the room's and the host's alone.** It defaults to the host's
+  interface locale and moves independently after — a player switching their app
+  between English and French mid-game changes their chrome and nothing else.
+- **The default is a map, not an identity.** `Locale` and `QuestionLanguage` are
+  separate unions holding the same two members today;
+  `@taverla/core/quiz/question-language` maps between them with a fallback, and
+  its test is the tripwire for a locale that ships without a bank.
+- **`Locale` lives in the protocol now**, because `POST /api/rooms` carries it.
+  `pickLocale` is a rule and stayed in core. The door carries the shell's fact —
+  what the host *reads* — rather than a quiz setting, and each game decides what
+  to do with it.
+
+English has **no anecdotes and no adult rating**, so a reveal there shows the
+answer alone and `allowsAdultContent` filters nothing. Its `arts` category is
+55% of the bank, a fifth of it video games; the draw is left uniform, and
+`docs/plans/14-question-languages.md` records why.
 
 Read the divergences at the end of `docs/plans/11-buzzer.md` before trusting a
 detail written earlier in that file: the second game corrected the first half in

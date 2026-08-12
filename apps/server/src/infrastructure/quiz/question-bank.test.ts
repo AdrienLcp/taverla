@@ -4,6 +4,7 @@ import {
   DEFAULT_QUIZ_SETTINGS,
   type QuizSettings
 } from '@taverla/protocol/game'
+import { questionLanguages } from '@taverla/protocol/question'
 
 import { drawQuestion } from './question-bank'
 
@@ -76,12 +77,23 @@ describe('drawQuestion', () => {
     expect(drawQuestion({ playedIds: played, settings })).toBeNull()
   })
 
-  it('[bank] has nothing to serve in a language it does not hold', () => {
-    expect(
-      drawQuestion({
-        playedIds: NOTHING_PLAYED,
-        settings: { ...DEFAULT_QUIZ_SETTINGS, language: 'en' }
-      })
-    ).toBeNull()
+  /**
+   * This replaced the assertion that English drew nothing, which was the guard
+   * on a decision rather than on a rule: while every row was French, shipping
+   * the control would have shipped an option that always failed. Both banks
+   * exist now, so the rule that matters is that neither leaks into the other —
+   * a room playing in French must never be handed an English question, and four
+   * hundred draws over a bank where more than two rows in three are English
+   * would surface one immediately if the filter were absent.
+   */
+  it('[bank] stays inside the language the room is playing', () => {
+    for (const language of questionLanguages) {
+      const drawn = drawMany({ ...DEFAULT_QUIZ_SETTINGS, language })
+
+      expect(drawn.length).toBe(400)
+      expect(drawn.every((question) => question.language === language)).toBe(
+        true
+      )
+    }
   })
 })

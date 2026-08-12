@@ -1,7 +1,9 @@
 import { type ReactNode, useEffect, useState } from 'react'
 import { I18nProvider as ReactAriaI18nProvider } from 'react-aria-components'
 
-import { type Locale, pickLocale } from '@taverla/core/i18n/locale'
+import type { Locale } from '@taverla/protocol/locale'
+
+import { pickLocale } from '@taverla/core/i18n/locale'
 import { createTranslator } from '@taverla/core/i18n/translator'
 
 import { createSafeContext } from '@/helpers/contexts'

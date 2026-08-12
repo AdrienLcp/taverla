@@ -15,39 +15,49 @@ import { movedToGame, reshapesRound, roomSettingsFor } from './room-settings'
 
 describe('roomSettingsFor', () => {
   it('[room-settings] opens a room on the game it was created for', () => {
-    expect(roomSettingsFor('buzzer').game?.kind).toBe('buzzer')
+    expect(roomSettingsFor({ game: 'buzzer', locale: 'fr' }).game?.kind).toBe(
+      'buzzer'
+    )
   })
 
   // The front door creates the room and the table decides afterwards, so this
   // is the ordinary case rather than a half-built one.
   it('[room-settings] opens a room with no game on nothing to play', () => {
-    expect(roomSettingsFor(null).game).toBeNull()
+    expect(roomSettingsFor({ game: null, locale: 'fr' }).game).toBeNull()
   })
 
   // The pair travels together everywhere, and a room that opened on a mode its
   // own game refuses is one whose first "start" the server rejects.
   it('[room-settings] never opens a room on a mode its game does not offer', () => {
     for (const game of gameKinds) {
-      const settings = roomSettingsFor(game)
+      const settings = roomSettingsFor({ game, locale: 'fr' })
 
       expect(offersAnswerMode({ game, mode: settings.mode.kind })).toBe(true)
     }
   })
 
   it('[room-settings] leaves a game with no natural end running until the host stops it', () => {
-    expect(roomSettingsFor('buzzer').roundCount).toBeNull()
-    expect(roomSettingsFor('blindtest').roundCount).toBe(10)
+    expect(
+      roomSettingsFor({ game: 'buzzer', locale: 'fr' }).roundCount
+    ).toBeNull()
+    expect(
+      roomSettingsFor({ game: 'blindtest', locale: 'fr' }).roundCount
+    ).toBe(10)
   })
 })
 
 describe('movedToGame', () => {
-  const onTheBuzzer = roomSettingsFor('buzzer')
+  const onTheBuzzer = roomSettingsFor({ game: 'buzzer', locale: 'fr' })
 
   // The bug this exists for: a room that came from the bare buzzer used to land
   // on a blind test in buzzer mode, with no round limit — its own settings worn
   // by a game that has better ones.
   it('[room-settings] gives the new game its own mode and round count', () => {
-    const moved = movedToGame({ game: 'blindtest', settings: onTheBuzzer })
+    const moved = movedToGame({
+      game: 'blindtest',
+      locale: 'fr',
+      settings: onTheBuzzer
+    })
 
     expect(moved.mode).toEqual(DEFAULT_MODE_SETTINGS.typed)
     expect(moved.roundCount).toBe(10)
@@ -57,6 +67,7 @@ describe('movedToGame', () => {
   it('[room-settings] leaves the settings that are the host’s alone', () => {
     const moved = movedToGame({
       game: 'blindtest',
+      locale: 'fr',
       settings: { ...onTheBuzzer, autoAdvanceMs: 8_000, countdownMs: 10_000 }
     })
 
@@ -67,7 +78,8 @@ describe('movedToGame', () => {
   it('[room-settings] narrows to the one mode a bare buzzer can serve', () => {
     const moved = movedToGame({
       game: 'buzzer',
-      settings: roomSettingsFor('blindtest')
+      locale: 'fr',
+      settings: roomSettingsFor({ game: 'blindtest', locale: 'fr' })
     })
 
     expect(moved.mode.kind).toBe('buzzer')
@@ -76,11 +88,11 @@ describe('movedToGame', () => {
 
 describe('reshapesRound', () => {
   const blindtest: RoomSettings = {
-    ...roomSettingsFor('blindtest'),
+    ...roomSettingsFor({ game: 'blindtest', locale: 'fr' }),
     game: DEFAULT_BLINDTEST_SETTINGS
   }
   const buzzer: RoomSettings = {
-    ...roomSettingsFor('buzzer'),
+    ...roomSettingsFor({ game: 'buzzer', locale: 'fr' }),
     game: DEFAULT_BUZZER_SETTINGS
   }
 

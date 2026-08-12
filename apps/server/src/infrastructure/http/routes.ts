@@ -82,10 +82,8 @@ export const registerHttpRoutes = (app: Hono): void => {
     limitRoomCreation,
     zValidator('json', createRoomRequestSchema),
     (context) => {
-      const room = createRoom({
-        game: context.req.valid('json').game ?? null,
-        now: Date.now()
-      })
+      const { game, locale } = context.req.valid('json')
+      const room = createRoom({ game: game ?? null, locale, now: Date.now() })
 
       if (room === null) {
         const error: ApiErrorResponse = {

@@ -6,7 +6,7 @@ import { roomSettingsFor } from './room-settings'
 import { settingsSummary } from './settings-summary'
 
 describe('settingsSummary', () => {
-  const blindtest = roomSettingsFor('blindtest')
+  const blindtest = roomSettingsFor({ game: 'blindtest', locale: 'fr' })
 
   it('[settings-summary] reads left to right, from the game down to how long the evening runs', () => {
     expect(settingsSummary({ draftSource: null, settings: blindtest })).toEqual(
@@ -33,7 +33,7 @@ describe('settingsSummary', () => {
   it('[settings-summary] says nothing about a source in a game that serves none', () => {
     const parts = settingsSummary({
       draftSource: { kind: 'search', query: 'yacht rock' },
-      settings: roomSettingsFor('buzzer')
+      settings: roomSettingsFor({ game: 'buzzer', locale: 'fr' })
     })
 
     expect(parts.some((part) => part.kind === 'source')).toBe(false)
@@ -42,7 +42,7 @@ describe('settingsSummary', () => {
   it('[settings-summary] says nothing about an answer mode the host was never offered', () => {
     const parts = settingsSummary({
       draftSource: null,
-      settings: roomSettingsFor('buzzer')
+      settings: roomSettingsFor({ game: 'buzzer', locale: 'fr' })
     })
 
     expect(parts.some((part) => part.kind === 'answerMode')).toBe(false)
@@ -55,7 +55,10 @@ describe('settingsSummary', () => {
   it('[settings-summary] names every game the shelf can be opened on', () => {
     for (const game of shelvedGames) {
       expect(
-        settingsSummary({ draftSource: null, settings: roomSettingsFor(game) })
+        settingsSummary({
+          draftSource: null,
+          settings: roomSettingsFor({ game, locale: 'fr' })
+        })
       ).toContainEqual({ game, kind: 'game' })
     }
   })
@@ -64,7 +67,10 @@ describe('settingsSummary', () => {
   // about a decision nobody has made rather than name a default.
   it('[settings-summary] says nothing about a game the room has not been given', () => {
     expect(
-      settingsSummary({ draftSource: null, settings: roomSettingsFor(null) })
+      settingsSummary({
+        draftSource: null,
+        settings: roomSettingsFor({ game: null, locale: 'fr' })
+      })
     ).toEqual([{ count: 10, kind: 'roundCount' }])
   })
 
@@ -72,7 +78,7 @@ describe('settingsSummary', () => {
     expect(
       settingsSummary({
         draftSource: null,
-        settings: roomSettingsFor('buzzer')
+        settings: roomSettingsFor({ game: 'buzzer', locale: 'fr' })
       })
     ).toContainEqual({ count: null, kind: 'roundCount' })
   })

@@ -311,6 +311,7 @@ export const FR_DICTIONARY: Dictionary = {
       description:
         'Des questions sur tout — l’histoire, les sciences, le sport, la vie de tous les jours. Un écran pose la question, tout le monde répond sur ce qu’il a dans la main, et la bonne réponse la plus rapide remporte le tour.'
     },
+    language: 'Langue des questions',
     name: 'Quiz',
     reveal: {
       title: 'La réponse était'
