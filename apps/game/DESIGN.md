@@ -153,10 +153,36 @@ card flips rather than the way a panel slides.
 
 ## Layout
 
-`layout.stage` for the host (full field, no column), `layout.screen` for the
-phone (620px, widening to 900px in game because not every player is on a
-phone). The buzzer is `min(78vw, 42vh, 420px)` — three limits, because one leaves
-it tiny on a wide screen or taller than a short one.
+`layout.stage` for the host, `layout.screen` for the phone (620px, widening to
+`$wide-screen` because not every player is on a phone). The buzzer is
+`min(78vw, 42vh, 420px)` — three limits, because one leaves it tiny on a wide
+screen or taller than a short one.
+
+**900px is one number with three jobs**, and they are the same moment: the
+viewport at which a column stops being a phone's, the ceiling that column widens
+to, and where the lobby splits in two. `layout.$wide-screen` is the source and
+`--column-wide-max-width` is derived from it, because a media query cannot read
+a custom property and two literals drift.
+
+**Everything is bounded, including the stage.** Type here is sized in `vmin`, so
+it stops growing with the *shorter* axis — past the width the composition needs,
+more width is void rather than a bigger title card. On a 21:9 display the
+unbounded stage ran the full 3 440px with the QR code pinned to one edge and the
+roster to the other. `--stage-max-width` is what a 1920 screen already gave it,
+which is the only width it was ever verified at.
+
+Three things follow from that ceiling, and each is a rule of its own:
+
+- **What is sized against the viewport must be sized against its container once
+  the container stops being the viewport.** The room code broke onto two lines
+  the moment the cap landed — 302px of type in a 928px column — and is `21cqi`
+  now, which is what "as large as its column allows" actually says.
+- **The fixed menu belongs to the field, not to the corner.** It is pinned to the
+  same band, or it sits hundreds of pixels clear of everything it is chrome for.
+- **A centred column only clears that corner when the viewport is far wider than
+  the column.** The front doors collided with the menu from a phone up to about
+  1 200px, so they start *below* it: giving up the width instead would cost a
+  phone's headline a third of its measure.
 
 **The lobby is two columns and two audiences.** The invitation — code, QR, join
 URL — is what the room is reading; the game picker, the roster and the setup are

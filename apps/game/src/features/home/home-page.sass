@@ -7,6 +7,11 @@
     @include layout.screen
 
     justify-content: center
+    // The centred column only clears the fixed menu once the viewport is far
+    // wider than the column itself, so the tagline ran under it at every width
+    // from a phone to about 1200px. Starting below the corner costs nothing a
+    // page this tall was using.
+    padding-block-start: var(--menu-block-inset)
 
     > header
       display: flex
@@ -20,6 +25,8 @@
 
     h1
       @include typography.billboard
+
+      text-wrap: balance
 
     .start
       display: flex
@@ -39,15 +46,20 @@
       font-weight: 700
       padding: var(--space-2xs) var(--space-s)
 
+    // The one place the widened column earns two of something: three cards
+    // stacked down a 900px page are a list pretending to be a shelf. `auto-fit`
+    // does it without a second breakpoint, and the inner `min` is what stops a
+    // 320px track overflowing a 288px phone.
     .shelf
-      display: flex
-      flex-direction: column
+      display: grid
       gap: var(--space-s)
+      grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr))
 
       h2
         @include typography.label
 
         color: var(--ink-muted)
+        grid-column: 1 / -1
 
     .game
       @include focus.ring

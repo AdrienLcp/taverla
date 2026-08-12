@@ -5,6 +5,11 @@
     // centre their column and never reach that corner.
     --menu-inset: calc(var(--layout-padding) + 116px)
 
+    // The same corner measured downwards, for a screen that leads with display
+    // type across the full column and so cannot sit beside the menu. Giving up
+    // the width instead would cost a phone's headline a third of its measure.
+    --menu-block-inset: calc(var(--layout-padding) + var(--space-xl))
+
     display: flex
     flex: 1
     flex-direction: column

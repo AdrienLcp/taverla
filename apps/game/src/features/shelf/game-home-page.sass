@@ -6,6 +6,7 @@
     @include layout.screen
 
     justify-content: center
+    padding-block-start: var(--menu-block-inset)
 
     > header
       display: flex
@@ -19,6 +20,8 @@
 
     h1
       @include typography.billboard
+
+      text-wrap: balance
 
     .pitch
       @include typography.body

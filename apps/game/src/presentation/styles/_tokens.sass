@@ -1,9 +1,14 @@
 // Side-effect module: emits top-level CSS. Loaded once, from globals.sass.
 //
+// It may `@use` a pure module, and does: the wide-column ceiling is the
+// breakpoint that reveals it, and `_layout.sass` owns that number.
+//
 // The surface IS the colour, and the colour is the phase. Six fields per
 // palette, each with the ink that survives on it — measured, not eyeballed:
 // every pair clears 4.5:1, and `--ink-muted` mixes back toward the field only
 // as far as 85%, which is where the worst pair still clears it.
+
+@use 'layout'
 
 @mixin dark-palette
   color-scheme: dark
@@ -77,6 +82,21 @@
     --font-base: 'Archivo', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif
 
     --layout-padding: clamp(16px, 4vmin, 56px)
+
+    // The widest the host's field is allowed to get. Type here is sized in
+    // `vmin`, so it stops growing with the *shorter* axis — past this, extra
+    // width is void between two columns rather than a bigger title card, and on
+    // a 21:9 display it left a thousand pixels of it. Set to what a 1920 screen
+    // already gave the console, which is the width its two-column lobby was
+    // designed and verified at.
+    --stage-max-width: 1800px
+
+    // A column, and how wide it may get once the screen is not a phone's. The
+    // wide one is `$wide-screen` itself: the column reaches its ceiling exactly
+    // where the console splits its lobby in two and the player's screen widens
+    // for the buzzer, and one number is what keeps those three the same moment.
+    --column-max-width: 620px
+    --column-wide-max-width: #{layout.$wide-screen}
 
     // The active pair. Every surface reads these two and nothing else; the
     // shell swaps which phase they point at, and that swap is the design.

@@ -1,4 +1,9 @@
-// Pure module: mixins only.
+// Pure module: mixins and the one breakpoint, no top-level CSS.
+
+/// Where a screen stops being a phone's. A SASS variable rather than a token
+/// because a media query cannot read a custom property — and it is the source
+/// the wide-column token is derived from, so the two cannot drift.
+$wide-screen: 900px
 
 /// Arriving on a page, and the only motion a *navigation* is allowed. Carried
 /// by the two page mixins rather than written on each root, so the six screens
@@ -12,6 +17,11 @@
     animation: page-enter var(--transition-base, 0) var(--timing, ease) both
 
 /// A phone-first column. Used by every screen a player sees.
+///
+/// It widens rather than staying a ribbon, because the type is sized in `vmin`
+/// and the measure was not: a 72px headline in a 620px column wrapped the front
+/// door's tagline onto eight lines and read as a phone screenshot enlarged. The
+/// two have to grow together or neither should.
 @mixin screen
   @include arriving
 
@@ -20,13 +30,21 @@
   flex-direction: column
   gap: var(--space-l)
   margin: 0 auto
-  max-width: 620px
+  max-width: var(--column-max-width)
   padding: var(--layout-padding)
   width: 100%
+
+  @media (width >= $wide-screen)
+    max-width: var(--column-wide-max-width)
 
 /// The host's surface. It is read anywhere from forty centimetres to four
 /// metres, so it never centres in a column: it takes the whole field and lets
 /// one idea grow into it.
+///
+/// Bounded all the same. `vmin` ties every size here to the shorter axis, so on
+/// a 21:9 display the room code had already stopped growing while the lobby's
+/// two columns kept being pushed apart — a thousand pixels of field between the
+/// QR code and the roster, and a game description set on one 200-character line.
 @mixin stage
   @include arriving
 
@@ -34,6 +52,8 @@
   flex: 1
   flex-direction: column
   gap: var(--space-l)
+  margin: 0 auto
+  max-width: var(--stage-max-width)
   padding: var(--layout-padding)
   width: 100%
 

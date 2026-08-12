@@ -36,7 +36,7 @@
         gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
         grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr)
 
-        @media (width < 900px)
+        @media (width < layout.$wide-screen)
           grid-template-columns: minmax(0, 1fr)
 
       &.playing
@@ -47,6 +47,7 @@
     // largest object in the product and nothing shares its line.
     .invitation
       align-items: flex-start
+      container-type: inline-size
       display: flex
       flex-direction: column
       gap: var(--space-l)
@@ -65,10 +66,16 @@
       // Selectable against the reset, along with the URL below: the copy button
       // is the fast path, and someone reading the code to a laptop still wants
       // to be able to grab it by hand.
+      // `vmin` alone sizes this against the *viewport*, which stopped being the
+      // width it gets the day the stage grew a ceiling: on a 21:9 display the
+      // code was 302px tall in a 930px column and broke across two lines. The
+      // container unit is the same sentence as the comment above — as large as
+      // its column allows — and four characters at this weight need every bit
+      // of `21cqi`.
       .room-code
         @include typography.monument
 
-        font-size: clamp(4.5rem, 21vmin, 20rem)
+        font-size: min(clamp(4.5rem, 21vmin, 20rem), 21cqi)
         user-select: text
         width: 100%
         word-break: break-all

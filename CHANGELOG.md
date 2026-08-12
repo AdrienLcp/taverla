@@ -75,8 +75,33 @@ one part.
   up none: every other interactive element already comes from react-aria, and
   the only hand-written `role` attributes are live regions on paragraphs.
 
+### Improvements
+
+- `[Game]` **A wide screen stops being a phone's screen blown up.** The two front
+  doors were a 620px column whatever the display, while the type is sized in
+  `vmin` — so a 72px headline wrapped the tagline onto eight lines. The column
+  widens to 900px past that width, which is already the product's own number: it
+  is where the console splits its lobby in two and where the player's screen
+  widens for the buzzer. The shelf of games goes two across in the room that
+  frees up
+- `[Game]` The host's console no longer sprawls. It had no maximum at all, so on
+  a 21:9 display it ran the full 3 440px with the QR code pinned to one edge, the
+  roster to the other, a thousand pixels of field between them and a game
+  description set on a single 200-character line. It is bounded to the width a
+  1920 screen already gave it — past that, `vmin` has stopped the type growing
+  and the extra width is only void
+
 ### Fixes
 
+- `[Game]` The front door's tagline no longer runs under the corner menu. A
+  centred column only clears that corner once the viewport is far wider than the
+  column, so it collided at every width from a phone up to about 1 200px. The
+  page starts below the menu instead of beside it — giving up the width would
+  have cost a phone's headline a third of its measure
+- `[Game]` The room code stays on one line. It was sized against the viewport,
+  which stopped being the width it gets the day the console grew a ceiling; it is
+  sized against its own column now, which is what the design always claimed it
+  was
 - `[Server]` A question with nothing to add says nothing. Upstream keeps its
   `anecdote` field even when it is empty, and what it leaves there is `-`, `P`
   or the empty string — 362 of the 1 800 rows, so one round in five put a stray

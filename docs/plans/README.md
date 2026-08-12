@@ -70,7 +70,14 @@ which half they were holding before they could say it, and one guess per round
 made a near-miss the end of it. None of that was visible until a room typed into
 it.
 
-Two more since: the i18n layer learning what a count does to a sentence — a
+A third: the large screen. Both front doors were a 620px column at every width
+while the type scaled with the viewport, and the host's console had no maximum at
+all — so one read as a phone screenshot enlarged and the other sprawled across a
+21:9 display. Recorded in [`apps/game/DESIGN.md`](../../apps/game/DESIGN.md),
+where the three rules that fell out of the ceiling are worth more than the
+ceiling.
+
+Two more before it: the i18n layer learning what a count does to a sentence — a
 scoreline that read "1 POINTS" in both languages was the visible half — and the
 settings moving into the host's footer, reachable for as long as the game runs.
 The second came with the rule underneath it, `reshapesRound`: three settings the
