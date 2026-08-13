@@ -28,7 +28,14 @@ writing `taverla:volume` there, and navigating afterwards. An init script that
 *clears* storage on the way is worse than none: it wipes the key under test on
 every real navigation and on every second tab of the same context.
 
-Four more that cost time to learn:
+Five more that cost time to learn:
+
+- **Two players in one room need a hand.** `taverla:seats` is a single
+  `localStorage` array shared by every tab of the context, keyed by room *and
+  role* — so a second `/play/:code` reclaims the first player's seat instead of
+  taking one of its own. Delete that room's `role: 'player'` entry before the
+  second join; the first player's socket is open and never re-reads it. It is
+  what lets a latecomer be driven against a round somebody else is already in.
 
 - A react-aria segment does not take a click on its `<input>`; the `<label>`
   intercepts the pointer. Click `label.segment`, and scope the query — the
