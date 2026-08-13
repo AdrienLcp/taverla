@@ -162,6 +162,23 @@ Raise it to 5% at most, and only when the audio itself is what is being tested �
 the countdown landing on the first note, a buzz pausing the clip, a reload
 seeking back into a round.
 
+## Driving the app by hand, and what it already cost to learn
+
+The MCP Playwright tool has no `addInitScript`. Reach the muted state by loading
+the home page first — it can play nothing — writing `taverla:volume` there, and
+navigating afterwards. An init script that *clears* storage on the way is worse
+than none: it wipes the key under test on every real navigation and on every
+second tab of the same context.
+
+- A react-aria segment does not take a click on its `<input>`; the `<label>`
+  intercepts the pointer. Click `label.segment`, and scope the query — the
+  console carries two `English` at once, the menu's and the fold's
+- The menu's popover intercepts clicks meant for its own buttons. `Escape` first
+- Playwright MCP writes its screenshots and `.playwright-mcp/` **at the
+  repository root**. Delete them before committing
+- A `/play/:code` opens no socket before the join, so nothing lands in
+  `taverla:seats` until the nickname is accepted
+
 ## UI is still verified in a browser
 
 There is **no component runner in this repo** — no jsdom, no testing-library —
