@@ -251,6 +251,21 @@ one part.
 
 ### Fixes
 
+- `[Server]` **A phone that arrives mid-round no longer holds the round up.**
+  Every predicate deciding whether a phase could close read the live roster, so
+  someone joining during a clip made "everybody has answered" false and a round
+  that would have ended on its last answer ran to its full deadline instead —
+  the table sat there. A round now stamps who it opened on when its clip starts,
+  and waits for those players and nobody else. The seat is kept and the next
+  round is played like anybody else's: joining late costs a round, not a game
+- `[Server]` A latecomer can no longer act in the round they walked in on. A
+  buzz, an answer, a lie and a vote were each guarded on phase, round and mode
+  but never on having been there, so somebody arriving during Le Fake's vote
+  could score two points for finding the truth among lies they never saw. All
+  four are refused with `joined_mid_round`
+- `[Server]` A buzzer round every seated player has missed reveals itself again.
+  A phone that joined after the lockouts counted as somebody who could still
+  answer, so the round waited on the one person in the room who could not
 - `[Game]` The blind test's source preview could hold a refusal from the
   previous query underneath a fresh set of results: a title list, an error and a
   progress flag standing beside each other carried eight combinations for four

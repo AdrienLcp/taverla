@@ -56,7 +56,11 @@ export const findBuzzBlocker = (view: PlayerRoomView): BuzzBlocker | null => {
  */
 export type BuzzRejection = Extract<
   ProtocolErrorCode,
-  'already_buzzed' | 'player_locked_out' | 'stale_round' | 'wrong_phase'
+  | 'already_buzzed'
+  | 'joined_mid_round'
+  | 'player_locked_out'
+  | 'stale_round'
+  | 'wrong_phase'
 >
 
 /**

@@ -109,6 +109,7 @@ Shared by both:
     "activeBuzz": { "playerId": "…", "atServerTime": 1786215014311,
                     "expiresAt": 1786215024311 },  // null → the host decides
     "lockedOutPlayerIds": ["…"],   // answered wrong, out for this round
+    "joinedAfterStart": false,     // you took your seat mid-round; in from the next
     "awards": [{ "playerId": "…", "points": 2, "verdict": { … } }],
     "content": { "kind": "blindtest", "choices": [],
                  "revealedTrack": null }  // filled at reveal, for everyone
@@ -179,6 +180,16 @@ and `null` before their first guess or when they hold no seat. Typed mode takes
 as many guesses as the clip allows, so a player has to be told which half they
 already hold. It is scoped to the reader — everyone else's progress stays secret
 until the reveal, like `revealedAnswers`.
+
+`round.joinedAfterStart` is scoped the same way, and is the round's answer to
+"what is this one to **you**". A round stamps who it opened on when its clip
+starts — the countdown is still *get ready*, so a phone that lands inside it is
+in the round — and waits for those players and nobody else before closing a
+phase. A latecomer keeps its seat and plays from the next round; everything it
+could send in this one is refused with `joined_mid_round`, which is the backstop
+behind the screen rather than the mechanism. One stamp covers the whole round,
+Le Fake's vote included: the people who may vote are the people who were there
+for the writing.
 
 `HostTrack` reaches the wire in exactly two places: the host view, and
 `round.content.revealedTrack` once the round is over — and the reveal carries no

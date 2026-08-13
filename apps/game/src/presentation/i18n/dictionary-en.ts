@@ -149,6 +149,7 @@ export const EN_DICTIONARY = defineTranslations({
     host_only_action: 'Only the host can do that.',
     internal_error: 'Something broke on the server.',
     invalid_message: 'The server did not understand that message.',
+    joined_mid_round: 'You are in from the next round.',
     lie_is_the_answer: 'That is the real answer. Make something up instead.',
     music_source_unavailable: 'The music service is not answering.',
     nickname_taken: 'Someone already took that nickname.',

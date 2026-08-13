@@ -22,6 +22,7 @@ const runningRound: RoundView = {
   content: { choices: [], kind: 'blindtest', revealedTrack: null },
   id: 'r1',
   index: 1,
+  joinedAfterStart: false,
   lockedOutPlayerIds: [],
   revealedAnswers: [],
   startsAt: 1_000

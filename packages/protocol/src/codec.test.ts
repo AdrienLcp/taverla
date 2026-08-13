@@ -17,6 +17,7 @@ const runningRound = {
   },
   id: 'r1',
   index: 1,
+  joinedAfterStart: false,
   lockedOutPlayerIds: [],
   revealedAnswers: [],
   startsAt: 1_700_000_000_000

@@ -9,6 +9,7 @@ import type {
 } from '@taverla/protocol/room'
 import type { HostTrack, TrackIdentity } from '@taverla/protocol/track'
 
+import { hasJoinedAfterStart } from '@taverla/core/round/round-roster'
 import { pointsFor } from '@taverla/core/scoring/verdict'
 
 import { elapsedRoundMs } from '@/domain/round/round-service'
@@ -146,6 +147,12 @@ const toRoundView = ({
   content: toContentView({ round, youId }),
   id: round.id,
   index: round.index,
+  joinedAfterStart:
+    youId !== null &&
+    hasJoinedAfterStart({
+      openedWithPlayerIds: round.openedWithPlayerIds,
+      playerId: youId
+    }),
   lockedOutPlayerIds: [...round.lockedOutPlayerIds],
   revealedAnswers: round.revealed
     ? round.attempts.map((attempts) => ({

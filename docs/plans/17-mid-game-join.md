@@ -28,23 +28,39 @@ cannot answer it.
 
 ## The fix: the round stamps its roster when it opens
 
-`Round` gains `openedWithPlayerIds: ReadonlySet<PlayerId>`, filled when the phase
-flips to `playing` — **not** when the round is created. The countdown is three
-seconds of a screen saying "get ready", and a phone that lands inside it is in
-the round; the stamp belongs at `startRoundClock`, not at `openRound`.
+`Round` gains `openedWithPlayerIds`, filled when the phase flips to `playing` —
+**not** when the round is created. The countdown is three seconds of a screen
+saying "get ready", and a phone that lands inside it is in the round; the stamp
+belongs at `startRoundClock`, not at `openRound`.
+
+It is `ReadonlySet<PlayerId> | null` rather than a set that starts empty, and the
+`null` is what keeps the countdown honest: an empty set says *nobody is in this
+round*, where the truth is that the roster is not decided yet. Every reader gets
+the right answer for free — during the countdown nobody has arrived late,
+because there is nothing to be late for.
 
 One stamp covers the whole round, Le Fake's `voting` included: the people who
 may vote are the people who were there for the writing. A player who was present
 and wrote nothing still votes — that stays true, and it is the sentence in
 `everyoneHasActed`'s docstring that this stage must not break.
 
-The rule goes in `packages/core/src/round/round-roster.ts`, because it is the
-conjunction that matters and it is used three times:
+The rule goes in `packages/core/src/round/round-roster.ts`, as two exports
+rather than the one this plan first drew:
 
 ```ts
+hasJoinedAfterStart({ openedWithPlayerIds, playerId })
+  === openedWithPlayerIds !== null && !openedWithPlayerIds.has(playerId)
+
 isExpectedInRound({ now, openedWithPlayerIds, participant })
-  === openedWithPlayerIds.has(participant.id) && isStillExpected(participant, now)
+  === !hasJoinedAfterStart(…) && isStillExpected(participant, now)
 ```
+
+The conjunction is what the two phase-closing predicates read. The bare
+predicate is what the four guards and the projection read — and what
+`resumeOrReveal` filters its candidates with, because `hasEligibleBuzzer` asks
+for a live socket rather than for a seat the room is still waiting on. Feeding
+it the grace window would keep a buzzer round open for a phone that cannot
+answer it, which is the bug next to the one this stage fixes.
 
 ## Protocol
 
@@ -64,6 +80,7 @@ established: the answer to "what is this round to **you**".
 | `apps/server/src/domain/room/room.ts` | `openedWithPlayerIds` on `Round` |
 | `apps/server/src/domain/round/round-service.ts` | stamp in `startRoundClock`; `everyoneIsDone`, `everyoneHasActed`, `resumeOrReveal` read it; refuse in `registerBuzz`, `registerAnswer`, `registerLie`, `registerVote` |
 | `packages/core/src/round/round-roster.ts` | the rule, with its test |
+| `apps/server/src/__tests__/mid-game-join.test.ts` | the four scenarios below, at socket level |
 | `packages/protocol/src/error-code.ts` | `joined_mid_round` |
 | `packages/protocol/src/room.ts` | `joinedAfterStart` on the player round view |
 | `apps/server/src/domain/room/room-view.ts` | project it |

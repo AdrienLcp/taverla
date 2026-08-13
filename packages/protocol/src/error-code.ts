@@ -14,6 +14,13 @@ export const protocolErrorCodes = [
   'already_buzzed',
   'player_locked_out',
   /**
+   * A frame from a phone that took its seat after the round was under way. It
+   * keeps the seat and plays from the next round; the screen is what stops it
+   * acting in this one, and this is the backstop behind that — a socket is
+   * whatever its owner makes it.
+   */
+  'joined_mid_round',
+  /**
    * A round was asked for in a room whose game nobody has picked yet. Its own
    * code rather than `wrong_phase`, because the phase is right — the lobby is
    * exactly where this happens — and what is missing is a decision the host can

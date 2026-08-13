@@ -23,12 +23,15 @@ import { shuffled } from '@taverla/core/helpers/shuffle'
 import { buildLieBoard } from '@taverla/core/lefake/lie-board'
 import { tallyLieBoard } from '@taverla/core/lefake/tally'
 import { gradeQuizGuess } from '@taverla/core/quiz/question-answer'
-import { isStillExpected } from '@taverla/core/room/seat-presence'
 import {
   type BuzzRejection,
   findBuzzRejection,
   hasEligibleBuzzer
 } from '@taverla/core/round/buzz-eligibility'
+import {
+  hasJoinedAfterStart,
+  isExpectedInRound
+} from '@taverla/core/round/round-roster'
 import { speedBonusForRank } from '@taverla/core/scoring/speed-bonus'
 import {
   isFullyBanked,
@@ -125,6 +128,7 @@ export const openRound = ({
     id: nanoid(10),
     index: (room.round?.index ?? 0) + 1,
     lockedOutPlayerIds: new Set(),
+    openedWithPlayerIds: null,
     revealed: false,
     runningSince: null,
     startsAt: now + room.settings.countdownMs
@@ -156,6 +160,7 @@ export const startRoundClock = ({
   }
 
   room.phase = 'playing'
+  room.round.openedWithPlayerIds = new Set(room.players.keys())
   room.round.runningSince = now
   touch(room, now)
 
@@ -198,6 +203,15 @@ export const registerBuzz = ({
 
   if (rejection !== null) {
     return Result.failure(rejection)
+  }
+
+  if (
+    hasJoinedAfterStart({
+      openedWithPlayerIds: round.openedWithPlayerIds,
+      playerId
+    })
+  ) {
+    return Result.failure('joined_mid_round')
   }
 
   const window = mode.answerWindowMs
@@ -287,7 +301,11 @@ export const clearLockouts = ({
 
 export type AnswerRejection = Extract<
   ProtocolErrorCode,
-  'already_buzzed' | 'invalid_message' | 'stale_round' | 'wrong_phase'
+  | 'already_buzzed'
+  | 'invalid_message'
+  | 'joined_mid_round'
+  | 'stale_round'
+  | 'wrong_phase'
 >
 
 /**
@@ -324,6 +342,15 @@ export const registerAnswer = ({
 
   if (room.settings.mode.kind === 'buzzer') {
     return Result.failure('invalid_message')
+  }
+
+  if (
+    hasJoinedAfterStart({
+      openedWithPlayerIds: round.openedWithPlayerIds,
+      playerId
+    })
+  ) {
+    return Result.failure('joined_mid_round')
   }
 
   const held = round.attempts.find((entry) => entry.playerId === playerId)
@@ -411,7 +438,11 @@ export const everyoneIsDone = (room: Room, now: number): boolean => {
   }
 
   const expected = [...room.players.values()].filter((participant) =>
-    isStillExpected(participant, now)
+    isExpectedInRound({
+      now,
+      openedWithPlayerIds: round.openedWithPlayerIds,
+      participant
+    })
   )
 
   return (
@@ -503,7 +534,11 @@ export const lefakeContent = (question: HostQuestion): Round['content'] => ({
 
 export type LieRejection = Extract<
   ProtocolErrorCode,
-  'already_buzzed' | 'lie_is_the_answer' | 'stale_round' | 'wrong_phase'
+  | 'already_buzzed'
+  | 'joined_mid_round'
+  | 'lie_is_the_answer'
+  | 'stale_round'
+  | 'wrong_phase'
 >
 
 /**
@@ -543,6 +578,15 @@ export const registerLie = ({
 
   if (content.kind !== 'lefake') {
     return Result.failure('wrong_phase')
+  }
+
+  if (
+    hasJoinedAfterStart({
+      openedWithPlayerIds: round.openedWithPlayerIds,
+      playerId
+    })
+  ) {
+    return Result.failure('joined_mid_round')
   }
 
   if (content.lies.some((written) => written.playerId === playerId)) {
@@ -592,6 +636,7 @@ export type VoteRejection = Extract<
   | 'already_buzzed'
   | 'cannot_vote_for_own_lie'
   | 'invalid_message'
+  | 'joined_mid_round'
   | 'stale_round'
   | 'wrong_phase'
 >
@@ -625,6 +670,15 @@ export const registerVote = ({
     return Result.failure('wrong_phase')
   }
 
+  if (
+    hasJoinedAfterStart({
+      openedWithPlayerIds: round.openedWithPlayerIds,
+      playerId
+    })
+  ) {
+    return Result.failure('joined_mid_round')
+  }
+
   if (content.votes.some((vote) => vote.playerId === playerId)) {
     return Result.failure('already_buzzed')
   }
@@ -651,18 +705,25 @@ export const registerVote = ({
 /**
  * Whether the phase the room is in has nothing left to wait for. A phone that
  * dropped off Wi-Fi holds it only for `RECONNECT_GRACE_MS`, the same way it
- * does not hold a clip open — and a player who wrote no lie still votes, which
- * is what keeps someone who arrived late in the round.
+ * does not hold a clip open — and a player who was there for the writing and
+ * wrote nothing still votes, which is what keeps somebody stuck for a lie in
+ * the round.
  */
 export const everyoneHasActed = (room: Room, now: number): boolean => {
-  const content = room.round?.content
+  const round = room.round
 
-  if (content?.kind !== 'lefake') {
+  if (round === null || round.content.kind !== 'lefake') {
     return false
   }
 
+  const content = round.content
+
   const seated = [...room.players.values()].filter((participant) =>
-    isStillExpected(participant, now)
+    isExpectedInRound({
+      now,
+      openedWithPlayerIds: round.openedWithPlayerIds,
+      participant
+    })
   )
 
   if (seated.length === 0) {
@@ -1028,7 +1089,13 @@ const resumeOrReveal = (room: Room, now: number): VerdictOutcome => {
 
   const canResume =
     hasEligibleBuzzer({
-      candidates: [...room.players.values()],
+      candidates: [...room.players.values()].filter(
+        (participant) =>
+          !hasJoinedAfterStart({
+            openedWithPlayerIds: round.openedWithPlayerIds,
+            playerId: participant.id
+          })
+      ),
       lockedOutPlayerIds: [...round.lockedOutPlayerIds]
     }) &&
     (remaining === null || remaining > 0)

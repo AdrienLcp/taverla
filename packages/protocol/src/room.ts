@@ -278,6 +278,15 @@ export const roundViewSchema = z.object({
   /** 1-based, so it reads as "round 3 of 10" without arithmetic at the call site. */
   index: z.number().int().positive(),
   /**
+   * Whether the reader took their seat after this round was under way. They are
+   * in from the next one, and until then the screen owes them a wait rather
+   * than an answer form: the server refuses everything they could send.
+   *
+   * Scoped to the reader, the way `yourVerdict` is — `false` for a host holding
+   * no seat, because a console is never a latecomer to its own room.
+   */
+  joinedAfterStart: z.boolean(),
+  /**
    * Answered wrong this round — cannot buzz again until the next one, or until
    * the host reopens the field with `host.clearLockouts`.
    */

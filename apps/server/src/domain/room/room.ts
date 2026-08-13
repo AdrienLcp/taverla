@@ -12,6 +12,7 @@ import type { HostTrack, TrackIdentity } from '@taverla/protocol/track'
 
 import type { BoardEntry, WrittenLie } from '@taverla/core/lefake/lie-board'
 import type { Vote } from '@taverla/core/lefake/tally'
+import type { RoundRoster } from '@taverla/core/round/round-roster'
 
 /**
  * The server's own model, deliberately richer than either wire view: it holds
@@ -149,6 +150,13 @@ export type Round = {
   id: RoundId
   index: number
   lockedOutPlayerIds: Set<PlayerId>
+  /**
+   * Who the round is played by, and `null` until its clip starts — see
+   * `@taverla/core/round/round-roster`. One stamp covers the whole round, Le
+   * Fake's vote included: the people who may vote are the people who were there
+   * for the writing.
+   */
+  openedWithPlayerIds: RoundRoster
   revealed: boolean
   /** Server time the round last started or resumed running; `null` while paused. */
   runningSince: number | null

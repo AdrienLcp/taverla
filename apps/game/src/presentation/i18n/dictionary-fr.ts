@@ -143,6 +143,7 @@ export const FR_DICTIONARY: Dictionary = {
     host_only_action: 'Seul l’hôte peut faire ça.',
     internal_error: 'Quelque chose a cassé côté serveur.',
     invalid_message: 'Le serveur n’a pas compris ce message.',
+    joined_mid_round: 'Tu joues à partir du prochain tour.',
     lie_is_the_answer: 'C’est la vraie réponse. Invente autre chose.',
     music_source_unavailable: 'Le service musical ne répond pas.',
     nickname_taken: 'Ce pseudo est déjà pris.',

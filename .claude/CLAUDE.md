@@ -126,7 +126,11 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
 - **Round** — one track, one question, or nothing at all.
   `lobby → countdown → playing → buzzed → voting → revealed → finished`.
   `roundCount` is nullable, and `null` means until the host ends it. `voting` is
-  Le Fake's alone; every other game goes from `playing` straight to a reveal
+  Le Fake's alone; every other game goes from `playing` straight to a reveal. A
+  round **stamps who it opened on** when its clip starts, and waits for those
+  players and nobody else — one stamp for the whole round, Le Fake's vote
+  included. A phone that arrives after keeps its seat, is refused everything it
+  could send with `joined_mid_round`, and plays from the next round
 - **Answer mode** — `typed` (one field, the default), `choice` (four candidates)
   or `buzzer` (one player, judged by the host). The first two are everyone at
   once, decided by the server and scored by speed on top of being right; typing
