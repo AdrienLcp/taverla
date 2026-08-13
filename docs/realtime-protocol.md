@@ -107,7 +107,8 @@ Shared by both:
     "awards": [{ "playerId": "…", "points": 2, "verdict": { … } }],
     "content": { "kind": "blindtest", "choices": [],
                  "revealedTrack": null }  // filled at reveal, for everyone
-  }
+  },
+  "roundElapsedMs": 8200          // buzz pauses excluded
 }
 ```
 
@@ -138,14 +139,19 @@ The host view adds what only the host may see:
                       "audioUrl": "https://cdnt-preview…",
                       "track": { "id": "…", "title": "…", "artist": "…",
                                  "coverUrl": "…", "previewUrl": "…" } },
-  "remainingPoolSize": 7,
-  "roundElapsedMs": 8200
+  "remainingPoolSize": 7
 }
 ```
 
 `audioUrl` and `track` are separate because a host who has taken a seat keeps
 the first and gets `null` for the second: that screen still has to play the
 clip, and must not be handed the answer.
+
+`roundElapsedMs` is shared rather than the host's, because it is the room's
+clock and not the speaker's: the host seeks the track back to it after a reload,
+and every screen arms the round bar from it — a phone that locked itself comes
+back to where the room is rather than to a full one. It says how long a round
+has been open, which the big screen is already showing to everybody.
 
 The player view adds instead:
 

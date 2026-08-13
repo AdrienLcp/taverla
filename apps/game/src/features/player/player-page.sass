@@ -65,6 +65,11 @@
         min-height: 44px
         padding-inline-end: var(--menu-inset)
 
+      // The clock belongs to the scoreline it hangs under, not to the round
+      // below it — the page's own gap would leave it adrift between the two.
+      > .round-progress
+        margin-top: calc(var(--space-s) - var(--space-xl))
+
     // The player's own score, ruled off from the field. It is glanced at
     // between rounds and never read carefully, so it is three lines and no box.
     .scoreline

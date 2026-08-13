@@ -28,6 +28,7 @@ const playerView: PlayerRoomView = {
   phase: 'playing',
   players: [{ id: 'p1', isConnected: true, nickname: 'Alice', score: 2 }],
   round: runningRound,
+  roundElapsedMs: 8_200,
   settings: DEFAULT_ROOM_SETTINGS,
   youId: 'p1',
   yourVerdict: null

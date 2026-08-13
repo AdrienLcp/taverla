@@ -303,6 +303,14 @@ const baseRoomViewSchema = z.object({
   phase: roomPhaseSchema,
   players: z.array(publicPlayerSchema),
   round: roundViewSchema.nullable(),
+  /**
+   * Round time already consumed, buzz pauses excluded. It is what lets a host
+   * who reloaded mid-round seek back to where the room actually is, rather than
+   * restarting the track under everyone — and what every screen arms the round
+   * clock from, so a phone that locked itself comes back to the bar where the
+   * room is rather than to a full one.
+   */
+  roundElapsedMs: z.number().int().nonnegative(),
   settings: roomSettingsSchema,
   /**
    * What the reader has banked this round, and `null` before their first guess
@@ -368,13 +376,7 @@ export const hostRoundContentSchema = z.discriminatedUnion('kind', [
  */
 export const hostRoomViewSchema = baseRoomViewSchema.extend({
   currentContent: hostRoundContentSchema.nullable(),
-  remainingPoolSize: z.number().int().nonnegative(),
-  /**
-   * Round time already consumed, buzz pauses excluded. It is what lets a host
-   * who reloaded mid-round seek back to where the room actually is, rather than
-   * restarting the track under everyone.
-   */
-  roundElapsedMs: z.number().int().nonnegative()
+  remainingPoolSize: z.number().int().nonnegative()
 })
 
 export const playerRoomViewSchema = baseRoomViewSchema.extend({

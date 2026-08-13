@@ -173,6 +173,17 @@ one part.
 
 ### Improvements
 
+- `[Shared]` **The round's clock is on the phones too.** The bar draining down
+  the big screen was the host's alone, so a player holding a buzzer had no idea
+  whether the clip had five seconds left or twenty-five — the one thing the phase
+  colour cannot say. It now sits under the scoreline on every screen, in every
+  game with a clock. It is absent while the host is away, where the round is
+  frozen and a bar draining would be timing nobody
+- `[Game]` A screen arriving in the middle of a round joins the bar **where the
+  room is** rather than at a full one — a phone back from a locked screen, a
+  console that reloaded. The correction is also what removed a jump the host's
+  own bar had: a running animation cannot be re-aimed, so each snapshot restarts
+  it from the server's count instead of stretching what it has already played
 - `[Game]` **The question banks are credited on a page of their own**, reachable
   from the menu, instead of two paragraphs of small print inside the popover you
   open to switch language mid-game. CC BY-SA 4.0 names a link to a resource

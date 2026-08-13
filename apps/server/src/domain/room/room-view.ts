@@ -33,9 +33,7 @@ export const toHostView = ({
   ...toBaseView({ isHostConnected, room, youId: seatId }),
   currentContent:
     room.round === null ? null : toHostContent({ round: room.round, seatId }),
-  remainingPoolSize: room.trackPool.length,
-  roundElapsedMs:
-    room.round === null ? 0 : elapsedRoundMs(room.round, Date.now())
+  remainingPoolSize: room.trackPool.length
 })
 
 /**
@@ -102,6 +100,8 @@ const toBaseView = ({
   phase: room.phase,
   players: [...room.players.values()].map(toPublicPlayer),
   round: room.round === null ? null : toRoundView({ round: room.round, youId }),
+  roundElapsedMs:
+    room.round === null ? 0 : elapsedRoundMs(room.round, Date.now()),
   settings: room.settings,
   yourVerdict:
     youId === null

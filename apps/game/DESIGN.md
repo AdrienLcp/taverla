@@ -145,8 +145,19 @@ three duration tokens at `0ms`).
   answers.
 - **Reveal** — `card-strike`, shared by the host panel and the phone, so the
   same moment reads the same on both surfaces.
-- **The clip timer** is a CSS animation whose duration is the server's remaining
-  time, re-keyed on a resume. No React timer.
+- **The round's clock** is a CSS animation whose duration is the server's
+  remaining time, on the big screen and on every phone. No React timer, and it
+  is the one thing that moves during a round — a bar draining is what the phase
+  colour cannot say, which is *how long*.
+
+  It is the exception the rule above allows, and only because it never resettles.
+  It drains from the fraction still standing rather than from full, and re-keys
+  on every snapshot: a running animation cannot be re-aimed — moving its duration
+  rebases what it has already played — so it is restarted from the server's own
+  count instead, which is where it had drained to anyway. A phone back from a
+  locked screen joins the bar where the room is. It is absent while the host is
+  away, because the server has the round frozen and a bar draining then would be
+  timing nobody.
 
 `--timing` is an exponential ease-out: things arrive fast and settle, the way a
 card flips rather than the way a panel slides.

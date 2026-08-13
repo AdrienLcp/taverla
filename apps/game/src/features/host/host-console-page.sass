@@ -230,28 +230,6 @@
         padding-bottom: var(--space-s)
         text-wrap: balance
 
-    // Width driven by a CSS animation rather than a React timer: the round runs
-    // for a duration the server already decided, and re-keying the element on a
-    // resume is what restarts it after a buzz.
-    .round-progress
-      border: 3px solid var(--ink)
-      height: 28px
-      overflow: hidden
-      position: relative
-      width: min(900px, 100%)
-
-      &::after
-        animation: round-drain var(--round-remaining, 0ms) linear forwards
-        background: var(--ink)
-        content: ''
-        inset: 0
-        position: absolute
-
-      @media (prefers-reduced-motion: reduce)
-        &::after
-          animation: none
-          opacity: 0.35
-
     .playing .scoreboard
       width: min(900px, 100%)
 
@@ -287,9 +265,3 @@
           @include typography.caption
 
           color: var(--ink-muted)
-
-@keyframes round-drain
-  from
-    transform: translateX(0)
-  to
-    transform: translateX(-100%)

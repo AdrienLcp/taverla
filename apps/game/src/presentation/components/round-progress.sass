@@ -1,0 +1,28 @@
+@layer components
+  .round-progress
+    border: 3px solid var(--ink)
+    height: 28px
+    position: relative
+    width: min(900px, 100%)
+
+    &::after
+      animation: round-drain var(--drain-duration, 0ms) linear forwards
+      background: var(--ink)
+      content: ''
+      inset: 0
+      position: absolute
+      transform-origin: left
+
+    // Still the measurement, minus the moving: someone who asked for no motion
+    // gets where the round stands each time a snapshot corrects it.
+    @media (prefers-reduced-motion: reduce)
+      &::after
+        animation: none
+        opacity: 0.35
+        transform: scaleX(var(--drain-from, 1))
+
+@keyframes round-drain
+  from
+    transform: scaleX(var(--drain-from, 1))
+  to
+    transform: scaleX(0)

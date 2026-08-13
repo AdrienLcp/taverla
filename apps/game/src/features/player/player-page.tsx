@@ -2,6 +2,7 @@ import { type FormEvent, useCallback, useState } from 'react'
 import { Form } from 'react-aria-components'
 
 import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
+import { roundDurationMsOf } from '@taverla/protocol/game'
 import type { RoomCode } from '@taverla/protocol/identifiers'
 import type { PlayerRoomView } from '@taverla/protocol/room'
 
@@ -18,6 +19,7 @@ import {
 import { forgetSessionId } from '@/infrastructure/storage/session-storage'
 import { Button } from '@/presentation/components/button'
 import { ConnectionRefused } from '@/presentation/components/connection-refused'
+import { RoundProgress } from '@/presentation/components/round-progress'
 import { TextField } from '@/presentation/components/text-field'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
 import { useReportRoomExits } from '@/presentation/exits/room-exits-provider'
@@ -167,6 +169,7 @@ const Lobby = ({
       ) : (
         <>
           <Scoreline view={view} />
+          <RoundClock view={view} />
           <PlayerRound
             clock={clock}
             error={error?.code ?? null}
@@ -185,6 +188,27 @@ const Lobby = ({
         </>
       )}
     </main>
+  )
+}
+
+/**
+ * The clock the big screen is showing, on the phone that is answering against
+ * it. Absent while the host is away: the server has the round frozen then, and
+ * a bar that kept draining would be timing nobody.
+ */
+const RoundClock = ({ view }: { view: PlayerRoomView }) => {
+  const durationMs = roundDurationMsOf(view.settings.game)
+
+  if (
+    durationMs === null ||
+    view.phase !== 'playing' ||
+    !view.isHostConnected
+  ) {
+    return null
+  }
+
+  return (
+    <RoundProgress durationMs={durationMs} elapsedMs={view.roundElapsedMs} />
   )
 }
 

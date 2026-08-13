@@ -36,6 +36,7 @@ import { forgetSessionId } from '@/infrastructure/storage/session-storage'
 import { AskedQuestion } from '@/presentation/components/asked-question'
 import { ConnectionRefused } from '@/presentation/components/connection-refused'
 import { Countdown } from '@/presentation/components/countdown'
+import { RoundProgress } from '@/presentation/components/round-progress'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
 import { useReportRoomExits } from '@/presentation/exits/room-exits-provider'
@@ -312,15 +313,9 @@ const Stage = ({
           </p>
         )}
         {roundDurationMs !== null && (
-          <div
-            className='round-progress'
-            key={`${round.id}-${round.awards.length}`}
-            style={{
-              '--round-remaining': `${Math.max(
-                0,
-                roundDurationMs - view.roundElapsedMs
-              )}ms`
-            }}
+          <RoundProgress
+            durationMs={roundDurationMs}
+            elapsedMs={view.roundElapsedMs}
           />
         )}
         {isSeated && view.settings.mode.kind === 'choice' && (
