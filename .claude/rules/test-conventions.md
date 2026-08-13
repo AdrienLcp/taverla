@@ -1,29 +1,27 @@
 ---
-description: Bracketed tags, mutation checks, the socket harness, the three journeys
+description: Bracketed tags, the mutation check, the one socket harness, what deserves a test
 paths:
   - "**/*.test.ts"
-  - "e2e/**"
   - "apps/server/src/__tests__/**"
 ---
 
 # Tests
 
-Vitest in plain Node for the rules and the sockets, Playwright for the two
-journeys. `pnpm test` runs `protocol`, `core` and `server`; `pnpm test:e2e`
-runs the journeys; `pnpm validate` runs the lot.
+## Test the rule, not the plumbing
 
-## Where the tests are, and why they are there
+`packages/protocol` and `packages/core` are pure by construction, so their
+suites finish in under a second and are the right place for a red-green loop
+(`pnpm test:core:watch`). That is also where the rules that matter live: the
+anti-cheat strip, the buzz shape, the clock estimator, the ranking, the
+room-code alphabet. A test over a function that only forwards its argument
+restates the code and gets in the way of the next refactor.
 
-`packages/protocol` and `packages/core` are pure by construction — no browser,
-no network, no server — so their suites finish in under a second and are the
-right place for a red-green loop (`pnpm test:core:watch`).
+Where a component holds a *decision*, move it into `packages/core` and test it
+there, as `findBuzzBlocker` and `buildScoreboard` already are. What a browser
+has to answer for instead is in
+[`../../docs/browser-driving.md`](../../docs/browser-driving.md).
 
-That is also where the rules that matter live. Test the **rule**, not the
-plumbing around it: the anti-cheat strip, the buzz shape, the clock estimator,
-the ranking, the room-code alphabet. A test over a function that only forwards
-its argument restates the code and gets in the way of the next refactor.
-
-## Every test has a bracketed tag
+## Every test carries a bracketed tag
 
 ```ts
 it('[clock] recovers a known offset from a symmetric round trip', …)
@@ -38,7 +36,7 @@ is a character class with an out-of-order range and vitest refuses to start.
 Before considering one done, **break the code on purpose and watch it fail for
 the right reason**. The anti-cheat test earns its place because removing the
 schema strip turns it red with `expected … not to contain 'Daft Punk'`; a test
-that stays green under a mutation is an assertion, not a test.
+that stays green under a mutation is an assertion.
 
 Write the failing test **first** for a bug fix, always: it costs nothing — you
 were going to reproduce the bug anyway — and it proves you found the cause
@@ -58,135 +56,15 @@ source the component reads.** Spell the literal out.
 `apps/server/src/__tests__/room-harness.ts` boots the app on an ephemeral port
 and hands back `connect`, `openRoom`, `seat` and `stop`. A new suite is a file
 with the two-line `vi.mock` of the music client and its tests — never a second
-copy of the plumbing, and never a second catalogue, because the anti-cheat
-assertion searches raw frames for those exact strings.
-
-`openRoom` takes the whole `RoomSettings` and creates the room for
-`settings.game.kind`, so a suite for another game is a fixture rather than a
-second harness — `buzzer-game.test.ts` is one file and no plumbing.
-
-It then sends those settings on the socket, which is what a console does: the
-door decides which arm of `round.content` the room will be rendering, and the
-frame that follows tunes it. While the quiz was served and unshelved the harness
-opened its rooms on a *different* game and moved them — the door and the game
-being two different gates — and that special case went when the quiz went on the
-shelf. It comes back the day another game is served before it has screens.
-
+copy of the plumbing. `openRoom` takes the whole `RoomSettings` and creates the
+room for `settings.game.kind`, so a suite for another game is a fixture rather
+than a second harness: `buzzer-game.test.ts` is one file and no plumbing, and
 `quiz-game.test.ts` stubs `question-bank` the way the others stub the music
 client, which also keeps eighteen hundred questions from being parsed on every
 run.
 
-The anti-cheat assertion is over **the whole round's transcript**, not the
-latest view: a leak in any frame is a leak, and a later frame tidying it away
-proves nothing. `QUESTIONS` lives in the harness for the same reason `CATALOGUE`
-does — the assertion searches raw frames for those exact strings, so a per-file
-copy that drifted would still pass.
-
-## Three journeys, and no fourth
-
-`e2e/` holds them: a whole buzzer game across two browser contexts, two phones
-answering over the same clip in a simultaneous one, and the screen a dead socket
-leaves behind. The second earns its place because the two shapes are opposites —
-one player taking the floor against everyone writing at once — and neither is a
-rule a socket suite could stand in for: it is two browsers, two forms, and a
-screen that has to end up showing both answers. They run on ports of their own against
-`e2e/support/deezer-stub.ts`, so neither the dev server nor today's charts can
-turn them red. Locators are roles and accessible names, gathered in
-`e2e/support/locators.ts` — never a `data-testid`.
-
-**One journey per door**, which is how the room-first flow got covered without a
-fourth: the buzzer game goes through the front page and picks its game on the
-console, and the simultaneous one goes through a game's own page. Both pages
-carry a **"Create a room"** — clicking before the navigation lands opens a room
-with no game, and that failure surfaces a minute later at a launch that stays
-greyed out, so the landing is awaited between the two clicks.
-
-**Everything Playwright owns lives in `e2e/`**, config included: `ls e2e`
-answers "which journeys exist?" and nothing else, and `support/` holds the two
-files that are not tests — the stub is a fake upstream service, not a spec.
-
-Two paths resolve from two different places, and guessing gets one of them
-wrong. `webServer.cwd` defaults to the **config's** directory, so the stub is
-started as `support/deezer-stub.ts` and not `e2e/support/deezer-stub.ts`.
-`outputDir` defaults from the **process's** working directory instead, so traces
-still land in `test-results` at the repository root — which is where CI collects
-them, and why moving the config did not move them.
-
-**`pnpm build` does not type-check `e2e/`.** It is `pnpm -r build`, per package,
-and the root `tsconfig.json` includes only `apps/**/*` and `packages/**/*` — so
-the only thing that reads a locator file is the `tsc --noEmit -p e2e` bolted to
-the front of `test:e2e`. That is accepted rather than overlooked: it runs before
-Playwright starts and costs about a second, and `pnpm validate` runs the lot.
-Closing it is one line — `"build": "pnpm -r build && tsc --noEmit -p e2e"` — for
-the day a type error in `support/` gets through a bare `pnpm build`.
-
-**The locators are shaped by screen**, which is how a spec reads, and the buzzer
-shipped without changing that. Two members of `hostConsole` have started to
-diverge — `answer` and `verdictBoth` are the blind test's, not the room's, where
-`buzzerMode` is a room setting the game narrows. The split, when it comes,
-follows the seam the domain already has: `support/locators/room.ts` beside
-`support/locators/blindtest.ts`, so a spec composes `hostConsole(page)` with
-`blindTestHost(page)`. **The trigger is the third case**, same threshold
-`CLAUDE.md` sets for the `mode` axis — the quiz bringing its own, or the first
-locator only the buzzer can use. Not the second.
-
-**Build before running them.** Playwright starts the server with
-`pnpm --filter @taverla/server start`, which is `node dist/index.mjs` — the
-bundle, not the sources the app is served from. A `pnpm test:e2e` after a server
-or protocol edit therefore runs yesterday's server against today's client, and a
-`PROTOCOL_VERSION` bump turns every journey red at once with a refusal that has
-nothing to do with what they assert. `pnpm validate` builds first, which is the
-reason to prefer it.
-
-Playwright is the slowest tool available. Before adding a third spec, ask what
-it covers that a socket test cannot; the answer is usually "nothing".
-
-## Mute the browser before you drive it
-
-**Every browser session opened to verify something here starts at volume 0.**
-This repo's host console plays music, the stored volume defaults to 80%, and it
-survives across sessions in `localStorage` — so a page that merely *reaches* a
-round makes noise on whatever machine is running the dev server, which is
-somebody's flat.
-
-Write the muted value **before** the first navigation rather than dragging the
-slider afterwards, because by then the clip has already played:
-
-```ts
-await context.addInitScript(() => {
-  localStorage.setItem('taverla:volume', '0')
-})
-```
-
-Raise it to 5% at most, and only when the audio itself is what is being tested —
-the countdown landing on the first note, a buzz pausing the clip, a reload
-seeking back into a round.
-
-## Driving the app by hand, and what it already cost to learn
-
-The MCP Playwright tool has no `addInitScript`. Reach the muted state by loading
-the home page first — it can play nothing — writing `taverla:volume` there, and
-navigating afterwards. An init script that *clears* storage on the way is worse
-than none: it wipes the key under test on every real navigation and on every
-second tab of the same context.
-
-- A react-aria segment does not take a click on its `<input>`; the `<label>`
-  intercepts the pointer. Click `label.segment`, and scope the query — the
-  console carries two `English` at once, the menu's and the fold's
-- The menu's popover intercepts clicks meant for its own buttons. `Escape` first
-- Playwright MCP writes its screenshots and `.playwright-mcp/` **at the
-  repository root**. Delete them before committing
-- A `/play/:code` opens no socket before the join, so nothing lands in
-  `taverla:seats` until the nickname is accepted
-
-## UI is still verified in a browser
-
-There is **no component runner in this repo** — no jsdom, no testing-library —
-and stage 06 left it out on purpose (`docs/plans/06-testing.md`). A type-check
-and a green build say nothing about whether a screen works, and neither does a
-journey that never opens the screen you changed. Any change to what a user sees
-is verified by driving the real app — see `CLAUDE.md`. Saying a UI change is
-done without one is the lapse.
-
-Where a component holds a *decision*, move it into `packages/core` and test it
-there, as `findBuzzBlocker` and `buildScoreboard` already are.
+`CATALOGUE` and `QUESTIONS` live in the harness because the anti-cheat assertion
+searches raw frames for those exact strings, and a per-file copy that drifted
+would still pass. That assertion is over **the whole round's transcript**, not
+the latest view: a leak in any frame is a leak, and a later frame tidying it
+away proves nothing.

@@ -69,8 +69,9 @@ controls for the three settings the protocol always carried, and a host's setup
 surviving the room it was made in. It is
 recorded where it will be read — [`apps/game/DESIGN.md`](../../apps/game/DESIGN.md)
 for the materials and the icon family,
-[`.claude/rules/react-components.md`](../../.claude/rules/react-components.md)
-for the rules that came out of it, and the changelog for the list.
+[`.claude/rules/design-system.md`](../../.claude/rules/design-system.md) and
+[`component-shape.md`](../component-shape.md) for the rules that came out of it,
+and the changelog for the list.
 
 The typed mode's rework is the largest of these so far, and it came from the
 same place: one field instead of two, as many guesses as the clip allows, and a

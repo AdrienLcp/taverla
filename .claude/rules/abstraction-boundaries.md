@@ -2,6 +2,7 @@
 description: Which module may import which external library
 paths:
   - "apps/**/src/**"
+  - "apps/*/scripts/**"
   - "packages/**/src/**"
 ---
 
@@ -11,10 +12,9 @@ paths:
 an SDK, the design-system component — each of those already IS the boundary
 between the application and an external library. Do not stack a second, thinner
 abstraction below it: no generic `httpClient.request()`, no neutral
-`storage.get()`, no "message bus" under the socket. The full rationale — leakage,
-the absent migration payoff, the permanent cost — is in
-`C:/git/.claude/CLAUDE.md`, which is *not* loaded in this project; open it if the
-summary above is not enough.
+`storage.get()`, no "message bus" under the socket. The second layer leaks the
+library's shape anyway, the migration it promises never arrives, and its cost is
+paid on every read of the code.
 
 ## Where an external library may be imported
 
@@ -40,36 +40,8 @@ wrapper underneath.
 here, it is the language the contract is written in. `packages/protocol` is
 nothing but Zod schemas.
 
-## The catalogue swap this actually buys
-
-`deezer-client.ts` is the one module that knows Deezer exists. Everything above
-it speaks `TrackSource`, `TrackSearchResult` and `HostTrack`. Moving to another
-catalogue means rewriting that file, and its two exported functions keep their
-signatures. Nothing thinner underneath would reduce that work.
-
-Note what the boundary does *not* hide, because it should not: preview URLs
-expire, so `fetchHostTrack` is called when a round starts rather than when the
-pool is built. That is a real property of streaming catalogues, not a Deezer
-quirk to paper over.
-
-The quiz's port is the same shape and hides the opposite property. `drawQuestion`
-is **synchronous**, because the bank is a bundled JSON asset rather than a
-service, and that is worth keeping rather than abstracting away: a game whose
-data weighs 780 KB has no business going down because somebody else's web server
-did. `scripts/` is the only thing that talks to either upstream, it runs by hand,
-and its output is committed — so a deploy depends on nothing outside the
-repository.
-
-The two upstreams are one module each — `openquizzdb-source.ts` and
-`opentdb-source.ts`, both returning what `question-source.ts` declares — rather
-than one script with a branch. That is the same rule as everywhere else here: the
-boundary is the shape both sides agree on, and what differs is real. OpenQuizzDB
-serves whole packs over HTTP; OpenTDB has to be drained fifty rows at a time
-behind a session token and a five-second rate limit, and refuses a page asking
-for more rows than remain. Neither of those is a detail the other would want
-flattened into a common denominator.
-
-## Related
-
-- `project-structure.md` — where each layer lives
-- `realtime-protocol.md` — the socket is a port; the protocol package is its language
+**A boundary hides the library, never the property.** Preview URLs expire and
+question banks do not, and each port is shaped by that rather than flattened
+into a common denominator — see
+[`../../docs/architecture.md`](../../docs/architecture.md) for what each one
+buys and what it deliberately leaves visible.

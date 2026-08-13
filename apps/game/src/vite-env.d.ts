@@ -2,7 +2,7 @@
 
 /**
  * Passing a CSS custom property through `style` is the one legitimate use of
- * that prop here — see `.claude/rules/css-variables.md`. React's own
+ * that prop here — see `.claude/rules/react-components.md`. React's own
  * `CSSProperties` has no room for arbitrary names, and widening it is what keeps
  * the alternative from being a cast.
  */

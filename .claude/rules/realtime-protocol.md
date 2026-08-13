@@ -12,6 +12,10 @@ Everything that happens during a game is a WebSocket frame described in
 `packages/protocol`. That package is the contract; the server and the app are
 two implementations of it. Read this before touching either.
 
+The format itself — every frame, both views, the error list — and the reasoning
+behind each guarantee are in
+[`../../docs/realtime-protocol.md`](../../docs/realtime-protocol.md).
+
 ## The four guarantees, and what enforces each
 
 | Guarantee | Enforced by | Where |
@@ -28,30 +32,10 @@ variants mention `hostRoomViewSchema`, which is the one place `HostTrack` — th
 title, the artist and the audio URL — reaches the wire before a reveal.
 
 That is the type-level half. The runtime half is `encodeChecked`, which encodes
-*through* the schema so Zod drops unknown keys. It exists because TypeScript's
-excess property check does not fire on a value passed through a variable: a host
-view assigned into a player-shaped position type-checks. `codec.test.ts` covers
-it, and the test fails when the strip is removed.
-
-**Never send a player frame with `JSON.stringify` or bare `encodeMessage`.** Use
-`encodeChecked(playerServerMessageSchema, …)`.
-
-### A host who plays is told less, and by the server
-
-One phone can be the speaker and a player at once — the seat is taken by putting
-a nickname on the host's `hello`, so it rides the same socket and survives a
-reconnect. The moment it is taken, `toHostView` nulls the answer inside
-`currentContent` — `track` for the blind test — because that screen is a
-player's now, and a payload it could read in a console is not a guarantee.
-
-What it keeps is `audioUrl`, because the speaker still has to play the clip.
-Those two fields exist separately for exactly this — the judge's copy and the
-speaker's copy were one field, and conflating them is what made "host and
-player" impossible. The residual leak is the catalogue id inside the URL, and
-it is the reason the seat is offered rather than assumed.
-
-Buzzer mode does not offer it: that round needs someone reading the answer to
-judge it.
+*through* the schema so Zod drops unknown keys; `codec.test.ts` fails when the
+strip is removed. **Send every player frame with
+`encodeChecked(playerServerMessageSchema, …)`**, never `JSON.stringify` or bare
+`encodeMessage`.
 
 ### The verdict is the game's too
 
@@ -59,30 +43,22 @@ judge it.
 is: the blind test judges two independent claims, and everything else judges
 one. `verdictKindFor` says which a game takes, and `applyVerdict` checks it
 before scoring — a `halves` verdict over a bare buzzer would pay two points for
-one charade, and a host socket is as forgeable as a player's.
-
-`yourVerdict` on the room view is the `halves` arm alone, not the union.
-*Banking* is what having two halves means, and a game judged on one claim has no
-half to hold.
+one charade, and a host socket is as forgeable as a player's. `yourVerdict` on
+the room view is the `halves` arm alone: *banking* is what having two halves
+means, and a game judged on one claim has no half to hold.
 
 ### The buzz carries no timestamp, deliberately
 
-Ordering is decided by when the frame reaches the server. A client-supplied
-"when" is both clock-skewed and trivially edited in a console, and a blind test
-is decided by exactly that field. `client-message.test.ts` asserts the shape so
-nobody adds one back for "accuracy".
-
-The fairness this buys is bounded by network latency, which the clock handshake
-measures but cannot remove. If that ever needs improving, the answer is
-compensating with the *measured* round trip the server already knows, never
-trusting a number the client sends.
+Ordering is decided by when the frame reaches the server.
+`client-message.test.ts` asserts the shape so nobody adds one back for
+"accuracy".
 
 ### Settings move mid-game; three of them wait
 
-`host.updateSettings` is accepted in every phase, because a party is set up
-while it runs — the countdown, the round count, the answer window and the
-difficulty all land on the round *after* the one on screen. That is the point of
-the fold living in the host's footer rather than inside the lobby.
+`host.updateSettings` is accepted in every phase, because a party is set up while
+it runs — the countdown, the round count, the answer window and the difficulty
+all land on the round *after* the one on screen. That is the point of the fold
+living in the host's footer rather than inside the lobby.
 
 Three cannot wait to be read, and the server refuses them while
 `isRoundInPlay(room.phase)`:
@@ -99,22 +75,18 @@ outside it, because the gap between two rounds is when anything about them may
 change. The console greys the three out, and that is a courtesy: **the guard on
 the socket is the rule**, same reason `registerBuzz` re-checks the mode.
 
-A mode's *own* settings are not on the list. `answerWindowMs` is read when a
-buzz lands and stamped into the buzz as `expiresAt`, so moving it decides the
-next floor rather than the one being held. Neither is the blind test's source:
-the pool is drawn when a round opens, so the picker commits on whatever opens
-the next one — the launch, "next round", or "play again".
+A mode's *own* settings are not on the list. `answerWindowMs` is stamped into a
+buzz as `expiresAt` when it lands, so moving it decides the next floor rather
+than the one being held; the blind test's source is drawn when a round opens, so
+the picker commits on whatever opens the next one.
 
 ### One snapshot, not deltas
 
 After any state change the server sends every socket its whole role-scoped view.
-A room holds at most `MAX_PLAYERS_PER_ROOM` players and changes at human speed,
-so the snapshot is a few hundred bytes — and it removes every way for a client
-to sit on a partially-applied delta after a dropped frame or a reconnect.
-
-Do not add per-event messages for things that are state. "Someone buzzed" is
-`round.activeBuzz`; "the answer is out" is `round.content.revealedTrack`; "she scored"
-is `round.awards`. A client that wants to animate a change diffs two views.
+Do not add per-event messages for things that are state: "someone buzzed" is
+`round.activeBuzz`, "the answer is out" is `round.content.revealedTrack`, "she
+scored" is `round.awards`. A client that wants to animate a change diffs two
+views.
 
 ### Time is the server's, estimated locally
 
@@ -141,42 +113,19 @@ against a raw `Date.now()` comparison with a server timestamp.
 Every rejection sends a `protocolErrorMessageSchema` frame with a code from
 `error-code.ts`, and `fatal` decides whether the client stops reconnecting. A
 refusal the user can act on — `nickname_taken`, `room_full` — is **non-fatal**,
-so the socket stays open and the form can retry on it.
+so the socket stays open and the form can retry on it. `not_implemented` exists
+so a stage that is not built yet answers honestly instead of borrowing a code
+that means something else.
 
-`not_implemented` exists so a stage that is not built yet answers honestly
-instead of borrowing a code that means something else. It should shrink to
-nothing as the stages in `docs/plans/` land.
+**A fatal frame ends the session on its own**, without waiting for a close: the
+client acts on the frame, because a fatal code may be sent to a socket the
+server keeps open. `use-room-socket.ts` sets `refused` and closes the socket
+itself the moment `fatal` arrives.
 
-### A fatal frame ends the session on its own, without waiting for a close
-
-`fatal` is the end of the line, and the client acts on the **frame** rather than
-on the socket closing after it. That distinction was invisible while every fatal
-refusal came from `reject`, which sends and then closes: a client that only
-gave up in its `close` listener behaved identically.
-
-`host.closeRoom` broke the tie. The server is answering a *third party* — the
-host's frame is what disbands the room, and the error lands on two dozen player
-sockets that nobody is closing. Every phone sat on a stale scoreboard, live and
-lying, while the room no longer existed. `use-room-socket.ts` now sets `refused`
-and closes the socket itself the moment `fatal` arrives.
-
-So a fatal code may be sent to a socket the server keeps open, and that is not a
-loose end to tidy up by closing it too — it is the guarantee the client owes.
-
-### An error outlives its moment, so the client forgets it on a phase change
-
-The socket keeps its last error until it reconnects, which is far longer than a
-message about a moment deserves. Le Fake is where that first hurt: its round has
-two collection phases, so `lie_is_the_answer` — refused while the room was
-writing — was still on screen under the board a minute later, reading as a
-refused *vote*.
-
-`useForgetErrorOnPhaseChange` clears it when `view.phase` turns over, and both
-connection hooks call it. A form that wants to know whether a refusal is *its
-own* checks that it has acted this round; before that, any error is somebody
-else's news.
-
-## Related
-
-- `docs/realtime-protocol.md` — the wire format itself, with examples
-- `abstraction-boundaries.md` — the socket lives in `infrastructure/messaging`
+**An error outlives its moment**, so the client forgets it on a phase change.
+The socket keeps its last error until it reconnects — Le Fake's
+`lie_is_the_answer`, refused while the room was writing, was still on screen
+under the vote a minute later. `useForgetErrorOnPhaseChange` clears it when
+`view.phase` turns over, and both connection hooks call it. A form asking
+whether a refusal is *its own* checks that it has acted this round; before that,
+any error is somebody else's news.

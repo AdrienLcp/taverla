@@ -99,6 +99,11 @@ filled button with the values swapped, and it was **taller than the button that
 submitted it**, which is what made a form read as a stack of slabs. An input is
 never taller than its own action.
 
+The fault it overcorrected is worth naming too: **a control never borrows its
+look from a rule.** The field was a ruled underline in the weight and ink of the
+page's dividers, so it read as a third divider — and taking focus drew a box
+around a line.
+
 Three sizes: `small` (40px) for an action that sits *beside* something, `medium`
 (52px) for the ordinary control, `large` (72px) for a thumb or a room. Before
 `small` existed every secondary action was a 52px block, so every one of them
@@ -152,7 +157,24 @@ almost always has one of the top three:
 It holds off 250 ms before appearing, because a good connection settles most
 waits inside that and a flash is worse than the blank it replaces. It is also
 the one piece of **continuous** motion in a system whose rule is one authored
-moment per event — which is the other reason its budget is this small.
+moment per event — which is the other reason its budget is this small. The delay
+is not only a flash guard: `Loader` is a `role='status'`, and a live region that
+appears already holding its text is a change no screen reader watched happen, so
+it mounts empty and fills afterwards.
+
+**A wait is never anonymous.** `Spinner` is geometry the way `Icon` is —
+decorative, `aria-hidden`, only ever composed — and `Loader` is the composition
+that carries meaning: a **required** label that is the visible line as well as
+the accessible name. There is no default and no bare `<Loader />`, for the same
+reason a glyph never travels alone, and because a screen that cannot name what
+it is waiting for usually should not be waiting visibly at all.
+
+**A pending state must not resize the control.** `Button` renders its spinner
+*over* the label rather than in place of it, and the label goes
+`color: transparent` instead of disappearing: nothing on the screen moves, and
+the button keeps its accessible name while it works. That spinner is
+`aria-hidden` — react-aria already announces `isPending`, and a second live
+region would say the same thing twice.
 
 ## Motion
 
@@ -273,6 +295,12 @@ because the desktop column was the same wall with more room to hide in.
   item's minimum is its content, so `min-width: 0` is half the fix. The
   scoreboard rows solve the same problem the other way, with an ellipsis,
   because a row is a fixed height and a headline is not.
+- **A board ranks only when there is something to rank.** Before the first
+  point every player is first on nothing, and a lobby roster printing `1` and
+  `0` beside every name says so out loud — while spending on it the width the
+  nicknames need. `hasAnybodyScored` is the one predicate: under it the rank and
+  score columns are absent rather than empty, the phone is told no placing, and
+  the final board names nobody. The columns come back at the first point.
 - **Duration references fall back to `0`,** never to a literal, or someone who
   asked for no motion gets motion when a token disappears.
 
@@ -280,5 +308,6 @@ because the desktop column was the same wall with more room to hide in.
 
 - [`PRODUCT.md`](PRODUCT.md) — who plays, where, and the constraints that drove
   all of this
-- `.claude/rules/sass-architecture.md` — layers, side-effect vs pure modules
-- `.claude/rules/i18n-and-theme.md` — the two palettes and the two dictionaries
+- `.claude/rules/sass-architecture.md` — layers, pure vs side-effect modules,
+  the two palettes
+- `.claude/rules/design-system.md` — wrapping a react-aria primitive

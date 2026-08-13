@@ -50,7 +50,12 @@ second socket is a reclaim, not a stranger.
 
 `player.buzz` carries **no timestamp**, and must never gain one. Ordering is
 decided by arrival at the server; anything the client says about "when" is
-clock-skewed and forgeable.
+clock-skewed and forgeable, and a blind test is decided by exactly that field.
+
+The fairness this buys is bounded by network latency, which the clock handshake
+measures but cannot remove. If that ever needs improving, the answer is
+compensating with the *measured* round trip the server already knows — never
+trusting a number the client sends.
 
 `verdict` is discriminated on `kind`, because what the host judged depends on
 the game: `{kind:'halves', titleCorrect, artistCorrect}` for the blind test's
@@ -147,6 +152,16 @@ The host view adds what only the host may see:
 the first and gets `null` for the second: that screen still has to play the
 clip, and must not be handed the answer.
 
+That is the whole of the seated host. One phone is the speaker and a player at
+once — the seat is taken by putting a nickname on the host's `hello`, so it
+rides the same socket and survives a reconnect — and the moment it is taken,
+`toHostView` nulls the answer inside `currentContent`, because a payload that
+screen could read in a console is not a guarantee. The judge's copy and the
+speaker's copy were one field once, and conflating them is what made "host and
+player" impossible. The residual leak is the catalogue id inside the URL, which
+is why the seat is offered rather than assumed. Buzzer mode does not offer it at
+all: that round needs someone reading the answer to judge it.
+
 `roundElapsedMs` is shared rather than the host's, because it is the room's
 clock and not the speaker's: the host seeks the track back to it after a reload,
 and every screen arms the round bar from it — a phone that locked itself comes
@@ -188,6 +203,15 @@ act on is non-fatal, so the socket stays open and the form retries on it:
 
 Fatal, followed by close code 1008: `room_not_found`,
 `protocol_version_mismatch`, `host_already_connected`.
+
+**A fatal frame ends the session on its own.** The client acts on the frame, not
+on the socket closing after it, and the difference was invisible while every
+fatal refusal came from `reject`, which sends and then closes. `host.closeRoom`
+broke the tie: the server is answering a *third party*, so the error lands on
+two dozen player sockets nobody is closing, and every phone sat on a stale
+scoreboard — live and lying — while the room no longer existed. A fatal code may
+therefore be sent to a socket the server keeps open, and that is not a loose end
+to tidy up by closing it too. It is the guarantee the client owes.
 
 `not_implemented` marks a message the contract describes but the server does not
 serve yet. It should disappear as the stages in [`plans/`](plans/) land.

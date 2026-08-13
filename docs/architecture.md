@@ -100,8 +100,26 @@ Two properties leak into the design and should not be hidden:
 - Preview URLs are **signed with an expiry** of roughly a day. The audio for a
   round is resolved when the round starts, never when the pool is built.
 
-Everything above `deezer-client.ts` speaks `TrackSource` and `HostTrack`.
-Swapping catalogue means rewriting that one file.
+Everything above `deezer-client.ts` speaks `TrackSource`, `TrackSearchResult`
+and `HostTrack`. Swapping catalogue means rewriting that one file, and its two
+exported functions keep their signatures. Nothing thinner underneath would
+reduce that work.
+
+## The question banks
+
+The quiz's port is the same shape and hides the opposite property.
+`drawQuestion` is **synchronous**, because the bank is a bundled JSON asset
+rather than a service — a game whose data weighs 780 KB has no business going
+down because somebody else's web server did. `scripts/` is the only thing that
+talks to either upstream, it runs by hand, and its output is committed, so a
+deploy depends on nothing outside the repository.
+
+The two upstreams are one module each — `openquizzdb-source.ts` and
+`opentdb-source.ts`, both returning what `question-source.ts` declares — rather
+than one script with a branch. OpenQuizzDB serves whole packs over HTTP; OpenTDB
+has to be drained fifty rows at a time behind a session token and a five-second
+rate limit, and refuses a page asking for more rows than remain. Neither is a
+detail the other would want flattened into a common denominator.
 
 ## Strings and colours
 

@@ -1,36 +1,16 @@
-# File & Directory Naming: kebab-case only
+# File and directory naming: kebab-case
 
 > **Unscoped on purpose**: it applies when a file is *created*, and no `paths:`
 > pattern matches a file that does not exist yet.
 
-All files and directories MUST use **kebab-case** (lowercase letters, numbers, hyphens).
+Every file and directory is kebab-case — lowercase letters, numbers, hyphens:
+`features/host/`, `host-console-page.tsx`, `host-console-page.sass`,
+`clock-sync.test.ts`. A stylesheet takes its component's name and nothing else
+(not `.styles.sass`).
 
-## Rules
+`App.tsx` and `main.tsx` keep their React entry-point names. A generated file
+keeps whatever its generator emits, and the generator is what gets fixed.
 
-- **Directories**: `my-feature/`, `cloud-space/` — never PascalCase or camelCase
-- **Files**: `my-component.tsx`, `use-debounce.ts`, `app-header.tsx` — never PascalCase or camelCase
-- **SASS files**: `my-component.sass` (not `.styles.sass`, not `MyComponent.sass`)
-- **Test files**: `feature.test.ts` — kebab-case before `.test.ts`
-
-## No barrel files
-
-Do NOT create `index.ts` files that only re-export from other files. Import directly from source modules instead. Generated re-export modules use a descriptive name (e.g. `sdk.ts`), not `index.ts`.
-
-## Exceptions
-
-- `App.tsx` and `main.tsx` — React entry points (convention)
-- Generated files keep their output name but codegen scripts must produce kebab-case
-
-## Examples
-
-```
-# Correct
-features/cloud-spaces/cloud-space-api.ts
-infrastructure/authentication/fetch-middleware.ts
-components/text-field.tsx
-
-# Wrong
-Features/CloudSpaces/cloudSpaceApi.ts
-Infrastructure/Authentication/fetchMiddleware.ts
-components/TextField.tsx
-```
+**No barrel `index.ts`.** A module that only re-exports is not created here;
+import from the source file. A generated re-export module takes a descriptive
+name (`sdk.ts`).

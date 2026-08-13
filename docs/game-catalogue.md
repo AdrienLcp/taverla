@@ -290,23 +290,38 @@ chosen and the lobby's picker is where the table decides, which is what
 `settings.game` being nullable buys: a room is a code on a screen before it is a
 game. See `docs/plans/13-room-first.md`.
 
-**i18n is namespaced by game.** A prefix per game — `blindtest.*`, `buzzer.*` —
-and `join.*`, `host.*`, `player.*`, `round.*`, `buzz.*`, `error.*`,
-`connection.*` and `preferences.*` for the shell. A new game adds its own prefix
-and touches nothing else.
+**i18n is namespaced by game.** A prefix per game — `blindtest.*`, `buzzer.*`,
+`quiz.*`, `lefake.*` — and `join.*`, `host.*`, `player.*`, `round.*`, `buzz.*`,
+`error.*`, `connection.*`, `menu.*` and `preferences.*` for the shell. A new game
+adds its own prefix and touches nothing else. The test itself — *would the second
+game display this string unchanged?* — is in
+[`.claude/rules/i18n.md`](../.claude/rules/i18n.md); what follows is what it has
+already decided.
 
-The partition is by **who would reuse the string**, not by which screen renders
-it — `host.*` names a screen, and the host console shows both kinds. The source
-picker, the genres, the clip length and the title/artist verdict are
-`blindtest.*` for exactly that reason, while "Start the game" and "Volume"
-stayed shell.
+**The trap is `host.*`**: it names a *screen*, and a screen shows both kinds of
+string. "Start the game", "Next round", "How to answer" and "Volume" are shell —
+every future game has a host console with those, and volume presupposes *audio*
+rather than the blind test, so a second game that plays anything reuses it. The
+source picker, the genres, the clip length and the title/artist verdict are the
+blind test's, and live under `blindtest.*` even though the host console is what
+renders them.
 
-The second game is what proved the rest of it. `blindtest.buzz.*` was filed
-under the game because only one game had a buzzer; it is `buzz.*` now, because
-`answerMode` is a *room* setting and the bare buzzer renders every one of those
-strings unchanged. `blindtest.round` is `round.*` for the same reason. The full
-test is in `.claude/rules/i18n-and-theme.md`, and it was already the right
-test — it simply had nothing to answer against until there were two games.
+**A mode is not a game.** `blindtest.buzz.*` was filed under the game because
+only one game had a buzzer; it is `buzz.*` now, because `answerMode` is a *room*
+setting and the bare buzzer renders every one of those strings unchanged — the
+button, the blockers, "{nickname} buzzed". `blindtest.round` is `round.*` one
+level up, because "Round 3 of 10", "+2" and "Nobody got it" are what a *round*
+shows in any game.
+
+**The third game moved four more**, and they are the same shape.
+`blindtest.answer.*` is `round.answer.*` — the field a *simultaneous round* is
+answered in, its label, its send, its "waiting for the others", its "as many goes
+as you like" — and the bare buzzer's right/wrong pair is `host.verdict.*`. Two
+games needing a string unchanged is the signal; one game plus a hunch is not.
+
+What stays inside a game's prefix is what only that game can say:
+`blindtest.reveal.title` is "It was", and a charade has no "it".
+`blindtest.answer.bothFound` says "both", and only a pair of halves has two.
 
 **Themes are semantic, so a game can own a colour.** Every component reads
 `--accent`, never a hex. A game that wants to be green sets `--accent` on its

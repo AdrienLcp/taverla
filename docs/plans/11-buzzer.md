@@ -200,5 +200,5 @@ it is the exhaustiveness arm rather than dead code.
 **The buzzer's strings forced the i18n namespaces open.** `blindtest.buzz.*` and
 `blindtest.round` were the *mode*'s and the *round*'s all along; they are now
 `buzz.*` and `round.*`, and `blindtest.answerMode.*` is `host.answerMode.*`. The
-rule in `.claude/rules/i18n-and-theme.md` was already the right test — this is
+rule in `.claude/rules/i18n.md` was already the right test — this is
 the first time it had a second case to answer against.

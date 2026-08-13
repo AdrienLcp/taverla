@@ -1,7 +1,7 @@
 # Project structure
 
 > **Unscoped on purpose**: it answers *where a new file goes*, decided before
-> the file exists. At 4 KB it is the largest greedy rule here, and the first to
+> the file exists. It is the largest greedy rule here, and the first to
 > re-examine if the floor must come down again.
 
 ```
@@ -12,46 +12,17 @@ packages/core       → Pure domain rules. Depends on protocol for types.
 docs/plans/         → The staged build plan; each file is one session's work.
 ```
 
-## One app, two surfaces
-
-`apps/game` serves the host console at `/host/:roomCode` and the player screen
-at `/play/:roomCode`, both lazily loaded. `/` creates a room with nothing chosen
-— the game is picked on the console — and `/:game` is every game's front door,
-one component for all of them, opening a room already set to it for a host who
-came in that way. That is not a compromise — it is what
-makes the QR code work: it encodes `location.origin`, so the phone that scans it
-lands on the same origin the host is already served from. One deployment, no
-CORS, no second domain, no environment variable pointing one app at the other.
-
-The bundles stay separate because the routes are lazy. Keep them that way: a
-phone on a party's Wi-Fi should not download the QR renderer and the audio
-player it will never run. Anything imported from both surfaces lands in the
-shared chunk, so think before hoisting.
-
-**There is no `packages/ui`.** With a single consuming app it would be a
-boundary with nothing on the other side. The design system lives in
-`apps/game/src/presentation/`. Promote it to a package the day a second app
-exists, not before.
-
-## Inside the app
-
 ```
-src/
+apps/game/src/
 ├── infrastructure/   api, messaging, router, storage, env
-├── features/         host, player, join, not-found
-├── presentation/     app-shell, components, styles, i18n, theme
+├── features/         credits, home, host, join, not-found, player, shelf
+├── presentation/     app-shell, components, connection, exits, i18n, styles, theme
 └── helpers/          pure utilities, no React
 ```
 
-`presentation/app-shell.tsx` is the layout route every page renders inside. It
-is where anything that must exist on *every* surface goes — `AppMenu` lives
-there because a phone arriving from a QR code never passes through the home
-page, and because a screen whose socket has died still needs a way off it.
-
-The menu shows the connection, which a *page* owns. `presentation/connection/`
-carries it upwards: a page with a socket calls `useReportConnection`, the shell
-reads it. That direction is deliberate — the alternative is three pages each
-mounting their own copy of the chrome.
+**There is no `packages/ui`** — with one consuming app it would be a boundary
+with nothing on the other side. Promote `presentation/` to a package the day a
+second app exists, not before.
 
 | From | Importing | Syntax |
 |---|---|---|
@@ -75,15 +46,5 @@ mounting their own copy of the chrome.
   `apps/*/src/infrastructure/`. See `abstraction-boundaries.md`.
 - A React component used by one surface → that feature. Used by both →
   `presentation/components/`.
-
-## No barrel files
-
-No `index.ts` that only re-exports. Both packages expose `"./*": "./src/*"`, so
-`@taverla/core/time/clock-sync` is the import and the file path at once.
-
-## Ports
-
-`3100` (server) and `5273` (app), offset from the usual 3000/5173 so this repo
-runs beside the other dev servers on the machine. In dev, Vite proxies `/api`
-and `/ws` to the server, which is what makes the app same-origin in development
-as well as in production.
+- Something that must exist on *every* screen → `presentation/app-shell.tsx`,
+  which is the layout route every page renders inside.
