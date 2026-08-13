@@ -28,7 +28,9 @@
 
       color: var(--ink-muted)
 
-    // What the room is about to play, named on the phone that will play it.
+    // What this phone is about to play, and when: the lobby names the game, and
+    // a phone that walked in on a round names the round it gets instead.
+    .next-round,
     .up-next
       @include typography.billboard
 
@@ -68,7 +70,8 @@
       color: var(--ink-muted)
       text-wrap: balance
 
-    .how-it-scores
+    .how-it-scores,
+    .seat-kept
       @include typography.body
 
       color: var(--ink-muted)

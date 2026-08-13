@@ -266,6 +266,12 @@ one part.
 - `[Server]` A buzzer round every seated player has missed reveals itself again.
   A phone that joined after the lockouts counted as somebody who could still
   answer, so the round waited on the one person in the room who could not
+- `[Game]` **A phone that walks in on a round is told so**, on a screen of its
+  own: *Au prochain tour*, and its seat is safe. It used to be handed the round
+  in play — a field, four choices or a board of lies — every one of which the
+  server was already refusing. The screen carries one idea and nothing else,
+  because the scoreline above it already names the room and the round's own bar
+  is already draining beside it
 - `[Game]` The blind test's source preview could hold a refusal from the
   previous query underneath a fresh set of results: a title list, an error and a
   progress flag standing beside each other carried eight combinations for four

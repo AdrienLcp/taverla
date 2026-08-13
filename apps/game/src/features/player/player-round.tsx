@@ -136,6 +136,19 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
     )
   }
 
+  // Below the reveal and the final board on purpose: those are what the round
+  // turned out to be, and a phone that walked in on it is in the room for them.
+  // What it must not be shown is the form, because the server refuses every
+  // frame it could send — a field that cannot be submitted is worse than a wait.
+  if (round?.joinedAfterStart === true) {
+    return (
+      <section className='player-round centred'>
+        <p className='next-round'>{translate('player.midRound.title')}</p>
+        <p className='seat-kept'>{translate('player.midRound.detail')}</p>
+      </section>
+    )
+  }
+
   if (view.phase === 'voting' && view.round !== null) {
     const round = view.round
 

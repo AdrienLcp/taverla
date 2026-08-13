@@ -353,6 +353,10 @@ export const EN_DICTIONARY = defineTranslations({
         }
       })
     },
+    midRound: {
+      detail: 'Your seat is safe — this\u00a0round started without you.',
+      title: 'Next round'
+    },
     nickname: {
       action: 'Join the game',
       label: 'Nickname',

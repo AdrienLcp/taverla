@@ -87,16 +87,26 @@ established: the answer to "what is this round to **you**".
 | `apps/game/src/features/player/player-round.tsx` | the screen for the state |
 | `presentation/i18n/dictionary-{en,fr}.ts` | `error.joined_mid_round`, the screen's strings |
 
-## Decisions left open for the session
+## Decisions the session settled
 
-- **What the latecomer's screen says.** It is a new player-facing state and goes
-  through `/impeccable` before a line of markup. It has the round's own
-  scoreboard to show and a wait to make legible; what it must not be is the
-  answer form, greyed out.
-- **Whether the host's roster marks them.** A 0-score latecomer currently ranks
-  equal-last with somebody who played five rounds and scored nothing. Arguably
-  correct — they are both on zero — and arguably the scoreboard's one lie. Left
-  alone unless the browser pass makes it look wrong.
+- **The screen carries one idea: *when*.** `Au prochain tour` in `billboard`,
+  and one line under it saying the seat is safe. It sits below the reveal and
+  the final board in `PlayerRound`, so a latecomer still sees what the round
+  turned out to be — it is in the room for that.
+- **No scoreboard on it**, against what this plan first asked for. Two things
+  the plan did not know: `Scoreline` and `RoundClock` are rendered by
+  `player-page.tsx` *above* `PlayerRound`, so the room's size and the round's
+  own draining bar are already on the screen — the wait was legible for free.
+  What is left is a ranking the big screen in the same room is already showing,
+  and repeating it here asks the one player who has not seen the game yet to
+  look down at their phone instead of up at the table. That is the product's
+  first principle, in the one place it would have been easy to lose.
+- **The two strings carry a non-breaking space** between the article and its
+  noun (`ce tour`, `this round`). Without it both locales broke the
+  line after the article at every width from 320px up.
+- **The host's roster does not mark them.** A 0-score latecomer ranks equal-last
+  with somebody who played five rounds and scored nothing; the browser pass gave
+  no reason to change that.
 
 ## How to tell it is done
 
@@ -109,3 +119,8 @@ established: the answer to "what is this round to **you**".
   phone that joined after the lockouts.
 - The next round opens and the latecomer plays it like anybody else.
 - A browser pass on a phone-width viewport, muted.
+
+All five hold. The first four are `mid-game-join.test.ts`, which goes red on all
+six tests when the stamp alone is removed; the last was driven at 320, 414 and
+1920 in both locales and both palettes, on a quiz room so that nothing could
+play a note.

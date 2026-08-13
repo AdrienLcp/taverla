@@ -347,6 +347,10 @@ export const FR_DICTIONARY: Dictionary = {
         }
       })
     },
+    midRound: {
+      detail: 'Ta place est gardée — ce\u00a0tour a commencé sans toi.',
+      title: 'Au prochain tour'
+    },
     nickname: {
       action: 'Rejoindre la partie',
       label: 'Pseudo',
