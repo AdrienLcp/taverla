@@ -128,11 +128,20 @@ describe('drawQuestion', () => {
     }
   })
 
+  /**
+   * Fifty where its neighbours draw four hundred, and putting it back is what to
+   * avoid. Their count carries a probabilistic argument — one question in twenty
+   * is adult, so four hundred is what makes a missing filter certain to surface.
+   * A language either groups or it does not, and fifty draws all landing in one
+   * of two languages say so already. At four hundred over both languages this
+   * was the slowest test here, 2.4s against vitest's 5s timeout, and it lost
+   * that race whenever something else was running on the machine.
+   */
   it('[bank] stays inside the language the room is playing', () => {
     for (const language of questionLanguages) {
-      const drawn = drawMany({ ...DEFAULT_QUIZ_SETTINGS, language })
+      const drawn = drawMany({ ...DEFAULT_QUIZ_SETTINGS, language }, 50)
 
-      expect(drawn.length).toBe(400)
+      expect(drawn.length).toBe(50)
       expect(drawn.every((question) => question.language === language)).toBe(
         true
       )
