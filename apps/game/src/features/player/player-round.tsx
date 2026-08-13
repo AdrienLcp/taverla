@@ -11,6 +11,10 @@ import type {
 
 import { isShelvedGame } from '@taverla/core/room/shelved-game'
 import { findBuzzBlocker } from '@taverla/core/round/buzz-eligibility'
+import {
+  buildScoreboard,
+  hasAnybodyScored
+} from '@taverla/core/scoring/scoreboard'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
 import {
@@ -126,6 +130,7 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
   if (view.phase === 'finished') {
     return (
       <section className='player-round centred'>
+        <YourPlacing view={view} />
         <Scoreboard players={view.players} youId={view.youId} />
       </section>
     )
@@ -235,6 +240,37 @@ const UpNext = ({ view }: { view: PlayerRoomView }) => {
             game: game.kind
           })
         )}
+      </p>
+    </>
+  )
+}
+
+/**
+ * Where this phone finished, which the big screen only ever says for the
+ * winner. Ties share a place, the way the board itself ranks them — a room of
+ * two on the same score reads "1st" on both phones, and `host.final.tie` is
+ * already saying so across the room.
+ */
+const YourPlacing = ({ view }: { view: PlayerRoomView }) => {
+  const translate = useTranslate()
+
+  if (!hasAnybodyScored(view.players)) {
+    return null
+  }
+
+  const yours = buildScoreboard(view.players).find(
+    (entry) => entry.player.id === view.youId
+  )
+
+  if (yours === undefined) {
+    return null
+  }
+
+  return (
+    <>
+      <p className='framing'>{translate('player.final.placing')}</p>
+      <p className='your-rank'>
+        {translate('player.final.rank', { rank: yours.rank })}
       </p>
     </>
   )

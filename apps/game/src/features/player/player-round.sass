@@ -53,6 +53,14 @@
 
       font-size: clamp(4rem, 30vmin, 12rem)
 
+    // A step under `.you-scored`, because the ordinal carries a suffix: "1er"
+    // sets three glyphs where "+3" sets two, and the board has to follow it.
+    .your-rank
+      @include typography.monument
+      @include typography.numeric
+
+      font-size: clamp(3rem, 20vmin, 8rem)
+
     .paused,
     .waiting
       @include typography.title

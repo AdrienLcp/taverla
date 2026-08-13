@@ -2,7 +2,10 @@ import type React from 'react'
 
 import type { PublicPlayer } from '@taverla/protocol/room'
 
-import { buildScoreboard } from '@taverla/core/scoring/scoreboard'
+import {
+  buildScoreboard,
+  hasAnybodyScored
+} from '@taverla/core/scoring/scoreboard'
 
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
@@ -36,11 +39,13 @@ export const Scoreboard: React.FC<ScoreboardProps> = ({
   youId
 }) => {
   const translate = useTranslate()
+  const isRanked = hasAnybodyScored(players)
 
   return (
     <ol
       className={[
         'scoreboard',
+        isRanked && 'ranked',
         onRemove !== undefined && 'removable',
         className
       ]
@@ -58,9 +63,9 @@ export const Scoreboard: React.FC<ScoreboardProps> = ({
             .join(' ')}
           key={player.id}
         >
-          <span className='rank'>{rank}</span>
+          {isRanked && <span className='rank'>{rank}</span>}
           <span className='nickname'>{player.nickname}</span>
-          <span className='score'>{player.score}</span>
+          {isRanked && <span className='score'>{player.score}</span>}
           {onRemove !== undefined && (
             <Button
               aria-label={translate('host.players.removeNamed', {

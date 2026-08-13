@@ -339,6 +339,20 @@ export const EN_DICTIONARY = defineTranslations({
   },
   player: {
     choosingGame: 'The host is choosing a game',
+    final: {
+      placing: 'You finished',
+      rank: defineTranslation('{rank:plural}', {
+        plural: {
+          rank: {
+            few: '{?}rd',
+            one: '{?}st',
+            other: '{?}th',
+            two: '{?}nd',
+            type: 'ordinal'
+          }
+        }
+      })
+    },
     nickname: {
       action: 'Join the game',
       label: 'Nickname',

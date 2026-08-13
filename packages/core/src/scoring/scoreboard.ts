@@ -7,6 +7,15 @@ export type ScoreboardEntry = {
 }
 
 /**
+ * Whether a board has anything to rank. Before the first point every player is
+ * first on nothing, so the screens that would say so drop the claim instead:
+ * the roster loses its rank and score columns, the phone is told no placing,
+ * and the final board names nobody.
+ */
+export const hasAnybodyScored = (players: readonly PublicPlayer[]): boolean =>
+  players.some((player) => player.score > 0)
+
+/**
  * Ties break on nickname so the board does not reshuffle itself between two
  * renders of the same scores — the players are watching it on a wall.
  */

@@ -2,7 +2,10 @@ import type React from 'react'
 
 import type { PublicPlayer } from '@taverla/protocol/room'
 
-import { buildScoreboard } from '@taverla/core/scoring/scoreboard'
+import {
+  buildScoreboard,
+  hasAnybodyScored
+} from '@taverla/core/scoring/scoreboard'
 
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
@@ -30,20 +33,21 @@ export const FinalBoard: React.FC<FinalBoardProps> = ({ players }) => {
   const ranked = buildScoreboard(players)
   const winners = ranked.filter((entry) => entry.rank === 1)
   const topScore = winners[0]?.player.score ?? 0
+  const isWon = hasAnybodyScored(players)
 
   return (
     <section className='final-board'>
       <header>
         <p className='label'>
           {translate(
-            topScore === 0
+            !isWon
               ? 'host.final.nobody'
               : winners.length > 1
                 ? 'host.final.tie'
                 : 'host.final.winner'
           )}
         </p>
-        {topScore > 0 && (
+        {isWon && (
           <>
             <h1 className='winners'>
               {winners.map((entry) => entry.player.nickname).join(' · ')}

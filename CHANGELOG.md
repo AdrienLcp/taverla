@@ -173,6 +173,21 @@ one part.
 
 ### Improvements
 
+- `[Game]` **A phone is told where it finished.** The final screen showed the
+  standings and left the player to find their own row in it, while the big
+  screen named the winner alone — so everyone who was not first learned nothing
+  about their evening. *Tu finis* now opens the line and the ordinal lands under
+  it at monument size, formatted by the locale: 1st / 2nd / 3rd in English,
+  1er / 2e in French, correct through the 11th–13th trap and up to the room's
+  twenty-fourth seat. Tied players share a place, the way the board already
+  ranks them
+- `[Game]` **A board only ranks when there is something to rank.** The lobby
+  roster printed `1` and `0` beside every name — everybody first, on nothing —
+  and spent 62 px of a phone's width saying it, which is what pushed a
+  seventeen-character nickname into an ellipsis. Until somebody scores, the rank
+  and score columns are gone: the nickname takes the room back, and the
+  truncation ceiling moves from about fifteen characters to nineteen. The
+  columns return at the first point
 - `[Shared]` **The round's clock is on the phones too.** The bar draining down
   the big screen was the host's alone, so a player holding a buzzer had no idea
   whether the clip had five seconds left or twenty-five — the one thing the phase

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import type { PublicPlayer } from '@taverla/protocol/room'
 
-import { buildScoreboard } from './scoreboard'
+import { buildScoreboard, hasAnybodyScored } from './scoreboard'
 
 const playerOn = (nickname: string, score: number): PublicPlayer => ({
   id: nickname.toLowerCase(),
@@ -46,5 +46,23 @@ describe('buildScoreboard', () => {
 
   it('[scoring] handles an empty room', () => {
     expect(buildScoreboard([])).toEqual([])
+  })
+})
+
+describe('hasAnybodyScored', () => {
+  it('[scoring] is false while the whole room is on zero', () => {
+    expect(hasAnybodyScored([playerOn('Alice', 0), playerOn('Bob', 0)])).toBe(
+      false
+    )
+  })
+
+  it('[scoring] is true as soon as one player is on the board', () => {
+    expect(hasAnybodyScored([playerOn('Alice', 0), playerOn('Bob', 1)])).toBe(
+      true
+    )
+  })
+
+  it('[scoring] is false for an empty room', () => {
+    expect(hasAnybodyScored([])).toBe(false)
   })
 })

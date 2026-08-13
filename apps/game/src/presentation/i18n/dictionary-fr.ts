@@ -335,6 +335,18 @@ export const FR_DICTIONARY: Dictionary = {
   },
   player: {
     choosingGame: 'L’hôte choisit un jeu',
+    final: {
+      placing: 'Tu finis',
+      rank: defineTranslation('{rank:plural}', {
+        plural: {
+          rank: {
+            one: '{?}er',
+            other: '{?}e',
+            type: 'ordinal'
+          }
+        }
+      })
+    },
     nickname: {
       action: 'Rejoindre la partie',
       label: 'Pseudo',

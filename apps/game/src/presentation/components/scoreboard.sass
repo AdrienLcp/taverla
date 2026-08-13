@@ -8,20 +8,26 @@
     flex-direction: column
     list-style: none
 
+    // A track only where a child exists: an empty one would still pay its gap,
+    // and the nickname is what the width is for.
     li
       align-items: baseline
       border-top: 2px solid var(--rule)
       display: grid
       gap: var(--space-s)
-      grid-template-columns: 2ch 1fr auto
+      grid-template-columns: 1fr
       padding: var(--space-s) 0
 
       &:last-child
         border-bottom: 2px solid var(--rule)
 
-    // A fourth track only where a fourth child exists: an empty one would still
-    // pay its gap on the three boards that only read.
+    &.ranked li
+      grid-template-columns: 2ch 1fr auto
+
     &.removable li
+      grid-template-columns: 1fr auto
+
+    &.ranked.removable li
       grid-template-columns: 2ch 1fr auto auto
 
     .rank
