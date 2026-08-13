@@ -130,7 +130,7 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
   const [draft, setDraft] = useState<Draft>(() =>
     draftFromSource(settings.source)
   )
-  const { clear, error, isPreviewing, preview, titles } = usePlaylistPreview(
+  const { clear, preview, previewSource } = usePlaylistPreview(
     settings.difficulty
   )
   const typed = draft.kind === 'playlist' ? draft.playlistId : draft.query
@@ -189,7 +189,7 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
         <Form
           onSubmit={(event) => {
             event.preventDefault()
-            void preview({ kind: draft.kind, typed })
+            void previewSource({ kind: draft.kind, typed })
           }}
         >
           {draft.kind === 'search' ? (
@@ -216,7 +216,7 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
           )}
           <Button
             isDisabled={typed.trim().length === 0}
-            isPending={isPreviewing}
+            isPending={preview.status === 'previewing'}
             type='submit'
             variant='underlined'
           >
@@ -225,19 +225,21 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
         </Form>
       )}
 
-      {error !== null && (
+      {preview.status === 'failed' && (
         <p className='error' role='alert'>
-          {translate(error)}
+          {translate(preview.error)}
         </p>
       )}
 
-      {titles !== null && (
+      {preview.status === 'found' && (
         <div className='found'>
           <p className='ready'>
-            {translate('blindtest.source.ready', { count: titles.length })}
+            {translate('blindtest.source.ready', {
+              count: preview.titles.length
+            })}
           </p>
           <ul className='preview'>
-            {titles.slice(0, PREVIEWED_TITLES).map((title) => (
+            {preview.titles.slice(0, PREVIEWED_TITLES).map((title) => (
               <li key={title}>{title}</li>
             ))}
           </ul>

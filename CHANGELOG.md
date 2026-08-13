@@ -214,6 +214,10 @@ one part.
 
 ### Fixes
 
+- `[Game]` The blind test's source preview could hold a refusal from the
+  previous query underneath a fresh set of results: a title list, an error and a
+  progress flag standing beside each other carried eight combinations for four
+  real states. They are one value now, and the impossible ones cannot be written
 - `[Game]` A refusal no longer outlives the moment it was about. The socket kept
   its last error until it reconnected, so a message about something the room had
   stopped doing stayed on screen — visible for the first time in a game whose

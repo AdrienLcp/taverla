@@ -17,6 +17,17 @@ type PreviewedSource = {
 }
 
 /**
+ * One value rather than a title list, an error and a flag standing beside each
+ * other: those three carried eight combinations for four real states, and left
+ * a refusal from the previous query sitting under a fresh result.
+ */
+export type PlaylistPreview =
+  | { error: PlainTranslationKey; status: 'failed' }
+  | { status: 'found'; titles: string[] }
+  | { status: 'idle' }
+  | { status: 'previewing' }
+
+/**
  * A look at what a query or a playlist id would draw, and the picker's only
  * trip to the network — nothing here commits, because the round that opens is
  * what sends the source.
@@ -26,45 +37,46 @@ type PreviewedSource = {
  * the party otherwise, with the room watching.
  */
 export const usePlaylistPreview = (difficulty: TrackDifficulty) => {
-  const [titles, setTitles] = useState<string[] | null>(null)
-  const [error, setError] = useState<PlainTranslationKey | null>(null)
-  const [isPreviewing, setIsPreviewing] = useState(false)
+  const [preview, setPreview] = useState<PlaylistPreview>({ status: 'idle' })
 
   const clear = (): void => {
-    setTitles(null)
-    setError(null)
+    setPreview({ status: 'idle' })
   }
 
-  const preview = async ({ kind, typed }: PreviewedSource): Promise<void> => {
+  const previewSource = async ({
+    kind,
+    typed
+  }: PreviewedSource): Promise<void> => {
     const isPlaylist = kind === 'playlist'
 
-    clear()
-    setIsPreviewing(true)
+    setPreview({ status: 'previewing' })
 
     const found = isPlaylist
       ? await fetchPlaylistTracks({ difficulty, playlistId: typed.trim() })
       : await searchTracks({ difficulty, query: typed.trim() })
 
-    setIsPreviewing(false)
-
     if (found.status === 'failure') {
-      setError(apiErrorKey(found.error))
+      setPreview({ error: apiErrorKey(found.error), status: 'failed' })
 
       return
     }
 
     if (found.data.length === 0) {
-      setError(
-        isPlaylist
+      setPreview({
+        error: isPlaylist
           ? 'blindtest.source.noneInPlaylist'
-          : 'blindtest.source.noneInSearch'
-      )
+          : 'blindtest.source.noneInSearch',
+        status: 'failed'
+      })
 
       return
     }
 
-    setTitles(found.data.map((track) => track.title))
+    setPreview({
+      status: 'found',
+      titles: found.data.map((track) => track.title)
+    })
   }
 
-  return { clear, error, isPreviewing, preview, titles }
+  return { clear, preview, previewSource }
 }
