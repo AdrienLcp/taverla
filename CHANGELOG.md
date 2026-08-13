@@ -320,6 +320,12 @@ one part.
   it, along with two gaps `00-bootstrap.md` still listed as open — an absent
   host has been visible to players and room creation has been rate limited for
   some time
+- **There is a Dockerfile, and CI builds it.** Render still deploys from its own
+  Node runtime and never reads the image; it exists for a host that wants one
+  and for a production run on a laptop. `pnpm deploy` needs `--legacy` from
+  pnpm 10 on, and the image reproduces the deployment's directory layout because
+  `SERVE_GAME_FROM` resolves against the working directory. The CI job is what
+  keeps a file nothing else builds from rotting unnoticed
 - The server announces itself as Taverla rather than as the blind test, which it
   stopped being three games ago
 - The game picker is on the lobby stage and in the settings fold, one at a time.

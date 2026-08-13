@@ -101,8 +101,38 @@ The arbitration, so it is not reopened for free:
 
 ## Still to do
 
-- **No Dockerfile.** Render's native Node runtime handles the pnpm workspace, so
-  there is nothing for one to solve yet.
+- **Bundling did not fix the cold start** — see below. Nothing else is open.
+
+## The Dockerfile, and why it is not what deploys
+
+There is one at the repository root, and **Render does not read it**: the native
+Node runtime builds the workspace from `render.yaml`, which is still the cheapest
+path and the one the free plan understands. The image exists for a host that
+wants one and for running the production build on a laptop.
+
+Two things in it are not guessable:
+
+- **`pnpm deploy` needs `--legacy`.** From pnpm 10 a deploy refuses a workspace
+  that does not inject its packages, and says so with
+  `ERR_PNPM_DEPLOY_NONINJECTED_WORKSPACE`. The output is the server package with
+  production dependencies only — 15 MB, because `tsdown` has already inlined
+  `@taverla/*` into the bundle.
+- **Running that command outside the image breaks the checkout.** `--prod` is
+  recorded against the workspace, so the next `pnpm` script decides the tree is
+  out of date and re-installs it *without* devDependencies: biome, tsc and
+  vitest all disappear and every command fails at once, several steps away from
+  the cause. `pnpm install` puts it back. Inside Docker it is harmless, because
+  the build stage is thrown away — this is a warning about trying the command by
+  hand.
+- **`SERVE_GAME_FROM` is relative to the process's working directory**, not to
+  the image root: `serveStatic` resolves it against `cwd`. The image reproduces
+  the deployment's layout — server at `/app/server`, game at `/app/game/dist`,
+  the variable set to `../game/dist` — so the two cannot drift into serving the
+  SPA from nowhere.
+
+**CI builds it on every push and throws the result away.** A Dockerfile nothing
+builds is a file that stops working without anybody finding out, and this one is
+not on the path anybody would notice from.
 - **Bundling did not fix the cold start, and was never going to.** Measuring it
   is what demoted the idea: the wait is container scheduling, and stripping
   types off a few dozen modules is seconds out of tens. It landed for its own
