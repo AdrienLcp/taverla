@@ -19,6 +19,11 @@
       &:last-child
         border-bottom: 2px solid var(--rule)
 
+    // A fourth track only where a fourth child exists: an empty one would still
+    // pay its gap on the three boards that only read.
+    &.removable li
+      grid-template-columns: 2ch 1fr auto auto
+
     .rank
       @include typography.numeric
 

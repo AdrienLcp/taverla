@@ -104,6 +104,15 @@ Three sizes: `small` (40px) for an action that sits *beside* something, `medium`
 `small` existed every secondary action was a 52px block, so every one of them
 read as a second primary action.
 
+**A control's reason is indented onto its label; a group's is flush.** The
+setting panel holds both, and the indent is the only thing that tells them
+apart: *You are the only one who knows who is in the room* belongs to one
+switch, so it starts where that switch's label starts, one track's width in.
+*Pick none and you get every subject* is what the strip above it currently
+amounts to, not the description of a control, so it begins at the panel's edge.
+Starting the first one there too was what made it read as a stray sentence in
+the middle of a column of settings.
+
 ### Icons
 
 There is an icon family, and it is authored rather than installed. Every glyph

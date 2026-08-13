@@ -258,6 +258,18 @@ chevron never turns. The build stays green and the type-check says nothing;
 only opening it in a browser does. Read the attribute off the rendered DOM
 before styling a state, rather than assuming it sits where the interaction does.
 
+`Switch` is the same trap one level up, and it fires when a primitive is split
+rather than when a state is misplaced. It is **`@deprecated` in 1.20** in favour
+of `SwitchField` + `SwitchButton`, and the two halves carry different render
+props: `SwitchFieldRenderProps` has `isSelected`, `isDisabled`, `isReadOnly`,
+`isInvalid` and `isRequired` — and **neither `isHovered`, nor `isPressed`, nor
+`isFocusVisible`**, which only `SwitchButtonRenderProps` has. So every hover,
+press and focus selector belongs on the button; left on the field they match
+nothing, and the migration compiles green with a control that has stopped
+answering the pointer. What the field buys is the other half: it publishes
+`descriptionProps` through `TextContext`, so a `<Text slot='description'>` is
+wired to the input's `aria-describedby` with no `useId` of its own.
+
 ### A pending state must not resize the control
 
 `Button` renders a `Spinner` on top of its label rather than in place of it, and

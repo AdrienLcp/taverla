@@ -39,7 +39,13 @@ export const Scoreboard: React.FC<ScoreboardProps> = ({
 
   return (
     <ol
-      className={['scoreboard', className].filter(Boolean).join(' ')}
+      className={[
+        'scoreboard',
+        onRemove !== undefined && 'removable',
+        className
+      ]
+        .filter(Boolean)
+        .join(' ')}
       style={style}
     >
       {buildScoreboard(players).map(({ player, rank }) => (

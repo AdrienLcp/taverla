@@ -277,6 +277,23 @@ one part.
   nothing claimed more than a day ago. The keys of the old shape are swept on the
   first launch that finds no store, and dropped rather than carried over: they
   are undated, so the eight worth keeping cannot be told from the rest
+- `[Game]` The host's roster keeps *Remove* on the row it belongs to. A row is a
+  grid of three tracks and the roster puts four things in it, so the button fell
+  to an implicit second row and into the 2ch rank track — where a button that
+  will not wrap overflows on both sides, which is what put it left of the row's
+  own left edge and hard against the edge of a phone. The fourth track is
+  declared only where a fourth child exists: an empty one would still pay its
+  gap on the three boards that are read rather than managed
+- `[Game]` *You are the only one who knows who is in the room* is the switch's
+  own description now, not a line standing beside it. It began at the panel's
+  edge — under the 52px track rather than under the label it explains — and
+  nothing tied the two together for a screen reader. react-aria deprecated
+  `Switch` in the version installed here in favour of `SwitchField` +
+  `SwitchButton`, and the field publishes the described-by a description needs,
+  so the wrapper took the migration and the alignment and the wiring both came
+  with it. Every hover, press and focus selector moved to the button in the same
+  pass: those three render props exist on that half alone, and a selector left
+  behind on the field would have matched nothing without failing to compile
 
 ### Internal
 

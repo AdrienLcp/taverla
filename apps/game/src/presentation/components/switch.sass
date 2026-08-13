@@ -2,13 +2,46 @@
 
 @layer components
   .switch
-    @include typography.label
+    --switch-track-width: 52px
 
-    align-items: center
-    color: var(--ink-muted)
-    cursor: pointer
-    display: inline-flex
-    gap: var(--space-xs)
+    display: flex
+    flex-direction: column
+    gap: var(--space-2xs)
+
+    // Every state selector belongs here and not on the field: only
+    // SwitchButtonRenderProps carries hover, press and focus, so the same
+    // selectors on the field would match nothing and compile green.
+    .switch-button
+      @include typography.label
+
+      align-items: center
+      color: var(--ink-muted)
+      cursor: pointer
+      display: inline-flex
+      gap: var(--space-xs)
+
+      &[data-hovered],
+      &[data-pressed],
+      &[data-selected]
+        color: var(--ink)
+
+      &[data-selected]
+        .track
+          background: var(--ink)
+          border-color: var(--ink)
+
+        .thumb
+          background: var(--field)
+          transform: translateX(24px)
+
+      // The ring goes on the track rather than the label, because the track is
+      // what the eye reads as the control.
+      &[data-focus-visible] .track
+        outline: 3px solid var(--ink)
+        outline-offset: 3px
+
+      &[data-disabled]
+        cursor: not-allowed
 
     .track
       border: 2px solid var(--ink-muted)
@@ -16,7 +49,7 @@
       height: 28px
       padding: 3px
       transition: background var(--transition-fast, 0), border-color var(--transition-fast, 0)
-      width: 52px
+      width: var(--switch-track-width)
 
     .thumb
       background: var(--ink-muted)
@@ -24,27 +57,15 @@
       transition: transform var(--transition-fast, 0) var(--timing, ease), background var(--transition-fast, 0)
       width: 18px
 
-    &[data-hovered],
-    &[data-pressed]
-      color: var(--ink)
+    // Indented onto the label rather than started at the panel edge: a line
+    // beginning under the track reads as a paragraph of the panel instead of
+    // as the reason for this one setting.
+    .description
+      @include typography.caption
 
-    &[data-selected]
-      color: var(--ink)
-
-      .track
-        background: var(--ink)
-        border-color: var(--ink)
-
-      .thumb
-        background: var(--field)
-        transform: translateX(24px)
-
-    // The ring goes on the track rather than the label, because the track is
-    // what the eye reads as the control.
-    &[data-focus-visible] .track
-      outline: 3px solid var(--ink)
-      outline-offset: 3px
+      color: var(--ink-muted)
+      padding-inline-start: calc(var(--switch-track-width) + var(--space-xs))
+      text-wrap: pretty
 
     &[data-disabled]
-      cursor: not-allowed
       opacity: 0.4

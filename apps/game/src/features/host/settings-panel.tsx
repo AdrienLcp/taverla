@@ -177,17 +177,15 @@ const QuestionBankSettings: React.FC<{
         who turns it on in French still has it on when they come back.
       */}
       {hasAdultContent(game.language) && (
-        <>
-          <Switch
-            isDisabled={isDisabled}
-            isSelected={game.allowsAdultContent}
-            label={translate('quiz.adult.label')}
-            onChange={(allowsAdultContent) => {
-              onChange({ ...game, allowsAdultContent })
-            }}
-          />
-          <p className='hint'>{translate('quiz.adult.hint')}</p>
-        </>
+        <Switch
+          description={translate('quiz.adult.hint')}
+          isDisabled={isDisabled}
+          isSelected={game.allowsAdultContent}
+          label={translate('quiz.adult.label')}
+          onChange={(allowsAdultContent) => {
+            onChange({ ...game, allowsAdultContent })
+          }}
+        />
       )}
     </>
   )
