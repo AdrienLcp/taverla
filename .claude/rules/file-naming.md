@@ -1,5 +1,8 @@
 # File & Directory Naming: kebab-case only
 
+> **Unscoped on purpose**: it applies when a file is *created*, and no `paths:`
+> pattern matches a file that does not exist yet.
+
 All files and directories MUST use **kebab-case** (lowercase letters, numbers, hyphens).
 
 ## Rules

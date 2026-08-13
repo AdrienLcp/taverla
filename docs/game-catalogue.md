@@ -206,25 +206,28 @@ setting:
 | **The game** | true of this game, whatever the mode | `difficulty`, `source`, the round's duration |
 | **The mode** | true of this way of answering, whatever the game | `answerWindowMs` — and nothing else yet |
 
-`answerWindowMs` is the one that exposes the gap. It sits on the room, and it is
-meaningless in two of the three answer modes: nothing holds the floor when
-everyone answers at once. The settings panel already hides it outside buzzer
-mode, which is the shape of the truth expressed as a UI rule rather than as a
-type.
+`answerWindowMs` is the one that exposed the gap, and **the `mode` union is
+built**. `settings.mode` is discriminated on `kind` beside `settings.game`, for
+the same reason: which game the room is playing and how it is answered are
+independent choices, and each owns settings the other cannot read.
+`answerWindowMs` lives in the buzzer arm alone, so the guard in `registerBuzz`
+against a hand-written buzz *is* the narrowing that produces the window — a mode
+where nobody buzzes cannot reach it.
 
-**Do not build the `mode` union yet.** It would have one field in one arm and
-two empty ones — a union invented to hold a single value, which is the same
-mistake as a `game` union built before the second game existed. The cost is real
-too: `answerMode` is read by `registerBuzz`, `registerAnswer`,
-`settleSimultaneousRound`, `findBuzzBlocker`, the scoreboard and three UI
-branches, and turning it from a string into `settings.mode.kind` changes every
-one of them.
+**It was built on one field rather than the two the threshold below asked for**,
+and that revision is worth more than the rule it broke: the field was in the
+wrong *place*, which is a different fault from a missing abstraction. A union
+invented for symmetry is premature; a union that makes an unreachable field
+unrepresentable pays for itself the day it is written. The cost the old
+paragraph feared was real — `answerMode` was read by `registerBuzz`,
+`registerAnswer`, `settleSimultaneousRound`, `findBuzzBlocker`, the scoreboard
+and three UI branches — and it was one afternoon, against a setting the panel
+had to hide by hand in two modes out of three.
 
-**The trigger is precise: the second mode-specific setting.** One field is a
-documented exception; two are a shape. Candidates that would pull it in — how
-many candidates choice mode shows, whether typed mode pays partial credit, how
-many thumbs a buzzer round accepts before it closes. When one of those is
-wanted, build the union and move `answerWindowMs` into it in the same change.
+**The threshold still holds for the next axis**, with that exception carved out:
+one mode-specific field is a documented exception, two are a shape — *unless*
+the one field is reachable somewhere it means nothing, which is a type bug and
+gets fixed as one.
 
 **The naming smell beside it is fixed.** `clipDurationMs` and
 `answerDurationMs` were the same concept — how long a round stays open — under
@@ -242,13 +245,23 @@ them: `settings.game` and `round.content` are discriminated on `kind`, and the
 compiler did walk through the change in an afternoon, exactly as this paragraph
 predicted it would once there were two cases.
 
-What is still fused is `RoomPhase` — `lobby → countdown → playing → buzzed →
-revealed → finished`, the blind test's life cycle wearing the room's name. It
-has not been split because every phase happens to be true of the next two games
-as well: a countdown is a countdown, a reveal is a reveal, and a buzzer game
-that serves nothing still moves through all six. Split it the day a game needs a
-phase these names cannot carry — a drawing game's "everyone is drawing at once"
-has no equivalent here — and not before.
+**`RoomPhase` stays fused, and Le Fake is what proved that rule rather than
+breaking it.** `lobby → countdown → playing → buzzed → voting → revealed →
+finished` is the blind test's life cycle wearing the room's name, and it stays
+whole because a phase carries **no field at all** — it is a name. `settings.game`,
+`settings.mode`, `round.content` and `Verdict` each split because a field
+belonged to one arm and sat on all of them. Splitting a name buys nothing of the
+sort, and costs every check in the shell the ability to spell what it is
+checking.
+
+The rule was to split it the day a game needs a phase these names cannot carry,
+and that day arrived as an *addition* instead: the submit-then-vote shape needed
+**one** new name, `voting`, and got it. Not two — its writing phase *is*
+`playing`, because "everyone submitting against a deadline" is what a
+simultaneous round already means, and `answers` already carries the names
+filling the screen. Adding a member keeps the enum shared and hands the next
+submit-then-vote game its phase for nothing. A drawing game's "everyone is
+drawing at once" is the same test again, and still has no equivalent here.
 
 **Message names are blind-test verbs.** `player.buzz`, `host.judge`,
 `host.reveal`. When a second game lands, its messages take its own namespace

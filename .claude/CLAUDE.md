@@ -6,10 +6,10 @@ shows the QR code, everyone else plays on whatever screen they have to hand,
 and the first to buzz gets to name the track. **Buzzer** is the second: the same
 room, the same unforgeable race for the floor, and no content at all — the host
 brings the charade, the quiz on paper or the lesson. **Quiz** is the third, and
-it serves its own: 1 800 French questions bundled with the server. **Le Fake**
-is the fourth, and the first where a wrong answer scores: everyone writes a lie
-about a real question, the screen shows them all beside the truth, and the room
-votes.
+it serves its own: two question banks bundled with the server, French and
+English. **Le Fake** is the fourth, and the first where a wrong answer scores:
+everyone writes a lie about a real question, the screen shows them all beside
+the truth, and the room votes.
 
 A phone is the common case, not the contract. The room code is displayed to be
 read aloud and typed, so a laptop in the same room joins the same way — nothing
@@ -135,16 +135,17 @@ string written into a component is a bug, not a shortcut — see
   already on screen is asked `round.content`, not `settings.game`, because that
   is the game it was *opened* on.
 
-  `blindtest`, `buzzer`, `lefake`, `quiz`; `shelvedGames` is the ones a game's own front
-  door may open a room for, and the create-room request carries which when it
-  came through one. It holds all three today, and must not collapse into
-  `gameKinds`: it is what refuses a game that is served but has no screens yet,
-  and every game so far has spent a stage in that window. The game owns its arm
-  of `settings.game` and `round.content`, and narrows the room's answer mode
+  `blindtest`, `buzzer`, `lefake`, `quiz`; `shelvedGames` is the ones a game's
+  own front door may open a room for, and the create-room request carries which
+  when it came through one. The two sets coincide today, which is what shipping
+  every game looks like — it must **not** collapse into `gameKinds`: it is what
+  refuses a game that is served but has no screens yet, and every game so far has
+  spent a stage in that window. The game owns its arm of `settings.game` and
+  `round.content`, and narrows the room's answer mode
 - **Round** — one track, one question, or nothing at all.
-  `lobby → countdown → playing → buzzed → voting → revealed`. `roundCount` is
-  nullable, and `null` means until the host ends it. `voting` is Le Fake's
-  alone; every other game goes from `playing` straight to a reveal
+  `lobby → countdown → playing → buzzed → voting → revealed → finished`.
+  `roundCount` is nullable, and `null` means until the host ends it. `voting` is
+  Le Fake's alone; every other game goes from `playing` straight to a reveal
 - **Answer mode** — `typed` (one field, the default), `choice` (four candidates)
   or `buzzer` (one player, judged by the host). The first two are everyone at
   once, decided by the server, and scored by speed on top of being right. Typing
@@ -199,117 +200,24 @@ string written into a component is a bug, not a shortcut — see
 
 ## The blind test is the first game, not the product
 
-The shelf is real now — four games share the room, the QR code and every screen —
-but the rule that got it here has not changed: do not weld a seam shut, and do
-not invent a shared shape before there is a second case to measure it against.
+Four games share the room, the QR code and every screen, and the rule that got
+them there has not changed: **do not weld a seam shut, and do not invent a
+shared shape before there is a second case to measure it against.**
 
-[`docs/game-catalogue.md`](../docs/game-catalogue.md) holds the candidates and,
-more usefully, the seams: room state versus game state, message namespaces, the
-role-scoped unions worth defending, and the one shape of game that legitimately
-breaks the snapshot rule. Read it before generalising anything.
-
-**The `mode` axis is built.** `settings.mode` is a union discriminated on
-`kind`, beside `settings.game` and for the same reason: which game the room is
-playing and how it is answered are independent choices, and each owns settings
-the other cannot read. `answerWindowMs` lives in the buzzer arm alone, so the
-guard in `registerBuzz` against a hand-written buzz *is* the narrowing that
-produces the window — a mode where nobody buzzes cannot reach it.
-
-It was built on one field rather than the two the threshold asked for, because
-the field was in the wrong place and that is a different fault from a missing
-abstraction. A union invented for symmetry is premature; a union that makes an
-unreachable field unrepresentable pays for itself the day it is written.
-
-**`RoomPhase` stays fused, and Le Fake is what proved the rule rather than
-breaking it.** It is the one candidate with no payload: `settings.game`,
-`settings.mode`, `round.content` and `Verdict` each split because a field
-belonged to one arm and sat on all of them, and a phase carries no field at all
-— it is a name. Splitting a name costs every check in the shell the ability to
-spell what it is checking.
-
-The rule was "revisit when a game needs a phase these cannot carry, which is a
-*new name* and not a reshuffle", and that is exactly what happened: the submit-
-then-vote shape needed **one** name, `voting`, and got it. Not two — its writing
-phase *is* `playing`, because "everyone submitting against a deadline" is what a
-simultaneous round already means and `answers` already carries the names filling
-the screen. Adding a member keeps the enum shared and hands the next
-submit-then-vote game its phase for nothing. Read `docs/plans/16-le-fake.md`
-before touching it.
+**Read [`docs/game-catalogue.md`](../docs/game-catalogue.md) before generalising
+anything** — before hoisting a field to the room, splitting a union, or naming
+something "shared". It holds the open seams, the shapes the remaining games fall
+into, and the two arguments already settled: `settings.mode`, built on one field
+because the field was in the wrong *place*, and `RoomPhase`, which stays fused
+because a phase is a name and not a payload — Le Fake added `voting` to it
+rather than splitting it.
 
 ## The build is staged
 
 `docs/plans/` holds one file per stage, in order, each scoped to a session.
-**00 through 09 are done** — the game is playable end to end in three answer
-modes, deployed, and covered by socket suites plus two Playwright journeys.
-`docs/plans/README.md` is the authority on which; do not trust this paragraph
-over that table.
+**Start a session by reading the stage's plan, and update it when reality
+diverges.**
 
-**10 is dropped** — audio stays on the host screen, and the case it was for is
-remote play, which will get its own stage when it is wanted. The plan file keeps
-the reasoning. Note what 06 deliberately did *not* buy: no component runner
-exists here, so a claim about a single screen still rests on a browser pass.
-
-**11 is done, and it is the first stage that is not the blind test's.** The seam
-between the shelf and one game on it — `settings.game`, `round.content` and the
-verdict, all discriminated on `kind` — and the game that proves it: a **bare
-buzzer**, where the server serves no content at all and the room supplies
-whatever it likes.
-
-**12 is done, and the quiz is the third game on the shelf.** It runs in all
-three modes on 1 800 French questions bundled with the server — ninety-two of
-them adult and off until the host says otherwise. There is no API to take —
-OpenQuizzDB publishes downloads now, which is better, because a bundled asset
-cannot go down in the middle of a party. Its real work was not the questions but
-the **simultaneous path**, which stage 11 left entirely in the blind test's
-shape, and then the four shell strings the screens forced out of a game's
-namespace.
-
-**13 is done: the room comes first.** `/` creates a room with nothing chosen and
-the game is picked on the console, so `settings.game` is nullable and
-`PROTOCOL_VERSION` is 9. A game's own page keeps its button as a shortcut. Read
-`docs/plans/13-room-first.md` before touching anything that reads
-`settings.game` — three of the sites it swept were reading it where
-`round.content` was the honest source.
-
-**14 is done, and the quiz has two banks.** 4 506 English questions from Open
-Trivia DB beside the 1 800 French, same CC BY-SA 4.0, same bundled asset, and the
-control stage 12 deliberately withheld. Three things worth knowing before
-touching it:
-
-- **The language is the room's and the host's alone.** It defaults to the host's
-  interface locale and moves independently after — a player switching their app
-  between English and French mid-game changes their chrome and nothing else.
-- **The default is a map, not an identity.** `Locale` and `QuestionLanguage` are
-  separate unions holding the same two members today;
-  `@taverla/core/quiz/question-language` maps between them with a fallback, and
-  its test is the tripwire for a locale that ships without a bank.
-- **`Locale` lives in the protocol now**, because `POST /api/rooms` carries it.
-  `pickLocale` is a rule and stayed in core. The door carries the shell's fact —
-  what the host *reads* — rather than a quiz setting, and each game decides what
-  to do with it.
-
-**16 is done, and Le Fake is the fourth game.** It bought the submit-then-vote
-phase seven of the remaining catalogue is waiting on, for one new `RoomPhase`
-name and no new content: it runs on the same question bank the quiz does, minus
-two shapes of question that cannot carry a round — one that names candidates the
-room cannot see, and one whose answer is a bare number. Three things to know
-before touching it, all in `docs/plans/16-le-fake.md`: the answer mode narrows to
-`choice` rather than gaining a fourth member, the host screen is sent *nothing*
-because the whole room is looking at it, and the two shell bugs it surfaced —
-an error outliving its phase, and a react-aria field whose refusal silently
-killed the form — are in `.claude/rules/`.
-
-English has **no anecdotes and no adult rating**, so a reveal there shows the
-answer alone and the adult switch is not shown at all — `hasAdultContent` decides
-that, and a server test keeps it honest against the bank.
-
-**A question is drawn by picking its category first.** Ticking nothing means
-every *subject*, which is not the same as every *question* unless a bank is flat,
-and neither is: `arts` is 55% of the English bank and `history` 3% of the French.
-Reach for uniform-over-questions only if a bank is ever built to be flat.
-
-Read the divergences at the end of `docs/plans/11-buzzer.md` before trusting a
-detail written earlier in that file: the second game corrected the first half in
-four places, which is what a second case is for.
-
-Start a session by reading the stage's plan. Update it when reality diverges.
+[`docs/plans/README.md`](../docs/plans/README.md) is the authority on which
+stages are done, which were dropped and why, and what each one bought — trust
+that table over anything remembered, this file included.

@@ -1,5 +1,9 @@
 # Project structure
 
+> **Unscoped on purpose**: it answers *where a new file goes*, decided before
+> the file exists. At 4 KB it is the largest greedy rule here, and the first to
+> re-examine if the floor must come down again.
+
 ```
 apps/server         → Hono + native WebSocket. Authoritative game state.
 apps/game           → One Vite SPA serving both surfaces, by route.

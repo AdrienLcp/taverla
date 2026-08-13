@@ -1,5 +1,9 @@
 # Git Hooks
 
+> **Unscoped on purpose**: it fires at *commit* time, when the files it warns
+> about may never have been read — and the partial-staging trap destroys work
+> silently.
+
 Git hooks live in `.githooks/` and are activated via `git config core.hooksPath .githooks` (run automatically by the `preinstall` script in root `package.json`).
 
 ## pre-commit

@@ -42,6 +42,12 @@ two cases to measure it against is the abstraction anti-pattern with a different
 hat on. Both halves have landed, and the second one is what corrected the first:
 five settings called "what every game needs" turned out to be three.
 
+**Read the divergences at the end of [11](11-buzzer.md) before trusting a detail
+written earlier in that file.** The second game corrected the first half in four
+places, which is what a second case is for — and the same caution applies to
+every plan here: a stage file is what was decided *then*, corrected in place
+when a later stage disagreed.
+
 11 and 12 were one file until the second game turned out not to be the quiz. A
 bare buzzer serves no content at all, which makes it both the cheapest game on
 the shelf and the sharpest test of the seam: it is the one that disagrees with
@@ -113,5 +119,7 @@ the code compiles.
 - `pnpm validate` before declaring anything working
 - A new rule in `packages/core` arrives with a test, and the test is broken on
   purpose once to prove it can fail
-- A UI change is verified by driving the real app
+- A UI change is verified by driving the real app. Note what
+  [06](06-testing.md) deliberately did *not* buy: no component runner exists
+  here, so a claim about a single screen still rests on a browser pass
 - `not_implemented` shrinks; if a stage leaves a message unserved, say so here
