@@ -23,6 +23,8 @@ describes the code is worse than no plan.
 | [14 — Question languages](14-question-languages.md) | **done** | A second bank, 4 506 English questions, and the control that picks between them — defaulted to what the host reads, independent of it after |
 | [15 — Room social](15-room-social.md) | **dropped** | A chat in the room, and public rooms with a directory. Both evaluated and declined; the file holds why, and the smaller thing worth building in each case |
 | [16 — Le Fake](16-le-fake.md) | **done** | The fourth game: write a lie, fool the table. It bought the submit-then-vote phase seven of the remaining games want, on the quiz bank and for one new `RoomPhase` name |
+| [17 — Mid-game join](17-mid-game-join.md) | **planned** | A phone that arrives mid-round keeps its seat and plays from the next one. Today it holds the round open instead, because every close predicate reads the live roster |
+| [18 — Reflex race](18-reflex-race.md) | **planned** | The fifth game, and the cheapest: the screen flips, the first thumb wins. Also the first whose fairness needs a fifth guarantee — the stimulus has to happen locally |
 
 ## Order, and what can move
 
