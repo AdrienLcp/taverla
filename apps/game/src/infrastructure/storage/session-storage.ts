@@ -1,19 +1,31 @@
-import type { ConnectionRole } from '@taverla/protocol/client-message'
-import type { RoomCode, SessionId } from '@taverla/protocol/identifiers'
+import { z } from 'zod'
 
-type SessionScope = {
-  role: ConnectionRole
-  roomCode: RoomCode
-}
+import { connectionRoleSchema } from '@taverla/protocol/client-message'
+import {
+  roomCodeSchema,
+  type SessionId,
+  sessionIdSchema
+} from '@taverla/protocol/identifiers'
 
-/**
- * Scoped by room *and* role. Room, because a session id is a claim on one seat.
- * Role, because hosting and playing the same room from one browser is a normal
- * way to try the game out, and a shared key would have the two tabs claiming
- * each other's identity.
- */
-const keyFor = ({ role, roomCode }: SessionScope): string =>
-  `taverla:session:${roomCode}:${role}`
+import {
+  forgetSeat,
+  type RememberedSeat,
+  rememberedSeatFor,
+  rememberSeat,
+  type SeatScope
+} from '@taverla/core/room/session-memory'
+
+const SEATS_KEY = 'taverla:seats'
+const ONE_KEY_EACH_PREFIX = 'taverla:session:'
+
+const rememberedSeatsSchema = z.array(
+  z.object({
+    at: z.number(),
+    role: connectionRoleSchema,
+    roomCode: roomCodeSchema,
+    sessionId: sessionIdSchema
+  })
+)
 
 /**
  * The session id is minted by the client, not the server, and that is
@@ -23,22 +35,21 @@ const keyFor = ({ role, roomCode }: SessionScope): string =>
  * *reclaim* of the same seat instead of a stranger fighting for it — the same
  * path a phone takes when it reconnects after a screen lock.
  *
+ * Every claim is re-stamped on the way through, minted or not, because this runs
+ * when a socket opens: that is the only moment the device can say which of the
+ * seats it remembers is still worth keeping.
+ *
  * Every access is guarded: `localStorage` throws outright in a Safari private
  * window. The degradation is losing the ability to reclaim a seat, which beats
  * a blank page.
  */
-export const ensureSessionId = (scope: SessionScope): SessionId => {
-  const stored = read(scope)
+export const ensureSessionId = (scope: SeatScope): SessionId => {
+  const seats = readSeats()
+  const sessionId = rememberedSeatFor({ ...scope, seats }) ?? mintSessionId()
 
-  if (stored !== null) {
-    return stored
-  }
+  writeSeats(rememberSeat({ ...scope, at: Date.now(), seats, sessionId }))
 
-  const created = mintSessionId()
-
-  write(scope, created)
-
-  return created
+  return sessionId
 }
 
 /**
@@ -55,30 +66,74 @@ const mintSessionId = (): SessionId =>
   `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`
 
 /**
- * Called when a player gives their seat up on purpose. Keeping the id would not
- * break anything — the server no longer knows it, so a return would be a new
- * arrival either way — but a claim on a seat that has been handed back is a lie
- * this device would carry until the browser is cleared.
+ * Called when a player gives their seat up on purpose, or when a host disbands
+ * the room they were running. Keeping the claim would not break anything — the
+ * server no longer knows it, so a return would be a new arrival either way — but
+ * a claim on a seat that has been handed back is a lie this device would
+ * otherwise carry until it aged out.
  */
-export const forgetSessionId = (scope: SessionScope): void => {
+export const forgetSessionId = (scope: SeatScope): void => {
+  writeSeats(forgetSeat({ ...scope, seats: readSeats() }))
+}
+
+/**
+ * A seat used to be a `localStorage` key of its own, and nothing ever removed
+ * one — a browser that had played thirty rooms held thirty keys, all but the
+ * last naming a code that stopped resolving the same evening.
+ *
+ * They are dropped rather than carried over, and that costs a device upgrading
+ * mid-round its seat: they are undated, so the eight worth keeping cannot be
+ * told from the seventy that are not.
+ */
+const dropSeatsKeptOneKeyEach = (): void => {
   try {
-    localStorage.removeItem(keyFor(scope))
+    for (const key of Object.keys(localStorage)) {
+      if (key.startsWith(ONE_KEY_EACH_PREFIX)) {
+        localStorage.removeItem(key)
+      }
+    }
   } catch {
     return
   }
 }
 
-const read = (scope: SessionScope): SessionId | null => {
+const readSeats = (): RememberedSeat[] => {
+  const stored = read(SEATS_KEY)
+
+  if (stored === null) {
+    dropSeatsKeptOneKeyEach()
+
+    return []
+  }
+
+  const parsed = rememberedSeatsSchema.safeParse(parseJson(stored))
+
+  return parsed.success ? parsed.data : []
+}
+
+const writeSeats = (seats: RememberedSeat[]): void => {
+  write(SEATS_KEY, JSON.stringify(seats))
+}
+
+const parseJson = (raw: string): unknown => {
   try {
-    return localStorage.getItem(keyFor(scope))
+    return JSON.parse(raw)
   } catch {
     return null
   }
 }
 
-const write = (scope: SessionScope, sessionId: SessionId): void => {
+const read = (key: string): string | null => {
   try {
-    localStorage.setItem(keyFor(scope), sessionId)
+    return localStorage.getItem(key)
+  } catch {
+    return null
+  }
+}
+
+const write = (key: string, value: string): void => {
+  try {
+    localStorage.setItem(key, value)
   } catch {
     return
   }

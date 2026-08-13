@@ -236,6 +236,15 @@ one part.
   and it was underlined — so the moment a second underlined thing existed,
   neither name told you which was which. It is `underlined` now, and the three
   read as one family
+- `[Game]` A device stops collecting dead seats. Every room it had played kept a
+  storage key of its own and nothing ever removed one — a browser used for a few
+  evenings of testing held seventy-three, all but the last naming a code that had
+  stopped resolving, and disbanding a room *added* one on every phone in it,
+  because a phone told the room is gone runs no code to tidy up after it. Seats
+  are one store now, pruned as each is claimed to the eight most recent and
+  nothing claimed more than a day ago. The keys of the old shape are swept on the
+  first launch that finds no store, and dropped rather than carried over: they
+  are undated, so the eight worth keeping cannot be told from the rest
 
 ### Internal
 

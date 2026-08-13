@@ -1,0 +1,75 @@
+import type { ConnectionRole } from '@taverla/protocol/client-message'
+import type { RoomCode, SessionId } from '@taverla/protocol/identifiers'
+
+/**
+ * A seat is claimed per room *and* role: hosting and playing the same room from
+ * one browser is a normal way to try the game out, and one claim covering both
+ * would have the two tabs taking each other's identity.
+ */
+export type SeatScope = {
+  role: ConnectionRole
+  roomCode: RoomCode
+}
+
+/**
+ * One seat this device holds a claim on. `at` is when it was last claimed rather
+ * than when it was first minted, which is what keeps the room being played from
+ * being the one a prune drops.
+ */
+export type RememberedSeat = {
+  at: number
+  role: ConnectionRole
+  roomCode: RoomCode
+  sessionId: SessionId
+}
+
+export const MAX_REMEMBERED_SEATS = 8
+
+/**
+ * The count bounds the store; the age is what keeps last week's party out of it,
+ * and the two answer different questions — a device that plays one room a month
+ * would never reach the count.
+ *
+ * A day rather than the ten minutes a room outlives its host, because a claim is
+ * stamped when the socket opened: a phone that has sat locked since the first
+ * round is exactly the one this exists for, and a party runs longer than a room's
+ * own grace.
+ */
+export const SEAT_MEMORY_MS = 24 * 60 * 60 * 1_000
+
+export const rememberedSeatFor = ({
+  role,
+  roomCode,
+  seats
+}: SeatScope & { seats: RememberedSeat[] }): SessionId | null =>
+  seats.find((seat) => seat.role === role && seat.roomCode === roomCode)
+    ?.sessionId ?? null
+
+export const forgetSeat = ({
+  role,
+  roomCode,
+  seats
+}: SeatScope & { seats: RememberedSeat[] }): RememberedSeat[] =>
+  seats.filter((seat) => seat.role !== role || seat.roomCode !== roomCode)
+
+/**
+ * The claim, at the head, with everything that no longer earns a place dropped
+ * behind it. Pruning happens *here* rather than on the paths that end a room
+ * because most claims die with nobody pressing anything: a room disbanded from
+ * the console leaves every phone in it holding a code that has stopped
+ * resolving, and no phone runs any code to find that out.
+ *
+ * Prepending rather than sorting is deliberate. A clock that steps backwards —
+ * an NTP correction, a device whose date was wrong — would otherwise file the
+ * claim just made below the ones it replaces, and drop the seat being taken.
+ */
+export const rememberSeat = ({
+  at,
+  role,
+  roomCode,
+  seats,
+  sessionId
+}: RememberedSeat & { seats: RememberedSeat[] }): RememberedSeat[] =>
+  [{ at, role, roomCode, sessionId }, ...forgetSeat({ role, roomCode, seats })]
+    .filter((seat) => seat.at > at - SEAT_MEMORY_MS)
+    .slice(0, MAX_REMEMBERED_SEATS)
