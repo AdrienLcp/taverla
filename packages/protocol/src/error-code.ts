@@ -32,12 +32,6 @@ export const protocolErrorCodes = [
   'no_content_available',
   'music_source_unavailable',
   'rate_limited',
-  /**
-   * A message the contract already describes but the server does not serve yet.
-   * It exists so a half-built stage answers honestly instead of borrowing a
-   * code that means something else; it should disappear as the stages land.
-   */
-  'not_implemented',
   'internal_error'
 ] as const
 

@@ -10,7 +10,7 @@ import { startSeatSweeper } from '@/infrastructure/messaging/round-conductor'
 const { app, injectWebSocket } = createApp()
 
 const server = serve({ fetch: app.fetch, port: env.PORT }, ({ port }) => {
-  logger.info(`Blind test server listening on http://localhost:${port}`)
+  logger.info(`Taverla server listening on http://localhost:${port}`)
 })
 
 injectWebSocket(server)

@@ -105,5 +105,11 @@ So the useful half of "private" is a host toggle that refuses new players,
 answering with the code that is already written. It needs no choice at creation
 time, no directory, and it retires a protocol code that currently means nothing.
 
-**Not built here** — recorded as a candidate, because it is a behaviour change to
-joining and that is the host's call to want.
+**Both premises have since expired, and the candidate with them.**
+`host.closeRoom` sends `room_closed` on disband, so the code means something
+now. And joining mid-game is **wanted**: a phone that arrives during a round
+takes a seat, sits out the round in play, and answers from the next one — which
+is what a room where people drift in and out of the kitchen actually does. The
+lock is not built and is not on the list; what the audit really found was the
+round in play needing to know who was in it when it opened, and that is
+[stage 17](17-mid-game-join.md).

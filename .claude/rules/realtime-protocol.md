@@ -113,9 +113,12 @@ against a raw `Date.now()` comparison with a server timestamp.
 Every rejection sends a `protocolErrorMessageSchema` frame with a code from
 `error-code.ts`, and `fatal` decides whether the client stops reconnecting. A
 refusal the user can act on — `nickname_taken`, `room_full` — is **non-fatal**,
-so the socket stays open and the form can retry on it. `not_implemented` exists
-so a stage that is not built yet answers honestly instead of borrowing a code
-that means something else.
+so the socket stays open and the form can retry on it.
+
+**A code exists when something sends it.** `not_implemented` was the placeholder
+for work that was not built yet, and it outlived the last stage that sent it by
+four games — dead vocabulary with a translated string in both locales. Do not
+add its replacement.
 
 **A fatal frame ends the session on its own**, without waiting for a close: the
 client acts on the frame, because a fatal code may be sent to a socket the

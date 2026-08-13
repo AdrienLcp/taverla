@@ -67,3 +67,11 @@ each other's identity. Now scoped by room *and* role.
 - The design is a coherent foundation, not a finished visual world — stage 05
 - The host disconnecting is invisible to players
 - No rate limiting on room creation
+
+All six are closed. The four with a stage beside them landed with it; the last
+two closed outside any stage — players see an absent host
+(`host-absence.test.ts`), and room creation is rate limited in
+`apps/server/src/infrastructure/http/rate-limit.ts`. The `not_implemented` code
+itself is gone: it survived every stage that sent it and became dead vocabulary,
+which is recorded as a rule in
+[`../realtime-protocol.md`](../realtime-protocol.md).

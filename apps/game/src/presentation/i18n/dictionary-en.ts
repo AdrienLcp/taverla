@@ -154,7 +154,6 @@ export const EN_DICTIONARY = defineTranslations({
     nickname_taken: 'Someone already took that nickname.',
     no_content_available: 'Nothing left to play. Try other settings.',
     no_game_chosen: 'Pick a game first.',
-    not_implemented: 'That part of the game is not built yet.',
     player_locked_out: 'You are out for this round.',
     protocol_version_mismatch: 'This page is out of date. Reload it.',
     rate_limited: 'That is a lot of rooms. Wait a minute and retry.',

@@ -312,6 +312,16 @@ one part.
 
 ### Internal
 
+- **`not_implemented` is gone from the protocol.** It was the one code that
+  existed for work that was not built yet, it stopped being sent four games ago,
+  and it was still shipping a translated string in both locales. The rule that
+  replaces it is in `docs/realtime-protocol.md`: a code exists when something
+  sends it. Five documents describing it as a live marker were corrected with
+  it, along with two gaps `00-bootstrap.md` still listed as open — an absent
+  host has been visible to players and room creation has been rate limited for
+  some time
+- The server announces itself as Taverla rather than as the blind test, which it
+  stopped being three games ago
 - The game picker is on the lobby stage and in the settings fold, one at a time.
   While the room fills up the game is the decision everyone is waiting on, so it
   sits beside the QR code with the chosen game's pitch under it; once a round

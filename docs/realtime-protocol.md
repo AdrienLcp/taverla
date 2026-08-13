@@ -213,8 +213,12 @@ scoreboard — live and lying — while the room no longer existed. A fatal code
 therefore be sent to a socket the server keeps open, and that is not a loose end
 to tidy up by closing it too. It is the guarantee the client owes.
 
-`not_implemented` marks a message the contract describes but the server does not
-serve yet. It should disappear as the stages in [`plans/`](plans/) land.
+**A code exists when something sends it.** `not_implemented` was the one
+exception — a placeholder so a half-built stage could answer honestly instead of
+borrowing a code that meant something else — and it outlived the last stage that
+sent it by four games, as dead vocabulary carrying a translated string in both
+locales. It is gone. The next thing that is not built yet does not get a code
+for saying so; it gets finished, or it stays off the wire.
 
 ## Versioning
 

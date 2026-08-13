@@ -148,7 +148,6 @@ export const FR_DICTIONARY: Dictionary = {
     nickname_taken: 'Ce pseudo est déjà pris.',
     no_content_available: 'Il ne reste rien à jouer. Change les réglages.',
     no_game_chosen: 'Choisis d’abord un jeu.',
-    not_implemented: 'Cette partie du jeu n’existe pas encore.',
     player_locked_out: 'Tu es hors-jeu pour ce tour.',
     protocol_version_mismatch: 'Cette page n’est plus à jour. Recharge-la.',
     rate_limited: 'Ça fait beaucoup de salons. Attends une minute et réessaie.',

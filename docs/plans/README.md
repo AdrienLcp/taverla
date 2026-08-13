@@ -123,4 +123,5 @@ the code compiles.
 - A UI change is verified by driving the real app. Note what
   [06](06-testing.md) deliberately did *not* buy: no component runner exists
   here, so a claim about a single screen still rests on a browser pass
-- `not_implemented` shrinks; if a stage leaves a message unserved, say so here
+- A stage leaves no message unserved. The `not_implemented` code that used to
+  cover one is gone — see [`../realtime-protocol.md`](../realtime-protocol.md)
