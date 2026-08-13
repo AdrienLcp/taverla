@@ -50,6 +50,7 @@ import { HostControls } from './host-controls'
 import { JoinReminder } from './join-reminder'
 import { LobbyStage } from './lobby-stage'
 import { RevealPanel } from './reveal-panel'
+import { RoomInvitation } from './room-invitation'
 import { useRoundAudio } from './round-audio'
 import { SetupFold } from './setup-fold'
 import { useRestoreStoredSetup } from './use-restore-stored-setup'
@@ -260,8 +261,16 @@ const Stage = ({
 }: StageProps) => {
   const translate = useTranslate()
 
+  // The invitation is drawn from the code in the address bar and this origin,
+  // so the room can start reading it out before the socket has answered. Two
+  // columns with one child on purpose: it lands in the column it keeps, and
+  // nothing moves when the first snapshot arrives.
   if (view === null) {
-    return <div className='stage' />
+    return (
+      <div className='stage lobby'>
+        <RoomInvitation roomCode={roomCode} />
+      </div>
+    )
   }
 
   const round = view.round

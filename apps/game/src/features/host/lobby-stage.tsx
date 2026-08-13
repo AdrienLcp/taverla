@@ -1,4 +1,3 @@
-import { QRCodeSVG } from 'qrcode.react'
 import type React from 'react'
 
 import type { ClientMessage } from '@taverla/protocol/client-message'
@@ -8,13 +7,12 @@ import type { HostRoomView, RoomSettings } from '@taverla/protocol/room'
 import type { HostPreferences } from '@taverla/core/room/host-preferences'
 import { isShelvedGame } from '@taverla/core/room/shelved-game'
 
-import { playUrlFor } from '@/infrastructure/router/navigation'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { gameDescriptionKey } from '@/presentation/i18n/translation'
 
-import { CopyButton } from './copy-button'
 import { GamePicker } from './game-picker'
+import { RoomInvitation } from './room-invitation'
 
 type LobbyStageProps = {
   /** The socket is open. The picker sends a frame, so it does nothing without one. */
@@ -44,27 +42,10 @@ export const LobbyStage: React.FC<LobbyStageProps> = ({
   view
 }) => {
   const translate = useTranslate()
-  const joinUrl = playUrlFor(view.code)
 
   return (
     <div className='stage lobby'>
-      <section className='invitation'>
-        <div className='code'>
-          <p className='room-code'>{roomCode}</p>
-          <CopyButton value={roomCode} />
-        </div>
-        <div className='qr'>
-          <QRCodeSVG
-            bgColor='transparent'
-            fgColor='currentColor'
-            marginSize={0}
-            size={256}
-            value={joinUrl}
-          />
-          <p className='invite'>{translate('host.invite.title')}</p>
-          <p className='join-url'>{joinUrl}</p>
-        </div>
-      </section>
+      <RoomInvitation roomCode={roomCode} />
 
       <div className='host-side'>
         <section className='game-choice'>

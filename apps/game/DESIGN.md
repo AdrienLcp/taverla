@@ -123,6 +123,28 @@ which was the prototype's world and had outlived it by a whole design pass. The
 share card is the same two colours with the wordmark set in `monument`, rendered
 at 1200×630 rather than drawn: it is the type, so it should come from the type.
 
+## Waiting
+
+**A spinner is the last answer, not the first.** Four rungs, and the product
+almost always has one of the top three:
+
+1. **Draw what is already known.** The host console's invitation — the code, the
+   QR, the address — comes from the address bar and this origin, so it goes up
+   before the socket has answered. The room starts reading the code aloud
+   instead of watching a field.
+2. **Say it in words.** *Taking your seat…* tells a player what is happening;
+   a turning square would only say *wait*.
+3. **Reserve the box** and let the content arrive. The cover art does this.
+4. **A `Loader`** — a turning square and a named line — which earns its place
+   only where the other three have nothing to offer. Today that is one screen:
+   the cold load of a route, which is the phone that scanned the QR code
+   downloading the app on a party's Wi-Fi.
+
+It holds off 250 ms before appearing, because a good connection settles most
+waits inside that and a flash is worse than the blank it replaces. It is also
+the one piece of **continuous** motion in a system whose rule is one authored
+moment per event — which is the other reason its budget is this small.
+
 ## Motion
 
 One authored moment per event, all of it collapsing to nothing under

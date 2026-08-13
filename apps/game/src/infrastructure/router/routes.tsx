@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router'
 import { NotFoundPage } from '@/features/not-found/not-found-page'
 import { AppShell } from '@/presentation/app-shell'
 import { ErrorScreen } from '@/presentation/error-screen'
+import { RouteFallback } from '@/presentation/route-fallback'
 
 /**
  * The host console and the player screen are lazily loaded, which is the whole
@@ -53,6 +54,9 @@ export const router = createBrowserRouter([
     ],
     // On the root, so a throw anywhere below replaces the shell instead of
     // rendering a fallback inside chrome that may be part of what broke.
-    ErrorBoundary: ErrorScreen
+    ErrorBoundary: ErrorScreen,
+    // Honoured on the root route alone, and only on a cold load — a navigation
+    // already made keeps the screen it is leaving until the chunk resolves.
+    HydrateFallback: RouteFallback
   }
 ])

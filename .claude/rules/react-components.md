@@ -268,6 +268,28 @@ accessibility tree, so the button keeps its name while it works.
 The spinner is `aria-hidden`. react-aria already announces `isPending`; a second
 live region would say the same thing twice.
 
+### A wait outside a control is a `Loader`, and it is never anonymous
+
+`Spinner` is geometry, the way `Icon` is — decorative, `aria-hidden`, and only
+ever composed. `Loader` is the composition that carries meaning: `role='status'`
+and a **required** `label` that is the visible line as well as the accessible
+name. There is no default label and no bare `<Loader />`, for the same reason a
+glyph never travels alone — and because a site that cannot name what it is
+waiting for usually should not be waiting visibly at all.
+
+Two things it does that are not obvious from reading it:
+
+- **The live region mounts empty and fills 250 ms later.** A `role='status'`
+  that appears already holding its text is a change no screen reader watched
+  happen, so the announcement is lost. The delay is not only a flash guard.
+- **A `MutationObserver` cannot prove the empty phase.** Its callback is a
+  microtask, so it sees the filled node and reports the region was never empty.
+  Read the DOM on a timer instead — that is what the browser pass did.
+
+**A spinner is the last thing to reach for**, below three cheaper answers:
+render what is already known, say it in words, reserve the box. See
+`apps/game/DESIGN.md`.
+
 ## Styling — no inline styles
 
 **Never write style values inline** (`style={{ flex: 1, minHeight: 0 }}`, `style={{ display: 'block' }}`). All styling lives in `.sass`/`.scss` files alongside the component.

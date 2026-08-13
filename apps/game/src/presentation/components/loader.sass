@@ -1,0 +1,13 @@
+@use '../styles/typography'
+
+@layer components
+  .loader
+    @include typography.label
+
+    align-items: center
+    color: var(--ink-muted)
+    display: flex
+    gap: var(--space-s)
+
+    &:empty
+      display: none

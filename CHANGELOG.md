@@ -184,6 +184,17 @@ one part.
   console that reloaded. The correction is also what removed a jump the host's
   own bar had: a running animation cannot be re-aimed, so each snapshot restarts
   it from the server's count instead of stretching what it has already played
+- `[Game]` **A phone that scans the QR code no longer looks at an empty screen
+  while the app downloads.** A cold load now shows a named wait — the one place
+  in the product with genuinely nothing else to draw, since the route has not
+  resolved and no room is known yet. It holds off for 250 ms first, so a good
+  connection still shows nothing at all rather than a flash
+- `[Game]` **The host console puts the room code up before the socket answers.**
+  The code, the QR square and the join address are drawn from the address bar
+  and this origin, so the room can start reading the code aloud immediately
+  instead of watching a blank field. It lands in the column it keeps, and
+  nothing moves when the first snapshot arrives — where a spinner would have
+  replaced something useful with something that only says *wait*
 - `[Game]` **The question banks are credited on a page of their own**, reachable
   from the menu, instead of two paragraphs of small print inside the popover you
   open to switch language mid-game. CC BY-SA 4.0 names a link to a resource

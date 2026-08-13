@@ -321,6 +321,7 @@ export const FR_DICTIONARY: Dictionary = {
       })
     }
   },
+  loading: 'Chargement…',
   menu: {
     build: 'Version {build}',
     home: 'Accueil',

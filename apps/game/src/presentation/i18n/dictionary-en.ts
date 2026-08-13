@@ -321,6 +321,11 @@ export const EN_DICTIONARY = defineTranslations({
       })
     }
   },
+  /**
+   * The app itself arriving, which is the one wait with nothing more specific
+   * to say: at this point the route has not resolved and no room is known.
+   */
+  loading: 'Loading…',
   menu: {
     build: 'Build {build}',
     home: 'Home',
