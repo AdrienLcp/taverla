@@ -237,6 +237,7 @@ export const EN_DICTIONARY = defineTranslations({
       action: 'Take a seat',
       description: 'This screen stops being told the answer until the reveal.',
       label: 'Play too, as',
+      leave: 'Give up the seat',
       taken: 'You are playing as {nickname}.'
     },
     seconds: '{seconds:number}s',

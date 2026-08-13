@@ -182,9 +182,12 @@ string written into a component is a bug, not a shortcut — see
   **seat**, `host.endGame` ends a **game** and puts the final board up,
   `host.closeRoom` disbands the **room** — everyone is sent a fatal
   `room_closed` and the code stops resolving. The stage carries the exit the
-  moment asks for and nothing else, so the two that must be reachable mid-round
+  moment asks for and nothing else, so the ones that must be reachable mid-round
   live in `AppMenu`, which is on every screen at every phase and behind a
-  popover no thumb aiming at the game can hit. A room outlives its host by ten
+  popover no thumb aiming at the game can hit. A seated host is the only screen
+  offering all three, and the server frees the seat on the frame rather than on
+  the reconnect that follows it — the console reopens its socket without the
+  nickname, and a judge waiting on that would read no answer until it landed. A room outlives its host by ten
   minutes so a reload keeps the game; closing is what says otherwise
 - **Session id** — minted by the client, stored per room and role; what lets a
   device that locked its screen come back to the same seat

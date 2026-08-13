@@ -233,6 +233,7 @@ export const FR_DICTIONARY: Dictionary = {
       action: 'Prendre une place',
       description: 'Cet écran cesse de recevoir la réponse jusqu’au reveal.',
       label: 'Jouer aussi, sous le nom de',
+      leave: 'Rendre sa place',
       taken: 'Tu joues sous le nom de {nickname}.'
     },
     seconds: '{seconds:number} s',

@@ -208,6 +208,36 @@ describe('answering all at once', () => {
     expect(seated).toContain('Adrien')
   })
 
+  /**
+   * The mirror of the test above, on the one socket that outlives its own seat:
+   * a player leaving closes theirs, where a host carries on judging. The
+   * console does reopen the socket without the nickname, and that is what must
+   * not be what restores the answer — a host who gave the seat back mid-round
+   * would otherwise judge the next buzz blind.
+   */
+  it('[seat] tells a host the answer again once they give the seat back', async () => {
+    const { code, host } = await harness.openRoom(TYPED_GAME, 'Adrien')
+    const zoe = await harness.seat({ code, nickname: 'Zoe' })
+
+    host.send({ type: 'host.startRound' })
+    await waitFor(
+      () => playerView(zoe)?.phase === 'playing',
+      'the clip to start'
+    )
+
+    expect(hostContent(host)?.track).toBeNull()
+
+    host.send({ type: 'player.leave' })
+    await waitFor(
+      () => hostContent(host)?.track != null,
+      'the judge to be told the answer again'
+    )
+
+    expect(hostView(host)?.players.map((player) => player.nickname)).toEqual([
+      'Zoe'
+    ])
+  })
+
   it('[seat] answers from the host seat like any other phone', async () => {
     const { host } = await harness.openRoom(TYPED_GAME, 'Adrien')
 

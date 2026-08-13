@@ -71,8 +71,8 @@ export const HostConsolePage = () => {
 
 const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
   const translate = useTranslate()
-  // Read once and kept for the life of the console: the socket reopens on a
-  // change of nickname, and re-seating mid-round would drop the answer.
+  // Taken once and only ever given back: the socket reopens on a change of
+  // nickname, and re-seating mid-round would drop the answer being typed.
   const [seatNickname, setSeatNickname] = useState<string | null>(null)
   const { clock, error, send, status, view } = useHostConnection(
     roomCode,
@@ -119,13 +119,21 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
     forgetSessionId({ role: 'host', roomCode })
   }, [roomCode, send])
 
+  // The frame first again, and for a second reason: dropping the nickname
+  // reopens the socket, so a seat given up on the reconnect alone would sit on
+  // the roster until the server timed it out.
+  const leaveSeat = useCallback(() => {
+    send({ type: 'player.leave' })
+    setSeatNickname(null)
+  }, [send])
+
   // Offered to the menu above, which owns the only way off this screen. What a
   // dead socket takes away is the *press*, which the menu greys out itself —
   // dropping the item would make the menu's contents flap on a Wi-Fi blink.
   useReportRoomExits({
     closeRoom,
     endGame: view !== null && isGameInPlay(view.phase) ? endGame : null,
-    leaveSeat: null
+    leaveSeat: seatNickname === null ? null : leaveSeat
   })
 
   if (status === 'refused') {

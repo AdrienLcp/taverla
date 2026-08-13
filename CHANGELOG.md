@@ -31,6 +31,12 @@ one part.
   server, and the roster on the big screen loses the name at once rather than
   keeping it greyed out. A closed socket could never carry that: a phone that
   locks its screen closes one too, and that seat has to come back
+- `[Shared]` **A host who took a seat can give it back**, without ending the game
+  or closing the room. The menu carries the three scopes as one ladder — a seat,
+  a game, a room — and the console offered the last two only, so the phone in the
+  middle of the table stayed a player for the rest of the evening. The answer
+  comes back to that screen the moment the seat does, so the next buzz is judged
+  by somebody who can read it
 - `[Shared]` A seat nobody has been behind for ten minutes is released on its
   own — the same patience the server already gives a room with nobody connected
   at all. A room outlives a game and chains several, so a phone that closed its

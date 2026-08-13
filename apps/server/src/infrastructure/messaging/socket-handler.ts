@@ -763,9 +763,21 @@ export const createRoomSocketEvents = (
    * somebody who has already gone.
    */
   const depart = (active: Connection, room: Room): void => {
-    if (active.playerId !== null) {
-      evict(active.playerId, room)
+    const { playerId } = active
+
+    if (playerId === null) {
+      return
     }
+
+    // Before the eviction and not after, because `evict` is what broadcasts and
+    // `toHostView` reads the seat off this connection. A host is the one socket
+    // that outlives its own seat — a player closes theirs — so one left holding
+    // an evicted id would judge the rest of the round blind.
+    if (active.role === 'host') {
+      active.playerId = null
+    }
+
+    evict(playerId, room)
   }
 
   /**

@@ -77,6 +77,24 @@ const RoomExit = ({ onDone }: { onDone: () => void }) => {
 
   return (
     <div className='exits'>
+      {/*
+        Widest scope last, and this is the only screen that shows more than one
+        of them: a host who took a seat can give it back without giving up the
+        room, which is what makes the three separate scopes worth having.
+      */}
+      {leaveSeat !== null && (
+        <Button
+          isDisabled={!isLive}
+          onPress={() => {
+            leaveSeat()
+            onDone()
+          }}
+          variant='outlined'
+        >
+          {translate('host.seat.leave')}
+        </Button>
+      )}
+
       {endGame !== null && (
         <Button
           isDisabled={!isLive}
