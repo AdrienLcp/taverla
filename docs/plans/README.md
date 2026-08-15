@@ -4,6 +4,11 @@ One file per stage, each scoped to a single session. Read the stage's plan
 before starting, and update it when reality diverges — a plan that no longer
 describes the code is worse than no plan.
 
+**[`backlog.md`](backlog.md) is where a session that is not a stage is picked
+up** — the faults a room has already met, the polish it asked for, and the two
+decisions still open. It is ordered, and each entry is scoped to one session the
+same way a stage is.
+
 | Stage | State | What it delivers |
 |---|---|---|
 | [00 — Bootstrap](00-bootstrap.md) | **done** | Contract, server, lobby, QR, join, live roster, clock sync |
@@ -98,8 +103,27 @@ The second came with the rule underneath it, `reshapesRound`: three settings the
 round in play is built on, refused by the server until it ends. Both are the
 same lesson as the typed rework, that what is *wrong* surfaces by playing.
 
+One came from a question rather than from a room: *what happens if a second
+browser opens the host URL?* Two tabs of one profile are both let in on
+purpose — it is what lets a socket be torn down and reopened without the room
+noticing — and nothing below that ever asked how many consoles were left.
+Closing one froze the round for the other, opening one rewound its clock, and a
+browser refused at the door kept a seat it had never been given.
+`second-console.test.ts` is the suite that did not exist, and the lesson runs
+the other way from the ones above: a rule written for *the* host breaks the day
+there are two of them.
+
 Expect more of this than of stages. The plans cover what is missing; what is
 *wrong* surfaces by playing.
+
+The first playtest with somebody who had not built it — 14 August 2026, two
+people, an iPhone and a laptop — produced thirteen notes in one evening, which
+is more than any stage has. They are diagnosed and split into sessions in
+[`backlog.md`](backlog.md), and three of them are faults rather than wishes: a
+phone that reconnects stays greyed out for the rest of the game, a removed player
+is told nothing at all, and the answer to one bundled question is spelled wrongly
+while its own decoys hold the right spelling. None of the three is visible from a
+green build.
 
 ## Beyond the blind test
 
