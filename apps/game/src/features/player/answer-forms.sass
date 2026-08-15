@@ -28,23 +28,38 @@
     // `touch-action` is the buzzer's, for the same reason: it keeps WebKit from
     // waiting on a second tap, which is the gesture that leaves a stray
     // `pointerenter` behind.
+    // A candidate is content, not a verb: `_control.sass` refuses a line break
+    // on every control because a label is two or three words somebody chose,
+    // and none of these was chosen — a track title is as long as it is. The
+    // verdict panel is the other control allowed to wrap, for the same reason.
+    //
+    // Wrapping rather than ellipsising, which is what the scoreboard does one
+    // screen away: a row is a fixed height and the name is only being read,
+    // where these four are being *told apart* and the tail is often what does
+    // it. `min-height` and vertical padding are what let the box grow.
     .button
       align-items: flex-start
       display: flex
       flex-direction: column
       gap: var(--space-2xs)
       min-height: 72px
+      overflow-wrap: anywhere
+      padding-block: var(--space-s)
       text-align: left
       touch-action: manipulation
+      white-space: normal
       width: 100%
 
     .title
       @include typography.title
 
+      text-wrap: pretty
+
     .subtitle
       @include typography.caption
 
       opacity: 0.75
+      text-wrap: pretty
 
   .typed
     .react-aria-Form

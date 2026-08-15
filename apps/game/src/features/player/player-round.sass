@@ -16,6 +16,15 @@
       @media (prefers-reduced-motion: no-preference)
         animation: card-strike var(--transition-slow, 0) var(--timing, ease) both
 
+      // Everything else on this screen is one centred thing; a board is rows,
+      // and rows want the column. `align-items: center` shrink-wraps a child to
+      // its min-content, and a nickname's is *zero* — `overflow: hidden` is what
+      // buys the ellipsis — so the final board handed every player one letter
+      // and a full stop.
+      .scoreboard
+        text-align: start
+        width: 100%
+
     // Bigger than the shared billboard step: this is the payoff, and on a phone
     // held at arm's length the shared size lands at twenty-eight pixels.
     .revealed-title

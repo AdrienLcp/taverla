@@ -310,6 +310,28 @@ one part.
 
 ### Fixes
 
+- `[Game]` **A long candidate no longer runs out of its own button.** Every
+  control in the product refuses a line break, because a label is two or three
+  words somebody chose — and none of a round's four candidates was chosen: a
+  track title is as long as it is. They wrap and the box grows now, including a
+  title with no spaces in it at all. Wrapping rather than ellipsising, unlike the
+  scoreboard one screen away: those four are being *told apart*, and the tail is
+  often what does it
+- `[Game]` **Your own row is stamped rather than signposted.** The `←` beside
+  your nickname was generated content — read aloud by some screen readers and by
+  none of the others, so the row was either mislabelled or unlabelled depending
+  on the reader. It is the ink block a banked half already wears, which survives
+  all six phase colours by being the ink rather than a shade of it, with the word
+  itself travelling hidden in the markup
+- `[Game]` **A hover is painted only where a pointer can hover.** iOS fires a
+  second `pointerenter` as a mouse and react-aria's guard against it misses on a
+  busy main thread, which is how one of four choice buttons stood filled for a
+  whole round. The press still paints everywhere — it is the whole of a thumb's
+  feedback
+- `[Game]` **The phone's final board printed every nickname as one letter.** The
+  end-of-game screen centres its contents, which shrink-wraps a list to its
+  min-content — and a nickname's min-content is zero, because `overflow: hidden`
+  is what buys it its ellipsis. The board takes the column now
 - `[Core]` **A typed answer stopped being paid for the wrong one.** *5 minutes*
   is eight characters, so the matcher forgave one correction — and the question
   offering it offered *7 minutes* beside it. Ninety-three questions in the bank

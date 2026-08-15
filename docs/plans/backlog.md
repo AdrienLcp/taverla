@@ -26,7 +26,7 @@ not a wish.
 | 2 | [Three exits that say nothing](#2--three-exits-that-say-nothing--done-15-august-2026) | **done** | — | playtest 13, old D |
 | 3 | [The question bank's spelling](#3--the-question-banks-spelling--done-15-august-2026) | **done** | — | playtest 9, `accepted` |
 | 4 | [Speed pays by rank; it should pay by the clock](#4--speed-pays-by-rank-it-should-pay-by-the-clock--done-15-august-2026) | **done** | — | playtest 2 |
-| 5 | [Two controls that break on their content](#5--two-controls-that-break-on-their-content) | small | `/impeccable` | playtest 6, 12 |
+| 5 | [Two controls that break on their content](#5--two-controls-that-break-on-their-content--done-15-august-2026) | **done** | `/impeccable` | playtest 6, 12 |
 | 6 | [The gap between two rounds](#6--the-gap-between-two-rounds) | large | `/impeccable` | playtest 4, 7, 10 |
 | 7 | [Say it the way a table says it](#7--say-it-the-way-a-table-says-it) | medium | `/impeccable` | playtest 1, 11, old C |
 | 8 | [The winner gets a moment](#8--the-winner-gets-a-moment) | medium | `/impeccable` | playtest 8 |
@@ -38,7 +38,7 @@ room already met, 4 is the one rule the room asked to have changed, and
 everything after is polish and new work. 5 is out of order on purpose — it is an
 hour, and it is the one players touch every single round.
 
-**Session 5 is next.** Sessions 1 to 4 all landed on 15 August 2026; what each
+**Session 6 is next.** Sessions 1 to 5 all landed on 15 August 2026; what each
 found that this file did not expect is written into its own entry — and session
 3's is the one to read before trusting any diagnosis here, because two of the
 three faults it was given turned out not to be faults at all.
@@ -437,7 +437,40 @@ the surface it lands on belongs to session 6.
 
 ---
 
-## 5 · Two controls that break on their content
+## 5 · Two controls that break on their content — **done, 15 August 2026**
+
+**What shipped**, against what this entry expected:
+
+- **The answer buttons wrap rather than ellipsise**, which the entry left open
+  between its two precedents. The scoreboard ellipsises because a row is a fixed
+  height and the name is only being *read*; these four are being **told apart**,
+  and the tail is often what does it — `Sunday Bloody Sunday` against
+  `Sunday Bloody Sunday - Live`. The box grows: `min-height` was already right,
+  what was missing was vertical padding, `white-space: normal` and
+  `overflow-wrap: anywhere` for a title with no spaces in it at all.
+- **The arrow became a stamp**, not another mark. `.you .nickname` is the ink
+  with the field's colour on it — the same block a banked half wears — which is
+  the product's own way of saying *this one is yours*, survives all six phase
+  fields by *being* the ink rather than a shade of it, and tells itself apart
+  from every neighbour without hue. The word travels in the markup now, in
+  `visually-hidden`: generated content is read by some screen readers and by
+  none of the others, so the old `←` left the row either mislabelled or
+  unlabelled depending on who was reading it. Two alternatives were rejected and
+  are cheap to switch to — muting every *other* row's name, which makes a board
+  about one player, and a thicker rule on the row, which reads as a section
+  boundary rather than as a person.
+- **The third lever is answered: a hover is painted only where a pointer can
+  hover.** `@media (hover: hover) and (pointer: fine)` around the three
+  `[data-hovered]` arms, with `[data-pressed]` left unconditional because it is
+  the whole of a thumb's feedback. Session 1 could only fix the *cascade* — the
+  disabled rule now wins — and this is the other half: a screen with no pointer
+  has no business painting a hover at all, whatever react-aria latched.
+- **A fault this entry did not know about, found on the way and fixed on
+  sight**: the phone's final board printed every nickname as one letter and an
+  ellipsis. `.player-round.centred` is `align-items: center`, which shrink-wraps
+  a child to its min-content — and a nickname's min-content is *zero*, because
+  `overflow: hidden` is what buys it the ellipsis in the first place. The board
+  takes the column now. It is session 8's surface and it was broken today.
 
 > *Playtest 6 — "quand le texte dans une proposition est trop long, il déborde
 > hors du bouton."*

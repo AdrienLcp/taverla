@@ -64,7 +64,14 @@ export const Scoreboard: React.FC<ScoreboardProps> = ({
           key={player.id}
         >
           {isRanked && <span className='rank'>{rank}</span>}
-          <span className='nickname'>{player.nickname}</span>
+          <span className='nickname'>
+            {player.nickname}
+            {player.id === youId && (
+              <span className='visually-hidden'>
+                {` (${translate('player.you')})`}
+              </span>
+            )}
+          </span>
           {isRanked && <span className='score'>{player.score}</span>}
           {onRemove !== undefined && (
             <Button

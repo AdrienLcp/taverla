@@ -50,7 +50,7 @@
   // colour only on hover left every thumb with the 2px nudge below as its
   // entire feedback, under a finger that covers the control.
   //
-  // Both are guarded on `:not([data-disabled])` because a variant selector
+  // Every state is guarded on `:not([data-disabled])` because a variant selector
   // outranks the bare `[data-disabled]` below: without it, a state left painted
   // at the moment the control was disabled stays painted, and the four choice
   // buttons found it on a phone — one of them stood white for a whole round.
@@ -60,7 +60,6 @@
     background: var(--ink)
     color: var(--control-ink)
 
-    &:not([data-disabled])[data-hovered],
     &:not([data-disabled])[data-pressed]
       background: var(--ink-muted)
 
@@ -70,7 +69,6 @@
     border-color: var(--ink)
     color: var(--control-ink)
 
-    &:not([data-disabled])[data-hovered],
     &:not([data-disabled])[data-pressed]
       background: var(--ink)
       color: var(--field)
@@ -83,8 +81,24 @@
     text-decoration-thickness: 2px
     text-underline-offset: 5px
 
-    &:not([data-disabled])[data-hovered],
     &:not([data-disabled])[data-pressed]
+      --control-ink: var(--ink)
+
+  // The other half of the stuck white button, and the half a fix in the
+  // cascade could not reach: a screen with no pointer has no business painting
+  // a hover at all. iOS fires a second `pointerenter` as `pointerType: 'mouse'`
+  // and react-aria guards it with a 500 ms window armed on a touch `pointerup`
+  // — miss that window and `isHovered` latches with nothing to lower it. The
+  // press stays unconditional, because it is the whole of a thumb's feedback.
+  @media (hover: hover) and (pointer: fine)
+    &.filled:not([data-disabled])[data-hovered]
+      background: var(--ink-muted)
+
+    &.outlined:not([data-disabled])[data-hovered]
+      background: var(--ink)
+      color: var(--field)
+
+    &.underlined:not([data-disabled])[data-hovered]
       --control-ink: var(--ink)
 
   &[data-pressed]

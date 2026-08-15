@@ -53,6 +53,21 @@
       opacity: 0.45
 
     // The phone marks its own row rather than tinting it, so the mark survives
-    // whichever field is painted behind it.
-    .you .nickname::after
-      content: ' ←'
+    // whichever field is painted behind it — and it is the ink itself rather
+    // than a shade of it, which is what makes it survive all six.
+    //
+    // It replaced a generated `←`. Generated content is read aloud by some
+    // screen readers and by none of the others, so the row was either
+    // mislabelled or unlabelled depending on the reader; the word now travels
+    // in the markup, hidden. The block is the product's own way of saying *this
+    // one is yours* — a banked half wears the same one.
+    //
+    // The stamp bleeds its own padding to the left so the name stays flush with
+    // the column the other rows align on.
+    .you .nickname
+      background: var(--ink)
+      color: var(--field)
+      margin-inline-start: calc(var(--space-2xs) * -1)
+      max-width: 100%
+      padding-inline: var(--space-2xs)
+      width: fit-content
