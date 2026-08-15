@@ -1,4 +1,4 @@
-import type { RoomCode } from '@taverla/protocol/identifiers'
+import type { PlayerId, RoomCode } from '@taverla/protocol/identifiers'
 
 import type { Connection } from './connection'
 
@@ -57,3 +57,12 @@ export const hostConnectionIn = (code: RoomCode): Connection | null =>
  */
 export const isHostConnected = (code: RoomCode): boolean =>
   connectionsIn(code).some((connection) => connection.role === 'host')
+
+/**
+ * The same question for a seat, and a seated host holds one too. Two sockets on
+ * one seat is ordinary rather than a fault: `seatPlayer` reclaims by
+ * `sessionId`, so a phone that switched network is welcomed back before the
+ * socket it left behind is known to be dead.
+ */
+export const isSeatConnected = (code: RoomCode, playerId: PlayerId): boolean =>
+  connectionsIn(code).some((connection) => connection.playerId === playerId)

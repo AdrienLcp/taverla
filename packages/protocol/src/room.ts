@@ -385,7 +385,14 @@ export const hostRoundContentSchema = z.discriminatedUnion('kind', [
  */
 export const hostRoomViewSchema = baseRoomViewSchema.extend({
   currentContent: hostRoundContentSchema.nullable(),
-  remainingPoolSize: z.number().int().nonnegative()
+  remainingPoolSize: z.number().int().nonnegative(),
+  /**
+   * The seat this console took, and `null` while it is only running the room.
+   * A player always has one, which is why theirs is not nullable — this is the
+   * same fact for the screen that may or may not be playing too, and without it
+   * a seated host cannot recognise itself in `answers` or `awards`.
+   */
+  youId: playerIdSchema.nullable()
 })
 
 export const playerRoomViewSchema = baseRoomViewSchema.extend({

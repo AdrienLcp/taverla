@@ -22,7 +22,7 @@ not a wish.
 
 | # | Session | Cost | Starts with | Holds |
 |---|---|---|---|---|
-| 1 | [A reconnecting phone stays half-dead](#1--a-reconnecting-phone-stays-half-dead) | medium | — | playtest 3 |
+| 1 | [A reconnecting phone stays half-dead](#1--a-reconnecting-phone-stays-half-dead--done-15-august-2026) | **done** | — | playtest 3 |
 | 2 | [Three exits that say nothing](#2--three-exits-that-say-nothing) | medium | — | playtest 13, old D |
 | 3 | [The question bank's spelling](#3--the-question-banks-spelling) | small→open | — | playtest 9, `accepted` |
 | 4 | [Speed pays by rank; it should pay by the clock](#4--speed-pays-by-rank-it-should-pay-by-the-clock) | medium | — | playtest 2 |
@@ -38,14 +38,15 @@ room already met, 4 is the one rule the room asked to have changed, and
 everything after is polish and new work. 5 is out of order on purpose — it is an
 hour, and it is the one players touch every single round.
 
-**Session 1 is next**, by Adrien's call on 15 August 2026.
+**Session 2 is next.** Session 1 landed on 15 August 2026; what it found that
+this file did not expect is written into its own entry.
 
 One decision is still Adrien's and blocks nothing:
 [who owns a room](#open--who-owns-a-room).
 
 ---
 
-## 1 · A reconnecting phone stays half-dead
+## 1 · A reconnecting phone stays half-dead — **done, 15 August 2026**
 
 > *Playtest 3 — "elle a quitté la partie et est revenue, ça fonctionne bien,
 > mais son nom est resté grisé toute la partie, et un des 4 boutons apparaissait
@@ -53,6 +54,35 @@ One decision is still Adrien's and blocks nothing:
 
 Two symptoms, three faults, and the first is the twin of a bug the working tree
 has already fixed for the host.
+
+**What shipped**, against what this entry expected:
+
+- `isSeatConnected` in the connection registry, and the guard in `onClose`
+  before both `markPlayerDisconnected` and `releaseBuzz`.
+  `reconnecting-phone.test.ts` holds it, and both of its tests were watched
+  failing with the guard removed.
+- The second-order effect was **not** the seat sweeper failing to fire. Reading
+  `isAbandoned` settles it the other way: the dead socket restamps
+  `disconnectedAt` at the moment it dies, so the seat looks abandoned from
+  *then* — and ten minutes later the sweeper would have taken the seat and the
+  score of a player still sitting there. The playtest room did not run that long
+  after the handover. The guard closes this too, since the stamp is never
+  written.
+- The white button was diagnosed further than it could be *confirmed*: the
+  specificity is real and reproducible in any browser, and the disabled rule now
+  wins in every variant. Whether the stuck attribute on the iPhone was
+  `data-hovered` or `data-pressed` is still unread — the fix covers both, and
+  `touch-action: manipulation` joins the buzzer's. The design question underneath
+  it, what a hover should paint on a touch screen at all, is still session 5's.
+- Deriving *I have answered* needed one thing this entry did not see: the host
+  console holds no `youId`, so a seated host could not read itself in
+  `round.answers`. `hostRoomViewSchema` carries a nullable one now — the server
+  already had `seatId` and simply was not sending it. `useAnswering` is gone;
+  `ChoiceAnswer` keeps one boolean for the 20–80 ms round trip and takes
+  everything else from the snapshot, under the `key={round.id}` its two
+  neighbours already had.
+- The unshown refusal needed no screen of its own: the second tap it came from
+  cannot happen now that a reloaded phone comes back locked.
 
 ### The grey name
 

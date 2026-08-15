@@ -206,6 +206,9 @@ describe('answering all at once', () => {
     const seated = hostView(host)?.players.map((player) => player.nickname)
 
     expect(seated).toContain('Adrien')
+    // The id of that seat, which is how this screen recognises its own answer
+    // in a round it is also running.
+    expect(hostView(host)?.youId).not.toBeNull()
   })
 
   /**
@@ -236,6 +239,7 @@ describe('answering all at once', () => {
     expect(hostView(host)?.players.map((player) => player.nickname)).toEqual([
       'Zoe'
     ])
+    expect(hostView(host)?.youId).toBeNull()
   })
 
   it('[seat] answers from the host seat like any other phone', async () => {

@@ -50,6 +50,7 @@ import type { Connection, Outbound } from './connection'
 import {
   connectionsIn,
   isHostConnected,
+  isSeatConnected,
   registerConnection,
   unregisterConnection
 } from './connection-registry'
@@ -885,6 +886,15 @@ export const createRoomSocketEvents = (
 
         broadcastRoom(room)
 
+        return
+      }
+
+      // The same reasoning one branch up, for a seat rather than the room: a
+      // phone whose socket was replaced still has somebody behind it. Marking
+      // the seat away on the dead one greys the name for the rest of the game —
+      // and stamps `disconnectedAt` on a player the seat sweeper would then
+      // evict ten minutes later, mid-game, score and all.
+      if (isSeatConnected(roomCode, connection.playerId)) {
         return
       }
 

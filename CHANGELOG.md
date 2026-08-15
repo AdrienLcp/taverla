@@ -251,6 +251,26 @@ one part.
 
 ### Fixes
 
+- `[Server]` **A phone that comes back no longer plays out the game greyed
+  out.** An app switch or a Wi-Fi handover leaves the old socket half-open, so
+  the server welcomes the replacement first and hears the original die
+  afterwards — and that death marked the seat away for good, on a player who was
+  sitting right there. Her name stayed grey to the whole room for the rest of
+  the game, and a buzz she had just taken was handed back. Worse than either: the
+  stamp it left made her seat look abandoned, so ten minutes on, the sweeper
+  would have taken her seat and her score mid-game. A seat another live socket
+  still holds is no longer given up
+- `[Game]` **A phone that reloads mid-round comes back having answered.** The
+  four choice buttons remembered the pick in local state and nothing else, so a
+  reload — or an iOS tab the system had discarded — brought them back live over
+  an answer the server already held. The second tap was refused, and that refusal
+  was displayed nowhere: the round simply stopped responding. The buttons now
+  read the round's own answers, which survive the reload the way the score does
+- `[Game]` **A control that was hovered when it went dead no longer stays
+  painted.** Any variant's hover outranked the disabled rule, so a state left on
+  the element at the moment it was disabled kept its colours — a choice button
+  stood white on a dark screen for a whole round on the phone that found it.
+  Every variant's hover and press now stand down when the control is disabled
 - `[Server]` **A second console tab closing no longer freezes the room.** Any
   non-player socket dropping put the round on hold — all four timers cancelled,
   the clock stopped — without ever asking whether another console was still

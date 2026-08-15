@@ -25,6 +25,9 @@
 
     // Sized by the thumb rather than by the words: four of these are the whole
     // screen during a round, and they are hit while looking at the big screen.
+    // `touch-action` is the buzzer's, for the same reason: it keeps WebKit from
+    // waiting on a second tap, which is the gesture that leaves a stray
+    // `pointerenter` behind.
     .button
       align-items: flex-start
       display: flex
@@ -32,6 +35,7 @@
       gap: var(--space-2xs)
       min-height: 72px
       text-align: left
+      touch-action: manipulation
       width: 100%
 
     .title

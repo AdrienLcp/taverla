@@ -328,7 +328,12 @@ const Stage = ({
           />
         )}
         {isSeated && view.settings.mode.kind === 'choice' && (
-          <ChoiceAnswer onAnswer={answerWithRound} round={round} />
+          <ChoiceAnswer
+            key={round.id}
+            onAnswer={answerWithRound}
+            round={round}
+            youId={view.youId}
+          />
         )}
         {isSeated && view.settings.mode.kind === 'typed' && (
           <TypedAnswer

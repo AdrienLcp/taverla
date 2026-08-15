@@ -2,6 +2,7 @@ import type React from 'react'
 import { useState } from 'react'
 import { Form } from 'react-aria-components'
 
+import type { PlayerId } from '@taverla/protocol/identifiers'
 import type { RoundView } from '@taverla/protocol/room'
 import type { HalvesVerdict, Verdict } from '@taverla/protocol/scoring'
 
@@ -28,24 +29,6 @@ type AnswerFormProps = {
 export type PlayerAnswer =
   | { choiceIndex: number; kind: 'choice' }
   | { guess: string; kind: 'typed' }
-
-/**
- * Both simultaneous modes share one shape: you answer once, the screen says you
- * are in, and the round waits for the others. Neither takes the floor the way a
- * buzz does — the music keeps running under everyone.
- */
-const useAnswering = (onAnswer: (answer: PlayerAnswer) => boolean) => {
-  const [answeredRoundId, setAnsweredRoundId] = useState<string | null>(null)
-
-  return {
-    answeredRoundId,
-    submit: (answer: PlayerAnswer, roundId: string) => {
-      if (onAnswer(answer)) {
-        setAnsweredRoundId(roundId)
-      }
-    }
-  }
-}
 
 /**
  * Every arm of a choice round in the one shape a column of buttons needs. A
@@ -83,17 +66,34 @@ const candidatesIn = (round: RoundView): Candidate[] => {
   }
 }
 
-export const ChoiceAnswer: React.FC<AnswerFormProps> = ({
+type ChoiceAnswerProps = AnswerFormProps & {
+  /** `null` on a console that is only running the room, which shows no form. */
+  youId: PlayerId | null
+}
+
+/**
+ * One pick and the round waits for the others — it takes no floor the way a
+ * buzz does, and the music keeps running under everyone.
+ *
+ * Mounted under `key={round.id}`, so `hasSent` is about this round and nothing
+ * else.
+ */
+export const ChoiceAnswer: React.FC<ChoiceAnswerProps> = ({
   onAnswer,
-  round
+  round,
+  youId
 }) => {
-  const { answeredRoundId, submit } = useAnswering(onAnswer)
+  const [hasSent, setHasSent] = useState(false)
 
   if (round === null) {
     return null
   }
 
-  const hasAnswered = answeredRoundId === round.id
+  // The server's answer is what survives a reload; the local half is only there
+  // because the round trip is 20–80 ms and a grid that stays live that long
+  // takes a second tap the server then refuses in silence.
+  const hasAnswered =
+    hasSent || round.answers.some((answer) => answer.playerId === youId)
 
   return (
     <section className='answer-form choices'>
@@ -103,7 +103,7 @@ export const ChoiceAnswer: React.FC<AnswerFormProps> = ({
             <Button
               isDisabled={hasAnswered}
               onPress={() => {
-                submit({ choiceIndex: index, kind: 'choice' }, round.id)
+                setHasSent(onAnswer({ choiceIndex: index, kind: 'choice' }))
               }}
               variant='outlined'
             >

@@ -34,7 +34,8 @@ export const toHostView = ({
   ...toBaseView({ isHostConnected, room, youId: seatId }),
   currentContent:
     room.round === null ? null : toHostContent({ round: room.round, seatId }),
-  remainingPoolSize: room.trackPool.length
+  remainingPoolSize: room.trackPool.length,
+  youId: seatId
 })
 
 /**

@@ -195,7 +195,12 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
       return (
         <section className='player-round'>
           <AskedQuestion prompt={prompt} />
-          <ChoiceAnswer onAnswer={answerWithRound} round={round} />
+          <ChoiceAnswer
+            key={round.id}
+            onAnswer={answerWithRound}
+            round={round}
+            youId={view.youId}
+          />
         </section>
       )
     }
