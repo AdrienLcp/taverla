@@ -24,7 +24,10 @@ import {
 } from '@/infrastructure/router/navigation'
 import { readHostToken } from '@/infrastructure/storage/session-storage'
 import { useConnection } from '@/presentation/connection/connection-provider'
-import { useRoomExits } from '@/presentation/exits/room-exits-provider'
+import {
+  useIsInsideRoom,
+  useRoomExits
+} from '@/presentation/exits/room-exits-provider'
 import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
 import { LANGUAGE_NAMES } from '@/presentation/i18n/language-names'
 import type { PlainTranslationKey } from '@/presentation/i18n/translation'
@@ -200,6 +203,7 @@ export const AppMenu = () => {
   const { locale, setLocale, translate } = useI18n()
   const { preference, setPreference } = useTheme()
   const connection = useConnection()
+  const isInsideRoom = useIsInsideRoom()
   const [build, setBuild] = useState<string | null>(null)
 
   const alert =
@@ -285,12 +289,20 @@ export const AppMenu = () => {
                   way to satisfy attribution, and the list it asks for is longer
                   than what anybody should meet while opening this to switch
                   language mid-game.
+
+                  A front-door concern, and offered only there: following it out
+                  of a room unmounts the page and closes its socket, which the
+                  server reads as a screen that dropped off — a host would leave
+                  the round frozen on every phone to go and read a licence. The
+                  route stays, so a shared link and a reload still resolve.
                 */}
-                <p className='credit'>
-                  <TextLink href={creditsPath} onPress={close}>
-                    {translate('credits.title')}
-                  </TextLink>
-                </p>
+                {!isInsideRoom && (
+                  <p className='credit'>
+                    <TextLink href={creditsPath} onPress={close}>
+                      {translate('credits.title')}
+                    </TextLink>
+                  </p>
+                )}
 
                 {build !== null && (
                   <p className='build'>{translate('menu.build', { build })}</p>

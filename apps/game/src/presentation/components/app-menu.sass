@@ -63,6 +63,22 @@
       gap: var(--space-m)
       outline: none
 
+    // The control register is sized in `vmin` and this box is not: at a fixed
+    // 320px, a host console on a television burst every one of these labels out
+    // of its block, and `Quitter le salon` was already doing it on a laptop.
+    // Same rule as the room code — what is sized against the viewport has to be
+    // sized against its container once the container stops being the viewport.
+    //
+    // The size alone was not enough, and the second half is the one every
+    // control carries: `_control.sass` refuses a line break everywhere, so
+    // `Afficher le code de reprise` still ran eleven pixels past its own edge in
+    // French. A block whose width is a constant rather than its content's is the
+    // one place that refusal cannot hold.
+    .button,
+    .link
+      font-size: 1rem
+      white-space: normal
+
     // Its own column rather than the dialog's, so the exits sit closer to each
     // other than to the preferences above them: they are one group, and one
     // ladder — a seat, a game, a room.
@@ -71,16 +87,6 @@
       flex-direction: column
       gap: var(--space-s)
 
-      // The control register is sized in `vmin` and this box is not: at a fixed
-      // 320px, a host console on a television burst every one of these labels
-      // out of its block, and `Quitter le salon` was already doing it on a
-      // laptop. Same rule as the room code — what is sized against the viewport
-      // has to be sized against its container once the container stops being
-      // the viewport.
-      .button,
-      .link
-        font-size: 1rem
-
     // Not an exit, so not in that ladder: it is the one thing in this menu that
     // is read out rather than pressed, and the only one that stays hidden until
     // it is asked for.
@@ -88,9 +94,6 @@
       display: flex
       flex-direction: column
       gap: var(--space-xs)
-
-      .button
-        font-size: 1rem
 
       .token
         @include typography.title
@@ -117,7 +120,6 @@
       @include typography.label
 
       color: var(--ink-muted)
-      margin-block-start: calc(var(--space-m) * -0.5)
       text-align: center
       user-select: text
 
@@ -134,10 +136,12 @@
       text-wrap: balance
       user-select: text
 
-      // The separator belongs to the fragment after it, or a line break leaves
-      // it stranded at the start of the next line.
-      .fragment
-        white-space: nowrap
+    // The two small centred lines are one footer, tightened against each other
+    // rather than spaced like the groups above. The credit is a front-door
+    // concern, so inside a room the build line is alone — and then it keeps the
+    // dialog's own gap instead of pulling up under the exits.
+    .credit + .build
+      margin-block-start: calc(var(--space-m) * -0.5)
 
 @keyframes popover-strike
   from

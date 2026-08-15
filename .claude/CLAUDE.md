@@ -171,7 +171,12 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   server frees the seat on the frame rather than on the reconnect after it,
   because a judge waiting on that would read no answer until it landed. A room
   outlives its host by ten minutes so a reload keeps the game; closing is what
-  says otherwise
+  says otherwise. `host.removePlayer` is the fourth and the only one nobody
+  chooses, so it is the one that has to be **said**: a fatal `removed_by_host`
+  to that phone alone, before the seat goes, and it voids the seat because the
+  room still answers. **A plain navigation is never an exit** — the server cannot
+  tell it from a closed tab, so the menu offers a link out of a room only where
+  there is no room, which is why the credits are a front-door concern
 - **Session id** — minted by the client, stored per room and role; what lets a
   device that locked its screen come back to the same seat
 - **Host token** — minted with the room and returned by `POST /api/rooms` to the

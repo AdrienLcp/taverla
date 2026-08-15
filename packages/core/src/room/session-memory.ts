@@ -56,10 +56,12 @@ export const MAX_REMEMBERED_SEATS = 8
 export const SEAT_MEMORY_MS = 24 * 60 * 60 * 1_000
 
 /**
- * The refusals that mean the seat was never granted. A claim is written before
- * the `hello` it is sent in, so a browser turned away at the door holds one it
- * never had — at the head of a bounded store, where it evicts a real seat rather
- * than waiting to age out.
+ * The refusals that leave this device with a claim on nothing. Two shapes, and
+ * they end the same way. A seat that was never granted: the claim is written
+ * before the `hello` it is sent in, so a browser turned away at the door holds
+ * one it never had — at the head of a bounded store, where it evicts a real seat
+ * rather than waiting to age out. And a seat taken back, where the room is still
+ * answering and a claim replayed on the next reload would be welcomed in.
  *
  * The two other fatal codes are absent on purpose: a version mismatch and a
  * malformed frame refuse the *frame*, and the seat behind them is usually good.
@@ -67,6 +69,7 @@ export const SEAT_MEMORY_MS = 24 * 60 * 60 * 1_000
  */
 const REFUSALS_VOIDING_A_SEAT = new Set<ProtocolErrorCode>([
   'host_already_connected',
+  'removed_by_host',
   'room_not_found'
 ])
 

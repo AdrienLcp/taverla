@@ -23,7 +23,7 @@ not a wish.
 | # | Session | Cost | Starts with | Holds |
 |---|---|---|---|---|
 | 1 | [A reconnecting phone stays half-dead](#1--a-reconnecting-phone-stays-half-dead--done-15-august-2026) | **done** | — | playtest 3 |
-| 2 | [Three exits that say nothing](#2--three-exits-that-say-nothing) | medium | — | playtest 13, old D |
+| 2 | [Three exits that say nothing](#2--three-exits-that-say-nothing--done-15-august-2026) | **done** | — | playtest 13, old D |
 | 3 | [The question bank's spelling](#3--the-question-banks-spelling) | small→open | — | playtest 9, `accepted` |
 | 4 | [Speed pays by rank; it should pay by the clock](#4--speed-pays-by-rank-it-should-pay-by-the-clock) | medium | — | playtest 2 |
 | 5 | [Two controls that break on their content](#5--two-controls-that-break-on-their-content) | small | `/impeccable` | playtest 6, 12 |
@@ -38,8 +38,8 @@ room already met, 4 is the one rule the room asked to have changed, and
 everything after is polish and new work. 5 is out of order on purpose — it is an
 hour, and it is the one players touch every single round.
 
-**Session 2 is next.** Session 1 landed on 15 August 2026; what it found that
-this file did not expect is written into its own entry.
+**Session 3 is next.** Sessions 1 and 2 both landed on 15 August 2026; what each
+found that this file did not expect is written into its own entry.
 
 The one decision that was still Adrien's has been taken and built:
 [who owns a room](#who-owns-a-room--done-15-august-2026).
@@ -152,12 +152,41 @@ passes `error` to Le Fake's forms only. Derive it instead:
 
 ---
 
-## 2 · Three exits that say nothing
+## 2 · Three exits that say nothing — **done, 15 August 2026**
 
 > *Playtest 13 — "« l'hôte a fermé le salon » ⇒ ok. Mais quand on est exclu, on
 > n'a pas de message ?"*
 
 He is right, and it is worse than a missing string.
+
+**What shipped**, against what this entry expected:
+
+- `removed_by_host` rather than `kicked`, because the code is read at a call site
+  and in two dictionaries and the shorter name says neither who nor what from.
+  The frame goes to that player's connections only, and the connection is
+  **unregistered on the way out** — this entry stopped at the frame, and a
+  socket left in the registry is handed one more view of the room it is out of.
+- A console that took a seat is removed from the roster **in silence**, which
+  this entry did not foresee: the lobby's ✕ sits beside the host's own seat too,
+  and a fatal frame there would take the room's only screen down over a seat.
+- The seated host's `onClose` is the seat *before* the room, not after. Holding
+  the round for an absent host cancels every timer that releasing their buzz
+  would have armed, so the other order re-arms a clip on a room with no screen.
+- The credits page took the way home this entry asked for, and the string behind
+  it moved: `notFound.back` was already borrowed by `ConnectionRefused`, so a
+  third screen made the prefix a lie. It is `navigation.back` now, one key for
+  one destination.
+- Two faults the browser pass found in the menu itself, both shipped by the
+  ownership session and neither in this entry: `Afficher le code de reprise` ran
+  eleven pixels past its own block in French — the popover is a fixed 320px box
+  and `_control.sass` refuses a line break on every control — and the build line
+  pulled up under the exits the moment the credit above it went away. Both fixed
+  here, so **session 5 does not need to rediscover the menu's half of playtest 6**.
+
+The one thing left standing, deliberately: `host.removePlayer` aimed at the
+console's *own* seat clears it server-side but leaves the console's local
+`seatNickname` set, so that screen still thinks it is playing. Deriving it from
+`view.seatId` is the fix and it belongs to whoever next opens that file.
 
 **A kicked player is never told, and their socket stays open.** `evict()` is two
 lines — `removePlayer` then `releaseBuzz` (`socket-handler.ts:754-757`) — with no
@@ -342,6 +371,12 @@ the surface it lands on belongs to session 6.
 Both are one component each, and both have a precedent in the repo — which is
 what makes this an hour rather than an afternoon. **Options belong to the
 `/impeccable` pass that opens the session, not to this file.**
+
+The menu's half of the overflow is already done — see session 2 — and what it
+settled is worth reading first: a control whose width is a constant rather than
+its content's is where `_control.sass`'s `white-space: nowrap` cannot hold. An
+answer button is not that; it is as wide as its column. So the decision below is
+still open, and the precedent above does not pre-empt it.
 
 **The overflow is real and its cause is shared.** `_control.sass:28` puts
 `white-space: nowrap` on *every* control, Button and Link alike, and

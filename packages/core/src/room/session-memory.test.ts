@@ -138,6 +138,10 @@ describe('refusalVoidsSeat', () => {
   it('[session-memory] keeps a seat that was granted before the room ended', () => {
     expect(refusalVoidsSeat('room_closed')).toBe(false)
   })
+
+  it('[session-memory] gives up a seat the host took back, since the room answers still', () => {
+    expect(refusalVoidsSeat('removed_by_host')).toBe(true)
+  })
 })
 
 describe('forgetSeat', () => {

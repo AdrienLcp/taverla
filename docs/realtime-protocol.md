@@ -174,6 +174,15 @@ player" impossible. The residual leak is the catalogue id inside the URL, which
 is why the seat is offered rather than assumed. Buzzer mode does not offer it at
 all: that round needs someone reading the answer to judge it.
 
+**A console's tab closing ends both of the things it was.** `onClose` asks two
+questions, and the seated host is the one socket that answers both — whether the
+room still has a screen, and whether that seat still has a socket. It used to
+return after the first, so a console that had taken a seat left it lit on every
+screen for the rest of the evening, and the sweeper never came for it either:
+`disconnectedAt` was never stamped, which is the only thing it reads. The seat is
+settled first on the way out, because holding the round for an absent host
+cancels every timer releasing a buzz would arm.
+
 `roundElapsedMs` is shared rather than the host's, because it is the room's
 clock and not the speaker's: the host seeks the track back to it after a reload,
 and every screen arms the round bar from it — a phone that locked itself comes
@@ -234,6 +243,20 @@ two dozen player sockets nobody is closing, and every phone sat on a stale
 scoreboard — live and lying — while the room no longer existed. A fatal code may
 therefore be sent to a socket the server keeps open, and that is not a loose end
 to tidy up by closing it too. It is the guarantee the client owes.
+
+`removed_by_host` is the same shape one scope down, and it was the whole of what
+`host.removePlayer` was missing: the seat came off the roster and the phone was
+told nothing, so it kept receiving `room.updated` with a `youId` no longer in
+`players` and quietly fell back to *You* and `0` — a screen that had stopped
+counting and did not say so. The frame goes to that player's connections only,
+before the seat is taken, and their connection is unregistered on the way out so
+the broadcast that follows never reaches them. It is one of the two refusals in
+`refusalVoidsSeat` for a room that still answers: the code keeps resolving, and a
+claim replayed on the next reload would be welcomed straight back in.
+
+A console that took a seat is refused nothing when the host removes it from the
+roster. It is losing the seat, not the room it is running, and there is no frame
+that says that — the one above would be a lie its own screen would act on.
 
 `host_already_connected` now travels both ways for the same reason: at the door
 it is `reject`, and to a console displaced by a screen presenting the token it is

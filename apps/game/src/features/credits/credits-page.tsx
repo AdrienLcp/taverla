@@ -1,3 +1,5 @@
+import { joinPath } from '@/infrastructure/router/navigation'
+import { Link } from '@/presentation/components/link'
 import { TextLink } from '@/presentation/components/text-link'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import type { PlainTranslationKey } from '@/presentation/i18n/translation'
@@ -92,6 +94,10 @@ export const CreditsPage = () => {
           {REPOSITORY_URL.replace('https://', '')}
         </TextLink>
       </p>
+
+      <Link href={joinPath} variant='outlined'>
+        {translate('navigation.back')}
+      </Link>
     </main>
   )
 }

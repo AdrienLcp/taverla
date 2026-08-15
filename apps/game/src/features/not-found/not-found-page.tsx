@@ -16,7 +16,7 @@ export const NotFoundPage = () => {
       <h1>{translate('notFound.title')}</h1>
       <p>{translate('notFound.description')}</p>
       <Link href={joinPath} variant='outlined'>
-        {translate('notFound.back')}
+        {translate('navigation.back')}
       </Link>
     </main>
   )

@@ -10,11 +10,11 @@ export const homePage = (page: Page) => ({
   /** The shelf's card for the blind test — the shortcut, not the way in. */
   blindTest: page.getByRole('link', { name: 'Blind test' }),
   /** The front door: a room with nothing chosen yet. */
-  createRoom: page.getByRole('button', { name: 'Create a room' })
+  createRoom: page.getByRole('button', { name: 'Open a table' })
 })
 
 export const blindTestHome = (page: Page) => ({
-  createRoom: page.getByRole('button', { name: 'Create a room' })
+  createRoom: page.getByRole('button', { name: 'Open a table' })
 })
 
 export const hostConsole = (page: Page) => ({
@@ -42,7 +42,7 @@ export const hostConsole = (page: Page) => ({
     .getByRole('radiogroup', { name: 'Which game' })
     .getByText('Blind test', { exact: true }),
   refusal: page.getByRole('heading', {
-    name: 'That room does not exist.'
+    name: 'No table under that code.'
   }),
   /** Ends a simultaneous round the room is not going to finish on its own. */
   reveal: page.getByRole('button', { name: 'Give it away' }),
@@ -52,18 +52,18 @@ export const hostConsole = (page: Page) => ({
   /** The roster in the lobby, the scorers at the reveal — never both at once. */
   rowFor: (nickname: string) =>
     page.getByRole('listitem').filter({ hasText: nickname }),
-  startGame: page.getByRole('button', { name: 'Start the game' }),
+  startGame: page.getByRole('button', { name: 'Gather round' }),
   theyBuzzed: (nickname: string) =>
     page.getByRole('heading', { name: `${nickname} buzzed` }),
   verdictBoth: page.getByRole('button', { name: 'Title + artist' }),
-  wayOut: page.getByRole('link', { name: 'Back to the start' })
+  wayOut: page.getByRole('link', { name: 'Back to the tavern' })
 })
 
 export const playerScreen = (page: Page) => ({
   /** One field for either half — the server decides which one a guess was. */
   answerGuess: page.getByRole('textbox', { name: 'Your answer' }),
   buzz: page.getByRole('button', { name: 'Buzz' }),
-  join: page.getByRole('button', { name: 'Join the game' }),
+  join: page.getByRole('button', { name: 'Pull up a chair' }),
   nickname: page.getByRole('textbox', { name: 'Nickname' }),
   scored: (points: number) => page.getByText(`+${points}`),
   sendAnswer: page.getByRole('button', { name: 'Send it' })

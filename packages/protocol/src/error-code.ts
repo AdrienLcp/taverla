@@ -4,6 +4,14 @@ export const protocolErrorCodes = [
   'room_not_found',
   'room_full',
   'room_closed',
+  /**
+   * The host taking a seat back. Fatal like `room_closed`, and the one exit a
+   * phone does not choose — so it is the one that has to be said out loud, or a
+   * screen holding a `youId` the roster no longer has simply stops counting. It
+   * voids the seat too: the room is still there, and a claim replayed on the
+   * next reload would walk straight back in.
+   */
+  'removed_by_host',
   'nickname_taken',
   'invalid_message',
   'protocol_version_mismatch',

@@ -42,7 +42,7 @@ export const ConnectionRefused = ({
       </h2>
       {children}
       <Link href={joinPath} size='large' variant='outlined'>
-        {translate('notFound.back')}
+        {translate('navigation.back')}
       </Link>
     </section>
   )

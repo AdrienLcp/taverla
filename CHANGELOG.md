@@ -188,6 +188,30 @@ one part.
 
 ### Improvements
 
+- `[Game]` **The app stopped describing its own plumbing.** Every user-visible
+  string was written from the inside out: the front door promised *des jeux de
+  soirée pour un écran et les téléphones de tout le monde*, three of the four
+  game pitches opened on *un écran*, two shared *répond sur ce qu'il a dans la
+  main* word for word, and the errors offered *côté serveur*, *ce message* and
+  *la console* to people who had sent no message and opened no console. Worse,
+  it was false as well as cold — the screen running the room can be a phone and
+  a player can be on a laptop, which is the one thing nothing user-facing is
+  allowed to assume
+- `[Game]` **The room is a tavern now, and says so.** `Taverla` was a coined word
+  the product never explained, so the front door is *La taverne est ouverte* /
+  *The tavern is open* and the vocabulary follows it all the way down: a room is
+  **une table**, the host is **l'aubergiste**, a round is **une tournée**, the
+  roster is **la tablée**, joining is **prendre place**, and launching is **À
+  table !**. English reaches the same register with its own words — *innkeeper*,
+  *the table*, *pull up a chair*, *Gather round* — because `round` is already the
+  pun there and a calque would have been worse English for the same idea. The
+  document title and the share card stay explanatory on purpose: a tab, a search
+  result and a link unfurled in a group chat have nobody standing in the room to
+  explain the joke
+- `[Game]` A game's pitch sells the evening and leaves the arithmetic to
+  `scoring` beside it, which was already saying it better. Music vocabulary stays
+  inside `blindtest.*` — *trois notes* is the blind test's alone, where *la
+  tablée* and *la tournée* belong to the shell every game reuses
 - `[Game]` **A phone is told where it finished.** The final screen showed the
   standings and left the player to find their own row in it, while the big
   screen named the winner alone — so everyone who was not first learned nothing
@@ -266,6 +290,26 @@ one part.
 
 ### Fixes
 
+- **A player the host removes is told so.** They were removed from the roster and
+  left holding an open socket: the phone kept receiving the room with a `youId`
+  nobody had any more, fell back to *You* and `0`, and simply stopped counting.
+  It lands on the same screen a closed room does now, with its own line, and the
+  seat it held is forgotten — the room still answers, so a reload holding the old
+  claim would have walked straight back in
+- `[Server]` **A screen that was running the game and playing in it gives up both
+  when its tab closes.** The seat used to survive for good: nothing marked it
+  away, so that name stayed lit on every screen for the rest of the evening, and
+  the sweeper never came for it either because the stamp it reads was never
+  written
+- `[Game]` **The credits page has a way back**, and is no longer offered from
+  inside a room. Following it out closed the room's socket, which the server
+  cannot tell from a screen that dropped off — a host who went to read a licence
+  froze the round on every phone, with their own screen saying nothing about it.
+  The address still resolves, so a shared link and a reload both work
+- `[Game]` `Afficher le code de reprise` no longer runs past the edge of its own
+  button in French. The menu is a fixed 320px box while the controls in it are
+  sized against the viewport, and a label there is now allowed the line break
+  every other control in the product refuses
 - `[Server]` **A phone that comes back no longer plays out the game greyed
   out.** An app switch or a Wi-Fi handover leaves the old socket half-open, so
   the server welcomes the replacement first and hears the original die

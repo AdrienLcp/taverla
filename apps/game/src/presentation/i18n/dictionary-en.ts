@@ -48,7 +48,7 @@ export const EN_DICTIONARY = defineTranslations({
     },
     home: {
       description:
-        'One screen plays the track and shows the QR code. Everyone else answers on whatever they have in their hand, and the first to know it wins the round.'
+        'Three notes are sometimes enough, and the whole table is already hunting. Title, artist, or both: the quickest to know takes the round.'
     },
     listening: 'Listening…',
     name: 'Blind test',
@@ -57,7 +57,7 @@ export const EN_DICTIONARY = defineTranslations({
     },
     scoring: {
       buzzer:
-        'First to buzz answers out loud. The host judges the title and the artist, a point each — a wrong answer sits you out for the rest of the round.',
+        'First to buzz answers out loud. The innkeeper judges the title and the artist, a point each — a wrong answer sits you out for the rest of the round.',
       choice:
         'Everyone picks, over the same clip. The right one scores a point, and the first two to find it earn +2 and +1 on top.',
       typed:
@@ -89,8 +89,8 @@ export const EN_DICTIONARY = defineTranslations({
   buzz: {
     action: 'Buzz',
     blocked: {
-      host_away: 'The host dropped out. Everything is on hold.',
-      round_not_running: 'Waiting for the host',
+      host_away: 'The innkeeper stepped away. Everything is on hold.',
+      round_not_running: 'Waiting for the innkeeper',
       someone_else_buzzed: 'Someone got there first',
       you_already_missed: 'You are out for this round',
       your_answer_is_pending: 'Say your answer out loud'
@@ -101,16 +101,16 @@ export const EN_DICTIONARY = defineTranslations({
     won: 'You are in. Say it out loud'
   },
   buzzer: {
-    clearLockouts: 'Let everyone back in',
+    clearLockouts: 'Let the table back in',
     home: {
       description:
-        'You bring the questions — a charade, a quiz off a sheet of paper, a lesson, whatever the room is up for. This screen only decides who put their thumb down first, and it never gets that wrong.'
+        'You bring the questions — a charade, a quiz off a sheet of paper, a lesson, whatever the table is up for. Only one thing gets settled here: who put their thumb down first. And that is never in doubt.'
     },
     lockout: 'A wrong answer sits you out',
     name: 'Buzzer',
     running: 'Ask away',
     scoring:
-      'First thumb answers out loud, and the host says right or wrong. A point for right — and a wrong answer sits you out until the host lets you back in.',
+      'First thumb answers out loud, and the innkeeper says right or wrong. A point for right — and a wrong answer sits you out until they let you back in.',
     tagline: 'Your questions, and a race to the buzzer.'
   },
   connection: {
@@ -128,7 +128,7 @@ export const EN_DICTIONARY = defineTranslations({
    */
   credits: {
     openquizzdb:
-      'Its rubrics were mapped onto the six subjects used here, its anecdotes kept as the line shown once an answer is public, and its adult-rated questions marked so a host can leave them out. Questions that did not carry exactly three wrong answers were left behind.',
+      'Its rubrics were mapped onto the six subjects used here, its anecdotes kept as the line shown once an answer is public, and its adult-rated questions marked so an innkeeper can leave them out. Questions that did not carry exactly three wrong answers were left behind.',
     opentdb:
       'Its text arrives HTML-encoded and was decoded, its categories were mapped onto the six subjects used here, and questions that did not carry exactly three wrong answers were left behind.',
     shareAlike:
@@ -139,30 +139,32 @@ export const EN_DICTIONARY = defineTranslations({
   error: {
     already_buzzed: 'Someone got there first.',
     api: {
-      rate_limited: 'That is a lot of rooms. Wait a minute and retry.',
-      rejected: 'The server refused that.',
-      unexpected_response: 'The server answered something unexpected.',
-      unreachable: 'Could not reach the server. Try again in a moment.'
+      rate_limited: 'That is a lot of tables. Wait a minute and retry.',
+      rejected: 'That did not go through. Try again.',
+      unexpected_response: 'We did not know what to make of that. Try again.',
+      unreachable: 'We cannot reach the tavern. Try again in a moment.'
     },
     cannot_vote_for_own_lie: 'That one is yours. Pick another.',
-    host_already_connected: 'Someone is already hosting this room.',
-    host_only_action: 'Only the host can do that.',
+    host_already_connected: 'Someone is already keeping this table.',
+    host_only_action: 'Only the innkeeper can do that.',
     host_reconnecting:
-      'This room has just lost its screen, and is waiting for it.',
-    internal_error: 'Something broke on the server.',
-    invalid_message: 'The server did not understand that message.',
+      'This table has just lost its innkeeper, and is waiting for them.',
+    internal_error: 'Something broke on our side. Try again.',
+    invalid_message: 'We did not understand that. Try again.',
     joined_mid_round: 'You are in from the next round.',
     lie_is_the_answer: 'That is the real answer. Make something up instead.',
-    music_source_unavailable: 'The music service is not answering.',
+    music_source_unavailable:
+      'The music has stopped answering. Try again in a moment.',
     nickname_taken: 'Someone already took that nickname.',
     no_content_available: 'Nothing left to play. Try other settings.',
     no_game_chosen: 'Pick a game first.',
     player_locked_out: 'You are out for this round.',
     protocol_version_mismatch: 'This page is out of date. Reload it.',
-    rate_limited: 'That is a lot of rooms. Wait a minute and retry.',
-    room_closed: 'The host closed the room.',
-    room_full: 'That room is full.',
-    room_not_found: 'That room does not exist.',
+    rate_limited: 'That is a lot of tables. Wait a minute and retry.',
+    removed_by_host: 'The innkeeper removed you from the table.',
+    room_closed: 'The innkeeper cleared the table.',
+    room_full: 'That table is full.',
+    room_not_found: 'No table under that code.',
     screen: {
       description:
         'The game hit something it could not carry on from. Reloading almost always fixes it — and if the site updated while this tab was open, it always does.',
@@ -174,7 +176,7 @@ export const EN_DICTIONARY = defineTranslations({
   },
   home: {
     games: 'The games',
-    tagline: 'Party games for one screen and everyone’s phone.',
+    tagline: 'The tavern is open.',
     title: 'Taverla'
   },
   host: {
@@ -188,11 +190,11 @@ export const EN_DICTIONARY = defineTranslations({
       label: 'Time to answer after a buzz'
     },
     autoAdvance: 'Chain rounds by itself',
-    backToRoom: 'Back to the room',
+    backToRoom: 'Back to the table',
     closeRoom: {
-      confirm: 'Yes, close it',
-      label: 'Close the room',
-      warning: 'Everyone is disconnected, and the code stops working.'
+      confirm: 'Yes, clear it',
+      label: 'Clear the table',
+      warning: 'The whole table is sent out, and the code stops working.'
     },
     copied: 'Copied',
     copyCode: 'Copy the code',
@@ -209,30 +211,30 @@ export const EN_DICTIONARY = defineTranslations({
     },
     game: {
       label: 'Which game',
-      prompt: 'Pick one and the room is set. You can change your mind later.'
+      prompt: 'Pick one and the table is set. You can change your mind later.'
     },
     hostDecides: 'You decide',
     invite: {
-      title: 'Scan to play'
+      title: 'Scan and pull up a chair'
     },
-    joinLate: 'Still open',
-    needsGame: 'Pick what the room is playing',
-    needsPlayer: 'The game needs at least one player',
+    joinLate: 'The door is open',
+    needsGame: 'Pick what the table is playing',
+    needsPlayer: 'You need at least one at the table',
     nextRound: 'Next round',
     playAgain: 'Play again',
     players: {
-      empty: 'Nobody has joined yet. The QR code is waiting.',
+      empty: 'Nobody yet. That will not last.',
       remove: 'Remove',
       removeNamed: 'Remove {nickname}',
-      title: 'Players'
+      title: 'The table'
     },
     recovery: {
-      action: 'Host from this screen',
-      description: 'It is in the menu of the screen hosting the room.',
+      action: 'Keep the table from here',
+      description: 'It is in the innkeeper’s own menu.',
       field: 'Recovery code',
-      hint: 'Type it on another screen to host this room from there.',
+      hint: 'Type it elsewhere to take the table over from there.',
       invalid: 'That is not a recovery code.',
-      refused: 'That code did not open this room.',
+      refused: 'That code does not match this table.',
       retry: 'Try again',
       reveal: 'Show the recovery code'
     },
@@ -247,7 +249,7 @@ export const EN_DICTIONARY = defineTranslations({
     rounds: 'Rounds',
     seat: {
       action: 'Take a seat',
-      description: 'This screen stops being told the answer until the reveal.',
+      description: 'You stop seeing the answer before everyone else.',
       label: 'Play too, as',
       leave: 'Give up the seat',
       taken: 'You are playing as {nickname}.'
@@ -258,7 +260,7 @@ export const EN_DICTIONARY = defineTranslations({
       label: 'Settings',
       roundInPlay: 'Some of these wait until the round is over'
     },
-    startGame: 'Start the game',
+    startGame: 'Gather round',
     verdict: {
       right: 'Right',
       wrong: 'Wrong'
@@ -268,23 +270,23 @@ export const EN_DICTIONARY = defineTranslations({
   join: {
     divider: 'or',
     host: {
-      action: 'Create a room',
-      description: 'Opens the console with the QR code your friends scan.'
+      action: 'Open a table',
+      description: 'You keep the table. The others just have to walk in.'
     },
     player: {
-      action: 'Join',
-      title: 'Join a game'
+      action: 'Pull up a chair',
+      title: 'Walk in'
     },
     roomCode: {
-      description: 'Shown on the host screen.',
-      label: 'Room code',
-      unknown: 'No game is running under that code.',
-      unsupportedCharacters: 'A room code never contains {characters}.',
+      description: 'The innkeeper has it in front of them.',
+      label: 'Table code',
+      unknown: 'No table under that code.',
+      unsupportedCharacters: 'A table code never contains {characters}.',
       wrongLength: defineTranslation('{length:plural}', {
         plural: {
           length: {
-            one: 'A room code is {?} character long.',
-            other: 'A room code is {?} characters long.'
+            one: 'A table code is {?} character long.',
+            other: 'A table code is {?} characters long.'
           }
         }
       })
@@ -293,7 +295,7 @@ export const EN_DICTIONARY = defineTranslations({
   lefake: {
     home: {
       description:
-        'One screen asks a question whose answer nobody sees coming. Everyone invents a convincing wrong one, the screen puts them all up beside the truth, and the room votes. You score for spotting the real answer — and for every player who falls for yours.'
+        'A question whose answer nobody sees coming. Everyone invents one convincing enough to fool the rest, they all go up beside the truth, and the table votes. You score for spotting the real one, and again for every friend who bites.'
     },
     name: 'Le Fake',
     reveal: {
@@ -307,7 +309,7 @@ export const EN_DICTIONARY = defineTranslations({
       title: 'The truth was'
     },
     scoring:
-      'Everyone writes a fake answer, then the room votes on the lot. Two points for finding the real one, and one more for every player who falls for yours.',
+      'Everyone writes a fake answer, then the table votes on the lot. Two points for finding the real one, and one more for every player who falls for yours.',
     tagline: 'Write a lie. Fool the table.',
     vote: {
       done: 'Your vote is in. Waiting for the others…',
@@ -342,15 +344,22 @@ export const EN_DICTIONARY = defineTranslations({
     build: 'Build {build}',
     home: 'Home',
     label: 'Menu',
-    leaveRoom: 'Leave the room'
+    leaveRoom: 'Leave the table'
+  },
+  /**
+   * The way back to the front door, from any page that is a dead end without
+   * one. Three screens show it — nothing here, a refused socket, the credits —
+   * and one destination is named one way or the product has three fronts.
+   */
+  navigation: {
+    back: 'Back to the tavern'
   },
   notFound: {
-    back: 'Back to the start',
     description: 'That game is over, or the code was mistyped.',
-    title: 'Nothing here'
+    title: 'Nobody here'
   },
   player: {
-    choosingGame: 'The host is choosing a game',
+    choosingGame: 'The innkeeper is choosing a game',
     final: {
       placing: 'You finished',
       rank: defineTranslation('{rank:plural}', {
@@ -370,15 +379,15 @@ export const EN_DICTIONARY = defineTranslations({
       title: 'Next round'
     },
     nickname: {
-      action: 'Join the game',
+      action: 'Pull up a chair',
       label: 'Nickname',
       title: 'What should we call you?'
     },
     points: defineTranslation('{points:plural}', {
       plural: { points: { one: 'point', other: 'points' } }
     }),
-    room: 'Room {code}',
-    roomSize: '{count:number} in the room',
+    room: 'Table {code}',
+    roomSize: '{count:number} at the table',
     seating: 'Taking your seat…',
     upNext: 'You are about to play',
     you: 'You'
@@ -394,7 +403,7 @@ export const EN_DICTIONARY = defineTranslations({
   },
   quiz: {
     adult: {
-      hint: 'You are the only one who knows who is in the room.',
+      hint: 'You are the only one who knows who is at the table.',
       label: 'Include adult questions'
     },
     category: {
@@ -410,7 +419,7 @@ export const EN_DICTIONARY = defineTranslations({
     duration: 'Time per question',
     home: {
       description:
-        'Questions on everything — history, science, sport, the everyday. One screen asks, everyone answers on whatever they have in their hand, and the fastest right answer takes the round.'
+        'History, science, sport, and questions nobody sees coming. Everyone answers at once, and the fastest right answer takes the round.'
     },
     language: 'Question language',
     name: 'Quiz',
@@ -419,7 +428,7 @@ export const EN_DICTIONARY = defineTranslations({
     },
     scoring: {
       buzzer:
-        'First to buzz answers out loud, and the host says right or wrong. A point for right — and a wrong answer sits you out for the rest of the round.',
+        'First to buzz answers out loud, and the innkeeper says right or wrong. A point for right — and a wrong answer sits you out for the rest of the round.',
       choice:
         'Everyone picks from four, against the clock. The right one scores a point, and the first two to find it earn +2 and +1 on top.',
       typed:

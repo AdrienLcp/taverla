@@ -778,10 +778,44 @@ export const createRoomSocketEvents = (
   }
 
   // Removed from the roster before the buzz is released, so that the player
-  // being evicted cannot be the one counted as still able to answer.
-  const evict = (playerId: PlayerId, room: Room): void => {
+  // being unseated cannot be the one counted as still able to answer.
+  const unseat = (playerId: PlayerId, room: Room): void => {
     removePlayer(room, playerId, Date.now())
     settle(releaseBuzz({ now: Date.now(), playerId, room }), room)
+  }
+
+  /**
+   * The one exit a phone does not choose, and therefore the only one that has to
+   * be said out loud: a socket left holding a `youId` the roster no longer has
+   * goes on being sent the room, and a screen that stops counting reads as the
+   * game having broken. Fatal frame, and the close is the client's — the same
+   * shape as `disband`, because a `Connection` carries a `send` and never its
+   * own socket.
+   *
+   * Unregistered here rather than on the close that follows it, since `unseat`
+   * broadcasts and the room is still standing to be broadcast: a phone told it
+   * is out should not be handed one more view of what it is out of.
+   *
+   * A console that took a seat is unseated without a word. It is losing the
+   * seat, not the room it is running, and there is no frame that says so — the
+   * one below would be a lie its own screen would act on.
+   */
+  const evict = (playerId: PlayerId, room: Room): void => {
+    for (const connection of connectionsIn(room.code)) {
+      if (connection.role !== 'player' || connection.playerId !== playerId) {
+        continue
+      }
+
+      sendError(connection, {
+        code: 'removed_by_host',
+        fatal: true,
+        message: 'The host removed you from the room'
+      })
+
+      unregisterConnection(room.code, connection)
+    }
+
+    unseat(playerId, room)
   }
 
   /**
@@ -800,15 +834,15 @@ export const createRoomSocketEvents = (
       return
     }
 
-    // Before the eviction and not after, because `evict` is what broadcasts and
-    // `toHostView` reads the seat off this connection. A host is the one socket
-    // that outlives its own seat — a player closes theirs — so one left holding
-    // an evicted id would judge the rest of the round blind.
+    // Before the seat goes and not after, because `unseat` is what broadcasts
+    // and `toHostView` reads the seat off this connection. A host is the one
+    // socket that outlives its own seat — a player closes theirs — so one left
+    // holding a departed id would judge the rest of the round blind.
     if (active.role === 'host') {
       active.playerId = null
     }
 
-    evict(playerId, room)
+    unseat(playerId, room)
   }
 
   /**
@@ -903,41 +937,40 @@ export const createRoomSocketEvents = (
         return
       }
 
-      if (connection.role !== 'player') {
-        // A room with another console still open has not lost its host, and the
-        // unregistering above is what makes that answerable here. Holding the
-        // round would freeze it for a screen nobody left.
-        if (!isHostConnected(roomCode)) {
-          holdRoundWhileHostIsAway(room)
-          markHostAway(room, Date.now())
-        }
+      const { playerId } = connection
 
-        broadcastRoom(room)
+      // Two questions, and a console that took a seat is asked both — where the
+      // early return this used to be asked it only the first, and left that seat
+      // connected for the rest of the evening with the sweeper never touching
+      // it. The seat is answered first: holding the round below cancels every
+      // timer `settle` arms, and re-arming one on a frozen round would spend a
+      // clip on a room with no screen.
+      //
+      // A phone whose socket was merely replaced still has somebody behind it.
+      // Marking the seat away on the dead one greys the name for the rest of the
+      // game — and stamps `disconnectedAt` on a player the sweeper would then
+      // drop ten minutes later, mid-game, score and all.
+      if (playerId !== null && !isSeatConnected(roomCode, playerId)) {
+        markPlayerDisconnected(room, playerId, Date.now())
 
+        // A phone that locks its screen while holding the buzzer would otherwise
+        // hang the round on a player who cannot answer.
+        settle(releaseBuzz({ now: Date.now(), playerId, room }), room)
+      }
+
+      if (connection.role === 'player') {
         return
       }
 
-      // The same reasoning one branch up, for a seat rather than the room: a
-      // phone whose socket was replaced still has somebody behind it. Marking
-      // the seat away on the dead one greys the name for the rest of the game —
-      // and stamps `disconnectedAt` on a player the seat sweeper would then
-      // evict ten minutes later, mid-game, score and all.
-      if (isSeatConnected(roomCode, connection.playerId)) {
-        return
+      // A room with another console still open has not lost its host, and the
+      // unregistering above is what makes that answerable here. Holding the
+      // round would freeze it for a screen nobody left.
+      if (!isHostConnected(roomCode)) {
+        holdRoundWhileHostIsAway(room)
+        markHostAway(room, Date.now())
       }
 
-      markPlayerDisconnected(room, connection.playerId, Date.now())
-
-      // A phone that locks its screen while holding the buzzer would otherwise
-      // hang the round on a player who cannot answer.
-      settle(
-        releaseBuzz({
-          now: Date.now(),
-          playerId: connection.playerId,
-          room
-        }),
-        room
-      )
+      broadcastRoom(room)
     },
 
     onMessage(event, ws) {

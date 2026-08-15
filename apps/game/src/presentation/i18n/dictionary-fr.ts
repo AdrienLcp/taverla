@@ -45,7 +45,7 @@ export const FR_DICTIONARY: Dictionary = {
     },
     home: {
       description:
-        'Un écran joue le morceau et affiche le QR code. Tout le monde répond sur ce qu’il a dans la main, et le premier qui sait remporte le tour.'
+        'Trois notes suffisent parfois, et toute la tablée cherche déjà. Titre, artiste, ou les deux : le plus rapide à savoir rafle la tournée.'
     },
     listening: 'À l’écoute…',
     name: 'Blind test',
@@ -54,7 +54,7 @@ export const FR_DICTIONARY: Dictionary = {
     },
     scoring: {
       buzzer:
-        'Le premier qui buzze répond à voix haute. L’hôte juge le titre et l’artiste, 1 point chacun — une mauvaise réponse te met hors-jeu pour le reste du tour.',
+        'Le premier qui buzze répond à voix haute. L’aubergiste juge le titre et l’artiste, 1 point chacun — une mauvaise réponse te met hors-jeu pour le reste de la tournée.',
       choice:
         'Tout le monde choisit, sur le même extrait. La bonne proposition rapporte 1 point, et les deux premiers à la trouver gagnent +2 et +1 en plus.',
       typed:
@@ -88,10 +88,10 @@ export const FR_DICTIONARY: Dictionary = {
   buzz: {
     action: 'Buzz',
     blocked: {
-      host_away: 'L’hôte a décroché. Tout est en pause.',
-      round_not_running: 'En attente de l’hôte',
+      host_away: 'L’aubergiste a décroché. Tout est en pause.',
+      round_not_running: 'En attente de l’aubergiste',
       someone_else_buzzed: 'Quelqu’un a été plus rapide',
-      you_already_missed: 'Tu es hors-jeu pour ce tour',
+      you_already_missed: 'Tu es hors-jeu pour cette tournée',
       your_answer_is_pending: 'Donne ta réponse à voix haute'
     },
     ready: 'Appuie dès que tu sais',
@@ -100,16 +100,16 @@ export const FR_DICTIONARY: Dictionary = {
     won: 'C’est à toi. Annonce\u00a0!'
   },
   buzzer: {
-    clearLockouts: 'Remettre tout le monde en jeu',
+    clearLockouts: 'Remettre la tablée en jeu',
     home: {
       description:
-        'Les questions, c’est toi qui les apportes — une charade, un quiz sur une feuille, une leçon, ce que la salle veut. Cet écran décide seulement qui a posé le pouce en premier, et ça, il ne se trompe jamais.'
+        'Les questions, c’est toi qui les apportes — une charade, un quiz sur une feuille, une leçon, ce que la tablée veut. Ici on ne tranche qu’une chose : qui a posé le pouce en premier. Et là-dessus, jamais de discussion.'
     },
     lockout: 'Une mauvaise réponse met hors-jeu',
     name: 'Buzzer',
     running: 'Pose ta question',
     scoring:
-      'Le premier pouce répond à voix haute, et l’hôte dit si c’est bon. 1 point si c’est juste — et une mauvaise réponse te met hors-jeu jusqu’à ce que l’hôte te remette en jeu.',
+      'Le premier pouce répond à voix haute, et l’aubergiste dit si c’est bon. 1 point si c’est juste — et une mauvaise réponse te met hors-jeu jusqu’à ce qu’il te remette en jeu.',
     tagline: 'Tes questions, et une course au buzz.'
   },
   connection: {
@@ -121,7 +121,7 @@ export const FR_DICTIONARY: Dictionary = {
   },
   credits: {
     openquizzdb:
-      'Ses rubriques ont été rattachées aux six sujets utilisés ici, ses anecdotes conservées comme la ligne affichée une fois la réponse dévoilée, et ses questions classées adulte signalées pour qu’un hôte puisse les laisser de côté. Les questions qui ne portaient pas exactement trois mauvaises réponses ont été écartées.',
+      'Ses rubriques ont été rattachées aux six sujets utilisés ici, ses anecdotes conservées comme la ligne affichée une fois la réponse dévoilée, et ses questions classées adulte signalées pour qu’un aubergiste puisse les laisser de côté. Les questions qui ne portaient pas exactement trois mauvaises réponses ont été écartées.',
     opentdb:
       'Son texte arrive encodé en HTML et a été décodé, ses catégories ont été rattachées aux six sujets utilisés ici, et les questions qui ne portaient pas exactement trois mauvaises réponses ont été écartées.',
     shareAlike:
@@ -133,43 +133,45 @@ export const FR_DICTIONARY: Dictionary = {
     already_buzzed: 'Quelqu’un a été plus rapide.',
     api: {
       rate_limited:
-        'Ça fait beaucoup de salons. Attends une minute et réessaie.',
-      rejected: 'Le serveur a refusé la demande.',
-      unexpected_response: 'Le serveur a répondu quelque chose d’inattendu.',
-      unreachable: 'Serveur injoignable. Réessaie dans un instant.'
+        'Ça fait beaucoup de tables. Attends une minute et réessaie.',
+      rejected: 'Ça n’est pas passé. Réessaie.',
+      unexpected_response: 'On n’a pas su quoi en faire. Réessaie.',
+      unreachable:
+        'On n’arrive pas à joindre la taverne. Réessaie dans un instant.'
     },
     cannot_vote_for_own_lie: 'Celle-là est la tienne. Choisis-en une autre.',
-    host_already_connected: 'Quelqu’un anime déjà ce salon.',
-    host_only_action: 'Seul l’hôte peut faire ça.',
+    host_already_connected: 'Quelqu’un tient déjà cette table.',
+    host_only_action: 'Seul l’aubergiste peut faire ça.',
     host_reconnecting:
-      'Ce salon vient de perdre son écran, et l’attend encore.',
-    internal_error: 'Quelque chose a cassé côté serveur.',
-    invalid_message: 'Le serveur n’a pas compris ce message.',
-    joined_mid_round: 'Tu joues à partir du prochain tour.',
+      'Cette table vient de perdre son aubergiste, et l’attend encore.',
+    internal_error: 'Ça a cassé de notre côté. Réessaie.',
+    invalid_message: 'On n’a pas compris. Réessaie.',
+    joined_mid_round: 'Tu joues à partir de la prochaine tournée.',
     lie_is_the_answer: 'C’est la vraie réponse. Invente autre chose.',
-    music_source_unavailable: 'Le service musical ne répond pas.',
+    music_source_unavailable:
+      'La musique ne répond plus. Réessaie dans un instant.',
     nickname_taken: 'Ce pseudo est déjà pris.',
     no_content_available: 'Il ne reste rien à jouer. Change les réglages.',
     no_game_chosen: 'Choisis d’abord un jeu.',
-    player_locked_out: 'Tu es hors-jeu pour ce tour.',
+    player_locked_out: 'Tu es hors-jeu pour cette tournée.',
     protocol_version_mismatch: 'Cette page n’est plus à jour. Recharge-la.',
-    rate_limited: 'Ça fait beaucoup de salons. Attends une minute et réessaie.',
-    room_closed: 'L’hôte a fermé le salon.',
-    room_full: 'Ce salon est complet.',
-    room_not_found: 'Ce salon n’existe pas.',
+    rate_limited: 'Ça fait beaucoup de tables. Attends une minute et réessaie.',
+    removed_by_host: 'L’aubergiste t’a retiré de la table.',
+    room_closed: 'L’aubergiste a levé la table.',
+    room_full: 'Cette table est complète.',
+    room_not_found: 'Aucune table sous ce code.',
     screen: {
       description:
         'Le jeu est tombé sur quelque chose dont il ne sait pas repartir. Recharger suffit presque toujours — et si le site a été mis à jour pendant que cet onglet était ouvert, toujours.',
       reload: 'Recharger la page',
       title: 'Quelque chose a cassé'
     },
-    stale_round: 'Ce tour est déjà terminé.',
+    stale_round: 'Cette tournée est déjà terminée.',
     wrong_phase: 'Trop tard, la partie est passée à autre chose.'
   },
   home: {
     games: 'Les jeux',
-    tagline:
-      'Des jeux de soirée pour un écran et les téléphones de tout le monde.',
+    tagline: 'La taverne est ouverte.',
     title: 'Taverla'
   },
   host: {
@@ -183,12 +185,11 @@ export const FR_DICTIONARY: Dictionary = {
       label: 'Temps pour répondre après un buzz'
     },
     autoAdvance: 'Enchaîner tout seul',
-    backToRoom: 'Retour au salon',
+    backToRoom: 'Retour à la table',
     closeRoom: {
-      confirm: 'Oui, fermer',
-      label: 'Fermer le salon',
-      warning:
-        'Tout le monde sera déconnecté, et le code cessera de fonctionner.'
+      confirm: 'Oui, on lève',
+      label: 'Lever la table',
+      warning: 'Toute la tablée sort, et le code cesse de fonctionner.'
     },
     copied: 'Copié',
     copyCode: 'Copier le code',
@@ -205,30 +206,30 @@ export const FR_DICTIONARY: Dictionary = {
     },
     game: {
       label: 'Quel jeu',
-      prompt: 'Choisis-en un et le salon est prêt. Tu pourras changer d’avis.'
+      prompt: 'Choisis-en un et la table est prête. Tu pourras changer d’avis.'
     },
     hostDecides: 'Tu décides',
     invite: {
-      title: 'Scanne pour jouer'
+      title: 'Scanne et prends place'
     },
-    joinLate: 'Encore ouvert',
-    needsGame: 'Choisis à quoi le salon joue',
-    needsPlayer: 'Il faut au moins un joueur pour lancer',
-    nextRound: 'Tour suivant',
+    joinLate: 'La porte est ouverte',
+    needsGame: 'Choisis à quoi la table joue',
+    needsPlayer: 'Il faut au moins quelqu’un à table',
+    nextRound: 'Tournée suivante',
     playAgain: 'Rejouer',
     players: {
-      empty: 'Personne n’a encore rejoint. Le QR code attend.',
+      empty: 'Encore personne. Ça ne va pas durer.',
       remove: 'Retirer',
       removeNamed: 'Retirer {nickname}',
-      title: 'Joueurs'
+      title: 'La tablée'
     },
     recovery: {
-      action: 'Animer depuis cet écran',
-      description: 'Il est dans le menu de l’écran qui anime le salon.',
+      action: 'Tenir la table d’ici',
+      description: 'Il est dans le menu, chez l’aubergiste.',
       field: 'Code de reprise',
-      hint: 'À saisir sur un autre écran pour animer le salon depuis lui.',
+      hint: 'À saisir ailleurs pour reprendre la table depuis là-bas.',
       invalid: 'Ce n’est pas un code de reprise.',
-      refused: 'Ce code n’a pas ouvert le salon.',
+      refused: 'Ce code ne va pas avec cette table.',
       retry: 'Réessayer',
       reveal: 'Afficher le code de reprise'
     },
@@ -237,13 +238,13 @@ export const FR_DICTIONARY: Dictionary = {
       open: 'Sans fin',
       openSummary: 'Jusqu’à ce que tu arrêtes',
       summary: defineTranslation('{count:plural}', {
-        plural: { count: { one: '{?} tour', other: '{?} tours' } }
+        plural: { count: { one: '{?} tournée', other: '{?} tournées' } }
       })
     },
-    rounds: 'Tours',
+    rounds: 'Tournées',
     seat: {
-      action: 'Prendre une place',
-      description: 'Cet écran cesse de recevoir la réponse jusqu’au reveal.',
+      action: 'Prendre place',
+      description: 'Tu ne verras plus la réponse avant les autres.',
       label: 'Jouer aussi, sous le nom de',
       leave: 'Rendre sa place',
       taken: 'Tu joues sous le nom de {nickname}.'
@@ -252,9 +253,9 @@ export const FR_DICTIONARY: Dictionary = {
     seeResults: 'Voir les résultats',
     setup: {
       label: 'Réglages',
-      roundInPlay: 'Certains de ces réglages attendent la fin de la manche'
+      roundInPlay: 'Certains de ces réglages attendent la fin de la tournée'
     },
-    startGame: 'Lancer la partie',
+    startGame: 'À table\u00a0!',
     verdict: {
       right: 'Bonne réponse',
       wrong: 'Raté'
@@ -264,24 +265,25 @@ export const FR_DICTIONARY: Dictionary = {
   join: {
     divider: 'ou',
     host: {
-      action: 'Créer un salon',
-      description: 'Ouvre la console avec le QR code que tes amis scannent.'
+      action: 'Ouvrir une table',
+      description:
+        'C’est toi qui tiens la table. Les autres n’ont plus qu’à pousser la porte.'
     },
     player: {
-      action: 'Rejoindre',
-      title: 'Rejoindre une partie'
+      action: 'Prendre place',
+      title: 'Pousser la porte'
     },
     roomCode: {
-      description: 'Affiché sur l’écran de l’hôte.',
-      label: 'Code du salon',
-      unknown: 'Aucune partie ne tourne sous ce code.',
+      description: 'L’aubergiste l’a sous les yeux.',
+      label: 'Code de la table',
+      unknown: 'Aucune table sous ce code.',
       unsupportedCharacters:
-        'Un code de salon ne contient jamais {characters}.',
+        'Un code de table ne contient jamais {characters}.',
       wrongLength: defineTranslation('{length:plural}', {
         plural: {
           length: {
-            one: 'Un code de salon fait {?} caractère.',
-            other: 'Un code de salon fait {?} caractères.'
+            one: 'Un code de table fait {?} caractère.',
+            other: 'Un code de table fait {?} caractères.'
           }
         }
       })
@@ -290,7 +292,7 @@ export const FR_DICTIONARY: Dictionary = {
   lefake: {
     home: {
       description:
-        'Un écran pose une question dont personne ne voit venir la réponse. Chacun en invente une fausse mais crédible, l’écran les affiche toutes à côté de la vraie, et la salle vote. Tu marques en trouvant la vraie — et à chaque joueur qui tombe dans la tienne.'
+        'Une question dont personne ne voit venir la réponse. Chacun en invente une assez crédible pour berner les autres, elles passent toutes à côté de la vraie, et la tablée vote. Tu marques en trouvant la vraie, et encore à chaque copain qui mord.'
     },
     name: 'Le Fake',
     reveal: {
@@ -311,7 +313,7 @@ export const FR_DICTIONARY: Dictionary = {
       title: 'La vérité, c’était'
     },
     scoring:
-      'Chacun écrit une fausse réponse, puis la salle vote sur le tout. 2 points pour trouver la vraie, et 1 de plus par joueur qui tombe dans la tienne.',
+      'Chacun écrit une fausse réponse, puis la tablée vote sur le tout. 2 points pour trouver la vraie, et 1 de plus par joueur qui tombe dans la tienne.',
     tagline: 'Écris un mensonge. Fais mordre la table.',
     vote: {
       done: 'Ton vote est parti. On attend les autres…',
@@ -338,15 +340,17 @@ export const FR_DICTIONARY: Dictionary = {
     build: 'Version {build}',
     home: 'Accueil',
     label: 'Menu',
-    leaveRoom: 'Quitter le salon'
+    leaveRoom: 'Quitter la table'
+  },
+  navigation: {
+    back: 'Retour à la taverne'
   },
   notFound: {
-    back: 'Retour au départ',
     description: 'La partie est finie, ou le code a été mal tapé.',
-    title: 'Il n’y a rien ici'
+    title: 'La salle est vide'
   },
   player: {
-    choosingGame: 'L’hôte choisit un jeu',
+    choosingGame: 'L’aubergiste choisit un jeu',
     final: {
       placing: 'Tu finis',
       rank: defineTranslation('{rank:plural}', {
@@ -360,19 +364,19 @@ export const FR_DICTIONARY: Dictionary = {
       })
     },
     midRound: {
-      detail: 'Ta place est gardée — ce\u00a0tour a commencé sans toi.',
-      title: 'Au prochain tour'
+      detail: 'Ta place est gardée — cette\u00a0tournée a commencé sans toi.',
+      title: 'À la prochaine tournée'
     },
     nickname: {
-      action: 'Rejoindre la partie',
+      action: 'Prendre place',
       label: 'Pseudo',
       title: 'On t’appelle comment\u00a0?'
     },
     points: defineTranslation('{points:plural}', {
       plural: { points: { one: 'point', other: 'points' } }
     }),
-    room: 'Salon {code}',
-    roomSize: '{count:number} dans le salon',
+    room: 'Table {code}',
+    roomSize: '{count:number} à table',
     seating: 'On te trouve une place…',
     upNext: 'Tu vas jouer à',
     you: 'Toi'
@@ -388,7 +392,7 @@ export const FR_DICTIONARY: Dictionary = {
   },
   quiz: {
     adult: {
-      hint: 'Tu es le seul à savoir qui est dans la salle.',
+      hint: 'Tu es le seul à savoir qui est à table.',
       label: 'Inclure les questions pour adultes'
     },
     category: {
@@ -404,7 +408,7 @@ export const FR_DICTIONARY: Dictionary = {
     duration: 'Temps par question',
     home: {
       description:
-        'Des questions sur tout — l’histoire, les sciences, le sport, la vie de tous les jours. Un écran pose la question, tout le monde répond sur ce qu’il a dans la main, et la bonne réponse la plus rapide remporte le tour.'
+        'De l’histoire, des sciences, du sport, et des questions que personne ne voit venir. Tout le monde répond en même temps, et la bonne réponse la plus rapide rafle la tournée.'
     },
     language: 'Langue des questions',
     name: 'Quiz',
@@ -413,7 +417,7 @@ export const FR_DICTIONARY: Dictionary = {
     },
     scoring: {
       buzzer:
-        'Le premier qui buzze répond à voix haute, et l’hôte dit si c’est bon. 1 point si c’est juste — et une mauvaise réponse te met hors-jeu pour le reste du tour.',
+        'Le premier qui buzze répond à voix haute, et l’aubergiste dit si c’est bon. 1 point si c’est juste — et une mauvaise réponse te met hors-jeu pour le reste de la tournée.',
       choice:
         'Tout le monde choisit parmi quatre, contre la montre. La bonne proposition rapporte 1 point, et les deux premiers à la trouver gagnent +2 et +1 en plus.',
       typed:
@@ -432,8 +436,8 @@ export const FR_DICTIONARY: Dictionary = {
         plural: { count: { one: '{?} a répondu', other: '{?} ont répondu' } }
       })
     },
-    index: 'Tour {index:number} sur {total:number}',
-    indexOpen: 'Tour {index:number}',
+    index: 'Tournée {index:number} sur {total:number}',
+    indexOpen: 'Tournée {index:number}',
     nobody: 'Personne n’a trouvé',
     scored: '+{points:number}'
   }

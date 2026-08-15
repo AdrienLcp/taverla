@@ -73,6 +73,29 @@ describe('a host who walks away', () => {
     expect(playerView(player)?.phase).toBe('playing')
   })
 
+  /**
+   * A console that took a seat is two things at once, and the tab closing ends
+   * both. The seat used to survive it for good: nothing ever marked it away, so
+   * the name stayed lit on every screen and the sweeper — which reads the stamp
+   * that was never written — never came for it either.
+   */
+  it('[host-absence] gives up the seat the console was playing on', async () => {
+    const { code, host } = await harness.openRoom(LONG_CLIP, 'Marina')
+    const player = await harness.seat({ code, nickname: 'Zoe' })
+
+    host.close()
+    await waitFor(
+      () => playerView(player)?.isHostConnected === false,
+      'the room to hear the host leave'
+    )
+
+    const marina = playerView(player)?.players.find(
+      (seated) => seated.nickname === 'Marina'
+    )
+
+    expect(marina?.isConnected).toBe(false)
+  })
+
   it('[host-absence] banks the clip where it stopped and spends none of the absence', async () => {
     const { code, host, player } = await playingRoom()
 

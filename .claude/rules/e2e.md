@@ -29,7 +29,7 @@ so neither the dev server nor today's charts can turn them red.
 **One journey per door**, which is how the room-first flow got covered without a
 fourth: the buzzer game goes through the front page and picks its game on the
 console, the simultaneous one goes through a game's own page. Both pages carry a
-**"Create a room"** — clicking before the navigation lands opens a room with no
+**"Open a table"** — clicking before the navigation lands opens a room with no
 game, and that failure surfaces a minute later at a launch that stays greyed
 out, so the landing is awaited between the two clicks.
 
