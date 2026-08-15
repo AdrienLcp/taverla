@@ -59,11 +59,13 @@ export const holdsTheAnswer = (content: HostRoundContent): boolean => {
   switch (content.kind) {
     case 'blindtest':
       return content.track !== null
-    // Neither hands this screen an answer a seat could take away: the bare
-    // buzzer's question is the room's, and Le Fake's is judged by the server —
-    // and never rendered here at all, since everyone can see the host screen.
+    // None of the three hands this screen an answer a seat could take away: the
+    // bare buzzer's question is the room's, Le Fake's is judged by the server —
+    // and never rendered here at all, since everyone can see the host screen —
+    // and the reflex race has no answer anywhere, only who was first.
     case 'buzzer':
     case 'lefake':
+    case 'reflex':
       return true
     case 'quiz':
       return content.question !== null

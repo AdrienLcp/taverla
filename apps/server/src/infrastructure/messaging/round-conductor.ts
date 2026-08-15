@@ -7,6 +7,7 @@ import { releaseAbandonedSeats } from '@/domain/room/room-service'
 import { allRooms, findRoom } from '@/domain/room/room-store'
 import {
   blindtestContent,
+  closeRound,
   closeWriting,
   finishGame,
   holdRoundClock,
@@ -14,12 +15,11 @@ import {
   lefakeContent,
   openRound,
   quizContent,
+  reflexContent,
   releaseBuzz,
   remainingRoundMs,
   resumeRoundClock,
-  revealRound,
   settleLieBoard,
-  settleSimultaneousRound,
   startRoundClock,
   timeOutBuzz
 } from '@/domain/round/round-service'
@@ -66,12 +66,13 @@ export const beginRound = async (room: Room): Promise<void> => {
   }
 
   // No catalogue, no network call, and nothing to fail — the room already holds
-  // the question. Opening the round is the whole of serving this game.
-  if (game.kind === 'buzzer') {
+  // the question, or there is no question at all. Opening the round is the whole
+  // of serving these two.
+  if (game.kind === 'buzzer' || game.kind === 'reflex') {
     cancelRoundTimer(room.code, 'advance')
 
     const round = openRound({
-      content: { kind: 'buzzer' },
+      content: game.kind === 'buzzer' ? { kind: 'buzzer' } : reflexContent(),
       now: Date.now(),
       room
     })
@@ -178,8 +179,11 @@ export const beginRound = async (room: Room): Promise<void> => {
  * `remainingRoundMs` is what stops the next player getting a fresh thirty
  * seconds out of someone else's wrong answer.
  *
- * A game with no clock cancels instead. The bare buzzer serves nothing, so
- * there is nothing for the room to run out of and the round waits for a thumb.
+ * A game with no clock cancels instead, and the bare buzzer is the only one:
+ * it serves nothing, so there is nothing for the room to run out of and the
+ * round waits for a thumb. The reflex race looks like it should be the second
+ * and is not — its clock is the round's rather than the settings', which is
+ * what `remainingRoundMs` reconciles.
  */
 export const armRoundTimeout = (room: Room): void => {
   const remaining = remainingRoundMs(room, Date.now())
@@ -204,15 +208,9 @@ export const armRoundTimeout = (room: Room): void => {
         return
       }
 
-      const mode = room.settings.mode.kind
-
-      // The round running out ends a simultaneous one the same way the last
-      // answer does, scoring included: whoever did not answer simply did not.
-      if (mode === 'buzzer') {
-        revealRound(room, Date.now())
-      } else {
-        settleSimultaneousRound({ mode, now: Date.now(), room })
-      }
+      // The round running out ends it the same way the last answer does,
+      // scoring included: whoever did not answer simply did not.
+      closeRound(room, Date.now())
 
       broadcastRoom(room)
       armAutoAdvance(room)

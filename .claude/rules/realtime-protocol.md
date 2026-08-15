@@ -16,7 +16,7 @@ The format itself — every frame, both views, the error list — and the reason
 behind each guarantee are in
 [`../../docs/realtime-protocol.md`](../../docs/realtime-protocol.md).
 
-## The four guarantees, and what enforces each
+## The five guarantees, and what enforces each
 
 | Guarantee | Enforced by | Where |
 |---|---|---|
@@ -24,6 +24,23 @@ behind each guarantee are in
 | Buzz order cannot be forged | The server stamps arrival time; `player.buzz` carries no timestamp | `client-message.ts`, `socket-handler.ts` |
 | A client never holds half a state | One `room.updated` snapshot, never a delta | `outbound.ts` |
 | Countdowns land together on every device | Server clock, estimated per device from a ping/pong handshake | `clock-sync.ts` |
+| A reaction measures the thumb, not the Wi-Fi | The stimulus is a server timestamp every device schedules locally, defended by a floor rather than by hiding it | `core/reflex/reaction.ts` |
+
+### The stimulus happens locally, and the floor is what pays for it
+
+The fifth is the one the shelf grew rather than opened with, and the only one a
+game had to be built to need. Stamping arrival makes *who was first*
+unforgeable, but arrival is not reaction: reaction is arrival minus the moment
+the screen changed. Broadcast that moment and the race is won by the best link
+in the room, so `round.content.flipsAt` travels **in advance** and every device
+flips against its own clock offset.
+
+Handing it out is safe because of what sits under it, not because of secrecy: a
+tap less than `FALSE_START_FLOOR_MS` after `flipsAt` is refused as a
+`false_start` and sits the player out. No human reaction is that fast, so an
+honest thumb never meets it and a scheduled one always does. `docs/` holds the
+argument in full — do not "fix" this by hiding `flipsAt`, which buys nothing and
+costs the countdown its own mechanism.
 
 ### Role-scoped messages are the anti-cheat mechanism
 

@@ -52,10 +52,12 @@ const candidatesIn = (round: RoundView): Candidate[] => {
         subtitle: choice.artist,
         title: choice.title
       }))
-    // Neither serves candidates to pick from here: one has no content at all,
-    // and the other's board is written by the room and voted on by its own form.
+    // None of the three serves candidates to pick from here: two have no
+    // content at all, and Le Fake's board is written by the room and voted on
+    // by its own form.
     case 'buzzer':
     case 'lefake':
+    case 'reflex':
       return []
     case 'quiz':
       return content.choices.map((choice) => ({

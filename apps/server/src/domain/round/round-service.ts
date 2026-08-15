@@ -24,6 +24,11 @@ import { buildLieBoard } from '@taverla/core/lefake/lie-board'
 import { tallyLieBoard } from '@taverla/core/lefake/tally'
 import { gradeQuizGuess } from '@taverla/core/quiz/question-answer'
 import {
+  drawFlipDelayMs,
+  reflexRoundDurationMs
+} from '@taverla/core/reflex/flip-schedule'
+import { isFalseStart } from '@taverla/core/reflex/reaction'
+import {
   type BuzzRejection,
   findBuzzRejection,
   hasEligibleBuzzer
@@ -773,6 +778,161 @@ export const settleLieBoard = (room: Room, now: number): void => {
 }
 
 /**
+ * The reflex race's half of opening a round, and the only content on the shelf
+ * that is neither drawn from a catalogue nor authored: the round is a wait and
+ * a colour, and the wait is the whole of it.
+ */
+export const reflexContent = (): Round['content'] => ({
+  flipDelayMs: drawFlipDelayMs(),
+  kind: 'reflex',
+  taps: []
+})
+
+/** When this round's screen flips, or `null` for a round that is not one. */
+export const flipsAtOf = (round: Round): number | null =>
+  round.content.kind !== 'reflex' || round.startsAt === null
+    ? null
+    : round.startsAt + round.content.flipDelayMs
+
+/**
+ * A tap arrives, or arrives too soon to have been a reaction. The false start
+ * is a *success* here on purpose: it is refused to the player and it changes
+ * the round, so the caller has to send the error and broadcast, where every
+ * other rejection only sends.
+ */
+export type ReflexTapOutcome = 'false_start' | 'tapped'
+
+export const registerReflexTap = ({
+  now,
+  playerId,
+  room,
+  roundId
+}: {
+  now: number
+  playerId: PlayerId
+  room: Room
+  roundId: RoundId
+}): Result<ReflexTapOutcome, BuzzRejection> => {
+  const round = room.round
+  const content = round?.content
+
+  if (round == null || content?.kind !== 'reflex') {
+    return Result.failure('wrong_phase')
+  }
+
+  const rejection = findBuzzRejection({
+    claimedRoundId: roundId,
+    currentRoundId: round.id,
+    // Nobody takes a floor in this game, so the buzz that blocks a buzz is the
+    // player's own: one thumb, one heat.
+    hasActiveBuzz: content.taps.some((tap) => tap.playerId === playerId),
+    isLockedOut: round.lockedOutPlayerIds.has(playerId),
+    phase: room.phase
+  })
+
+  if (rejection !== null) {
+    return Result.failure(rejection)
+  }
+
+  if (
+    hasJoinedAfterStart({
+      openedWithPlayerIds: round.openedWithPlayerIds,
+      playerId
+    })
+  ) {
+    return Result.failure('joined_mid_round')
+  }
+
+  const flipsAt = flipsAtOf(round)
+
+  if (flipsAt === null) {
+    return Result.failure('wrong_phase')
+  }
+
+  if (isFalseStart({ flipsAt, tappedAt: now })) {
+    round.lockedOutPlayerIds.add(playerId)
+    touch(room, now)
+
+    return Result.success('false_start')
+  }
+
+  content.taps.push({ atServerTime: now, playerId })
+  touch(room, now)
+
+  return Result.success('tapped')
+}
+
+/**
+ * Whether the heat has nothing left to wait for. A false start counts as having
+ * acted: that thumb has spent itself, and holding the round open for it is the
+ * opposite of what the lockout means.
+ */
+export const everyoneHasTapped = (room: Room, now: number): boolean => {
+  const round = room.round
+  const content = round?.content
+
+  if (round == null || content?.kind !== 'reflex') {
+    return false
+  }
+
+  const expected = [...room.players.values()].filter((participant) =>
+    isExpectedInRound({
+      now,
+      openedWithPlayerIds: round.openedWithPlayerIds,
+      participant
+    })
+  )
+
+  if (expected.length === 0) {
+    return false
+  }
+
+  const tapped = new Set(content.taps.map((tap) => tap.playerId))
+
+  return expected.every(
+    (participant) =>
+      tapped.has(participant.id) || round.lockedOutPlayerIds.has(participant.id)
+  )
+}
+
+/**
+ * Scores a heat and reveals it. Being first *is* being right, so this is the one
+ * settle on the shelf that mints its own verdict rather than applying one — no
+ * host judges it, and `applyVerdict` is not on this game's path at all.
+ */
+export const settleReflexRound = (room: Room, now: number): void => {
+  const round = room.round
+  const content = round?.content
+
+  if (round == null || content?.kind !== 'reflex') {
+    return
+  }
+
+  const [first] = content.taps
+
+  if (first !== undefined) {
+    const verdict = { isCorrect: true, kind: 'single' } as const
+    const points = pointsFor(verdict)
+    const participant = room.players.get(first.playerId)
+
+    if (participant !== undefined) {
+      participant.score += points
+    }
+
+    // No speed bonus, and this is the game where that reads oddest: the race is
+    // the entire round, and it is already paid by being the tap that took it.
+    round.awards.push({
+      playerId: first.playerId,
+      points,
+      speedBonus: 0,
+      verdict
+    })
+  }
+
+  revealRound(room, now)
+}
+
+/**
  * The bonus queue: whoever banked something first heads it, and everyone who
  * banked nothing sorts to the back where they cannot take a place.
  */
@@ -1024,6 +1184,30 @@ export const revealRound = (room: Room, now: number): void => {
   touch(room, now)
 }
 
+/**
+ * Ends the open round the way its game ends one, and one function rather than a
+ * branch at each caller because the reflex race is what a branch gets wrong:
+ * it is buzzer-moded and settles like a simultaneous round, so reading the mode
+ * alone reveals it without paying anyone.
+ */
+export const closeRound = (room: Room, now: number): void => {
+  if (room.round?.content.kind === 'reflex') {
+    settleReflexRound(room, now)
+
+    return
+  }
+
+  const mode = room.settings.mode.kind
+
+  if (mode === 'buzzer') {
+    revealRound(room, now)
+
+    return
+  }
+
+  settleSimultaneousRound({ mode, now, room })
+}
+
 export const finishGame = (room: Room, now: number): void => {
   room.phase = 'finished'
   room.round = null
@@ -1059,15 +1243,23 @@ export const elapsedRoundMs = (round: Round, now: number): number =>
   )
 
 /**
- * How long the phase the room is *in* runs for. Every game but one answers with
- * the round duration, because they have a single open phase; Le Fake writes and
- * then votes, and the round clock is wound back between the two rather than the
- * vote growing a clock of its own.
+ * How long the phase the room is *in* runs for, and the two games that answer
+ * it from somewhere other than the round duration. Le Fake writes and then
+ * votes, so the round clock is wound back between the two rather than the vote
+ * growing a clock of its own. The reflex race draws its wait per round, so the
+ * only thing that knows how long the heat runs is the heat.
  */
-const openPhaseDurationMs = (room: Room): number | null =>
-  room.phase === 'voting'
-    ? voteDurationMsOf(room.settings.game)
+const openPhaseDurationMs = (room: Room): number | null => {
+  if (room.phase === 'voting') {
+    return voteDurationMsOf(room.settings.game)
+  }
+
+  const content = room.round?.content
+
+  return content?.kind === 'reflex'
+    ? reflexRoundDurationMs(content.flipDelayMs)
     : roundDurationMsOf(room.settings.game)
+}
 
 /**
  * How much of the open phase is left, or `null` for a game that has no such

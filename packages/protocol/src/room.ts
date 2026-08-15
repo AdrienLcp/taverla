@@ -264,6 +264,27 @@ export const roundContentSchema = z.discriminatedUnion('kind', [
     kind: z.literal('quiz'),
     prompt: questionPromptSchema,
     revealedQuestion: revealedQuestionSchema.nullable()
+  }),
+  z.object({
+    /**
+     * When the screen flips, and `null` until the round's clock has a start.
+     * Every device flips against its own estimated offset rather than on a
+     * frame landing, so what the race measures is reaction and not the room's
+     * Wi-Fi — which is the whole reason this is handed out in advance. What
+     * makes that safe is `FALSE_START_FLOOR_MS`, not hiding the number.
+     */
+    flipsAt: serverTimeSchema.nullable(),
+    kind: z.literal('reflex'),
+    /**
+     * Every tap that landed, in arrival order — the first one takes the round.
+     * A reaction is `atServerTime` minus `flipsAt`, worked out where it is
+     * shown rather than carried: both halves of the subtraction are already
+     * here, and a third field could disagree with them.
+     *
+     * A false start is not one of these. It is refused, and puts the player in
+     * `lockedOutPlayerIds` — which in this game has no other cause.
+     */
+    taps: z.array(roundAnswerSchema)
   })
 ])
 
@@ -376,7 +397,14 @@ export const hostRoundContentSchema = z.discriminatedUnion('kind', [
   z.object({
     kind: z.literal('quiz'),
     question: hostQuestionSchema.nullable()
-  })
+  }),
+  /**
+   * The third arm with nothing, and the only one where nothing is not a
+   * withholding: there is no answer anywhere in this game. The console reads
+   * `flipsAt` off the round like every phone does, because it is flipping the
+   * same screen at the same moment.
+   */
+  z.object({ kind: z.literal('reflex') })
 ])
 
 /**

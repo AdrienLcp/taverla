@@ -2,7 +2,10 @@ import { serve } from '@hono/node-server'
 import type { z } from 'zod'
 
 import type { ClientMessage } from '@taverla/protocol/client-message'
-import { DEFAULT_BLINDTEST_SETTINGS } from '@taverla/protocol/game'
+import {
+  DEFAULT_BLINDTEST_SETTINGS,
+  shelvedGames
+} from '@taverla/protocol/game'
 import type { CreateRoomResponse } from '@taverla/protocol/http'
 import type { HostToken } from '@taverla/protocol/identifiers'
 import {
@@ -294,18 +297,34 @@ export const lefakeRound = (
   return content?.kind === 'lefake' ? content : null
 }
 
+export const reflexRound = (
+  view: { round: RoundView | null } | null
+): Extract<RoundContent, { kind: 'reflex' }> | null => {
+  const content = view?.round?.content
+
+  return content?.kind === 'reflex' ? content : null
+}
+
 export const hostLefakeContent = (host: Peer<HostServerMessage>) => {
   const content = hostView(host)?.currentContent
 
   return content?.kind === 'lefake' ? content : null
 }
 
+/**
+ * Narrowed rather than filtered, so a suite can assert *which* refusal it got
+ * and not only that one arrived. `filter` cannot infer that on a generic union,
+ * and a count alone passes under the wrong code.
+ */
 export const errorsIn = <TMessage extends { type: string }>(
   peer: Peer<TMessage>
-) =>
+): Extract<TMessage, { type: 'error' }>[] =>
   peer.frames
     .map(({ message }) => message)
-    .filter((message) => message.type === 'error')
+    .filter(
+      (message): message is Extract<TMessage, { type: 'error' }> =>
+        message.type === 'error'
+    )
 
 /**
  * Imported dynamically so a `vi.mock` in the calling suite is registered before
@@ -385,13 +404,21 @@ export const startRoomHarness = async (): Promise<RoomHarness> => {
    * which is what a console does: `POST /api/rooms` decides which arm of
    * `round.content` the room will be rendering, and the settings frame that
    * follows tunes it.
+   *
+   * The door only opens a room for a game that is on the shelf. One served
+   * without screens yet has no front door at all, so the settings frame is the
+   * whole of how a room reaches it — which is also the only way to play it.
    */
   const openRoom = async (
     settings: RoomSettings = FAST_GAME,
     nickname?: string
   ) => {
+    const doorGame = shelvedGames.find(
+      (shelved) => shelved === settings.game?.kind
+    )
+
     const response = await fetch(`http://${origin}/api/rooms`, {
-      body: JSON.stringify({ game: settings.game?.kind }),
+      body: JSON.stringify({ game: doorGame }),
       headers: { 'content-type': 'application/json' },
       method: 'POST'
     })

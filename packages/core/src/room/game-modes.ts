@@ -20,9 +20,9 @@ const CHOICE_ONLY = ['choice'] as const satisfies readonly AnswerMode[]
 /**
  * Which answer modes a game offers. The mode is the room's because the shell
  * reads it everywhere a round is answered and scored; what a game does is
- * narrow it, and the bare buzzer narrows it to one — four candidates and a
- * typed field both need something to answer *against*, and that game serves
- * nothing.
+ * narrow it, and two of them narrow it to one — four candidates and a typed
+ * field both need something to answer *against*, and neither the bare buzzer
+ * nor the reflex race serves anything to answer.
  *
  * A game with one mode is a game whose host is never asked: the panel hides the
  * control rather than offering an option that would break the round.
@@ -47,6 +47,7 @@ export const answerModesFor = (
     case 'quiz':
       return answerModes
     case 'buzzer':
+    case 'reflex':
       return BUZZER_ONLY
     case 'lefake':
       return CHOICE_ONLY

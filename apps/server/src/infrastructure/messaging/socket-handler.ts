@@ -31,18 +31,19 @@ import { deleteRoom, findRoom } from '@/domain/room/room-store'
 import {
   applyVerdict,
   clearLockouts,
+  closeRound,
   everyoneHasActed,
+  everyoneHasTapped,
   everyoneIsDone,
   finishGame,
   isFinalRound,
   registerAnswer,
   registerBuzz,
   registerLie,
+  registerReflexTap,
   registerVote,
   releaseBuzz,
   restartGame,
-  revealRound,
-  settleSimultaneousRound,
   type VerdictOutcome
 } from '@/domain/round/round-service'
 import { discardPoolIfStale } from '@/domain/round/track-pool'
@@ -414,6 +415,14 @@ export const createRoomSocketEvents = (
       return
     }
 
+    // The same frame, a different race: a reflex tap takes no floor and waits
+    // for no judge, so it settles on the taps rather than on a verdict.
+    if (room.round?.content.kind === 'reflex') {
+      tap({ outbound, playerId: active.playerId, room, roundId })
+
+      return
+    }
+
     const registered = registerBuzz({
       now: Date.now(),
       playerId: active.playerId,
@@ -433,6 +442,57 @@ export const createRoomSocketEvents = (
 
     holdRoundTimeout(room.code)
     armAnswerWindow(room)
+    broadcastRoom(room)
+  }
+
+  const tap = ({
+    outbound,
+    playerId,
+    room,
+    roundId
+  }: {
+    outbound: Outbound
+    playerId: PlayerId
+    room: Room
+    roundId: RoundId
+  }): void => {
+    const registered = registerReflexTap({
+      now: Date.now(),
+      playerId,
+      room,
+      roundId
+    })
+
+    if (registered.status === 'failure') {
+      sendError(outbound, {
+        code: registered.error,
+        fatal: false,
+        message: 'That tap was not accepted'
+      })
+
+      return
+    }
+
+    // The one refusal on the shelf that is not an early return: it takes the
+    // player out of the heat, so the room has to be told and the heat may now
+    // have nothing left to wait for.
+    if (registered.data === 'false_start') {
+      sendError(outbound, {
+        code: 'false_start',
+        fatal: false,
+        message: 'That tap came in before the screen flipped'
+      })
+    }
+
+    if (everyoneHasTapped(room, Date.now())) {
+      abandonRound(room.code)
+      closeRound(room, Date.now())
+      broadcastRoom(room)
+      armAutoAdvance(room)
+
+      return
+    }
+
     broadcastRoom(room)
   }
 
@@ -550,26 +610,9 @@ export const createRoomSocketEvents = (
     }
 
     abandonRound(room.code)
-    closeRound(room)
+    closeRound(room, Date.now())
     broadcastRoom(room)
     armAutoAdvance(room)
-  }
-
-  /**
-   * A simultaneous round is scored on the way out rather than as answers land:
-   * the speed bonus is a rank among everyone who got it right, and nobody knows
-   * that rank until the last of them has spoken or the clip has run out.
-   */
-  const closeRound = (room: Room): void => {
-    const mode = room.settings.mode.kind
-
-    if (mode === 'buzzer') {
-      revealRound(room, Date.now())
-
-      return
-    }
-
-    settleSimultaneousRound({ mode, now: Date.now(), room })
   }
 
   const answer = (
@@ -608,7 +651,7 @@ export const createRoomSocketEvents = (
 
     if (everyoneIsDone(room, Date.now())) {
       abandonRound(room.code)
-      closeRound(room)
+      closeRound(room, Date.now())
       broadcastRoom(room)
       armAutoAdvance(room)
 

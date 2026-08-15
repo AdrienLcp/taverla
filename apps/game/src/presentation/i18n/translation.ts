@@ -72,6 +72,7 @@ export const scoringKey = ({
 }): BuiltKey<
   | 'buzzer.scoring'
   | 'lefake.scoring'
+  | 'reflex.scoring'
   | `blindtest.scoring.${AnswerMode}`
   | `quiz.scoring.${AnswerMode}`
 > => {
@@ -84,6 +85,8 @@ export const scoringKey = ({
       return 'lefake.scoring'
     case 'quiz':
       return `quiz.scoring.${answerMode}`
+    case 'reflex':
+      return 'reflex.scoring'
   }
 }
 

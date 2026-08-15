@@ -221,6 +221,36 @@ are encoded with `encodeChecked`, which parses through the schema so Zod drops
 unknown keys. The second layer exists because TypeScript's excess property check
 does not fire on a value passed through a variable.
 
+## The stimulus happens locally, and a floor is what pays for it
+
+The fifth guarantee, and the first one the shelf grew rather than opened with.
+
+Buzz order is stamped on arrival, which is what makes *who was first*
+unforgeable. That measures **arrival**, and a game whose whole subject is
+reaction needs arrival *minus the moment the stimulus happened*. Broadcasting
+the stimulus gets that wrong in the one way that matters: every phone would flip
+when the frame lands, so a player on a slow link reacts late by exactly their
+latency and the race is won by the best Wi-Fi in the room.
+
+So the moment travels **ahead of itself**. `round.content.flipsAt` is a server
+timestamp on both views, and every device schedules against its own estimated
+offset — the same mechanism the countdown already runs on, and the reason
+`clock-sync.ts` exists. Latency drops out of the measurement entirely.
+
+That hands a scripted client the moment in advance, and the answer is not to
+hide it. Hiding buys nothing — the countdown gives it away — and costs the
+mechanism. **A tap arriving less than `FALSE_START_FLOOR_MS` after `flipsAt` is
+a false start**: refused with `false_start`, and the player sits out the rest of
+the round. Human simple reaction to a visual stimulus does not go below about
+150 ms, so the floor costs an honest player nothing and makes scheduling a tap
+self-defeating — the scheduled tap lands too early to be accepted, and only
+jitter could save it.
+
+One rule covers both halves of the problem, because a tap that beat the flip
+measures negative and a negative is under the floor. `packages/core/src/reflex/`
+holds it, with no I/O and a test of its own; the next reflex-shaped game
+inherits it rather than re-deciding it.
+
 ## Errors
 
 ```jsonc

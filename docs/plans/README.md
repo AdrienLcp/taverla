@@ -29,7 +29,7 @@ same way a stage is.
 | [15 — Room social](15-room-social.md) | **dropped** | A chat in the room, and public rooms with a directory. Both evaluated and declined; the file holds why, and the smaller thing worth building in each case |
 | [16 — Le Fake](16-le-fake.md) | **done** | The fourth game: write a lie, fool the table. It bought the submit-then-vote phase seven of the remaining games want, on the quiz bank and for one new `RoomPhase` name |
 | [17 — Mid-game join](17-mid-game-join.md) | **done** | A round stamps who it opened on and waits for those players alone, so a phone arriving mid-clip no longer holds it up. It kept the seat, the refusal and one screen saying *au prochain tour* |
-| [18 — Reflex race](18-reflex-race.md) | **planned** | The fifth game, and the cheapest: the screen flips, the first thumb wins. Also the first whose fairness needs a fifth guarantee — the stimulus has to happen locally |
+| [18 — Reflex race](18-reflex-race.md) | **half done** | The fifth game, and the cheapest: the screen flips, the first thumb wins. Session A served it — protocol, the false-start floor, the heat, `reflex-game.test.ts` — and it bought the **fifth guarantee**: the stimulus is a server timestamp every device schedules locally. It is in `gameKinds` and not in `shelvedGames`, so no room can be opened on it. **Session B is the screens**, and its own list is at the foot of the plan |
 
 ## Order, and what can move
 

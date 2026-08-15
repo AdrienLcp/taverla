@@ -30,6 +30,14 @@ export const protocolErrorCodes = [
   'already_buzzed',
   'player_locked_out',
   /**
+   * A tap that beat the screen it was reacting to, or landed inside the hundred
+   * milliseconds after it that no human reaction fits into. Its own code rather
+   * than `player_locked_out`, even though the lockout is exactly what it causes:
+   * the phone has to be able to say *too early* rather than *you already
+   * missed*, or a player who jumped the gun reads it as the game being broken.
+   */
+  'false_start',
+  /**
    * A frame from a phone that took its seat after the round was under way. It
    * keeps the seat and plays from the next round; the screen is what stops it
    * acting in this one, and this is the backstop behind that — a socket is

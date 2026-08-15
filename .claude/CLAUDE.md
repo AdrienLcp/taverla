@@ -118,15 +118,18 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   narrows it for everything downstream, and a round already on screen is asked
   `round.content` rather than `settings.game`, because that is the game it was
   *opened* on. `shelvedGames` is the ones a game's own front door may open a room
-  for, and the create-room request carries which. The two sets coincide today,
-  which is what shipping every game looks like — it must **not** collapse into
+  for, and the create-room request carries which. It must **not** collapse into
   `gameKinds`, because it is what refuses a game that is served but has no
-  screens yet, and every game so far spent a stage in that window. The game owns
+  screens yet — `reflex` is in exactly that window today, reachable only by a
+  settings frame, and every game before it spent a stage there. The game owns
   its arm of `settings.game` and `round.content`, and narrows the answer mode
-- **Round** — one track, one question, or nothing at all.
+- **Round** — one track, one question, a screen about to change colour, or
+  nothing at all.
   `lobby → countdown → playing → buzzed → voting → revealed → finished`.
   `roundCount` is nullable, and `null` means until the host ends it. `voting` is
-  Le Fake's alone; every other game goes from `playing` straight to a reveal. A
+  Le Fake's alone; every other game goes from `playing` straight to a reveal,
+  and the reflex race is the only one that never passes through `buzzed` at all.
+  A
   round **stamps who it opened on** when its clip starts, and waits for those
   players and nobody else — one stamp for the whole round, Le Fake's vote
   included. A phone that arrives after keeps its seat, is refused everything it
@@ -138,8 +141,8 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   round runs out, so two players in the same second are paid the same; typing
   pays 3 for the pair where a right pick pays 1, because producing an answer
   from nothing is not recognising it among four. It stays a *room* setting the
-  game narrows — the bare buzzer offers only `buzzer`, and a frame setting
-  anything else is refused
+  game narrows — the bare buzzer and the reflex race offer only `buzzer`, and a
+  frame setting anything else is refused
 - **Guess** — one typed line. Each half is looked for *inside* it over runs of
   whole words, so "jean jacques goldman on ira" banks both and "daniel balavoine
   on ira" banks the title and still owes the artist. Whole words are the guard:
@@ -161,10 +164,17 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   judges when that is `null` and the screens count up instead. Running out is
   the same outcome as answering wrong, because taking the floor and saying
   nothing is what it cost everyone else
-- **Lockout** — a player who answered wrong, or held the floor and said nothing,
-  sits out the rest of the round. The blind test always locks out, because its
-  round is a clip that runs out; the bare buzzer has no such clock, so its host
-  chooses (`locksOutOnMiss`) and can reopen the field with `host.clearLockouts`
+- **Lockout** — a player who answered wrong, held the floor and said nothing, or
+  went before the screen changed, sits out the rest of the round. The blind test
+  always locks out, because its round is a clip that runs out; the bare buzzer
+  has no such clock, so its host chooses (`locksOutOnMiss`) and can reopen the
+  field with `host.clearLockouts`. In the reflex race a lockout has exactly one
+  cause — a **false start** — which is what lets the reveal read it as one
+- **False start** — a tap less than `FALSE_START_FLOOR_MS` after `flipsAt`, or
+  before it at all. Refused with its own code and it costs the round, which is
+  what lets `flipsAt` be published in advance: every device has to flip on its
+  own clock or the race measures the room's Wi-Fi. It is the **fifth
+  guarantee** — see `docs/realtime-protocol.md`
 - **Reveal** — the moment the round's answer becomes public, and the scoreline
   alone in a game whose question the room owns
 - **Verdict** — what the host granted, in the shape the game is judged in:

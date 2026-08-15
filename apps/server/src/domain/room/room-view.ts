@@ -12,7 +12,7 @@ import type { HostTrack, TrackIdentity } from '@taverla/protocol/track'
 import { hasJoinedAfterStart } from '@taverla/core/round/round-roster'
 import { pointsFor } from '@taverla/core/scoring/verdict'
 
-import { elapsedRoundMs } from '@/domain/round/round-service'
+import { elapsedRoundMs, flipsAtOf } from '@/domain/round/round-service'
 
 import type { Participant, PlayerAttempts, Room, Round } from './room'
 
@@ -66,6 +66,10 @@ const toHostContent = ({
 
   if (content.kind === 'lefake') {
     return { kind: 'lefake' }
+  }
+
+  if (content.kind === 'reflex') {
+    return { kind: 'reflex' }
   }
 
   return {
@@ -224,6 +228,17 @@ const toContentView = ({
       kind: 'quiz',
       prompt: { category, id, prompt },
       revealedQuestion: round.revealed ? { answer, note } : null
+    }
+  }
+
+  // Nothing is withheld until the reveal, which is this game alone: the taps are
+  // the tension of the round rather than a leak, and the moment the screen flips
+  // is public by design.
+  if (content.kind === 'reflex') {
+    return {
+      flipsAt: flipsAtOf(round),
+      kind: 'reflex',
+      taps: [...content.taps]
     }
   }
 

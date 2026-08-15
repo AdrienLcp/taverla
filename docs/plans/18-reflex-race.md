@@ -1,5 +1,11 @@
 # Stage 18 — Reflex race, the fifth game
 
+> **Session A is done**: the game is served, tested and correct, and no room can
+> be opened on it — `reflex` is in `gameKinds` and deliberately not in
+> `shelvedGames`. **Session B is the screens**, and starts with `/impeccable`.
+> What follows is the plan as written, with the four places reality diverged
+> marked inline and the leftovers gathered under *What session B has left*.
+
 The screen flips, the first thumb wins. No content, no question, no judging —
 `docs/game-catalogue.md` costs it at *an evening* and calls it the cheapest thing
 left on the shelf, because it is the buzz already built with a colour change
@@ -48,6 +54,23 @@ verdict, and `applyVerdict` is not on its path at all.
 Answer mode: `buzzer` and nothing else, the same narrowing the bare buzzer does.
 `roundDurationMs` is `null` — the round ends when somebody wins it.
 
+> **Diverged — the heat does not end on the first thumb.** The plan said so
+> twice, and its own acceptance test contradicted it: *three phones, and the
+> reaction times ordered the way the room saw it happen* is a board, and a heat
+> that closes on the winner only ever holds one number. Adrien took the call.
+> **The first legal tap takes the point; the heat closes when everyone expected
+> in it has acted** — tapped or false-started — exactly the way a simultaneous
+> round does, and everybody gets their own time.
+>
+> That needed a backstop the plan had no room for, because one phone face down
+> on the table would otherwise hold the heat open with nothing to end it.
+> `TAP_WINDOW_MS` is it: the heat closes that long after the flip whatever else
+> happens. So `roundDurationMsOf` **is** `null` for this game and the round runs
+> on a clock anyway — the wait is drawn per round, so the settings could never
+> have said how long a heat lasts, and `openPhaseDurationMs` assembles it off the
+> round instead. Both are true at once, and that seam is the first thing to read
+> if this ever looks wrong.
+
 ## The checklist
 
 **Compiler-forced.** Add `'reflex'` to `gameKinds` and `tsc` names exactly five:
@@ -88,22 +111,59 @@ purpose once.
 **No e2e.** Nothing in `e2e/` enumerates games, and Le Fake did not get a journey
 either. Add one only if the flow turns out to be new.
 
-## Decisions left open for the session
+## What session A settled
 
-- **What the flip looks like.** The whole game is one visual event on a screen
-  the room is staring at, so it goes through `/impeccable` first. The waiting
-  state, the flip and the false-start state are three screens, not one.
+- **The reaction time is not a field.** It is `atServerTime` minus `flipsAt`,
+  and both halves are already on the round — a third number could only disagree
+  with them. So `Award` is untouched, and the shell gained nothing for one game.
+- **The taps live in the game's own arm**, not in `round.answers`. `answers` is
+  projected from the attempts a graded round accumulates, and a tap is graded by
+  nobody. Le Fake had already made the same move with `votedPlayerIds`.
+- **A false start is `lockedOutPlayerIds` and nothing else.** In this game the
+  lockout has exactly one cause, so the reveal can read the two lists as *who
+  reacted* and *who jumped*. `false_start` is its own error code, deliberately
+  outside `BuzzRejection` — the refusal changes the round, where every other one
+  only answers the phone.
+- **`flipsAt` is derived, not stored.** The model holds `flipDelayMs`; the view
+  adds it to `round.startsAt`. One answer to when a round starts.
+- **`closeRound` moved into `round-service.ts`** and routes on the content
+  before the mode. That is the trap this game sets: it is buzzer-moded and
+  settles like a simultaneous round, so the old `mode === 'buzzer'` branch — in
+  two places — would have revealed a heat without paying anybody.
+- **The harness only posts a game the door has.** `openRoom` filters on
+  `shelvedGames`, which is how a served-but-unshelved game is reachable at all,
+  and it will keep working unchanged when `reflex` joins the list.
+
+## What session B has left
+
+Start with `/impeccable`: the whole game is one visual event on a screen the
+room is staring at, and the waiting state, the flip and the false start are
+three screens rather than one.
+
+- The eight silent sites in the table above, in that order.
+- Both dictionaries. `reflex.scoring` already exists in each — it was
+  compiler-forced by `scoringKey`. Putting `reflex` in `shelvedGames` is what
+  forces `reflex.name`, `reflex.tagline` and `reflex.home.description`.
+- **`shelvedGames` last**, which is what makes the game visible on the shelf,
+  the picker and `/:game`.
+- A browser pass, muted, at phone width and on the console.
+
+Two decisions still open, and both are the design pass's rather than Adrien's:
+
+- **What the flip looks like**, including whether a false start is a state the
+  screen holds or a moment it plays.
 - **Whether the wait is a setting.** 2–6 s is a guess. It becomes a host control
   only if a room asks for it.
-- **Whether reaction times are shown.** "142 ms" beside a name is most of the
-  fun, and it is a field on the award rather than a new screen.
 
 ## How to tell it is done
 
+The last four are green in `reflex-game.test.ts` and `packages/core/src/reflex/`
+at the protocol level; what session B owes is the same list seen on a screen.
+
 - A room opens on `/reflex`, three phones join, the screen flips and the first
   thumb takes the round — with the reaction times ordered the way the room saw
-  it happen.
+  it happen. **Session B.**
 - A tap before the flip locks that player out and does not end the round.
 - A scheduled tap at `flipsAt` is refused as a false start.
 - Two devices on the same round see the flip at the same wall-clock moment.
-- A browser pass, muted, at phone width and on the host's screen.
+- A browser pass, muted, at phone width and on the host's screen. **Session B.**

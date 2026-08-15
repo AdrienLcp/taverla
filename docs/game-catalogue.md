@@ -75,7 +75,7 @@ team on the player model and a turn owner.
 | **Buzzer** — the room brings its own content | Buzz-first | — | **shipped** ([stage 11](plans/11-buzzer.md)) |
 | **Quiz / trivia** | Buzz-first | — | **shipped** ([12](plans/12-trivia.md), [14](plans/14-question-languages.md)) |
 | **Lyrics blackout** — the line is missing, sing it | Buzz-first | Same as the blind test, different reveal | a session |
-| **Reflex race** — first to tap when the screen flips | Buzz-first | Almost nothing; it *is* the buzz | an evening |
+| **Reflex race** — first to tap when the screen flips | Buzz-first | It needed one thing after all: a fair stimulus | **served, no screens yet** ([stage 18](plans/18-reflex-race.md)) |
 | **Le Fake** (Fibbage) — write a fake answer, fool the others | Submit-then-vote | — | **shipped** ([stage 16](plans/16-le-fake.md)) |
 | **Petit Bac** — a letter, six categories, type fast | Submit-then-vote | Scoring by uniqueness | a session |
 | **Just One** — everyone writes one clue, duplicates cancel | Submit-then-vote | A clue-collision pass | a session |
@@ -93,10 +93,19 @@ Le Fake was the one that unlocked the most, and it shipped. Six games of that
 shape are left and each is now a session rather than two plus an engine, which
 is the whole return on having built it once.
 
-**The cheapest is still Reflex race**: an evening, and it needs nothing that
-does not exist — it is the buzz already built, with the screen flipping instead
-of a clip playing. It was always a different question from "which unlocks the
-most", and now that the expensive one is paid for, cheap is the only axis left.
+**Reflex race was costed as the cheapest, and the estimate was wrong in an
+instructive way.** "Almost nothing; it *is* the buzz" was true of everything
+this table measures — no catalogue, no bank, no new phase, no new shape. What it
+missed is that a buzz answers *who arrived first* and a reflex race asks *who
+reacted fastest*, and the gap between those two is the room's Wi-Fi. Costing it
+by what it reuses could not see that, because the thing it needed was not a
+feature but a **guarantee**: the stimulus has to happen on each device against
+its own clock estimate, defended by a floor rather than by secrecy. That is now
+the fifth entry in `docs/realtime-protocol.md`, and the next reflex-shaped game
+inherits it.
+
+The lesson for the rest of this table: this column costs *parts*, and a game can
+still owe a rule. Ask what a game **measures** before trusting its appetite.
 
 ## The quiz, costed — and it needs no database
 

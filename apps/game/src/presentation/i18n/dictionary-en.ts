@@ -154,6 +154,7 @@ export const EN_DICTIONARY = defineTranslations({
       unreachable: 'We cannot reach the tavern. Try again in a moment.'
     },
     cannot_vote_for_own_lie: 'That one is yours. Pick another.',
+    false_start: 'Too soon. Wait for the change.',
     host_already_connected: 'Someone is already keeping this table.',
     host_only_action: 'Only the innkeeper can do that.',
     host_reconnecting:
@@ -447,6 +448,10 @@ export const EN_DICTIONARY = defineTranslations({
         'Everyone types their answer at once. The right one scores three, and the earlier you find it the more the clock adds — up to +3.'
     },
     tagline: 'A question, and the first one who knows it.'
+  },
+  reflex: {
+    scoring:
+      'The screen changes, and the first thumb takes the point. Go before it changes and you sit the heat out.'
   },
   round: {
     answer: {

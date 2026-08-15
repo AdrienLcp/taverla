@@ -3,7 +3,13 @@ import { z } from 'zod'
 import { questionDrawSettingsSchema } from './question'
 import { trackDifficultySchema, trackSourceSchema } from './track'
 
-export const gameKinds = ['blindtest', 'buzzer', 'lefake', 'quiz'] as const
+export const gameKinds = [
+  'blindtest',
+  'buzzer',
+  'lefake',
+  'quiz',
+  'reflex'
+] as const
 
 export const gameKindSchema = z.enum(gameKinds)
 
@@ -13,8 +19,10 @@ export const gameKindSchema = z.enum(gameKinds)
  * room opened on one of those would render another game's round. Refusing it at
  * the door beats opening a room whose first "start" cannot be looked at.
  *
- * The two sets coincide today, which is what shipping every game looks like —
- * not a sign the distinction was unnecessary.
+ * `reflex` is served in full and is deliberately not on this list: it has no
+ * screens yet, so the only way a room reaches it is a settings frame. That is
+ * the window every game here spent a stage in, and the whole of what this list
+ * is for.
  */
 export const shelvedGames = [
   'blindtest',
@@ -75,7 +83,14 @@ export const gameSettingsSchema = z.discriminatedUnion('kind', [
     kind: z.literal('quiz'),
     /** How long a question stays open before the round times out. */
     roundDurationMs: z.number().int().min(5_000).max(120_000)
-  })
+  }),
+  /**
+   * Nothing of its own, and the first arm that is empty rather than minimal.
+   * The wait before the screen flips is drawn per round rather than set — a
+   * fixed one is a wait a room learns to count — and the floor that keeps the
+   * race honest is not a taste call either.
+   */
+  z.object({ kind: z.literal('reflex') })
 ])
 
 export type GameKind = z.infer<typeof gameKindSchema>
@@ -85,16 +100,26 @@ export type BlindtestSettings = Extract<GameSettings, { kind: 'blindtest' }>
 export type BuzzerSettings = Extract<GameSettings, { kind: 'buzzer' }>
 export type LefakeSettings = Extract<GameSettings, { kind: 'lefake' }>
 export type QuizSettings = Extract<GameSettings, { kind: 'quiz' }>
+export type ReflexSettings = Extract<GameSettings, { kind: 'reflex' }>
 
 /**
- * How long a round stays open unanswered, or `null` for a game that has no such
- * clock. The bare buzzer is the `null`: nothing is being played or displayed, so
- * there is nothing for the room to run out of — the round ends when someone is
- * right or when the host says so. A room with no game yet is the same answer for
- * a different reason: there is no round to run out.
+ * How long a round stays open unanswered, or `null` for a game whose *settings*
+ * have no such clock. The bare buzzer is the first `null`: nothing is being
+ * played or displayed, so there is nothing for the room to run out of — the
+ * round ends when someone is right or when the host says so. A room with no
+ * game yet is the same answer for a different reason: there is no round to run
+ * out.
+ *
+ * The reflex race is the third, and the only one that answers `null` while
+ * still having a clock: its wait is drawn per round, so the round knows how
+ * long it runs and the settings never could. `openPhaseDurationMs` is where the
+ * two are reconciled, and it is why this reads *the settings'* clock rather
+ * than *the round's*.
  */
 export const roundDurationMsOf = (game: GameSettings | null): number | null =>
-  game === null || game.kind === 'buzzer' ? null : game.roundDurationMs
+  game === null || game.kind === 'buzzer' || game.kind === 'reflex'
+    ? null
+    : game.roundDurationMs
 
 /**
  * How long the board stays open, for the one game that has a second open phase.
@@ -156,10 +181,13 @@ export const DEFAULT_QUIZ_SETTINGS: QuizSettings = {
   roundDurationMs: 30_000
 }
 
+export const DEFAULT_REFLEX_SETTINGS: ReflexSettings = { kind: 'reflex' }
+
 /** A record rather than a switch, so a new kind without a default cannot compile. */
 export const DEFAULT_GAME_SETTINGS: Record<GameKind, GameSettings> = {
   blindtest: DEFAULT_BLINDTEST_SETTINGS,
   buzzer: DEFAULT_BUZZER_SETTINGS,
   lefake: DEFAULT_LEFAKE_SETTINGS,
-  quiz: DEFAULT_QUIZ_SETTINGS
+  quiz: DEFAULT_QUIZ_SETTINGS,
+  reflex: DEFAULT_REFLEX_SETTINGS
 }

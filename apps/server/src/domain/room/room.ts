@@ -108,6 +108,16 @@ export type PlayerAttempts = {
   verdict: Verdict
 }
 
+/**
+ * One thumb, and when the server heard it. There is nothing else to record: the
+ * whole of a reflex answer is that it happened, and the reaction it is worth is
+ * the gap to the flip.
+ */
+export type ReflexTap = {
+  atServerTime: number
+  playerId: PlayerId
+}
+
 export type Round = {
   activeBuzz: {
     atServerTime: number
@@ -158,6 +168,18 @@ export type Round = {
         correctChoiceIndex: number | null
         kind: 'quiz'
         question: HostQuestion
+      }
+    | {
+        /**
+         * How long after the round starts the screen flips, drawn once as it
+         * opens. The delay rather than the moment, because when a round starts
+         * is the round's own fact and holding both would be holding two
+         * answers to it — `room-view.ts` adds them on the way out.
+         */
+        flipDelayMs: number
+        kind: 'reflex'
+        /** In arrival order, which is the only ordering anyone can trust. */
+        taps: ReflexTap[]
       }
   /**
    * The round's own clock, and the pair that makes a miss resumable: a buzz

@@ -26,7 +26,9 @@ const DEFAULT_ROUND_COUNT: Record<GameKind, number | null> = {
   buzzer: null,
   /** Writing, reading a board aloud and voting is three of a quiz round; ten would be an evening on one game. */
   lefake: 5,
-  quiz: 10
+  quiz: 10,
+  /** A heat is a wait and a thumb, so ten of them is under two minutes. */
+  reflex: 10
 }
 
 /**

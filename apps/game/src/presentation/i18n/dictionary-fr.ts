@@ -144,6 +144,7 @@ export const FR_DICTIONARY: Dictionary = {
         'On n’arrive pas à joindre la taverne. Réessaie dans un instant.'
     },
     cannot_vote_for_own_lie: 'Celle-là est la tienne. Choisis-en une autre.',
+    false_start: 'Trop tôt. Attends que ça change.',
     host_already_connected: 'Quelqu’un tient déjà cette table.',
     host_only_action: 'Seul l’aubergiste peut faire ça.',
     host_reconnecting:
@@ -430,6 +431,10 @@ export const FR_DICTIONARY: Dictionary = {
         'Tout le monde tape sa réponse en même temps. La bonne rapporte 3 points, et plus tu la trouves tôt, plus la montre ajoute — jusqu’à +3.'
     },
     tagline: 'Une question, et le premier qui sait.'
+  },
+  reflex: {
+    scoring:
+      'L’écran change, et le premier pouce prend le point. Pars avant qu’il change et tu passes la manche sur le banc.'
   },
   round: {
     answer: {
