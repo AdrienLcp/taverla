@@ -30,7 +30,7 @@ not a wish.
 | 6 | [The gap between two rounds](#6--the-gap-between-two-rounds--done-15-august-2026) | **done** | `/impeccable` | playtest 4, 7, 10 |
 | 7 | [Say it the way a table says it](#7--say-it-the-way-a-table-says-it--done-15-august-2026) | **done** | `/impeccable` | playtest 1, 11, old C |
 | 8 | [The winner gets a moment](#8--the-winner-gets-a-moment--done-15-august-2026) | **done** | `/impeccable` | playtest 8 |
-| 9 | [Arriving cold in a running blind test](#9--arriving-cold-in-a-running-blind-test) | medium | `/impeccable` | old B |
+| 9 | [Arriving cold in a running blind test](#9--arriving-cold-in-a-running-blind-test--done-15-august-2026) | **done** | `/impeccable` | old B |
 | 10 | [Stage 18 — Reflex race](18-reflex-race.md) | large | its own plan | the fifth game |
 
 Order is by **what is wrong before what is missing**: 1 through 3 are faults a
@@ -38,10 +38,13 @@ room already met, 4 is the one rule the room asked to have changed, and
 everything after is polish and new work. 5 is out of order on purpose — it is an
 hour, and it is the one players touch every single round.
 
-**Session 9 is next.** Sessions 1 to 8 all landed on 15 August 2026; what each
-found that this file did not expect is written into its own entry — and session
-3's is the one to read before trusting any diagnosis here, because two of the
-three faults it was given turned out not to be faults at all.
+**Everything above is done.** Sessions 1 to 9 all landed on 15 August 2026;
+what each found that this file did not expect is written into its own entry —
+and session 3's is the one to read before trusting any diagnosis here, because
+two of the three faults it was given turned out not to be faults at all.
+
+**What is left is [stage 18](18-reflex-race.md), the fifth game**, which is new
+work rather than a fault a room met, and it has a plan of its own.
 
 The one decision that was still Adrien's has been taken and built:
 [who owns a room](#who-owns-a-room--done-15-august-2026).
@@ -732,7 +735,41 @@ has `.tie` and `.nobody` arms), and a single winner whose name is long.
 
 ---
 
-## 9 · Arriving cold in a running blind test
+## 9 · Arriving cold in a running blind test — **done, 15 August 2026**
+
+**What shipped**, against what this entry expected — which was right about all
+of it, including that the premise it inherited was wrong:
+
+- **The console admits it.** `isClipUnheard` is the rule and it lives in core
+  with a test, because the fault is invisible from a browser: a silent round is
+  *identical* to one that plays. Whenever no gesture has blessed an element on
+  this screen and the round serves a clip, the stage carries *Le son ne sort pas
+  d'ici.* and one press — during the countdown and during the clip alike.
+- **The refused unlock could not have been retried, and now can.** The element
+  was stored whether or not `play()` resolved, so the guard on it turned every
+  later press into a silent no-op and the tab was mute for the evening. It is
+  kept only on success now.
+- **The thrown-away rejection had a use after all.** `NotAllowedError` means the
+  element is not blessed, so the console disarms and offers the press again;
+  `AbortError` is the next `load()` cutting this one short and is ignored, which
+  is what the bare `.catch(() => {})` was right about.
+- **One thing this entry did not see**: arming mid-round was not enough on its
+  own. The phase effect is what loads, seeks and plays, and it read the element
+  through a **ref** — so a press during a round changed nothing until the next
+  phase turned over. The blessed element is state now and the effect's own
+  dependency, which is what makes the press take at once; `canPlay` is derived
+  from it rather than kept beside it, because a boolean next to a ref says the
+  same thing twice and only one of the two is in the list.
+- The seek at the heart of it is `seekTargetMs` in core now, with the rule the
+  old inline comparison only implied: **only ever forward**. A clip ahead of the
+  round is a rounding error, and yanking it back is audible where letting it run
+  is not.
+- **Verified muted**, deliberately: the press was driven on a console reloaded
+  mid-round, the block appeared and went away. That the clip then *sounds* is
+  the one thing a muted browser cannot answer, and it is what the unit test on
+  the seek is for.
+
+---
 
 Carried over whole from the previous handoff, and still true.
 

@@ -20,6 +20,10 @@ export const FR_DICTIONARY: Dictionary = {
       bothFound: 'Tu as les deux. Tranquille.',
       titleFound: 'Titre ✓'
     },
+    audio: {
+      silent: 'Le son ne sort pas d’ici.',
+      start: 'Lancer le son'
+    },
     clip: 'Durée de l’extrait',
     difficulty: {
       label: 'À quel point c’est connu',

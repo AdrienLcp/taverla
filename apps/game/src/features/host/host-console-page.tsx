@@ -10,6 +10,7 @@ import type {
 } from '@taverla/protocol/room'
 import type { TrackSource } from '@taverla/protocol/track'
 
+import { isClipUnheard } from '@taverla/core/blindtest/clip-audio'
 import {
   type HostPreferences,
   rememberSettings
@@ -24,6 +25,7 @@ import {
   TypedAnswer
 } from '@/features/player/answer-forms'
 import {
+  blindtestHostContent,
   holdsTheAnswer,
   lefakeContent,
   quizContent
@@ -42,6 +44,7 @@ import {
   writeHostToken
 } from '@/infrastructure/storage/session-storage'
 import { AskedQuestion } from '@/presentation/components/asked-question'
+import { Button } from '@/presentation/components/button'
 import { Countdown } from '@/presentation/components/countdown'
 import { RoundProgress } from '@/presentation/components/round-progress'
 import { Scoreboard } from '@/presentation/components/scoreboard'
@@ -95,7 +98,7 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
 
   useReportConnection({ clock, status })
   usePhaseField(view?.phase ?? null)
-  const { unlock } = useRoundAudio({ clock, view, volume })
+  const { canPlay, unlock } = useRoundAudio({ clock, view, volume })
   const isLive = status === 'open'
 
   // Every way the console has of changing a setting comes through here, so what
@@ -190,10 +193,12 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
       </header>
 
       <Stage
+        canPlay={canPlay}
         clock={clock}
         isLive={isLive}
         isSeated={seatNickname !== null}
         onSettingsChange={changeSettings}
+        onUnlockAudio={unlock}
         preferences={preferences}
         roomCode={roomCode}
         send={send}
@@ -261,9 +266,13 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
 }
 
 type StageProps = {
+  /** Whether a press has blessed an audio element on this screen. */
+  canPlay: boolean
   clock: ClockEstimate | null
   isLive: boolean
   isSeated: boolean
+  /** The gesture a screen that cannot play a clip has to be offered. */
+  onUnlockAudio: () => void
   onSettingsChange: (settings: RoomSettings) => void
   /** What this host last left each game set to, for the lobby's picker. */
   preferences: HostPreferences | null
@@ -273,10 +282,12 @@ type StageProps = {
 }
 
 const Stage = ({
+  canPlay,
   clock,
   isLive,
   isSeated,
   onSettingsChange,
+  onUnlockAudio,
   preferences,
   roomCode,
   send,
@@ -299,6 +310,22 @@ const Stage = ({
 
   const round = view.round
 
+  // A silent round is *visually identical* to one that plays — the clip's
+  // progress comes from the server, buzzes work, the reveal lands — so this is
+  // the one thing on the console that has to be said out loud.
+  const clipOffer = isClipUnheard({
+    canPlay,
+    hasClip: blindtestHostContent(view)?.audioUrl != null,
+    phase: view.phase
+  }) ? (
+    <div className='muted-clip'>
+      <p>{translate('blindtest.audio.silent')}</p>
+      <Button onPress={onUnlockAudio} size='small' variant='outlined'>
+        {translate('blindtest.audio.start')}
+      </Button>
+    </div>
+  ) : null
+
   if (view.phase === 'countdown' && round?.startsAt != null) {
     // The round that just ran, still up while the next one counts in. It is the
     // whole of what made this screen repetitive: a number replacing the answer
@@ -313,6 +340,7 @@ const Stage = ({
         {lastRevealed !== null && (
           <RevealPanel players={view.players} round={lastRevealed} />
         )}
+        {clipOffer}
       </div>
     )
   }
@@ -377,6 +405,7 @@ const Stage = ({
             verdict={view.yourVerdict}
           />
         )}
+        {clipOffer}
         <Scoreboard players={view.players} />
       </div>
     )

@@ -188,6 +188,18 @@ one part.
 
 ### Improvements
 
+- `[Game]` **A console that reloads mid-round no longer plays the rest of the
+  game in silence.** Permission to make a sound is granted to an audio element
+  by a press, and the press that mints one is the press that opens a round — so
+  a screen that reloaded, restored a tab or had the address pasted into it never
+  asked the browser anything, and nothing said so: *À l'écoute…* renders either
+  way, the progress bar comes from the server, buzzes work and the reveal lands.
+  A silent round was **visually identical** to one that plays. The screen says
+  *Le son ne sort pas d'ici.* now and offers the one press that fixes it, which
+  picks the clip up where the room is
+- `[Game]` **A refused first press stopped being permanent.** The element was
+  kept whether or not the browser let it play, so every later press was a silent
+  no-op and the tab was mute for the evening
 - `[Game]` **The winner gets a moment.** The final board named who won and then
   listed everybody in rows that differed only by a small grey numeral. The name
   is struck now, a rule draws out under it, and the board settles a row at a

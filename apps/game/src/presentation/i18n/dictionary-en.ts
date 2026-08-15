@@ -23,6 +23,15 @@ export const EN_DICTIONARY = defineTranslations({
       bothFound: 'You have both. Sit back.',
       titleFound: 'Title ✓'
     },
+    /**
+     * The one screen in the product that admits to being silent. A console that
+     * reloaded mid-round never asked the browser for permission, and nothing on
+     * the screen would otherwise say so.
+     */
+    audio: {
+      silent: 'No sound is coming from here.',
+      start: 'Start the music'
+    },
     clip: 'Clip length',
     difficulty: {
       label: 'How well known',

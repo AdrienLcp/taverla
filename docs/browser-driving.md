@@ -62,6 +62,18 @@ Five more that cost time to learn:
 so it sees the filled node and reports the region was never empty. Read the DOM
 on a timer instead.
 
+## A silent round looks exactly like one that plays
+
+Nothing on the console distinguishes them: *À l'écoute…* renders unconditionally,
+the clip's progress bar comes from the server's `roundElapsedMs`, buzzes work and
+the reveal lands. So a screenshot is no evidence at all here, and neither is
+watching it — the browser is muted.
+
+What answers it is the console saying so itself: `isClipUnheard` puts *Le son ne
+sort pas d'ici.* and a press on screen whenever no gesture has blessed an audio
+element on this screen. **Reload the console mid-round and look for that block**;
+its absence during a round the console opened is the other half of the check.
+
 ## What a pass covers
 
 At 414 px and 1920 px:

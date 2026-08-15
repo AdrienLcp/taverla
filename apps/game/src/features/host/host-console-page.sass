@@ -52,6 +52,22 @@
           flex: 0
           width: 100%
 
+      // The one screen in the product that admits to being silent, and it is a
+      // line and a press rather than a warning block: the round is running, the
+      // room is playing, and the only thing wrong is that this screen was never
+      // asked for permission to make a sound.
+      .muted-clip
+        align-items: center
+        align-self: center
+        display: flex
+        flex-direction: column
+        gap: var(--space-xs)
+
+        p
+          @include typography.caption
+
+          color: var(--ink-muted)
+
       // The reveal and the standings, which is the one moment the room asks
       // what the round did to the game.
       &.revealed
