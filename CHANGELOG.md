@@ -290,6 +290,34 @@ one part.
 
 ### Fixes
 
+- `[Core]` **A typed answer stopped being paid for the wrong one.** *5 minutes*
+  is eight characters, so the matcher forgave one correction — and the question
+  offering it offered *7 minutes* beside it. Ninety-three questions in the bank
+  had that shape, and two hundred spelling quizzes had it worse: asked whether
+  it is *Accueil* or *Acueil*, the matcher answered for the room. A row's three
+  decoys are the bank saying out loud what a different answer is, so forgiveness
+  now stops one edit short of the nearest — an answer nothing crowds keeps all
+  of it, and *kate winslett* is still Kate Winslet
+- `[Core]` **The music catalogue's rules stopped following the quiz around.**
+  Folding `(Radio Edit)` and `- Remastered 2011` away is what makes a track
+  title typable; applied to a question it turned *River Horse (Greek)* into its
+  own decoy *River Horse (Latin)*, and *1915 - 1916* into *1915 - 1918*. It
+  belongs to the blind test's matcher and to nothing else now. A leading article
+  went the other way: a room says *Cervin* where the bank holds *Le Cervin*, and
+  312 rows were refusing it
+- `[Server]` **Twenty questions no room could win are out of the bank**, and the
+  builder that assembles it applies the same rule rather than handing them back
+  on the next rebuild: eight French rows whose decoy differs from the answer by
+  an accent alone, and twelve English ones whose answer is punctuation — `-`
+  among Ed Sheeran's albums, `C++` beside `C#`. One real misspelling was
+  corrected, *Alvatraz* to Alcatraz, which its own anecdote had been spelling
+  right underneath. The credits name both, as the licence asks
+- `[Server]` The builder was writing to `infrastructure/quiz/`, a directory the
+  bank left some time ago, so a rebuild would have produced a second file and
+  changed nothing that ships
+- `[Game]` Two gaps set in `--space-3xs` were collapsing to nothing, in the
+  credits and in Le Fake's board of lies — the token does not exist. They are
+  `--space-2xs` now rather than a new step: 4px is the scale's floor on purpose
 - **A player the host removes is told so.** They were removed from the roster and
   left holding an open socket: the phone kept receiving the room with a `youId`
   nobody had any more, fell back to *You* and `0`, and simply stopped counting.

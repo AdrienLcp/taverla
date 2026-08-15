@@ -14034,7 +14034,7 @@
     },
     {
       "accepted": [],
-      "answer": "Alvatraz",
+      "answer": "Alcatraz",
       "category": "geography",
       "decoys": [
         "Santa Cruz",
@@ -19874,22 +19874,6 @@
     },
     {
       "accepted": [],
-      "answer": "Nonne",
-      "category": "everyday",
-      "decoys": [
-        "Nônne",
-        "None",
-        "Nône"
-      ],
-      "id": "oqdb-48-2",
-      "isAdult": false,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quelle femme doit obéir aux voeux de pauvreté, chasteté et obéissance ?",
-      "theme": "Orthoquizz #08"
-    },
-    {
-      "accepted": [],
       "answer": "Papyrus",
       "category": "everyday",
       "decoys": [
@@ -20674,38 +20658,6 @@
     },
     {
       "accepted": [],
-      "answer": "Séquoia",
-      "category": "everyday",
-      "decoys": [
-        "Cequoya",
-        "Sekoïa",
-        "Séquoïa"
-      ],
-      "id": "oqdb-120-4",
-      "isAdult": false,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quel conifère peut mesurer plus de cent mètres de hauteur ?",
-      "theme": "Orthoquizz #20"
-    },
-    {
-      "accepted": [],
-      "answer": "Salpêtre",
-      "category": "everyday",
-      "decoys": [
-        "Salepètre",
-        "Salepêtre",
-        "Salpètre"
-      ],
-      "id": "oqdb-126-1",
-      "isAdult": false,
-      "language": "fr",
-      "note": null,
-      "prompt": "Sous quel nom le nitrate de potassium était-il connu au Moyen Âge ?",
-      "theme": "Orthoquizz #21"
-    },
-    {
-      "accepted": [],
       "answer": "Cymbale",
       "category": "everyday",
       "decoys": [
@@ -20910,22 +20862,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Quelle partie visible d'une lésion cutanée apparaît après cicatrisation ?",
-      "theme": "Orthoquizz #24"
-    },
-    {
-      "accepted": [],
-      "answer": "Embrayage",
-      "category": "everyday",
-      "decoys": [
-        "Ambrayâge",
-        "Embrayâge",
-        "Ambrayage"
-      ],
-      "id": "oqdb-144-3",
-      "isAdult": false,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quelle pédale faut-il utiliser pour changer de vitesse en voiture ?",
       "theme": "Orthoquizz #24"
     },
     {
@@ -21506,22 +21442,6 @@
     },
     {
       "accepted": [],
-      "answer": "Piaillement",
-      "category": "everyday",
-      "decoys": [
-        "Piaïllement",
-        "Piaillment",
-        "Piaïlement"
-      ],
-      "id": "oqdb-198-4",
-      "isAdult": false,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quel mot est synonyme des sons vocalisés qu'émettent les oiseaux ?",
-      "theme": "Orthoquizz #33"
-    },
-    {
-      "accepted": [],
       "answer": "Évidemment",
       "category": "everyday",
       "decoys": [
@@ -21550,22 +21470,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Quel type de pirogue légère utilise une pagaie pour la propulsion ?",
-      "theme": "Orthoquizz #34"
-    },
-    {
-      "accepted": [],
-      "answer": "Hexagone",
-      "category": "everyday",
-      "decoys": [
-        "Héxagone",
-        "Exhagone",
-        "Hexaguone"
-      ],
-      "id": "oqdb-204-3",
-      "isAdult": false,
-      "language": "fr",
-      "note": null,
-      "prompt": "Comment appelle-t-on la partie continentale de la France métropolitaine ?",
       "theme": "Orthoquizz #34"
     },
     {
@@ -22114,22 +22018,6 @@
     },
     {
       "accepted": [],
-      "answer": "Féerie",
-      "category": "everyday",
-      "decoys": [
-        "Féérie",
-        "Féérrie",
-        "Féerrie"
-      ],
-      "id": "oqdb-258-2",
-      "isAdult": false,
-      "language": "fr",
-      "note": null,
-      "prompt": "Dans quelle histoire ou conte merveilleux peuvent apparaître des fées ?",
-      "theme": "Orthoquizz #43"
-    },
-    {
-      "accepted": [],
       "answer": "Mammouth",
       "category": "everyday",
       "decoys": [
@@ -22190,22 +22078,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Quel type d'environnement peut provoquer une forte angoisse ?",
-      "theme": "Orthoquizz #44"
-    },
-    {
-      "accepted": [],
-      "answer": "Bâillement",
-      "category": "everyday",
-      "decoys": [
-        "Baillemment",
-        "Baillemant",
-        "Baîllement"
-      ],
-      "id": "oqdb-264-3",
-      "isAdult": false,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quelle contraction des muscles du visage est associée à la fatigue ?",
       "theme": "Orthoquizz #44"
     },
     {
@@ -32686,22 +32558,6 @@
       "language": "en",
       "note": null,
       "prompt": "Which of these cities does NOT have a United States Minting location?",
-      "theme": "General Knowledge"
-    },
-    {
-      "accepted": [],
-      "answer": "Brasil",
-      "category": "everyday",
-      "decoys": [
-        "Brazil",
-        "Brasilia",
-        "Brasíl"
-      ],
-      "id": "otdb-87737bf23efd",
-      "isAdult": false,
-      "language": "en",
-      "note": null,
-      "prompt": "What is the Portuguese word for \"Brazil\"?",
       "theme": "General Knowledge"
     },
     {
@@ -46802,22 +46658,6 @@
     },
     {
       "accepted": [],
-      "answer": "-",
-      "category": "arts",
-      "decoys": [
-        "+",
-        "X",
-        "÷"
-      ],
-      "id": "otdb-d0358f7aecc3",
-      "isAdult": false,
-      "language": "en",
-      "note": null,
-      "prompt": "Which of these is not an Ed Sheeran album?",
-      "theme": "Entertainment: Music"
-    },
-    {
-      "accepted": [],
       "answer": "2012",
       "category": "arts",
       "decoys": [
@@ -51214,22 +51054,6 @@
       "language": "en",
       "note": null,
       "prompt": "Which actor from The Young Ones also played Lord Flashheart in one episode of Blackadder II?",
-      "theme": "Entertainment: Television"
-    },
-    {
-      "accepted": [],
-      "answer": "Lordgenome",
-      "category": "arts",
-      "decoys": [
-        "Kingloname",
-        "Lord Genome",
-        "King Loname"
-      ],
-      "id": "otdb-9d4bc4d0c3fc",
-      "isAdult": false,
-      "language": "en",
-      "note": null,
-      "prompt": "In the show \"Tengen Toppa Gurren Lagann\" what is the name of the character who force everyone to live underground?",
       "theme": "Entertainment: Television"
     },
     {
@@ -67298,22 +67122,6 @@
     },
     {
       "accepted": [],
-      "answer": "♡♪!?",
-      "category": "arts",
-      "decoys": [
-        "Geno",
-        "Exor",
-        "Smithy"
-      ],
-      "id": "otdb-f60c35fe5f28",
-      "isAdult": false,
-      "language": "en",
-      "note": null,
-      "prompt": "In Super Mario RPG: Legend of The Seven Stars, what is Geno's real name?",
-      "theme": "Entertainment: Video Games"
-    },
-    {
-      "accepted": [],
       "answer": "Tora",
       "category": "arts",
       "decoys": [
@@ -69870,22 +69678,6 @@
       "language": "en",
       "note": null,
       "prompt": "What is the \"powerhouse\" of the Eukaryotic animal cell?",
-      "theme": "Science & Nature"
-    },
-    {
-      "accepted": [],
-      "answer": "V = I*R",
-      "category": "science",
-      "decoys": [
-        "I = V*R",
-        "R = V*I",
-        "V = I / R"
-      ],
-      "id": "otdb-0c9ddbb99bca",
-      "isAdult": false,
-      "language": "en",
-      "note": null,
-      "prompt": "What is the mathematical formula of Ohm's law?",
       "theme": "Science & Nature"
     },
     {
@@ -73042,22 +72834,6 @@
     },
     {
       "accepted": [],
-      "answer": "?:",
-      "category": "science",
-      "decoys": [
-        "??",
-        "if then",
-        "?"
-      ],
-      "id": "otdb-25d74660434a",
-      "isAdult": false,
-      "language": "en",
-      "note": null,
-      "prompt": "In programming, the ternary operator is mostly defined with what symbol(s)?",
-      "theme": "Science: Computers"
-    },
-    {
-      "accepted": [],
       "answer": "50",
       "category": "science",
       "decoys": [
@@ -73230,38 +73006,6 @@
       "language": "en",
       "note": null,
       "prompt": "Which SQL keyword is used to fetch data from a database?",
-      "theme": "Science: Computers"
-    },
-    {
-      "accepted": [],
-      "answer": "C++",
-      "category": "science",
-      "decoys": [
-        "Assembly",
-        "C#",
-        "ECMAScript"
-      ],
-      "id": "otdb-1c74441bd428",
-      "isAdult": false,
-      "language": "en",
-      "note": null,
-      "prompt": "What major programming language does Unreal Engine 4 use?",
-      "theme": "Science: Computers"
-    },
-    {
-      "accepted": [],
-      "answer": "C#",
-      "category": "science",
-      "decoys": [
-        "Java",
-        "C++",
-        "Objective-C"
-      ],
-      "id": "otdb-f8dd1d507a3c",
-      "isAdult": false,
-      "language": "en",
-      "note": null,
-      "prompt": "Which of the following languages is used as a scripting language in the Unity 3D game engine?",
       "theme": "Science: Computers"
     },
     {
@@ -73870,22 +73614,6 @@
       "language": "en",
       "note": null,
       "prompt": "What is the maximum value of a 32-bit signed binary integer?",
-      "theme": "Science: Computers"
-    },
-    {
-      "accepted": [],
-      "answer": "A' + B'",
-      "category": "science",
-      "decoys": [
-        "A'B + B'A",
-        "A'B'",
-        "AB' + AB"
-      ],
-      "id": "otdb-46b41ca8f108",
-      "isAdult": false,
-      "language": "en",
-      "note": null,
-      "prompt": "According to DeMorgan's Theorem, the Boolean expression (AB)' is equivalent to:",
       "theme": "Science: Computers"
     },
     {
@@ -75346,22 +75074,6 @@
     },
     {
       "accepted": [],
-      "answer": "314.15 Inches",
-      "category": "science",
-      "decoys": [
-        "380.1215 Inches",
-        "3141.5 Inches",
-        "1256.6 Inches"
-      ],
-      "id": "otdb-7c3db1c6b84e",
-      "isAdult": false,
-      "language": "en",
-      "note": null,
-      "prompt": "What is the area of a circle with a diameter of 20 inches if π= 3.1415?",
-      "theme": "Science: Mathematics"
-    },
-    {
-      "accepted": [],
       "answer": "7",
       "category": "science",
       "decoys": [
@@ -75682,22 +75394,6 @@
     },
     {
       "accepted": [],
-      "answer": "cos(x)",
-      "category": "science",
-      "decoys": [
-        "csc(x)",
-        "-cos(x)",
-        "-sin(x)"
-      ],
-      "id": "otdb-87fe125ffd4f",
-      "isAdult": false,
-      "language": "en",
-      "note": null,
-      "prompt": "What is the derivative of sin(x)",
-      "theme": "Science: Mathematics"
-    },
-    {
-      "accepted": [],
       "answer": "23",
       "category": "science",
       "decoys": [
@@ -75742,22 +75438,6 @@
       "language": "en",
       "note": null,
       "prompt": "Which of these numbers is closest to the total number of possible states for an army standard Enigma Machine?",
-      "theme": "Science: Mathematics"
-    },
-    {
-      "accepted": [],
-      "answer": "-40",
-      "category": "science",
-      "decoys": [
-        "+40",
-        "0",
-        "+100"
-      ],
-      "id": "otdb-6825a0571a14",
-      "isAdult": false,
-      "language": "en",
-      "note": null,
-      "prompt": "At what temperature does temp in °C equal temp in °F?",
       "theme": "Science: Mathematics"
     },
     {

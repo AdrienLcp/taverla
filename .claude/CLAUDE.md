@@ -146,7 +146,14 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   both halves; a pick is one shot, because four candidates with retries is the
   answer with extra steps. **Searching *within* a line is the blind test's
   alone** — the quiz matches the whole of what was typed, because "trois ou
-  quatre" contains the answer to how many languages Switzerland has
+  quatre" contains the answer to how many languages Switzerland has. **So is
+  catalogue noise**: `(Radio Edit)` and `- Remastered 2011` belong to a music
+  catalogue, and folding them everywhere leaves the quiz answering
+  `River Horse (Greek)` and `1915 - 1916` with its own decoy. A leading article
+  is nobody's and goes everywhere — a room says *Cervin* for *Le Cervin*.
+  **Forgiveness stops one edit short of the nearest answer the bank calls
+  wrong**: a question offering `5 minutes` beside `7 minutes` has said what a
+  different answer is, and a tolerance reaching across it pays for the wrong one
 - **Buzz** — a player claiming the answer; the server stamps when it arrived
 - **The floor** — what a buzz takes, held for `answerWindowMs` or until the host
   judges when that is `null` and the screens count up instead. Running out is

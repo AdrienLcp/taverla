@@ -11,6 +11,7 @@ import {
 } from '@taverla/protocol/question'
 
 import { hasAdultContent } from '@taverla/core/quiz/adult-content'
+import { gradeQuizGuess } from '@taverla/core/quiz/question-answer'
 
 import { drawQuestion } from './question-bank'
 import bank from './question-bank.json' with { type: 'json' }
@@ -110,6 +111,28 @@ describe('drawQuestion', () => {
 
     expect(counts.size).toBe(questionCategories.length)
     expect(Math.min(...counts.values())).toBeGreaterThan(100)
+  })
+
+  /**
+   * The audit that earned its place in the suite. A row's decoys are the bank
+   * saying what it considers a different answer, so a decoy the matcher accepts
+   * is a question typed mode cannot be won at — and it found far more than the
+   * three spellings a playtest did: ninety-odd rows where the candidates differ
+   * by one digit, two hundred spelling quizzes, and twenty whose decoy is the
+   * answer once accents or punctuation are folded away.
+   *
+   * The first two are the matcher's fault and were fixed there. The twenty are
+   * the data's, and are gone from the bank rather than excused here: a test
+   * with a list of exceptions beside it stops being a rule.
+   */
+  it('[bank] holds no question whose own decoy would be graded right', () => {
+    const winnable = bank.questions.filter((question) =>
+      question.decoys.some(
+        (decoy) => gradeQuizGuess({ guess: decoy, question }).isCorrect
+      )
+    )
+
+    expect(winnable.map((question) => question.id)).toEqual([])
   })
 
   /**

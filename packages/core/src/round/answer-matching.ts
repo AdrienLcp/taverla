@@ -1,10 +1,14 @@
 /**
- * Bracketed segments and a trailing dashed suffix are how catalogues carry
- * everything that is not the title: `(feat. …)`, `(Radio Edit)`, `[Explicit]`,
- * `- Remastered 2011`, `- Live at Wembley`. Nobody types those, and a player
- * who did would be refused for being *more* right than the answer.
+ * Bracketed segments and a trailing dashed suffix are how **a music catalogue**
+ * carries everything that is not the title: `(feat. …)`, `(Radio Edit)`,
+ * `[Explicit]`, `- Remastered 2011`, `- Live at Wembley`. Nobody types those,
+ * and a player who did would be refused for being *more* right than the answer.
  *
  * The dash needs its spaces. `Jean-Jacques` is one word and must survive.
+ *
+ * It is the blind test's rule and **only** its rule, the same way searching
+ * within a line is: a quiz answers `River Horse (Greek)` and `1915 - 1916`, and
+ * folding those leaves two questions whose decoys are the answer.
  */
 const CATALOGUE_NOISE = /\([^)]*\)|\[[^\]]*\]|\s+-\s+.*$/gu
 
@@ -13,9 +17,20 @@ const DIACRITICS = /\p{Diacritic}/gu
 const NOT_A_LETTER_OR_DIGIT = /[^\p{L}\p{N}]/gu
 
 /**
- * Both what the player typed and what the catalogue holds go through this
- * before anything is compared. It folds away everything a room gets wrong for
- * reasons that are not about knowing the song.
+ * A room says *Cervin* where the bank holds *Le Cervin*, and *Beatles* where a
+ * catalogue holds *The Beatles*. The article is not what the question was
+ * about, and it is at the front where a length difference costs the most: two
+ * characters over a seven-character answer is past every tolerance below.
+ *
+ * Only at the front, and only followed by a boundary — `Latin` and `Un` are
+ * answers, and neither is an article with something after it.
+ */
+const LEADING_ARTICLE = /^(?:the|an?|le|la|les|une?|des|du)\s+|^l['’]/u
+
+/**
+ * Both what the player typed and what the bank holds go through this before
+ * anything is compared. It folds away everything a room gets wrong for reasons
+ * that are not about knowing the answer.
  *
  * **Whitespace is dropped rather than collapsed**, which is what makes
  * `daftpunk` and `daft punk` the same answer — and, with punctuation gone,
@@ -26,9 +41,9 @@ export const normalizeAnswer = (answer: string): string =>
   answer
     .normalize('NFD')
     .replace(DIACRITICS, '')
-    .replace(CATALOGUE_NOISE, '')
-    .replace(NOT_A_LETTER_OR_DIGIT, '')
     .toLowerCase()
+    .replace(LEADING_ARTICLE, '')
+    .replace(NOT_A_LETTER_OR_DIGIT, '')
 
 /**
  * How many single-character corrections are forgiven, from the length of the
@@ -53,16 +68,61 @@ const forgivenTypos = (length: number): number =>
   )
 
 type AnswerComparison = {
-  /** What the catalogue holds — the title or the artist, unnormalised. */
+  /**
+   * Other answers this one is known to be different from — a quiz question's
+   * own three decoys, which is the bank saying out loud how much difference it
+   * takes to be a different answer. `5 minutes` beside `7 minutes` says one
+   * character is the whole of it, and forgiveness reaching across that pays a
+   * player for the answer the question itself called wrong.
+   *
+   * So forgiveness stops one edit short of the nearest, per answer rather than
+   * per bank: `Kate Winslet` among three other actresses keeps all of hers, and
+   * only the rows whose decoys crowd the answer lose any. Empty where nothing
+   * has been named — the blind test has no decoys and a catalogue no rivals.
+   */
+  distinctFrom?: readonly string[]
+  /** What the bank holds — the title, the artist or the answer, unnormalised. */
   expected: string
   /** What the player typed, unnormalised. */
   given: string
 }
 
-export const matchesAnswer = ({ expected, given }: AnswerComparison): boolean =>
-  matchesNormalized(normalizeAnswer(expected), normalizeAnswer(given))
+export const matchesAnswer = ({
+  distinctFrom = [],
+  expected,
+  given
+}: AnswerComparison): boolean => {
+  const target = normalizeAnswer(expected)
 
-const matchesNormalized = (target: string, attempt: string): boolean => {
+  return matchesNormalized(
+    target,
+    normalizeAnswer(given),
+    forgivenessBetween(target, distinctFrom)
+  )
+}
+
+const forgivenessBetween = (
+  target: string,
+  distinctFrom: readonly string[]
+): number => {
+  let allowed = forgivenTypos(target.length)
+
+  for (const other of distinctFrom) {
+    const rival = normalizeAnswer(other)
+
+    while (allowed > 0 && editDistanceWithin(target, rival, allowed)) {
+      allowed--
+    }
+  }
+
+  return allowed
+}
+
+const matchesNormalized = (
+  target: string,
+  attempt: string,
+  allowed: number
+): boolean => {
   if (target.length === 0 || attempt.length === 0) {
     return false
   }
@@ -70,8 +130,6 @@ const matchesNormalized = (target: string, attempt: string): boolean => {
   if (target === attempt) {
     return true
   }
-
-  const allowed = forgivenTypos(target.length)
 
   return allowed > 0 && editDistanceWithin(target, attempt, allowed)
 }
@@ -95,13 +153,13 @@ export const answerAppearsIn = ({
   expected,
   given
 }: AnswerComparison): boolean => {
-  const target = normalizeAnswer(expected)
+  const target = normalizeAnswer(withoutCatalogueNoise(expected))
 
   if (target.length === 0) {
     return false
   }
 
-  const spoken = wordsIn(given)
+  const spoken = wordsIn(withoutCatalogueNoise(given))
 
   for (let from = 0; from < spoken.length; from++) {
     let run = ''
@@ -113,7 +171,7 @@ export const answerAppearsIn = ({
         break
       }
 
-      if (matchesNormalized(target, run)) {
+      if (matchesNormalized(target, run, forgivenTypos(target.length))) {
         return true
       }
     }
@@ -122,16 +180,19 @@ export const answerAppearsIn = ({
   return false
 }
 
+const withoutCatalogueNoise = (answer: string): string =>
+  answer.replace(CATALOGUE_NOISE, '')
+
 /**
  * The same folding as `normalizeAnswer`, stopping short of dropping the
  * boundaries — `Jean-Jacques` is two words here and one there, and both are
- * right for what each is used for.
+ * right for what each is used for. The article stays too: a run is one word or
+ * several, and `the` is one of them.
  */
 const wordsIn = (answer: string): string[] =>
   answer
     .normalize('NFD')
     .replace(DIACRITICS, '')
-    .replace(CATALOGUE_NOISE, '')
     .toLowerCase()
     .split(NOT_A_LETTER_OR_DIGIT)
     .filter((word) => word.length > 0)
