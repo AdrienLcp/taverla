@@ -128,12 +128,28 @@ Expect more of this than of stages. The plans cover what is missing; what is
 
 The first playtest with somebody who had not built it — 14 August 2026, two
 people, an iPhone and a laptop — produced thirteen notes in one evening, which
-is more than any stage has. They are diagnosed and split into sessions in
-[`backlog.md`](backlog.md), and three of them are faults rather than wishes: a
-phone that reconnects stays greyed out for the rest of the game, a removed player
-is told nothing at all, and the answer to one bundled question is spelled wrongly
-while its own decoys hold the right spelling. None of the three is visible from a
-green build.
+is more than any stage has. They were diagnosed and split into nine sessions in
+[`backlog.md`](backlog.md), and **all nine landed on 15 August 2026**.
+
+What that day is worth remembering for is how much of it the diagnosis got
+wrong, and in which direction:
+
+- **Two of the three "faults" in the bank were not faults.** `Brasil` is the
+  Portuguese word the question asks for and `Thwimps` is what tiny Thwomps are
+  called; the audit that reported them was measuring a near miss. The real fault
+  was one layer down and far larger — the *matcher* was forgiving its way onto
+  the answer a question called wrong, on ninety numeric rows and two hundred
+  spelling quizzes.
+- **The browser pass caught what no build could, three times**: a caption folded
+  onto itself by a `letter-spacing` inherited as a computed length, every
+  nickname on the phone's final board printed as one letter, and a console that
+  reloads mid-round playing the rest of the game in silence — that last one
+  *visually identical* to a round that plays.
+- **The e2e caught the one thing the browser pass could not**: a name appearing
+  in two lists at once, which reads fine and breaks a locator.
+
+Expect the same ratio next time. A note from a room is evidence that something
+is wrong; it is rarely evidence of what.
 
 ## Beyond the blind test
 
