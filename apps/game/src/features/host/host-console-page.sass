@@ -52,6 +52,14 @@
           flex: 0
           width: 100%
 
+          // The recap is the reveal the room has already read, and it inherits
+          // the reveal's overflow with it: eight players ran past the bottom
+          // and ten made 1 291px of a 1080px screen. Same arithmetic, one
+          // column instead of two, and `11rem` more spent — the countdown above
+          // it and the gap that separates them.
+          @media (width >= layout.$wide-screen)
+            --outcome-budget: calc(100dvh - var(--outcome-header, 44rem) - 11rem)
+
       // The one screen in the product that admits to being silent, and it is a
       // line and a press rather than a warning block: the round is running, the
       // room is playing, and the only thing wrong is that this screen was never
@@ -132,6 +140,17 @@
 
             .truth .line
               font-size: 2.4em
+
+          // The same divisor for the other three games, whose reveal is an
+          // answer and then one row per player who spoke. Two columns brought
+          // the quiz from 2 080px to 1 157px at 1080, which is a screen that
+          // still loses its last row — the arithmetic is what closes it.
+          //
+          // How much screen the panel's own list gets: everything the chrome
+          // and the panel's header have not already spent. The panel says what
+          // its header costs, because that is the half it knows.
+          .reveal-panel
+            --outcome-budget: calc(100dvh - var(--outcome-header, 44rem))
 
           // The same bargain on the other side, and the reason this board does
           // not take the final board's two columns: halving the width truncated

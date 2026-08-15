@@ -58,7 +58,12 @@ export const RevealPanel: React.FC<RevealPanelProps> = ({ players, round }) => {
 
         <div className='identity'>
           <p className='framing'>{translate('blindtest.reveal.title')}</p>
-          <p className='title'>{track.title}</p>
+          <p
+            className='title'
+            style={{ '--answer-length': track.title.length }}
+          >
+            {track.title}
+          </p>
           <p className='artist'>{track.artist}</p>
 
           <Outcome players={players} round={round} />
@@ -72,7 +77,12 @@ export const RevealPanel: React.FC<RevealPanelProps> = ({ players, round }) => {
       <section className='reveal-panel'>
         <div className='identity'>
           <p className='framing'>{translate('quiz.reveal.title')}</p>
-          <p className='title'>{question.answer}</p>
+          <p
+            className='title'
+            style={{ '--answer-length': question.answer.length }}
+          >
+            {question.answer}
+          </p>
           {question.note !== null && <p className='note'>{question.note}</p>}
 
           <Outcome players={players} round={round} />
@@ -97,9 +107,15 @@ const Outcome = ({ players, round }: RevealPanelProps) => {
   const nameOf = (playerId: string): string =>
     players.find((player) => player.id === playerId)?.nickname ?? '—'
 
+  // How many rows the room has to read, for a host stage that divides its own
+  // height by them. It is not the player count: a phone that never answered is
+  // in neither list, and only the ones drawn here pay for the space.
   if (round.revealedAnswers.length > 0) {
     return (
-      <ul className='said'>
+      <ul
+        className='said'
+        style={{ '--outcome-rows': round.revealedAnswers.length }}
+      >
         {round.revealedAnswers.map((answer) => (
           <li
             className={answer.isCorrect ? 'right' : 'wrong'}
@@ -118,7 +134,7 @@ const Outcome = ({ players, round }: RevealPanelProps) => {
   }
 
   return (
-    <ul className='scorers'>
+    <ul className='scorers' style={{ '--outcome-rows': scorers.length }}>
       {scorers.map((award) => (
         <li key={award.playerId}>
           <span className='nickname'>{nameOf(award.playerId)}</span>

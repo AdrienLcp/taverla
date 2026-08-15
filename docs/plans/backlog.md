@@ -656,11 +656,48 @@ happened before the session opened:
   worst case a scroll instead of a collision, which is what this screen already
   does below the split.
 
-  **Still open, and now measured**: the other three games' reveals print
-  `Outcome`, one unbounded row per player. The two columns brought the quiz from
-  ~2 080px to 1 157px at 1080, but it still overruns by 77px at ten players.
-  Bounding it means giving `Outcome` its own row count — `--standings-rows` is
-  the player count, and the bare buzzer's billboard would be crushed by it.
+  ~~**Still open, and now measured**: the other three games' reveals print
+  `Outcome`, one unbounded row per player.~~ Closed the same day, and it turned
+  out to be four faults rather than one — three of them found by driving the
+  screen the fix was for, which is the only place any of them were visible.
+
+  **The list**, which is what was owed. `Outcome` writes `--outcome-rows` — its
+  own count, not the room's, because a phone that never answered is in neither
+  list — and the row divides `100dvh` minus the chrome, with its padding in `em`
+  so a row is one multiple of its own type. The bare buzzer is excluded by
+  selector rather than tuned: its reveal is a scoreline set in `billboard` on
+  purpose, and only one player can ever be paid for a buzz.
+
+  **The answer, which was worse and nobody had looked.** A quiz answer is
+  catalogue text of unknown length at a fixed `9vmin`: the bank's median is 9
+  characters, its 90th percentile 17, and its longest **83** — six lines and
+  490px of a 587px budget, overrunning by 141px with *four* players on screen.
+  `--answer-length` is published beside the row count and the clamp divides by
+  it. Notes turned out to be French-only and on a fifth of the bank, which is
+  why `:has(.note)` buys back six rows rather than a blanket allowance costing
+  the other four fifths their type.
+
+  **The bare buzzer's `billboard` had never applied.** `.reveal-panel.bare
+  .scorers li` and `.reveal-panel .identity .scorers li` weigh exactly the same
+  and `.bare` was written first, so the buzzer's entire screen carried one 28px
+  line — *smaller than the standings beside it*. Moving the block to the end of
+  the file is the whole fix, and nothing about it was visible in a build.
+
+  **The count-in recap had inherited the same overflow**, because it is the same
+  panel one phase earlier: eight players ran past the bottom and ten made
+  1 291px. So the arithmetic moved to where both phases can reach it — the panel
+  publishes `--outcome-header`, which is what it knows, and each stage subtracts
+  it from the screen along with its own chrome, which is what the stage knows.
+  A phase that sets no budget at all falls back to a number large enough that
+  the clamp lands on its ceiling, so nothing else on the console moved.
+
+  Measured at 1920×1080 across the bank's real distribution, seven answer
+  lengths × four room sizes: **27 of 28 cases land at exactly 1080px**, every
+  ten-player case included. The one left is French, a two-line answer, a note
+  *and* twelve players, at 17px. The count-in fits to nine and scrolls 15px at
+  ten, down from 211px. 1366×768 is a 1.19× scroll with no collision, and 414px
+  is untouched — the arithmetic is inside the two-column branch, and the answer
+  bound is inert wherever `9vmin` is already the smaller number.
 
 ---
 

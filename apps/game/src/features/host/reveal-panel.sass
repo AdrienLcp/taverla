@@ -34,13 +34,6 @@
       &.placeholder
         opacity: 0.25
 
-    // A game whose question the room owns reveals nothing, so the scoreline is
-    // the whole panel rather than the line under an answer.
-    &.bare
-      .nobody,
-      .scorers li
-        @include typography.billboard
-
     .identity
       min-width: 0
 
@@ -48,10 +41,19 @@
       // decision — and at this size one long word is wider than the screen.
       // `min-width: 0` on `.identity` is only half of it: a flex item stops
       // growing, an unbreakable word does not.
+      //
+      // Length is the other half, and it is the one fact CSS cannot reach, so
+      // the component publishes it. The bank's answers run to 83 characters —
+      // *"A Fistful of Dollars", "For a Few Dollars More", …* — which at the
+      // ceiling is six lines and 490px of a 587px screen before a single player
+      // is listed. `128rem` is what holds any answer to two lines in the
+      // narrower of the two columns, the one with a cover beside it: the median
+      // of 9 characters and the 90th percentile of 17 both still clamp to the
+      // full size, and only the last five per cent read smaller.
       .title
         @include typography.monument
 
-        font-size: clamp(2rem, 9vmin, 7rem)
+        font-size: clamp(2rem, min(9vmin, calc(128rem / var(--answer-length, 10))), 7rem)
         overflow-wrap: anywhere
 
       .artist
@@ -147,3 +149,47 @@
 
         .points
           @include typography.numeric
+
+    // What this panel's own header costs the list under it, published for the
+    // stage to subtract — the panel knows what it draws, the stage knows how
+    // much screen there is, and neither can answer the other's half. Two of the
+    // three headers carry a line the arithmetic cannot see through, and both
+    // are worth about six rows: the artist the blind test always prints under
+    // its title, and the quiz's note, which exists on a fifth of the bank and
+    // all of it French. `:has()` reads the second off the markup rather than
+    // asking the component for a fact the markup already carries.
+    //
+    // The budget has no fallback worth honouring, so its default is a number so
+    // large the clamp lands on its ceiling: a phase that sets none — every one
+    // but the reveal and the count-in — gets the size it always had.
+    &:not(.bare)
+      --outcome-header: 44rem
+
+      &.with-cover,
+      &:has(.note)
+        --outcome-header: 50rem
+
+      // The floor is lower than the standings' beside it, because the two are
+      // not read the same way. Nobody reads ten of these from across the room —
+      // you find your own line, and the board next to it is what the room is
+      // looking at together. The padding goes with the type rather than staying
+      // at a fixed 8px, so a row is one multiple of its own size and the divisor
+      // means something.
+      @media (width >= layout.$wide-screen)
+        .said li,
+        .scorers li
+          font-size: clamp(1rem, calc(var(--outcome-budget, 100rem) / var(--outcome-rows, 5) / 1.75), 1.75rem)
+          padding: 0.28em 0
+
+    // A game whose question the room owns reveals nothing, so the scoreline is
+    // the whole panel rather than the line under an answer.
+    //
+    // Last in the file because it has to be. `.reveal-panel.bare .scorers li`
+    // and `.reveal-panel .identity .scorers li` weigh exactly the same, so the
+    // one written later wins — and written above `.identity` this one lost in
+    // silence, leaving the buzzer's whole screen carrying a single 28px line
+    // smaller than the standings beside it.
+    &.bare
+      .nobody,
+      .scorers li
+        @include typography.billboard

@@ -292,6 +292,25 @@ Two things follow, and both fail *silently* rather than loudly:
   Dividing `100dvh` minus the measured chrome is the less precise instrument and
   the right one: its worst case is a scroll, not a collision.
 
+**A component says what it costs; a stage says how much there is.** The two
+halves of a fitting formula are known in different places, and neither can guess
+the other's: the reveal panel knows whether it draws an artist line or a note,
+the stage knows the chrome around it and whether a countdown sits on top. So the
+panel publishes `--outcome-header` and each stage subtracts it, which is what
+let the reveal and the count-in that recaps it share one arithmetic instead of
+drifting apart. The budget's default is a number large enough that the clamp
+lands on its ceiling, so a phase that sets none is a phase nothing changed for.
+
+**A text of unknown length publishes its length.** The room's screens are sized
+against the viewport, which answers *how much space is there* and never *how
+much is there to say* — and the catalogue is what decides the second. A quiz
+answer runs from one character to 83, so at a fixed `9vmin` the longest one is
+six lines and 490px of a 587px screen with nobody listed yet. The component
+writes `--answer-length` and the clamp divides by it, the same way a board
+writes its line count. The median of nine characters and the 90th percentile of
+seventeen both still clamp to the full size: only the last five per cent read
+smaller, and they are the ones that could not have been read at all.
+
 **Vertical space is spent on furniture before it is spent on type.** Ten rows of
 fixed 12px gap and padding came to 240px of a 548px board, more than the type
 they framed — and a formula that only shrinks type cannot reach any of it. Put

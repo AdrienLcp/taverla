@@ -552,6 +552,22 @@ one part.
   share one row instead of a line of the screen each. A table of five reads it at
   the size it always did; only a room that wrote ten reads them smaller, which is
   the room with more to read
+- `[Game]` **A long answer stopped running off the reveal.** A quiz answer is
+  whatever the bank wrote — nine characters at the median, and eighty-three at
+  the longest, which at the size the room reads from across it was six lines and
+  most of the screen before a single player was listed. It is set to what it
+  costs now: the ninety-five per cent that were always short still fill the
+  screen, and the long ones stop taking it. Track titles at the blind test's
+  reveal answer to the same rule
+- `[Game]` **The reveal's roll call fits the screen at ten players.** Who
+  answered what, one line each, ran past the bottom of the room's screen once
+  enough people played — so the list now divides the height it has by the number
+  of lines in it. A table of five reads it exactly as before, and the recap that
+  stays up while the next round counts in follows the same rule
+- `[Game]` **The buzzer's reveal is legible from across the room again.** With
+  nothing to give away, that screen is a single line — who took the point — and
+  it was being drawn smaller than the standings beside it, on an otherwise empty
+  screen. It is set at the size it was always meant to be
 
 ### Internal
 
