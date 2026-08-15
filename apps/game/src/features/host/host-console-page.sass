@@ -69,9 +69,91 @@
           color: var(--ink-muted)
 
       // The reveal and the standings, which is the one moment the room asks
-      // what the round did to the game.
+      // what the round did to the game — and stacked, the one stage that could
+      // not deliver it. A room of ten writing ten lies measured 2 377px against
+      // a 1080px screen: the board alone filled it, and the standings, the half
+      // the room had actually asked for, sat eight hundred pixels below the
+      // fold on a screen nobody walks over to scroll.
+      //
+      // So above the split they sit side by side, in the geometry the room read
+      // the vote in one press earlier: the wide column is the board, because
+      // that is the half the room is looking at. The standings take the place
+      // the question had.
       &.revealed
-        justify-content: center
+        @media (width < layout.$wide-screen)
+          justify-content: center
+
+        // Both halves divide the screen rather than a box of their own, which
+        // the vote's board does too once it is stacked. A container query is
+        // the more precise instrument and it was the first answer here, but
+        // `container-type: size` also *contains* the overflow: on a 768px
+        // laptop, where ten lines do not fit at any legible size, the board ran
+        // out of its box and the launch button was drawn straight through it.
+        // Dividing the viewport keeps the worst case a scroll — which is what
+        // this screen does below the split already — instead of a collision.
+        //
+        // `31rem` is the chrome around the stage, measured rather than guessed:
+        // the header, the footer, the page padding and two gaps came to 494px
+        // at 1080 and 469px at 768.
+        @media (width >= layout.$wide-screen)
+          display: grid
+          gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
+          grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr)
+          grid-template-rows: minmax(0, 1fr)
+
+          // No subtraction beyond that, unlike the vote's board, because nothing
+          // in a row is a fixed size here: the gaps and the padding are in `em`
+          // too, so a row is one multiple of its type and the divisor is that
+          // multiple. Ten rows of fixed 12px furniture came to 240px of a 548px
+          // board — more than the type it was framing, and the part a formula
+          // that only shrinks type can never reach.
+          //
+          // The divisor is bigger than the vote's because every line here is a
+          // lie *and* who wrote it, where the vote's board was a lie alone. A
+          // table of five still clamps to the full size; only a room that wrote
+          // ten reads them smaller, which is the room with more to read.
+          .revealed-lie-board
+            font-size: clamp(0.8rem, calc((100dvh - 31rem) / var(--board-lines, 5) / 4), 1.75rem)
+            gap: 0.7em
+
+            li
+              gap: 0.3em
+              padding-bottom: 0.7em
+
+            .line
+              font-size: 1em
+
+            .framing
+              font-size: 0.45em
+
+            .authors,
+            .fooled
+              font-size: 0.62em
+
+            .truth .line
+              font-size: 2.4em
+
+          // The same bargain on the other side, and the reason this board does
+          // not take the final board's two columns: halving the width truncated
+          // `Anne-Charlotte` to `Anne-Charl…` on a screen whose whole job at
+          // this moment is to say who is winning. One column keeps every name
+          // whole, and keeps the ranking read downwards.
+          //
+          // `line-height` is the reset's 1.5 until it is said otherwise, which
+          // on a numeral this size is half a row of nothing, ten times over.
+          .scoreboard li
+            font-size: clamp(0.9rem, calc((100dvh - 31rem) / var(--standings-rows, 8) / 2.8), 1.75rem)
+            padding: 0.45em 0
+
+            .rank
+              font-size: 0.8em
+
+            .nickname
+              font-size: 1em
+
+            .score
+              font-size: 1.6em
+              line-height: 1
 
         .scoreboard
           align-self: center

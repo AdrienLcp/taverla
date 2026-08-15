@@ -26,7 +26,13 @@ export const RevealedLieBoard: React.FC<RevealedLieBoardProps> = ({
     players.find((player) => player.id === playerId)?.nickname ?? '—'
 
   return (
-    <ul className='revealed-lie-board'>
+    // How many lines there are, for a host stage that divides its own height by
+    // them rather than letting ten of them run off the bottom of the room's
+    // screen. The phone reads it at a fixed size and ignores this.
+    <ul
+      className='revealed-lie-board'
+      style={{ '--board-lines': board.length }}
+    >
       {[...board].sort(truthFirst).map((candidate) => (
         <li className={candidate.isTruth ? 'truth' : ''} key={candidate.id}>
           {/*
@@ -39,30 +45,37 @@ export const RevealedLieBoard: React.FC<RevealedLieBoardProps> = ({
             <p className='framing'>{translate('lefake.reveal.title')}</p>
           )}
           <p className='line'>{candidate.text}</p>
-          {!candidate.isTruth && (
-            <p className='authors'>
-              {candidate.authorIds.length === 0
-                ? translate('lefake.reveal.nobody')
-                : candidate.authorIds.map(nicknameOf).join(' · ')}
-            </p>
-          )}
-          {candidate.voterIds.length > 0 && (
-            <p className='fooled'>
-              {candidate.voterIds.length > MOST_VOTERS_NAMED
-                ? translate(
-                    candidate.isTruth
-                      ? 'lefake.reveal.found'
-                      : 'lefake.reveal.fooled',
-                    { count: candidate.voterIds.length }
-                  )
-                : translate(
-                    candidate.isTruth
-                      ? 'lefake.reveal.foundBy'
-                      : 'lefake.reveal.fooledNames',
-                    { names: candidate.voterIds.map(nicknameOf).join(' · ') }
-                  )}
-            </p>
-          )}
+          {/*
+            Who wrote it and who fell for it are one row, not two stacked at
+            full width: they are two short fragments, and a room of ten paid a
+            line of the screen's height for each of them ten times over.
+          */}
+          <p className='attribution'>
+            {!candidate.isTruth && (
+              <span className='authors'>
+                {candidate.authorIds.length === 0
+                  ? translate('lefake.reveal.nobody')
+                  : candidate.authorIds.map(nicknameOf).join(' · ')}
+              </span>
+            )}
+            {candidate.voterIds.length > 0 && (
+              <span className='fooled'>
+                {candidate.voterIds.length > MOST_VOTERS_NAMED
+                  ? translate(
+                      candidate.isTruth
+                        ? 'lefake.reveal.found'
+                        : 'lefake.reveal.fooled',
+                      { count: candidate.voterIds.length }
+                    )
+                  : translate(
+                      candidate.isTruth
+                        ? 'lefake.reveal.foundBy'
+                        : 'lefake.reveal.fooledNames',
+                      { names: candidate.voterIds.map(nicknameOf).join(' · ') }
+                    )}
+              </span>
+            )}
+          </p>
         </li>
       ))}
     </ul>

@@ -472,7 +472,13 @@ const Stage = ({
     // screen during `playing` already, where nobody is looking at them — the
     // reveal is when the table wants to know what the round did to the game.
     return (
-      <div className='stage revealed'>
+      // How many rows the standings hold, for the same reason the board carries
+      // its own count: beside a board and on half the width, this one buys its
+      // height by dividing its box rather than by taking a second column.
+      <div
+        className='stage revealed'
+        style={{ '--standings-rows': view.players.length }}
+      >
         <RevealPanel players={view.players} round={round} />
         <Scoreboard players={view.players} />
       </div>

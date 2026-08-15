@@ -271,6 +271,35 @@ strips of settings at the same weight as the QR code turned a title card into a
 form, and put the launch below everything. The fold is collapsed at every width,
 because the desktop column was the same wall with more room to hide in.
 
+**The reveal is two columns for the same reason the vote is.** A room of ten
+writing ten lies measured 2 377px against a 1080px screen, and the standings —
+the half the room actually asks for — ended eight hundred pixels below the fold.
+Above `$wide-screen` the board takes the wide column and the standings take the
+place the question had, each sized by dividing the screen rather than by the sum
+of its own type. Below it they stack and the page scrolls, which is what a phone
+does anyway.
+
+Two things follow, and both fail *silently* rather than loudly:
+
+- **A size container needs a height imposed from outside.** A grid item under
+  `align-items: center` takes its own height, and a stage that gets its height
+  from a chain of `flex: 1` under `min-height` settles too late to be queried.
+  Either way `100cqh` resolves to nothing, every `clamp()` lands on its floor,
+  and the screen merely looks a little small. Nothing warns.
+- **`contain: size` contains the overflow too**, so where the content does not
+  fit at any legible size it is drawn *through* whatever is under it rather than
+  pushing it down — the launch button ran straight across the board at 768px.
+  Dividing `100dvh` minus the measured chrome is the less precise instrument and
+  the right one: its worst case is a scroll, not a collision.
+
+**Vertical space is spent on furniture before it is spent on type.** Ten rows of
+fixed 12px gap and padding came to 240px of a 548px board, more than the type
+they framed — and a formula that only shrinks type cannot reach any of it. Put
+the gaps in `em` and a row becomes one multiple of its own size, which is what
+makes the divisor mean something. The same arithmetic is why a line carrying
+three short things stacked at full width is the expensive shape: who wrote a lie
+and who it caught are one row.
+
 ## What must not be broken
 
 - **Both palettes, always.** A hex in a component breaks one theme silently;

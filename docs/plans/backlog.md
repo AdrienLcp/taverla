@@ -551,9 +551,10 @@ should paint a filled background on `[data-hovered]` at all.
   growing where an unbreakable word does not. A nickname in the said/scored
   lists now ellipsises, because the number at the end of that row is the half
   the room is reading.
-- **Still owed, and cheap**: Le Fake's reveal was not driven in a browser, so
-  its board *plus* the new standings is unmeasured on a tall room. Session 7
-  opens `revealed-lie-board.tsx` and should look.
+- ~~**Still owed, and cheap**: Le Fake's reveal was not driven in a browser, so
+  its board *plus* the new standings is unmeasured on a tall room.~~ Measured
+  and fixed on 15 August 2026 — see session 6's entry below. It was neither
+  cheap nor a detail: the standings were entirely below the fold.
 
 ---
 
@@ -630,6 +631,36 @@ happened before the session opened:
 - **Session 6's owed check is discharged here**: Le Fake's reveal carries the
   new standings without crowding, verified with a five-line board. A room of ten
   writing ten lies is still unmeasured, and that is the one to watch.
+- **It was worth watching — measured 15 August 2026, and it was the worst
+  overflow in the product.** Ten players, ten lies, votes spread so every line
+  carries its own count: **2 377px of document against a 1080px screen**, 2.74×
+  on a 1366 laptop. The standings ended at 2 028px — the half the room actually
+  asks for, eight hundred pixels below the fold on a screen nobody walks over to
+  scroll. Five lines fit and hid all of it.
+
+  Three things fixed it, and none of them is new: the stage takes **two columns**
+  above `$wide-screen` the way `voting` does one press earlier, the board
+  **divides the viewport by its line count** the way the vote's board does, and
+  each line stopped spending **three full-width rows** on a lie plus two short
+  fragments — who wrote it and who it caught now share one row. 1920 tops out at
+  1080px exactly; 1366 is a 1.26× scroll, down from 2.74×.
+
+  Two traps, both of which cost a pass and neither of which fails loudly:
+  **`container-type: size` needs a height imposed from outside** — a grid item
+  that is `align-items: center`, or the stage itself getting its height from a
+  chain of `flex: 1` under `min-height`, both resolve `100cqh` to nothing, every
+  clamp lands on its floor and the screen merely looks a little small. And
+  **`contain: size` also contains the overflow**: where ten lines do not fit at
+  any legible size, the board ran out of its box and the launch button was drawn
+  straight through it. Dividing `100dvh` minus the measured chrome keeps the
+  worst case a scroll instead of a collision, which is what this screen already
+  does below the split.
+
+  **Still open, and now measured**: the other three games' reveals print
+  `Outcome`, one unbounded row per player. The two columns brought the quiz from
+  ~2 080px to 1 157px at 1080, but it still overruns by 77px at ten players.
+  Bounding it means giving `Outcome` its own row count — `--standings-rows` is
+  the player count, and the bare buzzer's billboard would be crushed by it.
 
 ---
 

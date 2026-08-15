@@ -542,6 +542,16 @@ one part.
   with it. Every hover, press and focus selector moved to the button in the same
   pass: those three render props exist on that half alone, and a selector left
   behind on the field would have matched nothing without failing to compile
+- `[Game]` **Le Fake's reveal stopped hiding the standings below the fold.** A
+  room of ten writing ten lies filled 2 377px of a 1080px screen: the board alone
+  ran past the bottom, and the scores — the half the table turns to the screen
+  for — sat eight hundred pixels under it, on a television nobody walks over to
+  scroll. The board and the standings sit side by side now, the geometry the room
+  read the vote in one press earlier, and each divides the screen rather than
+  taking the height its own type adds up to. Who wrote a lie and who it caught
+  share one row instead of a line of the screen each. A table of five reads it at
+  the size it always did; only a room that wrote ten reads them smaller, which is
+  the room with more to read
 
 ### Internal
 

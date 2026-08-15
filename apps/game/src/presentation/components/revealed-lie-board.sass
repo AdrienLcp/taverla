@@ -25,6 +25,16 @@
 
       color: var(--ink-muted)
 
+    // Who wrote it and who it caught are one row rather than two stacked at
+    // full width. They follow each other rather than sitting at either end of
+    // it: pushed apart on the host's board they were a thousand pixels of empty
+    // field between a name and the count that names it, which reads worse than
+    // the two lines it replaced.
+    .attribution
+      column-gap: var(--space-m)
+      display: flex
+      flex-wrap: wrap
+
     .authors
       @include typography.caption
 
