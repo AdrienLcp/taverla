@@ -1,5 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { DEFAULT_BLINDTEST_SETTINGS } from '@taverla/protocol/game'
+import type { RoomSettings } from '@taverla/protocol/room'
 import {
   hostServerMessageSchema,
   playerServerMessageSchema
@@ -24,7 +26,10 @@ vi.mock('@/infrastructure/music/deezer-client', async () => {
 })
 
 /** Long enough that a frozen clip and a running one are unmistakably different. */
-const LONG_CLIP = { ...FAST_GAME, playbackDurationMs: 30_000 }
+const LONG_CLIP: RoomSettings = {
+  ...FAST_GAME,
+  game: { ...DEFAULT_BLINDTEST_SETTINGS, roundDurationMs: 30_000 }
+}
 
 const AWAY_FOR_MS = 400
 
