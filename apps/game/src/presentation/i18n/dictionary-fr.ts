@@ -141,6 +141,8 @@ export const FR_DICTIONARY: Dictionary = {
     cannot_vote_for_own_lie: 'Celle-là est la tienne. Choisis-en une autre.',
     host_already_connected: 'Quelqu’un anime déjà ce salon.',
     host_only_action: 'Seul l’hôte peut faire ça.',
+    host_reconnecting:
+      'Ce salon vient de perdre son écran, et l’attend encore.',
     internal_error: 'Quelque chose a cassé côté serveur.',
     invalid_message: 'Le serveur n’a pas compris ce message.',
     joined_mid_round: 'Tu joues à partir du prochain tour.',
@@ -219,6 +221,16 @@ export const FR_DICTIONARY: Dictionary = {
       remove: 'Retirer',
       removeNamed: 'Retirer {nickname}',
       title: 'Joueurs'
+    },
+    recovery: {
+      action: 'Animer depuis cet écran',
+      description: 'Il est dans le menu de l’écran qui anime le salon.',
+      field: 'Code de reprise',
+      hint: 'À saisir sur un autre écran pour animer le salon depuis lui.',
+      invalid: 'Ce n’est pas un code de reprise.',
+      refused: 'Ce code n’a pas ouvert le salon.',
+      retry: 'Réessayer',
+      reveal: 'Afficher le code de reprise'
     },
     reveal: 'Donner la réponse',
     roundCount: {

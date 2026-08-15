@@ -174,6 +174,13 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   says otherwise
 - **Session id** — minted by the client, stored per room and role; what lets a
   device that locked its screen come back to the same seat
+- **Host token** — minted with the room and returned by `POST /api/rooms` to the
+  screen that opened it. The code says *which* room, this says *who may host it*,
+  and it always wins a claim — which is what makes a takeover undoable. Without
+  one a second console waits out `HOST_RECLAIM_GRACE_MS`, then the code alone is
+  enough. It lives in `taverla:host-tokens` and **never on the seat**: the
+  refusal that displaces a console voids its seat, and a token dropped with it
+  would make the takeover final
 - **The host's setup** — `HostPreferences`, stored on the console's own machine
   and split on the seam `movedToGame` turns on. A game answers three of the
   room's settings — `game`, `mode`, `roundCount`, together `GameSetup` — so

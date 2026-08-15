@@ -147,6 +147,8 @@ export const EN_DICTIONARY = defineTranslations({
     cannot_vote_for_own_lie: 'That one is yours. Pick another.',
     host_already_connected: 'Someone is already hosting this room.',
     host_only_action: 'Only the host can do that.',
+    host_reconnecting:
+      'This room has just lost its screen, and is waiting for it.',
     internal_error: 'Something broke on the server.',
     invalid_message: 'The server did not understand that message.',
     joined_mid_round: 'You are in from the next round.',
@@ -223,6 +225,16 @@ export const EN_DICTIONARY = defineTranslations({
       remove: 'Remove',
       removeNamed: 'Remove {nickname}',
       title: 'Players'
+    },
+    recovery: {
+      action: 'Host from this screen',
+      description: 'It is in the menu of the screen hosting the room.',
+      field: 'Recovery code',
+      hint: 'Type it on another screen to host this room from there.',
+      invalid: 'That is not a recovery code.',
+      refused: 'That code did not open this room.',
+      retry: 'Try again',
+      reveal: 'Show the recovery code'
     },
     reveal: 'Give it away',
     roundCount: {

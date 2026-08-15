@@ -5,28 +5,20 @@ import {
   roomCodeSchema
 } from '@taverla/protocol/identifiers'
 
-/**
- * Rejection sampling rather than `% alphabetLength`: 256 is not a multiple of
- * 28, so a plain modulo would make the first four letters of the alphabet
- * measurably more likely than the rest.
- */
-const secureRandomIndex = (exclusiveMax: number): number => {
-  const limit = Math.floor(256 / exclusiveMax) * exclusiveMax
-  const byte = new Uint8Array(1)
-
-  do {
-    crypto.getRandomValues(byte)
-  } while (byte[0] === undefined || byte[0] >= limit)
-
-  return byte[0] % exclusiveMax
-}
+import {
+  generateCode,
+  type RandomIndex,
+  secureRandomIndex
+} from './random-code'
 
 export const generateRoomCode = (
-  randomIndex: (exclusiveMax: number) => number = secureRandomIndex
+  randomIndex: RandomIndex = secureRandomIndex
 ): RoomCode =>
-  Array.from({ length: ROOM_CODE_LENGTH }, () =>
-    ROOM_CODE_ALPHABET.charAt(randomIndex(ROOM_CODE_ALPHABET.length))
-  ).join('')
+  generateCode({
+    alphabet: ROOM_CODE_ALPHABET,
+    length: ROOM_CODE_LENGTH,
+    randomIndex
+  })
 
 export type RoomCodeInput =
   | { code: RoomCode; status: 'valid' }

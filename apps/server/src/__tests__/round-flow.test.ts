@@ -17,6 +17,7 @@ import {
   PREVIEW_HOST,
   playerView,
   type RoomHarness,
+  sessionIdOf,
   sleep,
   startRoomHarness,
   waitFor
@@ -268,6 +269,7 @@ describe('a whole game over real sockets', () => {
     reconnected.send({
       protocolVersion: PROTOCOL_VERSION,
       role: 'host',
+      sessionId: sessionIdOf(host),
       type: 'hello'
     })
     await waitFor(

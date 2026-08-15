@@ -6,6 +6,7 @@ import {
   Button as ReactAriaButton
 } from 'react-aria-components'
 
+import type { RoomCode } from '@taverla/protocol/identifiers'
 import { LOCALES } from '@taverla/protocol/locale'
 
 import { isLocale } from '@taverla/core/i18n/locale'
@@ -16,7 +17,12 @@ import {
   type ThemePreference
 } from '@/helpers/theme'
 import { fetchHealth } from '@/infrastructure/api/taverla-api'
-import { creditsPath, joinPath } from '@/infrastructure/router/navigation'
+import {
+  creditsPath,
+  joinPath,
+  useRoomCodeParam
+} from '@/infrastructure/router/navigation'
+import { readHostToken } from '@/infrastructure/storage/session-storage'
 import { useConnection } from '@/presentation/connection/connection-provider'
 import { useRoomExits } from '@/presentation/exits/room-exits-provider'
 import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
@@ -45,10 +51,46 @@ import './app-menu.sass'
  * Closing asks twice, because it is the only one that cannot be undone: the
  * code stops resolving, so a phone cannot reload its way back in.
  */
+/**
+ * The room's own secret, on the one screen that holds it. Hidden until it is
+ * asked for: this menu opens on a console that is often a television, and a code
+ * the room can read over the host's shoulder is a room the room can take.
+ */
+const RoomRecovery = ({ roomCode }: { roomCode: RoomCode }) => {
+  const [isRevealed, setIsRevealed] = useState(false)
+  const translate = useTranslate()
+  const hostToken = readHostToken(roomCode)
+
+  // A console that took the room over on the grace window alone runs it without
+  // ever learning the token, and has nothing here to show.
+  if (hostToken === null) {
+    return null
+  }
+
+  return isRevealed ? (
+    <div className='recovery'>
+      <p className='token'>{hostToken}</p>
+      <p className='hint'>{translate('host.recovery.hint')}</p>
+    </div>
+  ) : (
+    <div className='recovery'>
+      <Button
+        onPress={() => {
+          setIsRevealed(true)
+        }}
+        variant='outlined'
+      >
+        {translate('host.recovery.reveal')}
+      </Button>
+    </div>
+  )
+}
+
 const RoomExit = ({ onDone }: { onDone: () => void }) => {
   const { closeRoom, endGame, leaveSeat } = useRoomExits()
   const [isConfirmingClose, setIsConfirmingClose] = useState(false)
   const connection = useConnection()
+  const roomCode = useRoomCodeParam()
   const translate = useTranslate()
   // Every exit here but the plain navigation sends a frame, and a frame written
   // to a socket that is not open is dropped with nothing to show for it.
@@ -76,63 +118,67 @@ const RoomExit = ({ onDone }: { onDone: () => void }) => {
   }
 
   return (
-    <div className='exits'>
-      {/*
-        Widest scope last, and this is the only screen that shows more than one
-        of them: a host who took a seat can give it back without giving up the
-        room, which is what makes the three separate scopes worth having.
-      */}
-      {leaveSeat !== null && (
-        <Button
-          isDisabled={!isLive}
-          onPress={() => {
-            leaveSeat()
-            onDone()
-          }}
-          variant='outlined'
-        >
-          {translate('host.seat.leave')}
-        </Button>
-      )}
+    <>
+      {roomCode !== null && <RoomRecovery roomCode={roomCode} />}
 
-      {endGame !== null && (
-        <Button
-          isDisabled={!isLive}
-          onPress={() => {
-            endGame()
-            onDone()
-          }}
-          variant='outlined'
-        >
-          {translate('host.endGame')}
-        </Button>
-      )}
-
-      {isConfirmingClose ? (
-        <>
-          <p className='warning'>{translate('host.closeRoom.warning')}</p>
-          <Link
-            href={joinPath}
+      <div className='exits'>
+        {/*
+          Widest scope last, and this is the only screen that shows more than
+          one of them: a host who took a seat can give it back without giving up
+          the room, which is what makes the three separate scopes worth having.
+        */}
+        {leaveSeat !== null && (
+          <Button
+            isDisabled={!isLive}
             onPress={() => {
-              closeRoom()
+              leaveSeat()
               onDone()
             }}
+            variant='outlined'
           >
-            {translate('host.closeRoom.confirm')}
-          </Link>
-        </>
-      ) : (
-        <Button
-          isDisabled={!isLive}
-          onPress={() => {
-            setIsConfirmingClose(true)
-          }}
-          variant='outlined'
-        >
-          {translate('host.closeRoom.label')}
-        </Button>
-      )}
-    </div>
+            {translate('host.seat.leave')}
+          </Button>
+        )}
+
+        {endGame !== null && (
+          <Button
+            isDisabled={!isLive}
+            onPress={() => {
+              endGame()
+              onDone()
+            }}
+            variant='outlined'
+          >
+            {translate('host.endGame')}
+          </Button>
+        )}
+
+        {isConfirmingClose ? (
+          <>
+            <p className='warning'>{translate('host.closeRoom.warning')}</p>
+            <Link
+              href={joinPath}
+              onPress={() => {
+                closeRoom()
+                onDone()
+              }}
+            >
+              {translate('host.closeRoom.confirm')}
+            </Link>
+          </>
+        ) : (
+          <Button
+            isDisabled={!isLive}
+            onPress={() => {
+              setIsConfirmingClose(true)
+            }}
+            variant='outlined'
+          >
+            {translate('host.closeRoom.label')}
+          </Button>
+        )}
+      </div>
+    </>
   )
 }
 

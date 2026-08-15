@@ -1,9 +1,16 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
+import type { HostToken } from '@taverla/protocol/identifiers'
 import { MAX_PLAYERS_PER_ROOM } from '@taverla/protocol/room'
 
 import type { Room } from './room'
-import { claimHost, joinAsPlayer, removePlayer } from './room-service'
+import {
+  claimHost,
+  HOST_RECLAIM_GRACE_MS,
+  joinAsPlayer,
+  markHostAway,
+  removePlayer
+} from './room-service'
 import { createRoom, deleteRoom } from './room-store'
 import { toHostView, toPlayerView } from './room-view'
 
@@ -80,18 +87,32 @@ describe('joinAsPlayer', () => {
 })
 
 describe('claimHost', () => {
-  const claim = (sessionId: string, isHostConnected: boolean) =>
-    claimHost({ isHostConnected, now: NOW, room, sessionId })
+  const A_STRANGERS_GUESS = 'ABCDABCD'
+
+  const claim = ({
+    at = NOW,
+    hostToken = null,
+    isHostConnected = false,
+    sessionId
+  }: {
+    at?: number
+    hostToken?: HostToken | null
+    isHostConnected?: boolean
+    sessionId: string
+  }) => claimHost({ hostToken, isHostConnected, now: at, room, sessionId })
 
   it('[room] hands the room to the first host', () => {
-    expect(claim('session-host', false).status).toBe('success')
+    expect(claim({ sessionId: 'session-host' }).status).toBe('success')
     expect(room.hostSessionId).toBe('session-host')
   })
 
   it('[room] refuses a second screen while a host is connected', () => {
-    claim('session-host', false)
+    claim({ sessionId: 'session-host' })
 
-    const intruder = claim('session-other', true)
+    const intruder = claim({
+      isHostConnected: true,
+      sessionId: 'session-other'
+    })
 
     expect(intruder.status === 'failure' && intruder.error).toBe(
       'host_already_connected'
@@ -100,18 +121,71 @@ describe('claimHost', () => {
   })
 
   it('[room] lets the same host reclaim the room after a reload', () => {
-    claim('session-host', false)
+    claim({ sessionId: 'session-host' })
 
-    expect(claim('session-host', true).status).toBe('success')
+    expect(
+      claim({ isHostConnected: true, sessionId: 'session-host' }).status
+    ).toBe('success')
+  })
+
+  it('[room] holds the room for the console that has just dropped', () => {
+    claim({ sessionId: 'session-host' })
+    markHostAway(room, NOW)
+
+    const early = claim({
+      at: NOW + HOST_RECLAIM_GRACE_MS - 1,
+      sessionId: 'session-replacement'
+    })
+
+    expect(early.status === 'failure' && early.error).toBe('host_reconnecting')
+    expect(room.hostSessionId).toBe('session-host')
   })
 
   // The room keeps `hostSessionId` after the tab closes, so without this a host
   // whose laptop slept would be locked out of their own game forever.
-  it('[room] lets a new screen take over once no host is connected', () => {
-    claim('session-host', false)
+  it('[room] lets a new screen take over once the grace window runs out', () => {
+    claim({ sessionId: 'session-host' })
+    markHostAway(room, NOW)
 
-    expect(claim('session-replacement', false).status).toBe('success')
+    expect(
+      claim({
+        at: NOW + HOST_RECLAIM_GRACE_MS,
+        sessionId: 'session-replacement'
+      }).status
+    ).toBe('success')
     expect(room.hostSessionId).toBe('session-replacement')
+    expect(room.hostLeftAt).toBeNull()
+  })
+
+  // The takeover was never the problem; it not being undoable was.
+  it('[room] gives the room back to the screen holding the token', () => {
+    claim({ sessionId: 'session-host' })
+    markHostAway(room, NOW)
+    claim({ at: NOW + HOST_RECLAIM_GRACE_MS, sessionId: 'session-replacement' })
+
+    expect(
+      claim({
+        at: NOW + HOST_RECLAIM_GRACE_MS,
+        hostToken: room.hostToken,
+        isHostConnected: true,
+        sessionId: 'session-host'
+      }).status
+    ).toBe('success')
+    expect(room.hostSessionId).toBe('session-host')
+  })
+
+  it('[room] is no more open to a wrong token than to none', () => {
+    claim({ sessionId: 'session-host' })
+
+    const intruder = claim({
+      hostToken: A_STRANGERS_GUESS,
+      isHostConnected: true,
+      sessionId: 'session-other'
+    })
+
+    expect(intruder.status === 'failure' && intruder.error).toBe(
+      'host_already_connected'
+    )
   })
 })
 

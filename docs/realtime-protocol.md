@@ -30,11 +30,22 @@ second socket is a reclaim, not a stranger.
 
 `hello` must be the first non-ping frame. Anything else closes the socket.
 
+`hostToken` is the room's own secret, minted with the room and returned by
+`POST /api/rooms` to whoever opened it — the one place it reaches a client, and
+never on a room view. A host claim carrying it is granted whatever else is
+connected, and the console that was there is sent a fatal
+`host_already_connected` of its own: **the token is what makes a takeover
+undoable**, in both directions. Without one, a second console is refused while a
+socket is attached (`host_already_connected`) and for `HOST_RECLAIM_GRACE_MS`
+after the last one dropped (`host_reconnecting`), which is the Wi-Fi blink and
+the closing lid; past that window the code alone is enough, because a room
+nobody can pick up is a party ended by a dead battery.
+
 ## Client → server
 
 | Type | Sent by | Payload |
 |---|---|---|
-| `hello` | both | `protocolVersion`, `role`, `sessionId?`, `nickname?` |
+| `hello` | both | `protocolVersion`, `role`, `sessionId?`, `nickname?`, `hostToken?` |
 | `time.ping` | both | `clientSentAt` |
 | `player.buzz` | player | `roundId` |
 | `player.answer` | player | `roundId`, `answer` — `{kind:'choice', choiceIndex}` or `{kind:'typed', guess}` |
@@ -213,7 +224,7 @@ act on is non-fatal, so the socket stays open and the form retries on it:
 `nickname_taken`, `room_full`, `host_only_action`, `invalid_message`.
 
 Fatal, followed by close code 1008: `room_not_found`,
-`protocol_version_mismatch`, `host_already_connected`.
+`protocol_version_mismatch`, `host_already_connected`, `host_reconnecting`.
 
 **A fatal frame ends the session on its own.** The client acts on the frame, not
 on the socket closing after it, and the difference was invisible while every
@@ -223,6 +234,12 @@ two dozen player sockets nobody is closing, and every phone sat on a stale
 scoreboard — live and lying — while the room no longer existed. A fatal code may
 therefore be sent to a socket the server keeps open, and that is not a loose end
 to tidy up by closing it too. It is the guarantee the client owes.
+
+`host_already_connected` now travels both ways for the same reason: at the door
+it is `reject`, and to a console displaced by a screen presenting the token it is
+a bare frame on a socket that did nothing wrong. A `Connection` carries a `send`
+and never its own socket, so closing somebody else's is not something the server
+can do anyway.
 
 **A code exists when something sends it.** `not_implemented` was the one
 exception — a placeholder so a half-built stage could answer honestly instead of

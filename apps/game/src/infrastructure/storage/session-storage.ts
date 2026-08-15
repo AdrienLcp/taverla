@@ -2,6 +2,9 @@ import { z } from 'zod'
 
 import { connectionRoleSchema } from '@taverla/protocol/client-message'
 import {
+  type HostToken,
+  hostTokenSchema,
+  type RoomCode,
   roomCodeSchema,
   type SessionId,
   sessionIdSchema
@@ -9,13 +12,18 @@ import {
 
 import {
   forgetSeat,
+  hostTokenFor,
+  hostTokensWithout,
+  type RememberedHostToken,
   type RememberedSeat,
   rememberedSeatFor,
+  rememberHostToken,
   rememberSeat,
   type SeatScope
 } from '@taverla/core/room/session-memory'
 
 const SEATS_KEY = 'taverla:seats'
+const HOST_TOKENS_KEY = 'taverla:host-tokens'
 const ONE_KEY_EACH_PREFIX = 'taverla:session:'
 
 const rememberedSeatsSchema = z.array(
@@ -24,6 +32,14 @@ const rememberedSeatsSchema = z.array(
     role: connectionRoleSchema,
     roomCode: roomCodeSchema,
     sessionId: sessionIdSchema
+  })
+)
+
+const rememberedHostTokensSchema = z.array(
+  z.object({
+    at: z.number(),
+    hostToken: hostTokenSchema,
+    roomCode: roomCodeSchema
   })
 )
 
@@ -45,11 +61,46 @@ const rememberedSeatsSchema = z.array(
  */
 export const ensureSessionId = (scope: SeatScope): SessionId => {
   const seats = readSeats()
-  const sessionId = rememberedSeatFor({ ...scope, seats }) ?? mintSessionId()
+  const sessionId =
+    rememberedSeatFor({ ...scope, seats })?.sessionId ?? mintSessionId()
 
   writeSeats(rememberSeat({ ...scope, at: Date.now(), seats, sessionId }))
 
   return sessionId
+}
+
+/**
+ * Written the moment a room is created, before any socket opens, and again when
+ * somebody types the token onto a second screen.
+ *
+ * A key of its own rather than a field on the host seat: a console displaced
+ * from its own room is refused with a code that voids the seat, and a token
+ * dropped along with it would leave the room's owner unable to take it back —
+ * which is the whole of what a token is for.
+ */
+export const writeHostToken = ({
+  hostToken,
+  roomCode
+}: {
+  hostToken: HostToken
+  roomCode: RoomCode
+}): void => {
+  writeHostTokens(
+    rememberHostToken({
+      at: Date.now(),
+      hostToken,
+      roomCode,
+      tokens: readHostTokens()
+    })
+  )
+}
+
+export const readHostToken = (roomCode: RoomCode): HostToken | null =>
+  hostTokenFor({ roomCode, tokens: readHostTokens() })
+
+/** Called when the room is disbanded: the code stops resolving, so this opens nothing. */
+export const forgetHostToken = (roomCode: RoomCode): void => {
+  writeHostTokens(hostTokensWithout({ roomCode, tokens: readHostTokens() }))
 }
 
 /**
@@ -113,6 +164,18 @@ const readSeats = (): RememberedSeat[] => {
 
 const writeSeats = (seats: RememberedSeat[]): void => {
   write(SEATS_KEY, JSON.stringify(seats))
+}
+
+const readHostTokens = (): RememberedHostToken[] => {
+  const parsed = rememberedHostTokensSchema.safeParse(
+    parseJson(read(HOST_TOKENS_KEY) ?? '')
+  )
+
+  return parsed.success ? parsed.data : []
+}
+
+const writeHostTokens = (tokens: RememberedHostToken[]): void => {
+  write(HOST_TOKENS_KEY, JSON.stringify(tokens))
 }
 
 const parseJson = (raw: string): unknown => {

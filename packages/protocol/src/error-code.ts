@@ -8,6 +8,14 @@ export const protocolErrorCodes = [
   'invalid_message',
   'protocol_version_mismatch',
   'host_already_connected',
+  /**
+   * A second console arriving in the seconds after the first one's socket died.
+   * Its own code rather than `host_already_connected`, because nobody is
+   * connected and the two ask for different things: one says the room is taken,
+   * this one says waiting will do — a lid closing and a Wi-Fi blink both land
+   * here, and the room is handed over anyway once the window runs out.
+   */
+  'host_reconnecting',
   'host_only_action',
   'wrong_phase',
   'stale_round',

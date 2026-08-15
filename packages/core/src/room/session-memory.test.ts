@@ -2,10 +2,14 @@ import { describe, expect, it } from 'vitest'
 
 import {
   forgetSeat,
+  hostTokenFor,
+  hostTokensWithout,
   MAX_REMEMBERED_SEATS,
+  type RememberedHostToken,
   type RememberedSeat,
   refusalVoidsSeat,
   rememberedSeatFor,
+  rememberHostToken,
   rememberSeat,
   SEAT_MEMORY_MS
 } from './session-memory'
@@ -46,12 +50,12 @@ describe('rememberedSeatFor', () => {
       { at: NOW, role: 'player', roomCode: 'ABCD', sessionId: 'the-phone' }
     ]
 
-    expect(rememberedSeatFor({ role: 'host', roomCode: 'ABCD', seats })).toBe(
-      'the-console'
-    )
-    expect(rememberedSeatFor({ role: 'player', roomCode: 'ABCD', seats })).toBe(
-      'the-phone'
-    )
+    expect(
+      rememberedSeatFor({ role: 'host', roomCode: 'ABCD', seats })?.sessionId
+    ).toBe('the-console')
+    expect(
+      rememberedSeatFor({ role: 'player', roomCode: 'ABCD', seats })?.sessionId
+    ).toBe('the-phone')
   })
 
   it('[session-memory] holds no claim on a room this device has not played', () => {
@@ -152,5 +156,53 @@ describe('forgetSeat', () => {
       'the-console',
       'session-BCDE'
     ])
+  })
+})
+
+describe('rememberHostToken', () => {
+  const tokenIn = (roomCode: string, at: number): RememberedHostToken => ({
+    at,
+    hostToken: `TOKEN-${roomCode}`,
+    roomCode
+  })
+
+  it('[session-memory] hands back the token kept for one room', () => {
+    const tokens = [tokenIn('ABCD', NOW), tokenIn('BCDE', NOW)]
+
+    expect(hostTokenFor({ roomCode: 'BCDE', tokens })).toBe('TOKEN-BCDE')
+    expect(hostTokenFor({ roomCode: 'CDEF', tokens })).toBeNull()
+  })
+
+  it('[session-memory] keeps one token per room when a room is re-entered', () => {
+    const tokens = rememberHostToken({
+      at: NOW + 1,
+      hostToken: 'TAKEN-BY-HAND',
+      roomCode: 'ABCD',
+      tokens: [tokenIn('ABCD', NOW)]
+    })
+
+    expect(tokens).toEqual([
+      { at: NOW + 1, hostToken: 'TAKEN-BY-HAND', roomCode: 'ABCD' }
+    ])
+  })
+
+  it('[session-memory] forgets a token kept more than a day ago', () => {
+    const tokens = rememberHostToken({
+      at: NOW,
+      hostToken: 'TOKEN-ABCD',
+      roomCode: 'ABCD',
+      tokens: [tokenIn('BCDE', NOW - SEAT_MEMORY_MS)]
+    })
+
+    expect(tokens.map((kept) => kept.roomCode)).toEqual(['ABCD'])
+  })
+
+  it('[session-memory] drops the room a disbanded code no longer opens', () => {
+    expect(
+      hostTokensWithout({
+        roomCode: 'ABCD',
+        tokens: [tokenIn('ABCD', NOW), tokenIn('BCDE', NOW)]
+      })
+    ).toEqual([tokenIn('BCDE', NOW)])
   })
 })

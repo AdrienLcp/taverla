@@ -15,6 +15,22 @@ export const roomCodeSchema = z
   .length(ROOM_CODE_LENGTH)
   .regex(new RegExp(`^[${ROOM_CODE_ALPHABET}]+$`))
 
+export const HOST_TOKEN_LENGTH = 8
+
+/**
+ * Minted with the room, handed to whoever created it and to nobody else. The
+ * code says which room; this says who may host it, which is why a takeover can
+ * be undone — the screen holding it always gets the room back.
+ *
+ * Same alphabet as the code because it is read off one screen and typed on
+ * another, and eight characters because that is 38 bits of a secret that has to
+ * survive being retyped by somebody whose laptop just died.
+ */
+export const hostTokenSchema = z
+  .string()
+  .length(HOST_TOKEN_LENGTH)
+  .regex(new RegExp(`^[${ROOM_CODE_ALPHABET}]+$`))
+
 export const playerIdSchema = z.string().min(1).max(64)
 export const roundIdSchema = z.string().min(1).max(64)
 
@@ -31,6 +47,7 @@ export const nicknameSchema = z.string().trim().min(1).max(20)
 export const serverTimeSchema = z.number().int().nonnegative()
 
 export type RoomCode = z.infer<typeof roomCodeSchema>
+export type HostToken = z.infer<typeof hostTokenSchema>
 export type PlayerId = z.infer<typeof playerIdSchema>
 export type RoundId = z.infer<typeof roundIdSchema>
 export type SessionId = z.infer<typeof sessionIdSchema>

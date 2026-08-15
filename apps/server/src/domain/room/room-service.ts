@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid'
 
 import type {
+  HostToken,
   Nickname,
   PlayerId,
   SessionId
@@ -13,7 +14,7 @@ import { isAbandoned } from '@taverla/core/room/seat-presence'
 import type { Participant, Room } from './room'
 
 export type JoinError = 'room_full' | 'nickname_taken'
-export type HostClaimError = 'host_already_connected'
+export type HostClaimError = 'host_already_connected' | 'host_reconnecting'
 
 export const touch = (room: Room, now: number): void => {
   room.lastActivityAt = now
@@ -73,17 +74,64 @@ export const joinAsPlayer = ({
 }
 
 /**
+ * How long the room stays the previous console's after its socket dies. A lid
+ * closing, a Wi-Fi handover and a reload all land well inside it, and the screen
+ * that comes back is the one that was already hosting.
+ *
+ * It runs out rather than holding, because the console that is never coming back
+ * is the same shape as the one blinking: a minute of a refusal is an evening
+ * saved, where a room nobody can pick up is the party over. What the token
+ * changes is that neither is final — the screen that holds it takes the room
+ * back whatever happened while it was gone.
+ */
+export const HOST_RECLAIM_GRACE_MS = 60 * 1_000
+
+/**
  * `isHostConnected` comes from the messaging layer: a room whose host closed
  * their laptop still carries their `hostSessionId`, and the difference between
  * "the host is reloading" and "a second screen is trying to take over" is
  * whether a socket is currently attached.
  */
-export const claimHost = ({
+const refuseHostClaim = ({
+  hostToken,
   isHostConnected,
   now,
   room,
   sessionId
 }: {
+  hostToken: HostToken | null
+  isHostConnected: boolean
+  now: number
+  room: Room
+  sessionId: SessionId
+}): HostClaimError | null => {
+  if (
+    hostToken === room.hostToken ||
+    room.hostSessionId === null ||
+    room.hostSessionId === sessionId
+  ) {
+    return null
+  }
+
+  if (isHostConnected) {
+    return 'host_already_connected'
+  }
+
+  return room.hostLeftAt !== null &&
+    now - room.hostLeftAt < HOST_RECLAIM_GRACE_MS
+    ? 'host_reconnecting'
+    : null
+}
+
+export const claimHost = ({
+  hostToken,
+  isHostConnected,
+  now,
+  room,
+  sessionId
+}: {
+  /** Replayed from the claiming screen's storage; `null` when it holds none. */
+  hostToken: HostToken | null
   isHostConnected: boolean
   now: number
   room: Room
@@ -91,17 +139,31 @@ export const claimHost = ({
 }): Result<void, HostClaimError> => {
   touch(room, now)
 
-  if (
-    room.hostSessionId !== null &&
-    room.hostSessionId !== sessionId &&
-    isHostConnected
-  ) {
-    return Result.failure('host_already_connected')
+  const refusal = refuseHostClaim({
+    hostToken,
+    isHostConnected,
+    now,
+    room,
+    sessionId
+  })
+
+  if (refusal !== null) {
+    return Result.failure(refusal)
   }
 
   room.hostSessionId = sessionId
+  room.hostLeftAt = null
 
   return Result.success(undefined)
+}
+
+/**
+ * Stamped when the room's last console goes, so the grace window is measured
+ * from the moment it actually lost its host rather than from the last frame that
+ * console happened to send.
+ */
+export const markHostAway = (room: Room, now: number): void => {
+  room.hostLeftAt = now
 }
 
 export const markPlayerDisconnected = (

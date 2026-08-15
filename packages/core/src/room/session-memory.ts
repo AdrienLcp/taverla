@@ -1,6 +1,10 @@
 import type { ConnectionRole } from '@taverla/protocol/client-message'
 import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
-import type { RoomCode, SessionId } from '@taverla/protocol/identifiers'
+import type {
+  HostToken,
+  RoomCode,
+  SessionId
+} from '@taverla/protocol/identifiers'
 
 /**
  * A seat is claimed per room *and* role: hosting and playing the same room from
@@ -22,6 +26,19 @@ export type RememberedSeat = {
   role: ConnectionRole
   roomCode: RoomCode
   sessionId: SessionId
+}
+
+/**
+ * The room's own secret, kept in a store of its own rather than on the host
+ * seat above — because the two do not die together. A console displaced from
+ * its own room is told its *seat* was never granted, and dropping the token
+ * with it would make that takeover final, which is the one thing the token
+ * exists to prevent.
+ */
+export type RememberedHostToken = {
+  at: number
+  hostToken: HostToken
+  roomCode: RoomCode
 }
 
 export const MAX_REMEMBERED_SEATS = 8
@@ -60,9 +77,8 @@ export const rememberedSeatFor = ({
   role,
   roomCode,
   seats
-}: SeatScope & { seats: RememberedSeat[] }): SessionId | null =>
-  seats.find((seat) => seat.role === role && seat.roomCode === roomCode)
-    ?.sessionId ?? null
+}: SeatScope & { seats: RememberedSeat[] }): RememberedSeat | null =>
+  seats.find((seat) => seat.role === role && seat.roomCode === roomCode) ?? null
 
 export const forgetSeat = ({
   role,
@@ -91,4 +107,34 @@ export const rememberSeat = ({
 }: RememberedSeat & { seats: RememberedSeat[] }): RememberedSeat[] =>
   [{ at, role, roomCode, sessionId }, ...forgetSeat({ role, roomCode, seats })]
     .filter((seat) => seat.at > at - SEAT_MEMORY_MS)
+    .slice(0, MAX_REMEMBERED_SEATS)
+
+export const hostTokenFor = ({
+  roomCode,
+  tokens
+}: {
+  roomCode: RoomCode
+  tokens: RememberedHostToken[]
+}): HostToken | null =>
+  tokens.find((kept) => kept.roomCode === roomCode)?.hostToken ?? null
+
+export const hostTokensWithout = ({
+  roomCode,
+  tokens
+}: {
+  roomCode: RoomCode
+  tokens: RememberedHostToken[]
+}): RememberedHostToken[] => tokens.filter((kept) => kept.roomCode !== roomCode)
+
+/** Bounded and aged exactly as the seats are, and for the same two reasons. */
+export const rememberHostToken = ({
+  at,
+  hostToken,
+  roomCode,
+  tokens
+}: RememberedHostToken & {
+  tokens: RememberedHostToken[]
+}): RememberedHostToken[] =>
+  [{ at, hostToken, roomCode }, ...hostTokensWithout({ roomCode, tokens })]
+    .filter((kept) => kept.at > at - SEAT_MEMORY_MS)
     .slice(0, MAX_REMEMBERED_SEATS)

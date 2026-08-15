@@ -1,4 +1,5 @@
 import type {
+  HostToken,
   Nickname,
   PlayerId,
   RoomCode,
@@ -23,8 +24,19 @@ import type { RoundRoster } from '@taverla/core/round/round-roster'
 export type Room = {
   code: RoomCode
   createdAt: number
+  /**
+   * When the last console's socket went, and `null` while one is attached. The
+   * grace window a second screen has to wait out is measured from here.
+   */
+  hostLeftAt: number | null
   /** `null` between the host closing their tab and reclaiming the room. */
   hostSessionId: SessionId | null
+  /**
+   * The room's own secret, minted with it and handed to whoever created it. It
+   * never reaches a room view: `room-view.ts` projects neither this nor
+   * `hostSessionId`, and the only frame carrying it travels the other way.
+   */
+  hostToken: HostToken
   lastActivityAt: number
   phase: RoomPhase
   /**

@@ -81,6 +81,32 @@
       .link
         font-size: 1rem
 
+    // Not an exit, so not in that ladder: it is the one thing in this menu that
+    // is read out rather than pressed, and the only one that stays hidden until
+    // it is asked for.
+    .recovery
+      display: flex
+      flex-direction: column
+      gap: var(--space-xs)
+
+      .button
+        font-size: 1rem
+
+      .token
+        @include typography.title
+
+        font-size: 1.5rem
+        letter-spacing: 0.16em
+        text-align: center
+        user-select: text
+
+      .hint
+        @include typography.caption
+
+        color: var(--ink-muted)
+        text-align: center
+        text-wrap: balance
+
     .warning
       @include typography.caption
 

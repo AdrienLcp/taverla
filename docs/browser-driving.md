@@ -37,6 +37,14 @@ Five more that cost time to learn:
   second join; the first player's socket is open and never re-reads it. It is
   what lets a latecomer be driven against a round somebody else is already in.
 
+- **Two consoles in one room need the same hand, one store further.** A second
+  tab shares `taverla:host-tokens` as well as `taverla:seats`, so it is already
+  the room's owner and displaces nothing. Delete that room's `role: 'host'`
+  **seat** and leave the token to drive the deliberate handover; delete both to
+  drive a screen that only has the code. Deleting both and then driving the
+  takeover is what makes the two tabs indistinguishable from one machine, which
+  is exactly the case a browser cannot reproduce.
+
 - A react-aria segment does not take a click on its `<input>`; the `<label>`
   intercepts the pointer. Click `label.segment`, and scope the query — the
   console carries two `English` at once, the menu's and the fold's.

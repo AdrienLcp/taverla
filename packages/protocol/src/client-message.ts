@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import {
+  hostTokenSchema,
   nicknameSchema,
   playerIdSchema,
   roundIdSchema,
@@ -17,8 +18,13 @@ export const connectionRoleSchema = z.enum(connectionRoles)
  * The first frame on every socket. `sessionId` is replayed from storage so a
  * reconnect reclaims the same seat and score; its absence means a new arrival.
  * A player must name themselves, a host must not.
+ *
+ * `hostToken` is the room's own secret, replayed the same way and read by the
+ * server only on a host claim: it is what takes the room back from a screen that
+ * took it over. A player frame carrying one is answering a question nobody asked.
  */
 export const helloMessageSchema = z.object({
+  hostToken: hostTokenSchema.optional(),
   nickname: nicknameSchema.optional(),
   protocolVersion: z.number().int().positive(),
   role: connectionRoleSchema,

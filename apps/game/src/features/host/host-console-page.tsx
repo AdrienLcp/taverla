@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 
 import type { ClientMessage } from '@taverla/protocol/client-message'
 import { roundDurationMsOf } from '@taverla/protocol/game'
-import type { RoomCode } from '@taverla/protocol/identifiers'
+import type { HostToken, RoomCode } from '@taverla/protocol/identifiers'
 import type { HostRoomView, RoomSettings } from '@taverla/protocol/room'
 import type { TrackSource } from '@taverla/protocol/track'
 
@@ -32,9 +32,12 @@ import {
   writeStoredHostPreferences,
   writeStoredVolume
 } from '@/infrastructure/storage/preferences-storage'
-import { forgetSessionId } from '@/infrastructure/storage/session-storage'
+import {
+  forgetHostToken,
+  forgetSessionId,
+  writeHostToken
+} from '@/infrastructure/storage/session-storage'
 import { AskedQuestion } from '@/presentation/components/asked-question'
-import { ConnectionRefused } from '@/presentation/components/connection-refused'
 import { Countdown } from '@/presentation/components/countdown'
 import { RoundProgress } from '@/presentation/components/round-progress'
 import { Scoreboard } from '@/presentation/components/scoreboard'
@@ -47,6 +50,7 @@ import { usePhaseField } from '@/presentation/theme/use-phase-field'
 import { FinalBoard } from './final-board'
 import { HostActions } from './host-actions'
 import { HostControls } from './host-controls'
+import { HostRefused } from './host-refused'
 import { JoinReminder } from './join-reminder'
 import { LobbyStage } from './lobby-stage'
 import { RevealPanel } from './reveal-panel'
@@ -76,10 +80,11 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
   // Taken once and only ever given back: the socket reopens on a change of
   // nickname, and re-seating mid-round would drop the answer being typed.
   const [seatNickname, setSeatNickname] = useState<string | null>(null)
-  const { clock, error, send, status, view } = useHostConnection(
+  const { clock, error, retry, send, status, view } = useHostConnection(
     roomCode,
     seatNickname
   )
+  const [hasOfferedToken, setHasOfferedToken] = useState(false)
   const [volume, setVolume] = useState(readStoredVolume)
   const [draftSource, setDraftSource] = useState<TrackSource | null>(null)
   const [preferences, setPreferences] = useState(readStoredHostPreferences)
@@ -119,6 +124,7 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
   const closeRoom = useCallback(() => {
     send({ type: 'host.closeRoom' })
     forgetSessionId({ role: 'host', roomCode })
+    forgetHostToken(roomCode)
   }, [roomCode, send])
 
   // The frame first again, and for a second reason: dropping the nickname
@@ -138,11 +144,24 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
     leaveSeat: seatNickname === null ? null : leaveSeat
   })
 
+  // Written before the socket carries it, because the hello is built from
+  // storage: the retry is what sends it, and it reads what was just kept.
+  const offerHostToken = (hostToken: HostToken) => {
+    writeHostToken({ hostToken, roomCode })
+    setHasOfferedToken(true)
+    retry()
+  }
+
   if (status === 'refused') {
     return (
       <main className='host-console-page'>
         <div className='stage solo'>
-          <ConnectionRefused error={error} />
+          <HostRefused
+            error={error}
+            hasOfferedToken={hasOfferedToken}
+            onOfferToken={offerHostToken}
+            onRetry={retry}
+          />
         </div>
       </main>
     )

@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { protocolErrorCodeSchema } from './error-code'
 import { shelvedGameSchema } from './game'
-import { roomCodeSchema } from './identifiers'
+import { hostTokenSchema, roomCodeSchema } from './identifiers'
 import { DEFAULT_LOCALE, localeSchema } from './locale'
 import { trackDifficultySchema, trackIdentitySchema } from './track'
 
@@ -38,8 +38,14 @@ export const createRoomRequestSchema = z.object({
   locale: localeSchema.default(DEFAULT_LOCALE)
 })
 
+/**
+ * The one place a `hostToken` reaches a client. It is never on the socket and
+ * never in a room view: a screen holds it because it opened the room, or because
+ * somebody read it out of that screen's menu and typed it.
+ */
 export const createRoomResponseSchema = z.object({
-  code: roomCodeSchema
+  code: roomCodeSchema,
+  hostToken: hostTokenSchema
 })
 
 export const roomExistsResponseSchema = z.object({

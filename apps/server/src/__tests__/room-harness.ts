@@ -4,6 +4,7 @@ import type { z } from 'zod'
 import type { ClientMessage } from '@taverla/protocol/client-message'
 import { DEFAULT_BLINDTEST_SETTINGS } from '@taverla/protocol/game'
 import type { CreateRoomResponse } from '@taverla/protocol/http'
+import type { HostToken } from '@taverla/protocol/identifiers'
 import {
   DEFAULT_MODE_SETTINGS,
   DEFAULT_ROOM_SETTINGS,
@@ -156,7 +157,12 @@ export type RoomHarness = {
   openRoom: (
     settings?: RoomSettings,
     nickname?: string
-  ) => Promise<{ code: string; host: Peer<HostServerMessage> }>
+  ) => Promise<{
+    code: string
+    host: Peer<HostServerMessage>
+    /** What the door handed the console that opened the room, and nobody else. */
+    hostToken: HostToken
+  }>
   /** `host:port`, for the suites that exercise the HTTP surface rather than a game. */
   origin: string
   seat: (options: {
@@ -369,11 +375,12 @@ export const startRoomHarness = async (): Promise<RoomHarness> => {
       headers: { 'content-type': 'application/json' },
       method: 'POST'
     })
-    const { code } = (await response.json()) as CreateRoomResponse
+    const { code, hostToken } = (await response.json()) as CreateRoomResponse
 
     const host = await connect(code, hostServerMessageSchema)
 
     host.send({
+      hostToken,
       nickname,
       protocolVersion: PROTOCOL_VERSION,
       role: 'host',
@@ -382,7 +389,7 @@ export const startRoomHarness = async (): Promise<RoomHarness> => {
     await waitFor(() => hostView(host) !== null, 'the host to be seated')
     host.send({ settings, type: 'host.updateSettings' })
 
-    return { code, host }
+    return { code, host, hostToken }
   }
 
   const seat = async ({

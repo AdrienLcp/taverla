@@ -5,6 +5,7 @@ import type { ShelvedGame } from '@taverla/protocol/game'
 
 import { createRoom } from '@/infrastructure/api/taverla-api'
 import { hostPathFor } from '@/infrastructure/router/navigation'
+import { writeHostToken } from '@/infrastructure/storage/session-storage'
 import { useI18n } from '@/presentation/i18n/i18n-provider'
 import {
   apiErrorKey,
@@ -39,6 +40,11 @@ export const useCreateRoom = () => {
 
         return
       }
+
+      writeHostToken({
+        hostToken: created.data.hostToken,
+        roomCode: created.data.code
+      })
 
       await navigate(hostPathFor(created.data.code))
     }

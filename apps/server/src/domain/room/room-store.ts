@@ -2,6 +2,7 @@ import type { GameKind } from '@taverla/protocol/game'
 import type { RoomCode } from '@taverla/protocol/identifiers'
 import type { Locale } from '@taverla/protocol/locale'
 
+import { generateHostToken } from '@taverla/core/room/host-token'
 import { generateRoomCode } from '@taverla/core/room/room-code'
 import { roomSettingsFor } from '@taverla/core/room/room-settings'
 
@@ -50,7 +51,9 @@ export const createRoom = ({
   const room: Room = {
     code,
     createdAt: now,
+    hostLeftAt: null,
     hostSessionId: null,
+    hostToken: generateHostToken(),
     lastActivityAt: now,
     phase: 'lobby',
     playedContentIds: new Set(),

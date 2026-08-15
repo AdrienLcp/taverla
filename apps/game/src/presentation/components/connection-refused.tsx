@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react'
+
 import type { ProtocolErrorMessage } from '@taverla/protocol/server-message'
 
 import { joinPath } from '@/infrastructure/router/navigation'
@@ -9,6 +11,12 @@ import { Link } from './link'
 import './connection-refused.sass'
 
 type ConnectionRefusedProps = {
+  /**
+   * What this screen can still do about it, between the reason and the way out.
+   * A console that holds the room's own token is not at the same dead end as a
+   * phone whose room has closed, and only the console's own page knows that.
+   */
+  children?: ReactNode
   /** `null` when the socket died without the server naming a reason. */
   error: ProtocolErrorMessage | null
 }
@@ -19,7 +27,10 @@ type ConnectionRefusedProps = {
  * replaced rather than annotated — a scoreboard left under a dead socket
  * invites pressing buttons whose frames go nowhere.
  */
-export const ConnectionRefused = ({ error }: ConnectionRefusedProps) => {
+export const ConnectionRefused = ({
+  children,
+  error
+}: ConnectionRefusedProps) => {
   const translate = useTranslate()
 
   return (
@@ -29,6 +40,7 @@ export const ConnectionRefused = ({ error }: ConnectionRefusedProps) => {
           error === null ? 'connection.refused' : protocolErrorKey(error.code)
         )}
       </h2>
+      {children}
       <Link href={joinPath} size='large' variant='outlined'>
         {translate('notFound.back')}
       </Link>

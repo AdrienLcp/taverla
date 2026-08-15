@@ -20,7 +20,9 @@ import { reshapesRound } from '@taverla/core/room/room-settings'
 import type { Room } from '@/domain/room/room'
 import {
   claimHost,
+  type HostClaimError,
   joinAsPlayer,
+  markHostAway,
   markPlayerDisconnected,
   removePlayer,
   updateSettings
@@ -75,6 +77,33 @@ type RoomActionMessage = Exclude<
 
 /** Policy violation. The client shows the error it was just sent and stops retrying. */
 const CLOSE_CODE_POLICY = 1008
+
+const HOST_CLAIM_REFUSALS: Record<HostClaimError, string> = {
+  host_already_connected: 'This room is already being hosted',
+  host_reconnecting:
+    'This room has just lost its console, which may still come back'
+}
+
+/**
+ * A claim the token won, over a console that is still connected — the one case
+ * where a socket that did nothing wrong is ended by somebody else's frame. Same
+ * shape as `disband`: the frame is fatal and the close is the client's, because
+ * a `Connection` carries a `send` and never its own socket.
+ *
+ * Two tabs of one browser share a `sessionId` and are both left alone, which is
+ * what lets a console be torn down and reopened without the room noticing.
+ */
+const displaceOtherConsoles = (room: Room, sessionId: string): void => {
+  for (const other of connectionsIn(room.code)) {
+    if (other.role === 'host' && other.sessionId !== sessionId) {
+      sendError(other, {
+        code: 'host_already_connected',
+        fatal: true,
+        message: 'This room is being hosted from another screen'
+      })
+    }
+  }
+}
 
 /**
  * One of these exists per socket, and the closure is the connection's state:
@@ -180,6 +209,7 @@ export const createRoomSocketEvents = (
     ws: WSContext
   }): Connection | null => {
     const claimed = claimHost({
+      hostToken: message.hostToken ?? null,
       isHostConnected: hostWasConnected,
       now: Date.now(),
       room,
@@ -187,15 +217,12 @@ export const createRoomSocketEvents = (
     })
 
     if (claimed.status === 'failure') {
-      reject(
-        outbound,
-        ws,
-        'host_already_connected',
-        'This room is already being hosted'
-      )
+      reject(outbound, ws, claimed.error, HOST_CLAIM_REFUSALS[claimed.error])
 
       return null
     }
+
+    displaceOtherConsoles(room, sessionId)
 
     const seat =
       message.nickname === undefined
@@ -882,6 +909,7 @@ export const createRoomSocketEvents = (
         // round would freeze it for a screen nobody left.
         if (!isHostConnected(roomCode)) {
           holdRoundWhileHostIsAway(room)
+          markHostAway(room, Date.now())
         }
 
         broadcastRoom(room)

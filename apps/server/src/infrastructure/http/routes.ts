@@ -94,7 +94,10 @@ export const registerHttpRoutes = (app: Hono): void => {
         return context.json(error, 503)
       }
 
-      const body: CreateRoomResponse = { code: room.code }
+      const body: CreateRoomResponse = {
+        code: room.code,
+        hostToken: room.hostToken
+      }
 
       return context.json(body, 201)
     }

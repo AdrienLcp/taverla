@@ -1,0 +1,27 @@
+@use '../../presentation/styles/typography'
+
+@layer components
+  // The refusal above it is prose for a room to read; this is a form for one
+  // pair of hands, so it stops being centred and stops being the page's width.
+  .host-refused
+    display: flex
+    flex-direction: column
+    gap: var(--space-m)
+    text-align: start
+    width: min(100%, 24rem)
+
+    .react-aria-Form
+      display: flex
+      flex-direction: column
+      gap: var(--space-m)
+
+    .rejected
+      @include typography.caption
+
+      color: var(--ink-muted)
+      text-wrap: balance
+
+    // The way back to waiting, under the way through: it is the answer when
+    // nobody has the code, and never the one being offered.
+    > .button
+      align-self: center

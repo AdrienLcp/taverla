@@ -14,6 +14,7 @@ import {
   type Peer,
   playerView,
   type RoomHarness,
+  sessionIdOf,
   sleep,
   startRoomHarness,
   waitFor
@@ -90,6 +91,7 @@ describe('a host who walks away', () => {
     returned.send({
       protocolVersion: PROTOCOL_VERSION,
       role: 'host',
+      sessionId: sessionIdOf(host),
       type: 'hello'
     })
     await waitFor(
@@ -130,6 +132,7 @@ describe('a host who walks away', () => {
     returned.send({
       protocolVersion: PROTOCOL_VERSION,
       role: 'host',
+      sessionId: sessionIdOf(host),
       type: 'hello'
     })
     await waitFor(
@@ -155,6 +158,7 @@ describe('a host who walks away', () => {
     returned.send({
       protocolVersion: PROTOCOL_VERSION,
       role: 'host',
+      sessionId: sessionIdOf(host),
       type: 'hello'
     })
     await waitFor(

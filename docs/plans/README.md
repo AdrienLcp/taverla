@@ -113,6 +113,16 @@ browser refused at the door kept a seat it had never been given.
 the other way from the ones above: a rule written for *the* host breaks the day
 there are two of them.
 
+The same question asked once more — *and which of the two owns the room?* — is
+what closed the last open decision in [`backlog.md`](backlog.md). A room now
+mints a token for the screen that opened it, and a claim carrying it beats
+whatever is connected; without one, a second console waits out a minute's grace
+before the code alone is enough. What that session is worth remembering for is
+where it was caught: the token was first kept on the host seat, everything was
+green, and it took *driving two consoles in a browser* to see that the refusal
+which displaces a console also voids the seat — so being taken over deleted the
+one thing that could undo it.
+
 Expect more of this than of stages. The plans cover what is missing; what is
 *wrong* surfaces by playing.
 

@@ -24,7 +24,8 @@ import {
 import { socketOrigin } from '@/infrastructure/env'
 import {
   ensureSessionId,
-  forgetSessionId
+  forgetSessionId,
+  readHostToken
 } from '@/infrastructure/storage/session-storage'
 
 /**
@@ -45,6 +46,13 @@ export type RoomSocket = {
   clearError: () => void
   clock: ClockEstimate | null
   error: ProtocolErrorMessage | null
+  /**
+   * Opens a fresh socket after a **refusal**, and does nothing on a socket that
+   * had not given up. A refusal is final until something changes on this side —
+   * a screen handed the room's token is the case that exists for — so this is a
+   * press rather than another timer.
+   */
+  retry: () => void
   /** `false` when the frame could not be written — the socket is down. */
   send: (message: ClientMessage) => boolean
   status: SocketStatus
@@ -92,6 +100,7 @@ export const useRoomSocket = ({
   const socketRef = useRef<WebSocket | null>(null)
   const samplesRef = useRef<ClockSample[]>([])
   const onFrameRef = useRef(onFrame)
+  const reconnectRef = useRef<(() => void) | null>(null)
 
   // The latest-ref pattern rather than a dependency: a fresh `onFrame` on every
   // render would tear the socket down and rebuild it on every render too.
@@ -112,8 +121,6 @@ export const useRoomSocket = ({
     let reconnectTimer: number | undefined
     let pingTimer: number | undefined
     const openingPingTimers: number[] = []
-
-    const sessionId = ensureSessionId({ role, roomCode })
 
     const ping = (socket: WebSocket): void => {
       if (socket.readyState === WebSocket.OPEN) {
@@ -140,12 +147,19 @@ export const useRoomSocket = ({
         attempt = 0
         setStatus('open')
         setError(null)
+        // Everything the hello carries is read here rather than when the effect
+        // ran: a refusal can have voided the seat since, and a screen handed the
+        // room's token holds it only from the press that reopens this socket.
         socket.send(
           encodeMessage({
+            hostToken:
+              role === 'host'
+                ? (readHostToken(roomCode) ?? undefined)
+                : undefined,
             nickname: nickname ?? undefined,
             protocolVersion: PROTOCOL_VERSION,
             role,
-            sessionId,
+            sessionId: ensureSessionId({ role, roomCode }),
             type: 'hello'
           })
         )
@@ -220,10 +234,24 @@ export const useRoomSocket = ({
       })
     }
 
+    // A refusal is final until something changes on this side, so the way back
+    // is a press rather than a dependency: nothing about the socket's inputs has
+    // changed, and the value that did — the room's token — is read on open.
+    reconnectRef.current = () => {
+      if (!giveUp) {
+        return
+      }
+
+      giveUp = false
+      attempt = 0
+      connect()
+    }
+
     connect()
 
     return () => {
       disposed = true
+      reconnectRef.current = null
       window.clearTimeout(reconnectTimer)
       window.clearInterval(pingTimer)
 
@@ -252,5 +280,9 @@ export const useRoomSocket = ({
     setError(null)
   }, [])
 
-  return { clearError, clock, error, send, status }
+  const retry = useCallback(() => {
+    reconnectRef.current?.()
+  }, [])
+
+  return { clearError, clock, error, retry, send, status }
 }

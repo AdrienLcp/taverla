@@ -8,6 +8,21 @@ one part.
 
 ### Features
 
+- **A room has an owner now.** Opening one mints a **recovery code** and hands it
+  to that screen alone. Anyone reading the room code off a screen could take a
+  room over the moment its console blinked, and the host came back to a flat
+  refusal with no way in — the takeover was never the problem, its being final
+  was. The recovery code always wins a claim, so the screen holding it takes the
+  room back from whatever is running it
+- `[Shared]` A second console arriving in the minute after a room lost its own is
+  told the room is waiting for its screen, rather than handed the game: a lid
+  closing, a reload and a Wi-Fi handover all land inside that minute. Past it the
+  room can still be picked up with the code alone, because a room nobody can take
+  over is an evening ended by a flat battery
+- `[Game]` The recovery code is read out of the host's own menu, behind a press
+  because the console is often a television the whole room is looking at, and
+  typed into the screen a second console is refused on. That is *the laptop died,
+  we host from the TV*, without the room ever seeing it
 - **Le Fake is the fourth game on the shelf.** A question with a surprising
   answer, everyone writes a convincing lie, the screen puts them all up beside
   the truth, and the room votes. Two points for finding the real answer, and one
