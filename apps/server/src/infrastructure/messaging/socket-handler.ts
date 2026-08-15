@@ -51,6 +51,7 @@ import { logger } from '@/infrastructure/logging/logger'
 import type { Connection, Outbound } from './connection'
 import {
   connectionsIn,
+  forgetSeat,
   isHostConnected,
   isSeatConnected,
   registerConnection,
@@ -778,8 +779,11 @@ export const createRoomSocketEvents = (
   }
 
   // Removed from the roster before the buzz is released, so that the player
-  // being unseated cannot be the one counted as still able to answer.
+  // being unseated cannot be the one counted as still able to answer — and off
+  // the console before either, because this is what broadcasts and
+  // `toHostView` reads the seat off the connection.
   const unseat = (playerId: PlayerId, room: Room): void => {
+    forgetSeat(room.code, playerId)
     removePlayer(room, playerId, Date.now())
     settle(releaseBuzz({ now: Date.now(), playerId, room }), room)
   }
@@ -832,14 +836,6 @@ export const createRoomSocketEvents = (
 
     if (playerId === null) {
       return
-    }
-
-    // Before the seat goes and not after, because `unseat` is what broadcasts
-    // and `toHostView` reads the seat off this connection. A host is the one
-    // socket that outlives its own seat — a player closes theirs — so one left
-    // holding a departed id would judge the rest of the round blind.
-    if (active.role === 'host') {
-      active.playerId = null
     }
 
     unseat(playerId, room)

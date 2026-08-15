@@ -188,10 +188,29 @@ He is right, and it is worse than a missing string.
   pulled up under the exits the moment the credit above it went away. Both fixed
   here, so **session 5 does not need to rediscover the menu's half of playtest 6**.
 
-The one thing left standing, deliberately: `host.removePlayer` aimed at the
-console's *own* seat clears it server-side but leaves the console's local
-`seatNickname` set, so that screen still thinks it is playing. Deriving it from
-`view.seatId` is the fix and it belongs to whoever next opens that file.
+The one thing left standing was `host.removePlayer` aimed at the console's *own*
+seat. **Closed on 15 August 2026, and it was twice the bug this paragraph
+described**: the local `seatNickname` was the visible half, and underneath it
+`evict` never cleared `connection.playerId` the way `depart` does — so
+`toHostView` went on reading a seat the roster no longer held, and the console
+was served every round with the answer withheld. A judge with nothing to judge
+with, silently, for the rest of the game.
+
+- **The seat comes off the connection wherever the roster loses it**, not only
+  on the exit that screen chose. `forgetSeat` is in the connection registry and
+  `unseat` calls it, which covers both `depart` and `evict`; the seat sweeper
+  calls it too, and `depart`'s hand-rolled copy is gone. One rule, one place.
+- **The console reads the room, not its own memory.** `isSeated` and the seat
+  control's name both come off `view.youId` and the roster now, so the two props
+  that carried the local mirror downward are gone.
+- **Removing yourself goes out as `player.leave`.** Deriving the display alone
+  would have left the nickname on the socket, and the next reconnect re-seats on
+  it — so an eviction aimed at your own row would not have survived a Wi-Fi
+  blink.
+- The browser pass is what confirmed the far end: the seat control comes back,
+  the menu drops its *leave* exit with the seat, and the round after it puts the
+  question on the console. Evicting somebody else still lands them on the
+  refusal screen.
 
 **A kicked player is never told, and their socket stays open.** `evict()` is two
 lines — `removePlayer` then `releaseBuzz` (`socket-handler.ts:754-757`) — with no

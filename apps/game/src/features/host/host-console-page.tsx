@@ -2,7 +2,11 @@ import { useCallback, useState } from 'react'
 
 import type { ClientMessage } from '@taverla/protocol/client-message'
 import { roundDurationMsOf } from '@taverla/protocol/game'
-import type { HostToken, RoomCode } from '@taverla/protocol/identifiers'
+import type {
+  HostToken,
+  PlayerId,
+  RoomCode
+} from '@taverla/protocol/identifiers'
 import type {
   HostRoomView,
   RoomSettings,
@@ -142,13 +146,27 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
     setSeatNickname(null)
   }, [send])
 
+  // The roster's ✕ sits beside the console's own seat too, and removing
+  // yourself is leaving it. Only `player.leave` also drops the nickname, which
+  // the socket would otherwise re-seat this screen with on the next reconnect —
+  // so an eviction aimed here would not survive a Wi-Fi blink.
+  const removePlayer = (playerId: PlayerId) => {
+    if (playerId === view?.youId) {
+      leaveSeat()
+
+      return
+    }
+
+    send({ playerId, type: 'host.removePlayer' })
+  }
+
   // Offered to the menu above, which owns the only way off this screen. What a
   // dead socket takes away is the *press*, which the menu greys out itself —
   // dropping the item would make the menu's contents flap on a Wi-Fi blink.
   useReportRoomExits({
     closeRoom,
     endGame: view !== null && isGameInPlay(view.phase) ? endGame : null,
-    leaveSeat: seatNickname === null ? null : leaveSeat
+    leaveSeat: view?.youId == null ? null : leaveSeat
   })
 
   // Written before the socket carries it, because the hello is built from
@@ -196,7 +214,7 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
         canPlay={canPlay}
         clock={clock}
         isLive={isLive}
-        isSeated={seatNickname !== null}
+        onRemovePlayer={removePlayer}
         onSettingsChange={changeSettings}
         onUnlockAudio={unlock}
         preferences={preferences}
@@ -255,7 +273,6 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
               onSettingsChange={changeSettings}
               onTakeSeat={setSeatNickname}
               preferences={preferences}
-              seatNickname={seatNickname}
               view={view}
             />
           </>
@@ -270,7 +287,8 @@ type StageProps = {
   canPlay: boolean
   clock: ClockEstimate | null
   isLive: boolean
-  isSeated: boolean
+  /** Aimed at the console's own seat too, which is why it is not a bare frame. */
+  onRemovePlayer: (playerId: PlayerId) => void
   /** The gesture a screen that cannot play a clip has to be offered. */
   onUnlockAudio: () => void
   onSettingsChange: (settings: RoomSettings) => void
@@ -285,7 +303,7 @@ const Stage = ({
   canPlay,
   clock,
   isLive,
-  isSeated,
+  onRemovePlayer,
   onSettingsChange,
   onUnlockAudio,
   preferences,
@@ -309,6 +327,11 @@ const Stage = ({
   }
 
   const round = view.round
+
+  // The room's answer, never what this console asked for: a seat can go without
+  // this screen deciding it — the host takes it off the roster, or the sweeper
+  // gives it up — and a screen still drawing its own answer form owns nothing.
+  const isSeated = view.youId !== null
 
   // A silent round is *visually identical* to one that plays — the clip's
   // progress comes from the server, buzzes work, the reveal lands — so this is
@@ -496,10 +519,10 @@ const Stage = ({
   return (
     <LobbyStage
       isLive={isLive}
+      onRemovePlayer={onRemovePlayer}
       onSettingsChange={onSettingsChange}
       preferences={preferences}
       roomCode={roomCode}
-      send={send}
       view={view}
     />
   )

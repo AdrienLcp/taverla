@@ -33,8 +33,6 @@ type SetupFoldProps = {
   onTakeSeat: (nickname: string) => void
   /** What this host last left each game set to, so picking one restores it. */
   preferences: HostPreferences | null
-  /** The nickname the host is playing under, or `null` while they only run the room. */
-  seatNickname: string | null
   view: HostRoomView
 }
 
@@ -54,13 +52,15 @@ export const SetupFold: React.FC<SetupFoldProps> = ({
   onSettingsChange,
   onTakeSeat,
   preferences,
-  seatNickname,
   view
 }) => {
   const translate = useTranslate()
   const game = view.settings.game
   const isInLobby = view.phase === 'lobby'
   const roundInPlay = isRoundInPlay(view.phase)
+  // The name the room has for this seat, not the one this screen asked for: a
+  // console removed from its own roster row keeps the second and holds none.
+  const seat = view.players.find((player) => player.id === view.youId) ?? null
 
   const summaryPart = (part: SettingsSummaryPart): string => {
     switch (part.kind) {
@@ -119,7 +119,7 @@ export const SetupFold: React.FC<SetupFoldProps> = ({
         to judge it, and a judge who is also answering is not one.
       */}
       {isInLobby && view.settings.mode.kind !== 'buzzer' && (
-        <HostSeat onTakeSeat={onTakeSeat} takenAs={seatNickname} />
+        <HostSeat onTakeSeat={onTakeSeat} takenAs={seat?.nickname ?? null} />
       )}
     </Disclosure>
   )

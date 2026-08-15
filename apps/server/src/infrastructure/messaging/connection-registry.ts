@@ -66,3 +66,18 @@ export const isHostConnected = (code: RoomCode): boolean =>
  */
 export const isSeatConnected = (code: RoomCode, playerId: PlayerId): boolean =>
   connectionsIn(code).some((connection) => connection.playerId === playerId)
+
+/**
+ * A host is the one socket that outlives its own seat — a player closes theirs
+ * — so the seat has to be taken off the connection wherever the roster loses
+ * it, not only on the exit that screen chose. `toHostView` reads the seat from
+ * here, and a console still naming a departed player is served the round with
+ * the answer withheld and nothing left to judge with.
+ */
+export const forgetSeat = (code: RoomCode, playerId: PlayerId): void => {
+  for (const connection of connectionsIn(code)) {
+    if (connection.role === 'host' && connection.playerId === playerId) {
+      connection.playerId = null
+    }
+  }
+}

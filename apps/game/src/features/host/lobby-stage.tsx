@@ -1,7 +1,6 @@
 import type React from 'react'
 
-import type { ClientMessage } from '@taverla/protocol/client-message'
-import type { RoomCode } from '@taverla/protocol/identifiers'
+import type { PlayerId, RoomCode } from '@taverla/protocol/identifiers'
 import type { HostRoomView, RoomSettings } from '@taverla/protocol/room'
 
 import type { HostPreferences } from '@taverla/core/room/host-preferences'
@@ -17,11 +16,12 @@ import { RoomInvitation } from './room-invitation'
 type LobbyStageProps = {
   /** The socket is open. The picker sends a frame, so it does nothing without one. */
   isLive: boolean
+  /** The ✕ beside a name — the console's own seat included, which is why it is not a frame. */
+  onRemovePlayer: (playerId: PlayerId) => void
   onSettingsChange: (settings: RoomSettings) => void
   /** What this host last left each game set to, so picking one restores it. */
   preferences: HostPreferences | null
   roomCode: RoomCode
-  send: (message: ClientMessage) => boolean
   view: HostRoomView
 }
 
@@ -35,10 +35,10 @@ type LobbyStageProps = {
  */
 export const LobbyStage: React.FC<LobbyStageProps> = ({
   isLive,
+  onRemovePlayer,
   onSettingsChange,
   preferences,
   roomCode,
-  send,
   view
 }) => {
   const translate = useTranslate()
@@ -65,12 +65,7 @@ export const LobbyStage: React.FC<LobbyStageProps> = ({
           {view.players.length === 0 ? (
             <p className='empty'>{translate('host.players.empty')}</p>
           ) : (
-            <Scoreboard
-              onRemove={(playerId) => {
-                send({ playerId, type: 'host.removePlayer' })
-              }}
-              players={view.players}
-            />
+            <Scoreboard onRemove={onRemovePlayer} players={view.players} />
           )}
         </section>
       </div>

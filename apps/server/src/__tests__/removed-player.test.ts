@@ -4,6 +4,9 @@ import type { PlayerServerMessage } from '@taverla/protocol/server-message'
 
 import {
   errorsIn,
+  FAST_GAME,
+  hostContent,
+  hostView,
   type Peer,
   playerView,
   type RoomHarness,
@@ -104,5 +107,36 @@ describe('a player the host removes', () => {
     expect(
       playerView(ada)?.players.some((player) => player.nickname === 'Zoe')
     ).toBe(false)
+  })
+
+  /**
+   * The ✕ in the lobby roster sits beside the console's own seat, and
+   * `answer-modes.test.ts` covers the exit that screen *chooses*. This is the
+   * one it does not: eviction never took the seat off the host connection, so
+   * `toHostView` went on reading a player the roster no longer held — and a
+   * judge naming a departed id is served the round with the answer withheld.
+   */
+  it('[eviction] gives a console back the answer when it removes its own seat', async () => {
+    const { code, host } = await harness.openRoom(FAST_GAME, 'Adrien')
+    const zoe = await harness.seat({ code, nickname: 'Zoe' })
+
+    host.send({
+      playerId: hostView(host)?.youId ?? '',
+      type: 'host.removePlayer'
+    })
+    await waitFor(
+      () => playerView(zoe)?.players.length === 1,
+      'the console to leave the roster'
+    )
+
+    expect(hostView(host)?.youId).toBeNull()
+
+    host.send({ type: 'host.startRound' })
+    await waitFor(
+      () => hostView(host)?.phase === 'playing',
+      'the clip to start'
+    )
+
+    expect(hostContent(host)?.track).not.toBeNull()
   })
 })

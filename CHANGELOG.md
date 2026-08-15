@@ -350,6 +350,19 @@ one part.
 
 ### Fixes
 
+- `[Server]` **A console that gives up its own seat is told the answer again.**
+  The ✕ in the roster sits beside the host's own row, and pressing it took the
+  player off the roster without taking the seat off the connection: the room no
+  longer had that player, and the console went on being served the round with
+  the answer withheld — a judge with nothing left to judge with, for the rest of
+  the game. The seat is dropped wherever the roster loses it now, by any of the
+  three exits rather than only the one that screen chose
+- `[Game]` **And that screen stops thinking it is still playing.** Whether it
+  holds a seat is read off the room rather than off what it once asked for, so
+  the seat control, the menu's exits and its own answer form all follow the
+  roster. Removing yourself goes out as *leaving*, which is what it is: aimed at
+  your own row, an eviction left the nickname on the socket and the next
+  reconnect quietly sat you back down
 - `[Game]` **A long candidate no longer runs out of its own button.** Every
   control in the product refuses a line break, because a label is two or three
   words somebody chose — and none of a round's four candidates was chosen: a

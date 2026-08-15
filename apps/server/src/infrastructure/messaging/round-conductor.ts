@@ -35,7 +35,7 @@ import {
   hostQuestionOf
 } from '@/infrastructure/questions/question-bank'
 
-import { hostConnectionIn } from './connection-registry'
+import { forgetSeat, hostConnectionIn } from './connection-registry'
 import { broadcastRoom, sendError } from './outbound'
 
 /**
@@ -421,6 +421,7 @@ export const startSeatSweeper = (): (() => void) => {
       }
 
       for (const playerId of released) {
+        forgetSeat(room.code, playerId)
         releaseBuzz({ now, playerId, room })
       }
 
