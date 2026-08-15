@@ -188,6 +188,14 @@ one part.
 
 ### Improvements
 
+- `[Le Fake]` **The reveal names people instead of counting them.** *1 l'a
+  trouvée* told a room of four something all four already knew; *Trouvée par
+  Zoe* is the thing they did not. Up to three names, and a count past that,
+  where the line would be a wall nobody finishes. Who fell for a lie is named
+  the same way and on purpose — the room watched the vote, the board already
+  says who wrote each line, and the score pays the author per person caught
+- `[Quiz]` `Tout le monde choisit parmi quatre, contre la montre` — parmi four
+  *what*. The four scoring lines open on the shape of the round now
 - `[Game]` **The countdown stopped wiping out the round it interrupts.** Between
   two rounds the big screen replaced the answer everybody was still arguing about
   with a number on an empty field, three times a minute. The round just played

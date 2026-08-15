@@ -48,12 +48,19 @@ export const RevealedLieBoard: React.FC<RevealedLieBoardProps> = ({
           )}
           {candidate.voterIds.length > 0 && (
             <p className='fooled'>
-              {translate(
-                candidate.isTruth
-                  ? 'lefake.reveal.found'
-                  : 'lefake.reveal.fooled',
-                { count: candidate.voterIds.length }
-              )}
+              {candidate.voterIds.length > MOST_VOTERS_NAMED
+                ? translate(
+                    candidate.isTruth
+                      ? 'lefake.reveal.found'
+                      : 'lefake.reveal.fooled',
+                    { count: candidate.voterIds.length }
+                  )
+                : translate(
+                    candidate.isTruth
+                      ? 'lefake.reveal.foundBy'
+                      : 'lefake.reveal.fooledNames',
+                    { names: candidate.voterIds.map(nicknameOf).join(' · ') }
+                  )}
             </p>
           )}
         </li>
@@ -61,6 +68,19 @@ export const RevealedLieBoard: React.FC<RevealedLieBoardProps> = ({
     </ul>
   )
 }
+
+/**
+ * Past this the line is a wall of names on a board already sized by how many
+ * candidates there are, and a count says more than a list nobody finishes. The
+ * case that asked for this is one person finding the truth, where *"1 l'a
+ * trouvée"* named nobody in a room of four who all know each other.
+ *
+ * Naming who fell for a lie is the same call and it is deliberate: the room
+ * watched the vote happen, the board already names who wrote each line, and the
+ * score pays the author per person caught — a count hides nothing and says
+ * less.
+ */
+const MOST_VOTERS_NAMED = 3
 
 /**
  * The room reads this out loud from the top, and the answer is what they are

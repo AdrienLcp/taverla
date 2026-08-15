@@ -56,7 +56,7 @@ export const FR_DICTIONARY: Dictionary = {
       buzzer:
         'Le premier qui buzze répond à voix haute. L’aubergiste juge le titre et l’artiste, 1 point chacun — une mauvaise réponse te met hors-jeu pour le reste de la tournée.',
       choice:
-        'Tout le monde choisit, sur le même extrait. La bonne proposition rapporte 1 point, et plus tu la trouves tôt, plus la montre ajoute — jusqu’à +3.',
+        'Quatre propositions sur le même extrait, et tout le monde répond. La bonne rapporte 1 point, et plus tu la trouves tôt, plus la montre ajoute — jusqu’à +3.',
       typed:
         'Tout le monde tape, sur le même extrait. Titre et artiste rapportent 1 point chacun, les deux ensemble 3, et plus tu trouves tôt, plus la montre ajoute — jusqu’à +3.'
     },
@@ -304,11 +304,13 @@ export const FR_DICTIONARY: Dictionary = {
           }
         }
       }),
+      fooledNames: 'Ça a mordu\u00a0: {names}',
       found: defineTranslation('{count:plural}', {
         plural: {
           count: { one: '{?} l’a trouvée', other: '{?} l’ont trouvée' }
         }
       }),
+      foundBy: 'Trouvée par {names}',
       nobody: 'Personne n’a écrit celle-là',
       title: 'La vérité, c’était'
     },
@@ -419,9 +421,9 @@ export const FR_DICTIONARY: Dictionary = {
       buzzer:
         'Le premier qui buzze répond à voix haute, et l’aubergiste dit si c’est bon. 1 point si c’est juste — et une mauvaise réponse te met hors-jeu pour le reste de la tournée.',
       choice:
-        'Tout le monde choisit parmi quatre, contre la montre. La bonne proposition rapporte 1 point, et plus tu la trouves tôt, plus la montre ajoute — jusqu’à +3.',
+        'Quatre propositions, et tout le monde répond en même temps. La bonne rapporte 1 point, et plus tu la trouves tôt, plus la montre ajoute — jusqu’à +3.',
       typed:
-        'Tout le monde tape, contre la montre. La bonne réponse rapporte 3 points, et plus tu trouves tôt, plus la montre ajoute — jusqu’à +3.'
+        'Tout le monde tape sa réponse en même temps. La bonne rapporte 3 points, et plus tu la trouves tôt, plus la montre ajoute — jusqu’à +3.'
     },
     tagline: 'Une question, et le premier qui sait.'
   },

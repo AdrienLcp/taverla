@@ -59,7 +59,7 @@ export const EN_DICTIONARY = defineTranslations({
       buzzer:
         'First to buzz answers out loud. The innkeeper judges the title and the artist, a point each — a wrong answer sits you out for the rest of the round.',
       choice:
-        'Everyone picks, over the same clip. The right one scores a point, and the earlier you find it the more the clock adds — up to +3.',
+        'Four answers over the same clip, everyone at once. The right one scores a point, and the earlier you find it the more the clock adds — up to +3.',
       typed:
         'Everyone types, over the same clip. Title and artist score a point each and both together score three, and the earlier you get it the more the clock adds — up to +3.'
     },
@@ -302,9 +302,12 @@ export const EN_DICTIONARY = defineTranslations({
       fooled: defineTranslation('{count:plural}', {
         plural: { count: { other: '{?} fell for it' } }
       }),
+      /** Named while the list is short enough to read; counted past that. */
+      fooledNames: 'Fooled: {names}',
       found: defineTranslation('{count:plural}', {
         plural: { count: { one: '{?} found it', other: '{?} found it' } }
       }),
+      foundBy: 'Found by {names}',
       nobody: 'Nobody wrote that one',
       title: 'The truth was'
     },
@@ -430,9 +433,9 @@ export const EN_DICTIONARY = defineTranslations({
       buzzer:
         'First to buzz answers out loud, and the innkeeper says right or wrong. A point for right — and a wrong answer sits you out for the rest of the round.',
       choice:
-        'Everyone picks from four, against the clock. The right one scores a point, and the earlier you find it the more the clock adds — up to +3.',
+        'Four answers, everyone at once. The right one scores a point, and the earlier you find it the more the clock adds — up to +3.',
       typed:
-        'Everyone types, against the clock. The right answer scores three, and the earlier you get it the more the clock adds — up to +3.'
+        'Everyone types their answer at once. The right one scores three, and the earlier you find it the more the clock adds — up to +3.'
     },
     tagline: 'A question, and the first one who knows it.'
   },

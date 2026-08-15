@@ -28,7 +28,7 @@ not a wish.
 | 4 | [Speed pays by rank; it should pay by the clock](#4--speed-pays-by-rank-it-should-pay-by-the-clock--done-15-august-2026) | **done** | — | playtest 2 |
 | 5 | [Two controls that break on their content](#5--two-controls-that-break-on-their-content--done-15-august-2026) | **done** | `/impeccable` | playtest 6, 12 |
 | 6 | [The gap between two rounds](#6--the-gap-between-two-rounds--done-15-august-2026) | **done** | `/impeccable` | playtest 4, 7, 10 |
-| 7 | [Say it the way a table says it](#7--say-it-the-way-a-table-says-it) | medium | `/impeccable` | playtest 1, 11, old C |
+| 7 | [Say it the way a table says it](#7--say-it-the-way-a-table-says-it--done-15-august-2026) | **done** | `/impeccable` | playtest 1, 11, old C |
 | 8 | [The winner gets a moment](#8--the-winner-gets-a-moment) | medium | `/impeccable` | playtest 8 |
 | 9 | [Arriving cold in a running blind test](#9--arriving-cold-in-a-running-blind-test) | medium | `/impeccable` | old B |
 | 10 | [Stage 18 — Reflex race](18-reflex-race.md) | large | its own plan | the fifth game |
@@ -38,7 +38,7 @@ room already met, 4 is the one rule the room asked to have changed, and
 everything after is polish and new work. 5 is out of order on purpose — it is an
 hour, and it is the one players touch every single round.
 
-**Session 7 is next.** Sessions 1 to 6 all landed on 15 August 2026; what each
+**Session 8 is next.** Sessions 1 to 7 all landed on 15 August 2026; what each
 found that this file did not expect is written into its own entry — and session
 3's is the one to read before trusting any diagnosis here, because two of the
 three faults it was given turned out not to be faults at all.
@@ -597,7 +597,38 @@ The facts it starts from:
 
 ---
 
-## 7 · Say it the way a table says it
+## 7 · Say it the way a table says it — **done, 15 August 2026**
+
+**What shipped**, against what this entry expected — and most of it had already
+happened before the session opened:
+
+- **The register pass landed with the tavern copy**, in the session that renamed
+  a room to *une table* and a host to *l'aubergiste*. The setup panel this entry
+  wanted re-read in one sitting was re-read there: *Comment on répond · Quatre
+  propositions · On tape · Le premier qui buzze* is what playtest 1 asked for.
+- **The tagline question closed itself.** *Prenez place.* against *Prends
+  place.* was a choice between two ways of addressing the room; the front door
+  says **La taverne est ouverte.** now and addresses nobody, so there is nothing
+  left to answer. Adrien never had to.
+- **What was actually left was four sentences**, and they were the ones the note
+  quoted: *"Tout le monde choisit parmi quatre, contre la montre"* — parmi four
+  *what*, and then *la montre* twice in one breath once session 4 rewrote the
+  arithmetic on top. They open on the shape of the round now: *Quatre
+  propositions, et tout le monde répond en même temps.*
+- **Playtest 11 is answered by naming them, up to three.** A count is what the
+  room already knows; *Trouvée par Zoe* is the thing it does not. Past three the
+  line is a wall of names on a board sized by how many candidates there are, and
+  the count says more. **Naming who fell for a lie is the same call and it is
+  deliberate**: the room watched the vote happen, the board already names who
+  wrote each line, and the score pays the author per person caught — a count
+  hides nothing and says less. Both strings are invariable (*Trouvée par …* /
+  *Ça a mordu : …*), which is what keeps a name list out of the plural
+  machinery.
+- **Session 6's owed check is discharged here**: Le Fake's reveal carries the
+  new standings without crowding, verified with a five-line board. A room of ten
+  writing ten lies is still unmeasured, and that is the one to watch.
+
+---
 
 > *Playtest 1 — "reformuler « tout le monde choisit parmi 4 ». La plupart des
 > wordings ne font pas très naturels. Il faut ajouter « parmi 4 propositions » à
