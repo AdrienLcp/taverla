@@ -133,7 +133,9 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   could send with `joined_mid_round`, and plays from the next round
 - **Answer mode** — `typed` (one field, the default), `choice` (four candidates)
   or `buzzer` (one player, judged by the host). The first two are everyone at
-  once, decided by the server and scored by speed on top of being right; typing
+  once, decided by the server and scored by the clock on top of being right —
+  `MOST_A_SPEED_BONUS_PAYS` at nought, falling linearly to nothing when the
+  round runs out, so two players in the same second are paid the same; typing
   pays 3 for the pair where a right pick pays 1, because producing an answer
   from nothing is not recognising it among four. It stays a *room* setting the
   game narrows — the bare buzzer offers only `buzzer`, and a frame setting

@@ -32,7 +32,7 @@ import {
   hasJoinedAfterStart,
   isExpectedInRound
 } from '@taverla/core/round/round-roster'
-import { speedBonusForRank } from '@taverla/core/scoring/speed-bonus'
+import { speedBonusForElapsed } from '@taverla/core/scoring/speed-bonus'
 import {
   isFullyBanked,
   isMiss,
@@ -398,10 +398,10 @@ const bank = ({
 
   const entry = held ?? {
     firstGuessedAt: now,
-    firstScoredAt: null,
     landed: [],
     lastMiss: null,
     playerId,
+    scoredAfterMs: null,
     verdict: graded.verdict
   }
 
@@ -409,7 +409,7 @@ const bank = ({
 
   if (gained) {
     entry.landed.push(graded.said)
-    entry.firstScoredAt ??= now
+    entry.scoredAfterMs ??= elapsedRoundMs(round, now)
   } else {
     entry.lastMiss = graded.said
   }
@@ -462,9 +462,9 @@ export const everyoneIsDone = (room: Room, now: number): boolean => {
 }
 
 /**
- * Scores a simultaneous round and reveals it. The speed bonus is a rank among
- * the players who *scored*, in arrival order — being quickly wrong wins
- * nothing, and taking somebody's bonus for it would be the wrong lesson.
+ * Scores a simultaneous round and reveals it. The speed bonus is paid from how
+ * far into the round each player first scored — being quickly wrong wins
+ * nothing, because a player who never banked a half is never asked.
  */
 export const settleSimultaneousRound = ({
   mode,
@@ -481,7 +481,7 @@ export const settleSimultaneousRound = ({
     return
   }
 
-  let rankAmongCorrect = 0
+  const roundDurationMs = roundDurationMsOf(room.settings.game)
 
   for (const attempts of [...round.attempts].sort(byFirstScored)) {
     const earned = pointsForSimultaneousAnswer({
@@ -489,19 +489,23 @@ export const settleSimultaneousRound = ({
       verdict: attempts.verdict
     })
 
-    if (earned === 0) {
+    if (earned === 0 || attempts.scoredAfterMs === null) {
       round.awards.push({
         playerId: attempts.playerId,
         points: 0,
+        speedBonus: 0,
         verdict: attempts.verdict
       })
 
       continue
     }
 
-    const points = earned + speedBonusForRank(rankAmongCorrect)
+    const speedBonus = speedBonusForElapsed({
+      elapsedMs: attempts.scoredAfterMs,
+      roundDurationMs
+    })
 
-    rankAmongCorrect += 1
+    const points = earned + speedBonus
 
     const participant = room.players.get(attempts.playerId)
 
@@ -512,6 +516,7 @@ export const settleSimultaneousRound = ({
     round.awards.push({
       playerId: attempts.playerId,
       points,
+      speedBonus,
       verdict: attempts.verdict
     })
   }
@@ -772,8 +777,8 @@ export const settleLieBoard = (room: Room, now: number): void => {
  * banked nothing sorts to the back where they cannot take a place.
  */
 const byFirstScored = (one: PlayerAttempts, other: PlayerAttempts): number =>
-  (one.firstScoredAt ?? Number.POSITIVE_INFINITY) -
-  (other.firstScoredAt ?? Number.POSITIVE_INFINITY)
+  (one.scoredAfterMs ?? Number.POSITIVE_INFINITY) -
+  (other.scoredAfterMs ?? Number.POSITIVE_INFINITY)
 
 type Attempt = { kind: 'choice'; choiceIndex: number } | TypedAttempt
 
@@ -900,7 +905,10 @@ export const applyVerdict = ({
 
   // A miss is recorded too: the reveal panel earns the right to say who tried
   // and got it wrong, which is most of the fun of the round being over.
-  round.awards.push({ playerId, points, verdict })
+  //
+  // No speed bonus: a judged round is one player on the floor, so the order is
+  // the buzz and speed is already the whole prize.
+  round.awards.push({ playerId, points, speedBonus: 0, verdict })
   round.activeBuzz = null
 
   if (!isMiss(verdict)) {

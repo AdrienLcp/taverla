@@ -69,6 +69,10 @@ export const tallyLieBoard = ({
     .map(([playerId, points]) => ({
       playerId,
       points,
+      // Voting fast is voting without reading the board, and on the other half
+      // it would pay the lie written quickly where a good lie is the one
+      // somebody thought about. Both phases push the wrong way.
+      speedBonus: 0,
       verdict: {
         isCorrect: votes.some(
           (vote) => vote.playerId === playerId && vote.candidateId === truthId

@@ -231,6 +231,26 @@ export const playerView = (player: Peer<PlayerServerMessage>) => {
 }
 
 /**
+ * What a round paid a player for the answer itself, with the clock's share
+ * taken back off. Every rate in the product is asserted through this rather
+ * than against a total: the speed bonus falls with real elapsed time, so a
+ * total is a number that depends on how loaded the machine was.
+ */
+export const basePointsFor = ({
+  playerId,
+  view
+}: {
+  playerId: string | null
+  view: { round: RoundView | null } | null
+}): number | null => {
+  const award = view?.round?.awards.find(
+    (candidate) => candidate.playerId === playerId
+  )
+
+  return award === undefined ? null : award.points - award.speedBonus
+}
+
+/**
  * The blind test's arm of a view's round, or `null` when the room is on another
  * game. Every suite here plays a blind test, so the narrowing is noise at the
  * call site and belongs once, in the harness.

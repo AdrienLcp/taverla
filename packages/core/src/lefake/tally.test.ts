@@ -86,6 +86,7 @@ describe('tallyLieBoard', () => {
     expect(awards.find((award) => award.playerId === 'di')).toEqual({
       playerId: 'di',
       points: 0,
+      speedBonus: 0,
       verdict: { isCorrect: false, kind: 'single' }
     })
   })

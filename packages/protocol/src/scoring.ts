@@ -36,16 +36,35 @@ export const POINTS_FOR_A_TYPED_ANSWER = 3
 export const POINTS_FOR_A_CLAIM = 1
 
 /**
- * Awarded on arrival order among the players who scored this round — the first
- * of them, then the second, then nobody. A rank bonus rather than a curve
- * because a player can compute it from what they watched happen, and arguing
- * about it out loud is most of what a party game is for.
+ * The most the clock pays, at nought seconds, falling linearly to nothing when
+ * the round runs out. It replaced a rank table of `[2, 1]` — the first scorer,
+ * then the second, then nobody — and the argument that table carried is worth
+ * keeping, because it is the reason somebody will want to restore it: a rank is
+ * a thing a player computes from what they watched happen, and arguing about it
+ * out loud is most of what a party game is for.
+ *
+ * It lost on the case it could not price. If the first answers at one second
+ * and the second answers at twenty-nine, a rank pays them 2 and 1; the gap the
+ * room actually saw was the whole round. **Do not put the table back.**
+ *
+ * Two consequences that are not incidental. Two players landing in the same
+ * second now score the same, where the table always separated them by arrival —
+ * more honest, and a real change in how a board reads. And the bonus is no
+ * longer scarce: on a thirty-second round everyone who answers inside
+ * twenty-five takes something, where before it was two players or nobody.
+ *
+ * Three is not measured against what an answer is worth, and does not need to
+ * be: the mode is the *room's*, so a typed answer and a pick are never scored
+ * in the same game. What the answer pays prices knowing it; this prices the
+ * race, and the race is the same race in both.
  *
  * Le Fake pays no such bonus, and it is the only game on the shelf that does
  * not: voting quickly is voting without reading the board, which is the half of
- * that round worth having.
+ * that round worth having. The bare buzzer pays none either, and cannot — it
+ * has no round clock at all, because the host brings the content and eight
+ * seconds into a charade is not eight seconds into a riddle.
  */
-export const SPEED_BONUS_BY_RANK = [2, 1] as const
+export const MOST_A_SPEED_BONUS_PAYS = 3
 
 /**
  * Picking the truth out of a board of lies. Twice what a right pick is worth in
@@ -91,7 +110,15 @@ export const verdictSchema = z.discriminatedUnion('kind', [
 
 export const awardSchema = z.object({
   playerId: playerIdSchema,
+  /** Everything the round paid, the speed bonus included. */
   points: z.number().int().nonnegative(),
+  /**
+   * How much of `points` the clock paid, so a screen can say why two players
+   * who both got it right did not get the same. A curve is less visible than
+   * the rank table it replaced — the room watched the order happen and could
+   * count it — so the breakdown travels rather than being inferred.
+   */
+  speedBonus: z.number().int().nonnegative(),
   verdict: verdictSchema
 })
 

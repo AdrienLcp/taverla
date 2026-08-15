@@ -8,6 +8,7 @@ import {
 } from '@taverla/protocol/room'
 
 import {
+  basePointsFor,
   errorsIn,
   hostQuestion,
   hostView,
@@ -170,8 +171,14 @@ describe('a quiz through the seam', () => {
       'the typed round to close'
     )
 
-    // Three for the claim and two for being the first to bank it.
-    expect(playerView(typed.zoe)?.players[0]?.score).toBe(5)
+    // Three for the claim, with whatever the clock paid taken back off — that
+    // share falls with real elapsed time and is the same in both modes.
+    expect(
+      basePointsFor({
+        playerId: playerView(typed.zoe)?.youId ?? null,
+        view: playerView(typed.zoe)
+      })
+    ).toBe(3)
 
     await harness.stop()
     harness = await startRoomHarness()
@@ -192,7 +199,12 @@ describe('a quiz through the seam', () => {
       'the pick round to close'
     )
 
-    expect(playerView(picked.zoe)?.players[0]?.score).toBe(3)
+    expect(
+      basePointsFor({
+        playerId: playerView(picked.zoe)?.youId ?? null,
+        view: playerView(picked.zoe)
+      })
+    ).toBe(1)
   })
 
   /**

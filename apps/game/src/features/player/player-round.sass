@@ -49,11 +49,28 @@
       color: var(--ink-muted)
       text-wrap: pretty
 
+    // The number and the clock's share of it, and they are siblings rather than
+    // one inside the other on purpose: `letter-spacing` inherits as a computed
+    // length, so `monument`'s -0.035em of a 12rem number reaches a caption as
+    // nearly seven pixels of negative tracking and folds it onto itself.
+    .your-award
+      align-items: center
+      display: flex
+      flex-direction: column
+      gap: var(--space-2xs)
+
     .you-scored
       @include typography.monument
       @include typography.numeric
 
       font-size: clamp(4rem, 30vmin, 12rem)
+
+    // The footnote that settles the argument about why two players who both got
+    // it right did not get the same.
+    .speed-bonus
+      @include typography.caption
+
+      color: var(--ink-muted)
 
     // A step under `.you-scored`, because the ordinal carries a suffix: "1er"
     // sets three glyphs where "+3" sets two, and the board has to follow it.

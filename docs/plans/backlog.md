@@ -25,7 +25,7 @@ not a wish.
 | 1 | [A reconnecting phone stays half-dead](#1--a-reconnecting-phone-stays-half-dead--done-15-august-2026) | **done** | — | playtest 3 |
 | 2 | [Three exits that say nothing](#2--three-exits-that-say-nothing--done-15-august-2026) | **done** | — | playtest 13, old D |
 | 3 | [The question bank's spelling](#3--the-question-banks-spelling--done-15-august-2026) | **done** | — | playtest 9, `accepted` |
-| 4 | [Speed pays by rank; it should pay by the clock](#4--speed-pays-by-rank-it-should-pay-by-the-clock) | medium | — | playtest 2 |
+| 4 | [Speed pays by rank; it should pay by the clock](#4--speed-pays-by-rank-it-should-pay-by-the-clock--done-15-august-2026) | **done** | — | playtest 2 |
 | 5 | [Two controls that break on their content](#5--two-controls-that-break-on-their-content) | small | `/impeccable` | playtest 6, 12 |
 | 6 | [The gap between two rounds](#6--the-gap-between-two-rounds) | large | `/impeccable` | playtest 4, 7, 10 |
 | 7 | [Say it the way a table says it](#7--say-it-the-way-a-table-says-it) | medium | `/impeccable` | playtest 1, 11, old C |
@@ -38,10 +38,10 @@ room already met, 4 is the one rule the room asked to have changed, and
 everything after is polish and new work. 5 is out of order on purpose — it is an
 hour, and it is the one players touch every single round.
 
-**Session 4 is next.** Sessions 1, 2 and 3 all landed on 15 August 2026; what
-each found that this file did not expect is written into its own entry — and
-session 3's is the one to read before trusting any diagnosis here, because two
-of the three faults it was given turned out not to be faults at all.
+**Session 5 is next.** Sessions 1 to 4 all landed on 15 August 2026; what each
+found that this file did not expect is written into its own entry — and session
+3's is the one to read before trusting any diagnosis here, because two of the
+three faults it was given turned out not to be faults at all.
 
 The one decision that was still Adrien's has been taken and built:
 [who owns a room](#who-owns-a-room--done-15-august-2026).
@@ -314,7 +314,40 @@ token is a step nobody can see at forty centimetres, let alone four metres.
 
 ---
 
-## 4 · Speed pays by rank; it should pay by the clock
+## 4 · Speed pays by rank; it should pay by the clock — **done, 15 August 2026**
+
+**What shipped**, against what this entry expected — it was right about the
+shape, and wrong about two things it could not see from outside:
+
+- Every recommendation was taken: linear, `MOST_A_SPEED_BONUS_PAYS = 3`,
+  continuous inside and rounded once at the end, the **first** banked half
+  stamping the blind test's pair, nothing at all for a wrong answer.
+- **`firstScoredAt` did not gain a sibling; it changed meaning and name.**
+  `scoredAfterMs` is how far into the round the player first banked, and it is
+  the only stamp — the wall clock it held was used for the bonus and for the
+  award order, and both want the round's clock. The rename is what makes the
+  next reader notice.
+- **The socket assertions could not simply be rewritten to new numbers.** A
+  bonus that falls with real elapsed time makes every total a function of how
+  loaded the machine was, and four suites asserted totals. `basePointsFor` in
+  the harness takes the clock's share back off, so a rate is asserted as a rate;
+  the one assertion left on a total is the one that matters — two players who
+  answered in the same breath now score **the same**, where the table always
+  separated them.
+- **The copy was four strings, not two.** `blindtest.scoring.*` and
+  `quiz.scoring.*` each spell the rule out in `choice` and `typed`, in both
+  locales, and every one of them said *+2 et +1*. Session 7 inherits their
+  register, not their arithmetic.
+- **The reveal says what the clock paid**, on the phone: `awardSchema` carries
+  `speedBonus` beside `points`, and `+3` now has *dont 2 pour la vitesse* under
+  it. The big screen still shows the total alone — placing it there is session
+  6's, which owns that composition.
+- **The browser pass earned its place again.** The bonus line was first written
+  as a `<span>` inside `.you-scored`, and `letter-spacing` inherits as a
+  *computed length*: `monument`'s -0.035em of a 12rem number reached a 14px
+  caption as nearly seven pixels of negative tracking and folded the sentence
+  onto itself. Nothing type-checks that. They are siblings under `.your-award`
+  now.
 
 > *Playtest 2 — "si on répond plus vite que les autres, on devrait avoir plus de
 > points, pour tous les jeux. Plus on a répondu tôt, plus on a de points, on se

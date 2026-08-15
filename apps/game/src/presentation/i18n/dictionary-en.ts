@@ -59,9 +59,9 @@ export const EN_DICTIONARY = defineTranslations({
       buzzer:
         'First to buzz answers out loud. The innkeeper judges the title and the artist, a point each — a wrong answer sits you out for the rest of the round.',
       choice:
-        'Everyone picks, over the same clip. The right one scores a point, and the first two to find it earn +2 and +1 on top.',
+        'Everyone picks, over the same clip. The right one scores a point, and the earlier you find it the more the clock adds — up to +3.',
       typed:
-        'Everyone types, over the same clip. Title and artist score a point each and both together score three, and the first two to get it right earn +2 and +1 on top.'
+        'Everyone types, over the same clip. Title and artist score a point each and both together score three, and the earlier you get it the more the clock adds — up to +3.'
     },
     source: {
       chart: 'Top charts',
@@ -430,9 +430,9 @@ export const EN_DICTIONARY = defineTranslations({
       buzzer:
         'First to buzz answers out loud, and the innkeeper says right or wrong. A point for right — and a wrong answer sits you out for the rest of the round.',
       choice:
-        'Everyone picks from four, against the clock. The right one scores a point, and the first two to find it earn +2 and +1 on top.',
+        'Everyone picks from four, against the clock. The right one scores a point, and the earlier you find it the more the clock adds — up to +3.',
       typed:
-        'Everyone types, against the clock. The right answer scores three, and the first two to get it right earn +2 and +1 on top.'
+        'Everyone types, against the clock. The right answer scores three, and the earlier you get it the more the clock adds — up to +3.'
     },
     tagline: 'A question, and the first one who knows it.'
   },
@@ -450,6 +450,11 @@ export const EN_DICTIONARY = defineTranslations({
     index: 'Round {index:number} of {total:number}',
     indexOpen: 'Round {index:number}',
     nobody: 'Nobody got it',
-    scored: '+{points:number}'
+    scored: '+{points:number}',
+    /**
+     * Why two players who both got it right did not get the same. The clock
+     * replaced a rank the room could count, so what it paid has to be said.
+     */
+    speedBonus: '{points:number} of that for being early'
   }
 })

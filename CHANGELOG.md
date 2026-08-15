@@ -188,6 +188,26 @@ one part.
 
 ### Improvements
 
+- **Speed is paid by the clock rather than by rank.** The first player to score
+  took +2 and the second +1, whatever the gap between them — so answering at one
+  second and answering at twenty-nine were worth a point apart. The bonus now
+  falls linearly from **+3** at nought to nothing when the round runs out, on the
+  quiz and the blind test, in both answer modes. Two consequences worth
+  expecting: two players landing in the same second score the same, where the
+  table always separated them by arrival; and the bonus is no longer scarce —
+  everyone who answers inside five-sixths of the round takes something, where
+  before it was two players or nobody
+- `[Server]` It is measured on the **round's** clock, not the wall's. That clock
+  stops while the host is away, so a room whose console blinked no longer pays
+  for the pause — a player who answered eight seconds in is eight seconds in
+  however long the screen took to come back
+- `[Game]` **A phone is told what the clock paid it.** A rank was something the
+  room watched happen and could count; a curve is not, so `+3` now carries *dont
+  2 pour la vitesse* under it. The big screen still shows the total alone
+- `[Buzzer]` **Unchanged, and not by oversight.** It has no round clock at all —
+  the host brings the content, and eight seconds into a charade acted out over
+  forty is not eight seconds into a riddle said in five. Le Fake is unchanged
+  too: voting fast is voting without reading the board
 - `[Game]` **The app stopped describing its own plumbing.** Every user-visible
   string was written from the inside out: the front door promised *des jeux de
   soirée pour un écran et les téléphones de tout le monde*, three of the four

@@ -7,6 +7,7 @@ import {
 
 import {
   bankedHalves,
+  basePointsFor,
   blindtestRound,
   errorsIn,
   FAST_GAME,
@@ -184,8 +185,15 @@ describe('answering all at once', () => {
       ])
     )
 
-    // One for the pick and two for being first, against five for typing it.
-    expect(scores.get('Zoe')).toBe(3)
+    // One for the pick, against three for typing the pair. What the clock adds
+    // is the same in both modes and is taken back off to say so.
+    expect(
+      basePointsFor({
+        playerId: playerView(zoe)?.youId ?? null,
+        view: playerView(zoe)
+      })
+    ).toBe(1)
+    expect(scores.get('Zoe')).toBeGreaterThanOrEqual(1)
     expect(scores.get('Max')).toBe(0)
   })
 
@@ -280,7 +288,7 @@ describe('answering all at once', () => {
     ).toEqual(['a guess'])
   })
 
-  it('[typed] banks one half at a time, and ranks on the first that landed', async () => {
+  it('[typed] banks one half at a time, and pays a shared instant the same', async () => {
     const { host, max, zoe } = await roundInPlay(TYPED_GAME)
 
     const roundId = playerView(zoe)?.round?.id ?? ''
@@ -298,8 +306,9 @@ describe('answering all at once', () => {
       })
     }
 
-    // Zoe banks the title first, so she heads the bonus queue even though Max
-    // completes the pair right behind her.
+    // Zoe banks the title first. Under the rank table that alone was worth a
+    // point more than Max; the clock cannot tell two answers a few hundred
+    // milliseconds apart from each other, and no longer pretends to.
     guess(zoe, track.title)
     await waitFor(
       () => bankedHalves(playerView(zoe))?.titleCorrect === true,
@@ -327,10 +336,15 @@ describe('answering all at once', () => {
       ])
     )
 
-    // The pair pays 3 however it was reached, and the queue is decided by who
-    // banked something first: +2 for Zoe, +1 for Max.
-    expect(scores.get('Zoe')).toBe(5)
-    expect(scores.get('Max')).toBe(4)
+    // The pair pays 3 however it was reached, and both reached it inside the
+    // same second of the same round.
+    expect(
+      basePointsFor({
+        playerId: playerView(zoe)?.youId ?? null,
+        view: playerView(zoe)
+      })
+    ).toBe(3)
+    expect(scores.get('Zoe')).toBe(scores.get('Max'))
   })
 
   it('[typed] keeps a player in the round after a guess that lands nothing', async () => {
@@ -429,14 +443,12 @@ describe('answering all at once', () => {
       'the round to close'
     )
 
-    const scores = new Map(
-      (playerView(zoe)?.players ?? []).map((player) => [
-        player.nickname,
-        player.score
-      ])
-    )
-
-    expect(scores.get('Zoe')).toBe(5)
+    expect(
+      basePointsFor({
+        playerId: playerView(zoe)?.youId ?? null,
+        view: playerView(zoe)
+      })
+    ).toBe(3)
   })
 
   it('[typed] shows what everyone said, only once the answer is out', async () => {

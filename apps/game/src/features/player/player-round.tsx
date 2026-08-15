@@ -119,9 +119,16 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
       <section className='player-round centred'>
         <Revealed round={round} view={view} />
         {yours != null && yours.points > 0 && (
-          <p className='you-scored'>
-            {translate('round.scored', { points: yours.points })}
-          </p>
+          <div className='your-award'>
+            <p className='you-scored'>
+              {translate('round.scored', { points: yours.points })}
+            </p>
+            {yours.speedBonus > 0 && (
+              <p className='speed-bonus'>
+                {translate('round.speedBonus', { points: yours.speedBonus })}
+              </p>
+            )}
+          </div>
         )}
       </section>
     )

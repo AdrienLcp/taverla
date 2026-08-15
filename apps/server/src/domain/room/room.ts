@@ -87,12 +87,19 @@ export type PlayerAttempts = {
   /** Their first guess of any kind — the name appearing on the room's screen. */
   firstGuessedAt: number
   /**
-   * Their first guess that banked a half, and `null` while they have none. The
-   * speed bonus ranks on this rather than on arrival: being quickly wrong wins
-   * nothing, and with several guesses allowed it must not win a queue place
-   * either.
+   * How far **into the round** their first guess that banked a half landed, and
+   * `null` while they have none. The speed bonus is paid from this rather than
+   * from arrival: being quickly wrong wins nothing, and with several guesses
+   * allowed it must not win a queue place either.
+   *
+   * The round's own clock, never a wall clock — it stops while the host is away,
+   * and a room whose console blinked would otherwise be charged for the pause.
+   * On the blind test, where a pair is two claims and one score, it is the
+   * **first** half that stamps it: the race the bonus prices was already won by
+   * whoever recognised the track, and the other half is usually typed in the
+   * same breath.
    */
-  firstScoredAt: number | null
+  scoredAfterMs: number | null
   /** The guesses that banked a half, in the order they landed. */
   landed: string[]
   /** Their latest guess that banked nothing — what the reveal shows when nothing landed. */
