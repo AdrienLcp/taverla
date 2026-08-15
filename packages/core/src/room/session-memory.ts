@@ -1,4 +1,5 @@
 import type { ConnectionRole } from '@taverla/protocol/client-message'
+import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
 import type { RoomCode, SessionId } from '@taverla/protocol/identifiers'
 
 /**
@@ -36,6 +37,24 @@ export const MAX_REMEMBERED_SEATS = 8
  * own grace.
  */
 export const SEAT_MEMORY_MS = 24 * 60 * 60 * 1_000
+
+/**
+ * The refusals that mean the seat was never granted. A claim is written before
+ * the `hello` it is sent in, so a browser turned away at the door holds one it
+ * never had — at the head of a bounded store, where it evicts a real seat rather
+ * than waiting to age out.
+ *
+ * The two other fatal codes are absent on purpose: a version mismatch and a
+ * malformed frame refuse the *frame*, and the seat behind them is usually good.
+ * A deploy mid-party would otherwise cost every device its place.
+ */
+const REFUSALS_VOIDING_A_SEAT = new Set<ProtocolErrorCode>([
+  'host_already_connected',
+  'room_not_found'
+])
+
+export const refusalVoidsSeat = (code: ProtocolErrorCode): boolean =>
+  REFUSALS_VOIDING_A_SEAT.has(code)
 
 export const rememberedSeatFor = ({
   role,

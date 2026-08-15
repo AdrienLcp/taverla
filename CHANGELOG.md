@@ -251,6 +251,29 @@ one part.
 
 ### Fixes
 
+- `[Server]` **A second console tab closing no longer freezes the room.** Any
+  non-player socket dropping put the round on hold — all four timers cancelled,
+  the clock stopped — without ever asking whether another console was still
+  open. The surviving screen went on broadcasting `isHostConnected: true`, so no
+  phone showed the host-away screen either: the game simply stopped, and nothing
+  on any screen said why. Only a reload brought it back. The hold now waits
+  until the room has no console left at all
+- `[Server]` **A second console tab opening no longer rewinds the round.** Every
+  host `hello` resumed the round, and resuming one that was never held restamps
+  its clock from that instant — so a tab duplicated forty seconds into a clip
+  handed every phone its progress bar back at full and pushed the deadline out
+  by forty seconds. A countdown fared worse and restarted whole, which is the
+  one thing it exists never to do. A console arriving where one is already
+  connected is a second screen, not a host coming back, and now leaves the round
+  where it found it
+- `[Game]` **A browser turned away at a room's door no longer keeps a seat
+  there.** The claim is written before the `hello` that carries it, so a screen
+  refused with `host_already_connected` — or one asking for a room that has
+  stopped resolving — held a seat it was never given, at the head of a store
+  bounded at eight, where it evicted a real one rather than ageing out. The two
+  refusals that mean the seat was never granted now drop it; a version mismatch
+  and a malformed frame deliberately do not, since they refuse the frame rather
+  than the claim and a deploy mid-party would cost every device its place
 - `[Server]` **A phone that arrives mid-round no longer holds the round up.**
   Every predicate deciding whether a phase could close read the live roster, so
   someone joining during a clip made "everybody has answered" false and a round

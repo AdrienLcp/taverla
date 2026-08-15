@@ -198,6 +198,22 @@ export const hostView = (host: Peer<HostServerMessage>) => {
   return null
 }
 
+/**
+ * The id the server minted for a peer, which a second tab replays to prove it
+ * shares that browser's storage.
+ */
+export const sessionIdOf = (
+  peer: Peer<HostServerMessage> | Peer<PlayerServerMessage>
+): string => {
+  for (const { message } of peer.frames) {
+    if (message.type === 'welcome') {
+      return message.sessionId
+    }
+  }
+
+  throw new Error('That peer was never welcomed')
+}
+
 export const playerView = (player: Peer<PlayerServerMessage>) => {
   for (const { message } of [...player.frames].reverse()) {
     if (message.type === 'room.updated' || message.type === 'welcome') {

@@ -14,6 +14,7 @@ import {
 } from '@taverla/protocol/server-message'
 import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
+import { refusalVoidsSeat } from '@taverla/core/room/session-memory'
 import {
   type ClockEstimate,
   type ClockSample,
@@ -21,7 +22,10 @@ import {
 } from '@taverla/core/time/clock-sync'
 
 import { socketOrigin } from '@/infrastructure/env'
-import { ensureSessionId } from '@/infrastructure/storage/session-storage'
+import {
+  ensureSessionId,
+  forgetSessionId
+} from '@/infrastructure/storage/session-storage'
 
 /**
  * `closed` and `refused` both mean "no socket", and the difference is the whole
@@ -191,6 +195,11 @@ export const useRoomSocket = ({
         if (control.message.fatal) {
           giveUp = true
           setStatus('refused')
+
+          if (refusalVoidsSeat(control.message.code)) {
+            forgetSessionId({ role, roomCode })
+          }
+
           socket.close()
         }
       })

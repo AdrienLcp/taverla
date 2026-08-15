@@ -129,9 +129,10 @@ export const createRoomSocketEvents = (
     }
 
     const sessionId = message.sessionId ?? nanoid(16)
+    const hostWasConnected = isHostConnected(code)
     const seated =
       message.role === 'host'
-        ? seatHost({ code, message, outbound, room, sessionId, ws })
+        ? seatHost({ hostWasConnected, message, outbound, room, sessionId, ws })
         : seatPlayer({ message, outbound, room, sessionId })
 
     if (seated === null) {
@@ -144,8 +145,10 @@ export const createRoomSocketEvents = (
 
     // After registering, never before: the resumed round is broadcast with
     // `isHostConnected` already true, so no socket sees a frame saying the room
-    // is running and the host is gone.
-    if (seated.role === 'host') {
+    // is running and the host is gone. And only when the room had no console at
+    // all — a second tab is not a host coming back, and resuming a round nothing
+    // ever held rewinds its clock and restarts the countdown on every phone.
+    if (seated.role === 'host' && !hostWasConnected) {
       resumeRoundForHost(room)
     }
 
@@ -161,14 +164,14 @@ export const createRoomSocketEvents = (
    * answer from them enforceable rather than a promise.
    */
   const seatHost = ({
-    code,
+    hostWasConnected,
     message,
     outbound,
     room,
     sessionId,
     ws
   }: {
-    code: RoomCode
+    hostWasConnected: boolean
     message: HelloMessage
     outbound: Outbound
     room: Room
@@ -176,7 +179,7 @@ export const createRoomSocketEvents = (
     ws: WSContext
   }): Connection | null => {
     const claimed = claimHost({
-      isHostConnected: isHostConnected(code),
+      isHostConnected: hostWasConnected,
       now: Date.now(),
       room,
       sessionId
@@ -873,7 +876,13 @@ export const createRoomSocketEvents = (
       }
 
       if (connection.role !== 'player') {
-        holdRoundWhileHostIsAway(room)
+        // A room with another console still open has not lost its host, and the
+        // unregistering above is what makes that answerable here. Holding the
+        // round would freeze it for a screen nobody left.
+        if (!isHostConnected(roomCode)) {
+          holdRoundWhileHostIsAway(room)
+        }
+
         broadcastRoom(room)
 
         return

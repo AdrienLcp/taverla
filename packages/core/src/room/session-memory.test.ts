@@ -4,6 +4,7 @@ import {
   forgetSeat,
   MAX_REMEMBERED_SEATS,
   type RememberedSeat,
+  refusalVoidsSeat,
   rememberedSeatFor,
   rememberSeat,
   SEAT_MEMORY_MS
@@ -116,6 +117,22 @@ describe('rememberSeat', () => {
 
     expect(seats).toHaveLength(MAX_REMEMBERED_SEATS)
     expect(seats[0]).toEqual(seatIn(oneRoomTooMany, NOW))
+  })
+})
+
+describe('refusalVoidsSeat', () => {
+  it('[session-memory] gives up a claim the door turned away', () => {
+    expect(refusalVoidsSeat('host_already_connected')).toBe(true)
+    expect(refusalVoidsSeat('room_not_found')).toBe(true)
+  })
+
+  it('[session-memory] keeps a seat a client could not describe itself into', () => {
+    expect(refusalVoidsSeat('protocol_version_mismatch')).toBe(false)
+    expect(refusalVoidsSeat('invalid_message')).toBe(false)
+  })
+
+  it('[session-memory] keeps a seat that was granted before the room ended', () => {
+    expect(refusalVoidsSeat('room_closed')).toBe(false)
   })
 })
 
