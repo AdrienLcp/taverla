@@ -188,6 +188,19 @@ one part.
 
 ### Improvements
 
+- `[Game]` **The countdown stopped wiping out the round it interrupts.** Between
+  two rounds the big screen replaced the answer everybody was still arguing about
+  with a number on an empty field, three times a minute. The round just played
+  stays up now and the count sits over it, on the countdown's own colour — the
+  colour says a new round is coming, the content says what the last one was
+- `[Game]` **The reveal shows the standings**, which is the one moment the room
+  asks for them. They were already on that screen during the clip, where nobody
+  is looking. Not on the phones: a room reading a ranking off twelve small
+  screens is the thing this product exists not to be
+- `[Game]` A track title and an artist come from a catalogue, so their length is
+  nobody's decision — at reveal size one long word was wider than the screen. And
+  a nickname in the who-said-what list no longer pushes the number at the end of
+  its row off the edge
 - **Speed is paid by the clock rather than by rank.** The first player to score
   took +2 and the second +1, whatever the gap between them — so answering at one
   second and answering at twenty-nine were worth a point apart. The bonus now

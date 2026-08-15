@@ -25,11 +25,41 @@
       gap: var(--space-l)
       min-height: 0
 
-      // One idea, centred in the field. Every phase but the lobby and the
-      // reveal is this.
+      // One idea, centred in the field. Every phase but the lobby, the reveal
+      // and a countdown with something to recap is this.
       &.solo
         align-items: center
         justify-content: center
+
+      // The countdown over the round it interrupted. The number gives up the
+      // whole screen it had — it is a three-second wait, and what the room is
+      // reading is underneath it — but it keeps the size that carries to the
+      // far side of a room.
+      &.counting-in
+        align-items: center
+        justify-content: center
+
+        .countdown
+          font-size: clamp(4rem, 18vmin, 12rem)
+
+          // The strike is the countdown's own moment, once per tick. The panel
+          // under it struck when the answer landed and is the same panel, so
+          // striking it again would say a second thing happened.
+          + .reveal-panel
+            animation: none
+
+        .reveal-panel
+          flex: 0
+          width: 100%
+
+      // The reveal and the standings, which is the one moment the room asks
+      // what the round did to the game.
+      &.revealed
+        justify-content: center
+
+        .scoreboard
+          align-self: center
+          width: min(900px, 100%)
 
       &.lobby
         display: grid

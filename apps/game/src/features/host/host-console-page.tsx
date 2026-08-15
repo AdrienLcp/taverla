@@ -3,7 +3,11 @@ import { useCallback, useState } from 'react'
 import type { ClientMessage } from '@taverla/protocol/client-message'
 import { roundDurationMsOf } from '@taverla/protocol/game'
 import type { HostToken, RoomCode } from '@taverla/protocol/identifiers'
-import type { HostRoomView, RoomSettings } from '@taverla/protocol/room'
+import type {
+  HostRoomView,
+  RoomSettings,
+  RoundView
+} from '@taverla/protocol/room'
 import type { TrackSource } from '@taverla/protocol/track'
 
 import {
@@ -279,6 +283,7 @@ const Stage = ({
   view
 }: StageProps) => {
   const translate = useTranslate()
+  const lastRevealed = useRoundStillBeingTalkedAbout(view)
 
   // The invitation is drawn from the code in the address bar and this origin,
   // so the room can start reading it out before the socket has answered. Two
@@ -295,9 +300,19 @@ const Stage = ({
   const round = view.round
 
   if (view.phase === 'countdown' && round?.startsAt != null) {
+    // The round that just ran, still up while the next one counts in. It is the
+    // whole of what made this screen repetitive: a number replacing the answer
+    // the room was in the middle of arguing about. The field is the countdown's
+    // own — the colour is what says a new round is coming, and the content is
+    // what says what the last one was.
     return (
-      <div className='stage solo'>
+      <div
+        className={lastRevealed === null ? 'stage solo' : 'stage counting-in'}
+      >
         <Countdown clock={clock} target={round.startsAt} />
+        {lastRevealed !== null && (
+          <RevealPanel players={view.players} round={lastRevealed} />
+        )}
       </div>
     )
   }
@@ -424,9 +439,13 @@ const Stage = ({
   }
 
   if (view.phase === 'revealed' && round != null) {
+    // The standings, at the one moment the room asks for them. They are on this
+    // screen during `playing` already, where nobody is looking at them — the
+    // reveal is when the table wants to know what the round did to the game.
     return (
-      <div className='stage'>
+      <div className='stage revealed'>
         <RevealPanel players={view.players} round={round} />
+        <Scoreboard players={view.players} />
       </div>
     )
   }
@@ -449,4 +468,41 @@ const Stage = ({
       view={view}
     />
   )
+}
+
+/**
+ * The round the room is still talking about, which the view stops carrying the
+ * moment the next one opens: `openRound` replaces `room.round`, so by the time
+ * a countdown is on screen the reveal it interrupted is gone from the snapshot.
+ *
+ * Held here rather than added to the wire, because it is the console's own
+ * memory of what it drew — the server has nothing to say about a round it has
+ * finished with, and a second round on the room view would have to be kept
+ * honest through a reload, a takeover and a game change for one screen's sake.
+ * A console that reloads mid-countdown simply gets the number alone, which is
+ * the screen this replaced.
+ */
+const useRoundStillBeingTalkedAbout = (
+  view: HostRoomView | null
+): RoundView | null => {
+  const [lastRevealed, setLastRevealed] = useState<RoundView | null>(null)
+
+  if (
+    view?.phase === 'revealed' &&
+    view.round !== null &&
+    view.round !== lastRevealed
+  ) {
+    setLastRevealed(view.round)
+  }
+
+  // A game that ended and a room back in its lobby have nothing to recap, and
+  // the next game must not open on the last one's answer.
+  if (
+    lastRevealed !== null &&
+    (view === null || view.phase === 'lobby' || view.phase === 'finished')
+  ) {
+    setLastRevealed(null)
+  }
+
+  return lastRevealed
 }

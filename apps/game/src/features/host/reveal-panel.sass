@@ -44,10 +44,15 @@
     .identity
       min-width: 0
 
+      // A catalogue writes these, not the product, so their length is nobody's
+      // decision — and at this size one long word is wider than the screen.
+      // `min-width: 0` on `.identity` is only half of it: a flex item stops
+      // growing, an unbreakable word does not.
       .title
         @include typography.monument
 
         font-size: clamp(2rem, 9vmin, 7rem)
+        overflow-wrap: anywhere
 
       .artist
         @include typography.billboard
@@ -55,6 +60,7 @@
         color: var(--ink-muted)
         font-size: clamp(1.25rem, 4vmin, 2.5rem)
         margin-top: var(--space-xs)
+        overflow-wrap: anywhere
 
       .framing
         @include typography.label
@@ -93,6 +99,15 @@
           justify-content: space-between
           padding: var(--space-xs) 0
 
+          // A nickname is twenty characters somebody chose and nothing makes
+          // them breakable, so without this the row grows until the number at
+          // the end of it is off the screen — which is the half of the row the
+          // room is reading.
+          .nickname
+            overflow: hidden
+            text-overflow: ellipsis
+            white-space: nowrap
+
           &.wrong
             color: var(--ink-muted)
 
@@ -120,6 +135,15 @@
           gap: var(--space-s)
           justify-content: space-between
           padding: var(--space-xs) 0
+
+          // A nickname is twenty characters somebody chose and nothing makes
+          // them breakable, so without this the row grows until the number at
+          // the end of it is off the screen — which is the half of the row the
+          // room is reading.
+          .nickname
+            overflow: hidden
+            text-overflow: ellipsis
+            white-space: nowrap
 
         .points
           @include typography.numeric

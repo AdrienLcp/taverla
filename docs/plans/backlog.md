@@ -27,7 +27,7 @@ not a wish.
 | 3 | [The question bank's spelling](#3--the-question-banks-spelling--done-15-august-2026) | **done** | — | playtest 9, `accepted` |
 | 4 | [Speed pays by rank; it should pay by the clock](#4--speed-pays-by-rank-it-should-pay-by-the-clock--done-15-august-2026) | **done** | — | playtest 2 |
 | 5 | [Two controls that break on their content](#5--two-controls-that-break-on-their-content--done-15-august-2026) | **done** | `/impeccable` | playtest 6, 12 |
-| 6 | [The gap between two rounds](#6--the-gap-between-two-rounds) | large | `/impeccable` | playtest 4, 7, 10 |
+| 6 | [The gap between two rounds](#6--the-gap-between-two-rounds--done-15-august-2026) | **done** | `/impeccable` | playtest 4, 7, 10 |
 | 7 | [Say it the way a table says it](#7--say-it-the-way-a-table-says-it) | medium | `/impeccable` | playtest 1, 11, old C |
 | 8 | [The winner gets a moment](#8--the-winner-gets-a-moment) | medium | `/impeccable` | playtest 8 |
 | 9 | [Arriving cold in a running blind test](#9--arriving-cold-in-a-running-blind-test) | medium | `/impeccable` | old B |
@@ -38,7 +38,7 @@ room already met, 4 is the one rule the room asked to have changed, and
 everything after is polish and new work. 5 is out of order on purpose — it is an
 hour, and it is the one players touch every single round.
 
-**Session 6 is next.** Sessions 1 to 5 all landed on 15 August 2026; what each
+**Session 7 is next.** Sessions 1 to 6 all landed on 15 August 2026; what each
 found that this file did not expect is written into its own entry — and session
 3's is the one to read before trusting any diagnosis here, because two of the
 three faults it was given turned out not to be faults at all.
@@ -513,7 +513,46 @@ should paint a filled background on `[data-hovered]` at all.
 
 ---
 
-## 6 · The gap between two rounds
+## 6 · The gap between two rounds — **done, 15 August 2026**
+
+**What shipped**, against what this entry expected:
+
+- **Neither of the two merges this entry offered was possible**, and for a
+  reason it had half-seen: `openRound` *replaces* `room.round`, so by the time a
+  countdown is on screen the reveal it interrupted is gone from the snapshot
+  entirely. Keeping the panel mounted through `countdown` had nothing to mount,
+  and `advancesAt` would only have bought a clock on the reveal — not the reveal
+  on the countdown, which is what playtest 10 asked for.
+- **So the console remembers it.** `useRoundStillBeingTalkedAbout` holds the
+  last `revealed` round view and the countdown draws it underneath the number.
+  Nothing joins the wire: the server has nothing to say about a round it has
+  finished with, and a second round on the room view would have to be kept
+  honest through a reload, a takeover and a game change for one screen's sake. A
+  console reloading mid-countdown gets the number alone, which is exactly the
+  screen this replaced.
+- **The field question answered itself once the content was the variable.** The
+  merged screen is painted on the **countdown's** own field, because the colour
+  is what says a new round is coming and the content is what says what the last
+  one was — the two carry different halves of the same moment rather than
+  competing. The number gives up the screen it had (42vmin → 18vmin) and keeps
+  the size that reaches the far side of a room, and the panel's `card-strike` is
+  suppressed there: it struck when the answer landed, and striking again would
+  say a second thing had happened.
+- **The standings join the reveal**, which is playtest 4 — they were on this
+  screen during `playing` only, where nobody is looking at them. **Not on the
+  phones**: [17](17-mid-game-join.md) declined that and this session found no
+  reason it did not have.
+- Playtest 7's overflow was one screen, not three: `AskedQuestion` and the lie
+  board already wrap. The reveal's title and artist come from a catalogue, at
+  `monument` size, and `min-width: 0` is only half a fix — a flex item stops
+  growing where an unbreakable word does not. A nickname in the said/scored
+  lists now ellipsises, because the number at the end of that row is the half
+  the room is reading.
+- **Still owed, and cheap**: Le Fake's reveal was not driven in a browser, so
+  its board *plus* the new standings is unmeasured on a tall room. Session 7
+  opens `revealed-lie-board.tsx` and should look.
+
+---
 
 > *Playtest 4 — "ce serait pas mal de voir les points de tous les joueurs sur
 > l'écran hôte, voire sur tous les écrans à chaque fois qu'on voit le

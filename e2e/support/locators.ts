@@ -49,9 +49,17 @@ export const hostConsole = (page: Page) => ({
   /** What a player wrote, published on the reveal and not before. */
   revealedAnswer: (said: string) =>
     page.getByRole('listitem').filter({ hasText: said }),
-  /** The roster in the lobby, the scorers at the reveal — never both at once. */
+  /**
+   * The roster in the lobby, and at the reveal the round's own line — which is
+   * beside the standings there rather than instead of them, so the reveal panel
+   * is what the search is scoped to. What the round paid and where the game
+   * stands are two facts, and a bare row search finds a name in both.
+   */
   rowFor: (nickname: string) =>
-    page.getByRole('listitem').filter({ hasText: nickname }),
+    page
+      .locator('.reveal-panel, .stage.lobby')
+      .getByRole('listitem')
+      .filter({ hasText: nickname }),
   startGame: page.getByRole('button', { name: 'Gather round' }),
   theyBuzzed: (nickname: string) =>
     page.getByRole('heading', { name: `${nickname} buzzed` }),
