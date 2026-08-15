@@ -61,6 +61,11 @@ export const Scoreboard: React.FC<ScoreboardProps> = ({
           ]
             .filter(Boolean)
             .join(' ')}
+          // The rank as ranked, so a board can style a podium without counting
+          // rows: two players sharing first are both `1`, and the row after
+          // them is `3`. Absent until somebody has scored, the same way the
+          // column is.
+          data-rank={isRanked ? rank : undefined}
           key={player.id}
         >
           {isRanked && <span className='rank'>{rank}</span>}

@@ -188,6 +188,13 @@ one part.
 
 ### Improvements
 
+- `[Game]` **The winner gets a moment.** The final board named who won and then
+  listed everybody in rows that differed only by a small grey numeral. The name
+  is struck now, a rule draws out under it, and the board settles a row at a
+  time — while the podium is made of the numerals themselves, stepping down from
+  first through third. No particles: a burst of them would be a costume on a
+  product drawn in hard edges and ink. All of it collapses to nothing for anyone
+  who asked for no motion, and it only ever plays on the one phase with no clock
 - `[Le Fake]` **The reveal names people instead of counting them.** *1 l'a
   trouvée* told a room of four something all four already knew; *Trouvée par
   Zoe* is the thing they did not. Up to three names, and a count past that,

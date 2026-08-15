@@ -29,7 +29,7 @@ not a wish.
 | 5 | [Two controls that break on their content](#5--two-controls-that-break-on-their-content--done-15-august-2026) | **done** | `/impeccable` | playtest 6, 12 |
 | 6 | [The gap between two rounds](#6--the-gap-between-two-rounds--done-15-august-2026) | **done** | `/impeccable` | playtest 4, 7, 10 |
 | 7 | [Say it the way a table says it](#7--say-it-the-way-a-table-says-it--done-15-august-2026) | **done** | `/impeccable` | playtest 1, 11, old C |
-| 8 | [The winner gets a moment](#8--the-winner-gets-a-moment) | medium | `/impeccable` | playtest 8 |
+| 8 | [The winner gets a moment](#8--the-winner-gets-a-moment--done-15-august-2026) | **done** | `/impeccable` | playtest 8 |
 | 9 | [Arriving cold in a running blind test](#9--arriving-cold-in-a-running-blind-test) | medium | `/impeccable` | old B |
 | 10 | [Stage 18 — Reflex race](18-reflex-race.md) | large | its own plan | the fifth game |
 
@@ -38,7 +38,7 @@ room already met, 4 is the one rule the room asked to have changed, and
 everything after is polish and new work. 5 is out of order on purpose — it is an
 hour, and it is the one players touch every single round.
 
-**Session 8 is next.** Sessions 1 to 7 all landed on 15 August 2026; what each
+**Session 9 is next.** Sessions 1 to 8 all landed on 15 August 2026; what each
 found that this file did not expect is written into its own entry — and session
 3's is the one to read before trusting any diagnosis here, because two of the
 three faults it was given turned out not to be faults at all.
@@ -672,7 +672,38 @@ inconsistent. The recommendation was ***Prends place.*** Adrien has not answered
 
 ---
 
-## 8 · The winner gets a moment
+## 8 · The winner gets a moment — **done, 15 August 2026**
+
+**What shipped**, against what this entry expected:
+
+- **The podium is made of type, not of blocks.** Three rows that differed only
+  by a muted numeral now step: the rank numerals run 1.9em, 1.45em, 1.15em down
+  to the base, in the ink where the rest stay muted, on rows that are
+  baseline-aligned so a taller numeral grows *off* the line the names sit on
+  rather than pushing its row about. It is the one podium this world can draw —
+  three stacked blocks would be a graphic in a product that has none.
+- **Keyed on `data-rank`, never on the row's position.** `Scoreboard` carries
+  the rank it was ranked with now, which is what lets two players sharing first
+  both wear it while the row under them is third. Styling `nth-child` would have
+  made the visual podium contradict the component's own doctrine — *ties are
+  named rather than broken* — and it is exactly the kind of lie a room checks.
+- **The fireworks are a rule and a strike.** A burst of particles is a costume
+  on a product made of hard edges, ink and no shadows; the same *gesture* in
+  this material is the name struck the way a second of the countdown is, and a
+  3px rule drawn out from the middle underneath it as it settles. The board
+  settles under both, one row every 60 ms, which is what makes the three read as
+  one moment rather than three.
+- `finished` is the phase with no clock, which is the whole reason there is a
+  budget: everything above sits inside `prefers-reduced-motion: no-preference`
+  and every duration falls back to `0`.
+- **Everything this entry asked to keep is kept**: the two-column overflow past
+  eight players, the `.tie` and `.nobody` arms, and a single winner whose name
+  is twenty characters with nowhere to break.
+- **The phone's final board is unchanged**, deliberately: it already tells that
+  player where *they* finished, in `monument`, and the podium is what the room's
+  screen is for.
+
+---
 
 > *Playtest 8 — "ajouter une petite animation « podium + feu d'artifice » pour le
 > gagnant ?"*

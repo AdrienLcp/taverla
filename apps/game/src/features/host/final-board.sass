@@ -19,6 +19,21 @@
       min-width: 0
       text-align: center
 
+      // The flourish, and the only one this world has room for: a rule struck
+      // out from the middle as the name lands. A burst of particles would be a
+      // costume on a product made of hard edges and ink — this is the same
+      // gesture in the material the rest of the screen is drawn in.
+      &::after
+        align-self: center
+        background: var(--ink)
+        block-size: 3px
+        content: ''
+        inline-size: min(420px, 60%)
+        margin-block-start: var(--space-m)
+
+        @media (prefers-reduced-motion: no-preference)
+          animation: winner-rule var(--transition-slow, 0) var(--timing, ease) both
+
     .label
       @include typography.label
 
@@ -38,6 +53,14 @@
       // space still breaks at the space, and a tie still breaks between names.
       overflow-wrap: anywhere
       text-wrap: balance
+
+      // `finished` is the one phase with no clock, which is the whole reason
+      // there is a budget for this: nothing inside a running round animates,
+      // because a screen that resettles while it is timing people reads as lag.
+      // The name is struck the way a second of the countdown is — the product
+      // already has that gesture, and a result deserves it more than a number.
+      @media (prefers-reduced-motion: no-preference)
+        animation: winner-strike var(--transition-slow, 0) var(--timing, ease) both
 
     .with
       @include typography.title
@@ -64,3 +87,67 @@
       li
         border-bottom: 2px solid var(--rule)
         border-top: none
+
+    // The podium, made of type rather than of blocks. Three rows that differed
+    // only by a muted numeral now say which three they are — keyed on the rank
+    // the server ranked and never on the row's position, because two players
+    // sharing first both wear it and the row under them is third. Ties are
+    // named rather than broken here too.
+    .scoreboard
+      // Wider than the shared board's, because the numerals below step up and a
+      // 2ch column would clip the first of them.
+      &.ranked li
+        grid-template-columns: 4ch 1fr auto
+
+      li[data-rank='1'],
+      li[data-rank='2'],
+      li[data-rank='3']
+        .rank
+          color: var(--ink)
+          font-stretch: 125%
+          font-weight: 900
+
+      // The steps, and the whole podium: the rows are baseline-aligned, so a
+      // taller numeral grows upward off the line the names sit on rather than
+      // pushing its row about.
+      li[data-rank='1'] .rank
+        font-size: 1.9em
+
+      li[data-rank='2'] .rank
+        font-size: 1.45em
+
+      li[data-rank='3'] .rank
+        font-size: 1.15em
+
+      li[data-rank='1'] .nickname
+        font-stretch: 125%
+        font-weight: 900
+
+      // The board settles under the name rather than arriving with it, which is
+      // what makes the two one moment instead of two. Eight is what a column
+      // holds; past that a row lands with the block it is read as.
+      @media (prefers-reduced-motion: no-preference)
+        li
+          animation: page-enter var(--transition-base, 0) var(--timing, ease) both
+
+        @for $row from 1 through 8
+          li:nth-child(#{$row})
+            animation-delay: #{($row - 1) * 60}ms
+
+@keyframes winner-strike
+  from
+    letter-spacing: 0.1em
+    opacity: 0
+    transform: scale(1.18)
+  60%
+    opacity: 1
+  to
+    letter-spacing: -0.035em
+    opacity: 1
+    transform: scale(1)
+
+@keyframes winner-rule
+  from
+    transform: scaleX(0)
+  to
+    transform: scaleX(1)
