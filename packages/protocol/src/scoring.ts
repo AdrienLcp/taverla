@@ -53,10 +53,13 @@ export const POINTS_FOR_A_CLAIM = 1
  * longer scarce: on a thirty-second round everyone who answers inside
  * twenty-five takes something, where before it was two players or nobody.
  *
- * Three is not measured against what an answer is worth, and does not need to
- * be: the mode is the *room's*, so a typed answer and a pick are never scored
- * in the same game. What the answer pays prices knowing it; this prices the
- * race, and the race is the same race in both.
+ * Three is a ceiling, not the amplitude: `speedBonusForElapsed` takes the lower
+ * of it and what the answer itself paid, so the clock can double a score and
+ * never more. That held for a typed answer already, and the argument that it
+ * did not need to hold for a pick — the mode is the *room's*, so the two are
+ * never scored in the same game — was wrong twice over. `mode.kind` is
+ * changeable between two rounds, so both rates do land on one board; and 4
+ * against 1 inside one choice round reads as rounding rather than as a rule.
  *
  * Le Fake pays no such bonus, and it is the only game on the shelf that does
  * not: voting quickly is voting without reading the board, which is the half of

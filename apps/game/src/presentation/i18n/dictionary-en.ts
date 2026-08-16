@@ -79,9 +79,9 @@ export const EN_DICTIONARY = defineTranslations({
       buzzer:
         'First to buzz answers out loud. The innkeeper judges the title and the artist, a point each — a wrong answer sits you out for the rest of the round.',
       choice:
-        'Four answers over the same clip, everyone at once. The right one scores a point, and the earlier you find it the more the clock adds — up to +3.',
+        'Four answers over the same clip, everyone at once. The right one scores a point, and the earlier you find it the more the clock adds — up to double.',
       typed:
-        'Everyone types, over the same clip. Title and artist score a point each and both together score three, and the earlier you get it the more the clock adds — up to +3.'
+        'Everyone types, over the same clip. Title and artist score a point each and both together score three, and the earlier you get it the more the clock adds — up to double.'
     },
     source: {
       chart: 'Top charts',
@@ -454,9 +454,9 @@ export const EN_DICTIONARY = defineTranslations({
       buzzer:
         'First to buzz answers out loud, and the innkeeper says right or wrong. A point for right — and a wrong answer sits you out for the rest of the round.',
       choice:
-        'Four answers, everyone at once. The right one scores a point, and the earlier you find it the more the clock adds — up to +3.',
+        'Four answers, everyone at once. The right one scores a point, and the earlier you find it the more the clock adds — up to double.',
       typed:
-        'Everyone types their answer at once. The right one scores three, and the earlier you find it the more the clock adds — up to +3.'
+        'Everyone types their answer at once. The right one scores three, and the earlier you find it the more the clock adds — up to double.'
     },
     tagline: 'A question, and the first one who knows it.'
   },
@@ -500,6 +500,15 @@ export const EN_DICTIONARY = defineTranslations({
         plural: { count: { other: '{?} in so far' } }
       })
     },
+    /**
+     * What the round paid, on the screen the whole room is watching. The clock's
+     * share is split off rather than folded in, in the `+N` the product uses
+     * everywhere else, because a lone `+4` beside a `+2` says only that two
+     * players differ — the split is the rule saying itself, and it is how the
+     * table learns that answering early pays without anybody explaining it.
+     */
+    award: '{points:number}',
+    awardWithSpeed: '{answer:number} +{speed:number}',
     index: 'Round {index:number} of {total:number}',
     indexOpen: 'Round {index:number}',
     nobody: 'Nobody got it',

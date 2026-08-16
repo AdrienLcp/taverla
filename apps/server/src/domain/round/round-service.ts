@@ -506,6 +506,7 @@ export const settleSimultaneousRound = ({
     }
 
     const speedBonus = speedBonusForElapsed({
+      answerPaid: earned,
       elapsedMs: attempts.scoredAfterMs,
       roundDurationMs
     })

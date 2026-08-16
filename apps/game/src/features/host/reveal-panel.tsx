@@ -131,15 +131,36 @@ const Outcome = ({ players, round }: RevealPanelProps) => {
         className='said'
         style={{ '--outcome-rows': round.revealedAnswers.length }}
       >
-        {round.revealedAnswers.map((answer) => (
-          <li
-            className={answer.isCorrect ? 'right' : 'wrong'}
-            key={answer.playerId}
-          >
-            <span className='nickname'>{nameOf(answer.playerId)}</span>
-            <span className='words'>{answer.said}</span>
-          </li>
-        ))}
+        {round.revealedAnswers.map((answer) => {
+          const paid = scorers.find(
+            (award) => award.playerId === answer.playerId
+          )
+
+          return (
+            <li
+              className={answer.isCorrect ? 'right' : 'wrong'}
+              key={answer.playerId}
+            >
+              <span className='nickname'>{nameOf(answer.playerId)}</span>
+              <span className='words'>{answer.said}</span>
+              {/* A round nobody took spends nothing on a column of blanks; one
+                  somebody took keeps the box on every row, or the answers above
+                  and below a miss end on two different right edges. */}
+              {scorers.length > 0 && (
+                <span className='points'>
+                  {paid === undefined
+                    ? null
+                    : paid.speedBonus > 0
+                      ? translate('round.awardWithSpeed', {
+                          answer: paid.points - paid.speedBonus,
+                          speed: paid.speedBonus
+                        })
+                      : translate('round.award', { points: paid.points })}
+                </span>
+              )}
+            </li>
+          )
+        })}
       </ul>
     )
   }

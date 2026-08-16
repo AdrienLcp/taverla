@@ -130,6 +130,18 @@
           text-overflow: ellipsis
           white-space: nowrap
 
+        // What the round paid, and the only column here the room reads *down*
+        // rather than across — so it holds one width whatever it carries. The
+        // widest form is four figures wide (`3 +3`), and a row that paid
+        // nothing keeps the box empty rather than dropping it, or the answers
+        // above and below it end on two different right edges.
+        .points
+          @include typography.numeric
+
+          flex: none
+          min-width: 4.5ch
+          text-align: right
+
       .nobody
         @include typography.title
 
