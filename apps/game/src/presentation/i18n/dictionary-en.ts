@@ -421,6 +421,23 @@ export const EN_DICTIONARY = defineTranslations({
     room: 'Table {code}',
     roomSize: '{count:number} at the table',
     seating: 'Taking your seat…',
+    standing: {
+      behind: defineTranslation('{points:plural} behind {nickname}', {
+        plural: { points: { one: '{?} point', other: '{?} points' } }
+      }),
+      /** The room's board, reduced to the two facts a screen held in a hand needs. */
+      ofRoom: defineTranslation('{rank:plural} of {count:number}', {
+        plural: {
+          rank: {
+            few: '{?}rd',
+            one: '{?}st',
+            other: '{?}th',
+            two: '{?}nd',
+            type: 'ordinal'
+          }
+        }
+      })
+    },
     upNext: 'You are about to play',
     you: 'You'
   },
@@ -519,6 +536,13 @@ export const EN_DICTIONARY = defineTranslations({
     awardWithSpeed: '{answer:number} +{speed:number}',
     index: 'Round {index:number} of {total:number}',
     indexOpen: 'Round {index:number}',
+    /**
+     * The zero arm of `scored`, and the reason the reveal draws a block on every
+     * phone rather than only on the ones that gained: a round that paid you
+     * nothing is a result, and a screen that says nothing about it leaves its
+     * owner to work out from an absence whether it was even scored.
+     */
+    missed: 'Nothing this time.',
     nobody: 'Nobody got it',
     scored: '+{points:number}',
     /**

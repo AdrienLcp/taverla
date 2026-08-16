@@ -405,6 +405,18 @@ and who it caught are one row.
   `max-width` so the longest one cannot swallow the payload in turn. The gap
   then goes in `em`: with the payload filling the row it is the only thing left
   holding the two apart.
+- **A phone gets a receipt, never the board.** The room's ranking is on the wall
+  and reading a list off a screen in a hand is what the table is not here to do —
+  so between two rounds a phone says what the round paid *it* and where that
+  leaves its owner, and nothing else. Two lines carry it: the payout, drawn
+  whether or not there was one, because a block that appears only for the
+  players who gained leaves everybody else inferring from an absence; and the
+  gap to the row above, by name, which is the one part of a board that makes
+  somebody look up rather than down. The place itself lives in the persistent
+  strip rather than in the reveal — *2nd of 6* costs the line the room's size was
+  already spending and is true at every phase, not only after one. Three asks
+  were declined before this one, and what they were right about was the
+  composition rather than the need.
 - **A board ranks only when there is something to rank.** Before the first
   point every player is first on nothing, and a lobby roster printing `1` and
   `0` beside every name says so out loud — while spending on it the width the

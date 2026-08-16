@@ -13,7 +13,8 @@ import { isShelvedGame } from '@taverla/core/room/shelved-game'
 import { findBuzzBlocker } from '@taverla/core/round/buzz-eligibility'
 import {
   buildScoreboard,
-  hasAnybodyScored
+  hasAnybodyScored,
+  standingOf
 } from '@taverla/core/scoring/scoreboard'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
@@ -116,23 +117,10 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
   }
 
   if (view.phase === 'revealed' && round != null) {
-    const yours = round.awards.find((award) => award.playerId === view.youId)
-
     return (
       <section className='player-round centred'>
         <Revealed round={round} view={view} />
-        {yours != null && yours.points > 0 && (
-          <div className='your-award'>
-            <p className='you-scored'>
-              {translate('round.scored', { points: yours.points })}
-            </p>
-            {yours.speedBonus > 0 && (
-              <p className='speed-bonus'>
-                {translate('round.speedBonus', { points: yours.speedBonus })}
-              </p>
-            )}
-          </div>
-        )}
+        <YourRound round={round} view={view} />
       </section>
     )
   }
@@ -285,6 +273,59 @@ const UpNext = ({ view }: { view: PlayerRoomView }) => {
 }
 
 /**
+ * What the round did to this player, which is the whole of what a screen in a
+ * hand is for between two rounds: the room's board is on the wall, and reading
+ * a list off a phone is what the table is not here to do.
+ *
+ * It renders whether or not they gained, because *nothing* is a result too —
+ * a screen that only appears for the ones who scored leaves everybody else to
+ * infer from an absence whether the round was even scored. The two halves are
+ * sized against that: a gain is the loudest thing on the screen, a miss is a
+ * quiet line, and the ink says which without a colour saying *wrong*.
+ *
+ * Somebody to catch is the one part of the board worth carrying here, and the
+ * one that makes a player look up rather than down.
+ */
+const YourRound = ({
+  round,
+  view
+}: {
+  round: RoundView
+  view: PlayerRoomView
+}) => {
+  const translate = useTranslate()
+  const award = round.awards.find((entry) => entry.playerId === view.youId)
+  const standing = standingOf({ players: view.players, youId: view.youId })
+
+  return (
+    <div className='your-round'>
+      {award != null && award.points > 0 ? (
+        <>
+          <p className='you-scored'>
+            {translate('round.scored', { points: award.points })}
+          </p>
+          {award.speedBonus > 0 && (
+            <p className='speed-bonus'>
+              {translate('round.speedBonus', { points: award.speedBonus })}
+            </p>
+          )}
+        </>
+      ) : (
+        <p className='you-missed'>{translate('round.missed')}</p>
+      )}
+      {standing?.chasing != null && (
+        <p className='chasing'>
+          {translate('player.standing.behind', {
+            nickname: standing.chasing.nickname,
+            points: standing.chasing.pointsBehind
+          })}
+        </p>
+      )}
+    </div>
+  )
+}
+
+/**
  * Where this phone finished, which the big screen only ever says for the
  * winner. Ties share a place, the way the board itself ranks them — a room of
  * two on the same score reads "1st" on both phones, and `host.final.tie` is
@@ -382,9 +423,11 @@ const Buzzer = ({
 }
 
 /**
- * What the round turned out to be, on the phone. A game whose question the room
- * owns has nothing to reveal, so the standings are what this screen is for
- * between two rounds.
+ * What the round turned out to be, on the phone — and `null` for a game whose
+ * question the room owns, because a charade has no answer to print and the
+ * receipt under this is the whole of what the phone can add. It used to print
+ * the room's full board there, which is the one composition every ask for
+ * standings on a phone has been declined over.
  */
 const Revealed = ({
   round,
@@ -429,7 +472,7 @@ const Revealed = ({
     )
   }
 
-  return <Scoreboard players={view.players} youId={view.youId} />
+  return null
 }
 
 const TheirName = ({ view }: { view: PlayerRoomView }) => {

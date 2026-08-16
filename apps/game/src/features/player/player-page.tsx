@@ -6,6 +6,8 @@ import { roundDurationMsOf } from '@taverla/protocol/game'
 import type { RoomCode } from '@taverla/protocol/identifiers'
 import type { PlayerRoomView } from '@taverla/protocol/room'
 
+import { standingOf } from '@taverla/core/scoring/scoreboard'
+
 import { NotFoundPage } from '@/features/not-found/not-found-page'
 import {
   type PlayerConnection,
@@ -212,10 +214,18 @@ const RoundClock = ({ view }: { view: PlayerRoomView }) => {
   )
 }
 
+/**
+ * The one thing this screen carries between rounds, and the reason the reveal
+ * does not have to: a place among the room costs the same line the room's size
+ * was already spending, and says the thing that line never did. Before the
+ * first point there is nothing to place, so it falls back to the count — every
+ * ranked surface in the product goes quiet at the same threshold.
+ */
 const Scoreline = ({ view }: { view: PlayerRoomView }) => {
   const translate = useTranslate()
   const you = view.players.find((player) => player.id === view.youId)
   const score = you?.score ?? 0
+  const standing = standingOf({ players: view.players, youId: view.youId })
 
   return (
     <section className='scoreline'>
@@ -227,7 +237,12 @@ const Scoreline = ({ view }: { view: PlayerRoomView }) => {
         </span>
       </p>
       <p className='others'>
-        {translate('player.roomSize', { count: view.players.length })}
+        {standing === null
+          ? translate('player.roomSize', { count: view.players.length })
+          : translate('player.standing.ofRoom', {
+              count: standing.roomSize,
+              rank: standing.rank
+            })}
       </p>
     </section>
   )

@@ -394,6 +394,20 @@ export const FR_DICTIONARY: Dictionary = {
     room: 'Table {code}',
     roomSize: '{count:number} à table',
     seating: 'On te trouve une place…',
+    standing: {
+      behind: defineTranslation('à {points:plural} de {nickname}', {
+        plural: { points: { one: '{?} point', other: '{?} points' } }
+      }),
+      ofRoom: defineTranslation('{rank:plural} sur {count:number}', {
+        plural: {
+          rank: {
+            one: '{?}er',
+            other: '{?}e',
+            type: 'ordinal'
+          }
+        }
+      })
+    },
     upNext: 'Tu vas jouer à',
     you: 'Toi'
   },
@@ -480,6 +494,7 @@ export const FR_DICTIONARY: Dictionary = {
     awardWithSpeed: '{answer:number} +{speed:number}',
     index: 'Tournée {index:number} sur {total:number}',
     indexOpen: 'Tournée {index:number}',
+    missed: 'Rien cette fois.',
     nobody: 'Personne n’a trouvé',
     scored: '+{points:number}',
     speedBonus: 'dont {points:number} pour la vitesse'

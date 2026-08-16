@@ -367,6 +367,16 @@ one part.
 
 ### Fixes
 
+- `[Game]` **A round that paid you nothing says so, and every screen says where
+  its owner stands.** A phone showed the answer and then a `+N` only if that
+  player had gained: everybody else got the answer and silence, with no way to
+  tell a round they lost from a round that was never scored. The reveal now
+  carries a line either way, and the strip at the top of the screen spends the
+  line it was giving the room's size on a place in it instead — *2nd of 6*,
+  which says both. The room's full board stays where the room can read it
+  together, and the one row worth carrying onto a phone comes with it: how far
+  behind the player above, by name, because that is what makes somebody look up
+  from their screen rather than down at it
 - `[Game]` **The screen running the reflex race can race on it.** The seat was
   withheld from every round answered by a buzz, because such a round needs
   somebody reading the answer to grant it — and the reflex race has no answer and
