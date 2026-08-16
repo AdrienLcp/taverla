@@ -77,7 +77,7 @@ The one decision that was still Adrien's has been taken and built:
 
 | # | Session | Cost | Starts with | Holds |
 |---|---|---|---|---|
-| 11 | [The field the whole game is typed into](#11--the-field-the-whole-game-is-typed-into) | a session | `/impeccable` | notes 1, 4 |
+| 11 | [The field the whole game is typed into](#11--the-field-the-whole-game-is-typed-into--done-16-august-2026) | **done** | `/impeccable` | notes 1, 4 |
 | 12 | [Speed already pays, and nothing in the room says so](#12--speed-already-pays-and-nothing-in-the-room-says-so) | a session, and a decision | — | note 3 |
 | 13 | [The room is silent and the console cannot say why](#13--the-room-is-silent-and-the-console-cannot-say-why) | a session | — | note 6 |
 | 14 | [A host's seat comes off by itself](#14--a-hosts-seat-comes-off-by-itself) | a session | — | note 8, second half |
@@ -95,6 +95,12 @@ halves of it that are not.
 
 15 and 16 are half-sessions and can ride along with a neighbour. 18 is the only
 one that is new work rather than a fault or a polish.
+
+**11 landed on 16 August 2026**, and it is a third case of the ratio above: its
+own design question — where to focus so a keyboard does not cover a blind test —
+turned out to have been answered by the composition before it was asked. Next is
+**12**, and its entry says plainly that the thing Adrien asked for four times is
+already built.
 
 ---
 
@@ -939,7 +945,7 @@ hook at all.
 
 ---
 
-## 11 · The field the whole game is typed into
+## 11 · The field the whole game is typed into — **done, 16 August 2026**
 
 > *Note 1 — "autofocus dans l'input quand « on tape » ce serait pratique plutôt
 > que de devoir taper dans l'input avant de taper sur le clavier. En plus, sur
@@ -1012,6 +1018,13 @@ keyboard covering the screen from the countdown onward is a worse round than one
 tap. Focusing at `playing` rather than at `countdown`, or per game, or per mode,
 is the call — and it is a composition question, not a prop.
 
+**It had already been made.** `player-round.tsx` renders the countdown and the
+form from two different branches, so `TypedAnswer` only ever mounts on
+`playing` — there was no keyboard-over-the-countdown case to design away, and a
+bare `autoFocus` is the whole of it. The question was real and the answer was
+sitting in the composition, which is the argument for reading the phase gate
+before reaching for a prop.
+
 ### How to tell it is done
 
 - A wrong guess in the blind test moves nothing; a wrong guess in the quiz says
@@ -1019,6 +1032,28 @@ is the call — and it is a composition question, not a prop.
 - On a real Android phone, the field is focused and the keyboard's action key
   sends. Nothing has to be scrolled.
 - On a laptop, the round opens and typing lands in the field.
+
+### What it found — **done, 16 August 2026**
+
+- **The empty paragraph and a live region nobody heard were one bug.** `.banked`
+  now mounts on every round and holds its height, which stops the shift *and*
+  gives the `role='status'` an empty region to change — a status that arrives
+  already holding its text is a change no screen reader watched happen, the same
+  rule `Loader` was built on. Measured rather than eyeballed: the field and the
+  send button sit at the same subpixel before and after a judged guess, empty,
+  missed, and stamped, at 414px and 1920px.
+- **The predicate already existed.** `isMiss` — a verdict worth no points — is
+  exactly *nothing landed*, and it is what makes a stamp and a miss mutually
+  exclusive rather than a case to handle: a banked half is worth points.
+- **A miss is muted ink, never `--danger`.** The field is still open and the line
+  under it still says *as many goes as you like*, so what the row owes is proof
+  the frame landed, not a warning. `round.answer.missed` is the shell's, since
+  every typed game misses the same way.
+- **`enterKeyHint` is not in react-aria's types**, so it goes on the `Input`
+  inside `TextField` the way `autoCapitalize` does. Le Fake's lie form is the
+  same field above the same button and took it too.
+- `bankedSingle` in `helpers/round-content.ts` has no callers and did not gain
+  one here. Left alone rather than folded into this diff.
 
 ---
 

@@ -69,11 +69,24 @@
 
     // Only what this player banked, so it sits with their own field rather than
     // on the room's screen — and it is empty until something lands.
+    //
+    // The height is held from the first paint: this row is above the field, so
+    // anything it grows by pushes the field and the send button down, and it
+    // would grow at exactly the moment a thumb is aiming at them.
+    //
+    // 1.75em of `caption` is 24.5px against a stamp's 24.2 — `label` at 0.75rem
+    // over this row's own 1.35 line-height, plus its two `--space-2xs`. Both
+    // sides are rem, so zoom moves them together; changing either mixin is what
+    // would close the gap.
     .banked
+      @include typography.caption
+
+      align-items: center
       display: flex
       flex-wrap: wrap
       gap: var(--space-xs)
       justify-content: center
+      min-height: 1.75em
 
     .half
       @include typography.label
@@ -81,3 +94,9 @@
       background: var(--ink)
       color: var(--field)
       padding: var(--space-2xs) var(--space-s)
+
+    // A guess that banked nothing is not an error — the field is still open and
+    // the line under it still says so — so it takes the muted ink the reveal
+    // panel gives a wrong answer, never the stamp of something held.
+    .missed
+      color: var(--ink-muted)

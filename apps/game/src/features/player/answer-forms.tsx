@@ -4,9 +4,13 @@ import { Form } from 'react-aria-components'
 
 import type { PlayerId } from '@taverla/protocol/identifiers'
 import type { RoundView } from '@taverla/protocol/room'
-import type { HalvesVerdict, Verdict } from '@taverla/protocol/scoring'
+import type { Verdict } from '@taverla/protocol/scoring'
 
-import { isFullyBanked, verdictKindFor } from '@taverla/core/scoring/verdict'
+import {
+  isFullyBanked,
+  isMiss,
+  verdictKindFor
+} from '@taverla/core/scoring/verdict'
 
 import { bankedHalves } from '@/helpers/round-content'
 import { Button } from '@/presentation/components/button'
@@ -160,7 +164,7 @@ export const TypedAnswer: React.FC<TypedAnswerProps> = ({
   return (
     <section className='answer-form typed'>
       {/* Above the field, because it is the context for the next guess. */}
-      <Banked banked={bankedHalves(verdict)} />
+      <GuessFeedback verdict={verdict} />
       <Form
         onSubmit={(event) => {
           event.preventDefault()
@@ -175,9 +179,13 @@ export const TypedAnswer: React.FC<TypedAnswerProps> = ({
       >
         <TextField
           autoComplete='off'
+          // The form only ever mounts on `playing`, so this opens the keyboard
+          // when the round does and never over a countdown nobody can answer.
+          autoFocus
           description={translate(
             judgedInHalves ? 'blindtest.answer.anyOrder' : 'round.answer.retry'
           )}
+          enterKeyHint='send'
           isDisabled={isDone}
           label={translate('round.answer.label')}
           onChange={setGuess}
@@ -201,25 +209,33 @@ export const TypedAnswer: React.FC<TypedAnswerProps> = ({
 /**
  * Without this a second guess is a guess at what to guess at: the player has
  * been told nothing about the first. It names only what *they* banked, which is
- * why it can be shown before the reveal — and only a pair of halves has
- * anything to say here, since one claim is either held or still owed.
+ * why it can be shown before the reveal.
+ *
+ * A miss and a half are mutually exclusive by construction — `isMiss` is a
+ * verdict worth nothing, so anything banked rules it out — which is what lets
+ * one row carry both without ever holding a contradiction.
+ *
+ * It mounts on every round and stays: an element that appeared with the first
+ * verdict spent a `gap` it had nothing to fill, shifting the field and its
+ * button down under a thumb already aiming at them, and a live region that
+ * arrives already holding its text is a change no screen reader watched happen.
  */
-const Banked = ({ banked }: { banked: HalvesVerdict | null }) => {
+const GuessFeedback = ({ verdict }: { verdict: Verdict | null }) => {
   const translate = useTranslate()
-
-  if (banked === null) {
-    return null
-  }
+  const banked = bankedHalves(verdict)
 
   return (
     <p className='banked' role='status'>
-      {banked.titleCorrect && (
+      {banked?.titleCorrect === true && (
         <span className='half'>{translate('blindtest.answer.titleFound')}</span>
       )}
-      {banked.artistCorrect && (
+      {banked?.artistCorrect === true && (
         <span className='half'>
           {translate('blindtest.answer.artistFound')}
         </span>
+      )}
+      {verdict !== null && isMiss(verdict) && (
+        <span className='missed'>{translate('round.answer.missed')}</span>
       )}
     </p>
   )

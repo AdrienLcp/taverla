@@ -80,6 +80,7 @@ export const LieForm: React.FC<LieFormProps> = ({
         <TextField
           autoComplete='off'
           description={translate('lefake.write.description')}
+          enterKeyHint='send'
           errorMessage={
             isRefused ? translate(protocolErrorKey(error)) : undefined
           }

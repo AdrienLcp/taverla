@@ -199,6 +199,24 @@ the button keeps its accessible name while it works. That spinner is
 `aria-hidden` — react-aria already announces `isPending`, and a second live
 region would say the same thing twice.
 
+**A verdict line above a field reserves its height, and mounts empty.** The two
+are one edit and they fix two faults. A row that appears when the server answers
+spends a `gap` it had nothing to fill, and everything under it — the field, its
+description, the button a thumb is already aiming at — moves; the typed answer
+form shifted 20px on the first judged guess with nothing drawn to explain it.
+And a `role='status'` that arrives already holding its text is a change no
+screen reader watched happen, which is the same reason `Loader` mounts empty
+above. Reserve against the tallest member: `.banked` holds 1.75em of `caption`
+because a `label` stamp with its padding measures 24.2px, and both sides are rem
+so a zoom moves them together.
+
+**A wrong guess is not an error, and the ink says which.** A mode that allows
+retries has said so under the field, so what a miss owes is proof the frame
+landed, not a warning — `--ink-muted`, the same the reveal panel gives a wrong
+answer, never `--danger` and never a stamp. A stamp is a thing you *hold*: the
+two cannot appear together because a banked half is worth points and `isMiss` is
+a verdict worth none.
+
 ## Motion
 
 One authored moment per event, all of it collapsing to nothing under

@@ -460,6 +460,7 @@ export const FR_DICTIONARY: Dictionary = {
       correct: 'Tu l’as. Tranquille.',
       label: 'Ta réponse',
       locked: 'Réponse envoyée. On attend les autres…',
+      missed: 'Pas celle-là.',
       retry: 'Autant d’essais que tu veux.',
       submit: 'Envoyer',
       waiting: defineTranslation('{count:plural}', {

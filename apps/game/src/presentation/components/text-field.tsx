@@ -17,6 +17,13 @@ type TextFieldProps = ReactAriaTextFieldProps & {
   autoCapitalize?: 'off' | 'characters'
   /** Guidance shown under the input, replaced by `errorMessage` when there is one. */
   description?: string
+  /**
+   * What the on-screen keyboard's action key says and does. `'send'` on a
+   * single-field form, which already submits on Enter — that key is then the
+   * whole submit affordance, and the button below it can be under the keyboard
+   * without costing anyone the round.
+   */
+  enterKeyHint?: 'done' | 'go' | 'send'
   errorMessage?: string
   label: string
   placeholder?: string
@@ -26,6 +33,7 @@ export const TextField: React.FC<TextFieldProps> = ({
   autoCapitalize,
   className,
   description,
+  enterKeyHint,
   errorMessage,
   isInvalid = false,
   label,
@@ -40,6 +48,7 @@ export const TextField: React.FC<TextFieldProps> = ({
     <Label>{label}</Label>
     <Input
       autoCapitalize={autoCapitalize}
+      enterKeyHint={enterKeyHint}
       placeholder={placeholder}
       spellCheck={false}
     />
