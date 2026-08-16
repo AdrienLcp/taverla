@@ -4,11 +4,7 @@ import type {
   RoundContent,
   RoundView
 } from '@taverla/protocol/room'
-import type {
-  HalvesVerdict,
-  SingleVerdict,
-  Verdict
-} from '@taverla/protocol/scoring'
+import type { HalvesVerdict, Verdict } from '@taverla/protocol/scoring'
 
 /**
  * A round's content is a union, and a screen only ever renders one arm of it.
@@ -84,7 +80,3 @@ export const holdsTheAnswer = (content: HostRoundContent): boolean => {
 export const bankedHalves = (
   verdict: Verdict | null | undefined
 ): HalvesVerdict | null => (verdict?.kind === 'halves' ? verdict : null)
-
-export const bankedSingle = (
-  verdict: Verdict | null | undefined
-): SingleVerdict | null => (verdict?.kind === 'single' ? verdict : null)

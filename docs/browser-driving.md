@@ -54,6 +54,44 @@ Five more that cost time to learn:
   **repository root**. Delete them before committing.
 - A `/play/:code` opens no socket before the join, so nothing lands in
   `taverla:seats` until the nickname is accepted.
+- `taverla:theme` and `taverla:locale` hold **plain strings**, not JSON. Writing
+  `'"light"'` stores a quoted string the reader rejects, and the page comes back
+  on the system theme with nothing to say it refused.
+- **A press that fires on `onPressStart` needs a real `pointerdown`.**
+  `element.click()` drives an ordinary button fine and does nothing at all to a
+  buzzer, a reflex tap or anything else react-aria arms on the press rather than
+  the release. Dispatch `PointerEvent('pointerdown')` and `('pointerup')` with
+  `pointerId`, `pointerType` and `isPrimary` set.
+
+## Reaching a state that closes before a tool call returns
+
+**Batch the whole timed sequence into one `browser_evaluate`.** A round trip is
+a few hundred milliseconds and several states here are shorter than the tools
+are: a reflex tap window is 3 s from the flip, the flip itself lands 2–6 s after
+the countdown, and a 60 s clip reveals while a stepped-through check is still
+walking. Poll inside the page, act inside the page, and return the reading.
+
+Two states cannot be reached at all with a single seat in the room, because the
+round settles the instant that seat acts and the screen is already the reveal
+when the next call lands:
+
+- a reflex heat after the console's own tap, or after its false start;
+- anything a heat shows *while* waiting for somebody else.
+
+Both need a second phone in the room, by the `taverla:seats` deletion above.
+
+## Two things a browser can be asked that no test can
+
+- **What the answer is, mid-round.** The console does not render a blind test's
+  title or a quiz's answer while the clip runs, and the reveal comes too late to
+  type against. Walk the host page's React fiber from
+  `#root[__reactContainer…].current`, following `child` and `sibling`, for a
+  `memoizedProps.view.round.content` — it carries the answer the screens are
+  withholding.
+- **What an autoplay refusal looks like.** Replace
+  `HTMLMediaElement.prototype.play` with one returning a promise that rejects
+  with a chosen `DOMException` name. That is how all three refusal messages on
+  the console were verified without an Android phone in the room.
 
 ## A microtask hides a phase a timer catches
 
