@@ -151,6 +151,17 @@ wrong, and in which direction:
 Expect the same ratio next time. A note from a room is evidence that something
 is wrong; it is rarely evidence of what.
 
+**The second playtest — 16 August 2026, on Android — proved that in one
+evening.** Eight notes, diagnosed into sessions 11 to 18 of
+[`backlog.md`](backlog.md), and **two of the eight were reports of things that
+already work**: the speed bonus session 4 shipped the day before is wired into
+every simultaneous round, and a seated host is still sent the clip it thinks it
+is being denied. In both cases something *is* wrong — the bonus is on no screen
+the room looks at, and the console cannot say why it failed to arm — but neither
+is the thing the note named. The second one was sent the wrong way by this
+repository's own documentation, which said the server "stops sending the track"
+to a seated host when it withholds only the title and artist.
+
 ## Beyond the blind test
 
 This game is the first of several. [`docs/game-catalogue.md`](../game-catalogue.md)

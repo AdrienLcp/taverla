@@ -108,8 +108,9 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   confusable glyphs (`O`/`0`, `I`/`1`, `S`/`5`, `Z`/`2` are all excluded)
 - **Host** — the screen running the room. Shows the QR code, plays the audio,
   judges answers. It can also take a **seat** and play, outside buzzer mode, and
-  the server then stops sending it the track. It is the only role that can
-  **close** the room — see `Exits` below
+  the server then withholds the track's **title and artist** while still sending
+  it the clip — that screen is the room's only speaker, seated or not. It is the
+  only role that can **close** the room — see `Exits` below
 - **Player** — anyone who joined, by scanning the QR code or by typing the room
   code. Holds a seat and a score
 - **Game** — what the room is playing, and **`null` until somebody says**: the

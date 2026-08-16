@@ -18,6 +18,29 @@ cover what is missing; what is wrong surfaces by playing.* Every item was traced
 into the code before being written down here, so what follows is a diagnosis and
 not a wish.
 
+## And where the second half came from
+
+A second playtest on **16 August 2026**, Adrien and a co-tester, on Android.
+Eight notes, kept under Adrien's own numbering again — *note 1* through *note 8*
+of that evening — and traced into the code the same way. They are sessions 11
+through 18 below.
+
+**Two of them should be read before anything else is planned, because the
+diagnosis disagrees with the note**, which is the ratio the plans' README
+already warns about:
+
+- **The speed bonus is not missing.** It shipped as
+  [session 4](#4--speed-pays-by-rank-it-should-pay-by-the-clock--done-15-august-2026)
+  on 15 August and it is wired into every simultaneous round, on the quiz and
+  the blind test, in `typed` and `choice`. What is missing is any screen *in the
+  room* that says so, and an amplitude a table can feel — see
+  [12](#12--speed-already-pays-and-nothing-in-the-room-says-so).
+- **A seated host's clip is not withheld.** The server sends `audioUrl` to a
+  seated host and holds back only the title and artist; that phone is still the
+  room's only speaker, and *Le son ne sort pas d'ici.* is an autoplay message
+  that predates the seat entirely. The silence has a different cause — see
+  [13](#13--the-room-is-silent-and-the-console-cannot-say-why).
+
 ## The sessions, in the order worth taking them
 
 | # | Session | Cost | Starts with | Holds |
@@ -44,11 +67,34 @@ and session 3's is the one to read before trusting any diagnosis here, because
 two of the three faults it was given turned out not to be faults at all.
 
 **[Stage 18](18-reflex-race.md), the fifth game, landed too** — session A served
-it and session B drew it, and the shelf is five games wide. Nothing on this list
-is open.
+it and session B drew it, and the shelf is five games wide. Nothing from the
+first playtest is open.
 
 The one decision that was still Adrien's has been taken and built:
 [who owns a room](#who-owns-a-room--done-15-august-2026).
+
+## The second playtest's sessions
+
+| # | Session | Cost | Starts with | Holds |
+|---|---|---|---|---|
+| 11 | [The field the whole game is typed into](#11--the-field-the-whole-game-is-typed-into) | a session | `/impeccable` | notes 1, 4 |
+| 12 | [Speed already pays, and nothing in the room says so](#12--speed-already-pays-and-nothing-in-the-room-says-so) | a session, and a decision | — | note 3 |
+| 13 | [The room is silent and the console cannot say why](#13--the-room-is-silent-and-the-console-cannot-say-why) | a session | — | note 6 |
+| 14 | [A host's seat comes off by itself](#14--a-hosts-seat-comes-off-by-itself) | a session | — | note 8, second half |
+| 15 | [The host may race](#15--the-host-may-race) | half a session | — | note 7 |
+| 16 | [The board a phone never sees](#16--the-board-a-phone-never-sees) | half a session | `/impeccable` | note 8, first half |
+| 17 | [A name you give once](#17--a-name-you-give-once) | a session | `/impeccable` | note 5 |
+| 18 | [Decades on the shelf](#18--decades-on-the-shelf) | a session | — | note 2 |
+
+Same ordering rule as above: **what is wrong before what is missing**. 11 is
+first because it is the screen every player touches every round and it carries
+two faults at once. 13 is the one that silently ends a blind test. 12 sits third
+rather than last only because Adrien has asked for it four times — and the entry
+says plainly that what he asked for is *there*, so the session is about the two
+halves of it that are not.
+
+15 and 16 are half-sessions and can ride along with a neighbour. 18 is the only
+one that is new work rather than a fault or a polish.
 
 ---
 
@@ -890,6 +936,529 @@ so the tab is mute for life), and both `.catch(() => {})` throw away the one thi
 worth keeping, whether the rejection was `AbortError` or `NotAllowedError`.
 Players are unaffected: audio is the host screen's alone. There is no test on this
 hook at all.
+
+---
+
+## 11 · The field the whole game is typed into
+
+> *Note 1 — "autofocus dans l'input quand « on tape » ce serait pratique plutôt
+> que de devoir taper dans l'input avant de taper sur le clavier. En plus, sur
+> android, ça crée un décalage et il faut scroller après avoir ouvert le clavier
+> pour accéder au bouton « envoyer »."*
+> *Note 4 — "quand on donne une réponse dans « on tape » qui n'est pas bonne, y a
+> un petit décalage qui se crée dans la UI, verticalement. Mais rien n'apparaît
+> de visible."*
+
+One component, `TypedAnswer` (`answer-forms.tsx:144-199`), and three faults on
+it. It is the surface a whole quiz or blind test is played through, which is why
+this is first.
+
+### Note 4 is an empty paragraph, and it is exact
+
+`bankedHalves` (`helpers/round-content.ts:84-86`) returns the verdict for **any**
+`kind === 'halves'` verdict — including `{ titleCorrect: false, artistCorrect:
+false }`. So from the first guess onward, right *or* wrong, `Banked`
+(`answer-forms.tsx:207-226`) stops returning `null` and mounts
+
+```tsx
+<p className='banked' role='status'>{/* both halves false: nothing */}</p>
+```
+
+An empty flex child has no height and still spends one `gap: var(--space-m)` of
+the column (`answer-forms.sass:4-9`) — **20px of downward shift with nothing to
+show for it**, which is the note word for word. `.status` beside it already
+reserves `min-height: 2.5em` (`answer-forms.sass:11-17`); `.banked` reserves
+nothing.
+
+In the quiz the verdict is `{ kind: 'single', isCorrect: false }`, so `Banked`
+stays `null` and **nothing at all happens**: the text vanishes and no word
+anywhere says it was wrong. The description under the field still reads *As many
+goes as you like*, and `AnswerStatus` shows a room-wide count. The host console
+holds what the player said and whether it was right (`reveal-panel.tsx:128-145`,
+`round.revealedAnswers`); the player's own screen never reads it.
+
+So the fix is two things, not one: stop mounting the empty paragraph, **and**
+decide what a wrong guess says. A wrong guess in a mode that allows retries is
+not an error state — it is *not yet*, and the register matters.
+
+### Note 1 is three missing lines and one layout that cannot hold
+
+- **No `autoFocus` exists anywhere in `apps/game/src`**, and no `.focus()`, and
+  no ref. `TextFieldProps` extends react-aria's, so the prop is available and
+  simply never passed. `key={round.id}` (`player-round.tsx:229-241`) remounts
+  the form every round, so every round starts with the field cold.
+- **No global key handler either** — the only `addEventListener` calls in the
+  SPA are the socket's. A laptop player must click into the field before any
+  keystroke goes anywhere.
+- **The Android displacement is real and has a cheaper fix than scrolling.**
+  The submit button is inside the `<Form>`, below the field, at `size='large'` =
+  72px (`_control.sass:44-47`); there is **no `visualViewport` handling in the
+  repo at all**, and `.answer-form { flex: 1; justify-content: center }` re-centres
+  the form in the shrunken viewport, which pushes the button under the keyboard
+  with nothing to scroll it back. **`enterKeyHint='send'` on the input is the
+  answer**: a single-field form already submits on Enter, so the keyboard's own
+  action key becomes the send button and the one under the keyboard stops
+  mattering. `visualViewport` work, if any, comes after that and is measured
+  against it.
+- Not a problem, and worth not chasing: the input is ≥16px
+  (`_typography.sass:26-31`), so there is no iOS zoom-on-focus.
+
+### The design question, which is the reason this starts with `/impeccable`
+
+**Autofocus opens the keyboard, and the keyboard eats half a phone.** In the
+quiz that is right — the question is on the big screen and the phone is a
+keyboard. In the **blind test** the first seconds are for *listening*, and a
+keyboard covering the screen from the countdown onward is a worse round than one
+tap. Focusing at `playing` rather than at `countdown`, or per game, or per mode,
+is the call — and it is a composition question, not a prop.
+
+### How to tell it is done
+
+- A wrong guess in the blind test moves nothing; a wrong guess in the quiz says
+  something, in both locales.
+- On a real Android phone, the field is focused and the keyboard's action key
+  sends. Nothing has to be scrolled.
+- On a laptop, the round opens and typing lands in the field.
+
+---
+
+## 12 · Speed already pays, and nothing in the room says so
+
+> *Note 3 — "gagner plus de points quand on répond bon AVANT. Ça doit être la
+> 4ème fois que je te demande ça et c'est toujours pas en place. Il faut peut-être
+> un système de points différents (genre on démarre à 30 000 et ça décrémente
+> chaque ms ? Ou autre ? Quelles seraient les bonnes pratiques à ce niveau ?)."*
+
+**It is in place**, and this entry exists because that is not the same as it
+being true for a room. Session 4 shipped it on 15 August:
+`speedBonusForElapsed` (`packages/core/src/scoring/speed-bonus.ts:18-34`) is
+called at `round-service.ts:474-530` for every simultaneous round, on the quiz
+and the blind test, in `typed` and `choice`. It is linear on the round's own
+pausable clock and it has a unit test.
+
+Two things are wrong with it, and neither is the rule.
+
+### It is invisible where the room is looking
+
+The reveal on the **host stage** prefers `round.revealedAnswers` and only falls
+through to the `+N` list when that is empty (`reveal-panel.tsx:118-163`).
+`revealedAnswers` is non-empty exactly in `typed` and `choice` — the two modes
+that pay a speed bonus. So **the big screen shows who said what and never a
+single number**, and the one screen that does break the bonus out is the
+player's own phone (`player-round.tsx:118-137`, *dont 2 pour la vitesse*), which
+only shows it to the player who earned it.
+
+A rule nobody watching the game can see is, for the table, a rule that does not
+exist. This half is not optional and it is most of the value.
+
+### The amplitude is four steps and they are invisible too
+
+`MOST_A_SPEED_BONUS_PAYS = 3` (`packages/protocol/src/scoring.ts:67`), rounded
+once at the end. Over a 30s round that is **four buckets**: 0–5s pays 3, 5–15s
+pays 2, 15–25s pays 1, after that nothing. Against the base scores
+(`packages/protocol/src/scoring.ts:5-36`):
+
+| Game and mode | Right answer | With the bonus | Speed is worth |
+|---|---|---|---|
+| quiz `choice` | 1 | up to 4 | **300%** of being right |
+| quiz `typed` | 3 | up to 6 | 100% |
+| blind test `typed` | 3 (both halves) | up to 6 | 100% |
+| blind test `choice` | 1 | up to 4 | **300%** |
+| buzzer, reflex, Le Fake | flat | flat | — (no round clock, or refused by design) |
+
+So in choice mode speed is already worth three times the answer, and it still
+does not read — because 4 against 1 on a party scoreline looks like an accident,
+not like a rule.
+
+### The practices worth borrowing, and where the note's own proposal breaks
+
+The shape every quiz product converged on is **Kahoot's**:
+`points = base × (1 − ½ × elapsed ÷ duration)`, with `base = 1000`. Two
+properties are what make it work, and both are worth stealing:
+
+- **Speed is capped at half the answer's value.** Answering at the buzzer still
+  pays 500 of 1000. Being right always outranks being fast, at every moment of
+  every round — which is the failure mode session 4's own notes flagged and
+  which choice mode is currently on the wrong side of.
+- **The base is large enough for the difference to be legible.** 1000 against
+  780 says *you were faster*; 4 against 3 says *rounding*. The big number is not
+  a gimmick, it is the entire mechanism by which a curve becomes visible.
+
+**"30 000 decrementing every millisecond" is the right instinct and the wrong
+number**, on two counts worth writing down before somebody builds it:
+
+- 30 000 steps over 30 s means the last three digits are noise nobody can read
+  or verify, and a scoreline of 28 447 is not a number anybody says out loud at
+  a table. A base in the hundreds or the low thousands, quantised to the nearest
+  ten, keeps the whole difference and loses none of it.
+- It **reverses a decision taken the day before**. Session 4 deliberately made
+  two players who answered in the same breath score the same — "ties stop being
+  broken by arrival". A per-millisecond score makes ties impossible again, by
+  the back door and with no discussion. That is Adrien's to re-open if he wants
+  it; it must not happen as a side effect of picking a scale.
+
+### The one thing that makes this a session and not an hour
+
+**A rescale is shelf-wide or it is incoherent.** If a quiz round pays ~1000 and
+a buzzer round pays 1, the five games stop sharing a currency and the scoreboard
+stops meaning anything across a mixed evening. So the base scores of the bare
+buzzer, the reflex race and Le Fake move with it, or nothing moves. Add to that
+every socket suite asserting totals — the harness already has `basePointsFor`
+for exactly this reason, see session 4's notes — and the four
+`*.scoring.*` strings in both locales, which spell the arithmetic out.
+
+**Recommendation: take the visible half first, on the numbers as they stand.**
+Put the award on the host stage's reveal beside the said-answers list, and see
+whether a room that can finally *watch* the bonus still wants the scale changed.
+The rescale is a real session with a real tail; it should not be paid for a
+problem the first half might solve.
+
+### What the session decides
+
+- Whether the base moves at all, and to what — with the constraint that it moves
+  for all five games at once.
+- Whether the cap becomes explicit (speed never worth more than the answer),
+  which changes `choice` mode today whatever the scale ends up being.
+- Whether ties survive. They should; say so either way.
+
+### How to tell it is done
+
+- Two players answer the same round eight seconds apart, and **the big screen**
+  shows why their numbers differ, in both locales.
+- Whatever the scale, a room watching a reveal can state the rule out loud
+  without being told it.
+
+---
+
+## 13 · The room is silent and the console cannot say why
+
+> *Note 6 — "quand on lance l'hôte sur téléphone et qu'on fait « jouer aussi
+> sous le nom de », on a « le son ne sort pas d'ici ». Mais du coup il sort d'où ?
+> On a beau cliquer et augmenter le son du téléphone il n'y a aucun son, alors
+> que le timer défile, et que le message reste."*
+
+**The seat is not the cause, and the answer to *il sort d'où ?* is: from that
+same phone.** `toHostContent` (`room-view.ts:47-80`) nulls `track` for a seated
+host and keeps `audioUrl`, which is the whole point of the two fields being
+separate — the schema says so at `packages/protocol/src/room.ts:374-383` and so
+does `docs/realtime-protocol.md:163-175`. `useRoundAudio` reads `audioUrl` with
+no seat check. A seated host hears the clip and does not see the answer.
+
+`blindtest.audio.silent` — *Le son ne sort pas d'ici.* — is
+[session 9](#9--arriving-cold-in-a-running-blind-test--done-15-august-2026)'s
+autoplay message and predates the seat entirely. It is shown when
+`isClipUnheard` reports that **no press has ever blessed an audio element on
+this tab**. That it stayed up through repeated presses is the diagnosis: every
+press ran, and every press failed.
+
+### The failure is thrown away, in the one branch session 9 did not fix
+
+`round-audio.ts:194-215`:
+
+```ts
+      void blessed.play().then(
+        () => {
+          blessed.pause()
+          setAudio(blessed)
+        },
+        () => {}
+      )
+```
+
+Session 9's whole lesson was that `.catch(() => {})` discards the one fact worth
+having — and it fixed the *playback* branch (`play()` at `:37-43` now separates
+`NotAllowedError` from `AbortError`) while leaving the **unlock** branch
+swallowing everything. So the console knows the press failed, cannot say why,
+and offers the same press again forever. That is exactly what the note
+describes, and fixing it is the first thing this session does: **whatever
+happens next, the screen has to be able to name the refusal.**
+
+### The candidate underneath, to be confirmed rather than assumed
+
+`unlock()` blesses a constructed `new Audio(SILENCE)` where `SILENCE` is a
+one-millisecond 8-bit data-URI WAV (`round-audio.ts:26-27`). That trick exists
+because permission attaches to the element and cannot be granted later, when the
+preview URL finally arrives — the comment at `:21-25` is right about the
+constraint. But a synthetic, undecodable-in-some-engines resource is a plausible
+way for `play()` to reject **inside a genuine gesture**, which is otherwise
+unusual on Android Chrome. Two alternatives to weigh once the rejection is
+actually readable: bless a real `<audio>` element that is in the DOM, or bless
+with `muted = true` (always permitted) and unmute on the first real source.
+
+Not the cause, and worth ruling out in one line so nobody chases it: a stored
+`taverla:volume` of `0` would make the clip inaudible but would **clear** the
+message, since `canPlay` would be true. The message staying is what says the
+element was never blessed.
+
+### The documentation that sent this the wrong way
+
+`.claude/CLAUDE.md` said the server *"stops sending it the track"* for a seated
+host, which reads as if the audio stopped. Corrected on 16 August 2026 in the
+same pass as this entry — it withholds the title and artist and keeps the clip.
+Worth knowing that the wrong sentence is what made the note point at the seat.
+
+### How to tell it is done
+
+- A console that fails to arm says which refusal it got, in both locales, rather
+  than repeating the same offer.
+- A host on a phone takes a seat mid-blind-test and the clip is audible from
+  that phone. This is the half no muted browser can answer; the unit-testable
+  half is the rejection handling and the seek.
+
+---
+
+## 14 · A host's seat comes off by itself
+
+> *Note 8, second half — "quand l'hôte fait « jouer aussi sous le nom de », il
+> est kické/déconnecté (on ne sait pas trop) après quelques rounds apparemment,
+> et redevient juste « hôte ». Peut-être que ma co-testeuse a fait une mauvaise
+> manip, mais chelou quand même."*
+
+It is not a mis-tap. The seat lives in **two places that must agree** and one of
+them is not persisted.
+
+- On the server, `Connection.playerId`, set by `seatHost` from the `nickname` on
+  the `hello` frame (`socket-handler.ts:198-256`). There is no seat message —
+  a host that names itself takes a seat.
+- On the client, `seatNickname`, **plain component state**
+  (`host-console-page.tsx:94`), and the only thing that puts the nickname back
+  on the next `hello`. Nothing writes it anywhere, where the host *token* and
+  the session id are both in `localStorage`.
+
+So a phone whose tab is discarded on screen-lock or an app switch — which is
+routine on Android, and which is a *reload*, not a socket blink — comes back
+with `nickname: undefined`, is seated `null`, and **cannot retake the seat**,
+because `HostSeat` renders only in the lobby (`setup-fold.tsx:117-123`). The
+answer form disappears, the *leave seat* exit disappears, the stale participant
+greys out, and the sweeper deletes it ten minutes later. That is the reported
+symptom exactly, including *after a few rounds*.
+
+Three more paths reach the same place, and the third is the one to watch because
+it needs no reload at all:
+
+- **The sweeper.** `releaseAbandonedSeats` (`round-conductor.ts:410-437`) calls
+  `forgetSeat`, which nulls `connection.playerId` on a **still-open** host
+  socket with no frame sent. It fires on any participant stuck `isConnected:
+  false` for `ABANDONED_SEAT_MS` — which is what a half-open iOS socket leaves
+  behind. Ten minutes is *a few rounds*.
+- **A second console.** `host_already_connected` is in `refusalVoidsSeat`
+  (`packages/core/src/room/session-memory.ts:70-77`), so the refusal drops the
+  session id; the retry mints a new one, `joinAsPlayer` no longer matches the
+  host's own ghost participant, and it collides with it — `nickname_taken`,
+  which is **non-fatal**, so the room comes back and the seat silently does not.
+- **Room full on reconnect**, same silent landing.
+
+### The structural fault, which is what the session actually fixes
+
+**A seat that fails to be re-taken is reported as a non-fatal error frame and
+nothing else.** There is no *you lost your seat* signal, the console's own copy
+of the seat is unpersisted, and the only control that could restore it is gated
+on the lobby. Three levers, and the session should take all three:
+
+- **Persist the fact.** `taverla:seats` is already keyed per room *and role*,
+  and `role: 'host'` is already a value in it — so what is missing is one flag,
+  not a store. The name itself is already device-global in `taverla:nickname`
+  (see [17](#17--a-name-you-give-once)), so nothing new needs writing down.
+- **Let the seat be retaken outside the lobby.** `HostSeat`'s lobby gate is what
+  turns a recoverable state into a lost evening.
+- **Say it.** A console that asked for a seat and did not get one should read
+  the refusal, not discover it by noticing the answer form is gone.
+
+### How to tell it is done
+
+- A seated host reloads mid-round and comes back seated, with their score.
+- A second console takes the room and hands it back: the seat survives, or the
+  screen says it did not.
+- A socket test beside `second-console.test.ts` on the ghost-participant
+  collision, since that path never touches a browser.
+
+---
+
+## 15 · The host may race
+
+> *Note 7 — "l'hôte ne peut pas jouer à réflexe ? Pourquoi ?"*
+
+Because of a guard that is right about the buzzer and wrong about the reflex
+race. `setup-fold.tsx:117-123` hides the seat form whenever
+`view.settings.mode.kind === 'buzzer'`, and its comment gives the reason: *"that
+round needs someone reading the answer to judge it, and a judge who is also
+answering is not one."*
+
+**The reflex race has no judge.** It settles on the taps
+(`settleReflexRound`, `round-service.ts:903`), `HostActions` returns `null` for
+it (`host-actions.tsx:44`), and the server already routes a tap by the *seat*
+rather than by the role — `socket-handler.ts:406-420`, whose own comment says
+*"the seat, not the role: a host running the room from the phone in the middle
+of the table holds both."* The server would accept the host's tap today. It is
+narrowed out by the client because reflex, like the bare buzzer, offers only
+`buzzer` mode (`packages/core/src/room/game-modes.ts:45-54`) — so the guard
+catches it by accident of the mode it shares, not by anything true about it.
+
+**And there is a leak on the other side of the same guard.** A host who takes a
+seat first — in a room with no game yet, or on the quiz — and *then* picks
+reflex **keeps the seat**: nothing on the server or the client revokes it. That
+host has no way to tap, because the reflex playing stage is display-only
+(`reflex-stage.tsx`), yet they are in `openedWithPlayerIds`, so
+`everyoneHasTapped` (`round-service.ts:870-890`) waits for a thumb that has no
+button and every heat runs its full duration. Whichever way the seat question is
+answered, that path has to stop existing.
+
+So: offer the seat for reflex, give the reflex host stage a tap target when
+seated, and key the guard on *does this game need a judge* rather than on the
+mode. The bare buzzer's exclusion stays and gets the honest name.
+
+### How to tell it is done
+
+- A host takes a seat, picks reflex, and can tap; their reaction time is on the
+  board.
+- A heat with a seated host who never taps ends on the deadline, not on a wait
+  that nothing can satisfy.
+- The bare buzzer still refuses the seat.
+
+---
+
+## 16 · The board a phone never sees
+
+> *Note 8, first half — "dans « quiz » ⇒ « on tape » : on ne voit pas le
+> classement des joueurs après chaque réponse sur l'écran du joueur."*
+
+True, and it is not specific to the quiz. `Revealed`
+(`player-round.tsx:389-433`) dispatches per game and only its **final fallback**
+renders `<Scoreboard>` — a branch reached solely by the bare buzzer, which has
+no answer to reveal. Quiz and blind test players see the answer, plus a `+N`
+**only if they scored** (`:124`). A player who got it wrong sees the answer and
+nothing else: no board, no *you were wrong*, not even the words they typed. A
+scoreboard reaches a phone only at `finished`, and the persistent `Scoreline`
+strip carries their own score and the room size.
+
+**This has been declined twice**, in [17](17-mid-game-join.md) and again in
+[session 6](#6--the-gap-between-two-rounds--done-15-august-2026), on the same
+principle: repeating the room's ranking on every phone asks the table to look
+down at a phone. A third ask from a room that has now played several evenings
+outranks a principle written at a desk — **but the principle is right about the
+composition**, which is why this starts with `/impeccable` rather than with a
+component.
+
+The recommendation to argue against: a phone does not need the list. It needs
+**where I stand and what just happened to it** — a rank, a score, the delta from
+this round, and at most the neighbour above. That answers *did I gain?* in one
+glance, where the full board asks the player to read it. It also composes with
+[12](#12--speed-already-pays-and-nothing-in-the-room-says-so), which is putting
+the number on the big screen at the same moment.
+
+### How to tell it is done
+
+- A player who answered wrong learns, on their own phone, that they did.
+- After a reveal a phone says where its owner stands without being scrolled.
+- The big screen is still the thing the room looks at.
+
+---
+
+## 17 · A name you give once
+
+> *Note 5 — "si y a déjà un pseudo, ne pas le redemander et arriver direct à la
+> table ? Et ajouter quelque part quelque chose pour modifier le pseudo dans un
+> menu ou autre ? Ça évite une étape, et c'est un peu le but, que tout soit
+> rapide et fluide."*
+
+Most of this already exists and is unused. `taverla:nickname` is a **device-global
+stored display name** (`preferences-storage.ts:15`, `:71-84`), deliberately kept
+out of the seat store, and it is read in exactly one place: to *prefill* the
+join form (`player-page.tsx:92`). The form is still shown, and still needs a
+press, because `PlayerScreen` initialises its nickname state to `null`
+unconditionally (`player-page.tsx:44-80`) — nothing consults the store, or
+`taverla:seats`, before deciding to ask.
+
+So the first half is a default, not a feature: initialise from the store, open
+the socket, and fall back to the form on refusal — which the screen already does,
+since `rejection !== null` brings it back. `nickname_taken` in a room where the
+name is already in use lands there for free.
+
+**Renaming needs a frame, and only just.** There is no `player.rename` in
+`playerClientMessageSchema` (`packages/protocol/src/client-message.ts:201-209`),
+but the server already renames on a re-sent `hello` — `joinAsPlayer` overwrites
+the nickname on a returning session (`room-service.ts:42-52`), the clash check
+excludes the returning participant, and there is a test on it
+(`room-service.test.ts:61`). The client could rename today by changing the
+nickname prop, which is a socket dependency (`use-room-socket.ts:265`) and would
+therefore **tear the socket down mid-round to change a label**. A `player.rename`
+frame is the small honest addition.
+
+The control belongs in `AppMenu`, which is the only chrome on every screen at
+every phase, and it reaches it the way everything else in that menu does: a
+field on `RoomExitsProvider`, which already exists for exactly this bottom-up
+shape (`presentation/exits/room-exits-provider.tsx:14-21`).
+
+Two smaller things in the same seam:
+
+- **`host-seat.tsx:27` starts its field empty** and never reads the stored
+  nickname, where the player's form does. Same fix, same line.
+- Skipping the form means a player never *sees* the name they are joining
+  under. The menu control is what makes that safe, so the two halves ship
+  together or neither does.
+
+### How to tell it is done
+
+- A phone that has played before scans the QR code and lands at the table with
+  no step in between.
+- The name is visible and changeable from the menu, mid-round, without the
+  socket dropping.
+- A name already taken in that room still gets the form back, with the refusal.
+
+---
+
+## 18 · Decades on the shelf
+
+> *Note 2 — "pour le blind test, on a moyen d'ajouter des catégories « années
+> 90 », etc ? Par génération ?"*
+
+Genres already exist — twelve Deezer charts behind a `ToggleGroup`
+(`playlist-picker.tsx:46-48`, `:165-186`). What does not exist is any notion of
+*when*, and the obstacle is data rather than UI:
+
+- **A track carries no year.** `CatalogueTrack` is `trackIdentitySchema` —
+  artist, cover, id, title (`packages/protocol/src/track.ts:9-24`). Deezer's
+  chart and playlist endpoints do not return `release_date`, and the per-track
+  lookup that does is already done once per round to resolve the expiring
+  preview URL.
+- **Deezer search cannot filter by year.** Its advanced query supports artist,
+  album, label and duration; no date dimension.
+- **Filtering at the draw does not work.** `drawPlayableTrack`
+  (`track-pool.ts:24-54`) retries five times; against a 100-track chart with a
+  decade filter, most draws would miss and a round would fail with
+  `no_content_available` rather than find a track.
+
+**So the rail is the one already built**: `TrackSource`'s `playlist` arm
+(`track.ts:31-50`). A decade is a curated Deezer playlist id behind a named
+button, and the whole change is a preset list, a control in `playlist-picker.tsx`
+and an `isSameSource` case so `discardPoolIfStale` (`track-pool.ts:65-97`) drops
+the pool when the preset changes. No protocol arm, no new client, no pipeline.
+
+Two things the session has to be honest about, because they are what makes this
+a session rather than an afternoon:
+
+- **A preset is somebody else's playlist.** Deezer's editorial decade playlists
+  can be renamed, re-ordered or withdrawn, and the failure lands on a room mid-
+  evening as an empty pool. Whether that is acceptable, and whether the presets
+  should be a handful of well-known ids or a `search` fallback beside them, is
+  the call.
+- **A preset is 100 tracks, once.** `POOL_SIZE = 100` per request and a room
+  never repeats (`room.playedContentIds`), so a decade preset is comfortable for
+  an evening and thin for two. The genre picker gets around this by merging
+  charts; a decade cannot merge with itself.
+
+The wider version — a `year` on the catalogue track, fetched at pool fill —
+costs one request per track against a 50-per-5s rate limit, and should be priced
+before it is dismissed, since it is also what a "years 1990–1999" *range* would
+need. Presets first; the range only if the room asks for it twice.
+
+### How to tell it is done
+
+- A host picks *Années 90*, and the pool is 90s tracks in a room that had been
+  playing something else.
+- Changing the preset mid-game discards the old pool.
+- An empty or withdrawn playlist fails at the picker, with the preview the
+  source picker already has, rather than at the first round.
 
 ---
 
