@@ -21,6 +21,12 @@ export const FR_DICTIONARY: Dictionary = {
       titleFound: 'Titre ✓'
     },
     audio: {
+      refused: {
+        blocked: 'Le navigateur a refusé. Réessaie.',
+        broken: 'Ça a cassé de notre côté. Réessaie.',
+        unsupported:
+          'Cet écran ne sait pas lire l’extrait. Tiens la table depuis un autre.'
+      },
       silent: 'Le son ne sort pas d’ici.',
       start: 'Lancer le son'
     },

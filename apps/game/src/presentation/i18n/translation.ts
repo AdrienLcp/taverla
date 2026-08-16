@@ -3,6 +3,7 @@ import type { GameKind, ShelvedGame } from '@taverla/protocol/game'
 import type { QuestionCategory } from '@taverla/protocol/question'
 import type { AnswerMode } from '@taverla/protocol/room'
 
+import type { ClipRefusal } from '@taverla/core/blindtest/clip-audio'
 import type {
   DotPath,
   PlainKey,
@@ -50,6 +51,11 @@ export const apiErrorKey = (
 export const buzzBlockerKey = (
   blocker: BuzzBlocker
 ): BuiltKey<`buzz.blocked.${BuzzBlocker}`> => `buzz.blocked.${blocker}`
+
+export const clipRefusalKey = (
+  refusal: ClipRefusal
+): BuiltKey<`blindtest.audio.refused.${ClipRefusal}`> =>
+  `blindtest.audio.refused.${refusal}`
 
 export const answerModeLabelKey = (
   mode: AnswerMode

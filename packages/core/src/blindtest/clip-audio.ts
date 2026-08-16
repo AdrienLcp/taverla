@@ -51,3 +51,32 @@ export const isClipUnheard = ({
   phase: RoomPhase | null
 }): boolean =>
   !canPlay && hasClip && (phase === 'countdown' || phase === 'playing')
+
+/**
+ * Why a screen could not play, in the three answers the room needs rather than
+ * the browser's own list: press again, host from something else, or we broke it.
+ */
+export type ClipRefusal = 'blocked' | 'broken' | 'unsupported'
+
+/**
+ * What a rejected `play()` means for the screen. `null` is the one rejection
+ * that is not a refusal at all: an `AbortError` is the next `load()` cutting
+ * this one short, the round is driven by the server either way, and saying
+ * anything about it would put a message on a screen that is working.
+ *
+ * It takes the name rather than the exception so this stays free of the DOM —
+ * `null` for a rejection that was not a `DOMException`, which tells the room as
+ * little as an unrecognised name does.
+ */
+export const clipRefusalFor = (name: string | null): ClipRefusal | null => {
+  switch (name) {
+    case 'AbortError':
+      return null
+    case 'NotAllowedError':
+      return 'blocked'
+    case 'NotSupportedError':
+      return 'unsupported'
+    default:
+      return 'broken'
+  }
+}

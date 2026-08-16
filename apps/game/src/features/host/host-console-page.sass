@@ -76,6 +76,16 @@
 
           color: var(--ink-muted)
 
+        // A stamped block rather than tinted text, the same as the footer's
+        // error: this sits on the countdown's chrome yellow as often as on the
+        // playing teal, and red text against the first tops out at 4.0:1.
+        .refusal
+          background: var(--danger)
+          color: var(--danger-ink)
+          font-weight: 700
+          padding: var(--space-2xs) var(--space-s)
+          text-align: center
+
       // The reveal and the standings, which is the one moment the room asks
       // what the round did to the game — and stacked, the one stage that could
       // not deliver it. A room of ten writing ten lies measured 2 377px against

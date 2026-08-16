@@ -29,6 +29,17 @@ export const EN_DICTIONARY = defineTranslations({
      * the screen would otherwise say so.
      */
     audio: {
+      /**
+       * What the last press got. Without these the offer above repeats itself
+       * for the whole evening and nothing on the screen ever says that every
+       * press has already failed.
+       */
+      refused: {
+        blocked: 'The browser turned it down. Try again.',
+        broken: 'It broke on our side. Try again.',
+        unsupported:
+          'This screen cannot play the clip. Run the room from another.'
+      },
       silent: 'No sound is coming from here.',
       start: 'Start the music'
     },

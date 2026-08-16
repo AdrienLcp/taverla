@@ -79,7 +79,7 @@ The one decision that was still Adrien's has been taken and built:
 |---|---|---|---|---|
 | 11 | [The field the whole game is typed into](#11--the-field-the-whole-game-is-typed-into--done-16-august-2026) | **done** | `/impeccable` | notes 1, 4 |
 | 12 | [Speed already pays, and nothing in the room says so](#12--speed-already-pays-and-nothing-in-the-room-says-so) | a session, and a decision | — | note 3 |
-| 13 | [The room is silent and the console cannot say why](#13--the-room-is-silent-and-the-console-cannot-say-why) | a session | — | note 6 |
+| 13 | [The room is silent and the console cannot say why](#13--the-room-is-silent-and-the-console-cannot-say-why--half-done-16-august-2026) | **the reading shipped; the cause waits on a phone** | — | note 6 |
 | 14 | [A host's seat comes off by itself](#14--a-hosts-seat-comes-off-by-itself) | a session | — | note 8, second half |
 | 15 | [The host may race](#15--the-host-may-race) | half a session | — | note 7 |
 | 16 | [The board a phone never sees](#16--the-board-a-phone-never-sees) | half a session | `/impeccable` | note 8, first half |
@@ -98,9 +98,17 @@ one that is new work rather than a fault or a polish.
 
 **11 landed on 16 August 2026**, and it is a third case of the ratio above: its
 own design question — where to focus so a keyboard does not cover a blind test —
-turned out to have been answered by the composition before it was asked. Next is
-**12**, and its entry says plainly that the thing Adrien asked for four times is
-already built.
+turned out to have been answered by the composition before it was asked.
+
+**13 landed the same day, and only half of it could.** The console now names the
+refusal it got instead of repeating one offer all evening — but *why* an Android
+phone refuses every press is a reading nobody has taken yet, and taking it needs
+that phone. The entry says which candidates survived the desk work and which one
+would have made things worse. **Do not pick a fix for it before somebody has
+read the message.**
+
+Next is **12**, and its entry says plainly that the thing Adrien asked for four
+times is already built.
 
 ---
 
@@ -1165,7 +1173,7 @@ problem the first half might solve.
 
 ---
 
-## 13 · The room is silent and the console cannot say why
+## 13 · The room is silent and the console cannot say why — **half done, 16 August 2026**
 
 > *Note 6 — "quand on lance l'hôte sur téléphone et qu'on fait « jouer aussi
 > sous le nom de », on a « le son ne sort pas d'ici ». Mais du coup il sort d'où ?
@@ -1239,6 +1247,42 @@ Worth knowing that the wrong sentence is what made the note point at the seat.
 - A host on a phone takes a seat mid-blind-test and the clip is audible from
   that phone. This is the half no muted browser can answer; the unit-testable
   half is the rejection handling and the seek.
+
+### What it found — **readable, 16 August 2026; the cause still open**
+
+The first half shipped and the second is **not closed**: nothing here proves a
+clip comes out of an Android phone, because no browser on this machine can
+answer that. What it can now do is *say why it did not*, which is what the next
+playtest is for.
+
+- **The gesture was never the problem, and that is worth not re-checking.** Both
+  `unlock()` call sites are synchronous inside `onPress`
+  (`host-console-page.tsx`), so the press really did reach the browser. Every
+  press failing was therefore a refusal, not a lost gesture.
+- **The silence is well-formed**, against what this entry assumed. Decoding the
+  data URI gives a valid RIFF header — PCM, 8 kHz, 8-bit, eight samples, sizes
+  consistent — so "malformed resource" is not the candidate. 8-bit PCM support
+  on a given engine still is.
+- **The muted-unlock alternative is a trap, and this is the argument against
+  it.** A muted element is always allowed to play, so `play()` would resolve
+  whatever the policy had decided — and `setAudio` would then mark *armed* a
+  screen the browser will refuse the moment it is unmuted. That turns a console
+  that says it is silent into one that says nothing at all, which is strictly
+  worse. Blessing a real in-DOM `<audio>` remains open and does not change the
+  decode question.
+- **Three answers, not the browser's list.** `clipRefusalFor` maps a
+  `DOMException` name to `blocked` / `unsupported` / `broken`, and `null` for an
+  `AbortError` — the one rejection that must stay silent, since the round is the
+  server's either way and a message there would apologise for working. It is in
+  core, taking the *name* rather than the exception so nothing DOM crosses that
+  boundary.
+- **The playback branch had the same hole, one refusal wide.** It answered
+  `NotAllowedError` alone, so a preview that failed to decode left the console
+  silent with `canPlay` still true and nothing said. Both branches now go
+  through the same classification.
+- The refusal is a **stamped `--danger` block**, not tinted text: it sits on the
+  countdown's chrome yellow as often as on the playing teal, and DESIGN.md
+  already measured red text there at 4.0:1.
 
 ---
 

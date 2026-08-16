@@ -14,7 +14,10 @@ import type {
 } from '@taverla/protocol/room'
 import type { TrackSource } from '@taverla/protocol/track'
 
-import { isClipUnheard } from '@taverla/core/blindtest/clip-audio'
+import {
+  type ClipRefusal,
+  isClipUnheard
+} from '@taverla/core/blindtest/clip-audio'
 import {
   type HostPreferences,
   rememberSettings
@@ -55,7 +58,10 @@ import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
 import { useReportRoomExits } from '@/presentation/exits/room-exits-provider'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
-import { protocolErrorKey } from '@/presentation/i18n/translation'
+import {
+  clipRefusalKey,
+  protocolErrorKey
+} from '@/presentation/i18n/translation'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
 
 import { FinalBoard } from './final-board'
@@ -103,7 +109,7 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
 
   useReportConnection({ clock, status })
   usePhaseField(view?.phase ?? null)
-  const { canPlay, unlock } = useRoundAudio({ clock, view, volume })
+  const { canPlay, refusal, unlock } = useRoundAudio({ clock, view, volume })
   const isLive = status === 'open'
 
   // Every way the console has of changing a setting comes through here, so what
@@ -219,6 +225,7 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
         onSettingsChange={changeSettings}
         onUnlockAudio={unlock}
         preferences={preferences}
+        refusal={refusal}
         roomCode={roomCode}
         send={send}
         view={view}
@@ -295,6 +302,8 @@ type StageProps = {
   onSettingsChange: (settings: RoomSettings) => void
   /** What this host last left each game set to, for the lobby's picker. */
   preferences: HostPreferences | null
+  /** Why the last press did not arm this screen, and `null` while none has failed. */
+  refusal: ClipRefusal | null
   roomCode: RoomCode
   send: (message: ClientMessage) => boolean
   view: HostRoomView | null
@@ -308,6 +317,7 @@ const Stage = ({
   onSettingsChange,
   onUnlockAudio,
   preferences,
+  refusal,
   roomCode,
   send,
   view
@@ -347,6 +357,12 @@ const Stage = ({
       <Button onPress={onUnlockAudio} size='small' variant='outlined'>
         {translate('blindtest.audio.start')}
       </Button>
+      {/* Below the offer, because it is what the last one came back with. */}
+      {refusal !== null && (
+        <p className='refusal' role='alert'>
+          {translate(clipRefusalKey(refusal))}
+        </p>
+      )}
     </div>
   ) : null
 

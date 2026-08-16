@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { isClipUnheard, seekTargetMs } from './clip-audio'
+import { clipRefusalFor, isClipUnheard, seekTargetMs } from './clip-audio'
 
 describe('seekTargetMs', () => {
   it('[clip] leaves a clip that is where the room is', () => {
@@ -53,5 +53,31 @@ describe('isClipUnheard', () => {
     for (const phase of ['lobby', 'buzzed', 'revealed', 'finished'] as const) {
       expect(isClipUnheard({ ...RUNNING, phase })).toBe(false)
     }
+  })
+})
+
+describe('clipRefusalFor', () => {
+  /**
+   * The one that must stay silent. A round is driven by the server, so a clip
+   * cut short by the next `load()` has cost the room nothing — and a screen
+   * apologising for it would be a screen apologising for working.
+   */
+  it('[clip] does not call an abort a refusal', () => {
+    expect(clipRefusalFor('AbortError')).toBeNull()
+  })
+
+  it('[clip] tells a policy refusal from a source it cannot play', () => {
+    expect(clipRefusalFor('NotAllowedError')).toBe('blocked')
+    expect(clipRefusalFor('NotSupportedError')).toBe('unsupported')
+  })
+
+  /**
+   * A rejection nobody anticipated is still a screen that will not sound, and
+   * the console has to say so — throwing it away is the whole fault this
+   * classification exists to end.
+   */
+  it('[clip] owns up to a rejection it cannot name', () => {
+    expect(clipRefusalFor('QuotaExceededError')).toBe('broken')
+    expect(clipRefusalFor(null)).toBe('broken')
   })
 })

@@ -2,7 +2,11 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import type { HostRoomView } from '@taverla/protocol/room'
 
-import { seekTargetMs } from '@taverla/core/blindtest/clip-audio'
+import {
+  type ClipRefusal,
+  clipRefusalFor,
+  seekTargetMs
+} from '@taverla/core/blindtest/clip-audio'
 import {
   type ClockEstimate,
   millisecondsUntil
@@ -27,17 +31,26 @@ const SILENCE =
   'data:audio/wav;base64,UklGRiwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQgAAACAgICAgICAgA=='
 
 /**
- * `play()` rejects for two reasons and they need opposite answers, which is
- * what throwing the error away used to cost. `AbortError` is the next `load()`
- * cutting this one short — ordinary, and the round is driven by the server
- * either way. `NotAllowedError` is a policy refusing the element, and it means
- * this screen is not armed after all: the console has to say so and offer the
- * press again, or the tab is mute for the rest of the evening.
+ * The browser's own name for a rejection, and `null` when it did not give one —
+ * which `clipRefusalFor` reads as telling the room nothing.
  */
-const play = (audio: HTMLAudioElement, onRefused: () => void): void => {
+const nameOf = (refusal: unknown): string | null =>
+  refusal instanceof DOMException ? refusal.name : null
+
+/**
+ * A rejected `play()` means this screen is not armed after all, whatever the
+ * reason: the console has to say which and offer the press again, or the tab is
+ * mute for the rest of the evening with a message that never changes.
+ */
+const play = (
+  audio: HTMLAudioElement,
+  onRefused: (refusal: ClipRefusal) => void
+): void => {
   void audio.play().catch((refusal: unknown) => {
-    if (refusal instanceof DOMException && refusal.name === 'NotAllowedError') {
-      onRefused()
+    const refused = clipRefusalFor(nameOf(refusal))
+
+    if (refused !== null) {
+      onRefused(refused)
     }
   })
 }
@@ -49,6 +62,13 @@ export type RoundAudio = {
    * three ways of arriving at a running clip with nothing able to play it.
    */
   canPlay: boolean
+  /**
+   * Why the last attempt to arm or to play was turned down, and `null` while
+   * none has been. It is what stops the console offering an identical press
+   * forever: the offer stays, because a policy can change between two of them,
+   * but the screen says what happened the last time.
+   */
+  refusal: ClipRefusal | null
   /**
    * MUST be called synchronously inside a user gesture. Called later — from an
    * effect, or from the socket frame that brings the track — it silently does
@@ -78,13 +98,15 @@ export const useRoundAudio = ({
    * in the list.
    */
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null)
+  const [refusal, setRefusal] = useState<ClipRefusal | null>(null)
 
   // `useCallback` for the one reason that survives the compiler: it is a
   // dependency of the effect below, and a fresh identity there would tear the
   // clip down and start it again on every render.
-  const disarm = useCallback((): void => {
+  const disarm = useCallback((refused: ClipRefusal): void => {
     loadedRoundRef.current = null
     setAudio(null)
+    setRefusal(refused)
   }, [])
 
   useEffect(() => {
@@ -191,6 +213,7 @@ export const useRoundAudio = ({
 
   return {
     canPlay: audio !== null,
+    refusal,
     unlock: () => {
       if (audio !== null) {
         return
@@ -209,8 +232,15 @@ export const useRoundAudio = ({
         () => {
           blessed.pause()
           setAudio(blessed)
+          setRefusal(null)
         },
-        () => {}
+        (refused: unknown) => {
+          // The branch that swallowed everything, which is why a console could
+          // press all evening and never learn that every press had failed. An
+          // abort cannot happen here — nothing else loads this element — so
+          // there is no rejection this may drop.
+          setRefusal(clipRefusalFor(nameOf(refused)) ?? 'broken')
+        }
       )
     }
   }
