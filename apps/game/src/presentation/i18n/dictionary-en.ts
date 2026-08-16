@@ -270,7 +270,15 @@ export const EN_DICTIONARY = defineTranslations({
     rounds: 'Rounds',
     seat: {
       action: 'Take a seat',
-      description: 'You stop seeing the answer before everyone else.',
+      /**
+       * What the seat costs, which is not the same thing in a game with no
+       * answer to hold back: there the screen is the whole of it, and promising
+       * a hidden answer would name something the round does not have.
+       */
+      cost: {
+        hiddenAnswer: 'You stop seeing the answer before everyone else.',
+        sharedScreen: 'You race on the screen the whole table is watching.'
+      },
       label: 'Play too, as',
       leave: 'Give up the seat',
       taken: 'You are playing as {nickname}.'

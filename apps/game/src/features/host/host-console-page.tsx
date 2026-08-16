@@ -391,7 +391,12 @@ const Stage = ({
   if (view.phase === 'playing' && round?.content.kind === 'reflex') {
     return (
       <div className='stage solo'>
-        <ReflexStage clock={clock} round={round} />
+        <ReflexStage
+          clock={clock}
+          onTap={(roundId) => send({ roundId, type: 'player.buzz' })}
+          round={round}
+          youId={view.youId}
+        />
       </div>
     )
   }

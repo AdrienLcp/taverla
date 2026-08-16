@@ -56,6 +56,16 @@ table to count the flip out loud. That is why `roundDurationMsOf` answering
 `null` for this game is load-bearing rather than incidental, and why the host's
 round actions are absent for the whole heat.
 
+**A console holding a seat is the same screen, not a screen with a buzzer on
+it.** The field is the stimulus, so the field takes the press: a full-bleed
+control with no ground, no edge and no label of its own, over a stage that is
+otherwise unchanged. A round buzzer beside the flip would be a second object on
+the one screen allowed to carry a single idea, and the press it answers is the
+one the eye is already on. What that console owes itself is one line under the
+signal — its own time, or the stamp naming a false start — and the line's height
+is held from the empty state, because a row arriving mid-wait would move the
+flip under the eyes waiting for it.
+
 ### Contrast, measured
 
 Every field/ink pair clears 4.5:1 (worst 5.56). `--ink-muted` mixes the ink back

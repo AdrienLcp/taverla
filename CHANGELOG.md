@@ -367,6 +367,16 @@ one part.
 
 ### Fixes
 
+- `[Game]` **The screen running the reflex race can race on it.** The seat was
+  withheld from every round answered by a buzz, because such a round needs
+  somebody reading the answer to grant it — and the reflex race has no answer and
+  no judge, so it was caught by the mode it happens to share rather than by
+  anything true about it. It offers the seat now, and the console plays on the
+  same screen the room is watching: the field it is staring at takes the press,
+  so nothing is added for the table to look at and nothing ticks that could be
+  counted. A false start on that screen is named there, and the thumb's own time
+  lands on the board with everyone else's. The bare buzzer still refuses the
+  seat, and now says so for the right reason
 - `[Server]` **A console that gives up its own seat is told the answer again.**
   The ✕ in the roster sits beside the host's own row, and pressing it took the
   player off the roster without taking the seat off the connection: the room no

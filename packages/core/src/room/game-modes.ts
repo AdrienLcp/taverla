@@ -63,6 +63,27 @@ export const offersAnswerMode = ({
 }): boolean => answerModesFor(game).includes(mode)
 
 /**
+ * Whether the round ends in a verdict a human has to grant, which is the one
+ * thing that keeps a console out of its own game: a judge who is also answering
+ * is not one.
+ *
+ * `buzzer` is the mode that asks for one, and the reflex race is the exception
+ * that shares that mode without needing it — being first *is* being right there,
+ * so the heat settles on the taps and nobody reads anything out. Keying on the
+ * mode alone caught it by accident of what it narrows to.
+ *
+ * A room with no game yet answers `true` under `buzzer`, because the seat is
+ * withheld until something says otherwise rather than the other way round.
+ */
+export const isJudgedByHost = ({
+  game,
+  mode
+}: {
+  game: GameKind | null
+  mode: AnswerMode
+}): boolean => mode === 'buzzer' && game !== 'reflex'
+
+/**
  * The nearest thing to `preferred` that this game can serve, with its own
  * settings intact — the preference itself when the game offers it, and the
  * game's only mode otherwise. Carrying the settings rather than the kind is the

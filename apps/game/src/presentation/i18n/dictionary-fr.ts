@@ -255,7 +255,10 @@ export const FR_DICTIONARY: Dictionary = {
     rounds: 'Tournées',
     seat: {
       action: 'Prendre place',
-      description: 'Tu ne verras plus la réponse avant les autres.',
+      cost: {
+        hiddenAnswer: 'Tu ne verras plus la réponse avant les autres.',
+        sharedScreen: 'Tu cours sur l’écran que toute la table regarde.'
+      },
       label: 'Jouer aussi, sous le nom de',
       leave: 'Rendre sa place',
       taken: 'Tu joues sous le nom de {nickname}.'

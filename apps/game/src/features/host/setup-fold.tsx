@@ -3,6 +3,7 @@ import type React from 'react'
 import type { HostRoomView, RoomSettings } from '@taverla/protocol/room'
 import type { TrackSource } from '@taverla/protocol/track'
 
+import { isJudgedByHost } from '@taverla/core/room/game-modes'
 import type { HostPreferences } from '@taverla/core/room/host-preferences'
 import { isRoundInPlay } from '@taverla/core/room/room-phase'
 import {
@@ -115,12 +116,25 @@ export const SetupFold: React.FC<SetupFoldProps> = ({
         settings={view.settings}
       />
       {/*
-        Not offered in buzzer mode: that round needs someone reading the answer
-        to judge it, and a judge who is also answering is not one.
+        Withheld from a round this screen has to judge, and from that alone: a
+        judge who is also answering is not one. The reflex race shares the mode
+        and needs no judge, so it keeps the seat.
       */}
-      {isInLobby && view.settings.mode.kind !== 'buzzer' && (
-        <HostSeat onTakeSeat={onTakeSeat} takenAs={seat?.nickname ?? null} />
-      )}
+      {isInLobby &&
+        !isJudgedByHost({
+          game: game?.kind ?? null,
+          mode: view.settings.mode.kind
+        }) && (
+          <HostSeat
+            cost={
+              game?.kind === 'reflex'
+                ? 'host.seat.cost.sharedScreen'
+                : 'host.seat.cost.hiddenAnswer'
+            }
+            onTakeSeat={onTakeSeat}
+            takenAs={seat?.nickname ?? null}
+          />
+        )}
     </Disclosure>
   )
 }

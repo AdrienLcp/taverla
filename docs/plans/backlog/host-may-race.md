@@ -39,5 +39,40 @@ mode. The bare buzzer's exclusion stays and gets the honest name.
   that nothing can satisfy.
 - The bare buzzer still refuses the seat.
 
+## Delivered — 16 August 2026
+
+`isJudgedByHost({ game, mode })` in `@taverla/core/room/game-modes` is the
+honest name, and it is `mode === 'buzzer' && game !== 'reflex'`. Verified in a
+browser across all five games and both blind-test modes: the seat is offered
+everywhere except the bare buzzer and a blind test answered by a buzz.
+
+**The tap target is the stage itself** — a full-bleed control with no ground and
+no edge, over an otherwise unchanged screen, rather than a buzzer drawn beside
+the flip. The argument is in [`DESIGN.md`](../../../apps/game/DESIGN.md); do not
+replace it with a round button. Two things it cost:
+
+- **`.stage.solo` centres its one child**, so `.reflex-stage` was as wide as its
+  longest word and the press target measured 202px of a 968px band.
+  `align-self: stretch` is what makes "the field is the buzzer" true.
+- **The console's own line reserves its height while empty.** It says nothing
+  during the wait, then the reaction or a false-start stamp — measured at the
+  same 39.5px in all three states, so nothing moves under the eyes waiting for
+  the flip.
+
+The seat's description was a promise the reflex race cannot keep — *you stop
+seeing the answer before everyone else*, in a game with no answer — so it is two
+keys now, `host.seat.cost.hiddenAnswer` and `host.seat.cost.sharedScreen`, and
+the caller picks.
+
+**A false start settles a heat immediately when the console is the only seat**,
+which is correct and makes the stamp unobservable alone: driving it needs a
+second phone in the room.
+
+The leak this entry names is closed for reflex, and **its twin on the bare
+buzzer is not** — a console that seats itself and then picks the buzzer keeps a
+seat it can never use. Nothing hangs there, so it is filed with the rest of the
+seat's lifecycle in
+[a host's seat comes off](host-seat-comes-off.md).
+
 ---
 

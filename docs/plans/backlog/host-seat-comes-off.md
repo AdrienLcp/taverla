@@ -55,9 +55,28 @@ on the lobby. Three levers, and the session should take all three:
 - **Say it.** A console that asked for a seat and did not get one should read
   the refusal, not discover it by noticing the answer form is gone.
 
+### The fourth lever, found next door
+
+**A seat can also outlive the reason it was allowed**, which is the same fault
+read the other way. `HostSeat` is offered in the lobby to a game that needs no
+judge and withheld from one that does — but nothing takes the seat *back* when
+the room moves to a judged game, and the picker sits on the lobby stage where a
+console can already be seated. So a host who takes a seat and then picks the
+bare buzzer holds a seat with no buzzer behind it, on the board and unable to
+score. Nothing hangs, which is why this is filed rather than fixed:
+[the host may race](host-may-race.md) closed the twin that did hang, by giving
+the reflex race a tap target rather than by revoking anything.
+
+Whichever lever this session pulls, the seat's rule is the same on both sides —
+**the room decides whether this console holds one, and the console follows** —
+so the guard belongs where `isJudgedByHost` is read at the settings frame, not
+only where the form is drawn.
+
 ### How to tell it is done
 
 - A seated host reloads mid-round and comes back seated, with their score.
+- A console that seats itself and then picks the bare buzzer does not keep a seat
+  it cannot play.
 - A second console takes the room and hands it back: the seat survives, or the
   screen says it did not.
 - A socket test beside `second-console.test.ts` on the ghost-participant

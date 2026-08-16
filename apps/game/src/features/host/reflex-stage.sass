@@ -1,19 +1,24 @@
+@use '../../presentation/styles/focus'
 @use '../../presentation/styles/typography'
 
 @layer components
   .reflex-stage
     align-items: center
+    // The stage centres its one child, which would leave this as wide as the
+    // longest word on it — and the press target is the field, not the words.
+    align-self: stretch
     display: flex
     flex: 1
     flex-direction: column
     justify-content: center
+    position: relative
     text-align: center
 
-    // No animation on either half, and this is the one screen where that is a
+    // No animation on any of it, and this is the one screen where that is a
     // rule rather than a default: the field inverting *is* the event, and a
     // second thing arriving beside it would be a second thing to look at. The
     // wait carries no motion at all, because motion is a clock.
-    &.waiting
+    .waiting
       @include typography.title
 
       color: var(--ink-muted)
@@ -32,3 +37,36 @@
 
       color: var(--ink-muted)
       margin-top: var(--space-s)
+
+    // This console's own heat, when it holds a seat — subordinate to both lines
+    // above, because the room is not reading it. Its height is held from the
+    // start against the tallest thing it can say: a line arriving mid-wait would
+    // move the flip under the eyes waiting for it, and the padding is in `em`
+    // so the reservation and the stamp cannot drift apart.
+    .yours
+      @include typography.title
+      @include typography.numeric
+
+      color: var(--ink-muted)
+      margin-top: var(--space-m)
+      min-height: 1.55em
+
+      // A stamped block rather than tinted words, for the same reason the phone
+      // stamps it: no ink derived from either field clears 4.5:1 as a red, and
+      // this is the one thing on the screen its owner must not miss.
+      .false-start
+        @include typography.title
+
+        background: var(--danger)
+        color: var(--danger-ink)
+        display: inline-block
+        padding: 0.25em 0.6em
+
+    // The stage itself, taking the press. No ground, no edge and no label: what
+    // was pressed is the field under it, which is already saying everything
+    // this control would repeat.
+    .tap
+      @include focus.ring-inset
+
+      inset: 0
+      position: absolute

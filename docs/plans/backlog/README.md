@@ -15,8 +15,8 @@ file rather than half-landing.
 
 ## Open
 
-Ordered by **what is wrong before what is missing**. `host-may-race` and
-`board-a-phone-never-sees` are half-sessions and can ride along with a
+Ordered by **what is wrong before what is missing**.
+`board-a-phone-never-sees` is a half-session and can ride along with a
 neighbour; `decades-on-the-shelf` is the only one that is new work rather than a
 fault or a polish.
 
@@ -24,7 +24,6 @@ fault or a polish.
 |---|---|---|---|---|
 | [The room is silent, unexplained](silent-room-unexplained.md) | **Half done.** The console names the refusal; why Android refuses is unread | waits on a phone | — | note 6 |
 | [A host's seat comes off](host-seat-comes-off.md) | A seated host drops back to plain host after a few rounds | a session | — | note 8, second half |
-| [The host may race](host-may-race.md) | A guard right about the buzzer and wrong about the reflex race | half a session | — | note 7 |
 | [The board a phone never sees](board-a-phone-never-sees.md) | No standings on the player screen after a reveal, and not only in the quiz | half a session | `/impeccable` | note 8, first half |
 | [A name you give once](name-you-give-once.md) | A stored name should skip the form, and be editable from a menu | a session | `/impeccable` | note 5 |
 | [Decades on the shelf](decades-on-the-shelf.md) | Genres exist behind a `ToggleGroup`; decades do not exist at all | a session | — | note 2 |
@@ -54,6 +53,7 @@ planning it:
 | [Stage 18 — Reflex race](../18-reflex-race.md) | the fifth game |
 | [The field the whole game is typed into](field-the-game-is-typed-into.md) | 16 Aug 2026 |
 | [The speed bonus nobody sees](speed-bonus-unseen.md) | 16 Aug 2026 |
+| [The host may race](host-may-race.md) | 16 Aug 2026 |
 | [Who owns a room](who-owns-a-room.md) | 15 Aug 2026 |
 
 **[The question bank's spelling](question-bank-spelling.md) is the one delivered
@@ -69,9 +69,10 @@ entry is a diagnosis and not a wish.
 - **14 August 2026**, Adrien and Marina, on an iPhone and a laptop — thirteen
   observations, which became the twelve delivered entries above.
 - **16 August 2026**, Adrien and a co-tester, on Android — eight notes, *note 1*
-  through *note 8*, which became the six open entries,
-  [the field the whole game is typed into](field-the-game-is-typed-into.md) and
-  [the speed bonus nobody sees](speed-bonus-unseen.md).
+  through *note 8*, which became the five open entries,
+  [the field the whole game is typed into](field-the-game-is-typed-into.md),
+  [the speed bonus nobody sees](speed-bonus-unseen.md) and
+  [the host may race](host-may-race.md).
 
 Three times now, a session's own design question turned out to have been
 answered before it was asked. It is the ratio [the plans'
