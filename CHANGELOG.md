@@ -598,6 +598,14 @@ one part.
   nothing to give away, that screen is a single line — who took the point — and
   it was being drawn smaller than the standings beside it, on an otherwise empty
   screen. It is set at the size it was always meant to be
+- `[Game]` **A long track no longer eats the name of whoever answered it.** On
+  the reveal's roll call, the nickname and the answer shared the row's shortfall
+  in proportion to their length, so a fifty-seven-character title and artist cut
+  `Zoé` down to `Z…` with two hundred and fifty pixels going spare at the other
+  end of the same line. The name is drawn on its own text now and the answer
+  takes what is left: half a title still reads, half a nickname names nobody.
+  The longest nickname is held to half the row so it cannot swallow the answer
+  in turn
 
 ### Internal
 

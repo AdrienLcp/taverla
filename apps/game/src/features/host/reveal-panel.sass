@@ -97,15 +97,25 @@
 
           border-top: 2px solid var(--rule)
           display: flex
-          gap: var(--space-s)
-          justify-content: space-between
+          // Once the answer fills the row the gap is the only thing left
+          // holding the two apart, and it is sized in `em` for the same reason
+          // the padding is: this row's size is divided out of a screen budget.
+          gap: 1em
           padding: var(--space-xs) 0
 
-          // A nickname is twenty characters somebody chose and nothing makes
-          // them breakable, so without this the row grows until the number at
-          // the end of it is off the screen — which is the half of the row the
-          // room is reading.
+          // Both halves are unbreakable text of a length nobody here decides —
+          // twenty characters a player chose, and a catalogue's title *and*
+          // artist. Two `auto` items shrink in proportion to their content, so
+          // a 57-character track ate the name beside it: `Zoé` was drawn as
+          // `Z…` in a row with 250px to spare at the other end.
+          //
+          // A name is atomic where a title is not — half a nickname names
+          // nobody, half a title still reads — so the name is sized on its own
+          // text and the answer takes what is left. Half the row is the ceiling
+          // that keeps the longest nickname from swallowing the answer whole,
+          // and it only ever bites there: below it nothing is cut at all.
           .nickname
+            max-width: 50%
             overflow: hidden
             text-overflow: ellipsis
             white-space: nowrap
@@ -114,6 +124,7 @@
             color: var(--ink-muted)
 
         .words
+          flex: 1
           overflow: hidden
           text-align: right
           text-overflow: ellipsis
@@ -147,8 +158,12 @@
             text-overflow: ellipsis
             white-space: nowrap
 
+        // What the ellipsis on the nickname is for, and it only holds if the
+        // number itself refuses to shrink.
         .points
           @include typography.numeric
+
+          flex: none
 
     // What this panel's own header costs the list under it, published for the
     // stage to subtract — the panel knows what it draws, the stage knows how

@@ -366,6 +366,17 @@ and who it caught are one row.
   item's minimum is its content, so `min-width: 0` is half the fix. The
   scoreboard rows solve the same problem the other way, with an ellipsis,
   because a row is a fixed height and a headline is not.
+- **A row holding two ellipsised texts names which one shrinks.** Two flex items
+  left on `auto` share the shortfall in proportion to their content, so the
+  longer one takes the row down with it: `Zoé` was drawn as `Z…` beside a
+  fifty-seven-character title, on a line with two hundred and fifty pixels
+  going spare. `justify-content: space-between` hides it until the day the row
+  overflows, and then it hides nothing. **A name is atomic where a title is
+  not** — half a nickname names nobody, half a title still reads — so the name
+  is sized on its own text, the payload is `flex: 1`, and the name carries a
+  `max-width` so the longest one cannot swallow the payload in turn. The gap
+  then goes in `em`: with the payload filling the row it is the only thing left
+  holding the two apart.
 - **A board ranks only when there is something to rank.** Before the first
   point every player is first on nothing, and a lobby roster printing `1` and
   `0` beside every name says so out loud — while spending on it the width the
