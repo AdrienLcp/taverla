@@ -64,6 +64,7 @@ import { HostControls } from './host-controls'
 import { HostRefused } from './host-refused'
 import { JoinReminder } from './join-reminder'
 import { LobbyStage } from './lobby-stage'
+import { ReflexStage } from './reflex-stage'
 import { RevealPanel } from './reveal-panel'
 import { RoomInvitation } from './room-invitation'
 import { useRoundAudio } from './round-audio'
@@ -364,6 +365,17 @@ const Stage = ({
           <RevealPanel players={view.players} round={lastRevealed} />
         )}
         {clipOffer}
+      </div>
+    )
+  }
+
+  // The one playing stage with nothing beside it. The room is staring at this
+  // screen waiting for it to change, and standings under the flip would be a
+  // second thing to look at on a screen whose whole job is to carry one event.
+  if (view.phase === 'playing' && round?.content.kind === 'reflex') {
+    return (
+      <div className='stage solo'>
+        <ReflexStage clock={clock} round={round} />
       </div>
     )
   }

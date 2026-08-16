@@ -411,7 +411,12 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         </>
       )}
 
-      {mode.kind === 'buzzer' && (
+      {/*
+        Buzzer-moded and still nothing to hold: a reflex tap takes no floor and
+        waits for no verdict, so how long a player has to answer is a setting
+        about a moment this game does not have.
+      */}
+      {mode.kind === 'buzzer' && game?.kind !== 'reflex' && (
         <NumberChoice
           isDisabled={isDisabled}
           label={translate('host.answerWindow.label')}

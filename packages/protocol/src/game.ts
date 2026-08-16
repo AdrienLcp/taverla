@@ -19,16 +19,17 @@ export const gameKindSchema = z.enum(gameKinds)
  * room opened on one of those would render another game's round. Refusing it at
  * the door beats opening a room whose first "start" cannot be looked at.
  *
- * `reflex` is served in full and is deliberately not on this list: it has no
- * screens yet, so the only way a room reaches it is a settings frame. That is
- * the window every game here spent a stage in, and the whole of what this list
- * is for.
+ * Every served game is on it today. The list still is not `gameKinds` and must
+ * not collapse into it: the next game will be served before it has screens, and
+ * this is where it waits — `reflex` spent a stage in exactly that window, and
+ * every game before it did too.
  */
 export const shelvedGames = [
   'blindtest',
   'buzzer',
   'lefake',
-  'quiz'
+  'quiz',
+  'reflex'
 ] as const satisfies readonly GameKind[]
 
 export const shelvedGameSchema = z.enum(shelvedGames)

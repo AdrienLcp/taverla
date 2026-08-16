@@ -1,0 +1,34 @@
+@use '../../presentation/styles/typography'
+
+@layer components
+  .reflex-stage
+    align-items: center
+    display: flex
+    flex: 1
+    flex-direction: column
+    justify-content: center
+    text-align: center
+
+    // No animation on either half, and this is the one screen where that is a
+    // rule rather than a default: the field inverting *is* the event, and a
+    // second thing arriving beside it would be a second thing to look at. The
+    // wait carries no motion at all, because motion is a clock.
+    &.waiting
+      @include typography.title
+
+      color: var(--ink-muted)
+      text-wrap: balance
+
+    .signal
+      @include typography.monument
+
+      font-size: clamp(4rem, 22vmin, 16rem)
+
+    // What the room watches resolve in the three seconds the flip opens. It is
+    // the only thing that changes on this screen after the flip, so it is a live
+    // region rather than a number that quietly moves.
+    .landed
+      @include typography.title
+
+      color: var(--ink-muted)
+      margin-top: var(--space-s)

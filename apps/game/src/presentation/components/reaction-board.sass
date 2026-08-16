@@ -1,0 +1,41 @@
+@use '../styles/typography'
+
+@layer components
+  .reaction-board
+    display: flex
+    flex-direction: column
+    list-style: none
+    text-align: start
+    width: 100%
+
+    li
+      @include typography.title
+
+      border-top: 2px solid var(--rule)
+      display: flex
+      gap: var(--space-s)
+      justify-content: space-between
+      // In `em` rather than at a fixed step, so a row is one multiple of its
+      // own size and a formula dividing a box by a row count means something.
+      padding: 0.28em 0
+
+      // A nickname is twenty characters somebody chose and nothing makes them
+      // breakable, so without this the row grows until the time at the end of
+      // it is off the screen — which is the half the room is reading.
+      .nickname
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
+
+      // Tabular, because the room is comparing the column downwards and a
+      // 248 that sits left of a 301 is a race the type decided.
+      .reaction
+        @include typography.numeric
+
+        flex: none
+
+    // Who went before the screen changed. It is words where every row above is
+    // a number, so the difference survives being read at a glance and does not
+    // rest on the ink alone.
+    li.jumped
+      color: var(--ink-muted)

@@ -75,7 +75,7 @@ team on the player model and a turn owner.
 | **Buzzer** — the room brings its own content | Buzz-first | — | **shipped** ([stage 11](plans/11-buzzer.md)) |
 | **Quiz / trivia** | Buzz-first | — | **shipped** ([12](plans/12-trivia.md), [14](plans/14-question-languages.md)) |
 | **Lyrics blackout** — the line is missing, sing it | Buzz-first | Same as the blind test, different reveal | a session |
-| **Reflex race** — first to tap when the screen flips | Buzz-first | It needed one thing after all: a fair stimulus | **served, no screens yet** ([stage 18](plans/18-reflex-race.md)) |
+| **Reflex race** — first to tap when the screen flips | Buzz-first | It needed one thing after all: a fair stimulus | **shipped** ([stage 18](plans/18-reflex-race.md)) |
 | **Le Fake** (Fibbage) — write a fake answer, fool the others | Submit-then-vote | — | **shipped** ([stage 16](plans/16-le-fake.md)) |
 | **Petit Bac** — a letter, six categories, type fast | Submit-then-vote | Scoring by uniqueness | a session |
 | **Just One** — everyone writes one clue, duplicates cancel | Submit-then-vote | A clue-collision pass | a session |

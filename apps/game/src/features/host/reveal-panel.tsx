@@ -5,8 +5,10 @@ import type { PublicPlayer, RoundView } from '@taverla/protocol/room'
 import {
   blindtestContent,
   lefakeContent,
-  quizContent
+  quizContent,
+  reflexContent
 } from '@/helpers/round-content'
+import { ReactionBoard } from '@/presentation/components/reaction-board'
 import { RevealedLieBoard } from '@/presentation/components/revealed-lie-board'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
@@ -86,6 +88,19 @@ export const RevealPanel: React.FC<RevealPanelProps> = ({ players, round }) => {
           {question.note !== null && <p className='note'>{question.note}</p>}
 
           <Outcome players={players} round={round} />
+        </div>
+      </section>
+    )
+  }
+
+  // The times *are* the reveal here — this is the one game where nothing was
+  // ever withheld — so the board replaces the scoreline rather than sitting
+  // under it, and it already names who took the round by putting them first.
+  if (reflexContent(round) !== null) {
+    return (
+      <section className='reveal-panel bare'>
+        <div className='identity'>
+          <ReactionBoard players={players} round={round} />
         </div>
       </section>
     )

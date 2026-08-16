@@ -193,3 +193,15 @@
       .nobody,
       .scorers li
         @include typography.billboard
+
+      // The other bare panel lists whoever scored, which is one line and a name.
+      // A heat lists everyone who moved — up to a full table — so this one buys
+      // its height by dividing its box the way the panels with a header do. What
+      // it subtracts is almost nothing, because it has almost no header: the
+      // board is the whole reveal, and the room reads it as a finishing order.
+      &:has(.reaction-board)
+        --outcome-header: 6rem
+
+        @media (width >= layout.$wide-screen)
+          .reaction-board li
+            font-size: clamp(1rem, calc(var(--outcome-budget, 100rem) / var(--outcome-rows, 5) / 1.75), 3rem)

@@ -116,6 +116,19 @@
     --field: var(--field-playing)
     --ink: var(--ink-playing)
 
+  // The reflex race's stimulus, and the one field change that is not a phase:
+  // `playing`'s pair simply trades places. It is the largest luminance jump
+  // either palette holds — which is what a room catches in peripheral vision
+  // from four metres — and it costs no seventh colour, so both palettes are
+  // right by construction and the contrast is the pair's own, reversed.
+  //
+  // Named against `playing` rather than against the active pair because that is
+  // the only phase it ever happens in, and a generic swap would need a third
+  // token standing between every surface and its colour.
+  \:root[data-flipped]
+    --field: var(--ink-playing)
+    --ink: var(--field-playing)
+
   \:root[data-phase='buzzed']
     --field: var(--field-buzzed)
     --ink: var(--ink-buzzed)

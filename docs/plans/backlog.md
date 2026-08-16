@@ -31,7 +31,7 @@ not a wish.
 | 7 | [Say it the way a table says it](#7--say-it-the-way-a-table-says-it--done-15-august-2026) | **done** | `/impeccable` | playtest 1, 11, old C |
 | 8 | [The winner gets a moment](#8--the-winner-gets-a-moment--done-15-august-2026) | **done** | `/impeccable` | playtest 8 |
 | 9 | [Arriving cold in a running blind test](#9--arriving-cold-in-a-running-blind-test--done-15-august-2026) | **done** | `/impeccable` | old B |
-| 10 | [Stage 18 — Reflex race](18-reflex-race.md) | **session A done** | `/impeccable` for B | the fifth game |
+| 10 | [Stage 18 — Reflex race](18-reflex-race.md) | **done** | `/impeccable` | the fifth game |
 
 Order is by **what is wrong before what is missing**: 1 through 3 are faults a
 room already met, 4 is the one rule the room asked to have changed, and
@@ -43,10 +43,9 @@ what each found that this file did not expect is written into its own entry —
 and session 3's is the one to read before trusting any diagnosis here, because
 two of the three faults it was given turned out not to be faults at all.
 
-**What is left is [stage 18](18-reflex-race.md), the fifth game**, which is new
-work rather than a fault a room met, and it has a plan of its own. Its session A
-landed — the game is served, tested and off the shelf on purpose — so what
-remains is **session B, the screens**, and the plan's own foot is the list.
+**[Stage 18](18-reflex-race.md), the fifth game, landed too** — session A served
+it and session B drew it, and the shelf is five games wide. Nothing on this list
+is open.
 
 The one decision that was still Adrien's has been taken and built:
 [who owns a room](#who-owns-a-room--done-15-august-2026).

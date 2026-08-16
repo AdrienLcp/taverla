@@ -1,10 +1,8 @@
 # Stage 18 — Reflex race, the fifth game
 
-> **Session A is done**: the game is served, tested and correct, and no room can
-> be opened on it — `reflex` is in `gameKinds` and deliberately not in
-> `shelvedGames`. **Session B is the screens**, and starts with `/impeccable`.
-> What follows is the plan as written, with the four places reality diverged
-> marked inline and the leftovers gathered under *What session B has left*.
+> **Both sessions are done.** A serves the game, B draws it, and the room is on
+> the shelf. What follows is the plan as written, with the places reality
+> diverged marked inline and what each session settled gathered at the foot.
 
 The screen flips, the first thumb wins. No content, no question, no judging —
 `docs/game-catalogue.md` costs it at *an evening* and calls it the cheapest thing
@@ -134,36 +132,58 @@ either. Add one only if the flow turns out to be new.
   `shelvedGames`, which is how a served-but-unshelved game is reachable at all,
   and it will keep working unchanged when `reflex` joins the list.
 
-## What session B has left
+## What session B settled
 
-Start with `/impeccable`: the whole game is one visual event on a screen the
-room is staring at, and the waiting state, the flip and the false start are
-three screens rather than one.
+- **The flip is the field inverting.** `:root[data-flipped]` points `--field` at
+  `--ink-playing` and `--ink` back at `--field-playing`, so the pair simply
+  trades places: no seventh colour, both palettes right by construction, the
+  contrast the pair already cleared, and the largest luminance jump either one
+  holds — which is what a room catches from four metres without looking
+  straight at it. `useFlipField` stamps it on the root against this device's own
+  clock offset, on a frame callback rather than a timeout, and every surface
+  calls it for itself.
+- **The wait is the one screen in the product that never moves.** No clock, no
+  bar, no tally — `roundDurationMsOf` already answers `null` here, and that
+  absence is now load-bearing rather than incidental: a bar draining to a known
+  end says the flip is three seconds before it. `HostActions` returns nothing
+  during a heat for the same reason, and because *give the answer* is a lie in a
+  game that has none.
+- **A false start is a state the phone holds**, a `--danger` stamp where the
+  buzzer was, and it is **silent on the big screen** until the reveal names it
+  at the foot of the board. A name printing itself mid-wait is motion, and
+  motion during the wait is a cue.
+- **The buzzer stays the buzzer**, in its place and at its size, because a thumb
+  is already resting on it — it gives up its ground until the flip and fills on
+  the frame the field inverts. Live throughout: going early has to be reachable
+  or the floor under `flipsAt` protects nothing.
+- **The wait is not a setting.** 2–6 s went unremarked in the browser pass, and
+  a control for it is a room's to ask for.
+- **`buildReactionBoard` does not sort**, and its test holds that red: arrival
+  order already *is* reaction order, so a comparator would be a second opinion
+  about a race the server has paid out.
 
-- The eight silent sites in the table above, in that order.
-- Both dictionaries. `reflex.scoring` already exists in each — it was
-  compiler-forced by `scoringKey`. Putting `reflex` in `shelvedGames` is what
-  forces `reflex.name`, `reflex.tagline` and `reflex.home.description`.
-- **`shelvedGames` last**, which is what makes the game visible on the shelf,
-  the picker and `/:game`.
-- A browser pass, muted, at phone width and on the console.
+Verified in a muted browser at 414 px and 1600 px: the countdown hands over to a
+still teal screen, the field inverts to `#eafbf6` five seconds later, the heat
+closes 3 048 ms after that, and the board reads `Marc 990 ms` over
+`Lea 2 273 ms` beside the standings. A tap before the flip is refused, stamps
+the phone, and lands at the foot of the board as *parti trop tôt*.
 
-Two decisions still open, and both are the design pass's rather than Adrien's:
-
-- **What the flip looks like**, including whether a false start is a state the
-  screen holds or a moment it plays.
-- **Whether the wait is a setting.** 2–6 s is a guess. It becomes a host control
-  only if a room asks for it.
+**One thing a single-player room hides**: a solo false start closes the heat on
+the spot — `everyoneHasTapped` counts a jumper as having acted — so the stamp
+never gets a frame. It is correct, and it is why the phone's own refusal has to
+be checked with two seats.
 
 ## How to tell it is done
 
 The last four are green in `reflex-game.test.ts` and `packages/core/src/reflex/`
 at the protocol level; what session B owes is the same list seen on a screen.
 
-- A room opens on `/reflex`, three phones join, the screen flips and the first
-  thumb takes the round — with the reaction times ordered the way the room saw
-  it happen. **Session B.**
+All of it is green, and the last two were seen rather than asserted.
+
+- A room opens on `/reflex`, phones join, the screen flips and the first thumb
+  takes the round — with the reaction times ordered the way the room saw it
+  happen.
 - A tap before the flip locks that player out and does not end the round.
 - A scheduled tap at `flipsAt` is refused as a false start.
 - Two devices on the same round see the flip at the same wall-clock moment.
-- A browser pass, muted, at phone width and on the host's screen. **Session B.**
+- A browser pass, muted, at phone width and on the host's screen.

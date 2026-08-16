@@ -433,8 +433,27 @@ export const FR_DICTIONARY: Dictionary = {
     tagline: 'Une question, et le premier qui sait.'
   },
   reflex: {
+    falseStart: {
+      detail: 'Celle-là, tu la regardes depuis le banc.',
+      title: 'Parti avant que l’écran change.'
+    },
+    flip: 'VAS-Y',
+    home: {
+      description:
+        'Rien à savoir, rien à dire. L’écran reste immobile, puis il change — et le premier pouce posé rafle la tournée. Pars avant qu’il change et celle-là, tu la regardes depuis le banc.'
+    },
+    landed: defineTranslation('{count:plural}', {
+      plural: { count: { one: '{?} pouce posé', other: '{?} pouces posés' } }
+    }),
+    name: 'Réflexe',
+    nobody: 'Personne n’a bougé',
+    reaction: '{milliseconds:number} ms',
     scoring:
-      'L’écran change, et le premier pouce prend le point. Pars avant qu’il change et tu passes la manche sur le banc.'
+      'L’écran change, et le premier pouce prend le point. Pars avant qu’il change et tu passes la tournée sur le banc.',
+    tagline: 'L’écran change. Le premier pouce gagne.',
+    tapped: 'C’est pris.',
+    tooEarly: 'parti trop tôt',
+    waiting: 'Guette l’écran.'
   },
   round: {
     answer: {

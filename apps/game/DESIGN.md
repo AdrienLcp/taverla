@@ -33,6 +33,29 @@ the token default so a first paint before React mounts is already correct.
 **Every colour a component uses is `--field`, `--ink`, `--ink-muted`, `--rule`,
 `--cut` or `--cut-ink`.** No component holds a hex.
 
+### The one field change that is not a phase
+
+The reflex race needs a stimulus, and `:root[data-flipped]` is it: `--field`
+points at `--ink-playing` and `--ink` back at `--field-playing`, so the pair
+trades places. There is no seventh colour, both palettes are right by
+construction, the contrast is the pair's own reversed — and it is the largest
+**luminance** jump either palette holds, which is what the room catches in
+peripheral vision from four metres. It is also the mechanic saying its own name.
+
+It sits between `playing` and `buzzed` in `_tokens.sass` deliberately: equal
+specificity, so it beats the phase it happens inside and loses to the two that
+come after it. `useFlipField` stamps it against this device's own clock offset,
+on a frame callback rather than a timeout — the flip has to land on a paint —
+and it is held against the moment it flipped for rather than as a bare boolean,
+because a pong arrives every few seconds and would otherwise un-flip a screen
+mid-heat.
+
+**The screen before it is the only one in the product that never moves.** No
+clock, no bar, no tally: anything that ticks during the wait is a way for the
+table to count the flip out loud. That is why `roundDurationMsOf` answering
+`null` for this game is load-bearing rather than incidental, and why the host's
+round actions are absent for the whole heat.
+
 ### Contrast, measured
 
 Every field/ink pair clears 4.5:1 (worst 5.56). `--ink-muted` mixes the ink back

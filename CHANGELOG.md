@@ -8,6 +8,23 @@ one part.
 
 ### Features
 
+- **The reflex race is the fifth game on the shelf.** No question, no content and
+  nothing to know: the screen holds still, then it changes, and the first thumb
+  down takes the round. Everybody who moved gets their own time back at the
+  reveal, ordered the way the room saw it happen, and going before the screen
+  changes costs the round
+- `[Shared]` The moment the screen changes travels **ahead of itself**, so every
+  screen in the room flips on its own clock rather than when a frame lands —
+  otherwise the race is won by the best Wi-Fi in the room rather than the
+  quickest thumb. Handing that moment out early is safe because a tap arriving
+  less than 100 ms after it is refused as a false start: no human reaction is
+  that fast, so an honest thumb never meets the floor and a scheduled one always
+  does
+- `[Game]` The flip is the field and its ink trading places — the largest change
+  either palette can make, so it lands in peripheral vision from across a room —
+  and the screen before it is the only one in the product that is completely
+  still. Anything that ticked or drained during the wait would hand the table a
+  way to count the flip out loud
 - **A room has an owner now.** Opening one mints a **recovery code** and hands it
   to that screen alone. Anyone reading the room code off a screen could take a
   room over the moment its console blinked, and the host came back to a flat

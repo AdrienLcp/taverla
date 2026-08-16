@@ -450,8 +450,27 @@ export const EN_DICTIONARY = defineTranslations({
     tagline: 'A question, and the first one who knows it.'
   },
   reflex: {
+    falseStart: {
+      detail: 'You watch this one from the bench.',
+      title: 'Gone before the screen changed.'
+    },
+    flip: 'GO',
+    home: {
+      description:
+        'Nothing to know and nothing to say. The screen holds still, then it changes — and the first thumb down takes the round. Go before it changes and you watch that one from the bench.'
+    },
+    landed: defineTranslation('{count:plural}', {
+      plural: { count: { one: '{?} thumb in', other: '{?} thumbs in' } }
+    }),
+    name: 'Reflex',
+    nobody: 'Nobody moved',
+    reaction: '{milliseconds:number} ms',
     scoring:
-      'The screen changes, and the first thumb takes the point. Go before it changes and you sit the heat out.'
+      'The screen changes, and the first thumb takes the point. Go before it changes and you sit the round out.',
+    tagline: 'The screen changes. First thumb wins.',
+    tapped: 'In.',
+    tooEarly: 'too early',
+    waiting: 'Watch the screen.'
   },
   round: {
     answer: {

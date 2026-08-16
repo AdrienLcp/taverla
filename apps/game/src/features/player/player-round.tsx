@@ -23,15 +23,18 @@ import {
   TypedAnswer
 } from '@/features/player/answer-forms'
 import { LieForm, VoteBoard } from '@/features/player/lefake-forms'
+import { ReflexBuzzer } from '@/features/player/reflex-buzzer'
 import {
   blindtestContent,
   lefakeContent,
-  quizContent
+  quizContent,
+  reflexContent
 } from '@/helpers/round-content'
 import { buzzFeedback } from '@/infrastructure/env'
 import { AskedQuestion } from '@/presentation/components/asked-question'
 import { Countdown } from '@/presentation/components/countdown'
 import { FloorClock } from '@/presentation/components/floor-clock'
+import { ReactionBoard } from '@/presentation/components/reaction-board'
 import { RevealedLieBoard } from '@/presentation/components/revealed-lie-board'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
@@ -195,6 +198,17 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
             youId={view.youId}
           />
         </section>
+      )
+    }
+
+    if (round.content.kind === 'reflex') {
+      return (
+        <ReflexBuzzer
+          clock={clock}
+          onBuzz={onBuzz}
+          round={round}
+          youId={view.youId}
+        />
       )
     }
 
@@ -386,6 +400,13 @@ const Revealed = ({
 
   if (lieBoard !== null) {
     return <RevealedLieBoard board={lieBoard} players={view.players} />
+  }
+
+  // The times, which the phone reads for the same reason the room does: this is
+  // the one game whose reveal is not an answer, so the finishing order is what
+  // there is to know — and everyone's own number is on it.
+  if (reflexContent(round) !== null) {
+    return <ReactionBoard players={view.players} round={round} />
   }
 
   if (track !== null) {

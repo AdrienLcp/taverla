@@ -1,0 +1,42 @@
+@use '../../presentation/styles/typography'
+
+@layer components
+  .reflex-buzzer
+    // Armed, and not yet live. The buzzer keeps its shape and its place — a
+    // thumb is already resting on it, which is the whole of what a player does
+    // during the wait — and gives up its ground until the screen flips. At the
+    // flip it fills, on the same frame the field inverts under it: two changes
+    // saying one thing, on the one object the hand is touching.
+    .buzzer.armed
+      background: transparent
+      border: 6px solid var(--ink)
+      color: var(--ink)
+
+    // What a heat pays a phone, in a game with no answer to reveal.
+    .your-reaction
+      @include typography.monument
+      @include typography.numeric
+
+      font-size: clamp(3rem, 20vmin, 9rem)
+
+    // A stamped block rather than tinted words, because the field it lands on
+    // has just inverted and no ink derived from it clears 4.5:1 on both. Inside
+    // the block the contrast is fixed, which is why it is the same in both
+    // palettes.
+    .false-start
+      background: var(--danger)
+      color: var(--danger-ink)
+      padding: var(--space-m) var(--space-l)
+
+      .verdict
+        @include typography.billboard
+
+        font-size: clamp(1.5rem, 7vmin, 3rem)
+        text-wrap: balance
+
+      .detail
+        @include typography.body
+
+        margin-top: var(--space-xs)
+        max-width: 30ch
+        text-wrap: balance

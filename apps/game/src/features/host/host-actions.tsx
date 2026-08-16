@@ -36,7 +36,14 @@ export const HostActions: React.FC<HostActionsProps> = (props) => {
     // the round is open rather than abandoning it — and without it a vote with
     // no clock would have nothing to end it.
     case 'voting':
-      return <RoundActions {...props} />
+      // The one round that ends without being ended: a heat closes when
+      // everyone expected in it has acted, and the tap window closes it when
+      // somebody never does. There is no answer to give and no field to
+      // reopen, so there is nothing here to press — which is also what leaves
+      // the screen the room is staring at with nothing on it that moves.
+      return props.view.round?.content.kind === 'reflex' ? null : (
+        <RoundActions {...props} />
+      )
     // The floor is held, and the only thing left to decide is the verdict —
     // which the stage owns, beside the answer it is judged against.
     case 'buzzed':

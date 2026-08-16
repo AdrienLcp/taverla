@@ -30,6 +30,11 @@ export const lefakeContent = (
 ): Extract<RoundContent, { kind: 'lefake' }> | null =>
   round?.content.kind === 'lefake' ? round.content : null
 
+export const reflexContent = (
+  round: RoundView | null | undefined
+): Extract<RoundContent, { kind: 'reflex' }> | null =>
+  round?.content.kind === 'reflex' ? round.content : null
+
 /** The same over the half only the host is sent. */
 export const blindtestHostContent = (
   view: HostRoomView | null | undefined

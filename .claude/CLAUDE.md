@@ -120,8 +120,9 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   *opened* on. `shelvedGames` is the ones a game's own front door may open a room
   for, and the create-room request carries which. It must **not** collapse into
   `gameKinds`, because it is what refuses a game that is served but has no
-  screens yet — `reflex` is in exactly that window today, reachable only by a
-  settings frame, and every game before it spent a stage there. The game owns
+  screens yet — every game so far spent a stage in that window, `reflex`
+  included, reachable only by a settings frame. The two lists happen to be equal
+  today and that is a coincidence, not a rule. The game owns
   its arm of `settings.game` and `round.content`, and narrows the answer mode
 - **Round** — one track, one question, a screen about to change colour, or
   nothing at all.
