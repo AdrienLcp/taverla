@@ -84,3 +84,53 @@ only where the form is drawn.
 
 ---
 
+## Delivered, 17 August 2026
+
+All four levers, and one the diagnosis did not name.
+
+- **The name lives on `taverla:seats`, not as a flag beside
+  `taverla:nickname`.** `RememberedSeat` grew `nickname: Nickname | null`, which
+  *is* the flag — a seat is held exactly when it carries a name. The entry
+  proposed a flag plus the device-global name, and that is wrong for the case it
+  exists for: the global name belongs to whichever room this device joined last,
+  so a console that seated itself as *Marina* and then joined a friend's room as
+  *Adrien* would have come back to its own room renamed. The store is already
+  keyed per room *and* role, which is the scope a seat's name actually has.
+- **The seat is offered in every phase but a round in play**, not in every phase.
+  Reopening the socket under a running clip is the one cost the lobby gate was
+  paying for, and the reveal is close enough that nobody waits out a game. The
+  entry's *lost evening* was the lobby gate, not the round.
+- **The refusal was already said**, which is why lever 3 turned out to be the
+  small one: `seatHost` sends a non-fatal error and the console renders it in the
+  footer. The reported silence was upstream of it — nothing had *asked*. Nothing
+  new says it, and the one thing that would have — a line derived from *asked and
+  not seated* — was rejected on purpose: `view` is stale across a reconnect, so
+  that line flashes on every seat taken. What replaced it is the form being
+  reachable, which says the same thing without asserting a refusal that has not
+  happened yet.
+- **The room's rule is enforced in three places, not one.** `hostMustJudge` is
+  read where the seat is granted (`seatHost`) and where the settings that allowed
+  it change (`reconfigure`, which unseats every console holding one). The third
+  is the console's own `changeSettings`: it drops the remembered name in the same
+  breath as the frame, because that is the only moment the loss is knowable
+  without watching the view come back.
+
+The lever nobody had counted: **`HostSeat` had no `maxLength`**, where the join
+form has always had one. A name over 20 characters is a `hello` the contract
+refuses, so the socket never introduces itself and no form is left to explain it.
+`NICKNAME_MAX_LENGTH` is exported from the protocol now, and both fields read it.
+
+Two existing suites were describing a room the product forbids — a console seated
+on a buzzer-mode blind test, which the settings frame now takes the seat back
+from. `SEATED_CONSOLE_GAME` in the harness is the fixture they should have had.
+One of them, `[eviction] gives a console back the answer when it removes its own
+seat`, had already stopped testing anything: with no seat to remove it passed on
+an empty roster.
+
+`host-seat.test.ts` holds the four socket cases, the ghost collision among them.
+What no socket suite reaches is the client half — that the browser now remembers
+what to say — and that was checked by driving the console: seated, reloaded
+mid-clip, back on the board with the answer form; the name cleared from storage
+by hand to watch the old symptom return; the seat retaken from a reveal; and the
+switch to the bare buzzer taking it back on both sides.
+

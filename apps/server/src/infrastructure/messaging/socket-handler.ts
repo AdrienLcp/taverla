@@ -12,7 +12,7 @@ import type { PlayerId, RoomCode, RoundId } from '@taverla/protocol/identifiers'
 import type { RoomSettings } from '@taverla/protocol/room'
 import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
-import { offersAnswerMode } from '@taverla/core/room/game-modes'
+import { isJudgedByHost, offersAnswerMode } from '@taverla/core/room/game-modes'
 import { normalizeRoomCode } from '@taverla/core/room/room-code'
 import { isRoundInPlay } from '@taverla/core/room/room-phase'
 import { reshapesRound } from '@taverla/core/room/room-settings'
@@ -106,6 +106,20 @@ const displaceOtherConsoles = (room: Room, sessionId: string): void => {
     }
   }
 }
+
+/**
+ * Whether the room as it stands needs its console to judge, which is the one
+ * thing that keeps that screen out of its own game. Read in two places on
+ * purpose: where a seat is granted and where the settings that allowed it
+ * change, because a console remembers the name it was seated under and replays
+ * it on every reconnect — a rule enforced only where the form is drawn is a
+ * rule the next `hello` walks straight through.
+ */
+const hostMustJudge = (settings: RoomSettings): boolean =>
+  isJudgedByHost({
+    game: settings.game?.kind ?? null,
+    mode: settings.mode.kind
+  })
 
 /**
  * One of these exists per socket, and the closure is the connection's state:
@@ -227,7 +241,7 @@ export const createRoomSocketEvents = (
     displaceOtherConsoles(room, sessionId)
 
     const seat =
-      message.nickname === undefined
+      message.nickname === undefined || hostMustJudge(room.settings)
         ? null
         : joinAsPlayer({
             nickname: message.nickname,
@@ -832,6 +846,28 @@ export const createRoomSocketEvents = (
   }
 
   /**
+   * A seat can outlive the reason it was allowed. The picker sits on the lobby
+   * stage where a console may already be seated, so a host who takes a seat and
+   * then chooses the bare buzzer holds one with nothing behind it: on the board,
+   * unable to score, and the only screen that could judge the round.
+   *
+   * Every host connection rather than the one that sent the frame — a second tab
+   * of the same browser is let in on purpose, and the seat is on whichever of
+   * them said hello with a name.
+   */
+  const unseatConsolesThatMustJudge = (room: Room): void => {
+    if (!hostMustJudge(room.settings)) {
+      return
+    }
+
+    for (const connection of connectionsIn(room.code)) {
+      if (connection.role === 'host' && connection.playerId !== null) {
+        unseat(connection.playerId, room)
+      }
+    }
+  }
+
+  /**
    * The one exit a phone does not choose, and therefore the only one that has to
    * be said out loud: a socket left holding a `youId` the roster no longer has
    * goes on being sent the room, and a screen that stops counting reads as the
@@ -939,6 +975,7 @@ export const createRoomSocketEvents = (
 
     updateSettings(room, settings, Date.now())
     discardPoolIfStale({ previousGame, room })
+    unseatConsolesThatMustJudge(room)
     broadcastRoom(room)
     armAutoAdvance(room)
   }

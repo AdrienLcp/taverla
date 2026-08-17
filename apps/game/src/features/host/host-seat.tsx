@@ -2,6 +2,8 @@ import type React from 'react'
 import { useState } from 'react'
 import { Form } from 'react-aria-components'
 
+import { NICKNAME_MAX_LENGTH } from '@taverla/protocol/identifiers'
+
 import { Button } from '@/presentation/components/button'
 import { TextField } from '@/presentation/components/text-field'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
@@ -53,6 +55,7 @@ export const HostSeat: React.FC<HostSeatProps> = ({
           autoComplete='off'
           description={translate(cost)}
           label={translate('host.seat.label')}
+          maxLength={NICKNAME_MAX_LENGTH}
           onChange={setNickname}
           value={nickname}
         />

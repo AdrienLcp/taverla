@@ -41,7 +41,14 @@ export const roundIdSchema = z.string().min(1).max(64)
  */
 export const sessionIdSchema = z.string().min(1).max(64)
 
-export const nicknameSchema = z.string().trim().min(1).max(20)
+/**
+ * Exported because the fields a name is typed into cap themselves on it: a
+ * nickname the schema refuses is a `hello` the server cannot even read, so the
+ * refusal never reaches the form that would explain it.
+ */
+export const NICKNAME_MAX_LENGTH = 20
+
+export const nicknameSchema = z.string().trim().min(1).max(NICKNAME_MAX_LENGTH)
 
 /** Server clock, milliseconds since the epoch. Never a client-supplied value. */
 export const serverTimeSchema = z.number().int().nonnegative()

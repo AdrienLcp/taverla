@@ -14,6 +14,7 @@ import {
   type Peer,
   playerView,
   type RoomHarness,
+  SEATED_CONSOLE_GAME,
   sessionIdOf,
   sleep,
   startRoomHarness,
@@ -30,6 +31,12 @@ vi.mock('@/infrastructure/music/deezer-client', async () => {
 const LONG_CLIP: RoomSettings = {
   ...FAST_GAME,
   game: { ...DEFAULT_BLINDTEST_SETTINGS, roundDurationMs: 30_000 }
+}
+
+/** The long clip again, in the one mode a console is allowed a seat in. */
+const LONG_CLIP_THE_CONSOLE_PLAYS: RoomSettings = {
+  ...LONG_CLIP,
+  mode: SEATED_CONSOLE_GAME.mode
 }
 
 const AWAY_FOR_MS = 400
@@ -80,7 +87,10 @@ describe('a host who walks away', () => {
    * that was never written — never came for it either.
    */
   it('[host-absence] gives up the seat the console was playing on', async () => {
-    const { code, host } = await harness.openRoom(LONG_CLIP, 'Marina')
+    const { code, host } = await harness.openRoom(
+      LONG_CLIP_THE_CONSOLE_PLAYS,
+      'Marina'
+    )
     const player = await harness.seat({ code, nickname: 'Zoe' })
 
     host.close()

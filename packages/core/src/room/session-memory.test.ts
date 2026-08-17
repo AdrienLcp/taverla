@@ -30,6 +30,7 @@ const ROOM_CODES = [
 
 const seatIn = (roomCode: string, at: number): RememberedSeat => ({
   at,
+  nickname: null,
   role: 'player',
   roomCode,
   sessionId: `session-${roomCode}`
@@ -46,8 +47,20 @@ const leastRecent = ROOM_CODES[MAX_REMEMBERED_SEATS - 1] ?? ''
 describe('rememberedSeatFor', () => {
   it('[session-memory] tells the two roles in one room apart', () => {
     const seats: RememberedSeat[] = [
-      { at: NOW, role: 'host', roomCode: 'ABCD', sessionId: 'the-console' },
-      { at: NOW, role: 'player', roomCode: 'ABCD', sessionId: 'the-phone' }
+      {
+        at: NOW,
+        nickname: null,
+        role: 'host',
+        roomCode: 'ABCD',
+        sessionId: 'the-console'
+      },
+      {
+        at: NOW,
+        nickname: null,
+        role: 'player',
+        roomCode: 'ABCD',
+        sessionId: 'the-phone'
+      }
     ]
 
     expect(
@@ -73,6 +86,7 @@ describe('rememberSeat', () => {
   it('[session-memory] keeps one entry per seat when a room is re-entered', () => {
     const seats = rememberSeat({
       at: NOW + 1,
+      nickname: null,
       role: 'player',
       roomCode: 'ABCD',
       seats: [seatIn('ABCD', NOW)],
@@ -82,9 +96,56 @@ describe('rememberSeat', () => {
     expect(seats).toEqual([seatIn('ABCD', NOW + 1)])
   })
 
+  // What a console has instead of a form it can reach: the name it was seated
+  // under is on no other frame, so a screen that reloads is asking storage what
+  // it was called or arriving as nobody.
+  it('[session-memory] carries the name a seat is held under', () => {
+    const seats = rememberSeat({
+      at: NOW,
+      nickname: 'Marina',
+      role: 'host',
+      roomCode: 'ABCD',
+      seats: [],
+      sessionId: 'the-console'
+    })
+
+    expect(
+      rememberedSeatFor({ role: 'host', roomCode: 'ABCD', seats })?.nickname
+    ).toBe('Marina')
+  })
+
+  it('[session-memory] gives the name up without giving the room up', () => {
+    const seats = rememberSeat({
+      at: NOW + 1,
+      nickname: null,
+      role: 'host',
+      roomCode: 'ABCD',
+      seats: rememberSeat({
+        at: NOW,
+        nickname: 'Marina',
+        role: 'host',
+        roomCode: 'ABCD',
+        seats: [],
+        sessionId: 'the-console'
+      }),
+      sessionId: 'the-console'
+    })
+
+    expect(
+      rememberedSeatFor({ role: 'host', roomCode: 'ABCD', seats })
+    ).toEqual({
+      at: NOW + 1,
+      nickname: null,
+      role: 'host',
+      roomCode: 'ABCD',
+      sessionId: 'the-console'
+    })
+  })
+
   it('[session-memory] drops the least recently claimed seat past the cap', () => {
     const seats = rememberSeat({
       at: NOW + 1,
+      nickname: null,
       role: 'player',
       roomCode: oneRoomTooMany,
       seats: aFullStore(),
@@ -99,6 +160,7 @@ describe('rememberSeat', () => {
   it('[session-memory] forgets a seat claimed more than a day ago', () => {
     const seats = rememberSeat({
       at: NOW,
+      nickname: null,
       role: 'player',
       roomCode: 'ABCD',
       seats: [seatIn('BCDE', NOW - SEAT_MEMORY_MS)],
@@ -113,6 +175,7 @@ describe('rememberSeat', () => {
   it('[session-memory] keeps the seat being claimed under a backwards clock', () => {
     const seats = rememberSeat({
       at: NOW,
+      nickname: null,
       role: 'player',
       roomCode: oneRoomTooMany,
       seats: aFullStore().map((seat) => ({ ...seat, at: NOW + 10_000 })),
@@ -151,7 +214,13 @@ describe('forgetSeat', () => {
       roomCode: 'ABCD',
       seats: [
         seatIn('ABCD', NOW),
-        { at: NOW, role: 'host', roomCode: 'ABCD', sessionId: 'the-console' },
+        {
+          at: NOW,
+          nickname: null,
+          role: 'host',
+          roomCode: 'ABCD',
+          sessionId: 'the-console'
+        },
         seatIn('BCDE', NOW)
       ]
     })

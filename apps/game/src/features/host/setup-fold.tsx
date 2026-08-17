@@ -43,8 +43,8 @@ type SetupFoldProps = {
  * on the round after the one on screen, and a host who has to end the game to
  * reach them is a host who does not change them.
  *
- * The seat is the one thing still kept to the lobby, because taking it reopens
- * the socket and a re-seat mid-round would drop the answer being typed.
+ * The seat is the one thing a round in play still holds back, because taking it
+ * reopens the socket and a re-seat mid-clip would drop the answer being typed.
  */
 export const SetupFold: React.FC<SetupFoldProps> = ({
   draftSource,
@@ -119,8 +119,15 @@ export const SetupFold: React.FC<SetupFoldProps> = ({
         Withheld from a round this screen has to judge, and from that alone: a
         judge who is also answering is not one. The reflex race shares the mode
         and needs no judge, so it keeps the seat.
+
+        Every phase but a round in play, rather than the lobby alone. A seat can
+        go without this screen deciding it — a takeover hands the room back with
+        the roster's ghost still holding the name — and a control the host can
+        only reach by ending the game is what turns that into a lost evening.
+        The round in play is still out, because taking the seat reopens the
+        socket underneath a clip that is running.
       */}
-      {isInLobby &&
+      {!roundInPlay &&
         !isJudgedByHost({
           game: game?.kind ?? null,
           mode: view.settings.mode.kind

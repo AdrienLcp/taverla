@@ -4,12 +4,12 @@ import type { PlayerServerMessage } from '@taverla/protocol/server-message'
 
 import {
   errorsIn,
-  FAST_GAME,
   hostContent,
   hostView,
   type Peer,
   playerView,
   type RoomHarness,
+  SEATED_CONSOLE_GAME,
   startRoomHarness,
   waitFor
 } from './room-harness'
@@ -117,7 +117,7 @@ describe('a player the host removes', () => {
    * judge naming a departed id is served the round with the answer withheld.
    */
   it('[eviction] gives a console back the answer when it removes its own seat', async () => {
-    const { code, host } = await harness.openRoom(FAST_GAME, 'Adrien')
+    const { code, host } = await harness.openRoom(SEATED_CONSOLE_GAME, 'Adrien')
     const zoe = await harness.seat({ code, nickname: 'Zoe' })
 
     host.send({

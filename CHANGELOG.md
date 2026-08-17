@@ -367,6 +367,27 @@ one part.
 
 ### Fixes
 
+- **A screen that plays the room it runs keeps its seat.** The name it was
+  playing under lived nowhere but the page, so a tab dropped on a screen lock —
+  routine on Android, and a reload rather than a blink — came back running the
+  room and playing in nothing: no answer field, a greyed-out name on the board,
+  and the only way to sit back down was to end the game. The name is kept with
+  the room now, so the screen comes back to the same seat and the same score
+- `[Game]` **The seat can be taken back mid-game.** It was offered in the lobby
+  and nowhere else, which turned an evening's worth of playing into a lost one
+  the moment a seat went for any reason. It is on every screen between rounds
+  now, and held back only while a round is running — taking it there would
+  interrupt the clip the room is listening to
+- `[Shared]` **Choosing a game the screen has to judge takes its seat back.** The
+  picker sits beside the QR code, where that screen may already be playing, and
+  nothing took the seat away when the room moved to a game whose answers it has
+  to grant: it stayed on the board, unable to score, as the only screen that
+  could judge the round. The room decides now, on both sides of the wire and on
+  the frame that changes it
+- `[Game]` **A name too long for the room to accept can no longer be typed into
+  the seat.** The field had no limit where the join form has always had one, and
+  a name past twenty characters is a message the room cannot read at all — so it
+  failed with nothing on screen to say why
 - `[Game]` **A round that paid you nothing says so, and every screen says where
   its owner stands.** A phone showed the answer and then a `+N` only if that
   player had gained: everybody else got the answer and silence, with no way to

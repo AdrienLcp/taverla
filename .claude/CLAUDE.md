@@ -107,10 +107,14 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
 - **Room** — one game, addressed by a 4-character code from an alphabet with no
   confusable glyphs (`O`/`0`, `I`/`1`, `S`/`5`, `Z`/`2` are all excluded)
 - **Host** — the screen running the room. Shows the QR code, plays the audio,
-  judges answers. It can also take a **seat** and play, outside buzzer mode, and
-  the server then withholds the track's **title and artist** while still sending
-  it the clip — that screen is the room's only speaker, seated or not. It is the
-  only role that can **close** the room — see `Exits` below
+  judges answers. It can also take a **seat** and play — everywhere
+  `isJudgedByHost` says no verdict is owed, which is every mode but `buzzer` plus
+  the reflex race — and the server then withholds the track's **title and
+  artist** while still sending it the clip; that screen is the room's only
+  speaker, seated or not. The rule is the **room's**, so the server grants no
+  seat under it and takes back the one it granted when the settings frame moves
+  the room to a game it must judge. It is the only role that can **close** the
+  room — see `Exits` below
 - **Player** — anyone who joined, by scanning the QR code or by typing the room
   code. Holds a seat and a score
 - **Game** — what the room is playing, and **`null` until somebody says**: the
@@ -202,7 +206,11 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   tell it from a closed tab, so the menu offers a link out of a room only where
   there is no room, which is why the credits are a front-door concern
 - **Session id** — minted by the client, stored per room and role; what lets a
-  device that locked its screen come back to the same seat
+  device that locked its screen come back to the same seat. The **name** that
+  seat is held under is stored beside it, and that is the console's alone: a
+  screen running a room takes its seat through the `hello`, so nothing else
+  carries the name across a reload — where a phone's join form has the
+  device-global `taverla:nickname` to fill itself in from
 - **Host token** — minted with the room and returned by `POST /api/rooms` to the
   screen that opened it. The code says *which* room, this says *who may host it*,
   and it always wins a claim — which is what makes a takeover undoable. Without

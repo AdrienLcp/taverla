@@ -15,14 +15,13 @@ file rather than half-landing.
 
 ## Open
 
-Ordered by **what is wrong before what is missing**. `decades-on-the-shelf` is
-the only one that is new work rather than a fault or a polish, and the two
-halves that could ride along with a neighbour have both landed.
+Ordered by **what is wrong before what is missing**. Only one fault is left and
+it is waiting on a phone, so what is open now is a polish and a piece of new
+work — `decades-on-the-shelf` is the new work.
 
 | Session | In one line | Cost | Starts with | Holds |
 |---|---|---|---|---|
 | [The room is silent, unexplained](silent-room-unexplained.md) | **Half done.** The console names the refusal; why Android refuses is unread | waits on a phone | — | note 6 |
-| [A host's seat comes off](host-seat-comes-off.md) | A seated host drops back to plain host after a few rounds | a session | — | note 8, second half |
 | [A name you give once](name-you-give-once.md) | A stored name should skip the form, and be editable from a menu | a session | `/impeccable` | note 5 |
 | [Decades on the shelf](decades-on-the-shelf.md) | Genres exist behind a `ToggleGroup`; decades do not exist at all | a session | — | note 2 |
 
@@ -54,6 +53,7 @@ planning it:
 | [The host may race](host-may-race.md) | 16 Aug 2026 |
 | [The board a phone never sees](board-a-phone-never-sees.md) | 16 Aug 2026 |
 | [Who owns a room](who-owns-a-room.md) | 15 Aug 2026 |
+| [A host's seat comes off](host-seat-comes-off.md) | 17 Aug 2026 |
 
 **[The question bank's spelling](question-bank-spelling.md) is the one delivered
 entry worth opening**, and only for this: two of the three faults it was given
@@ -68,7 +68,8 @@ entry is a diagnosis and not a wish.
 - **14 August 2026**, Adrien and Marina, on an iPhone and a laptop — thirteen
   observations, which became the twelve delivered entries above.
 - **16 August 2026**, Adrien and a co-tester, on Android — eight notes, *note 1*
-  through *note 8*, which became the four open entries,
+  through *note 8*, which became the three open entries,
+  [a host's seat comes off](host-seat-comes-off.md),
   [the field the whole game is typed into](field-the-game-is-typed-into.md),
   [the speed bonus nobody sees](speed-bonus-unseen.md),
   [the host may race](host-may-race.md) and

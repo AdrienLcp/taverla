@@ -128,6 +128,17 @@ export const FAST_GAME: RoomSettings = {
   roundCount: 3
 }
 
+/**
+ * The same game in a mode its console may play in. A seat is withheld from a
+ * room the host has to judge — a judge who is also answering is not one — and
+ * `FAST_GAME` buzzes, so any suite that needs a seated console asks for a seat
+ * the room can actually grant.
+ */
+export const SEATED_CONSOLE_GAME: RoomSettings = {
+  ...FAST_GAME,
+  mode: DEFAULT_MODE_SETTINGS.typed
+}
+
 /** The blind test judges two halves; the shape is noise at every call site. */
 export const halves = (
   titleCorrect: boolean,

@@ -2,6 +2,7 @@ import type { ConnectionRole } from '@taverla/protocol/client-message'
 import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
 import type {
   HostToken,
+  Nickname,
   RoomCode,
   SessionId
 } from '@taverla/protocol/identifiers'
@@ -20,9 +21,17 @@ export type SeatScope = {
  * One seat this device holds a claim on. `at` is when it was last claimed rather
  * than when it was first minted, which is what keeps the room being played from
  * being the one a prune drops.
+ *
+ * `nickname` is the name this device holds *in this room and role*, and `null`
+ * when it holds no seat at all. A console is the reason it lives here rather
+ * than beside the device-global name a join form fills itself in from: a screen
+ * running a room and playing in it takes its seat through the `hello`, so
+ * nothing else carries the name across a reload — and the global one belongs to
+ * whichever room this device joined last, which may not be this one.
  */
 export type RememberedSeat = {
   at: number
+  nickname: Nickname | null
   role: ConnectionRole
   roomCode: RoomCode
   sessionId: SessionId
@@ -103,12 +112,16 @@ export const forgetSeat = ({
  */
 export const rememberSeat = ({
   at,
+  nickname,
   role,
   roomCode,
   seats,
   sessionId
 }: RememberedSeat & { seats: RememberedSeat[] }): RememberedSeat[] =>
-  [{ at, role, roomCode, sessionId }, ...forgetSeat({ role, roomCode, seats })]
+  [
+    { at, nickname, role, roomCode, sessionId },
+    ...forgetSeat({ role, roomCode, seats })
+  ]
     .filter((seat) => seat.at > at - SEAT_MEMORY_MS)
     .slice(0, MAX_REMEMBERED_SEATS)
 

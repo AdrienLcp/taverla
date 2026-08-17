@@ -165,14 +165,27 @@ the first and gets `null` for the second: that screen still has to play the
 clip, and must not be handed the answer.
 
 That is the whole of the seated host. One phone is the speaker and a player at
-once — the seat is taken by putting a nickname on the host's `hello`, so it
-rides the same socket and survives a reconnect — and the moment it is taken,
-`toHostView` nulls the answer inside `currentContent`, because a payload that
-screen could read in a console is not a guarantee. The judge's copy and the
-speaker's copy were one field once, and conflating them is what made "host and
-player" impossible. The residual leak is the catalogue id inside the URL, which
-is why the seat is offered rather than assumed. Buzzer mode does not offer it at
-all: that round needs someone reading the answer to judge it.
+once — the seat is taken by putting a nickname on the host's `hello` — and the
+moment it is taken, `toHostView` nulls the answer inside `currentContent`,
+because a payload that screen could read in a console is not a guarantee. The
+judge's copy and the speaker's copy were one field once, and conflating them is
+what made "host and player" impossible. The residual leak is the catalogue id
+inside the URL, which is why the seat is offered rather than assumed.
+
+**There is no seat message, so the seat is only ever as durable as the name the
+console replays.** A socket blink keeps it because the page never went; a tab
+discarded on a screen lock is a *reload*, and a name held in component state
+alone died with it. It is kept on `taverla:seats` beside that room's session id,
+which is what makes the two survive together.
+
+**A room the console has to judge is granted no seat**, and the settings frame
+that moves the room to one takes back the seat it already granted — the picker
+sits on the lobby stage, where a console may already be playing. `isJudgedByHost`
+is the rule and it is the room's, not the form's: a console remembers the name it
+was seated under and replays it on every reconnect, so a rule enforced only where
+the control is drawn is a rule the next `hello` walks through. Buzzer mode is
+what asks for a judge; the reflex race shares that mode and needs none, because
+being first *is* being right there.
 
 **A console's tab closing ends both of the things it was.** `onClose` asks two
 questions, and the seated host is the one socket that answers both — whether the

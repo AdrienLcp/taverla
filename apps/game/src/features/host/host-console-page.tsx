@@ -18,6 +18,7 @@ import {
   type ClipRefusal,
   isClipUnheard
 } from '@taverla/core/blindtest/clip-audio'
+import { isJudgedByHost } from '@taverla/core/room/game-modes'
 import {
   type HostPreferences,
   rememberSettings
@@ -47,8 +48,11 @@ import {
 } from '@/infrastructure/storage/preferences-storage'
 import {
   forgetHostToken,
+  forgetSeatNickname,
   forgetSessionId,
-  writeHostToken
+  readSeatNickname,
+  writeHostToken,
+  writeSeatNickname
 } from '@/infrastructure/storage/session-storage'
 import { AskedQuestion } from '@/presentation/components/asked-question'
 import { Button } from '@/presentation/components/button'
@@ -95,9 +99,13 @@ export const HostConsolePage = () => {
 
 const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
   const translate = useTranslate()
-  // Taken once and only ever given back: the socket reopens on a change of
-  // nickname, and re-seating mid-round would drop the answer being typed.
-  const [seatNickname, setSeatNickname] = useState<string | null>(null)
+  // Read from storage rather than started empty, because this is the only thing
+  // that puts the name back on the next `hello` — and a console whose tab was
+  // discarded on a screen lock reloads rather than blinks, so a seat kept in
+  // component state alone came back as no seat at all.
+  const [seatNickname, setSeatNickname] = useState(() =>
+    readSeatNickname({ role: 'host', roomCode })
+  )
   const { clock, error, retry, send, status, view } = useHostConnection(
     roomCode,
     seatNickname
@@ -125,9 +133,25 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
 
       writeStoredHostPreferences(remembered)
       setPreferences(remembered)
+
+      // The server takes the seat back on this frame, and the console follows
+      // it here rather than by watching the answer come back: a name still
+      // remembered would put the seat on the next reconnect, under a game that
+      // would then have to refuse it — and inferring the loss from the room's
+      // view cannot tell "refused" from "the reconnect has not answered yet".
+      if (
+        isJudgedByHost({
+          game: settings.game?.kind ?? null,
+          mode: settings.mode.kind
+        })
+      ) {
+        forgetSeatNickname({ role: 'host', roomCode })
+        setSeatNickname(null)
+      }
+
       send({ settings, type: 'host.updateSettings' })
     },
-    [send]
+    [roomCode, send]
   )
 
   useRestoreStoredSetup({ onRestore: changeSettings, preferences, view })
@@ -150,8 +174,16 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
   // the roster until the server timed it out.
   const leaveSeat = useCallback(() => {
     send({ type: 'player.leave' })
+    forgetSeatNickname({ role: 'host', roomCode })
     setSeatNickname(null)
-  }, [send])
+  }, [roomCode, send])
+
+  // Kept before the socket carries it, for the same reason the token is: the
+  // reopen this triggers builds its `hello` out of storage.
+  const takeSeat = (nickname: string) => {
+    writeSeatNickname({ nickname, role: 'host', roomCode })
+    setSeatNickname(nickname)
+  }
 
   // The roster's ✕ sits beside the console's own seat too, and removing
   // yourself is leaving it. Only `player.leave` also drops the nickname, which
@@ -279,7 +311,7 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
               isLive={isLive}
               onDraftSource={setDraftSource}
               onSettingsChange={changeSettings}
-              onTakeSeat={setSeatNickname}
+              onTakeSeat={takeSeat}
               preferences={preferences}
               view={view}
             />
