@@ -376,7 +376,18 @@ export const EN_DICTIONARY = defineTranslations({
     build: 'Build {build}',
     home: 'Home',
     label: 'Menu',
-    leaveRoom: 'Leave the table'
+    leaveRoom: 'Leave the table',
+    /**
+     * `label` names the row and its summary is the name itself, which is the
+     * only place a screen that skipped the join form ever shows it. `field` is
+     * what the empty box below asks for, and it says *new* because the row
+     * above is already carrying the old one.
+     */
+    nickname: {
+      action: 'Change',
+      field: 'New nickname',
+      label: 'Nickname'
+    }
   },
   /**
    * The way back to the front door, from any page that is a dead end without

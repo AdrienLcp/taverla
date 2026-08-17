@@ -49,5 +49,50 @@ Two smaller things in the same seam:
   socket dropping.
 - A name already taken in that room still gets the form back, with the refusal.
 
+## Delivered — 17 August 2026
+
+All three criteria demonstrated in a browser, two locales and both palettes, at
+414 px and 1920 px. Four things the diagnosis above did not have.
+
+**The frame alone was not enough.** `player.rename` changes the seat, and then
+the next reconnect undoes it: `joinAsPlayer` overwrote the nickname from the
+`hello`, and the screen that renamed itself still holds the old one in memory
+until it reloads. So a Wi-Fi blink would have quietly put the old name back. A
+returning seat now **keeps the name it holds**, whatever the hello says, which
+is what makes the frame the only authority — and it is only affordable because
+the frame exists, since the hello was previously the sole way to rename.
+`room-service.test.ts` asserts the new rule where it used to assert the old one.
+
+**The channel outgrew its name.** A rename is not an exit, so `RoomExits` became
+`RoomActions` in `presentation/room-actions/`, and it carries three new fields
+rather than one: `seatNickname` (what the room calls this screen), `rename`, and
+`refusedNickname` — the *name* a refusal was given for, not a code. That last one
+is what lets the field drop `isInvalid` the moment the draft changes.
+
+**The browser pass found a dead end no build could.** A refused join could not be
+retried: `isInvalid` stayed true, which leaves the input's native validity false,
+so `requestSubmit` was a silent no-op — the exact trap
+[`react-components.md`](../../../.claude/rules/react-components.md) describes.
+It was reachable before this session and is on the *main path* now that a stored
+name is tried on arrival, which is how it surfaced. Fixed in the same shape as
+the menu's field: the refusal belongs to the name it was given for.
+
+**The seated console came free.** `player.rename` is named for the seat rather
+than the role, the way `player.leave` already was, so the console that took a
+seat renames itself with the same frame and the same menu row — no host message,
+no second control.
+
+Two smaller shifts: `writeStoredNickname` moved off the form's submit and onto
+the name the server **accepted**, so a refused name is no longer what the next
+room fills its form in with; and `host-seat.tsx` reads that store like every
+other form.
+
+**Still open, and deliberately.** A `room_full` refusal cannot be retried under
+the same name — `setNickname` with an equal value does not re-run the socket
+effect, so the press does nothing. It predates this session and auto-join makes
+it *better* rather than worse, because a reload now retries on its own. The real
+fix is a way to re-say hello on a live socket, which is a change to
+`use-room-socket`'s dependencies and belongs to whoever needs it.
+
 ---
 

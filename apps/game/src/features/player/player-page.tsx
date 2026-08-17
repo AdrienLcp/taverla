@@ -1,4 +1,4 @@
-import { type FormEvent, useCallback, useState } from 'react'
+import { type FormEvent, useCallback, useEffect, useState } from 'react'
 import { Form } from 'react-aria-components'
 
 import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
@@ -27,9 +27,9 @@ import { ConnectionRefused } from '@/presentation/components/connection-refused'
 import { RoundProgress } from '@/presentation/components/round-progress'
 import { TextField } from '@/presentation/components/text-field'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
-import { useReportRoomExits } from '@/presentation/exits/room-exits-provider'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { protocolErrorKey } from '@/presentation/i18n/translation'
+import { useReportRoomActions } from '@/presentation/room-actions/room-actions-provider'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
 
 import { PlayerRound } from './player-round'
@@ -47,9 +47,15 @@ export const PlayerPage = () => {
 }
 
 const PlayerScreen = ({ roomCode }: { roomCode: RoomCode }) => {
-  const [nickname, setNickname] = useState<string | null>(null)
+  // A device that has played before has already answered this, so it goes
+  // straight to the table. The form is what remains for a screen with nothing
+  // stored, and for the one case a stored name cannot settle: a refusal.
+  const [nickname, setNickname] = useState<string | null>(readStoredNickname)
+  const [requestedNickname, setRequestedNickname] = useState<string | null>(
+    null
+  )
   const connection = usePlayerConnection({ nickname, roomCode })
-  const { send } = connection
+  const { clearError, send, view } = connection
 
   // Offered to the menu above, which owns the only way off this screen. The
   // frame goes first: navigating away closes the socket, and a seat given up
@@ -59,23 +65,58 @@ const PlayerScreen = ({ roomCode }: { roomCode: RoomCode }) => {
     forgetSessionId({ role: 'player', roomCode })
   }, [roomCode, send])
 
-  useReportRoomExits({
+  // Skipping the form means never seeing the name you arrived under, so the
+  // menu is where it becomes visible and editable. A frame rather than a new
+  // `hello`, which would drop the socket and the round with it.
+  const rename = useCallback(
+    (next: string) => {
+      clearError()
+      setRequestedNickname(next)
+      send({ nickname: next, type: 'player.rename' })
+    },
+    [clearError, send]
+  )
+
+  const seatNickname =
+    view?.players.find((player) => player.id === view.youId)?.nickname ?? null
+
+  // The device remembers the name the room *accepted*, never the one that was
+  // typed. Storing it on submit is what filled the next room's form in with a
+  // name that had just been refused.
+  useEffect(() => {
+    if (seatNickname !== null) {
+      writeStoredNickname(seatNickname)
+    }
+  }, [seatNickname])
+
+  useReportRoomActions({
     closeRoom: null,
     endGame: null,
-    leaveSeat: nickname === null ? null : leave
+    leaveSeat: nickname === null ? null : leave,
+    refusedNickname:
+      requestedNickname !== null && connection.error?.code === 'nickname_taken'
+        ? requestedNickname
+        : null,
+    rename: seatNickname === null ? null : rename,
+    seatNickname
   })
 
   // A refused join is non-fatal, so the socket stays open and the form comes
   // back with the reason rather than stranding the player on a dead screen.
+  // Once a seat is held the same code answers a rename instead, and the menu is
+  // where it belongs — a phone bounced back to the join form mid-round would
+  // have lost the game to a name clash.
   const rejection =
-    connection.error?.code === 'nickname_taken' ||
-    connection.error?.code === 'room_full'
+    seatNickname === null &&
+    (connection.error?.code === 'nickname_taken' ||
+      connection.error?.code === 'room_full')
       ? connection.error.code
       : null
 
   return nickname === null || rejection !== null ? (
     <NicknameForm
       onSubmit={setNickname}
+      refusedNickname={nickname}
       rejection={rejection}
       roomCode={roomCode}
     />
@@ -86,15 +127,24 @@ const PlayerScreen = ({ roomCode }: { roomCode: RoomCode }) => {
 
 const NicknameForm = ({
   onSubmit,
+  refusedNickname,
   rejection,
   roomCode
 }: {
   onSubmit: (nickname: string) => void
+  /** The name the refusal was given for, or `null` where none was tried yet. */
+  refusedNickname: string | null
   rejection: ProtocolErrorCode | null
   roomCode: RoomCode
 }) => {
   const translate = useTranslate()
   const [draft, setDraft] = useState(() => readStoredNickname() ?? '')
+  // The refusal belongs to the name it was given for, and holding `isInvalid`
+  // past that is not a cosmetic slip: the field's native validity stays false,
+  // so the form refuses to submit, the button looks alive and nothing is
+  // logged. A stored name refused on arrival made that the first thing a
+  // returning screen met.
+  const isRefused = rejection !== null && draft.trim() === refusedNickname
 
   const submit = (event: FormEvent): void => {
     event.preventDefault()
@@ -105,7 +155,6 @@ const NicknameForm = ({
       return
     }
 
-    writeStoredNickname(trimmed)
     onSubmit(trimmed)
   }
 
@@ -119,11 +168,11 @@ const NicknameForm = ({
         <TextField
           autoComplete='nickname'
           errorMessage={
-            rejection === null
-              ? undefined
-              : translate(protocolErrorKey(rejection))
+            isRefused && rejection !== null
+              ? translate(protocolErrorKey(rejection))
+              : undefined
           }
-          isInvalid={rejection !== null}
+          isInvalid={isRefused}
           label={translate('player.nickname.label')}
           maxLength={NICKNAME_MAX_LENGTH}
           name='nickname'

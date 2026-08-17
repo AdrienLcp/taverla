@@ -4,6 +4,7 @@ import { Form } from 'react-aria-components'
 
 import { NICKNAME_MAX_LENGTH } from '@taverla/protocol/identifiers'
 
+import { readStoredNickname } from '@/infrastructure/storage/preferences-storage'
 import { Button } from '@/presentation/components/button'
 import { TextField } from '@/presentation/components/text-field'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
@@ -33,7 +34,9 @@ export const HostSeat: React.FC<HostSeatProps> = ({
   takenAs
 }) => {
   const translate = useTranslate()
-  const [nickname, setNickname] = useState('')
+  // The same name a phone's join form fills itself in with. It is the device
+  // saying what it likes being called, and a console is a device like any other.
+  const [nickname, setNickname] = useState(() => readStoredNickname() ?? '')
 
   if (takenAs !== null) {
     return (

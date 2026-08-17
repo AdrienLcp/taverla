@@ -2,11 +2,15 @@ import { useState } from 'react'
 import {
   Dialog,
   DialogTrigger,
+  Form,
   Popover,
   Button as ReactAriaButton
 } from 'react-aria-components'
 
-import type { RoomCode } from '@taverla/protocol/identifiers'
+import {
+  NICKNAME_MAX_LENGTH,
+  type RoomCode
+} from '@taverla/protocol/identifiers'
 import { LOCALES } from '@taverla/protocol/locale'
 
 import { isLocale } from '@taverla/core/i18n/locale'
@@ -24,13 +28,16 @@ import {
 } from '@/infrastructure/router/navigation'
 import { readHostToken } from '@/infrastructure/storage/session-storage'
 import { useConnection } from '@/presentation/connection/connection-provider'
-import {
-  useIsInsideRoom,
-  useRoomExits
-} from '@/presentation/exits/room-exits-provider'
 import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
 import { LANGUAGE_NAMES } from '@/presentation/i18n/language-names'
-import type { PlainTranslationKey } from '@/presentation/i18n/translation'
+import {
+  type PlainTranslationKey,
+  protocolErrorKey
+} from '@/presentation/i18n/translation'
+import {
+  useIsInsideRoom,
+  useRoomActions
+} from '@/presentation/room-actions/room-actions-provider'
 import { useTheme } from '@/presentation/theme/theme-provider'
 
 import { Button } from './button'
@@ -39,21 +46,14 @@ import {
   ConnectionStatus,
   connectionStatusKey
 } from './connection-status'
+import { Disclosure } from './disclosure'
 import { Link } from './link'
 import { SegmentedControl } from './segmented-control'
+import { TextField } from './text-field'
 import { TextLink } from './text-link'
 
 import './app-menu.sass'
 
-/**
- * The ways out of a room, in the one piece of chrome that is on every screen at
- * every phase. A stage carries the action the room is waiting on and nothing
- * else, so an exit that must be reachable mid-round lives here instead — behind
- * a popover, where it cannot be pressed by a thumb aiming at the game.
- *
- * Closing asks twice, because it is the only one that cannot be undone: the
- * code stops resolving, so a phone cannot reload its way back in.
- */
 /**
  * The room's own secret, on the one screen that holds it. Hidden until it is
  * asked for: this menu opens on a console that is often a television, and a code
@@ -89,8 +89,87 @@ const RoomRecovery = ({ roomCode }: { roomCode: RoomCode }) => {
   )
 }
 
+/**
+ * The name this screen is playing under. A device that has played before never
+ * passes through the join form, so what that form used to show has to live
+ * somewhere on every screen at every phase — and the row carries the name
+ * itself, which leaves the panel for the rarer half of the job.
+ */
+const SeatName = () => {
+  const { refusedNickname, rename, seatNickname } = useRoomActions()
+  const translate = useTranslate()
+  const [draft, setDraft] = useState<string | null>(null)
+
+  if (rename === null || seatNickname === null) {
+    return null
+  }
+
+  // Empty rather than filled with the name the row above already carries. A
+  // prefilled field printed it twice in four lines, and editing two characters
+  // of your own name is not what changing it means.
+  const value = draft ?? ''
+  const next = value.trim()
+  // The refusal belongs to the name it was given for, so any other draft
+  // submits again — a controlled `isInvalid` outliving its reason leaves the
+  // field's native validity false and the press a silent no-op.
+  const isRefused = next === refusedNickname
+
+  return (
+    <Disclosure
+      className='seat-name'
+      label={translate('menu.nickname.label')}
+      summary={seatNickname}
+    >
+      <Form
+        onSubmit={(event) => {
+          event.preventDefault()
+          rename(next)
+        }}
+      >
+        <TextField
+          autoComplete='nickname'
+          enterKeyHint='done'
+          errorMessage={
+            isRefused
+              ? translate(protocolErrorKey('nickname_taken'))
+              : undefined
+          }
+          isInvalid={isRefused}
+          label={translate('menu.nickname.field')}
+          maxLength={NICKNAME_MAX_LENGTH}
+          name='nickname'
+          onChange={setDraft}
+          value={value}
+        />
+        {/*
+          `small`, and beside the field rather than under the width of the
+          popover: a 52px block here is the same shape as the exit below it, and
+          changing a label is not a peer of leaving the room.
+        */}
+        <Button
+          isDisabled={next.length === 0 || next === seatNickname}
+          size='small'
+          type='submit'
+          variant='outlined'
+        >
+          {translate('menu.nickname.action')}
+        </Button>
+      </Form>
+    </Disclosure>
+  )
+}
+
+/**
+ * The ways out of a room, in the one piece of chrome that is on every screen at
+ * every phase. A stage carries the action the room is waiting on and nothing
+ * else, so an exit that must be reachable mid-round lives here instead — behind
+ * a popover, where it cannot be pressed by a thumb aiming at the game.
+ *
+ * Closing asks twice, because it is the only one that cannot be undone: the
+ * code stops resolving, so a phone cannot reload its way back in.
+ */
 const RoomExit = ({ onDone }: { onDone: () => void }) => {
-  const { closeRoom, endGame, leaveSeat } = useRoomExits()
+  const { closeRoom, endGame, leaveSeat } = useRoomActions()
   const [isConfirmingClose, setIsConfirmingClose] = useState(false)
   const connection = useConnection()
   const roomCode = useRoomCodeParam()
@@ -280,6 +359,8 @@ export const AppMenu = () => {
                   }))}
                   value={preference}
                 />
+
+                <SeatName />
 
                 <RoomExit onDone={close} />
 

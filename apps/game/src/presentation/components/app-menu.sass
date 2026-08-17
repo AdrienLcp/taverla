@@ -79,6 +79,23 @@
       font-size: 1rem
       white-space: normal
 
+    // Every other summary in this product is a list of settings, which is why
+    // the register mutes it. This one is a person, and it is the whole reason
+    // the row exists — a device that has played before never sees its name
+    // anywhere else.
+    .seat-name
+      .summary
+        color: var(--ink)
+
+      .react-aria-Form
+        align-items: start
+        display: flex
+        flex-direction: column
+        gap: var(--space-s)
+
+        .text-field
+          align-self: stretch
+
     // Its own column rather than the dialog's, so the exits sit closer to each
     // other than to the preferences above them: they are one group, and one
     // ladder — a seat, a game, a room.

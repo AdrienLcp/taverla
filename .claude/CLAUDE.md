@@ -209,8 +209,14 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   device that locked its screen come back to the same seat. The **name** that
   seat is held under is stored beside it, and that is the console's alone: a
   screen running a room takes its seat through the `hello`, so nothing else
-  carries the name across a reload — where a phone's join form has the
-  device-global `taverla:nickname` to fill itself in from
+  carries the name across a reload. But a seat that *comes back* keeps the name
+  it already holds, whatever the `hello` carries — `player.rename` is the only
+  thing that changes one, and reading the hello there would let a Wi-Fi blink
+  undo a rename. `taverla:nickname` is the device-global name beside it, written
+  from the name the room **accepted** rather than the one that was typed: a
+  screen holding one joins on arrival with no form at all, the console's seat
+  form fills itself in from it, and the menu is where it is read back and
+  changed — because a screen that never met the form never saw it
 - **Host token** — minted with the room and returned by `POST /api/rooms` to the
   screen that opened it. The code says *which* room, this says *who may host it*,
   and it always wins a claim — which is what makes a takeover undoable. Without

@@ -44,6 +44,7 @@ import {
   readStoredHostPreferences,
   readStoredVolume,
   writeStoredHostPreferences,
+  writeStoredNickname,
   writeStoredVolume
 } from '@/infrastructure/storage/preferences-storage'
 import {
@@ -60,12 +61,12 @@ import { Countdown } from '@/presentation/components/countdown'
 import { RoundProgress } from '@/presentation/components/round-progress'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
-import { useReportRoomExits } from '@/presentation/exits/room-exits-provider'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import {
   clipRefusalKey,
   protocolErrorKey
 } from '@/presentation/i18n/translation'
+import { useReportRoomActions } from '@/presentation/room-actions/room-actions-provider'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
 
 import { FinalBoard } from './final-board'
@@ -106,9 +107,10 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
   const [seatNickname, setSeatNickname] = useState(() =>
     readSeatNickname({ role: 'host', roomCode })
   )
-  const { clock, error, retry, send, status, view } = useHostConnection(
-    roomCode,
-    seatNickname
+  const { clearError, clock, error, retry, send, status, view } =
+    useHostConnection(roomCode, seatNickname)
+  const [requestedNickname, setRequestedNickname] = useState<string | null>(
+    null
   )
   const [hasOfferedToken, setHasOfferedToken] = useState(false)
   const [volume, setVolume] = useState(readStoredVolume)
@@ -181,9 +183,25 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
   // Kept before the socket carries it, for the same reason the token is: the
   // reopen this triggers builds its `hello` out of storage.
   const takeSeat = (nickname: string) => {
+    writeStoredNickname(nickname)
     writeSeatNickname({ nickname, role: 'host', roomCode })
     setSeatNickname(nickname)
   }
+
+  // A frame, and the store — never `setSeatNickname`, which is what the socket
+  // is keyed on: reopening it to change a label would freeze the round on every
+  // phone in the room. The stored name is what a reload re-seats under if the
+  // seat itself has since expired.
+  const renameSeat = useCallback(
+    (nickname: string) => {
+      clearError()
+      setRequestedNickname(nickname)
+      writeStoredNickname(nickname)
+      writeSeatNickname({ nickname, role: 'host', roomCode })
+      send({ nickname, type: 'player.rename' })
+    },
+    [clearError, roomCode, send]
+  )
 
   // The roster's ✕ sits beside the console's own seat too, and removing
   // yourself is leaving it. Only `player.leave` also drops the nickname, which
@@ -202,10 +220,19 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
   // Offered to the menu above, which owns the only way off this screen. What a
   // dead socket takes away is the *press*, which the menu greys out itself —
   // dropping the item would make the menu's contents flap on a Wi-Fi blink.
-  useReportRoomExits({
+  const seatedAs =
+    view?.players.find((player) => player.id === view.youId)?.nickname ?? null
+
+  useReportRoomActions({
     closeRoom,
     endGame: view !== null && isGameInPlay(view.phase) ? endGame : null,
-    leaveSeat: view?.youId == null ? null : leaveSeat
+    leaveSeat: view?.youId == null ? null : leaveSeat,
+    refusedNickname:
+      requestedNickname !== null && error?.code === 'nickname_taken'
+        ? requestedNickname
+        : null,
+    rename: seatedAs === null ? null : renameSeat,
+    seatNickname: seatedAs
   })
 
   // Written before the socket carries it, because the hello is built from

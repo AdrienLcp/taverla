@@ -52,8 +52,10 @@ Five more that cost time to learn:
   first.
 - Playwright MCP writes its screenshots and `.playwright-mcp/` at the
   **repository root**. Delete them before committing.
-- A `/play/:code` opens no socket before the join, so nothing lands in
-  `taverla:seats` until the nickname is accepted.
+- A `/play/:code` on a device with a stored `taverla:nickname` **joins on
+  arrival** — there is no form to fill. Clear that key to drive the form, and
+  expect a session id in `taverla:seats` either way: the socket now opens before
+  the join is answered, so a refused arrival leaves one behind too.
 - `taverla:theme` and `taverla:locale` hold **plain strings**, not JSON. Writing
   `'"light"'` stores a quoted string the reader rejects, and the page comes back
   on the system theme with nothing to say it refused.

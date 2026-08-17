@@ -8,6 +8,21 @@ one part.
 
 ### Features
 
+- **A name you give once.** A screen that has played before lands straight at the
+  table: no form, no press, nothing between scanning the code and being in the
+  room. What that step used to show, the menu now carries — the name is on every
+  screen at every phase, readable without opening anything, and changed from the
+  same row. The two halves ship together on purpose, because skipping the form
+  means never seeing the name you arrived under
+- `[Shared]` `player.rename` changes the name a seat is held under **without
+  reopening the socket**. Renaming used to mean saying hello again, which is a
+  screen dropping the round it is in the middle of to edit a label. It is named
+  for the seat rather than the role, the way `player.leave` is: the console that
+  took a seat renames itself with the same frame
+- `[Game]` The device remembers the name the room **accepted**, never the one
+  that was typed. A name refused at the door used to be what the next room filled
+  its form in with
+
 - **The reflex race is the fifth game on the shelf.** No question, no content and
   nothing to know: the screen holds still, then it changes, and the first thumb
   down takes the round. Everybody who moved gets their own time back at the
@@ -205,6 +220,12 @@ one part.
 
 ### Improvements
 
+- `[Server]` A seat that comes back keeps the name it already holds, whatever its
+  `hello` carries. The reconnect was the old way to rename, so leaving it there
+  would have let a Wi-Fi blink quietly undo a rename nobody asked to undo
+- `[Game]` The host's seat form fills itself in with the device's name, the way a
+  phone's join form always did. It was the one form in the product that started
+  empty every time
 - `[Game]` **A console that reloads mid-round no longer plays the rest of the
   game in silence.** Permission to make a sound is granted to an audio element
   by a press, and the press that mints one is the press that opens a round — so
@@ -367,6 +388,11 @@ one part.
 
 ### Fixes
 
+- `[Game]` **A refused join can be corrected again.** The field kept its invalid
+  state after the refusal, which leaves the input's *native* validity false — so
+  the button looked alive, Enter did nothing, and nothing was logged anywhere. It
+  was reachable before; trying a stored name on arrival puts it on the main path,
+  which is how it was found
 - **A screen that plays the room it runs keeps its seat.** The name it was
   playing under lived nowhere but the page, so a tab dropped on a screen lock —
   routine on Android, and a reload rather than a blink — came back running the

@@ -356,7 +356,12 @@ export const FR_DICTIONARY: Dictionary = {
     build: 'Version {build}',
     home: 'Accueil',
     label: 'Menu',
-    leaveRoom: 'Quitter la table'
+    leaveRoom: 'Quitter la table',
+    nickname: {
+      action: 'Changer',
+      field: 'Nouveau pseudo',
+      label: 'Pseudo'
+    }
   },
   navigation: {
     back: 'Retour à la taverne'

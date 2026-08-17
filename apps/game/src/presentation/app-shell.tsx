@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from 'react-router'
 
 import { AppMenu } from '@/presentation/components/app-menu'
 import { ConnectionProvider } from '@/presentation/connection/connection-provider'
-import { RoomExitsProvider } from '@/presentation/exits/room-exits-provider'
+import { RoomActionsProvider } from '@/presentation/room-actions/room-actions-provider'
 
 import './app-shell.sass'
 
@@ -22,12 +22,12 @@ export const AppShell = () => {
       }}
     >
       <ConnectionProvider>
-        <RoomExitsProvider>
+        <RoomActionsProvider>
           <div className='app-shell'>
             <AppMenu />
             <Outlet />
           </div>
-        </RoomExitsProvider>
+        </RoomActionsProvider>
       </ConnectionProvider>
     </ReactAriaRouterProvider>
   )
