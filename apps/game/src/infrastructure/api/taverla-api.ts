@@ -13,7 +13,7 @@ import {
 } from '@taverla/protocol/http'
 import type { RoomCode } from '@taverla/protocol/identifiers'
 import type { Locale } from '@taverla/protocol/locale'
-import type { TrackDifficulty } from '@taverla/protocol/track'
+import type { TrackDecade, TrackDifficulty } from '@taverla/protocol/track'
 
 import { Result } from '@taverla/core/helpers/result'
 
@@ -67,6 +67,24 @@ export const fetchPlaylistTracks = async ({
 }): Promise<Result<CatalogueTrack[], ApiError>> => {
   const response = await request(
     `/api/playlists/${encodeURIComponent(playlistId)}/tracks?difficulty=${difficulty}`,
+    trackListResponseSchema
+  )
+
+  return response.status === 'failure'
+    ? response
+    : Result.success(response.data.tracks)
+}
+
+export const fetchDecadeTracks = async ({
+  decades,
+  difficulty
+}: {
+  /** Empty is every decade, the same as it is on the wire. */
+  decades: readonly TrackDecade[]
+  difficulty: TrackDifficulty
+}): Promise<Result<CatalogueTrack[], ApiError>> => {
+  const response = await request(
+    `/api/tracks/decades?decades=${decades.join(',')}&difficulty=${difficulty}`,
     trackListResponseSchema
   )
 

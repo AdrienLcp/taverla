@@ -82,18 +82,37 @@ export const discardPoolIfStale = ({
 }
 
 const isSameSource = (left: TrackSource, right: TrackSource): boolean => {
-  if (left.kind !== right.kind) {
-    return false
-  }
-
   switch (left.kind) {
     case 'chart':
-      return true
+      return (
+        right.kind === 'chart' && holdsTheSame(left.genreIds, right.genreIds)
+      )
+    case 'decade':
+      return (
+        right.kind === 'decade' && holdsTheSame(left.decades, right.decades)
+      )
     case 'playlist':
       return right.kind === 'playlist' && left.playlistId === right.playlistId
     case 'search':
       return right.kind === 'search' && left.query === right.query
   }
+}
+
+/**
+ * Order is not part of the question: a strip hands back what is selected in the
+ * order it was clicked, and two hosts who picked rock and then pop are asking
+ * for what one who picked pop and then rock is asking for.
+ */
+const holdsTheSame = <TItem>(
+  left: readonly TItem[],
+  right: readonly TItem[]
+): boolean => {
+  const held = new Set(left)
+  const wanted = new Set(right)
+
+  return (
+    held.size === wanted.size && [...wanted].every((item) => held.has(item))
+  )
 }
 
 const refillWhenEmpty = async ({

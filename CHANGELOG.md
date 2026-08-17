@@ -6,7 +6,32 @@ one part.
 
 ## Unreleased
 
+### Breaking Changes
+
+- `[Shared]` A blind test can be filled **by decade**, and `PROTOCOL_VERSION`
+  goes to 12 — so a tab left open across the deploy reloads rather than meeting
+  a source it cannot read. `TrackSource` gains
+  `{ kind: 'decade', decades }`, and an empty list means every decade the way an
+  empty `genreIds` already means every genre. It is an arm rather than a preset
+  wearing the `playlist` one because a decade is six words the room already
+  says: *which* playlists each costs is a Deezer fact, and Deezer facts live in
+  `deezer-client.ts`. See [`docs/game-catalogue.md`](docs/game-catalogue.md)
+
 ### Features
+
+- **Pick the years instead of the genre.** *Années 70* through *Années 2020*,
+  one press each and as many as the table wants — the 80s and the 90s together
+  is one strip, not a choice between them. Picking none is every decade, which
+  is a whole evening of hits with nothing to decide. Each decade is two Deezer
+  editorial playlists merged, one international and one French, because a table
+  here sings along to both: measured at 90 to 130 tracks a room will actually
+  recognise per decade, against a room that never plays the same track twice
+- `[Game]` A decade **shows what it holds the moment it is pressed** — the count
+  and the first five titles, without asking. It is the one source that names
+  itself and says nothing about what is inside it, where a playlist id or a
+  search has to wait for the typing to stop. That is also what makes a withdrawn
+  playlist a thing the host sees in the lobby rather than a round that comes up
+  empty with the room watching
 
 - **A name you give once.** A screen that has played before lands straight at the
   table: no form, no press, nothing between scanning the code and being in the
@@ -388,6 +413,12 @@ one part.
 
 ### Fixes
 
+- `[Server]` **Changing the genre mid-game now changes the music.** Two chart
+  sources compared equal whatever genres they held, so a host who moved a
+  running room from rock to jazz kept getting rock until the pool ran dry — and
+  what they had asked for only arrived once it did. The comparison is over the
+  selection itself now, on both list-shaped sources, and ignores the order the
+  strip hands it back in. `track-pool.test.ts` is new and holds it
 - `[Game]` **A refused join can be corrected again.** The field kept its invalid
   state after the refusal, which leaves the input's *native* validity false — so
   the button looked alive, Enter did nothing, and nothing was logged anywhere. It

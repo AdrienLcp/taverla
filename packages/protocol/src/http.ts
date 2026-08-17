@@ -4,7 +4,11 @@ import { protocolErrorCodeSchema } from './error-code'
 import { shelvedGameSchema } from './game'
 import { hostTokenSchema, roomCodeSchema } from './identifiers'
 import { DEFAULT_LOCALE, localeSchema } from './locale'
-import { trackDifficultySchema, trackIdentitySchema } from './track'
+import {
+  trackDecadeSchema,
+  trackDifficultySchema,
+  trackIdentitySchema
+} from './track'
 
 /**
  * The HTTP surface is deliberately tiny — create a room, check one exists,
@@ -70,6 +74,19 @@ export const trackSearchQuerySchema = z.object({
 })
 
 export const playlistPreviewQuerySchema = z.object({
+  difficulty: trackDifficultySchema.default('wellKnown')
+})
+
+/**
+ * The decades travel comma-separated, and an absent list is every decade —
+ * which is what an empty selection means on the wire too.
+ */
+export const decadePreviewQuerySchema = z.object({
+  decades: z
+    .string()
+    .default('')
+    .transform((value) => value.split(',').filter((part) => part.length > 0))
+    .pipe(z.array(trackDecadeSchema)),
   difficulty: trackDifficultySchema.default('wellKnown')
 })
 

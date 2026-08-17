@@ -12,6 +12,7 @@ import type {
 } from '@taverla/protocol/http'
 import {
   createRoomRequestSchema,
+  decadePreviewQuerySchema,
   playlistPreviewQuerySchema,
   trackSearchQuerySchema
 } from '@taverla/protocol/http'
@@ -58,7 +59,7 @@ const respondWithTracks = (
 }
 
 /**
- * Five routes, and none of them run during a game — creating a room, checking
+ * Six routes, and none of them run during a game — creating a room, checking
  * one exists, browsing the catalogue. Everything that happens while people are
  * playing is a WebSocket frame.
  */
@@ -139,6 +140,22 @@ export const registerHttpRoutes = (app: Hono): void => {
           kind: 'playlist',
           playlistId: context.req.param('playlistId')
         }
+      })
+
+      return respondWithTracks(context, found)
+    }
+  )
+
+  // A decade names itself and says nothing about what is in it, so this is the
+  // one source a host cannot check by reading the control they just pressed.
+  app.get(
+    '/api/tracks/decades',
+    zValidator('query', decadePreviewQuerySchema),
+    async (context) => {
+      const { decades, difficulty } = context.req.valid('query')
+      const found = await fetchTracksFor({
+        difficulty,
+        source: { decades, kind: 'decade' }
       })
 
       return respondWithTracks(context, found)

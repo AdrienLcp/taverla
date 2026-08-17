@@ -121,10 +121,20 @@ a prerequisite, and it is the one that should be allowed to force the decision.
 ### Where a question would slot in
 
 The blind test's source picker is the template, and it is more reusable than it
-looks. `TrackSource` is `chart | playlist | search` — three ways to fill one
-pool, chosen in the lobby, committed by the launch. A quiz is the same picker
-with different arms, and the shape underneath is already built: the countdown,
-the buzz order, the lockout, the verdict, the reveal, the scoreboard.
+looks. `TrackSource` is `chart | decade | playlist | search` — four ways to fill
+one pool, chosen in the lobby, committed by the launch. A quiz is the same
+picker with different arms, and the shape underneath is already built: the
+countdown, the buzz order, the lockout, the verdict, the reveal, the scoreboard.
+
+The fourth arm is worth reading before adding a fifth, because it is the one
+that carries **no catalogue detail at all**. A decade is six words the room
+already says, and which Deezer playlists each costs lives in `deezer-client.ts`
+with the popularity floors. The alternative — a preset that is really a playlist
+id the browser holds — was rejected for what it does to the round trip: a host
+who typed that id by hand reopens the picker on the wrong control, and nothing
+ties the label to what it fetches. `TrackDifficulty` settled the same argument
+first, and the rule it leaves is: **an arm names what the room asked for, never
+what the catalogue charges for it.**
 
 So `QuestionSource: hosted | bank | api`, and each arm is a separate size:
 

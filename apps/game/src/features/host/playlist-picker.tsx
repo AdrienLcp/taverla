@@ -3,7 +3,11 @@ import { useEffect, useState } from 'react'
 import { Form } from 'react-aria-components'
 
 import type { BlindtestSettings } from '@taverla/protocol/game'
-import type { TrackSource } from '@taverla/protocol/track'
+import {
+  type TrackDecade,
+  type TrackSource,
+  trackDecades
+} from '@taverla/protocol/track'
 
 import { Button } from '@/presentation/components/button'
 import { SegmentedControl } from '@/presentation/components/segmented-control'
@@ -20,6 +24,7 @@ type SourceKind = TrackSource['kind']
 
 const KIND_LABELS: Record<SourceKind, PlainTranslationKey> = {
   chart: 'blindtest.source.chart',
+  decade: 'blindtest.source.decade',
   playlist: 'blindtest.source.playlist',
   search: 'blindtest.source.search'
 }
@@ -59,10 +64,22 @@ const genreLabelKey = (genreId: GenreId): `blindtest.genre.${GenreId}` =>
 const asGenreId = (value: string | number): GenreId | undefined =>
   GENRE_IDS.find((id) => String(id) === String(value))
 
+/**
+ * The same literal-return trick as the genres: a decade added to the protocol
+ * without a label in both dictionaries stops compiling here.
+ */
+const decadeLabelKey = (
+  decade: TrackDecade
+): `blindtest.decade.${TrackDecade}` => `blindtest.decade.${decade}`
+
+const asDecade = (value: string | number): TrackDecade | undefined =>
+  trackDecades.find((decade) => decade === value)
+
 const PREVIEWED_TITLES = 5
 
-/** What the three source kinds need, all at once, so switching kind keeps what was typed. */
+/** What the four source kinds need, all at once, so switching kind keeps what was typed. */
 type Draft = {
+  decades: TrackDecade[]
   genreIds: GenreId[]
   kind: SourceKind
   playlistId: string
@@ -75,6 +92,7 @@ type Draft = {
  * the selected ones when the lobby comes back.
  */
 const draftFromSource = (source: TrackSource): Draft => ({
+  decades: source.kind === 'decade' ? source.decades : [],
   genreIds:
     source.kind === 'chart'
       ? source.genreIds.map(asGenreId).filter((id) => id !== undefined)
@@ -86,6 +104,7 @@ const draftFromSource = (source: TrackSource): Draft => ({
 
 /** `null` while the chosen kind is still missing the text it needs. */
 const sourceFromDraft = ({
+  decades,
   genreIds,
   kind,
   playlistId,
@@ -94,6 +113,8 @@ const sourceFromDraft = ({
   switch (kind) {
     case 'chart':
       return { genreIds, kind: 'chart' }
+    case 'decade':
+      return { decades, kind: 'decade' }
     case 'playlist':
       return playlistId.trim().length === 0
         ? null
@@ -119,8 +140,10 @@ type PlaylistPickerProps = {
  * because a choice that has to be confirmed and *then* launched is two
  * decisions where the host only made one. That is also what lets the picker
  * stay reachable while a game runs — a source edited mid-clip cannot touch the
- * round already drawn. The preview button is the exception, and it only looks:
- * a query or an id with no visible answer is a guess.
+ * round already drawn. The preview is the exception, and it only looks: a
+ * source with no visible answer is a guess. Which press asks for it differs by
+ * kind — a decade answers on its own, where a query or an id waits for a button
+ * because neither is finished until the typing stops.
  */
 export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
   onDraftChange,
@@ -133,7 +156,7 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
   const { clear, preview, previewSource } = usePlaylistPreview(
     settings.difficulty
   )
-  const typed = draft.kind === 'playlist' ? draft.playlistId : draft.query
+  const draftSource = sourceFromDraft(draft)
 
   // The control that commits this draft is the one that starts the game, and it
   // lives in the console's footer rather than here.
@@ -144,6 +167,15 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
   const revise = (patch: Partial<Draft>): void => {
     setDraft({ ...draft, ...patch })
     clear()
+  }
+
+  // A decade names itself and says nothing about what is inside it, so it is
+  // the one source that answers for itself the moment it is pressed. An id or a
+  // query cannot: neither is finished until the host stops typing.
+  const chooseDecades = (decades: TrackDecade[]): void => {
+    setDraft({ ...draft, decades })
+
+    void previewSource({ decades, kind: 'decade' })
   }
 
   return (
@@ -185,11 +217,35 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
         </div>
       )}
 
-      {draft.kind !== 'chart' && (
+      {draft.kind === 'decade' && (
+        <div className='decades'>
+          <ToggleGroup
+            label={translate('blindtest.decade.label')}
+            onSelectionChange={(keys) => {
+              chooseDecades(
+                [...keys].map(asDecade).filter((decade) => decade !== undefined)
+              )
+            }}
+            options={trackDecades.map((decade) => ({
+              label: translate(decadeLabelKey(decade)),
+              value: decade
+            }))}
+            selectedKeys={draft.decades}
+          />
+          {draft.decades.length === 0 && (
+            <p className='hint'>{translate('blindtest.decade.none')}</p>
+          )}
+        </div>
+      )}
+
+      {(draft.kind === 'playlist' || draft.kind === 'search') && (
         <Form
           onSubmit={(event) => {
             event.preventDefault()
-            void previewSource({ kind: draft.kind, typed })
+
+            if (draftSource !== null && draftSource.kind !== 'chart') {
+              void previewSource(draftSource)
+            }
           }}
         >
           {draft.kind === 'search' ? (
@@ -215,7 +271,7 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
             </>
           )}
           <Button
-            isDisabled={typed.trim().length === 0}
+            isDisabled={draftSource === null}
             isPending={preview.status === 'previewing'}
             type='submit'
             variant='underlined'

@@ -23,6 +23,25 @@ export const hostTrackSchema = trackIdentitySchema.extend({
   previewUrl: z.url()
 })
 
+export const trackDecades = [
+  '1970s',
+  '1980s',
+  '1990s',
+  '2000s',
+  '2010s',
+  '2020s'
+] as const
+
+/**
+ * The generations a table is made of. Deezer cannot filter by year — its
+ * advanced search takes an artist, an album, a label and a duration, and no
+ * date — so a decade resolves to curated playlists, and which ones is a
+ * catalogue fact only `deezer-client.ts` may hold. Named the way the room says
+ * it for the same reason `TrackDifficulty` is: a catalogue that *could* filter
+ * by year would keep these six words.
+ */
+export const trackDecadeSchema = z.enum(trackDecades)
+
 /**
  * Where a room's tracks come from. Every variant resolves, server-side, to a
  * list of Deezer track ids; the browser never talks to Deezer directly, because
@@ -41,6 +60,14 @@ export const trackSourceSchema = z.discriminatedUnion('kind', [
   z.object({
     genreIds: z.array(z.number().int().nonnegative()),
     kind: z.literal('chart')
+  }),
+  /**
+   * **Empty means every decade**, for the same reason the chart's is: picking
+   * nothing already says everything.
+   */
+  z.object({
+    decades: z.array(trackDecadeSchema),
+    kind: z.literal('decade')
   }),
   z.object({ kind: z.literal('playlist'), playlistId: z.string().min(1) }),
   z.object({
@@ -61,5 +88,6 @@ export const trackDifficultySchema = z.enum(trackDifficulties)
 
 export type TrackIdentity = z.infer<typeof trackIdentitySchema>
 export type HostTrack = z.infer<typeof hostTrackSchema>
+export type TrackDecade = z.infer<typeof trackDecadeSchema>
 export type TrackSource = z.infer<typeof trackSourceSchema>
 export type TrackDifficulty = z.infer<typeof trackDifficultySchema>

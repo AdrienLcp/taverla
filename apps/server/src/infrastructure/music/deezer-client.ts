@@ -1,10 +1,12 @@
 import { z } from 'zod'
 
 import type { CatalogueTrack } from '@taverla/protocol/http'
-import type {
-  HostTrack,
-  TrackDifficulty,
-  TrackSource
+import {
+  type HostTrack,
+  type TrackDecade,
+  type TrackDifficulty,
+  type TrackSource,
+  trackDecades
 } from '@taverla/protocol/track'
 
 import { Result } from '@taverla/core/helpers/result'
@@ -155,6 +157,31 @@ const isWorthGuessing = (
 /** `0` is Deezer's all-genres chart, which is what an empty selection means. */
 const EVERY_GENRE = 0
 
+/**
+ * What a decade costs, in the only vocabulary that knows: Deezer has no date
+ * dimension anywhere — not on a chart, not in advanced search — so a generation
+ * is a curated playlist and nothing else.
+ *
+ * Deezer's **own** editors keep both series, which is the most stable thing on
+ * offer for something this product does not own; a label's playlist can be
+ * withdrawn on a marketing calendar. Two per decade rather than one, and they
+ * pay for themselves twice: a hundred tracks is comfortable for an evening and
+ * thin for two, and a playlist that disappears thins the pool instead of ending
+ * the round — `fetchTracksFor` keeps whatever answered.
+ *
+ * One of each pair is international and the other is French, because a table
+ * here sings along to both and a decade that held only one half would be a
+ * different game.
+ */
+const DECADE_PLAYLIST_IDS: Record<TrackDecade, readonly string[]> = {
+  '1970s': ['1470022445', '821019291'],
+  '1980s': ['867825522', '791349661'],
+  '1990s': ['878989033', '1051470831'],
+  '2000s': ['248297032', '713806955'],
+  '2010s': ['14917741483', '1162725851'],
+  '2020s': ['13650084141', '1139670951']
+}
+
 const pathsFor = (source: TrackSource): string[] => {
   switch (source.kind) {
     case 'chart': {
@@ -163,6 +190,16 @@ const pathsFor = (source: TrackSource): string[] => {
 
       return genreIds.map(
         (genreId) => `/chart/${genreId}/tracks?limit=${POOL_SIZE}`
+      )
+    }
+    case 'decade': {
+      const decades =
+        source.decades.length === 0 ? trackDecades : source.decades
+
+      return decades.flatMap((decade) =>
+        DECADE_PLAYLIST_IDS[decade].map(
+          (playlistId) => `/playlist/${playlistId}/tracks?limit=${POOL_SIZE}`
+        )
       )
     }
     case 'playlist':

@@ -15,13 +15,12 @@ file rather than half-landing.
 
 ## Open
 
-Ordered by **what is wrong before what is missing**. Only one fault is left and
-it is waiting on a phone, so what is open now is one piece of new work.
+Ordered by **what is wrong before what is missing**. One entry is left, it is
+the last fault, and it is waiting on a phone rather than on a session.
 
 | Session | In one line | Cost | Starts with | Holds |
 |---|---|---|---|---|
 | [The room is silent, unexplained](silent-room-unexplained.md) | **Half done.** The console names the refusal; why Android refuses is unread | waits on a phone | — | note 6 |
-| [Decades on the shelf](decades-on-the-shelf.md) | Genres exist behind a `ToggleGroup`; decades do not exist at all | a session | — | note 2 |
 
 **One diagnosis disagrees with the note that raised it** — read the entry before
 planning it:
@@ -53,11 +52,20 @@ planning it:
 | [Who owns a room](who-owns-a-room.md) | 15 Aug 2026 |
 | [A host's seat comes off](host-seat-comes-off.md) | 17 Aug 2026 |
 | [A name you give once](name-you-give-once.md) | 17 Aug 2026 |
+| [Decades on the shelf](decades-on-the-shelf.md) | 17 Aug 2026 |
 
-**[The question bank's spelling](question-bank-spelling.md) is the one delivered
-entry worth opening**, and only for this: two of the three faults it was given
-turned out not to be faults at all. It is the standing warning that a diagnosis
-written here can be wrong.
+**Two delivered entries are worth opening**, and each warns about a different
+half of what is written here.
+
+[The question bank's spelling](question-bank-spelling.md): two of the three
+faults it was given turned out not to be faults at all. A **diagnosis** written
+here can be wrong.
+
+[Decades on the shelf](decades-on-the-shelf.md): the diagnosis held in full and
+the **shape it prescribed** was overruled — it argued for reusing the `playlist`
+arm and counted "no protocol arm" as the saving, where that turned out to be the
+cost. So an entry's *what is wrong* is worth more than its *so build this*, and
+the second is the half a session may throw away.
 
 ## Where this came from
 
@@ -67,7 +75,8 @@ entry is a diagnosis and not a wish.
 - **14 August 2026**, Adrien and Marina, on an iPhone and a laptop — thirteen
   observations, which became the twelve delivered entries above.
 - **16 August 2026**, Adrien and a co-tester, on Android — eight notes, *note 1*
-  through *note 8*, which became the two open entries,
+  through *note 8*, which became the one entry still open,
+  [decades on the shelf](decades-on-the-shelf.md),
   [a name you give once](name-you-give-once.md),
   [a host's seat comes off](host-seat-comes-off.md),
   [the field the whole game is typed into](field-the-game-is-typed-into.md),

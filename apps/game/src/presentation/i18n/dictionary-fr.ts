@@ -31,6 +31,16 @@ export const FR_DICTIONARY: Dictionary = {
       start: 'Lancer le son'
     },
     clip: 'Durée de l’extrait',
+    decade: {
+      '1970s': 'Années 70',
+      '1980s': 'Années 80',
+      '1990s': 'Années 90',
+      '2000s': 'Années 2000',
+      '2010s': 'Années 2010',
+      '2020s': 'Années 2020',
+      label: 'Quelles années',
+      none: 'N’en choisis aucune et tu as toutes les décennies.'
+    },
     difficulty: {
       label: 'À quel point c’est connu',
       mixed: 'Un peu pointu',
@@ -72,7 +82,10 @@ export const FR_DICTIONARY: Dictionary = {
     },
     source: {
       chart: 'Le top du moment',
+      decade: 'Une décennie',
       label: 'D’où viennent les titres',
+      noneInDecade:
+        'Rien de jouable dans ces années-là. Essaie une autre décennie.',
       noneInPlaylist:
         'Rien de jouable dans cette playlist. Vérifie l’identifiant.',
       noneInSearch:

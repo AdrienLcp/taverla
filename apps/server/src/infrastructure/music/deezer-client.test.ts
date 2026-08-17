@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import type { TrackDifficulty } from '@taverla/protocol/track'
+import { type TrackDifficulty, trackDecades } from '@taverla/protocol/track'
 
 import { fetchTracksFor } from './deezer-client'
 
@@ -170,6 +170,51 @@ describe('fetchTracksFor', () => {
     expect(
       found.status === 'success' && found.data.map((t) => t.title)
     ).toEqual(['Rock one'])
+  })
+
+  it('[decades] reads both playlists a decade is made of', async () => {
+    const requested = catalogueByPath({
+      '/playlist/878989033/tracks': [namedTrack('a', 'Wannabe')],
+      '/playlist/1051470831/tracks': [namedTrack('b', 'Alors regarde')]
+    })
+
+    const found = await fetchTracksFor({
+      difficulty: 'wellKnown',
+      source: { decades: ['1990s'], kind: 'decade' }
+    })
+
+    expect(
+      found.status === 'success' && found.data.map((t) => t.title)
+    ).toEqual(['Wannabe', 'Alors regarde'])
+    expect(requested()).toHaveLength(2)
+  })
+
+  it('[decades] plays on when one playlist of a decade is withdrawn', async () => {
+    catalogueByPath({
+      '/playlist/878989033/tracks': [namedTrack('a', 'Wannabe')]
+    })
+
+    const found = await fetchTracksFor({
+      difficulty: 'wellKnown',
+      source: { decades: ['1990s'], kind: 'decade' }
+    })
+
+    expect(
+      found.status === 'success' && found.data.map((t) => t.title)
+    ).toEqual(['Wannabe'])
+  })
+
+  it('[decades] reads every decade when none was chosen', async () => {
+    const requested = catalogueByPath({
+      '/playlist/878989033/tracks': [namedTrack('a', 'Wannabe')]
+    })
+
+    await fetchTracksFor({
+      difficulty: 'wellKnown',
+      source: { decades: [], kind: 'decade' }
+    })
+
+    expect(requested()).toHaveLength(trackDecades.length * 2)
   })
 
   it('[genres] refuses the round when every chart is down', async () => {

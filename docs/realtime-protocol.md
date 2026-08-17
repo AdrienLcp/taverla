@@ -122,6 +122,7 @@ Shared by both:
                 "mode": { "kind": "typed" },   // buzzer arm adds answerWindowMs
                 "game": { "kind": "blindtest", "roundDurationMs": 30000,
                           "difficulty": "wellKnown",
+                          // chart | decade | playlist | search
                           "source": { "kind": "chart" } } },
   "round": {
     "id": "…",

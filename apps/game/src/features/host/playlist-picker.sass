@@ -3,12 +3,18 @@
 @layer components
   .playlist-picker
     border-top: 2px solid var(--rule)
+    // The decade strip's column count is the picker's own business: the same
+    // 414px phone and the same 1920px desktop hand it a full-width column or a
+    // third of the lobby depending on where the split fell, and a viewport
+    // query cannot tell those apart.
+    container-type: inline-size
     display: flex
     flex-direction: column
     gap: var(--space-s)
     padding-top: var(--space-m)
 
-    .genres
+    .genres,
+    .decades
       display: flex
       flex-direction: column
       gap: var(--space-2xs)
@@ -21,26 +27,51 @@
     // Eleven genres do not fit one row on a laptop, and a horizontal scroller
     // hides the ones at the end from a host who is standing up. A wrapped flex
     // strip is worse than it sounds here: the last row gets two chips stretched
-    // to half the width each. A grid gives every genre the same cell, and the
+    // to half the width each. A grid gives every option the same cell, and the
     // rules become gaps showing the strip's own ground through.
-    .genres .segments
+    .genres .segments,
+    .decades .segments
       background: var(--rule)
       display: grid
       gap: 2px
-      // Wide enough for `CHANSON FRANÇAISE`, which is the longest label either
-      // locale holds. At 148px it landed in a cell narrower than itself.
-      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr))
 
       .segment
         border-right: none
         // The shared strip keeps every label on one line, which a cell sized by
-        // the grid cannot promise. The column above is wide enough that nothing
-        // wraps today; this is what stops the next locale's longest genre from
-        // hanging over the strip's edge instead.
+        // the grid cannot promise. The columns below are wide enough that
+        // nothing wraps today; this is what stops the next locale's longest
+        // label from hanging over the strip's edge instead.
         white-space: normal
 
         &:not([data-selected])
           background: var(--field)
+
+    // Wide enough for `CHANSON FRANÇAISE`, which is the longest label either
+    // locale holds. At 148px it landed in a cell narrower than itself.
+    .genres .segments
+      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr))
+
+    // Six is the whole list, so the count is stepped through six's own
+    // divisors rather than left to auto-fit: four or five columns leave the
+    // last row short and the strip's ground showing through where a decade
+    // should be. Twelve genres survive auto-fit for the opposite reason — they
+    // divide by everything it can land on.
+    //
+    // `ANNÉES 2000` measures 120px with its padding, and at 414px the three
+    // columns it fell into gave it 119.5. Half a pixel is not a breakpoint, so
+    // each step carries a quarter of the label's width in headroom for the
+    // locale that arrives with a longer word for a decade.
+    .decades .segments
+      grid-template-columns: repeat(2, 1fr)
+
+    @container (min-width: 440px)
+      .decades .segments
+        grid-template-columns: repeat(3, 1fr)
+
+    // One row, and the reading order is the chronology.
+    @container (min-width: 780px)
+      .decades .segments
+        grid-template-columns: repeat(6, 1fr)
 
     .react-aria-Form
       display: flex

@@ -44,6 +44,16 @@ export const EN_DICTIONARY = defineTranslations({
       start: 'Start the music'
     },
     clip: 'Clip length',
+    decade: {
+      '1970s': '70s',
+      '1980s': '80s',
+      '1990s': '90s',
+      '2000s': '2000s',
+      '2010s': '2010s',
+      '2020s': '2020s',
+      label: 'Which years',
+      none: 'Pick none and you get every decade.'
+    },
     difficulty: {
       label: 'How well known',
       mixed: 'Deep cuts too',
@@ -85,7 +95,9 @@ export const EN_DICTIONARY = defineTranslations({
     },
     source: {
       chart: 'Top charts',
+      decade: 'A decade',
       label: 'Where the tracks come from',
+      noneInDecade: 'Nothing playable in those years. Try another decade.',
       noneInPlaylist: 'Nothing playable in that playlist. Check the id.',
       noneInSearch: 'Nothing well-known enough matched. Try another search.',
       playlist: 'A Deezer playlist',
