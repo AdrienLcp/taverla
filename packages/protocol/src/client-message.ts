@@ -63,6 +63,19 @@ export const leaveMessageSchema = z.object({
 })
 
 /**
+ * Changing the name a seat is already held under. The `hello` renames a
+ * returning session on its own, but reaching it means reopening the socket —
+ * so a screen would drop the round it is in the middle of to edit a label.
+ *
+ * Named for the seat rather than the role, like `player.leave`: the console
+ * that took one renames itself with the same frame.
+ */
+export const renameMessageSchema = z.object({
+  nickname: nicknameSchema,
+  type: z.literal('player.rename')
+})
+
+/**
  * The other two modes' answer, and it carries no timestamp for the same reason
  * `player.buzz` does not: the server stamps arrival, because the speed bonus is
  * decided by exactly that field and a client-supplied "when" is both
@@ -202,6 +215,7 @@ export const playerClientMessageSchema = z.discriminatedUnion('type', [
   helloMessageSchema,
   timePingMessageSchema,
   leaveMessageSchema,
+  renameMessageSchema,
   buzzMessageSchema,
   answerMessageSchema,
   submitLieMessageSchema,
@@ -213,6 +227,7 @@ export const clientMessageSchema = z.discriminatedUnion('type', [
   helloMessageSchema,
   timePingMessageSchema,
   leaveMessageSchema,
+  renameMessageSchema,
   buzzMessageSchema,
   answerMessageSchema,
   submitLieMessageSchema,

@@ -25,6 +25,11 @@ export const touch = (room: Room, now: number): void => {
  * `sessionId` it stored, and reclaims the same seat and score. Only when no
  * seat matches is a new participant created — which is why the nickname clash
  * check runs against *other* participants, never against the returning one.
+ *
+ * **A returning seat keeps the name it holds**, whatever the `hello` says.
+ * Renaming is `player.rename`'s job, and a screen that renamed itself carries
+ * the old name in memory until it reloads: honouring the hello here would let a
+ * Wi-Fi blink undo a rename nobody asked to undo.
  */
 export const joinAsPlayer = ({
   nickname,
@@ -46,7 +51,6 @@ export const joinAsPlayer = ({
   if (existing !== undefined) {
     existing.disconnectedAt = null
     existing.isConnected = true
-    existing.nickname = nickname
 
     return Result.success(existing)
   }
@@ -69,6 +73,33 @@ export const joinAsPlayer = ({
   }
 
   room.players.set(participant.id, participant)
+
+  return Result.success(participant)
+}
+
+/**
+ * A seat renaming itself, which is not a join: nothing is created and a full
+ * room has no bearing on it. Only the clash still applies, and it excludes this
+ * seat's own session the same way a returning player's does.
+ */
+export const renameSeat = ({
+  nickname,
+  now,
+  participant,
+  room
+}: {
+  nickname: Nickname
+  now: number
+  participant: Participant
+  room: Room
+}): Result<Participant, 'nickname_taken'> => {
+  touch(room, now)
+
+  if (isNicknameTaken({ nickname, room, sessionId: participant.sessionId })) {
+    return Result.failure('nickname_taken')
+  }
+
+  participant.nickname = nickname
 
   return Result.success(participant)
 }

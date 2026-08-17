@@ -47,8 +47,12 @@ nobody can pick up is a party ended by a dead battery.
 |---|---|---|
 | `hello` | both | `protocolVersion`, `role`, `sessionId?`, `nickname?`, `hostToken?` |
 | `time.ping` | both | `clientSentAt` |
+| `player.leave` | any seat | — |
+| `player.rename` | any seat | `nickname` |
 | `player.buzz` | player | `roundId` |
 | `player.answer` | player | `roundId`, `answer` — `{kind:'choice', choiceIndex}` or `{kind:'typed', guess}` |
+| `lefake.submit` | player | `roundId`, `lie` |
+| `lefake.vote` | player | `roundId`, `candidateId` |
 | `host.updateSettings` | host | `settings` |
 | `host.startRound` | host | — |
 | `host.judge` | host | `roundId`, `playerId`, `verdict` |
@@ -58,6 +62,12 @@ nobody can pick up is a party ended by a dead battery.
 | `host.endGame` | host | — |
 | `host.playAgain` | host | — |
 | `host.removePlayer` | host | `playerId` |
+| `host.closeRoom` | host | — |
+
+**The `player.` prefix names the seat, not the role.** `player.leave` and
+`player.rename` are the two a console holding a seat sends as well, which is why
+neither is in `HOST_ONLY_MESSAGE_TYPES` and why both guard on
+`connection.playerId` rather than on `connection.role`.
 
 `player.buzz` carries **no timestamp**, and must never gain one. Ordering is
 decided by arrival at the server; anything the client says about "when" is

@@ -9,7 +9,8 @@ import {
   HOST_RECLAIM_GRACE_MS,
   joinAsPlayer,
   markHostAway,
-  removePlayer
+  removePlayer,
+  renameSeat
 } from './room-service'
 import { createRoom, deleteRoom } from './room-store'
 import { toHostView, toPlayerView } from './room-view'
@@ -58,12 +59,15 @@ describe('joinAsPlayer', () => {
     expect(room.players.size).toBe(1)
   })
 
-  it('[room] lets a returning session change its nickname', () => {
+  // `renameSeat` is the only way a name changes, so a screen that renamed
+  // itself and then blinked off Wi-Fi comes back to the name it chose rather
+  // than to the one still sitting in its memory.
+  it('[room] keeps the name a returning seat already holds', () => {
     join('Alice', 'session-alice')
     join('Alicia', 'session-alice')
 
     expect([...room.players.values()].map((player) => player.nickname)).toEqual(
-      ['Alicia']
+      ['Alice']
     )
   })
 
@@ -83,6 +87,57 @@ describe('joinAsPlayer', () => {
     const overflow = join('Latecomer', 'session-late')
 
     expect(overflow.status === 'failure' && overflow.error).toBe('room_full')
+  })
+})
+
+describe('renameSeat', () => {
+  const seatOf = (nickname: string, sessionId: string) => {
+    const joined = join(nickname, sessionId)
+
+    if (joined.status !== 'success') {
+      throw new Error('the join should have succeeded')
+    }
+
+    return joined.data
+  }
+
+  const rename = (participant: ReturnType<typeof seatOf>, nickname: string) =>
+    renameSeat({ nickname, now: NOW, participant, room })
+
+  it('[room] keeps the seat and the score across a rename', () => {
+    const alice = seatOf('Alice', 'session-alice')
+
+    alice.score = 7
+
+    const renamed = rename(alice, 'Alicia')
+
+    expect(renamed.status).toBe('success')
+    expect(room.players.size).toBe(1)
+    expect(room.players.get(alice.id)?.nickname).toBe('Alicia')
+    expect(room.players.get(alice.id)?.score).toBe(7)
+  })
+
+  it('[room] refuses a nickname another player is using', () => {
+    const alice = seatOf('Alice', 'session-alice')
+
+    seatOf('Bob', 'session-bob')
+
+    const clash = rename(alice, 'bob')
+
+    expect(clash.status === 'failure' && clash.error).toBe('nickname_taken')
+    expect(room.players.get(alice.id)?.nickname).toBe('Alice')
+  })
+
+  // A room full of seats is nothing a rename can make worse, and refusing one
+  // there would strand the last player to arrive under a name they mistyped.
+  it('[room] renames a seat in a room that is full', () => {
+    const first = seatOf('Player 0', 'session-0')
+
+    for (let index = 1; index < MAX_PLAYERS_PER_ROOM; index++) {
+      seatOf(`Player ${index}`, `session-${index}`)
+    }
+
+    expect(rename(first, 'Alicia').status).toBe('success')
   })
 })
 

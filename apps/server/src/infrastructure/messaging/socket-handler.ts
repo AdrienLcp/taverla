@@ -8,7 +8,12 @@ import {
   HOST_ONLY_MESSAGE_TYPES
 } from '@taverla/protocol/client-message'
 import { decodeMessage } from '@taverla/protocol/codec'
-import type { PlayerId, RoomCode, RoundId } from '@taverla/protocol/identifiers'
+import type {
+  Nickname,
+  PlayerId,
+  RoomCode,
+  RoundId
+} from '@taverla/protocol/identifiers'
 import type { RoomSettings } from '@taverla/protocol/room'
 import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
@@ -25,6 +30,7 @@ import {
   markHostAway,
   markPlayerDisconnected,
   removePlayer,
+  renameSeat,
   updateSettings
 } from '@/domain/room/room-service'
 import { deleteRoom, findRoom } from '@/domain/room/room-store'
@@ -350,6 +356,10 @@ export const createRoomSocketEvents = (
     switch (message.type) {
       case 'player.leave': {
         depart(active, room)
+        break
+      }
+      case 'player.rename': {
+        rename(message.nickname, active, outbound, room)
         break
       }
       case 'player.buzz': {
@@ -918,6 +928,50 @@ export const createRoomSocketEvents = (
     }
 
     unseat(playerId, room)
+  }
+
+  /**
+   * The seat, not the role — a console holding one renames itself with this
+   * frame too. Refusing a clash keeps the roster's names distinct, which is what
+   * a host judging by name and every player reading the board depend on.
+   */
+  const rename = (
+    nickname: Nickname,
+    active: Connection,
+    outbound: Outbound,
+    room: Room
+  ): void => {
+    const participant =
+      active.playerId === null ? undefined : room.players.get(active.playerId)
+
+    if (participant === undefined) {
+      sendError(outbound, {
+        code: 'invalid_message',
+        fatal: false,
+        message: 'Only a seated player has a name to change'
+      })
+
+      return
+    }
+
+    const renamed = renameSeat({
+      nickname,
+      now: Date.now(),
+      participant,
+      room
+    })
+
+    if (renamed.status === 'failure') {
+      sendError(outbound, {
+        code: renamed.error,
+        fatal: false,
+        message: 'Someone already took that name'
+      })
+
+      return
+    }
+
+    broadcastRoom(room)
   }
 
   /**
