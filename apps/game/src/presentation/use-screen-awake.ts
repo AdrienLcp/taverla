@@ -3,9 +3,9 @@ import { useEffect } from 'react'
 import { keepScreenAwake } from '@/infrastructure/env'
 
 /**
- * A phone here carries the whole state of the game and is pressed a handful of
- * times a round, and a screen lock counts presses rather than attention — so
- * the screen a player is reading goes dark while they read it.
+ * A phone here is read far more often than it is pressed — it is the one screen
+ * a player is sure to have — and a screen lock counts presses rather than
+ * attention, so the screen they are reading goes dark while they read it.
  *
  * Held for as long as a game is running rather than for the round in play — a
  * screen that sleeps during the lobby misses the countdown, which is the moment

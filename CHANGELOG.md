@@ -34,10 +34,10 @@ one part.
 
 ### Features
 
-- **The screen stays awake for as long as the game does.** A phone here carries
-  the whole state of the game and is pressed a handful of times a round — and a
-  screen lock counts presses rather than attention, so the screen a player is
-  reading went dark while they read it. The lock is taken when a seat is, not
+- **The screen stays awake for as long as the game does.** A phone here is read
+  far more often than it is pressed — and a screen lock counts presses rather
+  than attention, so the screen a player was reading went dark while they read
+  it. The lock is taken when a seat is, not
   when a round starts: a screen that sleeps through the lobby is one that misses
   the countdown. It is taken again every time the tab comes back, because a
   browser drops it on the way out and never returns it on its own. Refused or

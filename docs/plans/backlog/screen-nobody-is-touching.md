@@ -1,11 +1,12 @@
 ## The screen nobody is touching
 
-> **The premise below was overruled on 19 August 2026, and the conclusion
-> survived.** `PRODUCT.md` no longer says the phone is looked at rarely — both
-> screens carry the whole picture now, and the phone is read as much as it is
-> pressed. The wake lock is *more* justified under that model, not less: a screen
-> lock counts presses rather than attention, so the screen a player is reading
-> goes dark while they read it. What follows is the diagnosis as it was written.
+> **The premise below was overruled on 19 August 2026, and the conclusion came
+> out stronger.** `PRODUCT.md` no longer says the phone is looked at rarely: it
+> is read far more often than it is pressed, because the big screen is often
+> somebody else's. The wake lock is *more* justified under that model, not less
+> — a screen lock counts presses rather than attention, so the screen a player
+> is reading goes dark while they read it. What follows is the diagnosis as it
+> was written, and it reached the same fault from the opposite premise.
 
 `PRODUCT.md` said the phone *is held one-handed and looked at rarely*, and that
 success is the moment nobody is looking at their phone as a phone. That is not

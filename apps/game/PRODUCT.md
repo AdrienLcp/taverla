@@ -28,22 +28,26 @@ There are two distinct jobs:
   standing, holding nothing, and looking up at the room as often as at the
   screen.
 - **The players** wait, recognise a track, and answer. Their phone is a second
-  screen rather than a remote control for the big one: they read it as much as
-  they press it, and it owes them everything the room knows.
+  screen rather than a remote control for the big one — they read it as much as
+  they press it, and it is often the only screen they can see. They read it
+  standing, in glances, with a drink in the other hand.
 
 ## Product Purpose
 
 Turn a room full of phones into a party game with no setup, no install and no
 accounts. Success is the moment the room is playing rather than administering —
-nobody is typing an address, nobody is asking what the score is, and nobody has
-to look up at the big screen to find out where they stand.
+nobody is typing an address, nobody is asking what the score is, and nobody is
+waiting on a screen they cannot see.
 
-**Both screens carry the whole picture.** The big screen is the shared one and
-the phone is the personal one, but neither is a summary of the other: a player
-who never looks up must still know the score, the round, the clock and what just
-happened. The one exception is anti-cheat, and it is permanent — a phone is
-never sent the answer while that answer can still be typed. Everything else the
-room knows, both screens say.
+**The big screen cannot be assumed visible.** It is across the room, angled
+away, or — when the host runs the room from a phone, and more so when that host
+has taken a seat — in one person's hand and nobody else's. The phone is the one
+screen every player is sure to have, so it carries enough to follow the game
+without looking up: the score, the round, the clock and what just happened. It
+carries it the way a phone should, a few things at a time and large enough to
+read in the dark, and never as a copy of the console. The one thing it is never
+sent is the answer while that answer can still be typed — anti-cheat, and
+permanent.
 
 The blind test is the first game, not the product. The product is the room: a
 code read aloud, a QR code scanned, seats that survive a locked screen, and a
@@ -67,11 +71,12 @@ mechanism the whole catalogue of future games inherits.
   and the layout has to hold at every width from a phone to a television.
 - **The room is often dark.** Living-room lighting, evening, sometimes only the
   screen itself.
-- **The phone is read as much as it is pressed.** It is held one-handed, in the
-  dark, often at arm's length — and it carries the whole state of the game,
-  so what is drawn around the buzzer matters as much as the buzzer does. A
-  screen showing only a button is a screen that sends its player looking up at
-  the other one.
+- **The phone is read as much as it is pressed, and read in glances.** Held
+  one-handed, in the dark, at arm's length, between two answers. So what is
+  drawn around the buzzer matters — a screen showing only a button sends its
+  player looking up at a screen that may not be there — and *how much* of it
+  there is matters exactly as much, because a screen showing everything is read
+  by nobody.
 - **Party Wi-Fi is bad Wi-Fi.** Anything that blocks first paint costs a player
   the first round.
 - **The cover art is the only real image in the product,** and it arrives from
@@ -153,12 +158,14 @@ mechanism the whole catalogue of future games inherits.
 
 ## Product Principles
 
-1. **Both screens carry the whole picture, at their own density.** Neither is a
-   summary of the other: a player who never looks up still knows the score, the
-   round, the clock and what just happened. The phone can hold detail the big
-   screen cannot, because it is read at 40 cm by one person, and that is what it
-   is for. The only thing it is never sent is the answer while that answer can
-   still be typed — which is anti-cheat, and permanent.
+1. **The phone is enough on its own, and stays quiet doing it.** A player who
+   never sees the big screen still knows the score, the round, the clock and
+   what just happened — a floor, because that screen is often somebody else's.
+   It is not a licence to draw the console at 414 px: the phone is read at 40 cm
+   by one person in glances, so anything added to it has to earn its place
+   against the one thing the player is there to do. The only thing it is never
+   sent is the answer while that answer can still be typed — which is
+   anti-cheat, and permanent.
 2. **The big screen is read by a group, from an unknown distance.** It must
    carry one idea at a time, at a size that survives four metres, and still be
    coherent on a laptop.

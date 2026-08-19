@@ -16,15 +16,17 @@ called talking, and it is faster, funnier and needs no protocol.
 together from elsewhere: "People in the same room, at the same time, each on a
 screen of their own."
 
-Four things followed. **The first has since been overruled**, and the drop now
-rests on the other three:
+Four things followed. **The first was narrowed on 19 August 2026**, and most of
+the weight moved onto the other three:
 
-1. ~~**It contradicts the product's first principle.**~~ **Overruled, 19 August
-   2026.** It rested on "the phone is a buzzer, not a screen" and on success
-   being "the moment nobody is looking at their phone as a phone".
-   [`PRODUCT.md`](../../apps/game/PRODUCT.md) says neither any more: both screens
-   carry the whole picture, and a player reading their own phone is the intended
-   case rather than the failure. Nothing below depended on this.
+1. **It contradicts the product's first principle** — which used to read "the
+   phone is a buzzer, not a screen", and no longer does.
+   [`PRODUCT.md`](../../apps/game/PRODUCT.md) now says the phone carries what a
+   player needs to follow the game and stays quiet doing it, so a player reading
+   their own phone is the intended case rather than the failure. A chat is still
+   refused by that principle, but as a question of what earns its place on a
+   screen read in glances rather than as a flat contradiction — a weaker ground
+   than the one written here first. Nothing below depended on it.
 2. **It competes with the game for the one thing the game needs.** During a round
    a player is racing a clock; between rounds the room is looking at the reveal
    on the big screen. There is no moment in the loop where a chat is what the
