@@ -312,6 +312,25 @@ Three things follow from that ceiling, and each is a rule of its own:
   1 200px, so they start *below* it: giving up the width instead would cost a
   phone's headline a third of its measure.
 
+**The page is laid out under the housing, so it pays for its own edges.**
+`viewport-fit=cover` is what lets the field bleed into the corners, which is the
+whole of a full-bleed title card — and it is also what puts *content* under the
+sensor housing and the home indicator until something says otherwise. So
+`--layout-padding` comes per side as well, each one the `max()` of the padding
+and that edge's inset: `max()` rather than a sum, because portrait wants the
+padding and landscape wants the inset, and only the larger of the two is right
+at both. The two page mixins and the fixed menu read those and nothing else, so
+a component still knows one token. Two things it decided:
+
+- **The bottom reserves against the inset's static ceiling, not its live
+  value.** Android's bottom bar retracts on scroll and animates
+  `safe-area-inset-bottom` as it goes, so a page sized against it re-lays itself
+  out while somebody is reading it.
+- **A page-level padding that *replaces* the mixin's has to carry the inset
+  itself.** The three front doors start below the menu by setting their own
+  `padding-block-start`, which overrides rather than adds — left on the plain
+  padding, the menu moved down onto the headline that had not.
+
 **The lobby is two columns and two audiences.** The invitation — code, QR, join
 URL — is what the room is reading; the game picker, the roster and the setup are
 the host's own. The picker is on the stage rather than in the fold for exactly

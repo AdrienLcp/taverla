@@ -3,12 +3,22 @@
     // What the fixed menu covers in the top-right corner. Only the two screens
     // whose content starts at the very top have to keep clear of it; the rest
     // centre their column and never reach that corner.
+    //
+    // Built on the plain padding rather than the safe-area one, because this is
+    // set on a `> header` *inside* the page: the container has already paid the
+    // inset once, and the menu is anchored to that same edge, so the gap
+    // between the two is the padding at every inset.
     --menu-inset: calc(var(--layout-padding) + 116px)
 
     // The same corner measured downwards, for a screen that leads with display
     // type across the full column and so cannot sit beside the menu. Giving up
     // the width instead would cost a phone's headline a third of its measure.
-    --menu-block-inset: calc(var(--layout-padding) + var(--space-xl))
+    //
+    // This one *replaces* the page's own `padding-block-start` rather than
+    // adding to it, so it is the one that has to carry the top inset itself. On
+    // a Dynamic Island the plain padding put the menu's 59px of housing over a
+    // headline that had only moved 64px down.
+    --menu-block-inset: calc(var(--layout-padding-block-start) + var(--space-xl))
 
     display: flex
     flex: 1

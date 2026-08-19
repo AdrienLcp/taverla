@@ -413,6 +413,18 @@ one part.
 
 ### Fixes
 
+- `[Game]` **The page stops laying itself out under the notch.**
+  `viewport-fit=cover` was declared and nothing read `env(safe-area-inset-*)`, so
+  a phone drew the page to the full screen and paid nothing for it: on a Dynamic
+  Island the fixed menu — the only way to reach the three exits mid-round — sat
+  43px inside the status bar, in landscape a 59px column of content went under
+  the housing whichever way the phone was turned, and the bottom of the player's
+  screen rested on the home indicator, which eats the swipe rather than merely
+  overlapping it. `--layout-padding` has a per-side form now, each the `max()` of
+  the padding and that edge's inset, and the two page mixins and the menu are all
+  that read them. Nothing changes where the insets are nought, which is every
+  desktop and every phone without a cutout
+
 - `[Server]` **Changing the genre mid-game now changes the music.** Two chart
   sources compared equal whatever genres they held, so a host who moved a
   running room from rock to jazz kept getting rock until the pool ran dry — and

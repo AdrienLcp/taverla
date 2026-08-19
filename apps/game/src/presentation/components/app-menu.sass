@@ -5,12 +5,12 @@
   .app-menu
     align-items: center
     display: flex
-    inset-block-start: var(--layout-padding)
+    inset-block-start: var(--layout-padding-block-start)
     // Fixed to the viewport, but never further out than the field it belongs
     // to. Past `--stage-max-width` the host's surface stops widening, and a
     // menu left in the true corner of a 21:9 display sits hundreds of pixels
     // clear of everything it is chrome for.
-    inset-inline-end: max(var(--layout-padding), calc(50% - var(--stage-max-width) / 2 + var(--layout-padding)))
+    inset-inline-end: max(var(--layout-padding-inline-end), calc(50% - var(--stage-max-width) / 2 + var(--layout-padding-inline-end)))
     position: fixed
     z-index: 1
 

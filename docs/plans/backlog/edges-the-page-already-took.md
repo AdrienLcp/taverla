@@ -100,3 +100,44 @@ MDN. Of the six families, three are answered above and three are settled:
   floor. This variable is the only thing that answers it. Its support is
   unstated on both MDN and the spec, so it would be progressive enhancement
   behind `env(preferred-text-scale, 1)`, never an assumption.
+
+## Delivered — 19 August 2026
+
+`--layout-padding` gained four per-side forms in `_tokens.sass`, each the
+`max()` of the padding and that edge's inset, and only four call sites read
+them: the `screen` and `stage` mixins, which pay for every page in the app,
+and the menu's two insets. Everything else keeps reading one token, as prescribed.
+
+**The measurement caught one thing the arithmetic had not.** `--menu-block-inset`
+*replaces* a page's `padding-block-start` rather than adding to it — the three
+front doors that start below the menu — so the mixin's new top padding never
+reached them. Left alone, the menu would have moved down to 59px and the
+headline stayed at 64px, which is the original fault with four pixels of relief.
+It is built on `--layout-padding-block-start` now. `--menu-inset`, its
+horizontal twin, is deliberately *not*: it sits on a `> header` inside the page,
+where the container has already paid the inset once and the menu is anchored to
+that same edge, so the gap between the two is the padding at every inset.
+
+Verified by driving the app at 414×896 and 896×414 with the four tokens
+overridden to a Dynamic Island's numbers — 59 top, 34 bottom, 59 either side in
+landscape — because Chromium synthesises no insets and there is no Safari on
+this machine. Menu top 16.6 → 59, page bottom clearance 16.6 → 34, side padding
+16.6 → 59, and the 4px gap between the menu and the headline unchanged in all
+three. With the overrides removed every number returns to today's exactly, which
+is the half that had to hold: `max(clamp(16px, 4vmin, 56px), 0px)` is the same
+16.56px it always was.
+
+Two things are open, and neither is this session's:
+
+- **A notched phone still has not seen it.** The fault was arithmetic and the
+  fix was verified against simulated insets; both remain unconfirmed by a
+  device.
+- **The console's `100dvh` budgets do not know about the insets.**
+  `--outcome-budget` and the two board clamps in `host-console-page.sass`
+  subtract a header and a measured constant, not the stage's padding — so a
+  phone hosting a room over-estimates its height by up to the two insets. Left
+  alone on purpose: the constants were measured with the padding already
+  outside them, and `DESIGN.md` says the failure there is a scroll rather than
+  a collision. The fix, if a room ever asks, is to subtract the *excess* —
+  `calc(var(--layout-padding-block-start) - var(--layout-padding))` — never the
+  token itself, which would shrink the type on every desktop.

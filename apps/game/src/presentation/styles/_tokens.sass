@@ -83,6 +83,32 @@
 
     --layout-padding: clamp(16px, 4vmin, 56px)
 
+    // The same padding per side, because `viewport-fit=cover` in `index.html`
+    // lays the page out under the sensor housing, the rounded corners and the
+    // home indicator. `max()` of the two rather than a sum: in portrait the
+    // padding is what the composition wants and the inset is nothing, in
+    // landscape the inset is 59px on whichever side the housing is and the
+    // padding is 16px. Only the larger of the two is right at both.
+    //
+    // Every one falls back to `0px`. An `env()` a browser does not know, with
+    // no fallback, is invalid at computed-value time — the whole declaration
+    // goes, and the page loses its padding rather than keeping today's.
+    //
+    // `env()` names physical sides, so the two inline tokens read a
+    // left-to-right locale. Both of ours are; a right-to-left one swaps which
+    // inset each of them takes.
+    --layout-padding-block-start: max(var(--layout-padding), env(safe-area-inset-top, 0px))
+
+    // The bottom is the one side that moves. Android's bottom bar retracts on
+    // scroll and animates `safe-area-inset-bottom` as it goes, so a page that
+    // reserves space against the live value re-lays itself out while somebody
+    // is reading it. `safe-area-max-inset-bottom` is that value's static
+    // ceiling, and where it is not known the nested fallback is the live one.
+    --layout-padding-block-end: max(var(--layout-padding), env(safe-area-max-inset-bottom, env(safe-area-inset-bottom, 0px)))
+
+    --layout-padding-inline-start: max(var(--layout-padding), env(safe-area-inset-left, 0px))
+    --layout-padding-inline-end: max(var(--layout-padding), env(safe-area-inset-right, 0px))
+
     // The widest the host's field is allowed to get. Type here is sized in
     // `vmin`, so it stops growing with the *shorter* axis — past this, extra
     // width is void between two columns rather than a bigger title card, and on
