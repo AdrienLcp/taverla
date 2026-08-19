@@ -15,12 +15,18 @@ file rather than half-landing.
 
 ## Open
 
-Ordered by **what is wrong before what is missing**. One entry is left, it is
-the last fault, and it is waiting on a phone rather than on a session.
+Ordered by **what is wrong before what is missing**. Four entries: a fault the
+page gave itself, a capability the product is built on and does not have, the
+last playtest fault, which waits on a phone rather than on a session, and — last,
+because it is the only one where nothing is broken — the first entry that came
+from an idea rather than from a room.
 
 | Session | In one line | Cost | Starts with | Holds |
 |---|---|---|---|---|
+| [Edges the page already took](edges-the-page-already-took.md) | `viewport-fit=cover` is declared and nothing reads `env(safe-area-inset-*)`; the fixed menu lands 43 px inside the status bar | a session, mostly `_tokens.sass` | `apps/game/index.html:5` | the whole `env()` catalogue, settled |
+| [The screen nobody is touching](screen-nobody-is-touching.md) | No wake lock anywhere, on a product whose phone is *designed* not to be touched | a session; the lifecycle listener is new ground | `infrastructure/env.ts` | why the audio protects nothing, and the rule vibration must not break |
 | [The room is silent, unexplained](silent-room-unexplained.md) | **Half done.** The console names the refusal; why Android refuses is unread | waits on a phone | — | note 6 |
+| [The film a table shouts](the-film-a-table-shouts.md) | A fifth source drawn from **film composers**, not from the soundtrack charts, where the answer is the **film** — and `CATALOGUE_NOISE` strips the only place the film is written | a session; the source is an afternoon, the verdict is the rest | `packages/core/src/round/answer-matching.ts:13` | why the obvious playlists were refused, measured |
 
 **One diagnosis disagrees with the note that raised it** — read the entry before
 planning it:
@@ -69,13 +75,13 @@ the second is the half a session may throw away.
 
 ## Where this came from
 
-Two playtests, both traced into the code before being written down, so every
-entry is a diagnosis and not a wish.
+Two playtests, one audit and one idea, all four traced into the code before being
+written down, so every entry is a diagnosis and not a wish.
 
 - **14 August 2026**, Adrien and Marina, on an iPhone and a laptop — thirteen
   observations, which became the twelve delivered entries above.
 - **16 August 2026**, Adrien and a co-tester, on Android — eight notes, *note 1*
-  through *note 8*, which became the one entry still open,
+  through *note 8*, which became the one entry from that batch still open,
   [decades on the shelf](decades-on-the-shelf.md),
   [a name you give once](name-you-give-once.md),
   [a host's seat comes off](host-seat-comes-off.md),
@@ -83,6 +89,21 @@ entry is a diagnosis and not a wish.
   [the speed bonus nobody sees](speed-bonus-unseen.md),
   [the host may race](host-may-race.md) and
   [the board a phone never sees](board-a-phone-never-sees.md).
+- **19 August 2026**, a survey of five browser APIs against this codebase and
+  another — screen wake lock, vibration, `navigator.locks`, web share, and every
+  `env()` variable that exists. Three of the five were settled as *no* and are
+  recorded as settled inside the two entries, so nobody re-surveys them. The two
+  that landed here differ from everything above in one way worth stating: they
+  were **traced in the code but never seen in a room**. [Edges the page already
+  took](edges-the-page-already-took.md) is a fault by arithmetic on committed
+  tokens — a notched phone has not confirmed it. [The screen nobody is
+  touching](screen-nobody-is-touching.md) is nearer *what is missing* than *what
+  is wrong*, and sits above the fault below it only because that one is blocked.
+- **19 August 2026**, an idea rather than an observation — *"musiques de films
+  in the blind test, can we?"* — traced into the code and measured against
+  Deezer the same afternoon, which is what turned it into [the film a table
+  shouts](the-film-a-table-shouts.md) rather than a wish. It is the first entry
+  here that no room asked for, and the only one where nothing is broken.
 
 Three times now, a session's own design question turned out to have been
 answered before it was asked. It is the ratio [the plans'
