@@ -3,9 +3,9 @@ import { useEffect } from 'react'
 import { keepScreenAwake } from '@/infrastructure/env'
 
 /**
- * A phone here is held one-handed and looked at rarely, which is the exact
- * condition under which it locks its own screen: the product's best moment and
- * its worst failure have the same cause.
+ * A phone here carries the whole state of the game and is pressed a handful of
+ * times a round, and a screen lock counts presses rather than attention — so
+ * the screen a player is reading goes dark while they read it.
  *
  * Held for as long as a game is running rather than for the round in play — a
  * screen that sleeps during the lobby misses the countdown, which is the moment

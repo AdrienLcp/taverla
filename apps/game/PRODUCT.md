@@ -27,15 +27,23 @@ There are two distinct jobs:
 - **The host** sets the game up, starts each round, and judges answers. They are
   standing, holding nothing, and looking up at the room as often as at the
   screen.
-- **The players** wait, recognise a track, and hit a buzzer. They are looking at
-  the big screen or at each other, not at their own phone, and they touch it
-  with one thumb without looking down.
+- **The players** wait, recognise a track, and answer. Their phone is a second
+  screen rather than a remote control for the big one: they read it as much as
+  they press it, and it owes them everything the room knows.
 
 ## Product Purpose
 
 Turn a room full of phones into a party game with no setup, no install and no
-accounts. Success is the moment nobody is looking at their phone as a phone —
-they are looking at each other, and the phone is just a buzzer.
+accounts. Success is the moment the room is playing rather than administering —
+nobody is typing an address, nobody is asking what the score is, and nobody has
+to look up at the big screen to find out where they stand.
+
+**Both screens carry the whole picture.** The big screen is the shared one and
+the phone is the personal one, but neither is a summary of the other: a player
+who never looks up must still know the score, the round, the clock and what just
+happened. The one exception is anti-cheat, and it is permanent — a phone is
+never sent the answer while that answer can still be typed. Everything else the
+room knows, both screens say.
 
 The blind test is the first game, not the product. The product is the room: a
 code read aloud, a QR code scanned, seats that survive a locked screen, and a
@@ -59,8 +67,11 @@ mechanism the whole catalogue of future games inherits.
   and the layout has to hold at every width from a phone to a television.
 - **The room is often dark.** Living-room lighting, evening, sometimes only the
   screen itself.
-- **The phone is held one-handed and looked at rarely.** Size and position of
-  the buzzer matter more than anything drawn on it.
+- **The phone is read as much as it is pressed.** It is held one-handed, in the
+  dark, often at arm's length — and it carries the whole state of the game,
+  so what is drawn around the buzzer matters as much as the buzzer does. A
+  screen showing only a button is a screen that sends its player looking up at
+  the other one.
 - **Party Wi-Fi is bad Wi-Fi.** Anything that blocks first paint costs a player
   the first round.
 - **The cover art is the only real image in the product,** and it arrives from
@@ -142,8 +153,12 @@ mechanism the whole catalogue of future games inherits.
 
 ## Product Principles
 
-1. **The phone is a buzzer, not a screen.** Anything that asks a player to read
-   carefully is in the wrong place; it belongs on the big screen.
+1. **Both screens carry the whole picture, at their own density.** Neither is a
+   summary of the other: a player who never looks up still knows the score, the
+   round, the clock and what just happened. The phone can hold detail the big
+   screen cannot, because it is read at 40 cm by one person, and that is what it
+   is for. The only thing it is never sent is the answer while that answer can
+   still be typed — which is anti-cheat, and permanent.
 2. **The big screen is read by a group, from an unknown distance.** It must
    carry one idea at a time, at a size that survives four metres, and still be
    coherent on a laptop.

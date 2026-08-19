@@ -15,13 +15,15 @@ file rather than half-landing.
 
 ## Open
 
-Ordered by **what is wrong before what is missing**. Two entries: the last
-playtest fault, which waits on a phone rather than on a session, and — last,
-because it is the only one where nothing is broken — the first entry that
-came from an idea rather than from a room.
+Ordered by **what is wrong before what is missing**. Three entries: the one the
+product document now demands and the app does not do, the last playtest fault,
+which waits on a phone rather than on a session, and — last, because it is the
+only one where nothing is broken — the first entry that came from an idea
+rather than from a room.
 
 | Session | In one line | Cost | Starts with | Holds |
 |---|---|---|---|---|
+| [Everything the phone is already sent](everything-the-phone-is-already-sent.md) | `PRODUCT.md` now says both screens carry the whole picture; the phone draws a fraction of what it is handed | two sessions, and the file says where the seam is | `/impeccable`, then `player-round.tsx` | the per-phase delta, and the anti-cheat line nothing may cross |
 | [The room is silent, unexplained](silent-room-unexplained.md) | **Half done.** The console names the refusal; why Android refuses is unread | waits on a phone | — | note 6 |
 | [The film a table shouts](the-film-a-table-shouts.md) | A fifth source drawn from **film composers**, not from the soundtrack charts, where the answer is the **film** — and `CATALOGUE_NOISE` strips the only place the film is written | a session; the source is an afternoon, the verdict is the rest | `packages/core/src/round/answer-matching.ts:13` | why the obvious playlists were refused, measured |
 
