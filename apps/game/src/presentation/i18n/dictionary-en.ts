@@ -477,9 +477,6 @@ export const EN_DICTIONARY = defineTranslations({
     roomSize: '{count:number} at the table',
     seating: 'Taking your seat…',
     standing: {
-      behind: defineTranslation('{points:plural} behind {nickname}', {
-        plural: { points: { one: '{?} point', other: '{?} points' } }
-      }),
       /** The room's board, reduced to the two facts a screen held in a hand needs. */
       ofRoom: defineTranslation('{rank:plural} of {count:number}', {
         plural: {

@@ -1,4 +1,5 @@
 @use '../../presentation/styles/focus'
+@use '../../presentation/styles/layout'
 @use '../../presentation/styles/typography'
 
 @layer components
@@ -21,9 +22,43 @@
       // its min-content, and a nickname's is *zero* — `overflow: hidden` is what
       // buys the ellipsis — so the final board handed every player one letter
       // and a full stop.
+      .round-board,
       .scoreboard
         text-align: start
         width: 100%
+
+    // What the round was and what it paid this player: one half of the reveal,
+    // and one child, so the other half can sit beside it.
+    &.revealed .outcome
+      align-items: center
+      display: flex
+      flex-direction: column
+      gap: var(--space-m)
+      width: 100%
+
+    // Not every player is on a phone, and a laptop is the one screen here with
+    // width to spare and none of the height: the answer, the cover and the
+    // payout filled it on their own and left the board — the half a player who
+    // cannot see the room's screen came for — under the fold. The room's own
+    // screen splits this same moment in two for the same reason.
+    @media (width >= layout.$wide-screen)
+      &.revealed
+        align-items: center
+        column-gap: var(--space-xl)
+        display: grid
+        grid-template-columns: 1fr minmax(15rem, 0.8fr)
+
+    // The product's only real image, die-cut on the field the way the QR code
+    // is: a block edged in its own paper, no radius and no shadow. Well under
+    // the size the room's screen gives it — that panel sets it beside the
+    // answer and this is a column, where every pixel it takes is a pixel the
+    // board under the answer does not get.
+    .cover
+      background: var(--cut)
+      border: 4px solid var(--cut)
+      height: clamp(140px, 26vmin, 180px)
+      object-fit: cover
+      width: clamp(140px, 26vmin, 180px)
 
     // Bigger than the shared billboard step: this is the payoff, and on a phone
     // held at arm's length the shared size lands at twenty-eight pixels.
@@ -68,11 +103,15 @@
       flex-direction: column
       gap: var(--space-2xs)
 
+    // A step down from the size it held while it was the whole of what a phone
+    // was told: the board under it now says this number again, in the row that
+    // is this player's, so it stays the loudest thing on the screen without
+    // being the only thing on it.
     .you-scored
       @include typography.monument
       @include typography.numeric
 
-      font-size: clamp(4rem, 30vmin, 12rem)
+      font-size: clamp(3rem, 16vmin, 5.5rem)
 
     // Nowhere near the size of a gain, and muted rather than stamped: a round
     // that paid nothing is a result, not a warning, and the same ink the reveal
@@ -88,15 +127,6 @@
       @include typography.caption
 
       color: var(--ink-muted)
-
-    // The one row of the room's board worth carrying onto a phone, because it
-    // is the one that makes its owner look up: somebody in this room is that
-    // far ahead, and they are sitting right there.
-    .chasing
-      @include typography.caption
-
-      color: var(--ink-muted)
-      text-wrap: balance
 
     // A step under `.you-scored`, because the ordinal carries a suffix: "1er"
     // sets three glyphs where "+3" sets two, and the board has to follow it.

@@ -349,6 +349,14 @@ place the question had, each sized by dividing the screen rather than by the sum
 of its own type. Below it they stack and the page scrolls, which is what a phone
 does anyway.
 
+**The player's reveal splits at that same width, for the same reason one screen
+down.** Not every player is on a phone, and a laptop is the one screen here with
+width to spare and none of the height: the cover, the answer and the payout
+filled 800px on their own and left the round's board under the fold. The two
+halves are grouped **in the markup** rather than placed from the stylesheet,
+because a grid item told to span rows nobody declared resolves back to the first
+one — the poster mixin's trap, met a second time and answered the same way.
+
 Two things follow, and both fail *silently* rather than loudly:
 
 - **A size container needs a height imposed from outside.** A grid item under
@@ -424,18 +432,27 @@ and who it caught are one row.
   `max-width` so the longest one cannot swallow the payload in turn. The gap
   then goes in `em`: with the payload filling the row it is the only thing left
   holding the two apart.
-- **A phone gets a receipt, never the board.** The room's ranking is on the wall
-  and reading a list off a screen in a hand is what the table is not here to do —
-  so between two rounds a phone says what the round paid *it* and where that
-  leaves its owner, and nothing else. Two lines carry it: the payout, drawn
-  whether or not there was one, because a block that appears only for the
-  players who gained leaves everybody else inferring from an absence; and the
-  gap to the row above, by name, which is the one part of a board that makes
-  somebody look up rather than down. The place itself lives in the persistent
-  strip rather than in the reveal — *2nd of 6* costs the line the room's size was
-  already spending and is true at every phase, not only after one. Three asks
-  were declined before this one, and what they were right about was the
-  composition rather than the need.
+- **A phone gets the room's round as one list, never the console's two blocks.**
+  This rule used to read *a receipt, never the board*, and it rested on the
+  room's ranking being on the wall — which is often somebody else's phone. So
+  the reveal now carries what the round paid everybody and where it leaves them,
+  as `RoundBoard`: one row per player, ranked by the round's own outcome, with
+  what they said under their own name and what it paid beside it. The console
+  draws those as two blocks side by side because it is read across a room;
+  folding them into one list is what the same two facts cost at forty
+  centimetres. Three asks were declined before this one and every one of them
+  was right about the **composition** — what they refused was the room's board
+  printed under the answer, and that is still refused. The payout keeps a line
+  of its own above the list, drawn whether or not there was one, because a block
+  that appears only for the players who gained leaves everybody else inferring
+  from an absence — and it is a step smaller than it was, because the row under
+  it now says the same number. The place stays in the persistent strip: *2nd of
+  6* costs the line the room's size was already spending and is true at every
+  phase, not only after one. The gap to the player above went the other way and
+  is gone: the board says it by name, by points, and for everybody. What the
+  board will not do is draw itself over nothing — before the first point with
+  nobody having typed, every column of it is empty and a roster is not a
+  reveal.
 - **A board ranks only when there is something to rank.** Before the first
   point every player is first on nothing, and a lobby roster printing `1` and
   `0` beside every name says so out loud — while spending on it the width the

@@ -435,9 +435,6 @@ export const FR_DICTIONARY: Dictionary = {
     roomSize: '{count:number} à table',
     seating: 'On te trouve une place…',
     standing: {
-      behind: defineTranslation('à {points:plural} de {nickname}', {
-        plural: { points: { one: '{?} point', other: '{?} points' } }
-      }),
       ofRoom: defineTranslation('{rank:plural} sur {count:number}', {
         plural: {
           rank: {

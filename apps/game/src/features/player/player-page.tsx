@@ -218,6 +218,20 @@ const Lobby = ({
     <main className='player-page playing'>
       <header>
         <p className='room'>{translate('player.room', { code: roomCode })}</p>
+
+        {/* In the chrome rather than inside the round, because it is true at
+            every phase — and the phone that needs it is the one whose owner
+            cannot see the screen that has been carrying it all evening. */}
+        {view?.round != null && view.phase !== 'finished' && (
+          <p className='round-index'>
+            {view.settings.roundCount === null
+              ? translate('round.indexOpen', { index: view.round.index })
+              : translate('round.index', {
+                  index: view.round.index,
+                  total: view.settings.roundCount
+                })}
+          </p>
+        )}
       </header>
 
       {view === null ? (

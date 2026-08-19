@@ -34,6 +34,25 @@ one part.
 
 ### Features
 
+- `[Game]` **A phone now knows what the round did to the room, not only to
+  itself.** The big screen is often somebody else's — across the room, angled
+  away, or in the hand of a host who has taken a seat — and a player who could
+  not see it finished a round knowing whether *they* scored and nothing more.
+  The reveal carries the room's round as **one list**: one row per player,
+  ranked by where the round left them, with what they said under their own name
+  and what it paid beside it, your own row stamped. The room's screen draws
+  those as two blocks side by side because it is read across four metres;
+  folding them into one list is what the same two facts cost on a screen read at
+  forty centimetres, and it is why this is not the console at 414px. The cover
+  art lands with it, at the one moment in the loop when nobody is racing. The
+  round number and the round count join the chrome beside the room code, on
+  every phase. Nothing moved on the wire: every field was already in
+  `PlayerRoomView` and arriving on every snapshot, so there is no protocol
+  change and no version bump. Three things went the other way to pay for it —
+  the payout is a step smaller now that the row under it says the same number,
+  the line naming the player above is gone because the board says it by name for
+  everybody, and a board with nothing to say draws nothing at all
+
 - **The screen stays awake for as long as the game does.** A phone here is read
   far more often than it is pressed — and a screen lock counts presses rather
   than attention, so the screen a player was reading went dark while they read
@@ -755,6 +774,14 @@ one part.
   in turn
 
 ### Internal
+
+- `[Shared]` **`Standing.chasing` is gone**, with `player.standing.behind` in
+  both locales and the test that pinned its tie rule. It answered *who is one
+  row above you and by how much*, on a phone that was not allowed the board —
+  and the board now says it by name, by points and for everybody. What is left
+  of `standingOf` is the place and the size of the room, which is the pair the
+  persistent strip carries at every phase; its doc said the opposite and said it
+  as doctrine
 
 - **`not_implemented` is gone from the protocol.** It was the one code that
   existed for work that was not built yet, it stopped being sent four games ago,

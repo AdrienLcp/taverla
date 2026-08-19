@@ -75,30 +75,17 @@ describe('standingOf', () => {
     playerOn('Dan', 1)
   ]
 
-  // Chloe rather than Bob: they are level, and the one named is the row
-  // directly above on the board — which is the row the big screen is showing
-  // above this player's own.
-  it('[scoring] names the row above, and the gap to it', () => {
+  it('[scoring] answers a place and the size of the room', () => {
     expect(standingOf({ players: room, youId: 'dan' })).toEqual({
-      chasing: { nickname: 'Chloe', pointsBehind: 3 },
       rank: 4,
       roomSize: 4
     })
   })
 
-  // The point of the line is somebody to catch. A player level with you is not
-  // one, and printing a gap of nought would say the opposite of what it means.
-  it('[scoring] skips a tie and reaches the score above it', () => {
-    expect(standingOf({ players: room, youId: 'bob' })?.chasing).toEqual({
-      nickname: 'Alice',
-      pointsBehind: 3
-    })
-  })
-
-  it('[scoring] gives whoever leads nobody to chase', () => {
-    expect(standingOf({ players: room, youId: 'alice' })).toEqual({
-      chasing: null,
-      rank: 1,
+  // Level with Chloe, and the board ranks a tie as one place rather than two.
+  it('[scoring] gives a tie the place it shares', () => {
+    expect(standingOf({ players: room, youId: 'bob' })).toEqual({
+      rank: 2,
       roomSize: 4
     })
   })

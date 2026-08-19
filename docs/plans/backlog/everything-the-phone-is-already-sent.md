@@ -1,4 +1,4 @@
-## Everything the phone is already sent
+## Everything the phone is already sent — **A landed 19 August 2026; B open**
 
 **The big screen is often somebody else's.** It is across the room, angled away,
 or — when the host runs the room from a phone, and more so when that host has
@@ -25,11 +25,11 @@ session, and that is what makes it worth taking now rather than later.
 
 | Phase | On the phone today | Absent, and already sent |
 |---|---|---|
-| every | own nickname, own score, own rank, room size (`Scoreline`, `player-page.tsx:278-303`); room code as text | **the round number** — `round.index` and `settings.roundCount` are read in `host-console-page.tsx:266-275` and **nowhere** in the player tree |
+| every | own nickname, own score, own rank, room size (`Scoreline`, `player-page.tsx:278-303`); room code as text; ~~the round number~~ **drawn beside the code since A** | — |
 | `lobby` | game name, one scoring line (`UpNext`, `player-round.tsx:251-273`) | the roster: every nickname, every connection state, the head count. A phone cannot see who else is in the room it just joined |
 | `playing` | prompt, one form, an answered count, a progress bar when the game has a duration | the running scoreboard (`host-console-page.tsx:526`); the reflex heat's live tap count (`reflex-stage.tsx:66-68`) |
 | `buzzed` | the buzzer, disabled with a reason; who buzzed, by name | the floor clock, unless it was you (`player-round.tsx:406`). Everyone else watches a silence with no end in sight |
-| `revealed` | title and artist, or the answer; own award; a one-line gap to the player ahead | **every other player's answer and whether it was right**; **every other player's award**; the standings; the 250 px cover art (`coverUrl` is on the wire, `reveal-panel.tsx:48-59` draws it) |
+| `revealed` | title and artist, or the answer; own award; the cover; **the room's round as one board** — every player ranked, what each said, what it paid (`round-board.tsx`, since A). The gap to the player ahead was **removed**: the board says it by name, for everybody | — |
 | `finished` | own rank, full scoreboard | the winner headline |
 
 Two phases are already right and are worth reading before building the others:
@@ -69,14 +69,35 @@ arguments cut both ways:
 The session decides these with `/impeccable` and is expected to drop at least
 one. Dropping none is the sign the table was read as a to-do list.
 
+**A took the floor and the cover.** What it decided, so B does not re-open it:
+
+- The floor is **one list, not two blocks**. The answers and the standings are
+  the same people, so the phone folds them into one row per player — rank,
+  name, what the round paid, the new total, and what they said under their own
+  name. Two boards stacked is the console at 414px, which is the failure mode
+  the entry was written around.
+- **The receipt survives and shrank.** `+4` is still the loudest thing on the
+  screen, one clamp step down, because the row under it now says the same
+  number. The line naming the player above was **dropped** — the board says it
+  by name, by points and for everybody rather than for one.
+- **A board with nothing to say draws nothing.** Before the first point with
+  nobody having typed, every column is empty and what is left is a roster,
+  which is a lobby concern and B's.
+- **The reveal splits in two above `$wide-screen`**, because a laptop has the
+  width and not the height, and the board was landing under the fold. Same
+  answer the room's own reveal already reached, one screen down.
+
 ## The fields on the wire that nothing renders
 
-`round.index` · `settings.roundCount` · `round.revealedAnswers[]` (`said`,
-`isCorrect`) · `round.awards[]` for anyone but you · `players[].score` for
-anyone but you · `players[].isConnected` mid-game · `revealedTrack.coverUrl` ·
-`choices[].coverUrl` · `round.content.reflex.taps[]` live · `activeBuzz.expiresAt`
-for non-buzzers · `round.lockedOutPlayerIds` for others · every `settings.game.*`
-the room is playing under · `isHostConnected` outside a running round.
+What is left after A: `players[].isConnected` mid-game · `choices[].coverUrl` ·
+`round.content.reflex.taps[]` live · `activeBuzz.expiresAt` for non-buzzers ·
+`round.lockedOutPlayerIds` for others · every `settings.game.*` the room is
+playing under · `isHostConnected` outside a running round.
+
+A took the other seven — `round.index`, `settings.roundCount`,
+`round.revealedAnswers[]`, `round.awards[]` for anyone but you,
+`players[].score` for anyone but you and `revealedTrack.coverUrl` — and none of
+them cost a line of protocol, which is what the finding above promised.
 
 ## What does not move, and why
 
@@ -105,15 +126,16 @@ architecture is the deliverable, not the markup.
 
 ## This is two sessions, and here is the seam
 
-**A — the floor.** The round number in the chrome, and the reveal rebuilt: every
-player's answer with its verdict, every player's award beside it, the standings
-after the round, and the cover art. It is the larger half and by far the more
-valuable — today a player finishes a round knowing only whether they scored.
+**A — the floor. Landed 19 August 2026.** The round number in the chrome, and
+the reveal rebuilt: every player's answer with its verdict, every player's award
+beside it, the standings after the round, and the cover art. Verified in the
+browser at 414 px and 1280 px, both palettes, two players and a synthetic eight
+— nothing moved on the wire, exactly as this entry predicted.
 
 **B — the queue.** The lobby roster with connection state, the floor clock for
 everyone rather than the buzzer alone, the running scoreboard mid-round if it
 survives the argument above, the reflex heat's live tap count, and the host-gone
 signal outside a running round.
 
-Take A first. B is comfort, and some of it will not be built; A is the half
-where the phone currently cannot follow the game.
+B is comfort, and some of it will not be built. Take it as its own session,
+against a phone that can now follow a round on its own.

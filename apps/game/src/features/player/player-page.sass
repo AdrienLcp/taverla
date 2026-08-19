@@ -65,6 +65,18 @@
         min-height: 44px
         padding-inline-end: var(--menu-inset)
 
+        // Two ends of one line, the way the room's own screen carries the same
+        // pair: the code says which table this is, the number says how far into
+        // the evening it is. The code gives up the whole line it claims under a
+        // heading, because in a round there is no heading above it.
+        .room
+          flex-basis: auto
+
+        .round-index
+          @include typography.label
+
+          color: var(--ink-muted)
+
       // The clock belongs to the scoreline it hangs under, not to the round
       // below it — the page's own gap would leave it adrift between the two.
       > .round-progress

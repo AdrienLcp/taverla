@@ -14,8 +14,7 @@ import { isShelvedGame } from '@taverla/core/room/shelved-game'
 import { findBuzzBlocker } from '@taverla/core/round/buzz-eligibility'
 import {
   buildScoreboard,
-  hasAnybodyScored,
-  standingOf
+  hasAnybodyScored
 } from '@taverla/core/scoring/scoreboard'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
@@ -26,6 +25,7 @@ import {
 } from '@/features/player/answer-forms'
 import { LieForm, VoteBoard } from '@/features/player/lefake-forms'
 import { ReflexBuzzer } from '@/features/player/reflex-buzzer'
+import { RoundBoard } from '@/features/player/round-board'
 import {
   blindtestContent,
   lefakeContent,
@@ -119,9 +119,15 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
 
   if (view.phase === 'revealed' && round != null) {
     return (
-      <section className='player-round centred'>
-        <Revealed round={round} view={view} />
-        <YourRound round={round} view={view} />
+      <section className='player-round centred revealed'>
+        {/* Grouped here rather than placed in the stylesheet, because the wide
+            screen lays the two halves side by side and a grid item spanning
+            rows it never declared silently resolves back to the first one. */}
+        <div className='outcome'>
+          <Revealed round={round} view={view} />
+          <YourRound round={round} view={view} />
+        </div>
+        <RoundBoard round={round} view={view} />
       </section>
     )
   }
@@ -282,9 +288,10 @@ const UpNext = ({ view }: { view: PlayerRoomView }) => {
 }
 
 /**
- * What the round did to this player, which is the whole of what a screen in a
- * hand is for between two rounds: the room's board is on the wall, and reading
- * a list off a phone is what the table is not here to do.
+ * What the round did to this player — the moment, above the board that holds
+ * the room's version of the same thing. It is what the eye lands on first and
+ * the only number here somebody reads without looking for it, so it stays the
+ * loudest thing on the screen and says nothing the row below repeats.
  *
  * It renders whether or not they gained, because *nothing* is a result too —
  * a screen that only appears for the ones who scored leaves everybody else to
@@ -292,8 +299,9 @@ const UpNext = ({ view }: { view: PlayerRoomView }) => {
  * sized against that: a gain is the loudest thing on the screen, a miss is a
  * quiet line, and the ink says which without a colour saying *wrong*.
  *
- * Somebody to catch is the one part of the board worth carrying here, and the
- * one that makes a player look up rather than down.
+ * Who there is to catch used to be carried here as a line of prose. `RoundBoard`
+ * says it by name, by points and for everybody rather than for the one player
+ * above, so the line is gone rather than printed twice.
  */
 const YourRound = ({
   round,
@@ -304,7 +312,6 @@ const YourRound = ({
 }) => {
   const translate = useTranslate()
   const award = round.awards.find((entry) => entry.playerId === view.youId)
-  const standing = standingOf({ players: view.players, youId: view.youId })
 
   return (
     <div className='your-round'>
@@ -321,14 +328,6 @@ const YourRound = ({
         </>
       ) : (
         <p className='you-missed'>{translate('round.missed')}</p>
-      )}
-      {standing?.chasing != null && (
-        <p className='chasing'>
-          {translate('player.standing.behind', {
-            nickname: standing.chasing.nickname,
-            points: standing.chasing.pointsBehind
-          })}
-        </p>
       )}
     </div>
   )
@@ -433,10 +432,15 @@ const Buzzer = ({
 
 /**
  * What the round turned out to be, on the phone — and `null` for a game whose
- * question the room owns, because a charade has no answer to print and the
- * receipt under this is the whole of what the phone can add. It used to print
- * the room's full board there, which is the one composition every ask for
- * standings on a phone has been declined over.
+ * question the room owns, because a charade has no answer to print. What that
+ * game's reveal is instead lands under this: the scoreline, which is what a
+ * reveal *is* where the room owns the question.
+ *
+ * The cover is the product's only real image and this is the one moment in the
+ * loop when nobody is racing, so it goes where the eye lands first. It is drawn
+ * only when there is one, where the room's screen keeps an empty block: that
+ * panel is two columns and needs the column held, and this is a stack where a
+ * reserved box for an image that will never arrive is a hole in the screen.
  */
 const Revealed = ({
   round,
@@ -464,6 +468,15 @@ const Revealed = ({
   if (track !== null) {
     return (
       <>
+        {track.coverUrl !== null && (
+          <img
+            alt=''
+            className='cover'
+            height={250}
+            src={track.coverUrl}
+            width={250}
+          />
+        )}
         <p className='framing'>{translate('blindtest.reveal.title')}</p>
         <p className='revealed-title'>{whatTheRoomNames(track)}</p>
         <p className='revealed-artist'>{track.artist}</p>

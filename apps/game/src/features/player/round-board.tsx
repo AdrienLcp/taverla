@@ -1,0 +1,101 @@
+import type React from 'react'
+
+import type { PlayerRoomView, RoundView } from '@taverla/protocol/room'
+
+import {
+  buildScoreboard,
+  hasAnybodyScored
+} from '@taverla/core/scoring/scoreboard'
+
+import { useTranslate } from '@/presentation/i18n/i18n-provider'
+
+import './round-board.sass'
+
+type RoundBoardProps = {
+  /** The round as it revealed: what everyone said, and what it paid them. */
+  round: RoundView
+  /** The whole room — a board listing only the players who answered is not a
+   *  standing, and where a round leaves everybody is half of what it is for. */
+  view: PlayerRoomView
+}
+
+/**
+ * The room's round on a phone: one row per player, ranked by where the round
+ * left them, carrying what they said and what it paid. The console draws those
+ * as two blocks side by side — the answers beside the reveal, the standings
+ * beside that — because it is read across four metres by a group. This is the
+ * same two things folded into the one list a screen read at forty centimetres
+ * can hold, and it exists because the big screen is often somebody else's.
+ *
+ * Your own row is stamped rather than repeated: the receipt above is the
+ * moment, this is the room, and the two say the same number once each.
+ */
+export const RoundBoard: React.FC<RoundBoardProps> = ({ round, view }) => {
+  const translate = useTranslate()
+  const isRanked = hasAnybodyScored(view.players)
+  // The same rule the room's screen follows: a round nobody was paid for spends
+  // nothing on a column of blanks, and one somebody was paid for keeps the box
+  // on every row, or two answers end on two different right edges.
+  const isPaying = round.awards.some((award) => award.points > 0)
+
+  // Nobody has scored yet and nobody typed, so every column this board is made
+  // of is empty and what is left is a roster — which is the one thing a reveal
+  // is not for. The round's whole truth is then the answer above it and the
+  // line under that.
+  if (!isRanked && round.revealedAnswers.length === 0) {
+    return null
+  }
+
+  return (
+    <ol
+      className={['round-board', isRanked && 'ranked', isPaying && 'paying']
+        .filter(Boolean)
+        .join(' ')}
+    >
+      {buildScoreboard(view.players).map(({ player, rank }) => {
+        const answer = round.revealedAnswers.find(
+          (revealed) => revealed.playerId === player.id
+        )
+        const award = round.awards.find((entry) => entry.playerId === player.id)
+
+        return (
+          <li
+            className={[
+              player.id === view.youId && 'you',
+              answer?.isCorrect === true && 'right'
+            ]
+              .filter(Boolean)
+              .join(' ')}
+            key={player.id}
+          >
+            {isRanked && <span className='rank'>{rank}</span>}
+            <span className='nickname'>
+              {player.nickname}
+              {player.id === view.youId && (
+                <span className='visually-hidden'>
+                  {` (${translate('player.you')})`}
+                </span>
+              )}
+            </span>
+            {isPaying && (
+              <span className='points'>
+                {award === undefined || award.points === 0
+                  ? null
+                  : award.speedBonus > 0
+                    ? translate('round.awardWithSpeed', {
+                        answer: award.points - award.speedBonus,
+                        speed: award.speedBonus
+                      })
+                    : translate('round.award', { points: award.points })}
+              </span>
+            )}
+            {isRanked && <span className='score'>{player.score}</span>}
+            {answer !== undefined && (
+              <span className='words'>{answer.said}</span>
+            )}
+          </li>
+        )
+      })}
+    </ol>
+  )
+}

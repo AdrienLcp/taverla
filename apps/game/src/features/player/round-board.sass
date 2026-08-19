@@ -1,0 +1,100 @@
+@use '../../presentation/styles/typography'
+
+@layer components
+  // Hairline-ruled rows straight on the field, the way every board in this
+  // product is drawn: no cards, no fills, the field is already the surface.
+  .round-board
+    display: flex
+    flex-direction: column
+    list-style: none
+    width: 100%
+
+    li
+      align-items: baseline
+      border-top: 2px solid var(--rule)
+      // Wider than the page's ordinary gap because the two columns it holds
+      // apart are both numbers: `3 +1` beside a total of `4` reads as one
+      // number at twelve pixels, and this row is meant to be read down.
+      column-gap: var(--space-m)
+      display: grid
+      grid-template-columns: 1fr
+      padding: var(--space-xs) 0
+      row-gap: var(--space-2xs)
+
+      &:last-child
+        border-bottom: 2px solid var(--rule)
+
+    &.ranked li
+      grid-template-columns: 2ch 1fr auto
+
+    &.ranked.paying li
+      grid-template-columns: 2ch 1fr auto auto
+
+    .rank
+      @include typography.numeric
+
+      color: var(--ink-muted)
+
+    // Twenty unbreakable characters somebody chose, in a column sized by what
+    // is left: a name is atomic where an answer is not, so this is the one that
+    // gets cut last and the sentence under it is the one that gets cut first.
+    .nickname
+      @include typography.title
+
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
+
+    // What the round paid, held to one width whatever it carries — the widest
+    // form is four figures (`3 +2`), and a row that paid nothing keeps the box
+    // empty rather than dropping it, or the rows around it end on two different
+    // right edges.
+    .points
+      @include typography.numeric
+
+      min-width: 4.5ch
+      text-align: end
+
+    // Where that leaves them, which is the column the whole board is ordered
+    // by: it is read *down* rather than across, so it is the one thing on the
+    // row set heavier than the name beside it.
+    .score
+      @include typography.numeric
+
+      font-size: 1.5rem
+      font-stretch: 125%
+      font-weight: 900
+
+    // What they typed or picked, under their own name rather than beside it.
+    // The first line of a row is read down as three columns of numbers, and a
+    // sentence of somebody else's length dropped into it is what stops that
+    // being true.
+    .words
+      @include typography.caption
+
+      color: var(--ink-muted)
+      grid-column: 1 / -1
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
+
+    &.ranked .words
+      grid-column: 2 / -1
+
+    // Right and wrong told apart by the ink, the way the room's own screen
+    // tells them apart: the answer is on the same screen, so nothing here has
+    // to say *wrong* to be read as one.
+    .right .words
+      color: var(--ink)
+
+    // The same stamp the final board gives this phone its own row — the ink
+    // itself rather than a shade of it, which is what makes it survive all six
+    // fields, and it bleeds its padding to the left so the name stays flush
+    // with the column the other rows align on.
+    .you .nickname
+      background: var(--ink)
+      color: var(--field)
+      margin-inline-start: calc(var(--space-2xs) * -1)
+      max-width: 100%
+      padding-inline: var(--space-2xs)
+      width: fit-content
