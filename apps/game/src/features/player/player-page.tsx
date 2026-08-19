@@ -31,6 +31,7 @@ import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { protocolErrorKey } from '@/presentation/i18n/translation'
 import { useReportRoomActions } from '@/presentation/room-actions/room-actions-provider'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
+import { useScreenAwake } from '@/presentation/use-screen-awake'
 
 import { PlayerRound } from './player-round'
 
@@ -203,6 +204,7 @@ const Lobby = ({
 
   useReportConnection({ clock, status })
   usePhaseField(view?.phase ?? null)
+  useScreenAwake(status !== 'refused' && view?.phase !== 'finished')
 
   if (status === 'refused') {
     return (

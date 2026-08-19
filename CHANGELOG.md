@@ -19,6 +19,20 @@ one part.
 
 ### Features
 
+- **The screen stays awake for as long as the game does.** A phone here is held
+  one-handed and looked at rarely — which is exactly the condition under
+  which it locks its own screen, so the product's best moment and its worst
+  failure had the same cause. The lock is taken when a seat is, not when a round
+  starts: a screen that sleeps through the lobby is one that misses the
+  countdown. It is taken again every time the tab comes back, because a browser
+  drops it on the way out and never returns it on its own. Refused or revoked
+  — an old iOS, a LAN address over plain HTTP, a phone low on battery — is an
+  ordinary outcome and says nothing on screen
+- `[Game]` The console holds one too, for a reason of its own: it is the room's
+  only speaker, and a laptop that sleeps takes the music with it. **Playing
+  audio protects nothing** — the browser's media wake lock is built from a
+  video track, so the clip a console is playing never kept its own screen lit
+
 - **Pick the years instead of the genre.** *Années 70* through *Années 2020*,
   one press each and as many as the table wants — the 80s and the 90s together
   is one strip, not a choice between them. Picking none is every decade, which

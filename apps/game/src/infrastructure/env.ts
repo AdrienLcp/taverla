@@ -18,6 +18,73 @@ export const buzzFeedback = (): void => {
 }
 
 /**
+ * Holds the screen awake until the returned function is called, taking the
+ * sentinel again every time the document comes back: a user agent releases it
+ * on the way out and never returns it on its own.
+ *
+ * **Playing audio protects nothing.** Chromium's media wake lock is built from
+ * a video track, so the clip a console is playing lets its own screen sleep —
+ * and it is the room's only speaker.
+ *
+ * Absent before Safari 16.4 and outside a secure context, the same LAN-over-
+ * HTTP trap `copyToClipboard` names below, and a phone low on battery may
+ * refuse or revoke it at any moment. None of the three is worth a word on
+ * screen: the screen sleeps the way it always did, and the next time the tab
+ * comes back this tries again.
+ */
+export const keepScreenAwake = (): (() => void) => {
+  let sentinel: WakeLockSentinel | null = null
+  let isTaking = false
+  let isWanted = true
+
+  const isHeld = (): boolean => sentinel !== null && !sentinel.released
+
+  const take = async (): Promise<void> => {
+    if (!isWanted || isTaking || isHeld() || document.hidden) {
+      return
+    }
+
+    isTaking = true
+
+    try {
+      const taken = await navigator.wakeLock?.request('screen')
+
+      if (taken === undefined) {
+        return
+      }
+
+      if (isWanted) {
+        sentinel = taken
+      } else {
+        void taken.release()
+      }
+    } catch {
+      // Refused or revoked, both of which the spec allows at any time.
+    } finally {
+      isTaking = false
+    }
+  }
+
+  const takeOnReturn = (): void => {
+    void take()
+  }
+
+  document.addEventListener('visibilitychange', takeOnReturn)
+  void take()
+
+  return () => {
+    isWanted = false
+    document.removeEventListener('visibilitychange', takeOnReturn)
+
+    if (isHeld()) {
+      void sentinel?.release()
+    }
+
+    sentinel = null
+  }
+}
+
+/**
  * `navigator.clipboard` exists only in a secure context, and the host is served
  * over plain HTTP on a LAN address as often as from the deployed origin — the
  * same trap `crypto.randomUUID` sprang on the session id. `execCommand` is

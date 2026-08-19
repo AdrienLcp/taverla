@@ -28,7 +28,7 @@ writing `taverla:volume` there, and navigating afterwards. An init script that
 *clears* storage on the way is worse than none: it wipes the key under test on
 every real navigation and on every second tab of the same context.
 
-Five more that cost time to learn:
+Nine more that cost time to learn:
 
 - **Two players in one room need a hand.** `taverla:seats` is a single
   `localStorage` array shared by every tab of the context, keyed by room *and
@@ -64,6 +64,13 @@ Five more that cost time to learn:
   buzzer, a reflex tap or anything else react-aria arms on the press rather than
   the release. Dispatch `PointerEvent('pointerdown')` and `('pointerup')` with
   `pointerId`, `pointerType` and `isPrimary` set.
+
+- **A background tab is not a hidden document.** Selecting another tab with
+  `browser_tabs` leaves the first page reporting `visibilityState: 'visible'`,
+  so nothing that depends on the document going away can be driven that way —
+  a wake lock the browser would have released stays held, and the return path
+  never runs. Reach that branch by hand instead: drop whatever the user agent
+  would have dropped, then `document.dispatchEvent(new Event('visibilitychange'))`.
 
 ## Reaching a state that closes before a tool call returns
 

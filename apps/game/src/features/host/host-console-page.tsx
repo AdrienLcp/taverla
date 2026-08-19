@@ -68,6 +68,7 @@ import {
 } from '@/presentation/i18n/translation'
 import { useReportRoomActions } from '@/presentation/room-actions/room-actions-provider'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
+import { useScreenAwake } from '@/presentation/use-screen-awake'
 
 import { FinalBoard } from './final-board'
 import { HostActions } from './host-actions'
@@ -119,6 +120,7 @@ const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
 
   useReportConnection({ clock, status })
   usePhaseField(view?.phase ?? null)
+  useScreenAwake(status !== 'refused' && view?.phase !== 'finished')
   const { canPlay, refusal, unlock } = useRoundAudio({ clock, view, volume })
   const isLive = status === 'open'
 

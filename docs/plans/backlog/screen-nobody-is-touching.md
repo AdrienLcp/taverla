@@ -109,3 +109,65 @@ flip while an iPhone player feels nothing is a measurable advantage, and *the
 server decides anything that decides a winner* is the principle it would break.
 Confirmation after the fact only — which is what the three existing call sites
 already are.
+
+## What landed
+
+`keepScreenAwake()` in `infrastructure/env.ts`, `useScreenAwake(isWanted)` in
+`presentation/use-screen-awake.ts`, and one line beside `usePhaseField` on each
+of the two surfaces — `Lobby` in `player-page.tsx` and `HostConsole` in
+`host-console-page.tsx`. Four files, no new dependency, no protocol change.
+
+**The whole capability went to the boundary, not just the request.** The plan
+put `navigator.wakeLock` in `env.ts` and the lifecycle listener in the hook;
+that split leaks the sentinel's shape into `presentation/` for no gain, and
+`abstraction-boundaries.md` asks for a capability rather than a wrapper.
+`keepScreenAwake()` therefore owns the sentinel, the `visibilitychange` that
+re-takes it and every way it can fail, and returns the release function — which
+is exactly the shape `useEffect` wants, so the hook is four lines and the
+`WakeLockSentinel` type appears in one file.
+
+**The MDN trap was avoided without an intent flag on the sentinel.**
+`sentinel.released` is the property that answers *do I still hold one*, so the
+guard is `sentinel !== null && !sentinel.released` and there is no stale
+sentinel to null out. An `isTaking` flag is still needed: two returns in the
+same tick would otherwise both pass the guard before either request resolved,
+and the second sentinel would leak.
+
+**Both surfaces got the same rule**, where the plan gave the console a longer
+one — held while it is running a room at all. The console's stated reason is the
+audio, and a final board plays none, so the two rules only differed where the
+reason had already run out. What ends it on either screen is
+`status !== 'refused' && view?.phase !== 'finished'`.
+
+**`host.endGame` is not the end of the room.** `replay` (`socket-handler.ts`)
+takes a `finished` room back to `lobby`, so a phone that let its screen sleep on
+the final board is re-locked the moment the table plays again, at the cost of
+one unlock. That is the right way round: holding a screen awake in a pocket for
+the rest of an evening is worse than one press.
+
+## What the browser proved, and what it could not
+
+Driven muted at `taverla:volume` `'0'`, with `navigator.wakeLock.request`
+wrapped to count sentinels:
+
+- the home page takes **nothing** — zero requests outside a room;
+- the console takes one when the room opens, the phone takes one **in the
+  lobby**;
+- dropping the sentinel by hand and firing `visibilitychange` takes a fresh one,
+  and three more returns while holding one take nothing — the acquire,
+  re-acquire and don't-double-take paths;
+- closing the room releases everything on the console (3 taken, 3 released) and,
+  the case that matters, **on the phone that never navigated**: it sits on
+  `/play/:code` showing *L'aubergiste a levé la table* with 2 taken and 2
+  released. An implementation resting on unmount alone would hold that screen
+  awake for as long as the tab lived.
+
+Two things it could not be asked, and neither is worth a session:
+
+- **Playwright does not background a tab.** Selecting another one leaves the
+  first reporting `visibilityState: 'visible'`, so the user agent never released
+  anything on its own and the return had to be simulated. Recorded in
+  [`docs/browser-driving.md`](../../browser-driving.md).
+- **No device has confirmed a screen physically staying lit.** That is a
+  device's business, as this file said before the work started; what is provable
+  from script is the sentinel, and the sentinel is proved.
