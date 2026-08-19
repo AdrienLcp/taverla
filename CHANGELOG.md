@@ -274,6 +274,14 @@ one part.
 
 ### Improvements
 
+- `[Game]` **A console that cannot make a sound now names the setting, not the
+  gesture.** *The browser turned it down. Try again.* was the one instruction
+  that cannot work against the thing most likely to be saying no: a per-origin
+  sound permission answers every press identically for the rest of the evening.
+  The press behind it is always a real gesture — both call sites are synchronous
+  inside `onPress` — so a refusal there is a setting. All three refusals now end
+  on the same way out, because a screen that cannot be fixed where it stands
+  should be told once what to do instead of three times what went wrong
 - `[Server]` A seat that comes back keeps the name it already holds, whatever its
   `hello` carries. The reconnect was the old way to rename, so leaving it there
   would have let a Wi-Fi blink quietly undo a rename nobody asked to undo

@@ -1,4 +1,4 @@
-## 13 · The room is silent and the console cannot say why — **half done, 16 August 2026**
+## 13 · The room is silent and the console cannot say why — **half done, 16 August 2026; narrowed to one cause, 19 August 2026**
 
 > *Note 6 — "quand on lance l'hôte sur téléphone et qu'on fait « jouer aussi
 > sous le nom de », on a « le son ne sort pas d'ici ». Mais du coup il sort d'où ?
@@ -108,6 +108,54 @@ playtest is for.
 - The refusal is a **stamped `--danger` block**, not tinted text: it sits on the
   countdown's chrome yellow as often as on the playing teal, and DESIGN.md
   already measured red text there at 4.0:1.
+
+## What the second pass found — **19 August 2026**
+
+Three causes were open. Two are now closed without a phone, and the message was
+pointing away from the third.
+
+- **The decode question is answered: the silence is fine.** `decodeAudioData`
+  accepts the data URI — one channel, eight samples resampled to 48 kHz, 1 ms —
+  and `canPlayType('audio/wav; codecs="1"')` answers `probably`. That is
+  evidence about a phone in a way a desktop pass usually is not: **Chromium
+  decodes PCM WAV in its own process on every platform**, and reaches the
+  device's MediaCodec only for compressed formats. So there is no Android
+  decoder to fail here, and the alternative this entry left open — blessing a
+  real in-DOM `<audio>` — buys nothing it was wanted for. Left undone
+  deliberately.
+- **What a desktop browser cannot answer, stated so nobody re-runs it.** The
+  Playwright Chromium starts with `--autoplay-policy=no-user-gesture-required`,
+  so `play()` resolves there whatever a phone would have decided. Every refusal
+  on this screen is verified by replacing `HTMLMediaElement.prototype.play`, and
+  that is the only way it can be.
+- **One candidate is left, and it is a setting rather than an accident.** The
+  gesture is real, the resource decodes — so a `NotAllowedError` on that phone
+  is most likely the site's own **sound permission**: per-origin, invisible, and
+  identical on every press for the rest of the evening. *Le navigateur a
+  refusé. Réessaie.* was the one instruction that cannot work against it, which
+  is why a console could be pressed all evening.
+- **So the copy changed rather than the code.** `blocked` names the permission
+  and the way out, `broken` keeps the retry and gains the same way out, and
+  `unsupported` completes its ellipsis — all three end on *tiens la table depuis
+  un autre écran*, so a screen that cannot be fixed where it stands is told once
+  what to do instead of three times what went wrong. Verified at 414 px and
+  1920 px, both locales switched live with a refusal already on screen, light
+  and dark: two lines on a phone, one on a television, and the stamped block
+  reads on the chrome yellow it lands on half the time.
+
+### The one reading that closes this
+
+Open the room on the Android phone from note 6, press *Lancer le son*, and read
+the line under the button. It is now the whole diagnosis:
+
+| The line says | What it means | What follows |
+|---|---|---|
+| *Le navigateur a refusé le son…* | the site's sound permission, or a policy no gesture satisfies | the fix is in the phone, not in this repository — and the message now says so |
+| *Cet écran ne sait pas lire l'extrait.* | the decode measured above is wrong for that engine | bless an element with a source it does read; the in-DOM `<audio>` alternative comes back with it |
+| *Ça a cassé de notre côté.* | a `DOMException` name nobody predicted | capture the name, then give it its own answer in `clipRefusalFor` |
+
+**Nothing else here is worth changing before that line has been read**, and the
+entry stays open for exactly that reason.
 
 ---
 

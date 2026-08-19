@@ -37,12 +37,24 @@ export const EN_DICTIONARY = defineTranslations({
        * What the last press got. Without these the offer above repeats itself
        * for the whole evening and nothing on the screen ever says that every
        * press has already failed.
+       *
+       * `blocked` names the site's sound permission rather than saying "try
+       * again", because the press behind it is always a real gesture — both
+       * `unlock()` call sites are synchronous inside `onPress` — so a
+       * `NotAllowedError` here is a setting rather than a mistimed tap, and
+       * pressing again answers it identically for the rest of the evening.
+       *
+       * All three end on the same way out, so a console that cannot be fixed
+       * where it stands is told once what to do instead of three times what
+       * went wrong.
        */
       refused: {
-        blocked: 'The browser turned it down. Try again.',
-        broken: 'It broke on our side. Try again.',
+        blocked:
+          'The browser refused the sound. Allow it for this site, or run the room from another screen.',
+        broken:
+          'It broke on our side. Try again, or run the room from another screen.',
         unsupported:
-          'This screen cannot play the clip. Run the room from another.'
+          'This screen cannot play the clip. Run the room from another screen.'
       },
       silent: 'No sound is coming from here.',
       start: 'Start the music'

@@ -22,7 +22,7 @@ fault, which waits on a phone rather than on a session.
 | Session | In one line | Cost | Starts with | Holds |
 |---|---|---|---|---|
 | [Everything the phone is already sent](everything-the-phone-is-already-sent.md) | `PRODUCT.md` now says both screens carry the whole picture; the phone draws a fraction of what it is handed | two sessions, and the file says where the seam is | `/impeccable`, then `player-round.tsx` | the per-phase delta, and the anti-cheat line nothing may cross |
-| [The room is silent, unexplained](silent-room-unexplained.md) | **Half done.** The console names the refusal; why Android refuses is unread | waits on a phone | — | note 6 |
+| [The room is silent, unexplained](silent-room-unexplained.md) | **Half done.** Two of the three causes are ruled out and the console names the third; one reading on the Android phone closes it | waits on a phone | — | note 6, and what each of the three lines means |
 
 **One diagnosis disagrees with the note that raised it** — read the entry before
 planning it:

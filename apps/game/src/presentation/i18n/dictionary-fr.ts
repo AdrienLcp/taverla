@@ -26,10 +26,12 @@ export const FR_DICTIONARY: Dictionary = {
     },
     audio: {
       refused: {
-        blocked: 'Le navigateur a refusé. Réessaie.',
-        broken: 'Ça a cassé de notre côté. Réessaie.',
+        blocked:
+          'Le navigateur a refusé le son. Autorise-le pour ce site, ou tiens la table depuis un autre écran.',
+        broken:
+          'Ça a cassé de notre côté. Réessaie, ou tiens la table depuis un autre écran.',
         unsupported:
-          'Cet écran ne sait pas lire l’extrait. Tiens la table depuis un autre.'
+          'Cet écran ne sait pas lire l’extrait. Tiens la table depuis un autre écran.'
       },
       silent: 'Le son ne sort pas d’ici.',
       start: 'Lancer le son'
