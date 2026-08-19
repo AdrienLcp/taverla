@@ -2,6 +2,8 @@ import type React from 'react'
 
 import type { PublicPlayer, RoundView } from '@taverla/protocol/room'
 
+import { cueOf, whatTheRoomNames } from '@taverla/core/blindtest/typed-answer'
+
 import {
   blindtestContent,
   lefakeContent,
@@ -62,11 +64,12 @@ export const RevealPanel: React.FC<RevealPanelProps> = ({ players, round }) => {
           <p className='framing'>{translate('blindtest.reveal.title')}</p>
           <p
             className='title'
-            style={{ '--answer-length': track.title.length }}
+            style={{ '--answer-length': whatTheRoomNames(track).length }}
           >
-            {track.title}
+            {whatTheRoomNames(track)}
           </p>
           <p className='artist'>{track.artist}</p>
+          {cueOf(track) !== null && <p className='note'>{cueOf(track)}</p>}
 
           <Outcome players={players} round={round} />
         </div>

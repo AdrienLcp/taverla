@@ -9,6 +9,7 @@ import type {
   RoundView
 } from '@taverla/protocol/room'
 
+import { cueOf, whatTheRoomNames } from '@taverla/core/blindtest/typed-answer'
 import { isShelvedGame } from '@taverla/core/room/shelved-game'
 import { findBuzzBlocker } from '@taverla/core/round/buzz-eligibility'
 import {
@@ -219,6 +220,12 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
         <section className='player-round'>
           <AskedQuestion prompt={prompt} />
           <TypedAnswer
+            // The phone is never sent the track, so the settings are the only
+            // place it can read what the round is asking for.
+            asksForAFilm={
+              view.settings.game?.kind === 'blindtest' &&
+              view.settings.game.source.kind === 'film'
+            }
             key={round.id}
             onAnswer={answerWithRound}
             round={round}
@@ -264,6 +271,8 @@ const UpNext = ({ view }: { view: PlayerRoomView }) => {
         {translate(
           scoringKey({
             answerMode: view.settings.mode.kind,
+            asksForAFilm:
+              game.kind === 'blindtest' && game.source.kind === 'film',
             game: game.kind
           })
         )}
@@ -456,8 +465,9 @@ const Revealed = ({
     return (
       <>
         <p className='framing'>{translate('blindtest.reveal.title')}</p>
-        <p className='revealed-title'>{track.title}</p>
+        <p className='revealed-title'>{whatTheRoomNames(track)}</p>
         <p className='revealed-artist'>{track.artist}</p>
+        {cueOf(track) !== null && <p className='note'>{cueOf(track)}</p>}
       </>
     )
   }

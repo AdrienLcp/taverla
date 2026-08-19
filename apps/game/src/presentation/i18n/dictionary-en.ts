@@ -19,8 +19,12 @@ export const EN_DICTIONARY = defineTranslations({
   blindtest: {
     answer: {
       anyOrder: 'The title, the artist, or both — as many goes as you like.',
+      anyOrderFilm:
+        'The film, the composer, or both — as many goes as you like.',
       artistFound: 'Artist ✓',
       bothFound: 'You have both. Sit back.',
+      composerFound: 'Composer ✓',
+      filmFound: 'Film ✓',
       titleFound: 'Title ✓'
     },
     /**
@@ -58,6 +62,8 @@ export const EN_DICTIONARY = defineTranslations({
       label: 'How well known',
       mixed: 'Deep cuts too',
       obscure: 'For the experts',
+      pinnedByFilms:
+        'Film scores set their own level — nothing here is a chart single.',
       wellKnown: 'Crowd-pleasers'
     },
     genre: {
@@ -93,11 +99,22 @@ export const EN_DICTIONARY = defineTranslations({
       typed:
         'Everyone types, over the same clip. Title and artist score a point each and both together score three, and the earlier you get it the more the clock adds — up to double.'
     },
+    scoringFilm: {
+      buzzer:
+        'First to buzz answers out loud. The innkeeper judges the film and the composer, a point each — a wrong answer sits you out for the rest of the round.',
+      typed:
+        'Everyone types, over the same clip. Film and composer score a point each and both together score three, and the earlier you get it the more the clock adds — up to double.'
+    },
     source: {
       chart: 'Top charts',
       decade: 'A decade',
+      film: 'Film scores',
+      filmHint:
+        'What a composer wrote for a film or a series — not the songs on its soundtrack.',
       label: 'Where the tracks come from',
       noneInDecade: 'Nothing playable in those years. Try another decade.',
+      noneInFilms:
+        'Nothing playable came back from the composers. Try another source.',
       noneInPlaylist: 'Nothing playable in that playlist. Check the id.',
       noneInSearch: 'Nothing well-known enough matched. Try another search.',
       playlist: 'A Deezer playlist',
@@ -114,6 +131,9 @@ export const EN_DICTIONARY = defineTranslations({
     verdict: {
       artistOnly: 'Artist only',
       both: 'Title + artist',
+      bothFilm: 'Film + composer',
+      composerOnly: 'Composer only',
+      filmOnly: 'Film only',
       miss: 'Wrong',
       titleOnly: 'Title only'
     }

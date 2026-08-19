@@ -75,6 +75,17 @@ export const fetchPlaylistTracks = async ({
     : Result.success(response.data.tracks)
 }
 
+/** No query at all: the arm carries no choice, and it pins its own floor. */
+export const fetchFilmTracks = async (): Promise<
+  Result<CatalogueTrack[], ApiError>
+> => {
+  const response = await request('/api/tracks/films', trackListResponseSchema)
+
+  return response.status === 'failure'
+    ? response
+    : Result.success(response.data.tracks)
+}
+
 export const fetchDecadeTracks = async ({
   decades,
   difficulty

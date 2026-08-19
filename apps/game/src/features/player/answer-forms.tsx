@@ -6,6 +6,7 @@ import type { PlayerId } from '@taverla/protocol/identifiers'
 import type { RoundView } from '@taverla/protocol/room'
 import type { Verdict } from '@taverla/protocol/scoring'
 
+import { whatTheRoomNames } from '@taverla/core/blindtest/typed-answer'
 import {
   isFullyBanked,
   isMiss,
@@ -54,7 +55,7 @@ const candidatesIn = (round: RoundView): Candidate[] => {
       return content.choices.map((choice) => ({
         key: choice.id,
         subtitle: choice.artist,
-        title: choice.title
+        title: whatTheRoomNames(choice)
       }))
     // None of the three serves candidates to pick from here: two have no
     // content at all, and Le Fake's board is written by the room and voted on
@@ -132,6 +133,12 @@ export const ChoiceAnswer: React.FC<ChoiceAnswerProps> = ({
 
 type TypedAnswerProps = AnswerFormProps & {
   /**
+   * Whether this round's two halves are a film and its composer rather than a
+   * title and its artist. Read off the room's settings, never off the track:
+   * the phone is not sent the track while the answer can still be typed.
+   */
+  asksForAFilm: boolean
+  /**
    * What the server has banked for this player, and `null` before their first
    * guess. Two halves in the blind test, one claim everywhere else — and the
    * field closes once it holds everything the round had for them.
@@ -146,6 +153,7 @@ type TypedAnswerProps = AnswerFormProps & {
  * whole and the server decides what it was worth.
  */
 export const TypedAnswer: React.FC<TypedAnswerProps> = ({
+  asksForAFilm,
   onAnswer,
   round,
   verdict
@@ -164,7 +172,7 @@ export const TypedAnswer: React.FC<TypedAnswerProps> = ({
   return (
     <section className='answer-form typed'>
       {/* Above the field, because it is the context for the next guess. */}
-      <GuessFeedback verdict={verdict} />
+      <GuessFeedback asksForAFilm={asksForAFilm} verdict={verdict} />
       <Form
         onSubmit={(event) => {
           event.preventDefault()
@@ -183,7 +191,11 @@ export const TypedAnswer: React.FC<TypedAnswerProps> = ({
           // when the round does and never over a countdown nobody can answer.
           autoFocus
           description={translate(
-            judgedInHalves ? 'blindtest.answer.anyOrder' : 'round.answer.retry'
+            judgedInHalves
+              ? asksForAFilm
+                ? 'blindtest.answer.anyOrderFilm'
+                : 'blindtest.answer.anyOrder'
+              : 'round.answer.retry'
           )}
           enterKeyHint='send'
           isDisabled={isDone}
@@ -220,18 +232,34 @@ export const TypedAnswer: React.FC<TypedAnswerProps> = ({
  * button down under a thumb already aiming at them, and a live region that
  * arrives already holding its text is a change no screen reader watched happen.
  */
-const GuessFeedback = ({ verdict }: { verdict: Verdict | null }) => {
+const GuessFeedback = ({
+  asksForAFilm,
+  verdict
+}: {
+  asksForAFilm: boolean
+  verdict: Verdict | null
+}) => {
   const translate = useTranslate()
   const banked = bankedHalves(verdict)
 
   return (
     <p className='banked' role='status'>
       {banked?.titleCorrect === true && (
-        <span className='half'>{translate('blindtest.answer.titleFound')}</span>
+        <span className='half'>
+          {translate(
+            asksForAFilm
+              ? 'blindtest.answer.filmFound'
+              : 'blindtest.answer.titleFound'
+          )}
+        </span>
       )}
       {banked?.artistCorrect === true && (
         <span className='half'>
-          {translate('blindtest.answer.artistFound')}
+          {translate(
+            asksForAFilm
+              ? 'blindtest.answer.composerFound'
+              : 'blindtest.answer.artistFound'
+          )}
         </span>
       )}
       {verdict !== null && isMiss(verdict) && (

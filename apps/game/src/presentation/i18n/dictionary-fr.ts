@@ -16,8 +16,12 @@ export const FR_DICTIONARY: Dictionary = {
     answer: {
       anyOrder:
         'Le titre, l’artiste, ou les deux — autant d’essais que tu veux.',
+      anyOrderFilm:
+        'Le film, le compositeur, ou les deux — autant d’essais que tu veux.',
       artistFound: 'Artiste ✓',
       bothFound: 'Tu as les deux. Tranquille.',
+      composerFound: 'Compositeur ✓',
+      filmFound: 'Film ✓',
       titleFound: 'Titre ✓'
     },
     audio: {
@@ -45,6 +49,8 @@ export const FR_DICTIONARY: Dictionary = {
       label: 'À quel point c’est connu',
       mixed: 'Un peu pointu',
       obscure: 'Pour les experts',
+      pinnedByFilms:
+        'Les musiques de films fixent leur propre niveau — rien ici n’est un tube du top.',
       wellKnown: 'Grand public'
     },
     genre: {
@@ -80,12 +86,23 @@ export const FR_DICTIONARY: Dictionary = {
       typed:
         'Tout le monde tape, sur le même extrait. Titre et artiste rapportent 1 point chacun, les deux ensemble 3, et plus tu trouves tôt, plus la montre ajoute — jusqu’au double.'
     },
+    scoringFilm: {
+      buzzer:
+        'Le premier qui buzze répond à voix haute. L’aubergiste juge le film et le compositeur, 1 point chacun — une mauvaise réponse te met hors-jeu pour le reste de la tournée.',
+      typed:
+        'Tout le monde tape, sur le même extrait. Film et compositeur rapportent 1 point chacun, les deux ensemble 3, et plus tu trouves tôt, plus la montre ajoute — jusqu’au double.'
+    },
     source: {
       chart: 'Le top du moment',
       decade: 'Une décennie',
+      film: 'Musiques de films',
+      filmHint:
+        'Ce qu’un compositeur a écrit pour un film ou une série — pas les chansons de la bande originale.',
       label: 'D’où viennent les titres',
       noneInDecade:
         'Rien de jouable dans ces années-là. Essaie une autre décennie.',
+      noneInFilms:
+        'Rien de jouable n’est revenu des compositeurs. Essaie une autre source.',
       noneInPlaylist:
         'Rien de jouable dans cette playlist. Vérifie l’identifiant.',
       noneInSearch:
@@ -104,6 +121,9 @@ export const FR_DICTIONARY: Dictionary = {
     verdict: {
       artistOnly: 'Artiste seulement',
       both: 'Titre + artiste',
+      bothFilm: 'Film + compositeur',
+      composerOnly: 'Compositeur seulement',
+      filmOnly: 'Film seulement',
       miss: 'Raté',
       titleOnly: 'Titre seulement'
     }

@@ -231,3 +231,120 @@ describe('fetchTracksFor', () => {
     })
   })
 })
+
+/**
+ * `Hans Zimmer` and the rank are spelled out rather than read from the table
+ * under test: the point of the arm is that those two facts are what let a track
+ * in, and a fixture computed the same way as the code cannot disagree with it.
+ */
+const scoreCue = ({
+  album,
+  artist = 'Hans Zimmer',
+  rank = 400_000,
+  title = 'Cornfield Chase'
+}: {
+  album: string
+  artist?: string
+  rank?: number
+  title?: string
+}) => ({
+  album: { cover_medium: null, title: album },
+  artist: { name: artist },
+  id: `${artist}-${title}`,
+  preview: 'https://example.test/preview.mp3',
+  rank,
+  title
+})
+
+const filmPoolOf = async (tracks: unknown[]) => {
+  catalogueHolding(tracks)
+
+  const found = await fetchTracksFor({
+    difficulty: 'wellKnown',
+    source: { kind: 'film' }
+  })
+
+  return found.status === 'success' ? found.data : []
+}
+
+describe('the film source', () => {
+  it('[film] asks a handful of composers rather than the whole table', async () => {
+    const requested: string[] = []
+
+    vi.stubGlobal('fetch', async (url: string) => {
+      requested.push(url.replace(/^https?:\/\/[^/]+/, ''))
+
+      return new Response(JSON.stringify({ data: [] }), {
+        headers: { 'content-type': 'application/json' },
+        status: 200
+      })
+    })
+
+    await fetchTracksFor({ difficulty: 'mixed', source: { kind: 'film' } })
+
+    expect(requested).toHaveLength(8)
+    expect(new Set(requested).size).toBe(8)
+
+    for (const path of requested) {
+      expect(path).toMatch(/^\/artist\/\d+\/top\?limit=\d+$/u)
+    }
+  })
+
+  it('[film] hands the round the film, keeping the cue beside it', async () => {
+    const pool = await filmPoolOf([
+      scoreCue({ album: 'Interstellar (Original Motion Picture Soundtrack)' })
+    ])
+
+    expect(pool).toEqual([
+      {
+        artist: 'Hans Zimmer',
+        coverUrl: null,
+        film: 'Interstellar',
+        id: 'Hans Zimmer-Cornfield Chase',
+        title: 'Cornfield Chase'
+      }
+    ])
+  })
+
+  // The two halves of the room's own definition: a piece a film composer wrote
+  // for the film. A song on a soundtrack is neither, however famous it is.
+  it('[film] refuses a track no composer is credited on', async () => {
+    const pool = await filmPoolOf([
+      scoreCue({
+        album: 'Titanic (Original Motion Picture Soundtrack)',
+        artist: 'Céline Dion',
+        rank: 900_000,
+        title: 'My Heart Will Go On'
+      })
+    ])
+
+    expect(pool).toEqual([])
+  })
+
+  it('[film] refuses a cue whose album never names a film', async () => {
+    const pool = await filmPoolOf([
+      scoreCue({ album: 'The Hans Zimmer Collection, Vol. 2' })
+    ])
+
+    expect(pool).toEqual([])
+  })
+
+  it('[film] pins its own floor over whatever the room asked for', async () => {
+    // 220k passes here and would fail every difficulty above `obscure`: Deezer
+    // ranks the recording, and a score cue carries almost none of a single's.
+    const pool = await filmPoolOf([
+      scoreCue({
+        album: 'Gladiator - Music From The Motion Picture',
+        rank: 220_000,
+        title: 'Now We Are Free'
+      }),
+      scoreCue({
+        album: 'Dune (Original Motion Picture Soundtrack)',
+        rank: 90_000,
+        title: 'Paul’s Dream'
+      })
+    ])
+
+    expect(pool.map((track) => track.film)).toEqual(['Gladiator'])
+  })
+})

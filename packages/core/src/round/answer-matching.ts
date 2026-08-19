@@ -180,7 +180,7 @@ export const answerAppearsIn = ({
   return false
 }
 
-const withoutCatalogueNoise = (answer: string): string =>
+export const withoutCatalogueNoise = (answer: string): string =>
   answer.replace(CATALOGUE_NOISE, '')
 
 /**

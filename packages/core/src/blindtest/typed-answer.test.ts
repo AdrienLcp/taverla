@@ -1,11 +1,47 @@
 import { describe, expect, it } from 'vitest'
 
 import { isFullyBanked, pointsForSimultaneousAnswer } from '../scoring/verdict'
-import { gradeGuess, NOTHING_BANKED, withGuessBanked } from './typed-answer'
+import {
+  cueOf,
+  gradeGuess,
+  NOTHING_BANKED,
+  withGuessBanked
+} from './typed-answer'
 
-const TRACK = { artist: 'Daft Punk', title: 'Harder, Better, Faster, Stronger' }
+const TRACK = {
+  artist: 'Daft Punk',
+  film: null,
+  title: 'Harder, Better, Faster, Stronger'
+}
+
+const SCORE_CUE = {
+  artist: 'Hans Zimmer',
+  film: 'Interstellar',
+  title: 'Cornfield Chase'
+}
 
 describe('gradeGuess', () => {
+  // Nobody at the table has ever heard the words `Cornfield Chase`, and
+  // everybody shouts *Interstellar*. Where the catalogue named a film, the film
+  // is what the half is measured against — the cue is not an answer.
+  it('[film] measures the half against the film, never the cue', () => {
+    expect(gradeGuess({ guess: 'interstellar', track: SCORE_CUE })).toEqual({
+      artistCorrect: false,
+      kind: 'halves',
+      titleCorrect: true
+    })
+
+    expect(gradeGuess({ guess: 'cornfield chase', track: SCORE_CUE })).toEqual({
+      artistCorrect: false,
+      kind: 'halves',
+      titleCorrect: false
+    })
+
+    expect(
+      gradeGuess({ guess: 'interstellar hans zimmer', track: SCORE_CUE })
+    ).toEqual({ artistCorrect: true, kind: 'halves', titleCorrect: true })
+  })
+
   it('[typed] banks whichever half the guess is, without being told which', () => {
     expect(gradeGuess({ guess: 'daft punk', track: TRACK })).toEqual({
       artistCorrect: true,
@@ -88,5 +124,29 @@ describe('withGuessBanked', () => {
     expect(
       pointsForSimultaneousAnswer({ mode: 'typed', verdict: acrossTwo })
     ).toBe(3)
+  })
+})
+
+describe('cueOf', () => {
+  it('[film] drops the film the catalogue wrote into the cue', () => {
+    expect(
+      cueOf({
+        artist: 'Alan Silvestri',
+        film: 'Forrest Gump',
+        title: 'They’re Sending Me To Vietnam (From "Forrest Gump" Score)'
+      })
+    ).toBe('They’re Sending Me To Vietnam')
+  })
+
+  it('[film] says nothing where the cue is the film again', () => {
+    expect(
+      cueOf({ artist: 'Éric Serra', film: 'Subway', title: 'Subway' })
+    ).toBeNull()
+  })
+
+  it('[film] says nothing on a track that is not from a film', () => {
+    expect(
+      cueOf({ artist: 'Daft Punk', film: null, title: 'One More Time' })
+    ).toBeNull()
   })
 })

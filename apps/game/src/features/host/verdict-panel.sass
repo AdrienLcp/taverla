@@ -39,6 +39,15 @@
         margin-top: var(--space-2xs)
         opacity: 0.7
 
+      // The cue, for a host judging a name the clip itself never says. Told
+      // apart from the artist by size alone: the ink is already as far from the
+      // paper as this surface takes it.
+      .note
+        @include typography.caption
+
+        margin-top: var(--space-2xs)
+        opacity: 0.7
+
     .choices
       display: grid
       gap: var(--space-s)

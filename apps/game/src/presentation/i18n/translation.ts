@@ -71,20 +71,28 @@ export const answerModeLabelKey = (
  */
 export const scoringKey = ({
   answerMode,
+  asksForAFilm,
   game
 }: {
   answerMode: AnswerMode
+  /** The blind test's two halves are a film and its composer on one source out of five. */
+  asksForAFilm: boolean
   game: GameKind
 }): BuiltKey<
   | 'buzzer.scoring'
   | 'lefake.scoring'
   | 'reflex.scoring'
   | `blindtest.scoring.${AnswerMode}`
+  | `blindtest.scoringFilm.${Exclude<AnswerMode, 'choice'>}`
   | `quiz.scoring.${AnswerMode}`
 > => {
   switch (game) {
     case 'blindtest':
-      return `blindtest.scoring.${answerMode}`
+      // Choice mode names neither half — four candidates and one is right —
+      // so it has one sentence whatever the round is asking for.
+      return asksForAFilm && answerMode !== 'choice'
+        ? `blindtest.scoringFilm.${answerMode}`
+        : `blindtest.scoring.${answerMode}`
     case 'buzzer':
       return 'buzzer.scoring'
     case 'lefake':

@@ -129,23 +129,75 @@ The new ground, and where the session actually goes:
   showing film, composer and cue, and the scoreboard reading two halves without
   the word *title* on this source.
 
-### Open questions the session must settle
+### What landed — 19 August 2026
 
-1. Which half sits beside the film — above, composer recommended.
-2. **How many composers, and which.** 24 gave 749 tracks; the table is where a
-   room's taste lives, and a French table wants Cosma and Sarde beside Williams.
-3. **One film can flood a pool.** *The Odyssey* took 7 of the top 20 by rank,
-   because a current release inflates its composer's top. A pool of 100 dilutes
-   it; a cap per film is the fallback if a room notices.
-4. What the second half is called in the protocol, once `titleCorrect` means
-   *film* on one source out of five. Decided while writing it.
+Delivered. `TrackSource` gains `{ kind: 'film' }`, `PROTOCOL_VERSION` goes to 13,
+and `TrackIdentity` gains `film`. The four open questions, answered:
 
-### How to tell it is done
+1. **The composer sits beside the film**, as recommended — and it cost nothing,
+   because the same filter that enforces the definition makes the composer *be*
+   `track.artist`. A track enters the pool only when the catalogue credits it to
+   a composer on the table, so `artistCorrect` kept its exact meaning and only
+   the title half moved. That filter costs 9 % of what the source could hold and
+   it is the definition being enforced, not a leak: it is what drops *My Heart
+   Will Go On* under Céline Dion and *Suis-moi* under Camille, and with them the
+   40 films whose only cue is a song.
+2. **49 composers**, measured rather than curated: 59 were probed, and a name
+   stays if at least six of its tracks clear the floor, name a film and are
+   credited to it. That is what keeps Bernard Herrmann, Henry Mancini and Elmer
+   Bernstein off the table — their tops are compilations, which `filmNamedBy`
+   refuses — and it is why Cosma, Sarde and Legrand sit beside Williams and
+   Zimmer. Eight of the 49 are drawn per pool fill, freshly each time, so an
+   evening reaches the whole table where a fixed subset would run out.
+3. **No cap per film**, as the entry deferred. It surfaced in the *preview*
+   rather than in a round — one film is a dozen cues, so the list showed
+   `Les Choses De La Vie` five times and collided two React keys. The list is
+   distinct now and the count beside it is still the pool's, because a repeat is
+   a thinner preview and never a thinner pool.
+4. **The protocol kept `titleCorrect`.** What each half *is* is a property of
+   the track, not of the verdict, and renaming the wire contract to fix a word
+   on one screen would have been paying the whole protocol for a label. The
+   screens say *film* and *compositeur*; the schema still says `titleCorrect`,
+   and says why in a JSDoc.
 
-- A host picks *Musiques de films*, the round plays *Concerning Hobbits*, a
-  player types `le seigneur des anneaux` and banks a half.
-- No round on this source ever asks for a film that was not named.
-- The reveal shows the film, the composer and the cue; the scoreboard reads two
-  halves and neither is called *title*.
-- Switching source mid-game empties the pool, as `track-pool.test.ts` already
-  holds for the other two list-shaped arms.
+Two things the entry got wrong, both by measurement:
+
+- **The floor is 200 000, not 150 000.** Read band by band: at 150k the bottom
+  of the range is a documentary and a Disney park restaurant, at 250k the
+  heritage layer goes with it — *Casablanca*, *Docteur Jivago*, *La Strada* all
+  fall out. 200k holds 1 155 tracks over 455 films and keeps them.
+- **`CATALOGUE_NOISE` was never touched.** The entry read it as the fault —
+  *the regex that removes `(Radio Edit)` removes the film* — and the fix turned
+  out to be upstream of it: stop asking for the title. The regex is *used* now,
+  to strip the film out of the cue for display, so a reveal reading *Forrest
+  Gump* does not print `They're Sending Me To Vietnam (From "Forrest Gump"
+  Score)` under it.
+
+**The measurement**, for whoever revisits the table: 59 composers, top 100 each,
+19 August 2026. 2 949 tracks with a preview, 2 182 naming a film, 2 041 of those
+credited to a composer, 1 155 above the floor across 455 films.
+
+### What the browser pass caught, and nothing else would have
+
+Three faults, none of which a green build says anything about:
+
+- **The difficulty strip lied for a whole round.** It was keyed off the room's
+  source, and the picker commits nothing until a round opens — so a host who
+  chose the composers was told the control still worked until the next launch.
+  It reads the **draft** now.
+- **The host was shown the cue to judge.** The verdict panel printed
+  `track.title` beside buttons reading *Film seulement*, so the one screen that
+  has to decide whether a film was named was the one not showing it.
+- **The preview repeated itself**, above.
+
+### How to tell it is done — all five hold
+
+- A host picks *Musiques de films*, a player types `le seigneur des anneaux` and
+  banks a half. Verified in a browser: `FILM ✓` and `COMPOSITEUR ✓` both stamp.
+- No round asks for a film that was not named — `filmNamedBy` returning `null`
+  is the admission price.
+- The reveal shows the film, the composer and the cue, on the console and on the
+  phone.
+- The scoreboard reads two halves and neither is called *title* — the stamps,
+  the verdict buttons and the scoring sentence all say *film* and *compositeur*.
+- Switching source empties the pool, held by `track-pool.test.ts`.

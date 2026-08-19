@@ -91,6 +91,7 @@ describe('encodeChecked', () => {
         track: {
           artist: 'Daft Punk',
           coverUrl: null,
+          film: null,
           id: '3135556',
           previewUrl: 'https://cdnt-preview.dzcdn.net/leak.mp3',
           title: 'Harder, Better, Faster, Stronger'
@@ -116,8 +117,14 @@ describe('encodeChecked', () => {
   // carries the index, and the strip is what keeps it off the wire.
   it('[anti-cheat] never tells a player which choice is the right one', () => {
     const choices = [
-      { artist: 'Air', coverUrl: null, id: '1', title: 'Sexy Boy' },
-      { artist: 'Justice', coverUrl: null, id: '2', title: 'Genesis' }
+      { artist: 'Air', coverUrl: null, film: null, id: '1', title: 'Sexy Boy' },
+      {
+        artist: 'Justice',
+        coverUrl: null,
+        film: null,
+        id: '2',
+        title: 'Genesis'
+      }
     ]
 
     // Through a variable, exactly as the server would: the excess property

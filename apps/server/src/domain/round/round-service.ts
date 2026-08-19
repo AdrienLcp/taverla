@@ -16,6 +16,7 @@ import {
   gradeGuess,
   NOTHING_BANKED,
   type TypedAttempt,
+  whatTheRoomNames,
   withGuessBanked
 } from '@taverla/core/blindtest/typed-answer'
 import { Result } from '@taverla/core/helpers/result'
@@ -972,7 +973,7 @@ const grade = ({
       }
 
       return {
-        said: `${picked.title} — ${picked.artist}`,
+        said: `${whatTheRoomNames(picked)} — ${picked.artist}`,
         verdict: choiceVerdict(
           attempt.choiceIndex === content.correctChoiceIndex
         )

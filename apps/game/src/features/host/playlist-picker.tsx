@@ -25,6 +25,7 @@ type SourceKind = TrackSource['kind']
 const KIND_LABELS: Record<SourceKind, PlainTranslationKey> = {
   chart: 'blindtest.source.chart',
   decade: 'blindtest.source.decade',
+  film: 'blindtest.source.film',
   playlist: 'blindtest.source.playlist',
   search: 'blindtest.source.search'
 }
@@ -77,7 +78,11 @@ const asDecade = (value: string | number): TrackDecade | undefined =>
 
 const PREVIEWED_TITLES = 5
 
-/** What the four source kinds need, all at once, so switching kind keeps what was typed. */
+/**
+ * What the source kinds that hold a choice need, all at once, so switching kind
+ * keeps what was typed. The composers hold none, which is why they are a kind
+ * with no field here.
+ */
 type Draft = {
   decades: TrackDecade[]
   genreIds: GenreId[]
@@ -115,6 +120,8 @@ const sourceFromDraft = ({
       return { genreIds, kind: 'chart' }
     case 'decade':
       return { decades, kind: 'decade' }
+    case 'film':
+      return { kind: 'film' }
     case 'playlist':
       return playlistId.trim().length === 0
         ? null
@@ -178,13 +185,24 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
     void previewSource({ decades, kind: 'decade' })
   }
 
+  // The composers answer for themselves the same way a decade does, and with
+  // nothing left to press afterwards they have to: the arm carries no control,
+  // so choosing it is the only moment there is to ask on.
+  const chooseKind = (kind: SourceKind): void => {
+    revise({ kind })
+
+    if (kind === 'film') {
+      void previewSource({ kind: 'film' })
+    }
+  }
+
   return (
     <section className='playlist-picker'>
       <SegmentedControl
         label={translate('blindtest.source.label')}
         onChange={(next) => {
           if (isSourceKind(next)) {
-            revise({ kind: next })
+            chooseKind(next)
           }
         }}
         options={Object.entries(KIND_LABELS).map(([value, key]) => ({
@@ -236,6 +254,10 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
             <p className='hint'>{translate('blindtest.decade.none')}</p>
           )}
         </div>
+      )}
+
+      {draft.kind === 'film' && (
+        <p className='hint'>{translate('blindtest.source.filmHint')}</p>
       )}
 
       {(draft.kind === 'playlist' || draft.kind === 'search') && (
@@ -291,7 +313,7 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
         <div className='found'>
           <p className='ready'>
             {translate('blindtest.source.ready', {
-              count: preview.titles.length
+              count: preview.count
             })}
           </p>
           <ul className='preview'>

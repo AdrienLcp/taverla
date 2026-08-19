@@ -3,6 +3,7 @@ import type React from 'react'
 import type { ActiveBuzz, HostRoundContent } from '@taverla/protocol/room'
 import type { Verdict } from '@taverla/protocol/scoring'
 
+import { cueOf, whatTheRoomNames } from '@taverla/core/blindtest/typed-answer'
 import { verdictKindFor } from '@taverla/core/scoring/verdict'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
@@ -14,6 +15,11 @@ import type { PlainTranslationKey } from '@/presentation/i18n/translation'
 import './verdict-panel.sass'
 
 type VerdictChoice = {
+  /**
+   * What this outcome is called where the halves are a film and its composer,
+   * and `null` for the two that name neither half.
+   */
+  filmKey: PlainTranslationKey | null
   key: PlainTranslationKey
   tone: 'win' | 'half' | 'miss'
   verdict: Verdict
@@ -26,21 +32,25 @@ type VerdictChoice = {
  */
 const HALVES_CHOICES: readonly VerdictChoice[] = [
   {
+    filmKey: 'blindtest.verdict.bothFilm',
     key: 'blindtest.verdict.both',
     tone: 'win',
     verdict: { artistCorrect: true, kind: 'halves', titleCorrect: true }
   },
   {
+    filmKey: 'blindtest.verdict.filmOnly',
     key: 'blindtest.verdict.titleOnly',
     tone: 'half',
     verdict: { artistCorrect: false, kind: 'halves', titleCorrect: true }
   },
   {
+    filmKey: 'blindtest.verdict.composerOnly',
     key: 'blindtest.verdict.artistOnly',
     tone: 'half',
     verdict: { artistCorrect: true, kind: 'halves', titleCorrect: false }
   },
   {
+    filmKey: null,
     key: 'blindtest.verdict.miss',
     tone: 'miss',
     verdict: { artistCorrect: false, kind: 'halves', titleCorrect: false }
@@ -49,11 +59,13 @@ const HALVES_CHOICES: readonly VerdictChoice[] = [
 
 const SINGLE_CHOICES: readonly VerdictChoice[] = [
   {
+    filmKey: null,
     key: 'host.verdict.right',
     tone: 'win',
     verdict: { isCorrect: true, kind: 'single' }
   },
   {
+    filmKey: null,
     key: 'host.verdict.wrong',
     tone: 'miss',
     verdict: { isCorrect: false, kind: 'single' }
@@ -84,6 +96,8 @@ export const VerdictPanel: React.FC<VerdictPanelProps> = ({
   const translate = useTranslate()
   const choices =
     verdictKindFor(content.kind) === 'halves' ? HALVES_CHOICES : SINGLE_CHOICES
+  const asksForAFilm =
+    content.kind === 'blindtest' && (content.track?.film ?? null) !== null
 
   return (
     <section className='verdict-panel'>
@@ -103,7 +117,11 @@ export const VerdictPanel: React.FC<VerdictPanelProps> = ({
             size='large'
             variant={choice.tone === 'miss' ? 'outlined' : 'filled'}
           >
-            {translate(choice.key)}
+            {translate(
+              asksForAFilm && choice.filmKey !== null
+                ? choice.filmKey
+                : choice.key
+            )}
           </Button>
         ))}
       </div>
@@ -122,8 +140,11 @@ const Answer = ({ content }: { content: HostRoundContent }) => {
     case 'blindtest':
       return content.track === null ? null : (
         <div className='answer'>
-          <p className='title'>{content.track.title}</p>
+          <p className='title'>{whatTheRoomNames(content.track)}</p>
           <p className='artist'>{content.track.artist}</p>
+          {cueOf(content.track) !== null && (
+            <p className='note'>{cueOf(content.track)}</p>
+          )}
         </div>
       )
     case 'buzzer':

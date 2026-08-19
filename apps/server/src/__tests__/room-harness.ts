@@ -31,10 +31,16 @@ import { PROTOCOL_VERSION } from '@taverla/protocol/version'
  * pass while proving nothing.
  */
 export const CATALOGUE = [
-  { artist: 'Daft Punk', coverUrl: null, id: '1', title: 'Around the World' },
-  { artist: 'Justice', coverUrl: null, id: '2', title: 'Genesis' },
-  { artist: 'Air', coverUrl: null, id: '3', title: 'Sexy Boy' },
-  { artist: 'Cassius', coverUrl: null, id: '4', title: '1999' }
+  {
+    artist: 'Daft Punk',
+    coverUrl: null,
+    film: null,
+    id: '1',
+    title: 'Around the World'
+  },
+  { artist: 'Justice', coverUrl: null, film: null, id: '2', title: 'Genesis' },
+  { artist: 'Air', coverUrl: null, film: null, id: '3', title: 'Sexy Boy' },
+  { artist: 'Cassius', coverUrl: null, film: null, id: '4', title: '1999' }
 ]
 
 export const PREVIEW_HOST = 'preview.test'

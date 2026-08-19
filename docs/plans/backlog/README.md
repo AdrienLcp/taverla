@@ -15,17 +15,14 @@ file rather than half-landing.
 
 ## Open
 
-Ordered by **what is wrong before what is missing**. Three entries: the one the
-product document now demands and the app does not do, the last playtest fault,
-which waits on a phone rather than on a session, and — last, because it is the
-only one where nothing is broken — the first entry that came from an idea
-rather than from a room.
+Ordered by **what is wrong before what is missing**. Two entries: the one the
+product document now demands and the app does not do, and the last playtest
+fault, which waits on a phone rather than on a session.
 
 | Session | In one line | Cost | Starts with | Holds |
 |---|---|---|---|---|
 | [Everything the phone is already sent](everything-the-phone-is-already-sent.md) | `PRODUCT.md` now says both screens carry the whole picture; the phone draws a fraction of what it is handed | two sessions, and the file says where the seam is | `/impeccable`, then `player-round.tsx` | the per-phase delta, and the anti-cheat line nothing may cross |
 | [The room is silent, unexplained](silent-room-unexplained.md) | **Half done.** The console names the refusal; why Android refuses is unread | waits on a phone | — | note 6 |
-| [The film a table shouts](the-film-a-table-shouts.md) | A fifth source drawn from **film composers**, not from the soundtrack charts, where the answer is the **film** — and `CATALOGUE_NOISE` strips the only place the film is written | a session; the source is an afternoon, the verdict is the rest | `packages/core/src/round/answer-matching.ts:13` | why the obvious playlists were refused, measured |
 
 **One diagnosis disagrees with the note that raised it** — read the entry before
 planning it:
@@ -60,8 +57,9 @@ planning it:
 | [Decades on the shelf](decades-on-the-shelf.md) | 17 Aug 2026 |
 | [Edges the page already took](edges-the-page-already-took.md) | 19 Aug 2026 |
 | [The screen nobody is touching](screen-nobody-is-touching.md) | 19 Aug 2026 |
+| [The film a table shouts](the-film-a-table-shouts.md) | 19 Aug 2026 |
 
-**Two delivered entries are worth opening**, and each warns about a different
+**Three delivered entries are worth opening**, and each warns about a different
 half of what is written here.
 
 [The question bank's spelling](question-bank-spelling.md): two of the three
@@ -73,6 +71,14 @@ the **shape it prescribed** was overruled — it argued for reusing the `playlis
 arm and counted "no protocol arm" as the saving, where that turned out to be the
 cost. So an entry's *what is wrong* is worth more than its *so build this*, and
 the second is the half a session may throw away.
+
+[The film a table shouts](the-film-a-table-shouts.md): the diagnosis was right
+about *where* the fault was and wrong about *what* it was. It read
+`CATALOGUE_NOISE` as the thing to fix, and the answer was to stop asking for the
+title at all — the regex was never touched, and is now used to clean the line it
+was accused of ruining. Its two measured numbers, the floor and the composer
+count, were both replaced by measuring again. So even a number an entry took the
+trouble to measure is a starting point.
 
 ## Where this came from
 
@@ -107,7 +113,8 @@ written down, so every entry is a diagnosis and not a wish.
   in the blind test, can we?"* — traced into the code and measured against
   Deezer the same afternoon, which is what turned it into [the film a table
   shouts](the-film-a-table-shouts.md) rather than a wish. It is the first entry
-  here that no room asked for, and the only one where nothing is broken.
+  here that no room asked for, the only one where nothing was broken, and it
+  landed the same day.
 
 Three times now, a session's own design question turned out to have been
 answered before it was asked. It is the ratio [the plans'

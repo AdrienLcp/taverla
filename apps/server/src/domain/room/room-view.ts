@@ -252,6 +252,7 @@ const toContentView = ({
 const toTrackIdentity = (track: HostTrack): TrackIdentity => ({
   artist: track.artist,
   coverUrl: track.coverUrl,
+  film: track.film,
   id: track.id,
   title: track.title
 })

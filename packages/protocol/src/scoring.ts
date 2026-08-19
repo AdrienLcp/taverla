@@ -95,6 +95,12 @@ export const POINTS_PER_PLAYER_FOOLED = 1
  * Either way, a verdict worth nothing is what locks the player out and hands
  * the floor back to the room.
  */
+/**
+ * `titleCorrect` is the half the *track* named, which on a source drawn from
+ * film composers is the **film** rather than the cue — see
+ * `trackIdentitySchema.film`. The judging is identical either way, which is why
+ * the verdict keeps one shape and only the screen changes its word.
+ */
 export const halvesVerdictSchema = z.object({
   artistCorrect: z.boolean(),
   kind: z.literal('halves'),

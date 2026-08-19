@@ -9,7 +9,12 @@ import {
   trackDecades
 } from '@taverla/protocol/track'
 
+import {
+  filmNamedBy,
+  isScoredByOneOf
+} from '@taverla/core/blindtest/film-score'
 import { Result } from '@taverla/core/helpers/result'
+import { shuffled } from '@taverla/core/helpers/shuffle'
 
 import { env } from '@/env'
 import { logger } from '@/infrastructure/logging/logger'
@@ -54,7 +59,9 @@ const deezerErrorSchema = z.object({
 })
 
 const deezerTrackSchema = z.object({
-  album: z.object({ cover_medium: z.string().nullish() }).nullish(),
+  album: z
+    .object({ cover_medium: z.string().nullish(), title: z.string().nullish() })
+    .nullish(),
   artist: z.object({ name: z.string() }),
   id: z.union([z.number(), z.string()]).transform(String),
   /** Empty on tracks Deezer will not stream in this country — unplayable, so unusable. */
@@ -100,9 +107,11 @@ export const fetchTracksFor = async ({
     )
   }
 
-  const playable = withoutRepeats(reached.flatMap((list) => list.data))
-    .filter((track) => isWorthGuessing(track, difficulty))
-    .map(toCatalogueTrack)
+  const playable = catalogued({
+    difficulty,
+    source,
+    tracks: withoutRepeats(reached.flatMap((list) => list.data))
+  })
 
   return playable.length === 0
     ? Result.failure('no_content_available')
@@ -147,6 +156,55 @@ export const fetchHostTrack = async (
   })
 }
 
+/**
+ * What a source lets into a pool, which every arm but one answers with the
+ * room's difficulty and nothing else.
+ *
+ * The film arm answers it three times over and **overrules the room's
+ * difficulty** doing it. Deezer's rank scores the recording, and a score cue
+ * carries almost none of a single's: `Son Of A Preacher Man` as it appears on
+ * *Pulp Fiction* ranks 8k where `wellKnown` demands 500k, and the whole
+ * composer table holds 135 tracks above that floor against 1 155 above this
+ * one. So the arm pins its own, and a track still has to name a film and be
+ * credited to a composer to get in — `film-score.ts` holds why each of those is
+ * a refusal rather than a preference.
+ */
+const catalogued = ({
+  difficulty,
+  source,
+  tracks
+}: {
+  difficulty: TrackDifficulty
+  source: TrackSource
+  tracks: DeezerTrack[]
+}): CatalogueTrack[] => {
+  if (source.kind !== 'film') {
+    return tracks
+      .filter((track) => isWorthGuessing(track, difficulty))
+      .map((track) => toCatalogueTrack(track))
+  }
+
+  const composers = Object.keys(FILM_COMPOSER_IDS)
+
+  return tracks.flatMap((track) => {
+    if (track.preview.length === 0 || (track.rank ?? 0) < FILM_SCORE_FLOOR) {
+      return []
+    }
+
+    if (!isScoredByOneOf({ artist: track.artist.name, composers })) {
+      return []
+    }
+
+    const film = filmNamedBy({
+      albumTitle: track.album?.title ?? '',
+      artist: track.artist.name,
+      trackTitle: track.title
+    })
+
+    return film === null ? [] : [toCatalogueTrack(track, film)]
+  })
+}
+
 const isWorthGuessing = (
   track: DeezerTrack,
   difficulty: TrackDifficulty
@@ -182,6 +240,96 @@ const DECADE_PLAYLIST_IDS: Record<TrackDecade, readonly string[]> = {
   '2020s': ['13650084141', '1139670951']
 }
 
+/**
+ * Where a film's music comes from, and the reason this arm exists at all.
+ *
+ * Deezer publishes a *Films/Jeux vidéo* genre and 200 editorial soundtrack
+ * playlists, and they are the wrong source: measured 19 August 2026, that
+ * chart's top twenty is *Shallow*, *Skyfall* and *Eye of the Tiger*. Those are
+ * songs used in films, every one of them already playable under `chart` and
+ * `decade`, and serving them here would be a label the room catches out on its
+ * second round.
+ *
+ * **Ids, never names.** Searching Deezer for a composer returns a homonym or a
+ * tribute act ahead of them — `Danny Elfman` gave 4 tracks, `Vladimir Cosma`
+ * gave none — so each of these was resolved by hand once and a name never
+ * reaches Deezer at runtime.
+ *
+ * Who is on it is measured, not curated by taste: each name returns at least
+ * six tracks that clear `FILM_SCORE_FLOOR`, name a film and are credited to
+ * them. That is what keeps Bernard Herrmann and Henry Mancini off it — their
+ * tops are compilations, which `film-score.ts` refuses — and it is why a French
+ * table's Cosma, Sarde and Legrand sit beside Williams and Zimmer.
+ */
+const FILM_COMPOSER_IDS: Record<string, number> = {
+  'Alan Silvestri': 791,
+  'Alexandre Desplat': 9183,
+  'Bear McCreary': 5863,
+  'Brian Tyler': 16596,
+  'Bruno Coulais': 1075,
+  'Carter Burwell': 2732,
+  'Christophe Beck': 7461,
+  'Cliff Martinez': 5060,
+  'Daniel Pemberton': 449167,
+  'Danny Elfman': 760,
+  'Ennio Morricone': 1536,
+  'Francis Lai': 15986,
+  'Gabriel Yared': 1047,
+  'Georges Delerue': 7956,
+  'Gustavo Santaolalla': 1509,
+  'Hans Zimmer': 1935,
+  'Harry Gregson-Williams': 3170,
+  'Howard Shore': 556,
+  'James Horner': 184,
+  'Jerry Goldsmith': 5980,
+  'Joe Hisaishi': 66582,
+  'John Barry': 2466,
+  'John Powell': 2301,
+  'John Williams': 805,
+  'Junkie XL': 2152,
+  'Justin Hurwitz': 6747671,
+  'Jóhann Jóhannsson': 75802,
+  'Klaus Badelt': 2791,
+  'Kyle Dixon & Michael Stein': 11206178,
+  'Lalo Schifrin': 4694,
+  'Lorne Balfe': 1199471,
+  'Ludwig Göransson': 4553724,
+  'Marco Beltrami': 8425,
+  'Maurice Jarre': 2901,
+  'Michael Giacchino': 4962,
+  'Michel Legrand': 8347,
+  'Nicholas Britell': 5317330,
+  'Nino Rota': 5741,
+  'Patrick Doyle': 3639,
+  'Philippe Sarde': 134189,
+  'Rachel Portman': 1941,
+  'Ramin Djawadi': 67835,
+  'Randy Newman': 5679,
+  'Thomas Newman': 2245,
+  'Trent Reznor & Atticus Ross': 1539961,
+  Vangelis: 2639,
+  'Vladimir Cosma': 17238,
+  'Yann Tiersen': 762,
+  'Éric Serra': 786
+}
+
+/**
+ * How many of them one pool is drawn from. The whole table is 49 requests, well
+ * past what any other arm asks of Deezer in one fill; a fresh draw each time a
+ * pool empties is what keeps the rest of the table reachable over an evening,
+ * where a fixed subset would run a room into `no_content_available`.
+ */
+const COMPOSERS_PER_POOL = 8
+
+/**
+ * The floor this arm pins in the room's place. Chosen against what the
+ * catalogue actually holds at each height: at 500k the whole table is 135
+ * tracks, at 150k the bottom of the range is a documentary and a Disney park
+ * restaurant, and here it is *Casablanca*, *Docteur Jivago* and *La Strada* —
+ * 1 155 tracks over 455 films.
+ */
+const FILM_SCORE_FLOOR = 200_000
+
 const pathsFor = (source: TrackSource): string[] => {
   switch (source.kind) {
     case 'chart': {
@@ -202,6 +350,10 @@ const pathsFor = (source: TrackSource): string[] => {
         )
       )
     }
+    case 'film':
+      return shuffled(Object.values(FILM_COMPOSER_IDS))
+        .slice(0, COMPOSERS_PER_POOL)
+        .map((composerId) => `/artist/${composerId}/top?limit=${POOL_SIZE}`)
     case 'playlist':
       return [
         `/playlist/${encodeURIComponent(source.playlistId)}/tracks?limit=${POOL_SIZE}`
@@ -213,9 +365,13 @@ const pathsFor = (source: TrackSource): string[] => {
   }
 }
 
-const toCatalogueTrack = (track: DeezerTrack): CatalogueTrack => ({
+const toCatalogueTrack = (
+  track: DeezerTrack,
+  film: string | null = null
+): CatalogueTrack => ({
   artist: track.artist.name,
   coverUrl: track.album?.cover_medium ?? null,
+  film,
   id: track.id,
   title: track.title
 })

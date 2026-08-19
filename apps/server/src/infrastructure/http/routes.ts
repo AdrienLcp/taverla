@@ -59,7 +59,7 @@ const respondWithTracks = (
 }
 
 /**
- * Six routes, and none of them run during a game — creating a room, checking
+ * Seven routes, and none of them run during a game — creating a room, checking
  * one exists, browsing the catalogue. Everything that happens while people are
  * playing is a WebSocket frame.
  */
@@ -148,6 +148,17 @@ export const registerHttpRoutes = (app: Hono): void => {
 
   // A decade names itself and says nothing about what is in it, so this is the
   // one source a host cannot check by reading the control they just pressed.
+  app.get('/api/tracks/films', async (context) => {
+    // No query: the arm carries no choice, and the room's difficulty is the one
+    // setting this source overrules — see `FILM_SCORE_FLOOR`.
+    const found = await fetchTracksFor({
+      difficulty: 'mixed',
+      source: { kind: 'film' }
+    })
+
+    return respondWithTracks(context, found)
+  })
+
   app.get(
     '/api/tracks/decades',
     zValidator('query', decadePreviewQuerySchema),

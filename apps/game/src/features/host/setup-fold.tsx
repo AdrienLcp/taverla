@@ -110,6 +110,7 @@ export const SetupFold: React.FC<SetupFoldProps> = ({
         <PlaylistPicker onDraftChange={onDraftSource} settings={game} />
       )}
       <SettingsPanel
+        draftSource={draftSource}
         isLive={isLive}
         isRoundInPlay={roundInPlay}
         onChange={onSettingsChange}

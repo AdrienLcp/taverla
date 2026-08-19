@@ -46,7 +46,10 @@ export const drawPlayableTrack = async ({
     const resolved = await fetchHostTrack(candidate.id)
 
     if (resolved.status === 'success') {
-      return resolved
+      // The film is a fact about how the track was *found*, not about the
+      // track: `/track/{id}` is asked for the preview URL and knows nothing of
+      // the composer table the pool was drawn from.
+      return Result.success({ ...resolved.data, film: candidate.film })
     }
   }
 
@@ -91,6 +94,9 @@ const isSameSource = (left: TrackSource, right: TrackSource): boolean => {
       return (
         right.kind === 'decade' && holdsTheSame(left.decades, right.decades)
       )
+    // Nothing to compare: the arm carries no choice, so it is only ever itself.
+    case 'film':
+      return right.kind === 'film'
     case 'playlist':
       return right.kind === 'playlist' && left.playlistId === right.playlistId
     case 'search':
@@ -170,6 +176,7 @@ export const drawChoices = ({
   const answer: TrackIdentity = {
     artist: track.artist,
     coverUrl: track.coverUrl,
+    film: track.film,
     id: track.id,
     title: track.title
   }

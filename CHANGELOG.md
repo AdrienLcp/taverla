@@ -8,6 +8,21 @@ one part.
 
 ### Breaking Changes
 
+- `[Shared]` A blind test can be filled from **film composers**, and
+  `PROTOCOL_VERSION` goes to 13. `TrackSource` gains `{ kind: 'film' }` and
+  `TrackIdentity` gains `film`, which is `null` on every other arm and is what
+  the round asks for wherever it is set — a score cue is called
+  `Cornfield Chase`, and what a room shouts is *Interstellar*. The source is
+  drawn from a table of **49 composers resolved to Deezer ids by hand**, never
+  from the soundtrack charts: those are a chart of *songs used in films*, whose
+  top twenty is *Shallow* and *Eye of the Tiger*, and every one of them is
+  already playable under `chart` and `decade`. A track enters the pool only when
+  a composer on the table is credited and the release names a film, so the
+  category cannot be caught out on its second round. It is also the first arm to
+  overrule a room setting: it pins its own popularity floor at 200 000, and the
+  difficulty strip is ruled and says why. See
+  [`docs/game-catalogue.md`](docs/game-catalogue.md)
+
 - `[Shared]` A blind test can be filled **by decade**, and `PROTOCOL_VERSION`
   goes to 12 — so a tab left open across the deploy reloads rather than meeting
   a source it cannot read. `TrackSource` gains

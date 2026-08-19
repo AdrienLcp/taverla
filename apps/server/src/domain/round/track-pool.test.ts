@@ -34,7 +34,13 @@ const poolSurvives = ({
 
   room.settings.game = to
   room.trackPool = [
-    { artist: 'Daft Punk', coverUrl: null, id: '1', title: 'One More Time' }
+    {
+      artist: 'Daft Punk',
+      coverUrl: null,
+      film: null,
+      id: '1',
+      title: 'One More Time'
+    }
   ]
 
   discardPoolIfStale({ previousGame: from, room })
@@ -75,6 +81,26 @@ describe('discardPoolIfStale', () => {
       poolSurvives({
         from: playingFrom({ decades: ['1990s', '2000s'], kind: 'decade' }),
         to: playingFrom({ decades: ['1990s', '2000s'], kind: 'decade' })
+      })
+    ).toBe(true)
+  })
+
+  it('[pool] drops what a move to the composers no longer asks for', () => {
+    expect(
+      poolSurvives({
+        from: playingFrom({ decades: ['1990s'], kind: 'decade' }),
+        to: playingFrom({ kind: 'film' })
+      })
+    ).toBe(false)
+  })
+
+  // The arm carries no choice, so it is only ever itself — there is nothing a
+  // host could change about it short of leaving it.
+  it('[pool] keeps the composers’ pool, which has nothing to change', () => {
+    expect(
+      poolSurvives({
+        from: playingFrom({ kind: 'film' }),
+        to: playingFrom({ kind: 'film' })
       })
     ).toBe(true)
   })

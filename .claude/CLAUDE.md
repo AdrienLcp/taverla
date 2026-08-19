@@ -165,6 +165,9 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   catalogue, and folding them everywhere leaves the quiz answering
   `River Horse (Greek)` and `1915 - 1916` with its own decoy. A leading article
   is nobody's and goes everywhere — a room says *Cervin* for *Le Cervin*.
+  A source drawn from **film composers** asks for the **film** in the title's
+  place — `TrackIdentity.film`, `null` on every other source, because a score
+  cue is called *Cornfield Chase* and what a table shouts is *Interstellar*.
   **Forgiveness stops one edit short of the nearest answer the bank calls
   wrong**: a question offering `5 minutes` beside `7 minutes` has said what a
   different answer is, and a tolerance reaching across it pays for the wrong one

@@ -9,6 +9,16 @@ import { z } from 'zod'
 export const trackIdentitySchema = z.object({
   artist: z.string(),
   coverUrl: z.url().nullable(),
+  /**
+   * The film or the series the track was written for, and `null` on every
+   * source but the one that goes looking for composers.
+   *
+   * Where it is set it is the half the round asks for **in the title's place**,
+   * and the reveal shows all three. A score cue's own title is `Cornfield
+   * Chase`, `Day One`, `Concerning Hobbits` — the one thing at the table nobody
+   * can produce, where the film is what the room shouts.
+   */
+  film: z.string().nullable(),
   id: z.string(),
   title: z.string()
 })
@@ -69,6 +79,19 @@ export const trackSourceSchema = z.discriminatedUnion('kind', [
     decades: z.array(trackDecadeSchema),
     kind: z.literal('decade')
   }),
+  /**
+   * Film and series music, drawn from a table of **composers** and never from
+   * the soundtrack charts. The distinction is the whole game: a song used in a
+   * film is not a film's score, and *Shallow*, *Skyfall* and *Eye of the Tiger*
+   * under this name would be a label the room catches out on its second round —
+   * they are already playable under every other arm.
+   *
+   * It carries nothing, because there is nothing left to choose. Which
+   * composers is a catalogue fact only `deezer-client.ts` may hold, and a
+   * composer who scores a series does the same job under the same name, so
+   * series ride along with no control of their own.
+   */
+  z.object({ kind: z.literal('film') }),
   z.object({ kind: z.literal('playlist'), playlistId: z.string().min(1) }),
   z.object({
     kind: z.literal('search'),

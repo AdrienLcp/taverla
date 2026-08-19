@@ -516,6 +516,12 @@ const Stage = ({
         )}
         {isSeated && view.settings.mode.kind === 'typed' && (
           <TypedAnswer
+            // A seated console is withheld the answer the same way a phone is,
+            // so it reads what the round asks for off the settings too.
+            asksForAFilm={
+              view.settings.game?.kind === 'blindtest' &&
+              view.settings.game.source.kind === 'film'
+            }
             key={round.id}
             onAnswer={answerWithRound}
             round={round}

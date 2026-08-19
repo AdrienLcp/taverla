@@ -251,6 +251,7 @@ describe('the two views', () => {
       {
         artist: 'Daft Punk',
         coverUrl: null,
+        film: null,
         id: '3135556',
         title: 'Harder, Better, Faster, Stronger'
       }

@@ -1,6 +1,10 @@
 import type { HalvesVerdict } from '@taverla/protocol/scoring'
 
-import { answerAppearsIn } from '../round/answer-matching'
+import {
+  answerAppearsIn,
+  normalizeAnswer,
+  withoutCatalogueNoise
+} from '../round/answer-matching'
 
 export type TypedAttempt = {
   guess: string
@@ -9,7 +13,44 @@ export type TypedAttempt = {
 
 type TrackAnswer = {
   artist: string
+  film: string | null
   title: string
+}
+
+/**
+ * The half a room can actually produce, which on a track drawn from film
+ * composers is not the title. A score cue is called `Cornfield Chase`,
+ * `Day One`, `Concerning Hobbits` — nobody at the table has ever heard those
+ * words, and everybody shouts *Interstellar* before the clip has finished.
+ *
+ * The reveal still shows the cue. It is only what the round *asks for* that
+ * moves, which is why the verdict keeps one shape either way.
+ */
+export const whatTheRoomNames = (track: TrackAnswer): string =>
+  track.film ?? track.title
+
+/**
+ * The piece that actually played, for the one line the reveal has left once the
+ * film is on the screen — and `null` wherever that line would only say again
+ * what is already up there.
+ *
+ * A catalogue writes the film into the cue as often as not, so
+ * `They're Sending Me To Vietnam (From "Forrest Gump" Score)` under a screen
+ * reading *Forrest Gump* is the film printed twice. And a score whose one
+ * famous cue carries the film's own name — `Subway` on *Subway* — has nothing
+ * to add at all.
+ */
+export const cueOf = (track: TrackAnswer): string | null => {
+  if (track.film === null) {
+    return null
+  }
+
+  const cue = withoutCatalogueNoise(track.title).trim()
+
+  return cue.length === 0 ||
+    normalizeAnswer(cue) === normalizeAnswer(track.film)
+    ? null
+    : cue
 }
 
 /**
@@ -32,7 +73,10 @@ export const gradeGuess = ({
 }): HalvesVerdict => ({
   artistCorrect: answerAppearsIn({ expected: track.artist, given: guess }),
   kind: 'halves',
-  titleCorrect: answerAppearsIn({ expected: track.title, given: guess })
+  titleCorrect: answerAppearsIn({
+    expected: whatTheRoomNames(track),
+    given: guess
+  })
 })
 
 /**

@@ -15,6 +15,7 @@ import {
 } from '@taverla/protocol/room'
 import {
   type TrackDifficulty,
+  type TrackSource,
   trackDifficulties
 } from '@taverla/protocol/track'
 
@@ -213,6 +214,12 @@ const isQuestionLanguage = (value: string): value is QuestionLanguage =>
   questionLanguages.some((language) => language === value)
 
 type SettingsPanelProps = {
+  /**
+   * What the picker above is currently showing, which the room does not hold
+   * yet — nothing there commits until a round opens. `null` while the chosen
+   * kind is still missing the text it needs.
+   */
+  draftSource: TrackSource | null
   /** The socket is open. Every control here sends a frame, so none of them work without it. */
   isLive: boolean
   /**
@@ -233,6 +240,7 @@ type SettingsPanelProps = {
  * not folded away with the things only a lobby can offer.
  */
 export const SettingsPanel: React.FC<SettingsPanelProps> = ({
+  draftSource,
   isLive,
   isRoundInPlay,
   onChange,
@@ -244,6 +252,11 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   const game = settings.game
   const mode = settings.mode
   const offeredModes = answerModesFor(game?.kind ?? null)
+  // Read from the draft rather than from the room, or this strip goes on
+  // claiming to work for a whole round after the composers were chosen.
+  const chosenSource =
+    draftSource ?? (game?.kind === 'blindtest' ? game.source : null)
+  const pinsItsOwnDifficulty = chosenSource?.kind === 'film'
 
   const secondsLabel = (milliseconds: number): string =>
     translate('host.seconds', { seconds: milliseconds / 1_000 })
@@ -289,14 +302,20 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
             and the host is the one deciding what the evening will be worth.
           */}
           <p className='hint'>
-            {translate(scoringKey({ answerMode: mode.kind, game: game.kind }))}
+            {translate(
+              scoringKey({
+                answerMode: mode.kind,
+                asksForAFilm: pinsItsOwnDifficulty,
+                game: game.kind
+              })
+            )}
           </p>
         </>
       )}
 
       {game?.kind === 'blindtest' && (
         <SegmentedControl
-          isDisabled={isDisabled}
+          isDisabled={isDisabled || pinsItsOwnDifficulty}
           label={translate('blindtest.difficulty.label')}
           onChange={(next) => {
             if (isDifficulty(next)) {
@@ -309,6 +328,18 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           }))}
           value={game.difficulty}
         />
+      )}
+
+      {/*
+        Said where the lie would otherwise be told. The composers pin their own
+        floor, so this strip decides nothing while they are the source — and a
+        control that quietly stopped working is worse than one that is ruled
+        and says why.
+      */}
+      {game?.kind === 'blindtest' && pinsItsOwnDifficulty && (
+        <p className='hint'>
+          {translate('blindtest.difficulty.pinnedByFilms')}
+        </p>
       )}
 
       {game?.kind === 'buzzer' && (
