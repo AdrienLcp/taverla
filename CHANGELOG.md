@@ -34,6 +34,21 @@ one part.
 
 ### Features
 
+- `[Game]` **A phone waiting on the room is told what it is waiting on.** Four
+  facts the server was already sending reached no screen a player holds: who
+  else is at the table and whose screen has gone, how long the floor lasts when
+  somebody else took it, how much of a reflex heat is still out there, and that
+  the innkeeper has stepped away while the room is still in the lobby. The lobby
+  draws the roster unranked — nobody has scored, so there is no rank and no
+  score column to draw — the buzz window is the same `FloorClock` the player
+  holding the floor already saw, counting down where the host set a limit and up
+  where they judge it themselves, and the heat's tally is drawn on the one of
+  that game's three screens belonging to a thumb already down. Nothing moved on
+  the wire. **The running scoreboard mid-round was deliberately dropped**: a
+  player mid-round is racing a clock, the standings are what they read after it,
+  and the persistent strip already says *2nd of 6* at every phase. See
+  [`docs/plans/backlog/everything-the-phone-is-already-sent.md`](docs/plans/backlog/everything-the-phone-is-already-sent.md)
+
 - `[Game]` **A phone now knows what the round did to the room, not only to
   itself.** The big screen is often somebody else's — across the room, angled
   away, or in the hand of a host who has taken a seat — and a player who could
@@ -468,6 +483,18 @@ one part.
   and the extra width is only void
 
 ### Fixes
+
+- `[Game]` **A seat whose screen has gone is named, not dimmed.** Every board in
+  the product said it with `opacity: 0.45` and nothing else, which takes the
+  whole row under 4.5:1 on all six fields and says nothing at all to a reader
+  who cannot tell two inks apart. The row carries the word beside the name now,
+  and the ink only seconds it — on the console's roster, on both final boards
+  and on the lobby roster the phone just gained.
+
+- `[Game]` **The buzz floor's clock is centred under the buzzer it belongs to**,
+  and follows the lines naming whose window it is rather than preceding them. It
+  had sat flush left for as long as it was one player's own clock on a screen
+  nobody else read.
 
 - `[Game]` **The page stops laying itself out under the notch.**
   `viewport-fit=cover` was declared and nothing read `env(safe-area-inset-*)`, so

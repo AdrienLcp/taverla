@@ -17,6 +17,12 @@ type ScoreboardProps = {
   /** For a caller that lays the rows out differently — the final board does. */
   className?: string
   /**
+   * Names the list where the screen around it does not. The lobby roster on a
+   * phone is a column of nicknames under a pitch, and a reader who cannot see
+   * it is told only "list, six items".
+   */
+  label?: string
+  /**
    * Gives each row a way to drop that player. Omitted everywhere the board is
    * something to *read* — the room's screen mid-round, the phone, the final
    * board — and passed only by the host's own roster, which is the one surface
@@ -33,6 +39,7 @@ type ScoreboardProps = {
 
 export const Scoreboard: React.FC<ScoreboardProps> = ({
   className,
+  label,
   onRemove,
   players,
   style,
@@ -43,6 +50,7 @@ export const Scoreboard: React.FC<ScoreboardProps> = ({
 
   return (
     <ol
+      aria-label={label}
       className={[
         'scoreboard',
         isRanked && 'ranked',
@@ -70,7 +78,16 @@ export const Scoreboard: React.FC<ScoreboardProps> = ({
         >
           {isRanked && <span className='rank'>{rank}</span>}
           <span className='nickname'>
-            {player.nickname}
+            <span className='name'>{player.nickname}</span>
+            {/*
+              A seat whose screen has gone. It used to be the row's opacity and
+              nothing else, which said it by taking the whole row under the
+              contrast floor and said it to no reader who was not looking at it.
+              The word is the signal now; the ink only seconds it.
+            */}
+            {!player.isConnected && (
+              <span className='state'>{translate('player.away')}</span>
+            )}
             {player.id === youId && (
               <span className='visually-hidden'>
                 {` (${translate('player.you')})`}

@@ -459,6 +459,27 @@ and who it caught are one row.
   nicknames need. `hasAnybodyScored` is the one predicate: under it the rank and
   score columns are absent rather than empty, the phone is told no placing, and
   the final board names nobody. The columns come back at the first point.
+- **A state a row carries is a word, and the ink only seconds it.** A seat
+  whose screen has gone was `opacity: 0.45` on the whole row, which is the
+  contrast floor given away twice over: it takes every glyph in the row under
+  4.5:1 on all six fields, and it says nothing whatever to a reader who is not
+  looking at it. The name is muted and the state is set beside it in `label`,
+  in the cell the name already owns rather than a column of its own — a track
+  declared for every row would pay its gap on the rows that have nothing to put
+  there, and a track appended only where there is something pushes the score
+  column off the alignment the rows above it hold. Which of the two texts
+  shrinks is named the same way the reveal names it: the state is atomic and
+  the name is what ellipsises, because half a nickname still points at
+  somebody.
+- **One window, one clock, drawn for everyone waiting it out.** The buzz floor
+  is the room's and not the buzzing player's, so `FloorClock` is on every
+  phone: the same component read from either end, counting down where the host
+  set a limit and up where they judge it themselves. It follows the lines that
+  say whose window it is, because a number arriving before the name is a
+  countdown to nothing — and it is centred, under the one round object in the
+  product. It had sat flush left for as long as it was one player's own clock
+  on a screen nobody else read, which is what a fact reaching a second surface
+  costs: nothing about it was wrong until somebody else could see it.
 - **Duration references fall back to `0`,** never to a literal, or someone who
   asked for no motion gets motion when a token disappears.
 

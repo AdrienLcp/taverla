@@ -15,14 +15,11 @@ file rather than half-landing.
 
 ## Open
 
-Ordered by **what is wrong before what is missing**. Two entries, and neither
-is a fault any more: what the phone owes a player who cannot see the big screen
-is now a comfort list rather than a floor, and the last playtest fault waits on
-a phone rather than on a session.
+One entry, and it is not a fault: the last playtest fault waits on a phone
+rather than on a session.
 
 | Session | In one line | Cost | Starts with | Holds |
 |---|---|---|---|---|
-| [Everything the phone is already sent](everything-the-phone-is-already-sent.md) | **Half done.** The floor landed — the round number, the room's round as one board, the cover. What is left is B: the lobby roster, the floor clock for non-buzzers, the live tap count | one session, and some of it will not be built | `/impeccable`, then `player-round.tsx` | what A decided, so B does not re-open it |
 | [The room is silent, unexplained](silent-room-unexplained.md) | **Half done.** Two of the three causes are ruled out and the console names the third; one reading on the Android phone closes it | waits on a phone | — | note 6, and what each of the three lines means |
 
 **One diagnosis disagrees with the note that raised it** — read the entry before
@@ -59,6 +56,7 @@ planning it:
 | [Edges the page already took](edges-the-page-already-took.md) | 19 Aug 2026 |
 | [The screen nobody is touching](screen-nobody-is-touching.md) | 19 Aug 2026 |
 | [The film a table shouts](the-film-a-table-shouts.md) | 19 Aug 2026 |
+| [Everything the phone is already sent](everything-the-phone-is-already-sent.md) | 19 Aug 2026, in two halves |
 
 **Three delivered entries are worth opening**, and each warns about a different
 half of what is written here.

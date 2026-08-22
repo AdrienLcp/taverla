@@ -406,6 +406,7 @@ export const FR_DICTIONARY: Dictionary = {
     title: 'La salle est vide'
   },
   player: {
+    away: 'plus là',
     choosingGame: 'L’aubergiste choisit un jeu',
     final: {
       placing: 'Tu finis',
@@ -445,6 +446,7 @@ export const FR_DICTIONARY: Dictionary = {
         }
       })
     },
+    table: 'À la table',
     upNext: 'Tu vas jouer à',
     you: 'Toi'
   },

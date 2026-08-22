@@ -80,6 +80,14 @@ are: a reflex tap window is 3 s from the flip, the flip itself lands 2–6 s aft
 the countdown, and a 60 s clip reveals while a stepped-through check is still
 walking. Poll inside the page, act inside the page, and return the reading.
 
+**A tap on the frame the field flips is a false start, every time.** Polling
+`data-flipped` and dispatching `pointerdown` on the next line reproduces the
+one refusal the game has, not the reaction it was meant to measure — the
+server floors a tap at `FALSE_START_FLOOR_MS` after `flipsAt`, which no thumb
+ever beats and a script always does. Wait past the floor before the press, and
+read the phone straight after it: the heat has `TAP_WINDOW_MS` left at most,
+and less than that once the other seats are out.
+
 Two states cannot be reached at all with a single seat in the room, because the
 round settles the instant that seat acts and the screen is already the reveal
 when the next call lands:

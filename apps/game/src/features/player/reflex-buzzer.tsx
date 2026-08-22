@@ -74,6 +74,16 @@ export const ReflexBuzzer: React.FC<ReflexBuzzerProps> = ({
             })
           })}
         </p>
+        {/*
+          How much of the heat is still out there, which is the same count the
+          room's screen carries and the only thing this phone can still learn.
+          It is on this screen alone: the two others are the wait before the
+          flip and the bench, and a tally ticking on either is how a table
+          counts the flip out loud.
+        */}
+        <p className='landed' role='status'>
+          {translate('reflex.landed', { count: content.taps.length })}
+        </p>
       </section>
     )
   }

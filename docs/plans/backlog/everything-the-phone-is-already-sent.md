@@ -1,4 +1,4 @@
-## Everything the phone is already sent — **A landed 19 August 2026; B open**
+## Everything the phone is already sent — **A and B landed 19 August 2026**
 
 **The big screen is often somebody else's.** It is across the room, angled away,
 or — when the host runs the room from a phone, and more so when that host has
@@ -26,9 +26,9 @@ session, and that is what makes it worth taking now rather than later.
 | Phase | On the phone today | Absent, and already sent |
 |---|---|---|
 | every | own nickname, own score, own rank, room size (`Scoreline`, `player-page.tsx:278-303`); room code as text; ~~the round number~~ **drawn beside the code since A** | — |
-| `lobby` | game name, one scoring line (`UpNext`, `player-round.tsx:251-273`) | the roster: every nickname, every connection state, the head count. A phone cannot see who else is in the room it just joined |
-| `playing` | prompt, one form, an answered count, a progress bar when the game has a duration | the running scoreboard (`host-console-page.tsx:526`); the reflex heat's live tap count (`reflex-stage.tsx:66-68`) |
-| `buzzed` | the buzzer, disabled with a reason; who buzzed, by name | the floor clock, unless it was you (`player-round.tsx:406`). Everyone else watches a silence with no end in sight |
+| `lobby` | game name, one scoring line (`UpNext`) ~~and nothing else~~ · **the roster since B**: every nickname, whose screen has gone, and no rank or score because nobody has one yet | — |
+| `playing` | prompt, one form, an answered count, a progress bar when the game has a duration · **the reflex heat's tap count since B**, on the screen of a thumb already down | the running scoreboard, **dropped** — see below |
+| `buzzed` | the buzzer, disabled with a reason; who buzzed, by name; **the floor clock since B**, for the room and not only for the player holding it | — |
 | `revealed` | title and artist, or the answer; own award; the cover; **the room's round as one board** — every player ranked, what each said, what it paid (`round-board.tsx`, since A). The gap to the player ahead was **removed**: the board says it by name, for everybody | — |
 | `finished` | own rank, full scoreboard | the winner headline |
 
@@ -69,6 +69,38 @@ arguments cut both ways:
 The session decides these with `/impeccable` and is expected to drop at least
 one. Dropping none is the sign the table was read as a to-do list.
 
+**B kept four and dropped one.** What it decided:
+
+- **The running scoreboard mid-round is dropped, and the entry above called it.**
+  A player mid-round is racing a clock; the standings are what they read after
+  it, and A already put them there. The persistent strip carries *2nd of 6* at
+  every phase, so nothing about their own standing is missing during a round —
+  what a table would gain is the console at 414px, on the one screen where the
+  round is being answered.
+- **The floor clock is the same component, not a bar.** `FloorClock` already
+  counts both directions off one `ActiveBuzz`, and during `buzzed` there is no
+  other clock on the phone — `RoundProgress` is gated on `playing` — so the
+  second-countdown worry the entry raised was void. It draws where the host set
+  a window and counts up where they judge it themselves, which is what a bar
+  could not have done at all.
+- **The lobby roster is the board, unranked.** `hasAnybodyScored` is false in a
+  lobby, so `Scoreboard` drops its rank and score columns on its own and what is
+  left is names — which is the shape A predicted when it refused to let the
+  reveal degrade into one.
+- **The reflex tap count is drawn on one of that game's three screens**: the one
+  belonging to a thumb already down. The wait before the flip is the only screen
+  in the product that never moves, and the bench is reachable *before* the flip,
+  so a tally on either is how a table counts the flip out loud. After your own
+  tap the heat has up to `TAP_WINDOW_MS` left and the count is the only thing
+  that screen can still learn.
+- **The host-gone signal replaces the pitch, not the screen.** A running round
+  is blanked because nothing on it is answerable; a lobby has nothing to block
+  and the roster stays true while the console is away. What could not stay is
+  *the innkeeper is choosing a game*, which is the one thing the phone is
+  waiting on. `revealed` and `finished` were left silent: the phone has just
+  been paid and is waiting on nobody, and a two-second socket blink crying
+  *stepped away* over a reveal is worse than the silence.
+
 **A took the floor and the cover.** What it decided, so B does not re-open it:
 
 - The floor is **one list, not two blocks**. The answers and the standings are
@@ -89,15 +121,15 @@ one. Dropping none is the sign the table was read as a to-do list.
 
 ## The fields on the wire that nothing renders
 
-What is left after A: `players[].isConnected` mid-game · `choices[].coverUrl` ·
-`round.content.reflex.taps[]` live · `activeBuzz.expiresAt` for non-buzzers ·
+What is left after B, and none of it is owed: `choices[].coverUrl` ·
 `round.lockedOutPlayerIds` for others · every `settings.game.*` the room is
-playing under · `isHostConnected` outside a running round.
+playing under.
 
-A took the other seven — `round.index`, `settings.roundCount`,
-`round.revealedAnswers[]`, `round.awards[]` for anyone but you,
-`players[].score` for anyone but you and `revealedTrack.coverUrl` — and none of
-them cost a line of protocol, which is what the finding above promised.
+B took `players[].isConnected`, `round.content.reflex.taps[]` live,
+`activeBuzz.expiresAt` for non-buzzers and `isHostConnected` outside a running
+round; A took the other seven. Not one of the eleven cost a line of protocol,
+which is what the finding at the top promised and the only prediction in this
+entry that held in full.
 
 ## What does not move, and why
 
@@ -132,10 +164,23 @@ beside it, the standings after the round, and the cover art. Verified in the
 browser at 414 px and 1280 px, both palettes, two players and a synthetic eight
 — nothing moved on the wire, exactly as this entry predicted.
 
-**B — the queue.** The lobby roster with connection state, the floor clock for
-everyone rather than the buzzer alone, the running scoreboard mid-round if it
-survives the argument above, the reflex heat's live tap count, and the host-gone
-signal outside a running round.
+**B — the queue. Landed 19 August 2026.** The lobby roster with connection
+state, the floor clock for the whole room, the reflex heat's tap count and the
+host-gone signal in the lobby. The running scoreboard mid-round was dropped.
+Nothing moved on the wire here either.
 
-B is comfort, and some of it will not be built. Take it as its own session,
-against a phone that can now follow a round on its own.
+**Two faults it found that were nobody's item.** Both were invisible until the
+thing that surfaced them was drawn beside them, which is the argument for
+building against a browser rather than a diff:
+
+- **The floor clock was flush left under a centred buzzer**, and had been for as
+  long as it was one player's own clock on a screen nobody else read. Putting it
+  on every phone is what made a lone number hugging the edge impossible to miss.
+  It is centred now, and it follows the two lines naming whose window it is —
+  a number that arrives *before* the name is a countdown to nothing.
+- **A seat that had gone was `opacity: 0.45` and nothing else.** That is the
+  whole row taken under 4.5:1 on every one of the six fields, and it was the
+  only thing saying so — no word, no shape, nothing a reader who cannot tell two
+  inks apart could use. The row now carries the word, in `label` beside the
+  name, and the ink only seconds it. It was a lobby item that turned out to be a
+  `Scoreboard` fault, so the console's roster and both final boards got it too.

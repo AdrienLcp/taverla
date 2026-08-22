@@ -446,6 +446,8 @@ export const EN_DICTIONARY = defineTranslations({
     title: 'Nobody here'
   },
   player: {
+    /** A seat whose screen has gone quiet — beside that name, on every board. */
+    away: 'away',
     choosingGame: 'The innkeeper is choosing a game',
     final: {
       placing: 'You finished',
@@ -490,6 +492,8 @@ export const EN_DICTIONARY = defineTranslations({
         }
       })
     },
+    /** Names the lobby roster for a reader who cannot see whose names those are. */
+    table: 'At the table',
     upNext: 'You are about to play',
     you: 'You'
   },

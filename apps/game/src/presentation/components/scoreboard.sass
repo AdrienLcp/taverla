@@ -35,12 +35,28 @@
 
       color: var(--ink-muted)
 
+    // Two texts in one cell, and the name is the one that shrinks: a truncated
+    // nickname still points at somebody, where a truncated state word points at
+    // nothing. `min-width: 0` is half the ellipsis — a flex item's minimum is
+    // its content.
     .nickname
       @include typography.title
 
+      align-items: baseline
+      display: flex
+      gap: var(--space-2xs)
+      min-width: 0
+
+    .name
       overflow: hidden
       text-overflow: ellipsis
       white-space: nowrap
+
+    .state
+      @include typography.label
+
+      color: var(--ink-muted)
+      flex: none
 
     .score
       @include typography.numeric
@@ -49,8 +65,12 @@
       font-stretch: 125%
       font-weight: 900
 
-    .away
-      opacity: 0.45
+    // Quieter, not fainter. `opacity: 0.45` put the row under 4.5:1 on every
+    // field, and it was the only thing saying the seat was gone; the muted ink
+    // is the one value measured to clear it, and the word beside the name is
+    // what a reader who cannot tell two inks apart reads instead.
+    .away .name
+      color: var(--ink-muted)
 
     // The phone marks its own row rather than tinting it, so the mark survives
     // whichever field is painted behind it — and it is the ink itself rather

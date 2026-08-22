@@ -1,11 +1,11 @@
 {
   "dependencies": {
-    "@hono/node-server": "^2.1.0",
+    "@hono/node-server": "^2.1.1",
     "@hono/node-ws": "^1.3.1",
     "@hono/zod-validator": "^0.9.0",
     "@taverla/core": "workspace:*",
     "@taverla/protocol": "workspace:*",
-    "hono": "^4.13.1",
+    "hono": "^4.13.3",
     "hono-rate-limiter": "^0.5.3",
     "nanoid": "^6.0.1",
     "zod": "^4.4.3"
@@ -14,8 +14,8 @@
   "devDependencies": {
     "@types/node": "^26.2.0",
     "tsdown": "^0.22.14",
-    "tsx": "^4.23.11",
-    "vitest": "^4.1.10"
+    "tsx": "^4.23.12",
+    "vitest": "^4.1.11"
   },
   "name": "@taverla/server",
   "private": true,

@@ -100,11 +100,27 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
 
   // The room fills up while the table decides, so this is where a phone waits
   // longest — and the only moment nobody is against a clock, which is why it is
-  // where what the evening pays is explained.
+  // where what the evening pays is explained and where the room the player
+  // walked into is drawn. Nobody has scored yet, so the board is a column of
+  // names: no rank, no score, and the one screen with the space to spend on it.
+  //
+  // The host being away replaces the pitch rather than the screen. A lobby has
+  // nothing to block — who is at the table stays true while the console is
+  // gone — but *the innkeeper is choosing a game* would be a lie about the one
+  // thing the phone is waiting on.
   if (view.phase === 'lobby') {
     return (
       <section className='player-round centred'>
-        <UpNext view={view} />
+        {view.isHostConnected ? (
+          <UpNext view={view} />
+        ) : (
+          <p className='paused'>{translate('buzz.blocked.host_away')}</p>
+        )}
+        <Scoreboard
+          label={translate('player.table')}
+          players={view.players}
+          youId={view.youId}
+        />
       </section>
     )
   }
@@ -411,10 +427,6 @@ const Buzzer = ({
         {translate('buzz.action')}
       </ReactAriaButton>
 
-      {isWon && view.round?.activeBuzz != null && (
-        <FloorClock buzz={view.round.activeBuzz} clock={clock} />
-      )}
-
       <p className='blocker' role='status'>
         {hasFailed
           ? translate('buzz.sendFailed')
@@ -426,6 +438,19 @@ const Buzzer = ({
       </p>
 
       {view.phase === 'buzzed' && !isWon && <TheirName view={view} />}
+
+      {/*
+        Last, and drawn for the whole room rather than only for the player
+        holding the floor: everybody else is waiting out the same window and had
+        a name and a dead buzzer to look at, which is a silence with no end in
+        sight. It follows the two lines that say whose window it is, because a
+        number that arrives before the name is a countdown to nothing — and it
+        counts down where the host set a limit and up where they judge it
+        themselves, which is the same component read from either end.
+      */}
+      {view.phase === 'buzzed' && view.round?.activeBuzz != null && (
+        <FloorClock buzz={view.round.activeBuzz} clock={clock} />
+      )}
     </section>
   )
 }
