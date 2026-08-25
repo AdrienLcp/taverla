@@ -1,11 +1,10 @@
-import { useParams } from 'react-router'
-
 import type { ShelvedGame } from '@taverla/protocol/game'
 
 import { isShelvedGame } from '@taverla/core/room/shelved-game'
 
 import { useCreateRoom } from '@/features/home/use-create-room'
 import { NotFoundPage } from '@/features/not-found/not-found-page'
+import { useParams } from '@/infrastructure/router/params'
 import { Button } from '@/presentation/components/button'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import {
@@ -28,7 +27,7 @@ import './game-home-page.sass'
  * pitch and one button. Split it when one genuinely needs something the others
  * do not, and not to pre-empt that.
  */
-export const GameHomePage = () => {
+export const GameHomePage: React.FC = () => {
   const { game } = useParams()
 
   return game !== undefined && isShelvedGame(game) ? (
@@ -38,7 +37,7 @@ export const GameHomePage = () => {
   )
 }
 
-const GameHome = ({ game }: { game: ShelvedGame }) => {
+const GameHome: React.FC<{ game: ShelvedGame }> = ({ game }) => {
   const translate = useTranslate()
   const { error, isCreating, open } = useCreateRoom()
 

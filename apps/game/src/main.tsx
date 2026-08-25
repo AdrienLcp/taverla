@@ -10,11 +10,13 @@ import '@/presentation/styles/globals.sass'
 
 const container = document.getElementById('root')
 
-if (container === null) {
+if (container == null) {
   throw new Error('Missing #root in index.html')
 }
 
-createRoot(container).render(
+const root = createRoot(container)
+
+const App: React.FC = () => (
   <StrictMode>
     <ThemeProvider>
       <I18nProvider>
@@ -23,3 +25,5 @@ createRoot(container).render(
     </ThemeProvider>
   </StrictMode>
 )
+
+root.render(<App />)

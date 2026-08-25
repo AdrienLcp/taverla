@@ -1,6 +1,6 @@
 import { useRouteError } from 'react-router'
 
-import { joinPath } from '@/infrastructure/router/navigation'
+import { paths } from '@/infrastructure/router/navigation'
 import { Button } from '@/presentation/components/button'
 import { Link } from '@/presentation/components/link'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
@@ -38,7 +38,7 @@ export const ErrorScreen = () => {
         <Button onPress={reload} size='large'>
           {translate('error.screen.reload')}
         </Button>
-        <Link href={joinPath} variant='underlined'>
+        <Link href={paths.home} variant='underlined'>
           {translate('menu.home')}
         </Link>
       </div>

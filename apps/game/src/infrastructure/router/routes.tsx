@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router'
 
 import { NotFoundPage } from '@/features/not-found/not-found-page'
+import { paths } from '@/infrastructure/router/navigation'
 import { AppShell } from '@/presentation/app-shell'
 import { ErrorScreen } from '@/presentation/error-screen'
 import { RouteFallback } from '@/presentation/route-fallback'
@@ -28,27 +29,27 @@ export const router = createBrowserRouter([
           Component: (await import('@/features/credits/credits-page'))
             .CreditsPage
         }),
-        path: 'credits'
+        path: paths.credits
       },
       {
         lazy: async () => ({
           Component: (await import('@/features/shelf/game-home-page'))
             .GameHomePage
         }),
-        path: ':game'
+        path: paths.game
       },
       {
         lazy: async () => ({
           Component: (await import('@/features/host/host-console-page'))
             .HostConsolePage
         }),
-        path: 'host/:roomCode'
+        path: paths.host
       },
       {
         lazy: async () => ({
           Component: (await import('@/features/player/player-page')).PlayerPage
         }),
-        path: 'play/:roomCode'
+        path: paths.game
       },
       { Component: NotFoundPage, path: '*' }
     ],

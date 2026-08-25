@@ -5,7 +5,7 @@
     "@hono/zod-validator": "^0.9.0",
     "@taverla/core": "workspace:*",
     "@taverla/protocol": "workspace:*",
-    "hono": "^4.13.3",
+    "hono": "^4.13.4",
     "hono-rate-limiter": "^0.5.3",
     "nanoid": "^6.0.1",
     "zod": "^4.4.3"

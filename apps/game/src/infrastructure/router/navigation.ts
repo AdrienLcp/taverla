@@ -5,11 +5,24 @@ import type { RoomCode } from '@taverla/protocol/identifiers'
 
 import { normalizeRoomCode } from '@taverla/core/room/room-code'
 
-export const joinPath = '/'
-export const creditsPath = '/credits'
-export const gameHomePathFor = (game: ShelvedGame): string => `/${game}`
-export const hostPathFor = (code: RoomCode): string => `/host/${code}`
-export const playPathFor = (code: RoomCode): string => `/play/${code}`
+import { params } from './params'
+
+export const paths = {
+  credits: '/credits',
+  game: `/:${params.game}`,
+  home: '/',
+  host: `/host/:${params.roomCode}`,
+  play: `/play/:${params.roomCode}`
+} as const
+
+export const gameHomePathFor = (game: ShelvedGame): string =>
+  paths.game.replace(`:${params.game}`, game)
+
+export const hostPathFor = (code: RoomCode): string =>
+  paths.host.replace(`:${params.roomCode}`, code)
+
+export const playPathFor = (code: RoomCode): string =>
+  paths.play.replace(`:${params.roomCode}`, code)
 
 /**
  * What the QR code encodes. Same origin as the page showing it, so a phone that

@@ -86,7 +86,7 @@ import { VerdictPanel } from './verdict-panel'
 
 import './host-console-page.sass'
 
-export const HostConsolePage = () => {
+export const HostConsolePage: React.FC = () => {
   const roomCode = useRoomCodeParam()
 
   // The socket hook must not be called with a code the server would refuse, and
@@ -99,7 +99,7 @@ export const HostConsolePage = () => {
   )
 }
 
-const HostConsole = ({ roomCode }: { roomCode: RoomCode }) => {
+const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   const translate = useTranslate()
   // Read from storage rather than started empty, because this is the only thing
   // that puts the name back on the next `hello` — and a console whose tab was

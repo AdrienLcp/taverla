@@ -21,11 +21,7 @@ import {
   type ThemePreference
 } from '@/helpers/theme'
 import { fetchHealth } from '@/infrastructure/api/taverla-api'
-import {
-  creditsPath,
-  joinPath,
-  useRoomCodeParam
-} from '@/infrastructure/router/navigation'
+import { paths, useRoomCodeParam } from '@/infrastructure/router/navigation'
 import { readHostToken } from '@/infrastructure/storage/session-storage'
 import { useConnection } from '@/presentation/connection/connection-provider'
 import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
@@ -186,7 +182,7 @@ const RoomExit = ({ onDone }: { onDone: () => void }) => {
     return (
       <div className='exits'>
         <Link
-          href={joinPath}
+          href={paths.home}
           onPress={() => {
             leaveSeat?.()
             onDone()
@@ -239,7 +235,7 @@ const RoomExit = ({ onDone }: { onDone: () => void }) => {
           <>
             <p className='warning'>{translate('host.closeRoom.warning')}</p>
             <Link
-              href={joinPath}
+              href={paths.home}
               onPress={() => {
                 closeRoom()
                 onDone()
@@ -379,7 +375,7 @@ export const AppMenu = () => {
                 */}
                 {!isInsideRoom && (
                   <p className='credit'>
-                    <TextLink href={creditsPath} onPress={close}>
+                    <TextLink href={paths.credits} onPress={close}>
                       {translate('credits.title')}
                     </TextLink>
                   </p>

@@ -28,7 +28,7 @@ import './home-page.sass'
  * A shelf row is a third kind of surface, and the one the design system has not
  * been asked for yet.
  */
-export const HomePage = () => {
+export const HomePage: React.FC = () => {
   const translate = useTranslate()
   const { error, isCreating, open } = useCreateRoom()
 

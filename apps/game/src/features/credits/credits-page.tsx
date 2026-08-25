@@ -1,4 +1,4 @@
-import { joinPath } from '@/infrastructure/router/navigation'
+import { paths } from '@/infrastructure/router/navigation'
 import { Link } from '@/presentation/components/link'
 import { TextLink } from '@/presentation/components/text-link'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
@@ -58,7 +58,7 @@ const QUESTION_CREDITS: QuestionCredit[] = [
   }
 ]
 
-export const CreditsPage = () => {
+export const CreditsPage: React.FC = () => {
   const translate = useTranslate()
 
   return (
@@ -95,7 +95,7 @@ export const CreditsPage = () => {
         </TextLink>
       </p>
 
-      <Link href={joinPath} variant='outlined'>
+      <Link href={paths.home} variant='outlined'>
         {translate('navigation.back')}
       </Link>
     </main>

@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 
 import type { ProtocolErrorMessage } from '@taverla/protocol/server-message'
 
-import { joinPath } from '@/infrastructure/router/navigation'
+import { paths } from '@/infrastructure/router/navigation'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { protocolErrorKey } from '@/presentation/i18n/translation'
 
@@ -41,7 +41,7 @@ export const ConnectionRefused = ({
         )}
       </h2>
       {children}
-      <Link href={joinPath} size='large' variant='outlined'>
+      <Link href={paths.home} size='large' variant='outlined'>
         {translate('navigation.back')}
       </Link>
     </section>

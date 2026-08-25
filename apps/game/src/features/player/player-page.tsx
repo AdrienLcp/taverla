@@ -37,7 +37,7 @@ import { PlayerRound } from './player-round'
 
 import './player-page.sass'
 
-export const PlayerPage = () => {
+export const PlayerPage: React.FC = () => {
   const roomCode = useRoomCodeParam()
 
   return roomCode === null ? (
@@ -47,7 +47,7 @@ export const PlayerPage = () => {
   )
 }
 
-const PlayerScreen = ({ roomCode }: { roomCode: RoomCode }) => {
+const PlayerScreen: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   // A device that has played before has already answered this, so it goes
   // straight to the table. The form is what remains for a screen with nothing
   // stored, and for the one case a stored name cannot settle: a refusal.
