@@ -49,7 +49,7 @@ export const router = createBrowserRouter([
         lazy: async () => ({
           Component: (await import('@/features/player/player-page')).PlayerPage
         }),
-        path: paths.game
+        path: paths.play
       },
       { Component: NotFoundPage, path: '*' }
     ],
