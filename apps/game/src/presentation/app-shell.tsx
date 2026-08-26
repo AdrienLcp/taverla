@@ -16,11 +16,7 @@ export const AppShell = () => {
   const navigate = useNavigate()
 
   return (
-    <ReactAriaRouterProvider
-      navigate={(path) => {
-        void navigate(path)
-      }}
-    >
+    <ReactAriaRouterProvider navigate={navigate}>
       <ConnectionProvider>
         <RoomActionsProvider>
           <div className='app-shell'>
