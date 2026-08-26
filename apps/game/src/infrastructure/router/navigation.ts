@@ -1,28 +1,27 @@
-import { useParams } from 'react-router'
+import { generatePath, type ParamParseKey, useParams } from 'react-router'
 
 import type { ShelvedGame } from '@taverla/protocol/game'
 import type { RoomCode } from '@taverla/protocol/identifiers'
 
 import { normalizeRoomCode } from '@taverla/core/room/room-code'
-
-import { params } from './params'
+import { isShelvedGame } from '@taverla/core/room/shelved-game'
 
 export const paths = {
   credits: '/credits',
-  game: `/:${params.game}`,
+  game: '/:game',
   home: '/',
-  host: `/host/:${params.roomCode}`,
-  play: `/play/:${params.roomCode}`
+  host: '/host/:roomCode',
+  play: '/play/:roomCode'
 } as const
 
 export const gameHomePathFor = (game: ShelvedGame): string =>
-  paths.game.replace(`:${params.game}`, game)
+  generatePath(paths.game, { game })
 
 export const hostPathFor = (code: RoomCode): string =>
-  paths.host.replace(`:${params.roomCode}`, code)
+  generatePath(paths.host, { roomCode: code })
 
 export const playPathFor = (code: RoomCode): string =>
-  paths.play.replace(`:${params.roomCode}`, code)
+  generatePath(paths.play, { roomCode: code })
 
 /**
  * What the QR code encodes. Same origin as the page showing it, so a phone that
@@ -39,7 +38,14 @@ export const playUrlFor = (code: RoomCode): string =>
  * refused anyway.
  */
 export const useRoomCodeParam = (): RoomCode | null => {
-  const { roomCode } = useParams()
+  const { roomCode } =
+    useParams<ParamParseKey<typeof paths.host | typeof paths.play>>()
 
   return roomCode === undefined ? null : normalizeRoomCode(roomCode)
+}
+
+export const useGameParam = (): ShelvedGame | null => {
+  const { game } = useParams<ParamParseKey<typeof paths.game>>()
+
+  return game !== undefined && isShelvedGame(game) ? game : null
 }

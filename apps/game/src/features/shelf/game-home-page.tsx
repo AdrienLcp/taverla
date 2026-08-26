@@ -1,10 +1,8 @@
 import type { ShelvedGame } from '@taverla/protocol/game'
 
-import { isShelvedGame } from '@taverla/core/room/shelved-game'
-
 import { useCreateRoom } from '@/features/home/use-create-room'
 import { NotFoundPage } from '@/features/not-found/not-found-page'
-import { useParams } from '@/infrastructure/router/params'
+import { useGameParam } from '@/infrastructure/router/navigation'
 import { Button } from '@/presentation/components/button'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import {
@@ -28,13 +26,9 @@ import './game-home-page.sass'
  * do not, and not to pre-empt that.
  */
 export const GameHomePage: React.FC = () => {
-  const { game } = useParams()
+  const game = useGameParam()
 
-  return game !== undefined && isShelvedGame(game) ? (
-    <GameHome game={game} />
-  ) : (
-    <NotFoundPage />
-  )
+  return game === null ? <NotFoundPage /> : <GameHome game={game} />
 }
 
 const GameHome: React.FC<{ game: ShelvedGame }> = ({ game }) => {
