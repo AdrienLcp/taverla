@@ -18,7 +18,7 @@
   "private": true,
   "scripts": {
     "build": "pnpm -r build",
-    "deps:upgrade": "pnpm -r up -L",
+    "deps:upgrade": "corepack use pnpm@latest && pnpm -r up -L && biome migrate --write",
     "dev": "pnpm --parallel --filter @taverla/server --filter @taverla/game dev",
     "lighthouse": "pnpm build && node scripts/lighthouse.mjs",
     "lint": "biome check --write",

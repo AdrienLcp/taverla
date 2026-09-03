@@ -879,13 +879,20 @@ one part.
   left on it are all unused here. The bundle grew 21 KiB and Lighthouse did not
   move: 0.94 performance, 1 everywhere else.
 
-- **`pnpm deps:upgrade` could never run.** It opened on `pnpm self-update`,
-  which refuses outright under Corepack — `ERR_PNPM_CANT_SELF_UPDATE_IN_COREPACK`
-  — so the `&&` behind it meant the upgrade the script exists for never
-  happened. Updating the package manager is a separate occasional act whose
-  command depends on how pnpm was installed (`corepack use pnpm@latest` here),
-  and folding it into the dependency script is what broke it. The script is the
-  upgrade now, and nothing else.
+- **`pnpm deps:upgrade` could never run**, and now updates the three things a
+  version bump touches. It opened on `pnpm self-update`, which refuses outright
+  under Corepack — `ERR_PNPM_CANT_SELF_UPDATE_IN_COREPACK` — so the `&&` behind
+  it meant the upgrade the script exists for never happened. The command was
+  wrong, not the intent: pnpm *should* move with the rest, so
+  `corepack use pnpm@latest` is what does it, which is also what writes the
+  `packageManager` field and its hash.
+
+  `biome migrate --write` closes the chain, because upgrading Biome is two
+  edits and only one of them is the version. `biome.json` pins a `$schema` at
+  the exact release, so a bump leaves the config validating against the previous
+  one — editors keep offering the old options and stop knowing the new ones,
+  silently and for as long as nobody looks. It is Biome's own command for it,
+  so it carries any config migration the release needs at the same time.
 
   `managePackageManagerVersions` went with it: pnpm 11 does not recognise the
   setting, so it warned on every command and did nothing — and what it claimed
