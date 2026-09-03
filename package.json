@@ -1,11 +1,11 @@
 {
   "author": "Adrien Lacourpaille",
   "devDependencies": {
-    "@biomejs/biome": "2.5.10",
+    "@biomejs/biome": "2.5.11",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.62.1",
-    "@types/node": "^26.2.0",
-    "tsx": "^4.23.12",
+    "@types/node": "^26.4.1",
+    "tsx": "^4.23.13",
     "typescript": "^7.0.2"
   },
   "engines": {
@@ -14,11 +14,11 @@
   },
   "license": "AGPL-3.0-or-later",
   "name": "taverla",
-  "packageManager": "pnpm@11.22.0",
+  "packageManager": "pnpm@11.25.0+sha512.5cde925b4f075f725eb71fbae18a42ffe784524789f19b61c731cb8721ec28aaee160e01a8d5af4fedb2a42cdbf300efe23db356b0d4a17b4d63e11f8ab7c956",
   "private": true,
   "scripts": {
     "build": "pnpm -r build",
-    "deps:upgrade": "pnpm self-update && pnpm -r up -L",
+    "deps:upgrade": "pnpm -r up -L",
     "dev": "pnpm --parallel --filter @taverla/server --filter @taverla/game dev",
     "lighthouse": "pnpm build && node scripts/lighthouse.mjs",
     "lint": "biome check --write",
