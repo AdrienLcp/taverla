@@ -105,7 +105,13 @@ mixin) on the field; everything else is drawn with the ink or a `--rule`
 hairline.
 
 Controls are blocks: `filled` inverts the field, `outlined` is ruled in ink,
-`underlined` has neither. Disabled is **ruled, never dimmed** — fading a filled
+`underlined` has neither — **and therefore has no block either.** It is the one
+variant that takes no height and no inline padding, so it begins at the column
+edge the lines around it begin at; a tertiary action drawn as nothing but its
+own label has nothing to reserve room for. The box is a mixin the two materials
+opt into rather than a rule the root applies, because written as an exclusion it
+would be a `min-height: unset` undoing three rules above it, and the next size
+added would have to be undone there too. Disabled is **ruled, never dimmed** — fading a filled
 block takes its label's contrast with it. A choice strip obeys the same rule the
 same way: the selected stamp drops its ink ground and keeps the ink as an inset
 edge, which is what lets a host read their settings over a dead socket.
@@ -140,7 +146,8 @@ around a line.
 Three sizes: `small` (40px) for an action that sits *beside* something, `medium`
 (52px) for the ordinary control, `large` (72px) for a thumb or a room. Before
 `small` existed every secondary action was a 52px block, so every one of them
-read as a second primary action.
+read as a second primary action. The heights belong to the box, so on
+`underlined` a size sets the type and nothing else.
 
 **A control's reason is indented onto its label; a group's is flush.** The
 setting panel holds both, and the indent is the only thing that tells them

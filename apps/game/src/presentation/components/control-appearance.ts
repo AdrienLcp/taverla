@@ -17,6 +17,9 @@ export type ControlAppearance = {
    * - `'small'` — an action beside something, never under it
    * - `'medium'` — the default control size
    * - `'large'` — meant to be hit with a thumb, or read across a room
+   *
+   * It sets a height and a padding on the two variants that have a box, and
+   * the type alone on `'underlined'`, which has none.
    */
   size?: ControlSize
   /**
@@ -26,11 +29,14 @@ export type ControlAppearance = {
    * get:
    * - `'filled'` — an ink block, the one action on the screen
    * - `'outlined'` — the field behind an ink edge, an action of equal standing
-   * - `'underlined'` — no ground and no edge, a tertiary action that should not
-   *   compete. Still a control: it keeps the box, the case and the size
+   * - `'underlined'` — no ground, no edge, and therefore **no box**: it is the
+   *   only variant that does not take the height and the inline padding, so it
+   *   starts at the column edge every line beside it starts at. It keeps the
+   *   case, the type and the states — it is still a control, drawn as nothing
+   *   but its own label
    *
-   * A link inside a sentence is none of these — see `TextLink`, which is not a
-   * control at all.
+   * A link inside a sentence is none of these — see `TextLink`, which inherits
+   * the type of the sentence it sits in and is not a control at all.
    */
   variant?: ControlVariant
 }
