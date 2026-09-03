@@ -20,5 +20,7 @@ test('[e2e] a host pointed at a room that is gone is told, and given a way out',
   await expect(host.startGame).toBeHidden()
 
   await host.wayOut.click()
-  await expect(page).toHaveURL('/')
+  // The language the URL carries, not the bare root: the way out of a dead
+  // room is a link like any other, and every link names its language.
+  await expect(page).toHaveURL('/en')
 })

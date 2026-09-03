@@ -30,7 +30,13 @@ same way a stage is.
 | [16 — Le Fake](16-le-fake.md) | **done** | The fourth game: write a lie, fool the table. It bought the submit-then-vote phase seven of the remaining games want, on the quiz bank and for one new `RoomPhase` name |
 | [17 — Mid-game join](17-mid-game-join.md) | **done** | A round stamps who it opened on and waits for those players alone, so a phone arriving mid-clip no longer holds it up. It kept the seat, the refusal and one screen saying *au prochain tour* |
 | [18 — Reflex race](18-reflex-race.md) | done | The fifth game, and the cheapest: the screen flips, the first thumb wins. Session A served it — protocol, the false-start floor, the heat, `reflex-game.test.ts` — and it bought the **fifth guarantee**: the stimulus is a server timestamp every device schedules locally. Session B drew it: the field inverts at the flip (`data-flipped`, no seventh colour), the wait is the one screen in the product that never moves, and the reveal is a board of reaction times. It is on the shelf, and `shelvedGames` now equals `gameKinds` — which is a coincidence of today, not a rule |
-| [19 — A URL per language](19-locale-urls.md) | **to do** | `/fr/` and `/en/`, six indexable pages prerendered into twelve served documents with their own `lang`, `title`, `og:` and reciprocal `hreflang`. Two problems with one build step: it is also the only thing that touches the **83% of LCP spent waiting for JavaScript**, because the served `index.html` has nothing to paint |
+| [19 — A URL per language](19-locale-urls.md) | **half done** | `/fr/` and `/en/`, six indexable pages prerendered into twelve served documents with their own `lang`, `title`, `og:` and reciprocal `hreflang`. Two problems with one build step: it is also the only thing that touches the **83% of LCP spent waiting for JavaScript**, because the served `index.html` has nothing to paint. **Steps 1–3 and 8 have
+landed**: the six indexable pages live under `/fr` and `/en`, `/` and every
+unprefixed path negotiate and redirect, every internal link names its language,
+and the rooms deliberately stay unprefixed — nobody indexes an evening, and the
+QR code stays short. What is left is the whole point of the size: the post-build
+prerender, the twelve documents with their own `lang` / `title` / `og:` /
+reciprocal `hreflang`, Hono serving them, and the runtime `document.title` |
 
 ## Order, and what can move
 

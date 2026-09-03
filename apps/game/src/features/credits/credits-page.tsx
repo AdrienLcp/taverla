@@ -1,7 +1,7 @@
-import { paths } from '@/infrastructure/router/navigation'
+import { homePathFor } from '@/infrastructure/router/navigation'
 import { Link } from '@/presentation/components/link'
 import { TextLink } from '@/presentation/components/text-link'
-import { useTranslate } from '@/presentation/i18n/i18n-provider'
+import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
 import type { PlainTranslationKey } from '@/presentation/i18n/translation'
 
 import './credits-page.sass'
@@ -59,6 +59,7 @@ const QUESTION_CREDITS: QuestionCredit[] = [
 ]
 
 export const CreditsPage: React.FC = () => {
+  const { locale } = useI18n()
   const translate = useTranslate()
 
   return (
@@ -95,7 +96,7 @@ export const CreditsPage: React.FC = () => {
         </TextLink>
       </p>
 
-      <Link href={paths.home} variant='outlined'>
+      <Link href={homePathFor(locale)} variant='outlined'>
         {translate('navigation.back')}
       </Link>
     </main>

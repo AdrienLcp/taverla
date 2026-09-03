@@ -34,6 +34,21 @@ one part.
 
 ### Features
 
+- `[Game]` **Every page a crawler reaches now has a URL per language.** The six
+  indexable pages live under `/fr` and `/en`; the rooms deliberately do not,
+  because nobody indexes an evening and a locale segment would lengthen the two
+  things a room travels by — what the QR code encodes and what somebody reads
+  out across the table. `/` and every path from before this stage negotiate and
+  redirect, so a link already shared still resolves and `hreflang="x-default"`
+  has something to point at. The locale a URL names wins over what the device
+  remembers and over what its browser asks for, and is remembered — a room
+  reached from a link shared in the other language would otherwise come back in
+  the reader's own on the first reload, since a room's URL names none.
+  Switching language in the menu navigates on a page that names one and stays
+  put in a room, where leaving the path would drop the socket and hand the seat
+  back. This is half of [stage 19](docs/plans/19-locale-urls.md); the served
+  documents, their heads and the prerender are the other half
+
 - `[Game]` **A phone waiting on the room is told what it is waiting on.** Four
   facts the server was already sending reached no screen a player holds: who
   else is at the table and whose screen has gone, how long the floor lasts when
@@ -921,6 +936,21 @@ one part.
   in turn
 
 ### Internal
+
+- `[Shared]` **The i18n engine is one library again, shared with the project
+  it was adapted from.** It moves to `packages/core/src/i18n/lib/` as four files
+  that name nothing of this project: `defineTranslations` becomes
+  `defineDictionary`, `TranslationsLike` becomes `DictionaryFor`, and
+  `createTranslator` takes `dictionary` where it took `translations`. Not one
+  call site of `translate` changed. What came back from the other copy:
+  `WellFormed` now refuses a leaf that is not a message at all — `{ count: 3 }`
+  compiled before, because a mapped type over a primitive returns that
+  primitive — `negotiateLocale` replaces the region-stripping inside
+  `pickLocale` and tries each tag whole before dropping a subtag, so a supported
+  `pt-BR` beats a bare `pt`, and the library carries a README again. New:
+  `translator.types.test.ts` writes every rule that is a compile error at a call
+  site as the type it resolves to, since a compile error cannot be caught by a
+  test that has to compile; `tsc --noEmit` checks them.
 
 - `[Game]` **The breakpoint is a mixin now, not a comparison repeated ten
   times.** `@include layout.wide` and `layout.narrow` wrap the two media

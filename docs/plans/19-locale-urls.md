@@ -43,22 +43,42 @@ paint before any script runs.
   locale plugin, the LAN dev host the QR code needs).
 - **Six pages are indexable**: home, credits, and the four game front doors.
   Times two locales, twelve files.
-- **Rooms stay out.** `/host/` and `/play/` are already `Disallow`ed: a room is
-  one evening long and needs a live socket.
+- **Rooms stay out**, and that includes the prefix. `/host/` and `/play/` are
+  already `Disallow`ed: a room is one evening long and needs a live socket, so a
+  locale segment buys no language back in the index and lengthens the two things
+  a room travels by — what the QR code encodes and what somebody reads out
+  across the table. They keep negotiating at runtime, which is right for them
+  precisely because no crawler is watching. `taverla:seats`, the host tokens and
+  the QR code are untouched.
 
 ## Steps
 
-1. **`paths` gains a locale segment** for the six indexable routes. The room
-   routes are the open question below.
-2. **The root negotiates.** `/` keeps `applyInitialLocale`'s reading of
-   `navigator.languages` and redirects to the prefixed URL, and it is what
-   `hreflang="x-default"` points at. Redirecting without an `x-default` is the
-   one thing Google's guidance warns can keep a language out of the index
-   entirely.
-3. **Every internal link becomes locale-aware.** `gameHomePathFor` and the
-   `paths.home` / `paths.credits` links in `app-menu`, `credits-page`,
-   `not-found-page`, `connection-refused` and `error-screen`. `pathFor` is the
-   chokepoint, so this is where its params type earns itself.
+1. ~~**`paths` gains a locale segment**~~ **Done.** `paths` is now the union of
+   `localizedPaths` (`/:locale`, `/:locale/credits`, `/:locale/:game`) and
+   `roomPaths`, which is what decides the route tree: `routes.tsx` hangs the
+   first set behind the prefix guard and the second beside it, read off the path
+   itself so there is no second list to keep in step. The namespace `/:game`
+   shares moved down a segment with it, and the note that says so moved too.
+2. ~~**The root negotiates.**~~ **Done.** `/` is an index route rendering
+   `NegotiatedLocaleRedirect`, and it is what `hreflang="x-default"` will point
+   at — redirecting without an `x-default` is the one thing Google's guidance
+   warns can keep a language out of the index entirely. The same component
+   answers every *other* unprefixed path, so `/credits` and `/blindtest` from
+   before this stage gain the prefix rather than 404. `applyInitialLocale` reads
+   the locale out of the served path first, then storage, then
+   `navigator.languages`, and **remembers one the URL named** — without that, a
+   room reached from a link shared in the other language comes back in the
+   reader's own on the first reload, since a room's URL names none. The
+   negotiated fallback is deliberately not written: "never chosen" is what keeps
+   following the operating system.
+3. ~~**Every internal link becomes locale-aware.**~~ **Done.** `homePathFor`,
+   `creditsPathFor` and `gameHomePathFor` all take the locale, and `useLocale`
+   is the narrow accessor the six call sites read it from. Switching language in
+   the menu now **navigates** on a page that names one and stays put on a room —
+   leaving a room path would drop the socket and hand the seat back. The guard
+   follows the URL back the other way in a layout effect, because going back
+   across `/fr` → `/en` moves the URL without passing through the control that
+   moved it.
 4. **A post-build script** renders the six routes twice with
    `react-dom/server`, writing each into its own `index.html` with that
    language's head. The server already compresses and caches what it hands out;
@@ -73,19 +93,20 @@ paint before any script runs.
    navigation is a separate thing and still needs two dictionary keys and a
    write to `document.title` — today it is the English string from
    `index.html`, in both locales, for the life of the tab.
-8. **The e2e journeys navigate URLs**, so all three need the prefix.
+8. ~~**The e2e journeys navigate URLs**~~ **Done.** `everyone-answers` goes to
+   `/en` and asserts `/en/blindtest`, `dead-socket` expects the way out to land
+   on `/en`, and `full-game` keeps arriving at `/` and now asserts the
+   negotiation that sends it to `/en` — one journey covering the front door
+   where a room actually starts.
 
-## The open question
+## No trailing slash
 
-**Do the room routes take a prefix?** `/play/:code` is what the QR code encodes
-and what a person reads aloud, and a locale segment makes both longer for no
-indexing gain. Against that, one rule for every route is simpler than two, and a
-phone joining a French room should probably not open in English.
-
-The narrower answer, if the seam holds: leave the room routes unprefixed and let
-them keep negotiating at runtime, which is correct for them precisely because
-nobody indexes them. Decide it before step 1 — it decides whether
-`taverla:seats`, the host tokens and the QR code are touched at all.
+`/fr`, `/fr/credits`, `/fr/blindtest`. It is what `generatePath` produces, so
+`pathFor` stays the one place a path is built, and it is what every link in the
+app now carries. The prerender step therefore maps each of the twelve URLs to
+its file explicitly rather than leaning on a directory index — which the plan
+already called for (*"a static-file route per prefix"*), and which is the only
+shape that does not depend on how a given static server resolves a directory.
 
 ## Traps found while measuring
 

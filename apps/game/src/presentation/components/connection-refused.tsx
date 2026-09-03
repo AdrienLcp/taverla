@@ -2,8 +2,8 @@ import type { ReactNode } from 'react'
 
 import type { ProtocolErrorMessage } from '@taverla/protocol/server-message'
 
-import { paths } from '@/infrastructure/router/navigation'
-import { useTranslate } from '@/presentation/i18n/i18n-provider'
+import { homePathFor } from '@/infrastructure/router/navigation'
+import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
 import { protocolErrorKey } from '@/presentation/i18n/translation'
 
 import { Link } from './link'
@@ -31,6 +31,7 @@ export const ConnectionRefused = ({
   children,
   error
 }: ConnectionRefusedProps) => {
+  const { locale } = useI18n()
   const translate = useTranslate()
 
   return (
@@ -41,7 +42,7 @@ export const ConnectionRefused = ({
         )}
       </h2>
       {children}
-      <Link href={paths.home} size='large' variant='outlined'>
+      <Link href={homePathFor(locale)} size='large' variant='outlined'>
         {translate('navigation.back')}
       </Link>
     </section>

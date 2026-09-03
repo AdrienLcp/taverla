@@ -21,7 +21,12 @@ import {
   type ThemePreference
 } from '@/helpers/theme'
 import { fetchHealth } from '@/infrastructure/api/taverla-api'
-import { paths, useRoomCodeParam } from '@/infrastructure/router/navigation'
+import {
+  creditsPathFor,
+  homePathFor,
+  useNavigateToLocale,
+  useRoomCodeParam
+} from '@/infrastructure/router/navigation'
 import { readHostToken } from '@/infrastructure/storage/session-storage'
 import { useConnection } from '@/presentation/connection/connection-provider'
 import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
@@ -165,6 +170,7 @@ const SeatName = () => {
  * code stops resolving, so a phone cannot reload its way back in.
  */
 const RoomExit = ({ onDone }: { onDone: () => void }) => {
+  const { locale } = useI18n()
   const { closeRoom, endGame, leaveSeat } = useRoomActions()
   const [isConfirmingClose, setIsConfirmingClose] = useState(false)
   const connection = useConnection()
@@ -182,7 +188,7 @@ const RoomExit = ({ onDone }: { onDone: () => void }) => {
     return (
       <div className='exits'>
         <Link
-          href={paths.home}
+          href={homePathFor(locale)}
           onPress={() => {
             leaveSeat?.()
             onDone()
@@ -235,7 +241,7 @@ const RoomExit = ({ onDone }: { onDone: () => void }) => {
           <>
             <p className='warning'>{translate('host.closeRoom.warning')}</p>
             <Link
-              href={paths.home}
+              href={homePathFor(locale)}
               onPress={() => {
                 closeRoom()
                 onDone()
@@ -276,6 +282,7 @@ const THEME_KEYS: Record<ThemePreference, PlainTranslationKey> = {
  */
 export const AppMenu = () => {
   const { locale, setLocale, translate } = useI18n()
+  const navigateToLocale = useNavigateToLocale()
   const { preference, setPreference } = useTheme()
   const connection = useConnection()
   const isInsideRoom = useIsInsideRoom()
@@ -333,6 +340,7 @@ export const AppMenu = () => {
                   onChange={(next) => {
                     if (isLocale(next)) {
                       setLocale(next)
+                      navigateToLocale(next)
                     }
                   }}
                   options={LOCALES.map((value) => ({
@@ -375,7 +383,7 @@ export const AppMenu = () => {
                 */}
                 {!isInsideRoom && (
                   <p className='credit'>
-                    <TextLink href={paths.credits} onPress={close}>
+                    <TextLink href={creditsPathFor(locale)} onPress={close}>
                       {translate('credits.title')}
                     </TextLink>
                   </p>

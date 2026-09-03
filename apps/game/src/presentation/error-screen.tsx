@@ -1,9 +1,9 @@
 import { useRouteError } from 'react-router'
 
-import { paths } from '@/infrastructure/router/navigation'
+import { homePathFor } from '@/infrastructure/router/navigation'
 import { Button } from '@/presentation/components/button'
 import { Link } from '@/presentation/components/link'
-import { useTranslate } from '@/presentation/i18n/i18n-provider'
+import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import './error-screen.sass'
 
@@ -25,6 +25,7 @@ const reload = (): void => {
  * work is worse than one button that does.
  */
 export const ErrorScreen = () => {
+  const { locale } = useI18n()
   const translate = useTranslate()
   const error = useRouteError()
 
@@ -38,7 +39,7 @@ export const ErrorScreen = () => {
         <Button onPress={reload} size='large'>
           {translate('error.screen.reload')}
         </Button>
-        <Link href={paths.home} variant='underlined'>
+        <Link href={homePathFor(locale)} variant='underlined'>
           {translate('menu.home')}
         </Link>
       </div>

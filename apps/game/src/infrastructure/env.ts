@@ -10,6 +10,13 @@ export const socketOrigin = (): string =>
 export const preferredLocales = (): readonly string[] => navigator.languages
 
 /**
+ * The path the document was served at, which is where the language it is
+ * written in is named. Read here rather than through the router because the
+ * attribute on `<html>` has to be right before the router exists.
+ */
+export const servedPath = (): string => location.pathname
+
+/**
  * Absent on iOS Safari, and silently so. Nothing may be built on top of it —
  * it confirms a buzz that the screen already confirmed.
  */

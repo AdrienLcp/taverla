@@ -1,16 +1,24 @@
 import { createBrowserRouter, type RouteObject } from 'react-router'
 
 import { NotFoundPage } from '@/features/not-found/not-found-page'
-import { paths } from '@/infrastructure/router/navigation'
+import {
+  LocalePrefixedRoutes,
+  NegotiatedLocaleRedirect
+} from '@/infrastructure/router/locale-prefix'
+import {
+  localizedPaths,
+  paths,
+  roomPaths
+} from '@/infrastructure/router/navigation'
 import { AppShell } from '@/presentation/app-shell'
 import { ErrorScreen } from '@/presentation/error-screen'
 import { RouteFallback } from '@/presentation/route-fallback'
 
 /**
- * Every path that is reached by matching it, which is all of them but `home` —
+ * Every path that is reached by matching it, which is all of them but `root` —
  * that one is the layout's index route, and matches by being nowhere.
  */
-type RoutedPath = Exclude<(typeof paths)[keyof typeof paths], typeof paths.home>
+type RoutedPath = Exclude<(typeof paths)[keyof typeof paths], typeof paths.root>
 
 /**
  * Keyed by path so the table cannot lose one or answer the same one twice.
@@ -30,6 +38,9 @@ const lazyPageFor = {
   [paths.game]: async () => ({
     Component: (await import('@/features/shelf/game-home-page')).GameHomePage
   }),
+  [paths.home]: async () => ({
+    Component: (await import('@/features/home/home-page')).HomePage
+  }),
   [paths.host]: async () => ({
     Component: (await import('@/features/host/host-console-page'))
       .HostConsolePage
@@ -39,17 +50,26 @@ const lazyPageFor = {
   })
 } satisfies Record<RoutedPath, RouteObject['lazy']>
 
+const routeFor = (path: RoutedPath): RouteObject => ({
+  lazy: lazyPageFor[path],
+  path
+})
+
+/**
+ * Which branch a path hangs from is read off the path itself, so putting a page
+ * under a locale is what puts it behind the prefix guard — there is no second
+ * list to keep in step.
+ */
 export const router = createBrowserRouter([
   {
     Component: AppShell,
     children: [
+      { Component: NegotiatedLocaleRedirect, index: true },
       {
-        index: true,
-        lazy: async () => ({
-          Component: (await import('@/features/home/home-page')).HomePage
-        })
+        Component: LocalePrefixedRoutes,
+        children: Object.values(localizedPaths).map(routeFor)
       },
-      ...Object.entries(lazyPageFor).map(([path, lazy]) => ({ lazy, path })),
+      ...Object.values(roomPaths).map(routeFor),
       { Component: NotFoundPage, path: '*' }
     ],
     // On the root, so a throw anywhere below replaces the shell instead of

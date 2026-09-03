@@ -23,6 +23,9 @@ test('[e2e] a room, a scan, a buzz, a verdict and a point', async ({
   const player = playerScreen(phone)
 
   await bigScreen.goto('/')
+  // The one journey that arrives at the front door, so the negotiation that
+  // sends it to a language is covered where a room actually starts.
+  await expect(bigScreen).toHaveURL('/en')
   await homePage(bigScreen).createRoom.click()
   await expect(bigScreen).toHaveURL(/\/host\/[A-Z0-9]{4}$/)
 

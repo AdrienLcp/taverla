@@ -6,7 +6,7 @@ import { JoinWithCode } from '@/features/join/join-with-code'
 import { gameHomePathFor } from '@/infrastructure/router/navigation'
 import { Button } from '@/presentation/components/button'
 import { Separator } from '@/presentation/components/separator'
-import { useTranslate } from '@/presentation/i18n/i18n-provider'
+import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
 import { gameNameKey, gameTaglineKey } from '@/presentation/i18n/translation'
 
 import { useCreateRoom } from './use-create-room'
@@ -29,6 +29,7 @@ import './home-page.sass'
  * been asked for yet.
  */
 export const HomePage: React.FC = () => {
+  const { locale } = useI18n()
   const translate = useTranslate()
   const { error, isCreating, open } = useCreateRoom()
 
@@ -70,7 +71,11 @@ export const HomePage: React.FC = () => {
         <section className='shelf'>
           <h2>{translate('home.games')}</h2>
           {shelvedGames.map((game) => (
-            <Link className='game' href={gameHomePathFor(game)} key={game}>
+            <Link
+              className='game'
+              href={gameHomePathFor({ game, locale })}
+              key={game}
+            >
               <span className='name'>{translate(gameNameKey(game))}</span>
               <span className='pitch'>{translate(gameTaglineKey(game))}</span>
             </Link>

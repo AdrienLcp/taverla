@@ -31,9 +31,9 @@ test('[e2e] two phones type over the same clip, and the reveal says what they sa
   // The landing is awaited rather than assumed, because both pages carry a
   // "Open a table" and clicking the wrong one opens a room with no game — a
   // race that fails much later, at a launch that stays greyed out.
-  await bigScreen.goto('/')
+  await bigScreen.goto('/en')
   await homePage(bigScreen).blindTest.click()
-  await expect(bigScreen).toHaveURL('/blindtest')
+  await expect(bigScreen).toHaveURL('/en/blindtest')
   await blindTestHome(bigScreen).createRoom.click()
   await expect(bigScreen).toHaveURL(/\/host\/[A-Z0-9]{4}$/)
 
