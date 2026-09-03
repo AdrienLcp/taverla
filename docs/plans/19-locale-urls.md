@@ -68,7 +68,12 @@ paint before any script runs.
    in silence.
 6. **`og:locale` per page**, and `og:locale:alternate` finally means something —
    today `index.html` promises `fr_FR` with no French URL behind it.
-7. **The e2e journeys navigate URLs**, so all three need the prefix.
+7. **The document title, twice.** The prerendered head carries it per language,
+   which is what a crawler and an unfurl read. The tab after an in-app
+   navigation is a separate thing and still needs two dictionary keys and a
+   write to `document.title` — today it is the English string from
+   `index.html`, in both locales, for the life of the tab.
+8. **The e2e journeys navigate URLs**, so all three need the prefix.
 
 ## The open question
 

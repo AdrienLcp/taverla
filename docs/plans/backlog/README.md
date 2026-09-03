@@ -15,12 +15,15 @@ file rather than half-landing.
 
 ## Open
 
-One entry, and it is not a fault: the last playtest fault waits on a phone
-rather than on a session.
+Three entries, and none is a fault. The last playtest fault waits on a phone
+rather than on a session; the two beside it are decisions the oklch palette
+opened and nobody has taken.
 
 | Session | In one line | Cost | Starts with | Holds |
 |---|---|---|---|---|
 | [The room is silent, unexplained](silent-room-unexplained.md) | **Half done.** Two of the three causes are ruled out and the console names the third; one reading on the Android phone closes it | waits on a phone | — | note 6, and what each of the three lines means |
+| [The borders that do not quite carry](borders-that-do-not-quite-carry.md) | `--rule` is 1.84:1 and two of its twelve uses are a control's border, not a divider. Decide whether WCAG 1.4.11's 3:1 applies to a frame around type that already reads | small, one decision | the two uses that are not dividers | the argument both ways, and the cheap third answer |
+| [The fields a phone could show](fields-a-phone-could-show.md) | `oklch()` can name a colour sRGB cannot, and every phone in the room has a P3 screen. Three fields would gain; the twelve contrast pairs would need re-measuring | a session, and a phone to review on | the three highest-chroma fields | why it is a design decision and not a conversion |
 
 **One diagnosis disagrees with the note that raised it** — read the entry before
 planning it:
