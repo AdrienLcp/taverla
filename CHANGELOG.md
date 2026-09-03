@@ -507,10 +507,10 @@ one part.
   and the negotiated locale was written onto `<html>` from an effect in the
   i18n provider, which runs *after* the first paint. So every French load spent
   a frame as French text under `lang="en"`, which is exactly what a browser's
-  translate heuristic looks for; an Xbox offered to translate the page. The
-  negotiation now happens in `main.tsx` and lands on `<html lang>` before React
-  renders a word, and the provider is seeded with what it decided rather than
-  deciding again. Nothing about *which* locale is chosen changed: a browser
+  translate heuristic looks for; an Xbox offered to translate the page.
+  `applyInitialLocale` decides and stamps in one call — one call is what keeps
+  the order from being got wrong — `main.tsx` makes it before `root.render`,
+  and the provider is seeded with what it decided rather than deciding again. Nothing about *which* locale is chosen changed: a browser
   asking for French has always got French, `DEFAULT_LOCALE` being the fallback
   for a browser that asks for neither.
 

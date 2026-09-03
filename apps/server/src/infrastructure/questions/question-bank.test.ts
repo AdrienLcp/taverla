@@ -101,6 +101,12 @@ describe('drawQuestion', () => {
    * gave French history — 52 rows of 1 708 — about thirty-five, which is what
    * this floor catches. It is far enough below the expected count that chance
    * cannot reach it and far enough above the old behaviour to fail on it.
+   *
+   * Which is why this one buys a budget where the language test below cut its
+   * sample instead: a language either groups or it does not, and fifty draws
+   * say so, but the floor here *is* the sample size. Twelve hundred draws are
+   * seconds of real work, so the number to move is vitest's default 5 s — a
+   * default, never a decision about this test — and not the statistics.
    */
   it('[bank] mixes the subjects evenly when the host has ticked none', () => {
     const counts = new Map<QuestionCategory, number>()
@@ -111,7 +117,7 @@ describe('drawQuestion', () => {
 
     expect(counts.size).toBe(questionCategories.length)
     expect(Math.min(...counts.values())).toBeGreaterThan(100)
-  })
+  }, 30_000)
 
   /**
    * The audit that earned its place in the suite. A row's decoys are the bank
