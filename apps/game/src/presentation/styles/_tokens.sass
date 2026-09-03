@@ -3,62 +3,70 @@
 // It may `@use` a pure module, and does: the wide-column ceiling is the
 // breakpoint that reveals it, and `_layout.sass` owns that number.
 //
-// The surface IS the colour, and the colour is the phase. Six fields per
-// palette, each with the ink that survives on it — measured, not eyeballed:
-// every pair clears 4.5:1, and `--ink-muted` mixes back toward the field only
-// as far as 85%, which is where the worst pair still clears it.
+// The surface IS the colour, and the colour is the phase. Six fields, each with
+// the ink that survives on it — measured, not eyeballed: every pair clears
+// 4.5:1, worst 5.65 on the light buzzed pair, and `--ink-muted` mixes back
+// toward the field only as far as 85%, which is where that pair still clears it.
+//
+// Each pair is one `light-dark()`, read as the row DESIGN.md tabulates it as:
+// light beside dark, which is what you compare when you tune one. It also means
+// the palette is declared once instead of in both places a theme can be decided
+// from — those two now set nothing but `color-scheme`, which is what
+// `light-dark()` reads.
+//
+// Every value is an exact conversion of the hex it replaces: all twenty-nine
+// round-trip to the same 8-bit sRGB colour, so this moved the notation and
+// nothing a room can see. What it buys is the two mixes at the bottom, which
+// are perceptual now — the worst `--ink-muted` pair went from 4.61:1 to 4.81:1
+// on the same 85%.
+//
+// `light-dark()` is the newest thing here and costs nothing, because
+// LightningCSS lowers it for Vite's default target: what ships is a pair of
+// custom properties toggled between a space and `initial`, attached to these
+// same two rules, which works anywhere `var()` does. `oklch()` and
+// `color-mix()` are inside that target and ship as written. So the authored
+// floor is Baseline 2024 and the shipped one is far older — check the built
+// CSS rather than this comment before assuming either.
 
 @use 'layout'
 
-@mixin dark-palette
-  color-scheme: dark
-
-  --field-lobby: #a8330d
-  --ink-lobby: #fff2e6
-  --field-countdown: #c98a00
-  --ink-countdown: #1a1206
-  --field-playing: #0e4b44
-  --ink-playing: #eafbf6
-  --field-buzzed: #8c1027
-  --ink-buzzed: #ffedef
-  --field-revealed: #48174f
-  --ink-revealed: #f8e9fb
-  --field-finished: #14532d
-  --ink-finished: #e9fbef
-
-  --cut: #f6f1e7
-  --cut-ink: #17130d
-
-@mixin light-palette
-  color-scheme: light
-
-  --field-lobby: #ff7a3d
-  --ink-lobby: #2b0e00
-  --field-countdown: #ffc53d
-  --ink-countdown: #2b1f00
-  --field-playing: #3fb8a6
-  --ink-playing: #04231f
-  --field-buzzed: #f2566e
-  --ink-buzzed: #2e0009
-  --field-revealed: #b77cc4
-  --ink-revealed: #25062b
-  --field-finished: #5fbf7f
-  --ink-finished: #04240f
-
-  --cut: #ffffff
-  --cut-ink: #17130d
-
 @layer tokens
   \:root
-    @include dark-palette
+    // Dark is the default because a room plays with the lights down. The two
+    // rules further down move `color-scheme` and nothing else.
+    color-scheme: dark
+
+    --field-lobby: light-dark(oklch(72.58% 0.1782 43.19), oklch(49.27% 0.1593 36.32))
+    --ink-lobby: light-dark(oklch(20.74% 0.0556 49.07), oklch(96.81% 0.0212 65.32))
+
+    --field-countdown: light-dark(oklch(85.37% 0.1572 84.13), oklch(67.94% 0.1424 76.48))
+    --ink-countdown: light-dark(oklch(24.70% 0.0505 87.71), oklch(18.89% 0.0260 77.50))
+
+    --field-playing: light-dark(oklch(71.12% 0.1094 181.26), oklch(37.38% 0.0605 183.56))
+    --ink-playing: light-dark(oklch(23.21% 0.0371 183.02), oklch(97.42% 0.0190 176.45))
+
+    --field-buzzed: light-dark(oklch(66.75% 0.1909 14.92), oklch(41.29% 0.1550 19.08))
+    --ink-buzzed: light-dark(oklch(19.16% 0.0766 14.32), oklch(96.09% 0.0197 9.78))
+
+    --field-revealed: light-dark(oklch(67.20% 0.1218 320.21), oklch(30.84% 0.1081 322.47))
+    --ink-revealed: light-dark(oklch(20.11% 0.0774 320.77), oklch(95.11% 0.0287 320.58))
+
+    --field-finished: light-dark(oklch(72.94% 0.1308 152.72), oklch(39.25% 0.0896 152.54))
+    --ink-finished: light-dark(oklch(23.04% 0.0550 151.40), oklch(97.15% 0.0246 156.74))
+
+    // The die-cut ground the cover art and the QR code are stamped on. Its ink
+    // is the one colour both palettes share: what sits on the cut is a
+    // rectangle rather than a field, and the rectangle is the same either way.
+    --cut: light-dark(oklch(100% 0 0), oklch(95.93% 0.0143 84.58))
+    --cut-ink: oklch(18.95% 0.0133 77.82)
 
     // An error is a stamped block, never tinted text, and that is a contrast
     // decision rather than a stylistic one: a red that reads on the aubergine
     // field is invisible on the chrome-yellow one, and text tinted from the ink
     // tops out at 4.0:1 against the worst field. Inside its own block the
     // contrast is fixed and total, so the stamp is the same in both palettes.
-    --danger: #b3001b
-    --danger-ink: #fff2f2
+    --danger: oklch(48.30% 0.1958 25.03)
+    --danger-ink: oklch(97.13% 0.0140 17.40)
 
     // Hard edges everywhere. The buzzer is the one round thing in the product,
     // because it is the one thing that is a physical button.
@@ -92,7 +100,7 @@
     //
     // Every one falls back to `0px`. An `env()` a browser does not know, with
     // no fallback, is invalid at computed-value time — the whole declaration
-    // goes, and the page loses its padding rather than keeping today's.
+    // goes, and the page loses its padding rather than keeping the current one.
     //
     // `env()` names physical sides, so the two inline tokens read a
     // left-to-right locale. Both of ours are; a right-to-left one swaps which
@@ -128,8 +136,11 @@
     // shell swaps which phase they point at, and that swap is the design.
     --field: var(--field-lobby)
     --ink: var(--ink-lobby)
-    --ink-muted: color-mix(in srgb, var(--ink) 85%, var(--field))
-    --rule: color-mix(in srgb, var(--ink) 32%, var(--field))
+    // Mixed in oklab rather than srgb, which is where gamma-encoded
+    // interpolation goes muddy at the midpoint. This one is read as text, so
+    // the gain is measured: the worst pair clears 4.81:1 where srgb gave 4.61.
+    --ink-muted: color-mix(in oklab, var(--ink) 85%, var(--field))
+    --rule: color-mix(in oklab, var(--ink) 32%, var(--field))
 
   // `usePhaseField` stamps the attribute on the root element, so the field
   // survives an overscroll bounce — what shows there is the document's
@@ -171,12 +182,15 @@
   // leaves the system default to be resolved here — in CSS, before any script
   // has run. A JavaScript-decided theme cannot be applied until after the first
   // paint, and that gap is the flash of the wrong ground.
+  //
+  // Both rules set `color-scheme` alone. Every token above reads it through
+  // `light-dark()`, so a theme is one declaration rather than a second palette.
   \:root[data-theme='light']
-    @include light-palette
+    color-scheme: light
 
   @media (prefers-color-scheme: light)
     \:root:not([data-theme='dark'])
-      @include light-palette
+      color-scheme: light
 
   // Every duration token collapses here, which is why a `var(--transition-*)`
   // reference must fall back to `0` and never to its nominal value: if the

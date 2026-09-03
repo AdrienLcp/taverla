@@ -308,6 +308,28 @@ one part.
 
 ### Improvements
 
+- `[Game]` **The palette is `oklch()`, and each pair is one `light-dark()`.**
+  All twenty-nine colours were hex in two blocks a mixin applied to the two
+  places a theme can be decided from; they are now one list of `light-dark()`
+  pairs, and those two rules set `color-scheme` and nothing else. Every value is
+  an exact conversion — all twenty-nine round-trip to the same 8-bit sRGB
+  colour, verified by reading pixels back off the built app in both palettes
+  across three phases — so the six fields are the same six colours.
+
+  The one thing a room sees differently is better: `--ink-muted` and `--rule`
+  mix `in oklab` rather than `in srgb`, which is where gamma-encoded
+  interpolation goes muddy at the midpoint, and the worst `--ink-muted` pair
+  went from 4.61:1 to 4.81:1 on the same 85%. `light-dark()` costs nothing at
+  the far end: LightningCSS lowers it for Vite's default target into a pair of
+  toggled custom properties attached to those same two rules, so what ships
+  works anywhere `var()` does.
+
+  `DESIGN.md` carries the values as lightness, chroma and hue now, which made
+  two things checkable that had been assertions: the closest two consecutive
+  phases are 57 degrees apart, and the two palettes drift up to 8 degrees off
+  each other rather than being one hue at two lightnesses. Its worst measured
+  pair was also recorded as 5.56:1 and is 5.65:1 over all twelve.
+
 - `[Server]` **The built app is compressed and cached.** `serveStatic` was
   sending 370 KiB of uncompressed text and no `Cache-Control` at all, so every
   phone joining a room downloaded the whole bundle again over whichever flat's

@@ -16,14 +16,27 @@ Lineage: French television variety title cards, 1972–81.
 `usePhaseField` stamps `data-phase` on the root element and `_tokens.sass` maps
 it to a `--field` / `--ink` pair. Six phases, six fields:
 
-| Phase | Dark | Light |
-|---|---|---|
-| `lobby` | burnt orange `#a8330d` | `#ff7a3d` |
-| `countdown` | chrome yellow `#c98a00` | `#ffc53d` |
-| `playing` | deep teal `#0e4b44` | `#3fb8a6` |
-| `buzzed` | oxblood `#8c1027` | `#f2566e` |
-| `revealed` | aubergine `#48174f` | `#b77cc4` |
-| `finished` | forest `#14532d` | `#5fbf7f` |
+Written in `oklch()`, as lightness, chroma and hue — the exact values are in
+`_tokens.sass`, and each pair is one `light-dark()` so a token reads as its row
+here does.
+
+| Phase | | Dark `L% C H` | Light `L% C H` |
+|---|---|---|---|
+| `lobby` | burnt orange | `49% .159 36` | `73% .178 43` |
+| `countdown` | chrome yellow | `68% .142 76` | `85% .157 84` |
+| `playing` | deep teal | `37% .061 184` | `71% .109 181` |
+| `buzzed` | oxblood | `41% .155 19` | `67% .191 15` |
+| `revealed` | aubergine | `31% .108 322` | `67% .122 320` |
+| `finished` | forest | `39% .090 153` | `73% .131 153` |
+
+Two things the hues make checkable rather than asserted. The closest two
+consecutive phases are `buzzed` and `revealed`, 57 degrees apart — comfortably
+distinct at four metres. And the two palettes are **not** one hue at two
+lightnesses: they drift up to 8 degrees, widest on `lobby`. That is the mark of
+six pairs picked by eye rather than derived, which is what they were, and it is
+only visible at all now the values say their hue out loud. Holding each pair to
+one angle is a change to what a room sees, so it is a decision and not a
+tidy-up — nobody has made it.
 
 No two consecutive phases share a hue, which is the point: from the far side of
 a room you know where the game is before you read a word. The attribute goes on
@@ -68,9 +81,17 @@ flip under the eyes waiting for it.
 
 ### Contrast, measured
 
-Every field/ink pair clears 4.5:1 (worst 5.56). `--ink-muted` mixes the ink back
-toward the field only as far as 85%, which is where the worst pair still clears
-4.5:1 — 80% does not.
+Every field/ink pair clears 4.5:1. The worst is the light `buzzed` pair at
+5.65:1, measured over all twelve. `--ink-muted` mixes the ink back toward the
+field only as far as 85%, which is where that pair still clears 4.5:1 — 80% does
+not.
+
+That mix is `in oklab` rather than `in srgb`, which is where gamma-encoded
+interpolation goes muddy at the midpoint and this one is read as text. It is the
+one thing the move to `oklch()` changed about what a room sees, and it changed
+it for the better: the worst `--ink-muted` pair went from 4.61:1 to 4.81:1 on
+the same 85%. Every field and ink value itself round-trips to the hex it
+replaced, so the six fields are the same six colours.
 
 An error is **a stamped block**, never tinted text: `--danger` / `--danger-ink`
 are the same in both palettes because the contrast that matters is inside the
