@@ -871,6 +871,15 @@ one part.
 
 ### Internal
 
+- `[Game]` **The route table is keyed by path, so it cannot lose one or answer
+  the same one twice.** Both shipped once: `paths.game` was given to the player
+  screen as well as the shelf, which left `/play/XXXX` on the 404 and
+  PlayerPage unreachable with build and lint green — an e2e journey was the
+  only thing that said so, because two route entries holding the wrong
+  constant are two strings and nothing more. `lazyPageFor` is a record over
+  every path but `home`, checked with `satisfies`: a missing key is a compile
+  error, and a repeated one has nowhere to go.
+
 - `[Game]` **A path is built through a params type with no escape hatch.**
   `generatePath`'s own intersects an index signature over every string, so a
   name the pattern does not carry — a typo beside the right one, a param since
