@@ -31,6 +31,62 @@ Prerendering answers both: each language gets its own served document with its
 own `lang`, `title`, `description` and `og:`, and that document has content to
 paint before any script runs.
 
+## What it measured
+
+Re-run on the built app after the stage, same three pages under their prefix,
+three runs each, median. Port 3199 rather than 3100, which was taken; the port
+is not part of the measurement.
+
+| | `/en` | `/en/blindtest` | `/en/credits` |
+|---|---|---|---|
+| performance | 0.93 → 0.93 | 0.94 → 0.95 | 0.94 → 0.94 |
+| FCP | 2.3 s → **2.1 s** | 2.1 s | 2.1 s |
+| LCP | 2.7 s → 2.7 s | 2.68 s | 2.68 s |
+| TBT | 70 ms → 114 ms | 63 ms | 66 ms |
+| CLS, accessibility, best-practices, SEO | unchanged | unchanged | unchanged |
+
+The arrows are against the baseline above, which reported one set of paint
+figures for `/`; the other two columns had no published FCP to compare to.
+
+**The document is right and the paint barely moved.** `/en` is served as a
+complete page — the head, the shell, the two doors and all five game cards, 8.4
+KB — and Lighthouse names an element of it as the LCP. So the goal is met and
+the score did not follow, which is worth a sentence rather than a shrug.
+
+**The gate moved from the bundle to the stylesheets, and the stylesheets are
+queued behind the bundle.** One run under `--throttling-method=devtools`, which
+throttles the load as it happens instead of simulating it afterwards and so
+gives a timeline that can be read:
+
+| | arrives |
+|---|---|
+| the document, 8.4 KB | 646 ms |
+| `button.css` · `link.css` | 1 278 · 1 309 ms |
+| **`index.css`, 16 KB** | **1 930 ms** |
+| `i18n-provider.js` 256 KB · `index.js` 291 KB | 2 626 · 2 736 ms |
+| `archivo-latin.woff2`, 90 KB | 2 719 ms |
+
+FCP and LCP are the same event at 2 224 ms — TTFB 72 ms, render delay 2 152 ms.
+All three stylesheets are render-blocking, so nothing may paint before 1 930 ms,
+and the 294 ms after that is layout. Those three files are 16 KB between them
+and take 1.2 s because they are discovered in the same breath as 550 KB of
+JavaScript and a 90 KB font, all requested at ~686 ms over a link moving about
+200 KB/s. Priority does not preempt on a shared connection: the small file waits
+its turn with the large ones.
+
+So the stage did what it was built for. The first paint no longer waits for
+React, and there is a whole page in the document for it to paint. It now waits
+for a stylesheet that is 3% of what is in flight, which is why the scores are
+flat.
+
+**That makes the render-blocking-stylesheet trap the whole remaining win, not a
+150 ms cleanup.** Inlining what the first paint needs removes the request
+instead of reordering it, and the ceiling underneath is the document's own
+646 ms. It is the same answer the theme flash wants, and neither is a Lighthouse
+concern first — a reader on a phone waits two seconds for a page the server
+finished sending in one.
+
+
 ## What is already decided
 
 - **Path prefix**, `/fr/…` and `/en/…`. Subdomains and ccTLDs are for when the
@@ -167,10 +223,17 @@ gives.
   render adds a round trip to the critical path, which under the throttled
   profile costs more than the 20 KiB saves. It only pays if the import is issued
   from the **entry** so it is discovered in parallel with the provider chunk —
-  and once the page is prerendered, the whole question changes shape. Measure
-  again after this stage, not before.
-- **Three render-blocking stylesheets** (4.1 + 1.2 + 1.0 KiB) cost ~150 ms in
-  round trips. Prerendering is the moment to inline the tokens the first paint
-  needs, which is the lobby field and its ink.
+  and once the page is prerendered, the whole question changes shape. It has:
+  the measurement above puts the first paint at 1 930 ms and the `i18n-provider`
+  chunk at 2 626 ms, so **the dictionary is no longer on the first-paint path at
+  all**. What it can still buy is bandwidth the stylesheets are competing for,
+  and the blocking time after the paint. That is a different case from the one
+  this bullet weighed, and it should be argued on those terms or dropped.
+- **Three render-blocking stylesheets** (4.1 + 1.2 + 1.0 KiB gzipped) were
+  costed at ~150 ms in round trips. They cost **1.28 s** — measured after the
+  stage, above: the estimate priced the round trips and not the queue, and once
+  the document has something to paint the queue is what is left. Prerendering is
+  the moment to inline the tokens the first paint needs, which is the lobby field
+  and its ink.
 - **`lang` is already stamped before React renders** (`applyInitialLocale`), so
   the runtime half of this is done. What is missing is the *served* document.
