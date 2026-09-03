@@ -31,7 +31,18 @@ export const RoomInvitation: React.FC<RoomInvitationProps> = ({ roomCode }) => {
         <CopyButton value={roomCode} />
       </div>
       <div className='qr'>
+        {/*
+          Hidden rather than named. `qrcode.react` stamps `role="img"` on the
+          square whether or not it was given a `title`, so an unnamed one is a
+          graphic with no alternative — and the alternative is already on the
+          screen twice: the line under it says what to do with the square, and
+          the address below that is what the square encodes. A screen reader
+          cannot point a camera at anything, so naming it would announce a
+          shortcut its listener has no way to take, ahead of the address that
+          is the way in.
+        */}
         <QRCodeSVG
+          aria-hidden='true'
           bgColor='transparent'
           fgColor='currentColor'
           marginSize={0}

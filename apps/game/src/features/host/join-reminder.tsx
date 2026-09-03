@@ -26,7 +26,10 @@ export const JoinReminder: React.FC<JoinReminderProps> = ({ roomCode }) => {
 
   return (
     <aside className='join-reminder'>
+      {/* Hidden for the reason `RoomInvitation` gives, and the code beside it
+          is what a listener can actually act on. */}
       <QRCodeSVG
+        aria-hidden='true'
         bgColor='transparent'
         fgColor='currentColor'
         marginSize={0}
