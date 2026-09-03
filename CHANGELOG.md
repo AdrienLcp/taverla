@@ -34,8 +34,8 @@ one part.
 
 ### Features
 
-- `[Game]` **Every page a crawler reaches now has a URL per language.** The six
-  indexable pages live under `/fr` and `/en`; the rooms deliberately do not,
+- `[Game]` **Every page a crawler reaches now has a URL per language.** The
+  seven indexable pages live under `/fr` and `/en`; the rooms deliberately do not,
   because nobody indexes an evening and a locale segment would lengthen the two
   things a room travels by — what the QR code encodes and what somebody reads
   out across the table. `/` and every path from before this stage negotiate and
@@ -48,6 +48,31 @@ one part.
   put in a room, where leaving the path would drop the socket and hand the seat
   back. This is half of [stage 19](docs/plans/19-locale-urls.md); the served
   documents, their heads and the prerender are the other half
+
+- `[Game]` **The page now paints before the JavaScript runs, in the language its
+  URL names.** The build renders the seven indexable pages in both languages and
+  writes **fourteen documents**, each carrying its own `lang`, `title`,
+  `description`, self-referencing `canonical`, reciprocal `hreflang` with an
+  `x-default` on `/`, and a full `og:` set down to a localized `og:image:alt`.
+  Until now every one of those URLs was answered by one English `index.html`
+  with an empty `#root`: an unfurl bot, which runs no JavaScript at all, read
+  the English head whatever the link said, and a phone on a party's Wi-Fi looked
+  at an empty field for as long as the bundle took — **83% of the largest paint
+  was render delay**, not network. The tab after an in-app navigation follows
+  too, and follows a language change with it.
+
+  Three things are worth knowing about the shape. The document list is read off
+  `shelvedGames` and `LOCALES`, never written down — this stage's own plan said
+  six pages and twelve documents and was already wrong by two, because `reflex`
+  had reached the shelf since. The server registers **one route per URL** from a
+  manifest the build writes, rather than leaning on a directory index, and says
+  so out loud when the manifest is missing, because falling through in silence
+  is exactly the bug being fixed here. And the head copy lives in
+  `presentation/head/document-head.ts` rather than the dictionary — the
+  exception `.claude/rules/i18n.md` already carved for the document head, kept
+  rather than widened: the home screen says *Taverla* and *The tavern is open.*,
+  and neither is a search result. See
+  [stage 19](docs/plans/19-locale-urls.md)
 
 - `[Game]` **A phone waiting on the room is told what it is waiting on.** Four
   facts the server was already sending reached no screen a player holds: who
@@ -942,12 +967,23 @@ one part.
   that name nothing of this project: `defineTranslations` becomes
   `defineDictionary`, `TranslationsLike` becomes `DictionaryFor`, and
   `createTranslator` takes `dictionary` where it took `translations`. Not one
-  call site of `translate` changed. What came back from the other copy:
+  call site of `translate` changed. Above it sits a new door, `createI18n`,
+  which binds each locale to its dictionary once: the provider and the boot-time
+  negotiation now call `i18n.translator(locale)` and `i18n.negotiate(...)` and
+  never name a dictionary, so a translator holding the French one under the tag
+  `en` is no longer expressible. It caches per locale, which the provider did
+  not — it rebuilt the translator on every render, handing a new identity to
+  anything memoising on it. `isLocale` moves to `@taverla/protocol/locale`
+  beside `LOCALES` and `localeSchema`, where a guard over a contract value
+  belongs, which leaves `packages/core/src/i18n/` holding the library and
+  nothing else. What came back from the other copy:
   `WellFormed` now refuses a leaf that is not a message at all — `{ count: 3 }`
   compiled before, because a mapped type over a primitive returns that
   primitive — `negotiateLocale` replaces the region-stripping inside
   `pickLocale` and tries each tag whole before dropping a subtag, so a supported
-  `pt-BR` beats a bare `pt`, and the library carries a README again. New:
+  `pt-BR` beats a bare `pt`, each `Intl` formatter is now built once per translator and kept, where both
+  copies rebuilt one on every substitution, and the library carries a README
+  again. New:
   `translator.types.test.ts` writes every rule that is a compile error at a call
   site as the type it resolves to, since a compile error cannot be caught by a
   test that has to compile; `tsc --noEmit` checks them.

@@ -1,4 +1,4 @@
-import { createBrowserRouter, type RouteObject } from 'react-router'
+import type { RouteObject } from 'react-router'
 
 import { NotFoundPage } from '@/features/not-found/not-found-page'
 import {
@@ -59,8 +59,15 @@ const routeFor = (path: RoutedPath): RouteObject => ({
  * Which branch a path hangs from is read off the path itself, so putting a page
  * under a locale is what puts it behind the prefix guard — there is no second
  * list to keep in step.
+ *
+ * The tree rather than a router, because it is mounted twice: `main.tsx` hands
+ * it to `createBrowserRouter`, and the build-time prerender hands it to
+ * `createStaticHandler`, which is also what resolves every `lazy` above before
+ * anything is rendered. A browser router cannot be built in Node at all, so
+ * exporting one here would put the whole route tree out of the prerender's
+ * reach.
  */
-export const router = createBrowserRouter([
+export const routes: RouteObject[] = [
   {
     Component: AppShell,
     children: [
@@ -79,4 +86,4 @@ export const router = createBrowserRouter([
     // already made keeps the screen it is leaving until the chunk resolves.
     HydrateFallback: RouteFallback
   }
-])
+]

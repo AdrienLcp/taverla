@@ -41,8 +41,12 @@ paint before any script runs.
   server-side data, and would take over a Vite config carrying three sharp
   constraints (the React Compiler on `@rolldown/plugin-babel`, the react-aria
   locale plugin, the LAN dev host the QR code needs).
-- **Six pages are indexable**: home, credits, and the four game front doors.
-  Times two locales, twelve files.
+- **Seven pages are indexable**: home, credits, and the *five* game front
+  doors. Times two locales, **fourteen** files. This plan said six and twelve,
+  and was already wrong by two when it was written — `reflex` reached
+  `shelvedGames` in stage 18. The prerender therefore reads `shelvedGames` and
+  `LOCALES` rather than a list of its own, because a game that reaches the shelf
+  without a document is a front door no crawler finds and nothing says.
 - **Rooms stay out**, and that includes the prefix. `/host/` and `/play/` are
   already `Disallow`ed: a room is one evening long and needs a live socket, so a
   locale segment buys no language back in the index and lengthens the two things
@@ -79,20 +83,23 @@ paint before any script runs.
    follows the URL back the other way in a layout effect, because going back
    across `/fr` → `/en` moves the URL without passing through the control that
    moved it.
-4. **A post-build script** renders the six routes twice with
-   `react-dom/server`, writing each into its own `index.html` with that
-   language's head. The server already compresses and caches what it hands out;
-   it gains a static-file route per prefix.
-5. **`hreflang` reciprocal on every page**, including a self-reference, plus a
-   `canonical` per URL pointing at itself. Non-reciprocal `hreflang` is ignored
-   in silence.
-6. **`og:locale` per page**, and `og:locale:alternate` finally means something —
-   today `index.html` promises `fr_FR` with no French URL behind it.
-7. **The document title, twice.** The prerendered head carries it per language,
-   which is what a crawler and an unfurl read. The tab after an in-app
-   navigation is a separate thing and still needs two dictionary keys and a
-   write to `document.title` — today it is the English string from
-   `index.html`, in both locales, for the life of the tab.
+4. ~~**A post-build script**~~ **Done.** `vite build --ssr src/entry-server.tsx`
+   emits a Node bundle beside the client one, and `scripts/prerender.ts` imports
+   it and writes fourteen documents plus a `prerendered.json` manifest into
+   `dist`. The server reads that manifest and registers **one route per URL**,
+   which is what the *no trailing slash* section below asks for; a manifest
+   rather than a list both sides keep, because only the build knows what it
+   actually wrote. Absent, the server says so out loud and falls back to the
+   single document — that silence would be this stage's own bug returning.
+5. ~~**`hreflang` reciprocal on every page**~~ **Done.** Each document lists both
+   languages including itself, plus `x-default` on `/`.
+6. ~~**`og:locale` per page**~~ **Done**, with `og:locale:alternate` naming the
+   other language's URL — and `og:image:alt` localized with it, which was the
+   last English string a French unfurl would have read aloud.
+7. ~~**The document title, twice.**~~ **Done.** The head is written per document
+   at build time, and `useDocumentTitle` writes the tab on an in-app navigation
+   and on a language change. The copy lives in
+   `presentation/head/document-head.ts` rather than the dictionary — see below.
 8. ~~**The e2e journeys navigate URLs**~~ **Done.** `everyone-answers` goes to
    `/en` and asserts `/en/blindtest`, `dead-socket` expects the way out to land
    on `/en`, and `full-game` keeps arriving at `/` and now asserts the
@@ -107,6 +114,50 @@ app now carries. The prerender step therefore maps each of the twelve URLs to
 its file explicitly rather than leaning on a directory index — which the plan
 already called for (*"a static-file route per prefix"*), and which is the only
 shape that does not depend on how a given static server resolves a directory.
+
+## Where the head copy lives, and why it is not in the dictionary
+
+`presentation/head/document-head.ts` holds a title and a description per page
+per language, and it is the one user-visible string outside the dictionary.
+That is the exception `.claude/rules/i18n.md` already carved for the document
+head, kept rather than widened: this copy is read by somebody with no room in
+front of them. The home screen says `Taverla` and `The tavern is open.`; neither
+is a search result. It is also read in Node with no provider mounted, which a
+dictionary key cannot be. It is typed `Record<Locale, Record<IndexedPage, …>>`
+over `ShelvedGame`, so a game reaching the shelf stops compiling until both
+languages can introduce it to a stranger — the same guarantee the dictionary
+gives.
+
+## Traps found while building
+
+- **`createStaticRouter(routes, context)` renders the `HydrateFallback`.** Every
+  page here is `lazy`, and it is `createStaticHandler.query` that resolves those
+  chunks — into `handler.dataRoutes`, not into the array it was given. Handed
+  the original tree the router has no component to mount, and writes the loader
+  into all fourteen documents with the build green and every file the right
+  size. `renderPage` now throws on `ROUTE_FALLBACK_CLASS` so it cannot come back
+  quietly.
+- **The client still calls `createRoot`, not `hydrateRoot`**, and that is a
+  decision. The document is written at build time and cannot know the device's
+  theme, which is read from storage at first render; hydrating would mismatch on
+  every load, or push the theme into an effect and trade one flash for another.
+  Nothing here comes from a loader, so hydration would buy the reuse of a few
+  dozen nodes. React replaces the container's children inside its first commit,
+  so the prerendered text is what paints and nothing blanks between the two.
+- **The theme flash is now visible, and it was not before.**
+  `theme-provider.tsx` stamps `data-theme` only for an explicit choice, in an
+  effect, and says why: `_tokens.sass` answers `prefers-color-scheme` on its own.
+  Until this stage the page was empty while that was decided, so a reader whose
+  choice differs from their OS saw two seconds of an empty field in the wrong
+  colour. They now see two seconds of *text* in it. Nothing regressed — the same
+  attribute is stamped at the same moment — but the argument the comment records
+  was written against a blank first paint, and prerendering is what changes its
+  price. It belongs with the render-blocking-stylesheet trap below: both are
+  answered by putting what the first paint needs in the served document.
+- **`lighthouserc.json` audited `/`, `/blindtest` and `/credits`**, all three of
+  which now negotiate and redirect. They are `/en`, `/en/blindtest` and
+  `/en/credits`, and the baseline in this file stays comparable because the old
+  URLs served exactly this document.
 
 ## Traps found while measuring
 

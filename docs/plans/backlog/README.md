@@ -5,7 +5,7 @@ of the session you take, and nothing else. Delivered sessions keep their file so
 what they found stays readable, and are never opened to plan new work.
 
 What a session picks up next, and nothing that is already in flight — the
-uncommitted tree is [`HANDOFF.md`](../../../HANDOFF.md)'s job, and that file is
+uncommitted tree is the job of the handoff files under `.handoff/`, which are
 local to one machine. This one is committed, because a backlog that dies with a
 laptop is a to-do list somebody has to remember.
 

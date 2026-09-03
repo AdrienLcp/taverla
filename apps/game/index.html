@@ -22,9 +22,17 @@
       result and a link unfurled in a group chat have nobody standing in front
       of the room to explain it, so the explanation lives here instead.
     -->
+    <!--
+      This head is the English home page's, and every tag below that names a
+      page is rewritten per document by `scripts/prerender.ts` — which fails the
+      build if any of them stops matching. What is served from here unrewritten
+      is `pnpm dev` and the SPA fallback, so it stays a valid standalone page.
+      The copy itself lives in `presentation/head/document-head.ts`, in both
+      languages; these two must be its `en.home` entry word for word.
+    -->
     <title>Taverla — party games for one screen and the whole room</title>
     <meta
-      content="One screen runs the game, everyone joins by scanning a QR code or typing the room code — no install, no account. Blind test, Buzzer, Quiz and Le Fake."
+      content="One screen runs the game, everyone joins by scanning a QR code or typing the room code — no install, no account. Blind test, Buzzer, Quiz, Le Fake and Reflex."
       name="description"
     />
     <!--
@@ -38,7 +46,7 @@
     <meta content="Taverla" property="og:site_name" />
     <meta content="Taverla — party games for one screen and the whole room" property="og:title" />
     <meta
-      content="One screen runs the game, everyone joins by scanning a QR code or typing the room code. No install, no account."
+      content="One screen runs the game, everyone joins by scanning a QR code or typing the room code — no install, no account. Blind test, Buzzer, Quiz, Le Fake and Reflex."
       property="og:description"
     />
     <meta content="https://taverla.onrender.com/" property="og:url" />

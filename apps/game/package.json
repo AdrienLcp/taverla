@@ -24,8 +24,11 @@
   "name": "@taverla/game",
   "private": true,
   "scripts": {
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && pnpm build:client && pnpm build:ssr && pnpm prerender",
+    "build:client": "vite build",
+    "build:ssr": "vite build --ssr src/entry-server.tsx --outDir dist-ssr",
     "dev": "vite",
+    "prerender": "node --import tsx scripts/prerender.ts",
     "preview": "vite preview"
   },
   "type": "module",

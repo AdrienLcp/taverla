@@ -14,9 +14,9 @@
       "startServerCommand": "pnpm --filter @taverla/server preview",
       "startServerReadyPattern": "listening on",
       "url": [
-        "http://localhost:3100/",
-        "http://localhost:3100/blindtest",
-        "http://localhost:3100/credits"
+        "http://localhost:3100/en",
+        "http://localhost:3100/en/blindtest",
+        "http://localhost:3100/en/credits"
       ]
     },
     "upload": {

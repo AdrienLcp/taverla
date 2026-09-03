@@ -25,13 +25,18 @@ it plays the audio and shows the score.
 
 ## Pages
 
-- [Home](https://taverla.onrender.com/): open a room, or join one with a code.
-- [Blind test](https://taverla.onrender.com/blindtest)
-- [Buzzer](https://taverla.onrender.com/buzzer)
-- [Quiz](https://taverla.onrender.com/quiz)
-- [Le Fake](https://taverla.onrender.com/lefake)
-- [Reflex](https://taverla.onrender.com/reflex)
-- [Credits](https://taverla.onrender.com/credits)
+Every page below is served in English under `/en` and in French under `/fr`,
+as its own document with its own `lang`, title and description. `/` carries no
+language: it negotiates from the browser's and redirects, which is what
+`hreflang="x-default"` points at.
+
+- [Home](https://taverla.onrender.com/en): open a room, or join one with a code.
+- [Blind test](https://taverla.onrender.com/en/blindtest)
+- [Buzzer](https://taverla.onrender.com/en/buzzer)
+- [Quiz](https://taverla.onrender.com/en/quiz)
+- [Le Fake](https://taverla.onrender.com/en/lefake)
+- [Reflex](https://taverla.onrender.com/en/reflex)
+- [Credits](https://taverla.onrender.com/en/credits)
 
 ## Notes
 

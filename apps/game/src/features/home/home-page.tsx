@@ -6,6 +6,7 @@ import { JoinWithCode } from '@/features/join/join-with-code'
 import { gameHomePathFor } from '@/infrastructure/router/navigation'
 import { Button } from '@/presentation/components/button'
 import { Separator } from '@/presentation/components/separator'
+import { useDocumentTitle } from '@/presentation/head/use-document-title'
 import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
 import { gameNameKey, gameTaglineKey } from '@/presentation/i18n/translation'
 
@@ -30,6 +31,9 @@ import './home-page.sass'
  */
 export const HomePage: React.FC = () => {
   const { locale } = useI18n()
+
+  useDocumentTitle('home')
+
   const translate = useTranslate()
   const { error, isCreating, open } = useCreateRoom()
 
