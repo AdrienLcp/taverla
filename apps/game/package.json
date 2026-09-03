@@ -4,19 +4,19 @@
     "@taverla/protocol": "workspace:*",
     "qrcode.react": "^4.2.0",
     "react": "19.2.8",
-    "react-aria-components": "1.20.0",
+    "react-aria-components": "1.21.0",
     "react-dom": "19.2.8",
-    "react-router": "^8.3.0",
-    "zod": "^4.4.3"
+    "react-router": "^8.3.1",
+    "zod": "^4.5.4"
   },
   "devDependencies": {
     "@babel/core": "^8.0.1",
-    "@react-aria/optimize-locales-plugin": "^2.0.1",
+    "@react-aria/optimize-locales-plugin": "^2.0.2",
     "@rolldown/plugin-babel": "^0.2.3",
     "@types/babel__core": "^7.20.5",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.5",
-    "@vitejs/plugin-react": "^6.1.0",
+    "@vitejs/plugin-react": "^6.1.1",
     "babel-plugin-react-compiler": "^1.0.0",
     "sass": "^1.103.1",
     "vite": "^8.2.2"

@@ -871,6 +871,28 @@ one part.
 
 ### Internal
 
+- **Dependencies up to latest**, no majors outstanding: react-aria-components
+  1.20 to 1.21, zod 4.4 to 4.5, react-router 8.3.0 to 8.3.1, hono 4.13.4 to
+  4.13.5, biome, tsx, `@types/node`, `@vitejs/plugin-react`,
+  `@react-aria/optimize-locales-plugin` and `@hono/zod-validator`; pnpm 11.22 to
+  11.25. 1.21 adds no deprecation to the list 1.20 already carried, and the four
+  left on it are all unused here. The bundle grew 21 KiB and Lighthouse did not
+  move: 0.94 performance, 1 everywhere else.
+
+- **`pnpm deps:upgrade` could never run.** It opened on `pnpm self-update`,
+  which refuses outright under Corepack — `ERR_PNPM_CANT_SELF_UPDATE_IN_COREPACK`
+  — so the `&&` behind it meant the upgrade the script exists for never
+  happened. Updating the package manager is a separate occasional act whose
+  command depends on how pnpm was installed (`corepack use pnpm@latest` here),
+  and folding it into the dependency script is what broke it. The script is the
+  upgrade now, and nothing else.
+
+  `managePackageManagerVersions` went with it: pnpm 11 does not recognise the
+  setting, so it warned on every command and did nothing — and what it claimed
+  to do, self-installing the pinned `packageManager`, is exactly what the
+  self-update above was refused for. Corepack is what manages it on the Node 24
+  this repo pins.
+
 - **`pnpm lighthouse` runs Lighthouse CI over the built app**, against the real
   server rather than a preview: `pnpm --filter @taverla/server preview` serves
   `dist` the way `render.yaml` does, so the numbers are the deployment's. Three
