@@ -41,7 +41,7 @@
     // payout filled it on their own and left the board — the half a player who
     // cannot see the room's screen came for — under the fold. The room's own
     // screen splits this same moment in two for the same reason.
-    @media (width >= layout.$wide-screen)
+    @include layout.wide
       &.revealed
         align-items: center
         column-gap: var(--space-xl)

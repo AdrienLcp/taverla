@@ -37,7 +37,7 @@
     // this read as a phone screenshot dropped in the middle of the display, so
     // on a wide one it becomes what the rest of the product already is: a title
     // card, centred, sized to the screen it is on.
-    @media (width >= layout.$wide-screen)
+    @include layout.wide
       &:not(.playing)
         align-items: center
         max-width: 760px

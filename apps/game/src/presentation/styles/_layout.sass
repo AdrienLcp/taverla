@@ -12,6 +12,19 @@ $wide-screen: 900px
 /// one.
 $poster-screen: 1200px
 
+/// The breakpoint as intent rather than as a comparison. Ten call sites outside
+/// this file open with `>=` or `<` on the same number, and those two have to
+/// stay each other's exact complement — which is the one thing a grep cannot
+/// check and the one thing that breaks if the boundary ever moves off `>=`.
+/// Behind these, that is one edit.
+@mixin wide
+  @media (width >= $wide-screen)
+    @content
+
+@mixin narrow
+  @media (width < $wide-screen)
+    @content
+
 /// Arriving on a page, and the only motion a *navigation* is allowed. Carried
 /// by the two page mixins rather than written on each root, so the six screens
 /// cannot drift and the seventh inherits it.
@@ -42,7 +55,7 @@ $poster-screen: 1200px
   padding-inline: var(--layout-padding-inline-start) var(--layout-padding-inline-end)
   width: 100%
 
-  @media (width >= $wide-screen)
+  @include wide
     max-width: var(--column-wide-max-width)
 
 /// The host's surface. It is read anywhere from forty centimetres to four

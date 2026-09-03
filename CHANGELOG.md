@@ -922,6 +922,16 @@ one part.
 
 ### Internal
 
+- `[Game]` **The breakpoint is a mixin now, not a comparison repeated ten
+  times.** `@include layout.wide` and `layout.narrow` wrap the two media
+  queries, and `$wide-screen` is left with three references: its declaration,
+  those two mixins, and the token derived from it. The ten call sites outside
+  `_layout.sass` opened with `>=` or `<` on the same number and had to stay each
+  other's exact complement — the one thing a grep cannot check, and the one that
+  breaks the day the boundary stops being `>=`. It stays a SASS variable because
+  a media query cannot read a custom property, which is the only reason any
+  SASS variable is left in the repo.
+
 - `[Game]` **`@babel/core` is back on 7.x, and the build refuses anything
   else.** The pin drifted to `^8.0.1` two dependency bumps ago — which is what
   `pnpm -r up -L` does to a range — and under Babel 8 the React Compiler cannot

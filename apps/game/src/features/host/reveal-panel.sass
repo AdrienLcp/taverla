@@ -207,7 +207,7 @@
       // looking at together. The padding goes with the type rather than staying
       // at a fixed 8px, so a row is one multiple of its own size and the divisor
       // means something.
-      @media (width >= layout.$wide-screen)
+      @include layout.wide
         .said li,
         .scorers li
           font-size: clamp(1rem, calc(var(--outcome-budget, 100rem) / var(--outcome-rows, 5) / 1.75), 1.75rem)
@@ -234,6 +234,6 @@
       &:has(.reaction-board)
         --outcome-header: 6rem
 
-        @media (width >= layout.$wide-screen)
+        @include layout.wide
           .reaction-board li
             font-size: clamp(1rem, calc(var(--outcome-budget, 100rem) / var(--outcome-rows, 5) / 1.75), 3rem)

@@ -57,7 +57,7 @@
           // and ten made 1 291px of a 1080px screen. Same arithmetic, one
           // column instead of two, and `11rem` more spent — the countdown above
           // it and the gap that separates them.
-          @media (width >= layout.$wide-screen)
+          @include layout.wide
             --outcome-budget: calc(100dvh - var(--outcome-header, 44rem) - 11rem)
 
       // The one screen in the product that admits to being silent, and it is a
@@ -98,7 +98,7 @@
       // that is the half the room is looking at. The standings take the place
       // the question had.
       &.revealed
-        @media (width < layout.$wide-screen)
+        @include layout.narrow
           justify-content: center
 
         // Both halves divide the screen rather than a box of their own, which
@@ -113,7 +113,7 @@
         // `31rem` is the chrome around the stage, measured rather than guessed:
         // the header, the footer, the page padding and two gaps came to 494px
         // at 1080 and 469px at 768.
-        @media (width >= layout.$wide-screen)
+        @include layout.wide
           display: grid
           gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
           grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr)
@@ -193,7 +193,7 @@
         gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
         grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr)
 
-        @media (width < layout.$wide-screen)
+        @include layout.narrow
           grid-template-columns: minmax(0, 1fr)
 
       &.playing
@@ -213,7 +213,7 @@
         gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
         grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr)
 
-        @media (width < layout.$wide-screen)
+        @include layout.narrow
           grid-template-columns: minmax(0, 1fr)
 
         // Above the split the stage owns the height, so the row can be bounded
@@ -226,7 +226,7 @@
         // ignore its contents, which is only safe while something else is
         // giving it a height. Stacked, the row is sized by what is in it, the
         // page scrolls anyway, and the fallback below governs.
-        @media (width >= layout.$wide-screen)
+        @include layout.wide
           grid-template-rows: minmax(0, 1fr)
 
           .lie-board
