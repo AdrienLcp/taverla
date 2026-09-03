@@ -3,15 +3,10 @@ import { I18nProvider as ReactAriaI18nProvider } from 'react-aria-components'
 
 import type { Locale } from '@taverla/protocol/locale'
 
-import { pickLocale } from '@taverla/core/i18n/locale'
 import { createTranslator } from '@taverla/core/i18n/translator'
 
 import { createSafeContext } from '@/helpers/contexts'
-import { preferredLocales } from '@/infrastructure/env'
-import {
-  readStoredLocale,
-  writeStoredLocale
-} from '@/infrastructure/storage/preferences-storage'
+import { writeStoredLocale } from '@/infrastructure/storage/preferences-storage'
 
 import { EN_DICTIONARY } from './dictionary-en'
 import { FR_DICTIONARY } from './dictionary-fr'
@@ -44,10 +39,20 @@ export const [I18nContext, useI18n] =
 
 export const useTranslate = (): Translate => useI18n().translate
 
-export const I18nProvider = ({ children }: { children: ReactNode }) => {
-  const [locale, setLocale] = useState<Locale>(
-    () => readStoredLocale() ?? pickLocale(preferredLocales())
-  )
+type I18nProviderProps = {
+  children: ReactNode
+  /**
+   * Negotiated in `main.tsx` and already on `<html lang>` by the time this
+   * renders — which is the point, and why it is not read again here.
+   */
+  locale: Locale
+}
+
+export const I18nProvider = ({
+  children,
+  locale: initialLocale
+}: I18nProviderProps) => {
+  const [locale, setLocale] = useState<Locale>(initialLocale)
 
   useEffect(() => {
     document.documentElement.lang = locale

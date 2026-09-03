@@ -501,6 +501,19 @@ one part.
 
 ### Fixes
 
+- `[Game]` **A French room is no longer offered a translation of itself.**
+  `index.html` ships `lang="en"` — deliberately, because a crawler and a link
+  unfurled in a group chat read the served document and that copy is English —
+  and the negotiated locale was written onto `<html>` from an effect in the
+  i18n provider, which runs *after* the first paint. So every French load spent
+  a frame as French text under `lang="en"`, which is exactly what a browser's
+  translate heuristic looks for; an Xbox offered to translate the page. The
+  negotiation now happens in `main.tsx` and lands on `<html lang>` before React
+  renders a word, and the provider is seeded with what it decided rather than
+  deciding again. Nothing about *which* locale is chosen changed: a browser
+  asking for French has always got French, `DEFAULT_LOCALE` being the fallback
+  for a browser that asks for neither.
+
 - `[Game]` **The QR code is no longer an unnamed graphic.** `qrcode.react`
   stamps `role="img"` on the square whether or not it was handed a `title`, so
   both of them — the lobby's invitation and the round's reminder in the corner —
