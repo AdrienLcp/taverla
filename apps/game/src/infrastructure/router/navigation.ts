@@ -27,26 +27,9 @@ export const paths = {
   play: '/play/:roomCode'
 } as const
 
-export const gameHomePathFor = (game: ShelvedGame): string =>
-  generatePath(paths.game, { game })
-
-export const hostPathFor = (code: RoomCode): string =>
-  generatePath(paths.host, { roomCode: code })
-
-export const playPathFor = (code: RoomCode): string =>
-  generatePath(paths.play, { roomCode: code })
-
 /**
- * What the QR code encodes. Same origin as the page showing it, so a phone that
- * scans it lands on the machine the host is already reachable at — over the LAN
- * in dev, over the public host in production — with no second domain to
- * configure and no CORS to arrange.
- */
-export const playUrlFor = (code: RoomCode): string =>
-  `${location.origin}${playPathFor(code)}`
-
-/**
- * The names a route pattern carries, and what `useParams` is narrowed by here.
+ * The names a route pattern carries — what a path below is built from, and what
+ * `useParams` is narrowed by.
  *
  * `PathParam` rather than react-router's own `ParamParseKey`, which is this
  * with an escape hatch: it answers `string` for a pattern carrying no
@@ -58,6 +41,39 @@ export const playUrlFor = (code: RoomCode): string =>
  * a hook read from either route is entitled to.
  */
 type RouteParamOf<TPath extends string> = PathParam<TPath>
+
+/**
+ * `generatePath`'s own params type intersects an index signature over every
+ * string, so a name the pattern does not carry type-checks and is dropped in
+ * silence, and the argument stays optional where the pattern needs one. A plain
+ * record over the names shuts both, at the cost of making an optional
+ * `:param?` mandatory — which no pattern here has.
+ *
+ * `<string>` collapses that loose type to the index signature alone, which is
+ * what the record satisfies with no cast.
+ */
+const pathFor = <TPath extends string>(
+  path: TPath,
+  params: Record<RouteParamOf<TPath>, string>
+): string => generatePath<string>(path, params)
+
+export const gameHomePathFor = (game: ShelvedGame): string =>
+  pathFor(paths.game, { game })
+
+export const hostPathFor = (code: RoomCode): string =>
+  pathFor(paths.host, { roomCode: code })
+
+export const playPathFor = (code: RoomCode): string =>
+  pathFor(paths.play, { roomCode: code })
+
+/**
+ * What the QR code encodes. Same origin as the page showing it, so a phone that
+ * scans it lands on the machine the host is already reachable at — over the LAN
+ * in dev, over the public host in production — with no second domain to
+ * configure and no CORS to arrange.
+ */
+export const playUrlFor = (code: RoomCode): string =>
+  `${location.origin}${playPathFor(code)}`
 
 /**
  * `null` when the URL carries something that cannot be a room code, which a

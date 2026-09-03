@@ -871,6 +871,16 @@ one part.
 
 ### Internal
 
+- `[Game]` **A path is built through a params type with no escape hatch.**
+  `generatePath`'s own intersects an index signature over every string, so a
+  name the pattern does not carry — a typo beside the right one, a param since
+  renamed — type-checks and is dropped in silence, and the argument stays
+  optional where the pattern needs one. `pathFor` takes a plain record over
+  `PathParam`'s names, which puts excess-property checking back and makes the
+  argument required; it delegates to `generatePath<string>`, collapsing the
+  loose type to that index signature alone, so the percent-encoding is kept and
+  no cast is needed.
+
 - **Dependencies up to latest**, no majors outstanding: react-aria-components
   1.20 to 1.21, zod 4.4 to 4.5, react-router 8.3.0 to 8.3.1, hono 4.13.4 to
   4.13.5, biome, tsx, `@types/node`, `@vitejs/plugin-react`,
