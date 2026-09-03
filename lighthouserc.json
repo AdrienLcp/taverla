@@ -1,0 +1,27 @@
+{
+  "ci": {
+    "assert": {
+      "aggregationMethod": "median",
+      "assertions": {
+        "categories:accessibility": ["error", { "minScore": 1 }],
+        "categories:best-practices": ["error", { "minScore": 1 }],
+        "categories:performance": ["error", { "minScore": 0.9 }],
+        "categories:seo": ["error", { "minScore": 1 }]
+      }
+    },
+    "collect": {
+      "numberOfRuns": 3,
+      "startServerCommand": "pnpm --filter @taverla/server preview",
+      "startServerReadyPattern": "listening on",
+      "url": [
+        "http://localhost:3100/",
+        "http://localhost:3100/blindtest",
+        "http://localhost:3100/credits"
+      ]
+    },
+    "upload": {
+      "outputDir": ".lighthouseci",
+      "target": "filesystem"
+    }
+  }
+}

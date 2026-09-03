@@ -2,6 +2,7 @@
   "author": "Adrien Lacourpaille",
   "devDependencies": {
     "@biomejs/biome": "2.5.10",
+    "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.62.1",
     "@types/node": "^26.2.0",
     "tsx": "^4.23.12",
@@ -19,6 +20,7 @@
     "build": "pnpm -r build",
     "deps:upgrade": "pnpm self-update && pnpm -r up -L",
     "dev": "pnpm --parallel --filter @taverla/server --filter @taverla/game dev",
+    "lighthouse": "pnpm build && node scripts/lighthouse.mjs",
     "lint": "biome check --write",
     "lint:ci": "biome ci",
     "preinstall": "git config core.hooksPath .githooks || true",

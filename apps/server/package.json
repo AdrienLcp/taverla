@@ -22,6 +22,7 @@
   "scripts": {
     "build": "tsc --noEmit && tsdown",
     "dev": "node --watch --import tsx src/index.ts",
+    "preview": "node --env-file=.env.preview dist/index.mjs",
     "questions:build": "node --import tsx scripts/build-question-bank.ts",
     "start": "node dist/index.mjs",
     "test": "vitest run",

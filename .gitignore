@@ -20,3 +20,5 @@ playwright-report
 # vercel-react-best-practices) with no licence of their own. They are personal
 # tooling, not project code, and a public repository must not redistribute them.
 .claude/skills
+
+.lighthouseci
