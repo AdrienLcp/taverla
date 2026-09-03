@@ -1,5 +1,5 @@
-import { defineTranslation } from '@taverla/core/i18n/define-translation'
-import { defineTranslations } from '@taverla/core/i18n/translator'
+import { defineTranslation } from '@taverla/core/i18n/lib/define-translation'
+import { defineDictionary } from '@taverla/core/i18n/lib/dictionary'
 
 /**
  * The reference dictionary: its keys are the type every other locale is checked
@@ -15,7 +15,7 @@ import { defineTranslations } from '@taverla/core/i18n/translator'
  * errors — is the shell that the next game reuses unchanged. See
  * `docs/game-catalogue.md`.
  */
-export const EN_DICTIONARY = defineTranslations({
+export const EN_DICTIONARY = defineDictionary({
   blindtest: {
     answer: {
       anyOrder: 'The title, the artist, or both — as many goes as you like.',

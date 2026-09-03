@@ -23,3 +23,10 @@ export const localeSchema = z.enum(LOCALES)
 export const DEFAULT_LOCALE = 'en' as const satisfies Locale
 
 export type Locale = z.infer<typeof localeSchema>
+
+/**
+ * The guard that goes with the schema, for a value read back from a place zod
+ * is not worth reaching for — a storage blob, a URL segment, a select.
+ */
+export const isLocale = (value: string): value is Locale =>
+  LOCALES.some((locale) => locale === value)

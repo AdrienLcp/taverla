@@ -1,13 +1,13 @@
 import type { Locale } from '@taverla/protocol/locale'
 
-import { pickLocale } from '@taverla/core/i18n/locale'
-
 import { preferredLocales, servedPath } from '@/infrastructure/env'
 import { localeInPath } from '@/infrastructure/router/navigation'
 import {
   readStoredLocale,
   writeStoredLocale
 } from '@/infrastructure/storage/preferences-storage'
+
+import { i18n } from './i18n'
 
 /**
  * The locale the app opens on: the one its URL names, then the one this device
@@ -26,7 +26,8 @@ import {
  */
 export const applyInitialLocale = (): Locale => {
   const inUrl = localeInPath(servedPath())
-  const locale = inUrl ?? readStoredLocale() ?? pickLocale(preferredLocales())
+  const locale =
+    inUrl ?? readStoredLocale() ?? i18n.negotiate(preferredLocales())
 
   // Remembered only when the URL named it, because a room's URL cannot: a phone
   // that reached one from a link shared in English would otherwise come back in

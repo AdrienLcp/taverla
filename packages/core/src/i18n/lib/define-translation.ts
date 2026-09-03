@@ -14,12 +14,24 @@ export type PluralForms = Partial<
   type?: Intl.PluralRuleType
 }
 
+/**
+ * `Intl.RelativeTimeFormat` formats a number *of something*, and the message
+ * cannot say which — so the unit is declared here, per placeholder, and the
+ * caller passes the count alone. Negative is the past, positive the future,
+ * which is `Intl`'s own convention.
+ */
+export type RelativeTime = Intl.RelativeTimeFormatOptions & {
+  unit: Intl.RelativeTimeFormatUnit
+}
+
 export type TranslationOptions = {
   date?: Record<string, Intl.DateTimeFormatOptions>
+  displayname?: Record<string, Intl.DisplayNamesOptions>
   enum?: Record<string, Record<string, string>>
   list?: Record<string, Intl.ListFormatOptions>
   number?: Record<string, Intl.NumberFormatOptions>
   plural?: Record<string, PluralForms>
+  relative?: Record<string, RelativeTime>
 }
 
 type OptionsForParam<
@@ -27,15 +39,19 @@ type OptionsForParam<
   Name extends string
 > = Type extends 'date'
   ? { date?: { [K in Name]?: Intl.DateTimeFormatOptions } }
-  : Type extends 'enum'
-    ? { enum: { [K in Name]: Record<string, string> } }
-    : Type extends 'list'
-      ? { list?: { [K in Name]?: Intl.ListFormatOptions } }
-      : Type extends 'number'
-        ? { number?: { [K in Name]?: Intl.NumberFormatOptions } }
-        : Type extends 'plural'
-          ? { plural: { [K in Name]: PluralForms } }
-          : never
+  : Type extends 'displayname'
+    ? { displayname: { [K in Name]: Intl.DisplayNamesOptions } }
+    : Type extends 'enum'
+      ? { enum: { [K in Name]: Record<string, string> } }
+      : Type extends 'list'
+        ? { list?: { [K in Name]?: Intl.ListFormatOptions } }
+        : Type extends 'number'
+          ? { number?: { [K in Name]?: Intl.NumberFormatOptions } }
+          : Type extends 'plural'
+            ? { plural: { [K in Name]: PluralForms } }
+            : Type extends 'relative'
+              ? { relative: { [K in Name]: RelativeTime } }
+              : never
 
 export type OptionsFor<Message extends string> =
   Message extends `${string}{${infer Param}}${infer Rest}`
@@ -47,10 +63,11 @@ export type OptionsFor<Message extends string> =
 export type DefinedTranslation = readonly [string, TranslationOptions]
 
 /**
- * Pairs a message with the alternatives its placeholders choose between. Only
- * `plural` and `enum` need one: the other three types configure a formatter,
- * and a message wanting the locale's default formatting is written as a bare
- * string.
+ * Pairs a message with what its placeholders need beyond the value itself.
+ * `plural` and `enum` need the alternatives to choose between; `relative` needs
+ * its unit and `displayname` the kind of name to look up. The other three only
+ * configure a formatter, so a message wanting the locale's defaults is written
+ * as a bare string.
  */
 export const defineTranslation = <
   Message extends string,

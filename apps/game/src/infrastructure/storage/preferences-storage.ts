@@ -2,10 +2,9 @@ import { z } from 'zod'
 
 import { gameKindSchema, gameSettingsSchema } from '@taverla/protocol/game'
 import { type Nickname, nicknameSchema } from '@taverla/protocol/identifiers'
-import type { Locale } from '@taverla/protocol/locale'
+import { isLocale, type Locale } from '@taverla/protocol/locale'
 import { modeSettingsSchema, roomSettingsSchema } from '@taverla/protocol/room'
 
-import { isLocale } from '@taverla/core/i18n/locale'
 import type { HostPreferences } from '@taverla/core/room/host-preferences'
 
 import { isThemePreference, type ThemePreference } from '@/helpers/theme'

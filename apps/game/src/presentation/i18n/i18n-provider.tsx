@@ -3,19 +3,11 @@ import { I18nProvider as ReactAriaI18nProvider } from 'react-aria-components'
 
 import type { Locale } from '@taverla/protocol/locale'
 
-import { createTranslator } from '@taverla/core/i18n/translator'
-
 import { createSafeContext } from '@/helpers/contexts'
 import { writeStoredLocale } from '@/infrastructure/storage/preferences-storage'
 
-import { EN_DICTIONARY } from './dictionary-en'
-import { FR_DICTIONARY } from './dictionary-fr'
-import type { Dictionary, Translate } from './translation'
-
-const DICTIONARIES: Record<Locale, Dictionary> = {
-  en: EN_DICTIONARY,
-  fr: FR_DICTIONARY
-}
+import { i18n } from './i18n'
+import type { Translate } from './translation'
 
 /**
  * react-aria carries its own strings — press announcements, `FieldError`, the
@@ -68,10 +60,7 @@ export const I18nProvider = ({
       value={{
         locale,
         setLocale: chooseLocale,
-        translate: createTranslator<typeof EN_DICTIONARY>({
-          locale,
-          translations: DICTIONARIES[locale]
-        })
+        translate: i18n.translator(locale)
       }}
     >
       <ReactAriaI18nProvider locale={REACT_ARIA_LOCALES[locale]}>

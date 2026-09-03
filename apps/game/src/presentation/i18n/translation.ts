@@ -5,11 +5,11 @@ import type { AnswerMode } from '@taverla/protocol/room'
 
 import type { ClipRefusal } from '@taverla/core/blindtest/clip-audio'
 import type {
+  DictionaryFor,
   DotPath,
-  PlainKey,
-  TranslationsLike,
-  Translator
-} from '@taverla/core/i18n/translator'
+  PlainKey
+} from '@taverla/core/i18n/lib/dictionary'
+import type { Translator } from '@taverla/core/i18n/lib/translator'
 import type { BuzzBlocker } from '@taverla/core/round/buzz-eligibility'
 
 import type { ApiError } from '@/infrastructure/api/taverla-api'
@@ -25,7 +25,7 @@ export type TranslationKey = DotPath<typeof EN_DICTIONARY>
  */
 export type PlainTranslationKey = PlainKey<typeof EN_DICTIONARY>
 
-export type Dictionary = TranslationsLike<typeof EN_DICTIONARY>
+export type Dictionary = DictionaryFor<typeof EN_DICTIONARY>
 
 export type Translate = Translator<typeof EN_DICTIONARY>
 

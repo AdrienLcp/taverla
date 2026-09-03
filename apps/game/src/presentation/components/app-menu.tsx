@@ -11,9 +11,7 @@ import {
   NICKNAME_MAX_LENGTH,
   type RoomCode
 } from '@taverla/protocol/identifiers'
-import { LOCALES } from '@taverla/protocol/locale'
-
-import { isLocale } from '@taverla/core/i18n/locale'
+import { isLocale, LOCALES } from '@taverla/protocol/locale'
 
 import {
   isThemePreference,

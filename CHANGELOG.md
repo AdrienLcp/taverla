@@ -987,6 +987,20 @@ one part.
   `translator.types.test.ts` writes every rule that is a compile error at a call
   site as the type it resolves to, since a compile error cannot be caught by a
   test that has to compile; `tsc --noEmit` checks them.
+  Four capabilities were added on top, none of them used here yet — the library
+  is meant to be reusable, and a gap that is cheap to close now is expensive to
+  discover in another project later: `{x:relative}` (`Intl.RelativeTimeFormat`,
+  unit declared with the message, so `-1` reads *hier*), `{x:displayname}`
+  (`Intl.DisplayNames`), `i18n.compare(locale, options?)` (`Intl.Collator`, so a
+  sorted list puts `Émile` between `Adrien` and `Zoé` rather than after both),
+  and `translate.rich(key, values)`, which cuts a message at the spans it marks —
+  `Lis les <link>conditions</link>` — and hands each to the function named after
+  it. **`rich` names no framework**: a span function returns whatever the caller
+  wants and the return type is inferred from it. One defect surfaced while
+  testing that: negotiation only walked *up* a tag, so an app shipping `fr-FR`
+  and `fr-CA` and no plain `fr` answered English to a browser asking for `fr`.
+  The library now lives in its own repository, `C:/git/typed-i18n`, from which
+  both copies are taken verbatim.
 
 - `[Game]` **The breakpoint is a mixin now, not a comparison repeated ten
   times.** `@include layout.wide` and `layout.narrow` wrap the two media

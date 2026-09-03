@@ -8,9 +8,8 @@ import {
 
 import type { ShelvedGame } from '@taverla/protocol/game'
 import type { RoomCode } from '@taverla/protocol/identifiers'
-import type { Locale } from '@taverla/protocol/locale'
+import { isLocale, type Locale } from '@taverla/protocol/locale'
 
-import { isLocale } from '@taverla/core/i18n/locale'
 import { normalizeRoomCode } from '@taverla/core/room/room-code'
 import { isShelvedGame } from '@taverla/core/room/shelved-game'
 
