@@ -308,6 +308,23 @@ one part.
 
 ### Improvements
 
+- `[Server]` **The built app is compressed and cached.** `serveStatic` was
+  sending 370 KiB of uncompressed text and no `Cache-Control` at all, so every
+  phone joining a room downloaded the whole bundle again over whichever flat's
+  network the party was in. `compress()` sits ahead of the files — not the whole
+  app, so the socket upgrade and the API keep the frames they already send — and
+  a hashed name under `/assets/` is served `immutable` for a year while
+  everything else is revalidated. `index.html` is the file that must never be
+  stale: it is what names the bundle, so a cached copy pins a phone to the
+  previous deployment's JavaScript. It moved first contentful paint from 4.0 s
+  to 2.1 s under Lighthouse's mobile throttling, and the performance score from
+  0.73 to 0.95.
+
+- `[Game]` **`llms.txt` says what the product is**, in the shape a model reads:
+  what a room is, the five games, and which paths are content. `robots.txt`
+  stops naming games in its `Allow` lines — they bought nothing without a
+  blanket `Disallow`, and the list had been stale since the second game shipped.
+
 - `[Game]` **A console that cannot make a sound now names the setting, not the
   gesture.** *The browser turned it down. Try again.* was the one instruction
   that cannot work against the thing most likely to be saying no: a per-origin
@@ -483,6 +500,58 @@ one part.
   and the extra width is only void
 
 ### Fixes
+
+- `[Game]` **The QR code is no longer an unnamed graphic.** `qrcode.react`
+  stamps `role="img"` on the square whether or not it was handed a `title`, so
+  both of them — the lobby's invitation and the round's reminder in the corner —
+  were graphics with no alternative. It is the one accessibility failure
+  Lighthouse could not have caught here: it audits the pages a crawler can
+  reach, and a room's own screens need a live room. They are `aria-hidden` now
+  rather than named, because the alternative is already on the screen and is
+  better than a name would be: the line under the big one says what to do with
+  the square, the address below that is what the square encodes, and the small
+  one carries the room code. A screen reader cannot point a camera at anything,
+  so naming it would announce a shortcut its listener has no way to take, ahead
+  of the way in that they do.
+
+- `[Game]` **`underlined` stops carrying a box it never draws.** The variant has
+  no ground and no edge, and it was still taking the 52px height, the 20px of
+  inline padding and the transparent border that reserves room for an edge — so
+  a tertiary action sat indented from the column every line beside it starts at,
+  in a block twice the height of its own label. The box is a mixin the two
+  materials that have one opt into now, rather than a rule the root applies to
+  all three: written as an exclusion it would have been a `min-height: unset`
+  undoing three rules above it, and the next size added would have had to be
+  undone there too. The block padding is the one thing that stays and does not
+  scale, because it is not the box coming back — a `title` line is 1.05em and
+  the pending spinner is 1.1em, so with none at all the target would fall under
+  the 24px it owes. Measured at 29px, flush with its column.
+
+- `[Game]` **A choice strip that wraps is ruled between its rows.** The rules
+  were a `border-right` on each segment and a `:last-child` that dropped the
+  last one, which can only rule the axis it was written for: the five games fit
+  a laptop on one row and wrap on a phone, and the boundary between those two
+  rows was simply absent — as it was on every wrapped strip in the settings
+  panel, up to six rows deep on the quiz's subjects. The rules are gaps with the
+  strip's own ground showing through now, so they run both ways and no
+  `:last-child` has to name the end of a row it cannot see. The genre grid keeps
+  its own column counts and drops the three overrides it needed to say this
+  locally; they are twelve's divisors now rather than `auto-fit`, which landed
+  on five columns at laptop width and left three cells of bare ground where a
+  genre should be.
+
+- `[Game]` **A console refused a seat is told why.** The seat is withheld
+  wherever the round ends in a verdict this screen has to grant, which is the
+  rule — but the control simply vanished, and a quiz or a blind test left on
+  *first to buzz* is a room that could have had one. The host's setup is
+  remembered **per game**, so a room arrives in that state without anybody
+  choosing it this evening: pick the quiz, and the mode it was last left on
+  comes back with it. The fold now says so where the control was, and names the
+  way out rather than the rule, because the strip that undoes it is four lines
+  up. `isSeatWithheldByMode` is the rule, and it is narrower than
+  `isJudgedByHost` on purpose — the bare buzzer offers no other mode and a room
+  that has picked no game is waiting on the lobby, so neither has anything to
+  explain.
 
 - `[Game]` **A seat whose screen has gone is named, not dimmed.** Every board in
   the product said it with `opacity: 0.45` and nothing else, which takes the
@@ -801,6 +870,39 @@ one part.
   in turn
 
 ### Internal
+
+- **`pnpm lighthouse` runs Lighthouse CI over the built app**, against the real
+  server rather than a preview: `pnpm --filter @taverla/server preview` serves
+  `dist` the way `render.yaml` does, so the numbers are the deployment's. Three
+  runs each over the home page, a game's front door and the credits, asserted on
+  the median at 1 for accessibility, best practices and SEO and 0.9 for
+  performance. It is deliberately not in `pnpm validate`: it builds, boots a
+  server and runs nine audits.
+
+  `scripts/lighthouse.mjs` exists for one reason. `lhci` launches Chrome through
+  `chrome-launcher`, which deletes the temporary profile it made when it kills
+  the browser — and on Windows that delete fails `EPERM` every single run, after
+  the audit is finished and the report is already on disk. There is no flag for
+  it. Handing Lighthouse a `port` is the way out: `chrome-launcher` attaches to
+  what is already listening, so it creates no profile and its `kill()` returns
+  before the delete. The browser is Playwright's Chromium, which is the one the
+  end-to-end journeys already run in.
+
+- `[Game]` **`Radio` is deprecated in react-aria-components 1.20**, in favour of
+  `RadioField` + `RadioButton` — the same split `Switch` already took here, and
+  with the same trap: `isHovered`, `isPressed` and `isFocusVisible` belong to
+  the button and not to the field, so every state selector goes on the button.
+  `segment` is the button, and the field is laid out away with
+  `display: contents` so the button stays the flex or grid item the strip
+  arranges. One `.segment` rule still covers this and `ToggleGroup`'s bare
+  button alike.
+
+- `[Game]` **`useParams` is narrowed by `PathParam` rather than
+  `ParamParseKey`.** They are the same type with one difference, and it is the
+  one that matters: `ParamParseKey` answers `string` for a pattern carrying no
+  parameter, so a pattern that lost its `:` buys an index signature and every
+  name still reads as `string | undefined` with nothing to say it stopped
+  matching. `PathParam` answers `never`, and the name stops compiling.
 
 - `[Shared]` **`Standing.chasing` is gone**, with `player.standing.behind` in
   both locales and the test that pinned its tie rule. It answered *who is one
