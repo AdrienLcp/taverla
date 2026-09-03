@@ -3,3 +3,10 @@
 @layer components
   .segmented-control
     @include strip.strip
+
+    // The field is the box react-aria gives `value` to, and the button inside
+    // it is the box every state lands on. Taking it out of the flow is what
+    // lets the button be the flex or grid item the strip lays out, so one
+    // `.segment` rule covers this and `ToggleGroup`'s bare button alike.
+    .segment-field
+      display: contents
