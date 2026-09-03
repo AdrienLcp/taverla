@@ -27,6 +27,19 @@ const SERVER_ENTRY = join(GAME_ROOT, 'dist-ssr', 'entry-server.js')
 const MANIFEST_FILE = 'prerendered.json'
 
 /**
+ * Vite's own, which answers a different question: what the build emitted for a
+ * given source module. It is what lets a document inline the stylesheet its
+ * page's chunk carries instead of linking it.
+ */
+const VITE_MANIFEST_FILE = '.vite/manifest.json'
+
+type BuildChunk = {
+  css?: string[]
+  file: string
+  imports?: string[]
+}
+
+/**
  * Every replacement is required to match exactly once. `index.html` stays a
  * valid standalone document — it is what `pnpm dev` serves — so there are no
  * placeholders to key off, and a tag that is edited out of it would otherwise
@@ -106,18 +119,169 @@ const originOf = (template: string): string => {
 /** `/en` → `en.html`, `/fr/credits` → `fr/credits.html`. */
 const fileFor = (path: string): string => `${path.slice(1)}.html`
 
+/**
+ * Every `<link rel="stylesheet">` the build emitted, matched as one run so a
+ * single `<style>` can take their place. They are removed rather than
+ * reordered: the three of them are 16 KB behind 550 KB of JavaScript and a
+ * 90 KB font, all requested in the same breath, and priority does not preempt
+ * on a shared connection — measured at 1.28 s of pure queue.
+ */
+const LINKED_STYLESHEETS =
+  /<link[^>]*rel="stylesheet"[^>]*>(?:\s*<link[^>]*rel="stylesheet"[^>]*>)*/
+
+const linkedStylesheetsOf = (html: string): string[] => {
+  const run = LINKED_STYLESHEETS.exec(html)?.[0]
+
+  if (run === undefined) {
+    throw new Error(
+      'prerender: index.html links no stylesheet, so there is nothing to inline and nothing would paint'
+    )
+  }
+
+  return [...run.matchAll(/href="([^"]*)"/g)].flatMap(([, href]) => href ?? [])
+}
+
+/**
+ * A chunk and everything it statically imports, imports first. The walk rather
+ * than the chunk alone, because a page is painted and run by both — and a
+ * shared chunk the bundler splits off tomorrow would otherwise drop off the
+ * first paint with nothing to say so.
+ */
+const chunksFor = ({
+  module,
+  seen
+}: {
+  module: string
+  seen: Set<string>
+}): BuildChunk[] => {
+  if (seen.has(module)) {
+    return []
+  }
+
+  seen.add(module)
+
+  const chunk = buildManifest[module]
+
+  if (chunk === undefined) {
+    throw new Error(
+      `prerender: ${module} is not in Vite's manifest — routes.tsx names a module this build did not emit`
+    )
+  }
+
+  return [
+    ...(chunk.imports ?? []).flatMap((imported) =>
+      chunksFor({ module: imported, seen })
+    ),
+    chunk
+  ]
+}
+
+const stylesheets = new Map<string, string>()
+
+const readStylesheet = async (href: string): Promise<string> => {
+  const cached = stylesheets.get(href)
+
+  if (cached !== undefined) {
+    return cached
+  }
+
+  const css = await readFile(join(CLIENT_DIR, href.slice(1)), 'utf8')
+
+  if (css.includes('</style')) {
+    throw new Error(
+      `prerender: ${href} would close the <style> tag it is inlined into`
+    )
+  }
+
+  stylesheets.set(href, css)
+
+  return css
+}
+
+/**
+ * What the template links — the entry's sheet and every shared chunk it pulls
+ * in — plus the ones belonging to the page's own chunk, which the template
+ * cannot name because the router loads it lazily. Both halves or neither: the
+ * document carries the whole page's markup, so inlining only the first would
+ * paint it stripped of a third of its styles for as long as the bundle takes.
+ */
+const inlineStylesFor = async (module: string): Promise<string> => {
+  const hrefs = [
+    ...new Set([
+      ...templateStylesheets,
+      ...chunksFor({ module, seen: new Set() }).flatMap((chunk) =>
+        (chunk.css ?? []).map((file) => `/${file}`)
+      )
+    ])
+  ]
+
+  return (await Promise.all(hrefs.map(readStylesheet))).join('\n')
+}
+
+/**
+ * Every `<link rel="modulepreload">` the build emitted, as one run — matched
+ * the way the stylesheets are, and for the same exactly-once guard.
+ */
+const PRELOADED_MODULES =
+  /<link[^>]*rel="modulepreload"[^>]*>(?:\s*<link[^>]*rel="modulepreload"[^>]*>)*/
+
+const preloadedModulesOf = (html: string): string => {
+  const run = PRELOADED_MODULES.exec(html)?.[0]
+
+  if (run === undefined) {
+    throw new Error(
+      'prerender: index.html preloads no module, so there is no run to add a page chunk to'
+    )
+  }
+
+  return run
+}
+
+const entryScriptOf = (html: string): string => {
+  const src = /<script[^>]*type="module"[^>]*src="([^"]*)"/.exec(html)?.[1]
+
+  if (src === undefined) {
+    throw new Error('prerender: index.html carries no module entry script')
+  }
+
+  return src
+}
+
+/**
+ * The chunk this page's route lives in, and its static imports. The router
+ * reaches it through a dynamic import, so nothing names it until the entry has
+ * been downloaded, parsed and run — a serial round trip behind 550 KB of
+ * bundle, measured at 870 ms, for which the route fallback holds the screen and
+ * the paint the document already made is thrown away. Named here, it is in
+ * flight with everything else from the first response.
+ */
+const preloadsFor = (module: string): string =>
+  chunksFor({ module, seen: new Set() })
+    .map((chunk) => `/${chunk.file}`)
+    .filter((href) => !alreadyRequested.has(href))
+    .map(
+      (href) => `\n    <link rel="modulepreload" crossorigin href="${href}">`
+    )
+    .join('')
+
 const documentFor = ({
   origin,
   page,
+  preloads,
   rendered,
   siblings,
+  styles,
   template
 }: {
   origin: string
   page: PrerenderedPage
+  /** `<link rel="modulepreload">` for this page's own chunk, which the template cannot name. */
+  preloads: string
   rendered: RenderedPage
   /** The same page in every language, this one included — `hreflang` must be reciprocal. */
   siblings: PrerenderedPage[]
+  /** Every stylesheet this page paints under, so the document links none. */
+  styles: string
   template: string
 }): string => {
   const url = `${origin}${page.path}`
@@ -184,6 +348,18 @@ const documentFor = ({
     (html: string) =>
       replaceOnce({
         html,
+        pattern: PRELOADED_MODULES,
+        replacement: `${preloadedModules}${preloads}`
+      }),
+    (html: string) =>
+      replaceOnce({
+        html,
+        pattern: LINKED_STYLESHEETS,
+        replacement: `<style>${styles}</style>`
+      }),
+    (html: string) =>
+      replaceOnce({
+        html,
         pattern: /<div id="root"><\/div>/,
         replacement: `<div id="root">${rendered.html}</div>`
       })
@@ -218,6 +394,19 @@ const OPEN_GRAPH_TAGS: Record<Locale, string> = {
 
 const template = await readFile(join(CLIENT_DIR, 'index.html'), 'utf8')
 const origin = originOf(template)
+const templateStylesheets = linkedStylesheetsOf(template)
+const preloadedModules = preloadedModulesOf(template)
+
+const alreadyRequested = new Set([
+  entryScriptOf(template),
+  ...[...preloadedModules.matchAll(/href="([^"]*)"/g)].flatMap(
+    ([, href]) => href ?? []
+  )
+])
+
+const buildManifest: Record<string, BuildChunk> = JSON.parse(
+  await readFile(join(CLIENT_DIR, VITE_MANIFEST_FILE), 'utf8')
+)
 
 const {
   imageAlts,
@@ -242,8 +431,10 @@ for (const page of prerenderedPages) {
     documentFor({
       origin,
       page,
+      preloads: preloadsFor(page.module),
       rendered,
       siblings: siblingsOf(page.page),
+      styles: await inlineStylesFor(page.module),
       template
     }),
     'utf8'

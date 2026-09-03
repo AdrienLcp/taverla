@@ -31,6 +31,11 @@ const SERVER_ORIGIN = process.env.VITE_SERVER_ORIGIN ?? 'http://localhost:3100'
 const DEV_PORT = Number(process.env.VITE_DEV_PORT) || 5273
 
 export default defineConfig({
+  build: {
+    // Read by `scripts/prerender.ts`, which needs to know the stylesheet each
+    // page's chunk carries before it can inline it.
+    manifest: true
+  },
   plugins: [
     react(),
     // The compiler rides on @rolldown/plugin-babel rather than `react({ babel })`:

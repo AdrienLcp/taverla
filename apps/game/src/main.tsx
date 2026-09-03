@@ -27,9 +27,7 @@ const router = createBrowserRouter(routes)
  * render — hydrating would either mismatch on every load or push the theme into
  * an effect, which is a flash of the wrong palette on every page instead of
  * none. Nothing on these pages comes from a loader, so hydration would buy the
- * reuse of a few dozen nodes and nothing else. React replaces the container's
- * children inside its first commit, so the prerendered text is what paints and
- * nothing blanks between the two.
+ * reuse of a few dozen nodes and nothing else.
  */
 const root = createRoot(container)
 
@@ -41,4 +39,26 @@ const App: React.FC = () => (
   </StrictMode>
 )
 
-root.render(<App />)
+/**
+ * A prerendered document is already showing this page, and React's first commit
+ * cannot: every route is `lazy`, so until the chunk resolves the router is
+ * uninitialized and `RouterProvider` renders `RouteFallback` over it. Measured
+ * on the home page at 200 ms of loader replacing a page painted at 456 ms —
+ * throwing away the paint the document was written to make.
+ *
+ * Waiting costs nothing here, because what it waits behind is the screen being
+ * rendered. A room is the other case and needs the opposite: `/host/:code` and
+ * the `/play/:code` a QR code lands on are served the empty SPA fallback, so
+ * `#root` has no children, and the loader is the only thing that screen has to
+ * show. That is the whole of the condition.
+ */
+if (container.hasChildNodes() && !router.state.initialized) {
+  const unsubscribe = router.subscribe((state) => {
+    if (state.initialized) {
+      unsubscribe()
+      root.render(<App />)
+    }
+  })
+} else {
+  root.render(<App />)
+}

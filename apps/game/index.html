@@ -12,6 +12,28 @@
     <meta content="#a8330d" media="(prefers-color-scheme: dark)" name="theme-color" />
     <meta content="#ff7a3d" media="(prefers-color-scheme: light)" name="theme-color" />
 
+    <!--
+      `_tokens.sass` answers `prefers-color-scheme` on its own, so only an
+      explicit override needs stamping — and `ThemeProvider` stamps it from an
+      effect, which is a second and a half after the first paint. That gap is
+      the flash. The two meta tags above are media-scoped to the system
+      preference for the same reason, so an override has to move them too or
+      the browser's own chrome keeps the palette the page just left.
+    -->
+    <script>
+      try {
+        const theme = localStorage.getItem('taverla:theme')
+
+        if (theme === 'dark' || theme === 'light') {
+          document.documentElement.dataset.theme = theme
+
+          for (const meta of document.querySelectorAll('meta[name="theme-color"]')) {
+            meta.media = meta.media.includes(theme) ? 'all' : 'not all'
+          }
+        }
+      } catch {}
+    </script>
+
     <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
     <!-- iOS ignores an SVG icon outright, and a phone is where this is added to a home screen. -->
     <link href="/apple-touch-icon.png" rel="apple-touch-icon" />

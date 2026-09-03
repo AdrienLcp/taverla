@@ -31,29 +31,58 @@ type RoutedPath = Exclude<(typeof paths)[keyof typeof paths], typeof paths.root>
  * reason one app can serve both: a phone joining a game downloads the buzzer,
  * not the QR code renderer and the audio player it will never run.
  */
-const lazyPageFor = {
-  [paths.credits]: async () => ({
-    Component: (await import('@/features/credits/credits-page')).CreditsPage
-  }),
-  [paths.game]: async () => ({
-    Component: (await import('@/features/shelf/game-home-page')).GameHomePage
-  }),
-  [paths.home]: async () => ({
-    Component: (await import('@/features/home/home-page')).HomePage
-  }),
-  [paths.host]: async () => ({
-    Component: (await import('@/features/host/host-console-page'))
-      .HostConsolePage
-  }),
-  [paths.play]: async () => ({
-    Component: (await import('@/features/player/player-page')).PlayerPage
-  })
-} satisfies Record<RoutedPath, RouteObject['lazy']>
+type LazyPage = {
+  lazy: RouteObject['lazy']
+  /**
+   * The same module the import beside it names, spelled the way Vite's build
+   * manifest keys it. The prerender walks that manifest to inline the
+   * stylesheet a page's chunk carries, and cannot read a specifier back out of
+   * a closure — so the two are written on adjacent lines rather than in two
+   * tables that can drift apart.
+   */
+  module: string
+}
+
+const pageFor = {
+  [paths.credits]: {
+    lazy: async () => ({
+      Component: (await import('@/features/credits/credits-page')).CreditsPage
+    }),
+    module: 'src/features/credits/credits-page.tsx'
+  },
+  [paths.game]: {
+    lazy: async () => ({
+      Component: (await import('@/features/shelf/game-home-page')).GameHomePage
+    }),
+    module: 'src/features/shelf/game-home-page.tsx'
+  },
+  [paths.home]: {
+    lazy: async () => ({
+      Component: (await import('@/features/home/home-page')).HomePage
+    }),
+    module: 'src/features/home/home-page.tsx'
+  },
+  [paths.host]: {
+    lazy: async () => ({
+      Component: (await import('@/features/host/host-console-page'))
+        .HostConsolePage
+    }),
+    module: 'src/features/host/host-console-page.tsx'
+  },
+  [paths.play]: {
+    lazy: async () => ({
+      Component: (await import('@/features/player/player-page')).PlayerPage
+    }),
+    module: 'src/features/player/player-page.tsx'
+  }
+} satisfies Record<RoutedPath, LazyPage>
 
 const routeFor = (path: RoutedPath): RouteObject => ({
-  lazy: lazyPageFor[path],
+  lazy: pageFor[path].lazy,
   path
 })
+
+export const pageModuleFor = (path: RoutedPath): string => pageFor[path].module
 
 /**
  * Which branch a path hangs from is read off the path itself, so putting a page

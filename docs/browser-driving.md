@@ -21,14 +21,26 @@ Raise it to 5% at most, and only when the audio itself is what is being tested �
 the countdown landing on the first note, a buzz pausing the clip, a reload
 seeking back into a round. Say so in the reply when you do.
 
-## The MCP Playwright tool has no `addInitScript`
+## `addInitScript` is reachable, through one door
 
-Reach the muted state by loading the home page first — it can play nothing —
+`browser_run_code_unsafe` is handed the `page` itself, so the whole Playwright
+API is there — `page.addInitScript`, `page.route`, and
+`page.context().newCDPSession(page)`. This page used to say the tool had no init
+script at all, which cost a stage's worth of navigating to the home page first.
+
+```ts
+await page.addInitScript(() => {
+  localStorage.setItem('taverla:volume', '0')
+})
+```
+
+Where only the ordinary MCP tools are loaded there is no init script, and the
+muted state is reached by loading the home page first — it can play nothing —
 writing `taverla:volume` there, and navigating afterwards. An init script that
-*clears* storage on the way is worse than none: it wipes the key under test on
-every real navigation and on every second tab of the same context.
+*clears* storage on the way is worse than none either way: it wipes the key
+under test on every real navigation and on every second tab of the same context.
 
-Nine more that cost time to learn:
+Twelve more that cost time to learn:
 
 - **Two players in one room need a hand.** `taverla:seats` is a single
   `localStorage` array shared by every tab of the context, keyed by room *and
@@ -64,6 +76,26 @@ Nine more that cost time to learn:
   buzzer, a reflex tap or anything else react-aria arms on the press rather than
   the release. Dispatch `PointerEvent('pointerdown')` and `('pointerup')` with
   `pointerId`, `pointerType` and `isPrimary` set.
+
+- **An init script runs before `document.documentElement` exists**, so a
+  `MutationObserver` pointed at it throws and observes nothing. The trap is that
+  an observer which was never installed reports the same empty log as a page
+  where nothing happened, so it reads as proof. Observe `document`, which is
+  there.
+
+- **The first paint is the page with its bundles aborted.**
+  `page.route('**/assets/*.js', (route) => route.abort())` leaves exactly what
+  the served document can draw on its own, and it can be screenshotted and
+  queried like any other page. It is the only way to see what a phone sees for
+  the first second, and `typeof window.React === 'undefined'` is how the shot
+  proves it ran no script.
+
+- **Throttling goes through CDP, and `page.route` cannot stand in for it.**
+  `Network.emulateNetworkConditions`, `Network.setCacheDisabled` and
+  `Emulation.setCPUThrottlingRate` on a session from
+  `page.context().newCDPSession(page)`, applied **before** the navigation. Check
+  it took: `performance.getEntriesByType('paint')` reporting a first paint under
+  100 ms means the conditions were not applied, or the assets came from cache.
 
 - **A background tab is not a hidden document.** Selecting another tab with
   `browser_tabs` leaves the first page reporting `visibilityState: 'visible'`,

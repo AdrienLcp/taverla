@@ -11,9 +11,10 @@ import { LOCALES, type Locale } from '@taverla/protocol/locale'
 import {
   creditsPathFor,
   gameHomePathFor,
-  homePathFor
+  homePathFor,
+  paths
 } from '@/infrastructure/router/navigation'
-import { routes } from '@/infrastructure/router/routes'
+import { pageModuleFor, routes } from '@/infrastructure/router/routes'
 import { AppProviders } from '@/presentation/app-providers'
 import {
   IMAGE_ALTS,
@@ -26,6 +27,8 @@ import { ROUTE_FALLBACK_CLASS } from '@/presentation/route-fallback'
 
 export type PrerenderedPage = {
   locale: Locale
+  /** How Vite's build manifest keys the chunk this page renders, which is what says whose stylesheet the document inlines. */
+  module: string
   page: IndexedPage
   /** Where the document is served, from the site root — `/fr/credits`. */
   path: string
@@ -44,11 +47,22 @@ export type RenderedPage = PageHead & {
 export { IMAGE_ALTS as imageAlts, OPEN_GRAPH_LOCALES as openGraphLocales }
 
 const pagesFor = (locale: Locale): PrerenderedPage[] => [
-  { locale, page: 'home', path: homePathFor(locale) },
-  { locale, page: 'credits', path: creditsPathFor(locale) },
+  {
+    locale,
+    module: pageModuleFor(paths.home),
+    page: 'home',
+    path: homePathFor(locale)
+  },
+  {
+    locale,
+    module: pageModuleFor(paths.credits),
+    page: 'credits',
+    path: creditsPathFor(locale)
+  },
   ...shelvedGames.map(
     (game): PrerenderedPage => ({
       locale,
+      module: pageModuleFor(paths.game),
       page: game,
       path: gameHomePathFor({ game, locale })
     })
