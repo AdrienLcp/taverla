@@ -3,7 +3,10 @@ import type React from 'react'
 import type { HostRoomView, RoomSettings } from '@taverla/protocol/room'
 import type { TrackSource } from '@taverla/protocol/track'
 
-import { isJudgedByHost } from '@taverla/core/room/game-modes'
+import {
+  isJudgedByHost,
+  isSeatWithheldByMode
+} from '@taverla/core/room/game-modes'
 import type { HostPreferences } from '@taverla/core/room/host-preferences'
 import { isRoundInPlay } from '@taverla/core/room/room-phase'
 import {
@@ -57,6 +60,10 @@ export const SetupFold: React.FC<SetupFoldProps> = ({
 }) => {
   const translate = useTranslate()
   const game = view.settings.game
+  const answering = {
+    game: game?.kind ?? null,
+    mode: view.settings.mode.kind
+  }
   const isInLobby = view.phase === 'lobby'
   const roundInPlay = isRoundInPlay(view.phase)
   // The name the room has for this seat, not the one this screen asked for: a
@@ -128,21 +135,25 @@ export const SetupFold: React.FC<SetupFoldProps> = ({
         The round in play is still out, because taking the seat reopens the
         socket underneath a clip that is running.
       */}
-      {!roundInPlay &&
-        !isJudgedByHost({
-          game: game?.kind ?? null,
-          mode: view.settings.mode.kind
-        }) && (
-          <HostSeat
-            cost={
-              game?.kind === 'reflex'
-                ? 'host.seat.cost.sharedScreen'
-                : 'host.seat.cost.hiddenAnswer'
-            }
-            onTakeSeat={onTakeSeat}
-            takenAs={seat?.nickname ?? null}
-          />
-        )}
+      {!roundInPlay && !isJudgedByHost(answering) && (
+        <HostSeat
+          cost={
+            game?.kind === 'reflex'
+              ? 'host.seat.cost.sharedScreen'
+              : 'host.seat.cost.hiddenAnswer'
+          }
+          onTakeSeat={onTakeSeat}
+          takenAs={seat?.nickname ?? null}
+        />
+      )}
+      {/*
+        In its place, and only where the room could have had one: the control
+        vanishing on its own is what makes a quiz left on `buzzer` read as a
+        broken seat rather than as a room that owes a verdict.
+      */}
+      {!roundInPlay && isSeatWithheldByMode(answering) && (
+        <p className='held'>{translate('host.seat.judged')}</p>
+      )}
     </Disclosure>
   )
 }

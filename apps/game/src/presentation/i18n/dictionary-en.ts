@@ -323,6 +323,13 @@ export const EN_DICTIONARY = defineTranslations({
         hiddenAnswer: 'You stop seeing the answer before everyone else.',
         sharedScreen: 'You race on the screen the whole table is watching.'
       },
+      /**
+       * Why there is no seat here, where the room could have one. It names the
+       * way out rather than the rule, because the strip that undoes it is on
+       * the same screen a few lines up.
+       */
+      judged:
+        'You judge the buzzes, so there is no seat here. Any other way to answer gives you one.',
       label: 'Play too, as',
       leave: 'Give up the seat',
       taken: 'You are playing as {nickname}.'

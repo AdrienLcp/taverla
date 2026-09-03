@@ -294,6 +294,8 @@ export const FR_DICTIONARY: Dictionary = {
         hiddenAnswer: 'Tu ne verras plus la réponse avant les autres.',
         sharedScreen: 'Tu cours sur l’écran que toute la table regarde.'
       },
+      judged:
+        'Tu juges les buzz, donc pas de place ici. N’importe quelle autre façon de répondre t’en rend une.',
       label: 'Jouer aussi, sous le nom de',
       leave: 'Rendre sa place',
       taken: 'Tu joues sous le nom de {nickname}.'

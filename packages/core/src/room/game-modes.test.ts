@@ -6,6 +6,7 @@ import { DEFAULT_MODE_SETTINGS } from '@taverla/protocol/room'
 import {
   answerModesFor,
   isJudgedByHost,
+  isSeatWithheldByMode,
   modeOfferedBy,
   offersAnswerMode
 } from './game-modes'
@@ -53,6 +54,34 @@ describe('isJudgedByHost', () => {
 
   it('[game-modes] withholds the seat from a room that has picked nothing yet', () => {
     expect(isJudgedByHost({ game: null, mode: 'buzzer' })).toBe(true)
+  })
+
+  // The quiz is the other game offering all three, and the one whose host is
+  // most likely to be surprised: nothing about a bank of questions says a room
+  // playing it might owe a verdict.
+  it('[game-modes] judges a quiz answered by a buzz and no other quiz', () => {
+    expect(isJudgedByHost({ game: 'quiz', mode: 'buzzer' })).toBe(true)
+    expect(isJudgedByHost({ game: 'quiz', mode: 'choice' })).toBe(false)
+    expect(isJudgedByHost({ game: 'quiz', mode: 'typed' })).toBe(false)
+  })
+})
+
+describe('isSeatWithheldByMode', () => {
+  it('[game-modes] explains the seat a quiz took away with its answer mode', () => {
+    expect(isSeatWithheldByMode({ game: 'quiz', mode: 'buzzer' })).toBe(true)
+    expect(isSeatWithheldByMode({ game: 'blindtest', mode: 'buzzer' })).toBe(
+      true
+    )
+  })
+
+  it('[game-modes] says nothing where a seat was never on offer', () => {
+    expect(isSeatWithheldByMode({ game: 'buzzer', mode: 'buzzer' })).toBe(false)
+    expect(isSeatWithheldByMode({ game: null, mode: 'buzzer' })).toBe(false)
+  })
+
+  it('[game-modes] says nothing about a seat the host already has', () => {
+    expect(isSeatWithheldByMode({ game: 'quiz', mode: 'typed' })).toBe(false)
+    expect(isSeatWithheldByMode({ game: 'reflex', mode: 'buzzer' })).toBe(false)
   })
 })
 
