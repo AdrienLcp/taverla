@@ -27,35 +27,42 @@
     // Eleven genres do not fit one row on a laptop, and a horizontal scroller
     // hides the ones at the end from a host who is standing up. A wrapped flex
     // strip is worse than it sounds here: the last row gets two chips stretched
-    // to half the width each. A grid gives every option the same cell, and the
-    // rules become gaps showing the strip's own ground through.
+    // to half the width each. A grid gives every option the same cell instead —
+    // the strip's own rules, which are already gaps, then run both ways.
     .genres .segments,
     .decades .segments
-      background: var(--rule)
       display: grid
-      gap: 2px
 
       .segment
-        border-right: none
         // The shared strip keeps every label on one line, which a cell sized by
         // the grid cannot promise. The columns below are wide enough that
         // nothing wraps today; this is what stops the next locale's longest
         // label from hanging over the strip's edge instead.
         white-space: normal
 
-        &:not([data-selected])
-          background: var(--field)
-
-    // Wide enough for `CHANSON FRANÇAISE`, which is the longest label either
-    // locale holds. At 148px it landed in a cell narrower than itself.
+    // Twelve is the whole list, so the count is stepped through twelve's own
+    // divisors rather than left to auto-fit. `auto-fit` lands on five columns
+    // at laptop width, and five leaves three empty cells with the strip's
+    // ground showing through where a genre should be. The steps are the widest
+    // count whose cell still holds `CHANSON FRANÇAISE`, the longest label
+    // either locale carries and the one that landed in a cell narrower than
+    // itself at 148px.
     .genres .segments
-      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr))
+      grid-template-columns: repeat(2, 1fr)
 
-    // Six is the whole list, so the count is stepped through six's own
-    // divisors rather than left to auto-fit: four or five columns leave the
-    // last row short and the strip's ground showing through where a decade
-    // should be. Twelve genres survive auto-fit for the opposite reason — they
-    // divide by everything it can land on.
+    @container (min-width: 530px)
+      .genres .segments
+        grid-template-columns: repeat(3, 1fr)
+
+    @container (min-width: 710px)
+      .genres .segments
+        grid-template-columns: repeat(4, 1fr)
+
+    @container (min-width: 1060px)
+      .genres .segments
+        grid-template-columns: repeat(6, 1fr)
+
+    // Six is the whole list, stepped the same way and for the same reason.
     //
     // `ANNÉES 2000` measures 120px with its padding, and at 414px the three
     // columns it fell into gave it 119.5. Half a pixel is not a breakpoint, so

@@ -28,25 +28,35 @@
       cursor: not-allowed
 
       &[data-selected]
-        background: none
+        background: var(--field)
         box-shadow: inset 0 0 0 3px var(--ink)
         color: var(--ink)
 
   // A strip of stamps, ruled off from the field. No pill, no inner card.
+  //
+  // The rules are gaps with the strip's own ground showing through, not borders
+  // on the segments. A border rules the one axis it was written for: the five
+  // games fit a laptop on one row and wrap on a phone, and the boundary between
+  // those two rows was simply missing — a `border-right` has nothing to say
+  // about a row below it, and no `:last-child` can name the end of a row.
   .segments
+    background: var(--rule)
     border: 2px solid var(--rule)
     display: flex
     flex-wrap: wrap
+    gap: 2px
 
   // `flex: 1` rather than content width: the segments share the strip evenly,
-  // so the trailing gap between the last one and the rule cannot appear. The
-  // basis is 0 but each segment's minimum is its own `nowrap` label, so a strip
-  // too narrow for its options wraps and then fills the row it landed on.
+  // so the trailing gap between the last one and the rule cannot appear, and a
+  // short last row stretches to fill instead of leaving the ground showing
+  // through where an option should be. The basis is 0 but each segment's
+  // minimum is its own `nowrap` label, so a strip too narrow for its options
+  // wraps and then fills the row it landed on.
   .segment
     @include focus.ring-inset
     @include typography.caption
 
-    border-right: 2px solid var(--rule)
+    background: var(--field)
     color: var(--ink-muted)
     cursor: pointer
     flex: 1
@@ -56,9 +66,6 @@
     text-transform: uppercase
     transition: background-color var(--transition-fast, 0) var(--timing, ease), color var(--transition-fast, 0) var(--timing, ease)
     white-space: nowrap
-
-    &:last-child
-      border-right: none
 
     &[data-hovered],
     &[data-pressed]
