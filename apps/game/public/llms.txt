@@ -1,0 +1,40 @@
+# Taverla
+
+> Party games for one screen and the whole room. One screen runs the game and
+> shows a QR code; everyone else joins from whatever screen they have to hand.
+> No install, no account, no app store.
+
+One person opens a room and gets a four-character code. Everyone else joins by
+scanning the QR code on that screen or by typing the code — a phone, a laptop,
+anything with a browser. The room stays open for the evening; the screen running
+it plays the audio and shows the score.
+
+## Games
+
+- **Blind test** — a clip plays, the first to name the track and the artist
+  scores. Tracks come from charts, a decade, film composers, a Deezer playlist
+  or a search.
+- **Buzzer** — the race with no content at all. The host brings the charade, the
+  quiz on paper or the lesson; the screen only settles who was first.
+- **Quiz** — question banks bundled with the server, in French and English, by
+  subject.
+- **Le Fake** — everyone writes a lie about a real question, the screen shows
+  them all beside the truth, and the room votes.
+- **Reflex** — the screen changes colour and the first thumb wins. Going before
+  it changes costs the round.
+
+## Pages
+
+- [Home](https://taverla.onrender.com/): open a room, or join one with a code.
+- [Blind test](https://taverla.onrender.com/blindtest)
+- [Buzzer](https://taverla.onrender.com/buzzer)
+- [Quiz](https://taverla.onrender.com/quiz)
+- [Le Fake](https://taverla.onrender.com/lefake)
+- [Reflex](https://taverla.onrender.com/reflex)
+- [Credits](https://taverla.onrender.com/credits)
+
+## Notes
+
+A room's own pages — `/host/<code>` and `/play/<code>` — are not content. A code
+is one evening long and is shared by hand, so those paths resolve only while the
+room is open and are excluded in `robots.txt`.

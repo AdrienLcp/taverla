@@ -1,9 +1,9 @@
 User-agent: *
-Allow: /$
-Allow: /blindtest
 
 # A room is one evening long and its code is shared by hand. The SPA fallback
 # answers 200 on any path, so without this a link pasted into a public place
-# would put a dead room in an index.
+# would put a dead room in an index. Everything else is allowed by default,
+# which is why no game is named here — a list of them would go stale the day
+# one is added, and buy nothing while it was right.
 Disallow: /host/
 Disallow: /play/
