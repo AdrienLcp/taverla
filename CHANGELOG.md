@@ -523,6 +523,22 @@ one part.
 
 ### Fixes
 
+- `[Game]` **Three lines of secondary text were dimmed below the contrast the
+  token they should have used already guarantees.** `opacity` on text
+  multiplies the field back into the ink, and nothing says by how much: the two
+  `.subtitle` captions on the player's answer forms sat at 3.91:1 against the
+  worst field, and `revealed-lie-board`'s `.fooled` stacked `opacity: 0.75` on
+  top of `--ink-muted` — which is *already* 85% ink, calibrated to the point
+  where the worst pair still clears 4.5:1 — for 63.7% effective ink and 3.18:1.
+  All three now read `color: var(--ink-muted)` and clear 4.5:1 by the same
+  measurement that set the 85%.
+
+  Lighthouse scored accessibility 1.0 with all three shipped, on all three
+  audited URLs, because they live on screens a room reaches mid-round and an
+  audit of the front door never loads. The two remaining `opacity` values under
+  0.5 are a pulse keyframe and a reduced-motion progress bar, neither of them
+  text.
+
 - `[Game]` **A French room is no longer offered a translation of itself.**
   `index.html` ships `lang="en"` — deliberately, because a crawler and a link
   unfurled in a group chat read the served document and that copy is English —
