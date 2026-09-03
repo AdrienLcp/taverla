@@ -871,6 +871,22 @@ one part.
 
 ### Internal
 
+- `[Game]` **`@babel/core` is back on 7.x, and the build refuses anything
+  else.** The pin drifted to `^8.0.1` two dependency bumps ago — which is what
+  `pnpm -r up -L` does to a range — and under Babel 8 the React Compiler cannot
+  parse the AST for a destructured parameter with a default, so it bails on
+  that function alone with the build green. Measured with the compiler's own
+  `logger`: 113 successes and 3 errors on 8, 114 and 2 on 7. **One function**,
+  and the one it took was `TextField`, which every form in the product renders.
+  The two errors that stay are `round-audio.ts` mutating a value the compiler
+  will not let it, and have nothing to do with Babel.
+
+  The note in `docs/component-shape.md` said *most of the app* and was wrong by
+  two orders of magnitude, which is part of why nobody went looking; it now
+  carries the measurement and how to repeat it. And the pin stops being a
+  sentence: `vite.config.ts` throws on any `@babel/core` outside 7.x, so the
+  next `deps:upgrade` fails loudly instead of quietly costing a component.
+
 - `[Game]` **The route table is keyed by path, so it cannot lose one or answer
   the same one twice.** Both shipped once: `paths.game` was given to the player
   screen as well as the shelf, which left `/play/XXXX` on the 404 and

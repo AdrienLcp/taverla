@@ -32,9 +32,11 @@ the same package. One answer to "where is the wire contract?".
 in this repo consumes the TypeScript JS compiler API (no `@hey-api/openapi-ts`,
 no Storybook autodocs). Adding a tool that does means pinning back to 6.x.
 
-**`@babel/core` stays on 7.x.** The React Compiler cannot parse Babel 8's AST
-for a destructured parameter with a default and bails per function, silently —
-see [`docs/component-shape.md`](../docs/component-shape.md).
+**`@babel/core` stays on 7.x**, and `vite.config.ts` throws on anything else.
+The React Compiler cannot parse Babel 8's AST for a destructured parameter with
+a default and bails on that function, silently — one function in 116, and the
+one it took was `TextField`. See
+[`docs/component-shape.md`](../docs/component-shape.md).
 
 ## Commands
 

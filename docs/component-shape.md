@@ -40,9 +40,37 @@ owns the socket, and the stage that switches on the phase.
 The React Compiler runs through `@rolldown/plugin-babel` in
 `apps/game/vite.config.ts`, because plugin-react 6 moved to Oxc and no longer
 runs Babel itself. The compiler cannot parse Babel 8's AST for a destructured
-parameter with a default — `({ isPending = false }) => …`, which is most
-components — and it bails **per function, silently**: the build stays green and
-the component is simply not optimized.
+parameter with a default — `({ isInvalid = false }) => …` — and it bails **per
+function, silently**: the build stays green and that one function is simply not
+optimized.
 
-Nothing surfaces it, so the pin is the only guard. A dependency bump that lifts
-`@babel/core` to 8 costs the compiler on most of the app and reports nothing.
+**Per function is the whole shape of it**, and it is worth being exact about
+because the earlier wording here said *most of the app* and sent nobody looking.
+Measured on the build, Babel 8 costs **one function out of 116** — but the one
+it cost was `TextField`, the design system's field, which every form in the
+product renders. A bump does not degrade the app broadly; it takes out whichever
+components happen to carry a default, and says nothing about which.
+
+The pin drifted to `^8.0.1` for two dependency bumps before anyone looked, which
+is what `pnpm -r up -L` does to a range: it lifts it. So `vite.config.ts` now
+throws on any `@babel/core` that is not 7.x, and the pin is a build failure
+rather than a sentence in a document.
+
+### Measuring it
+
+`reactCompilerPreset` forwards its options to `babel-plugin-react-compiler`, so
+a `logger` is all it takes to turn the silence into a count:
+
+```ts
+reactCompilerPreset({
+  logger: {
+    logEvent: (filename, event) =>
+      appendFileSync(LOG, `${event.kind} ${filename}` + NEWLINE)
+  }
+})
+```
+
+`CompileSuccess` against `CompileError` is the answer. Two errors are permanent
+and unrelated to Babel — `round-audio.ts` mutates a value the compiler will not
+let it — so the number to watch is **114 successes, 2 errors**. Anything else on
+7.x means a component stopped compiling for its own reasons.
