@@ -1,7 +1,7 @@
 import { type ReactNode, useEffect, useState } from 'react'
 
 import { createSafeContext } from '@/helpers/contexts'
-import type { ThemePreference } from '@/helpers/theme'
+import { type ThemePreference, themeColorMediaFor } from '@/helpers/theme'
 import {
   readStoredThemePreference,
   writeStoredThemePreference
@@ -29,6 +29,18 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       delete document.documentElement.dataset.theme
     } else {
       document.documentElement.dataset.theme = preference
+    }
+
+    // The head script answers the same question on a cold load, and cannot
+    // answer this one: a theme chosen from the menu happens long after it ran.
+    for (const meta of document.querySelectorAll<HTMLMetaElement>(
+      'meta[name="theme-color"][data-scheme]'
+    )) {
+      const scheme = meta.dataset.scheme
+
+      if (scheme === 'light' || scheme === 'dark') {
+        meta.media = themeColorMediaFor({ preference, scheme })
+      }
     }
   }, [preference])
 

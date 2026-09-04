@@ -44,7 +44,7 @@ the **root element** so the field survives an overscroll bounce, and `lobby` is
 the token default so a first paint before React mounts is already correct.
 
 **Every colour a component uses is `--field`, `--ink`, `--ink-muted`, `--rule`,
-`--cut` or `--cut-ink`.** No component holds a hex.
+`--edge`, `--cut` or `--cut-ink`.** No component holds a hex.
 
 ### The one field change that is not a phase
 
@@ -93,6 +93,27 @@ it for the better: the worst `--ink-muted` pair went from 4.61:1 to 4.81:1 on
 the same 85%. Every field and ink value itself round-trips to the hex it
 replaced, so the six fields are the same six colours.
 
+**A hairline has two weights, and which one is asked for is the question.** WCAG
+1.4.11 asks 3:1 of what identifies a control or its state, and nothing of what
+merely separates two regions. `--rule` at 32% is the separator — 1.84:1 on the
+worst pair, and that is enough for a line between a scoreboard and the thing
+under it. `--edge` at 60% is a control's own boundary, where 3:1 has to hold:
+3.19:1 on the same pair, 55% gives 2.90 and does not. It stops well short of
+`--ink-muted`, because a shelf of game cards bordered at 85% reads as heavy as
+the two doors above it and the front page loses its order — measured on the
+page, not argued.
+
+Three borders are `--edge`: the game card on the front door, the menu trigger,
+and the volume slider's track. Everything else that draws in `--rule` is a
+divider, an inactive control — 1.4.11 exempts those — or a shape whose
+information is carried in full ink beside it, which is the segmented strip and
+the slider's own fill.
+
+**A bar that is the information is drawn in full ink, moving or not.** The
+round's clock fades nothing under `prefers-reduced-motion`: it used to drop to
+35%, which put the edge between filled and empty at 1.84:1 — the same number,
+in the one place where the mark *is* the reading rather than around it.
+
 An error is **a stamped block**, never tinted text: `--danger` / `--danger-ink`
 are the same in both palettes because the contrast that matters is inside the
 block. Tinted red text tops out at 4.0:1 against the chrome-yellow field, and
@@ -122,8 +143,8 @@ laptop and at four metres on a television, and `vw` alone breaks one of them.
 Hard edges. `--radius-full` exists for exactly one element — the buzzer, because
 it is the one thing in the product that is a physical button. No shadows, no
 glass, no gradients. The QR code and the cover art are die-cut blocks (`cut`
-mixin) on the field; everything else is drawn with the ink or a `--rule`
-hairline.
+mixin) on the field; everything else is drawn with the ink, a `--rule` hairline
+between two regions, or an `--edge` one around a control.
 
 Controls are blocks: `filled` inverts the field, `outlined` is ruled in ink,
 `underlined` has neither — **and therefore has no block either.** It is the one

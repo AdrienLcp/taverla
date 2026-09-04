@@ -52,3 +52,37 @@ That is bigger than the fault.
 - **Both tags stay.** Deleting them and setting one from script would leave a
   phone with no colour at all until JavaScript runs, which is the flash this
   repository just spent a stage removing.
+
+## What it did — **4 September 2026**
+
+The tag now says which scheme it is, and one function says what to do about it.
+
+`index.html` gives each `theme-color` meta a `data-scheme` of `light` or
+`dark`. `themeColorMediaFor` in `helpers/theme.ts` takes that and the
+preference and returns the `media` the tag must carry: `all` when the scheme is
+the chosen one, `not all` when it is not, and — the branch this entry called the
+hard one — `(prefers-color-scheme: <scheme>)` for `'system'`, which puts the
+query back rather than choosing a colour. `ThemeProvider` applies it in the
+effect that already stamps `data-theme`.
+
+**The third option was not needed, and the reason is worth keeping.** This entry
+argued that a script and an effect saying the same thing in two languages was
+the case for moving the whole job into the provider. What made the duplication
+safe instead is that neither side knows the pairing: the tag carries its own
+scheme, so the head script's four lines and the provider's loop share one fact —
+the attribute name — and cannot drift on colours or on which tag is which.
+
+Reading the media query back out of the tag, which is what stage 20 did
+(`meta.media.includes(theme)`), is the thing that could not be repaired: the
+first override overwrites it, and `'system'` then has nothing to restore.
+
+Verified live in the browser, switching from the menu with no reload:
+
+| Chosen | `data-theme` | tag `dark` | tag `light` |
+|---|---|---|---|
+| Sombre | `dark` | `all` | `not all` |
+| Clair | `light` | `not all` | `all` |
+| Système | *(removed)* | `(prefers-color-scheme: dark)` | `(prefers-color-scheme: light)` |
+
+A cold load on `'system'` leaves both queries untouched, so the effect is a
+no-op there and the tags never depend on JavaScript having run.

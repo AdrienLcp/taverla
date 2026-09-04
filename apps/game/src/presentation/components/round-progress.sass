@@ -15,10 +15,15 @@
 
     // Still the measurement, minus the moving: someone who asked for no motion
     // gets where the round stands each time a snapshot corrects it.
+    //
+    // In the same ink as the moving one, and that is the point. This used to
+    // fade to 35%, which put the edge that carries the reading — filled against
+    // empty — at 1.84:1 against the field, under the 3:1 WCAG 1.4.11 asks of
+    // anything that is the information rather than around it. Full ink is
+    // 5.65:1 on the worst pair, and it is what a paused bar looks like anyway.
     @media (prefers-reduced-motion: reduce)
       &::after
         animation: none
-        opacity: 0.35
         transform: scaleX(var(--drain-from, 1))
 
 @keyframes round-drain

@@ -140,7 +140,15 @@
     // interpolation goes muddy at the midpoint. This one is read as text, so
     // the gain is measured: the worst pair clears 4.81:1 where srgb gave 4.61.
     --ink-muted: color-mix(in oklab, var(--ink) 85%, var(--field))
+    // Two weights of the same hairline, and the split is what each one is asked
+    // to say. `--rule` separates two regions and carries nothing on its own, so
+    // 32% — 1.84:1 on the worst pair — is all it needs. `--edge` is a control's
+    // own boundary, which WCAG 1.4.11 asks 3:1 of, and 60% is where the worst
+    // pair reaches it: 55% gives 2.90. It stops there rather than going to
+    // `--ink-muted`, because a shelf of cards bordered at 85% reads as heavy as
+    // the two doors above it and the front page loses its order.
     --rule: color-mix(in oklab, var(--ink) 32%, var(--field))
+    --edge: color-mix(in oklab, var(--ink) 60%, var(--field))
 
   // `usePhaseField` stamps the attribute on the root element, so the field
   // survives an overscroll bounce — what shows there is the document's
