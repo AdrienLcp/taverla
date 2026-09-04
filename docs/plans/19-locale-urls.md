@@ -228,7 +228,9 @@ gives.
   chunk at 2 626 ms, so **the dictionary is no longer on the first-paint path at
   all**. What it can still buy is bandwidth the stylesheets are competing for,
   and the blocking time after the paint. That is a different case from the one
-  this bullet weighed, and it should be argued on those terms or dropped.
+  this bullet weighed. It was argued on those terms and **dropped** — the
+  numbers and the reasoning are in
+  [`backlog/README.md`](backlog/README.md), under what nobody re-opens.
 - **Three render-blocking stylesheets** (4.1 + 1.2 + 1.0 KiB gzipped) were
   costed at ~150 ms in round trips. They cost **1.28 s** — measured after the
   stage, above: the estimate priced the round trips and not the queue, and once

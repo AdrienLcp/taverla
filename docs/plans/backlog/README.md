@@ -134,3 +134,21 @@ wrong surfaces by playing.*
 - **Emoji reactions**: not for now.
 - **Mid-game joining stays**: a phone that arrives takes a seat and plays from
   the next round.
+- **The dictionaries are not split.** [Stage 19](../19-locale-urls.md) left this
+  open on new terms — off the first-paint path, worth bandwidth and post-paint
+  blocking time — and [stage 20](../20-critical-css.md) is what made those terms
+  measurable. Measured: the unused locale is **6 610 B gzipped**, against a
+  `i18n-provider` chunk of 79 028 B and roughly 550 KB of JavaScript on a cold
+  load. That is 1.2% of what a phone downloads and about 35 ms of a 200 KB/s
+  connection, spent after a paint that now happens at 1 044 ms. Stage 19's
+  "43 KiB" was the raw figure; gzip is what travels.
+
+  Against it stands a permanent cost that no measurement shrinks: a provider
+  with a not-yet-loaded state, a fetch on the language switch, and an SPA
+  fallback that does not know its locale — on party Wi-Fi, three new ways for a
+  screen to have no words on it. **Recommendation: no**, and it does not come
+  back for a smaller number.
+
+  The finding worth keeping is the other one: **87% of that chunk is not
+  dictionaries**. 72 KB gzipped of it is react-aria's locale machinery, which is
+  a different question and the only one worth asking about this chunk.

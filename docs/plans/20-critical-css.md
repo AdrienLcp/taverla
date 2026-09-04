@@ -217,5 +217,8 @@ which is the case that had to keep working.
 
 - **Nothing was done about the 550 KB of JavaScript.** It no longer gates the
   paint, and it still gates interactivity. The dictionary split
-  [19](19-locale-urls.md) repriced is the same question, and still needs a new
-  argument.
+  [19](19-locale-urls.md) repriced was settled here rather than left hanging:
+  the unused locale is 6 610 B gzipped, 1.2% of a cold load, and splitting it
+  buys less than the states it adds — [`backlog/README.md`](backlog/README.md)
+  carries the measurement. What is left in that chunk is react-aria's locale
+  machinery, 72 KB gzipped, which nobody has weighed.
