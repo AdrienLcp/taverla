@@ -31,6 +31,10 @@
     // and one child, so the other half can sit beside it.
     &.revealed .outcome
       align-items: center
+      // What the answer is sized against: on a laptop this is a column of a
+      // fixed share, and `vmin` there is the size of a screen this half of it
+      // never gets.
+      container-type: inline-size
       display: flex
       flex-direction: column
       gap: var(--space-m)
@@ -41,12 +45,18 @@
     // payout filled it on their own and left the board — the half a player who
     // cannot see the room's screen came for — under the fold. The room's own
     // screen splits this same moment in two for the same reason.
+    //
+    // Both tracks divide the screen rather than being sized by what is in
+    // them: `1fr` is `minmax(auto, 1fr)`, so the answer's own min-content — one
+    // unbreakable word at ninety-six pixels — claimed the whole row and left
+    // the board on its 15rem floor at every desktop width, which is a phone's
+    // width carrying a laptop's type. `Adrien 2` was drawn as `Adr…`.
     @include layout.wide
       &.revealed
         align-items: center
         column-gap: var(--space-xl)
         display: grid
-        grid-template-columns: 1fr minmax(15rem, 0.8fr)
+        grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.8fr)
 
     // The product's only real image, die-cut on the field the way the QR code
     // is: a block edged in its own paper, no radius and no shadow. Well under
@@ -62,10 +72,19 @@
 
     // Bigger than the shared billboard step: this is the payoff, and on a phone
     // held at arm's length the shared size lands at twenty-eight pixels.
+    //
+    // Two facts the viewport cannot answer, so the component publishes both,
+    // and once this screen splits in two the column is what has to answer them
+    // rather than the screen behind it. How much there is to say holds the
+    // answer to about two lines — the bank runs to 83 characters. How long its
+    // longest unbreakable run is holds every one of them to a *whole word*:
+    // `anywhere` is the guard against a word leaving the column, and a guard
+    // that fires reads `Maiso / n- / Blanch / e`.
     .revealed-title
       @include typography.billboard
 
-      font-size: clamp(2.5rem, 11vmin, 6rem)
+      font-size: clamp(2.5rem, min(11vmin, calc(240cqi / var(--answer-length, 10)), calc(120cqi / var(--longest-word, 10))), 6rem)
+      overflow-wrap: anywhere
 
     .revealed-artist
       @include typography.title

@@ -563,6 +563,28 @@ one part.
 
 ### Fixes
 
+- `[Game]` **A player's reveal on a laptop cut every nickname over about seven
+  characters** — `Adrien 2` was drawn as `Adr…`. The board sat in a column that
+  never grew: the split reveal declares `1fr minmax(15rem, 0.8fr)`, and `1fr`
+  is `minmax(auto, 1fr)`, so the answer's own min-content — one unbreakable word
+  at ninety-six pixels — claimed the whole row and left the board on its 15rem
+  floor at *every* desktop width. A phone's width, carrying a laptop's type,
+  because the name was sized in `vmin` against the screen behind the column. The
+  track is `minmax(0, 1fr)` now, and the row is sized against its own container:
+  `clamp(1.25rem, min(3vmin, 6cqi), 1.75rem)`, which is the size a phone and a
+  narrow window already read and a cap the split had no ruler for. Fourteen
+  characters fit where seven did, on every game — the board is the shell's.
+
+- `[Game]` **The revealed answer is sized by the column it is in, not by the
+  screen behind it.** The room's own panel has divided by `--answer-length`
+  since it was written; the phone's never did, and once that screen splits in
+  two the same 83-character answers land in 431 pixels. It publishes two
+  measurements now, because two things decide whether a display-size string
+  fits: how much there is of it, and how long its longest *unbreakable* run is —
+  `Maison-Blanche` is seven characters wide, not fourteen. `overflow-wrap:
+  anywhere` is the guard behind both, and a guard that fires reads
+  `Maiso / n- / Blanch / e`.
+
 - `[Game]` **Three lines of secondary text were dimmed below the contrast the
   token they should have used already guarantees.** `opacity` on text
   multiplies the field back into the ink, and nothing says by how much: the two

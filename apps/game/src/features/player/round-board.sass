@@ -4,6 +4,10 @@
   // Hairline-ruled rows straight on the field, the way every board in this
   // product is drawn: no cards, no fills, the field is already the surface.
   .round-board
+    // The rows are sized against this, not against the viewport: on a laptop
+    // the reveal splits and this board is handed a fixed column while `vmin`
+    // goes on growing with the screen behind it.
+    container-type: inline-size
     display: flex
     flex-direction: column
     list-style: none
@@ -41,6 +45,11 @@
     .nickname
       @include typography.title
 
+      // The shared step, capped by the column it is actually in. A phone and a
+      // narrow window read it at the size they always did; the split reveal is
+      // where the two rulers disagree, and 6% of a 345px column is what puts a
+      // fourteen-character name back inside the row it was being cut out of.
+      font-size: clamp(1.25rem, min(3vmin, 6cqi), 1.75rem)
       overflow: hidden
       text-overflow: ellipsis
       white-space: nowrap

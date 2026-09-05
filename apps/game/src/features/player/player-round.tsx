@@ -456,6 +456,22 @@ const Buzzer = ({
 }
 
 /**
+ * The two measurements a stylesheet cannot take of a string it never sees, and
+ * both decide whether the answer fits the column it is set in: how much there
+ * is of it, and how long its longest *unbreakable* run is. A hyphen and a space
+ * are break opportunities, so `Maison-Blanche` is seven characters wide rather
+ * than fourteen, and an answer of short words is long without holding any
+ * single line hostage.
+ */
+const fitting = (answer: string): React.CSSProperties => ({
+  '--answer-length': answer.length,
+  '--longest-word': Math.max(
+    1,
+    ...answer.split(/[\s-]+/u).map((run) => run.length)
+  )
+})
+
+/**
  * What the round turned out to be, on the phone — and `null` for a game whose
  * question the room owns, because a charade has no answer to print. What that
  * game's reveal is instead lands under this: the scoreline, which is what a
@@ -503,7 +519,9 @@ const Revealed = ({
           />
         )}
         <p className='framing'>{translate('blindtest.reveal.title')}</p>
-        <p className='revealed-title'>{whatTheRoomNames(track)}</p>
+        <p className='revealed-title' style={fitting(whatTheRoomNames(track))}>
+          {whatTheRoomNames(track)}
+        </p>
         <p className='revealed-artist'>{track.artist}</p>
         {cueOf(track) !== null && <p className='note'>{cueOf(track)}</p>}
       </>
@@ -514,7 +532,9 @@ const Revealed = ({
     return (
       <>
         <p className='framing'>{translate('quiz.reveal.title')}</p>
-        <p className='revealed-title'>{question.answer}</p>
+        <p className='revealed-title' style={fitting(question.answer)}>
+          {question.answer}
+        </p>
         {question.note !== null && <p className='note'>{question.note}</p>}
       </>
     )
