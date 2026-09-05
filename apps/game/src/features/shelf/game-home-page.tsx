@@ -4,7 +4,7 @@ import { useCreateRoom } from '@/features/home/use-create-room'
 import { NotFoundPage } from '@/features/not-found/not-found-page'
 import { useGameParam } from '@/infrastructure/router/navigation'
 import { Button } from '@/presentation/components/button'
-import { useDocumentTitle } from '@/presentation/head/use-document-title'
+import { useIndexedPageTitle } from '@/presentation/head/use-document-title'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import {
   gameDescriptionKey,
@@ -35,7 +35,7 @@ export const GameHomePage: React.FC = () => {
 const GameHome: React.FC<{ game: ShelvedGame }> = ({ game }) => {
   const translate = useTranslate()
 
-  useDocumentTitle(game)
+  useIndexedPageTitle(game)
 
   const { error, isCreating, open } = useCreateRoom()
 

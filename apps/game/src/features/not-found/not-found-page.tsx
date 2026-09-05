@@ -1,5 +1,6 @@
 import { homePathFor } from '@/infrastructure/router/navigation'
 import { Link } from '@/presentation/components/link'
+import { useDocumentTitle } from '@/presentation/head/use-document-title'
 import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import './not-found-page.sass'
@@ -11,6 +12,8 @@ import './not-found-page.sass'
 export const NotFoundPage: React.FC = () => {
   const { locale } = useI18n()
   const translate = useTranslate()
+
+  useDocumentTitle(translate('notFound.documentTitle'))
 
   return (
     <main className='not-found-page'>

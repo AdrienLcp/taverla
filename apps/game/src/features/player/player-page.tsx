@@ -27,6 +27,7 @@ import { ConnectionRefused } from '@/presentation/components/connection-refused'
 import { RoundProgress } from '@/presentation/components/round-progress'
 import { TextField } from '@/presentation/components/text-field'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
+import { useRoomDocumentTitle } from '@/presentation/head/use-room-document-title'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { protocolErrorKey } from '@/presentation/i18n/translation'
 import { useReportRoomActions } from '@/presentation/room-actions/room-actions-provider'
@@ -89,6 +90,8 @@ const PlayerScreen: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
       writeStoredNickname(seatNickname)
     }
   }, [seatNickname])
+
+  useRoomDocumentTitle(view?.settings.game?.kind ?? null)
 
   useReportRoomActions({
     closeRoom: null,

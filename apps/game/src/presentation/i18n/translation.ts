@@ -109,14 +109,18 @@ export const questionCategoryKey = (
 ): BuiltKey<`quiz.category.${QuestionCategory}`> => `quiz.category.${category}`
 
 /**
- * The three strings the shelf and a game's own front door read. Typed over the
- * games a room can actually be opened for, so adding one to `shelvedGames`
- * stops compiling until both locales can name it, pitch it and describe it.
+ * What a game is called, owed by every game the *server* serves rather than
+ * only the ones with a front door: a room's tab names the game it is playing,
+ * and a game reachable by a settings frame alone is still a game a room can be
+ * in. Adding one to `gameKinds` stops compiling until both locales name it.
  */
-export const gameNameKey = (
-  game: ShelvedGame
-): BuiltKey<`${ShelvedGame}.name`> => `${game}.name`
+export const gameNameKey = (game: GameKind): BuiltKey<`${GameKind}.name`> =>
+  `${game}.name`
 
+/**
+ * The two the shelf and a game's own front door read, and those only the
+ * shelved games owe — nothing pitches a game a room cannot be opened for.
+ */
 export const gameTaglineKey = (
   game: ShelvedGame
 ): BuiltKey<`${ShelvedGame}.tagline`> => `${game}.tagline`

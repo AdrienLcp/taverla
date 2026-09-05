@@ -61,6 +61,7 @@ import { Countdown } from '@/presentation/components/countdown'
 import { RoundProgress } from '@/presentation/components/round-progress'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
+import { useRoomDocumentTitle } from '@/presentation/head/use-room-document-title'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import {
   clipRefusalKey,
@@ -119,6 +120,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   const [preferences, setPreferences] = useState(readStoredHostPreferences)
 
   useReportConnection({ clock, status })
+  useRoomDocumentTitle(view?.settings.game?.kind ?? null)
   usePhaseField(view?.phase ?? null)
   useScreenAwake(status !== 'refused' && view?.phase !== 'finished')
   const { canPlay, refusal, unlock } = useRoundAudio({ clock, view, volume })

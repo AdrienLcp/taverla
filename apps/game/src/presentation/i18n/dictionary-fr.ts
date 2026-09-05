@@ -405,6 +405,7 @@ export const FR_DICTIONARY: Dictionary = {
   },
   notFound: {
     description: 'La partie est finie, ou le code a été mal tapé.',
+    documentTitle: 'La salle est vide — Taverla',
     title: 'La salle est vide'
   },
   player: {
@@ -518,6 +519,10 @@ export const FR_DICTIONARY: Dictionary = {
     tapped: 'C’est pris.',
     tooEarly: 'parti trop tôt',
     waiting: 'Guette l’écran.'
+  },
+  room: {
+    documentTitle: '{game} — Taverla',
+    documentTitleLobby: 'Taverla'
   },
   round: {
     answer: {

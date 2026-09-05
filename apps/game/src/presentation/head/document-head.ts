@@ -23,7 +23,7 @@ export type PageHead = {
  * says `Taverla` and `The tavern is open.`, and neither is a search result.
  *
  * Read twice. The build-time prerender writes it into fourteen documents, and
- * `useDocumentTitle` writes the tab after an in-app navigation. Typed over
+ * `useIndexedPageTitle` writes the tab after an in-app navigation. Typed over
  * `ShelvedGame`, so putting a game on the shelf stops compiling here until both
  * languages can introduce it to a stranger.
  */

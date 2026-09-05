@@ -1,7 +1,7 @@
 import { homePathFor } from '@/infrastructure/router/navigation'
 import { Link } from '@/presentation/components/link'
 import { TextLink } from '@/presentation/components/text-link'
-import { useDocumentTitle } from '@/presentation/head/use-document-title'
+import { useIndexedPageTitle } from '@/presentation/head/use-document-title'
 import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
 import type { PlainTranslationKey } from '@/presentation/i18n/translation'
 
@@ -62,7 +62,7 @@ const QUESTION_CREDITS: QuestionCredit[] = [
 export const CreditsPage: React.FC = () => {
   const { locale } = useI18n()
 
-  useDocumentTitle('credits')
+  useIndexedPageTitle('credits')
 
   const translate = useTranslate()
 

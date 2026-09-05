@@ -585,6 +585,18 @@ one part.
   anywhere` is the guard behind both, and a guard that fires reads
   `Maiso / n- / Blanch / e`.
 
+- `[Game]` **A room's tab said `Taverla — party games for one screen and the
+  whole room` in a French app.** `/host/:code`, `/play/:code` and the
+  not-found page are served by the SPA fallback rather than by one of the
+  fourteen prerendered documents, and none of the three set a title of its own —
+  so all three inherited the English home page's, whatever language the app was
+  in. All three say what the front doors say now: `Blind test — Taverla`, and
+  `Taverla` alone while the lobby has no game yet. A tab is chrome rather than a
+  game screen, so it is one of the three places the product is named; the room
+  code is not in it, being already the largest thing on the console and the line
+  above the player's own name. `useDocumentTitle` is the string, and
+  `useIndexedPageTitle` the page it used to be.
+
 - `[Game]` **Three lines of secondary text were dimmed below the contrast the
   token they should have used already guarantees.** `opacity` on text
   multiplies the field back into the ink, and nothing says by how much: the two

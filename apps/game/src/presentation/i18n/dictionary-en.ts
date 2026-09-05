@@ -450,6 +450,7 @@ export const EN_DICTIONARY = defineDictionary({
   },
   notFound: {
     description: 'That game is over, or the code was mistyped.',
+    documentTitle: 'Nobody here — Taverla',
     title: 'Nobody here'
   },
   player: {
@@ -570,6 +571,10 @@ export const EN_DICTIONARY = defineDictionary({
     tapped: 'In.',
     tooEarly: 'too early',
     waiting: 'Watch the screen.'
+  },
+  room: {
+    documentTitle: '{game} — Taverla',
+    documentTitleLobby: 'Taverla'
   },
   round: {
     answer: {
