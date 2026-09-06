@@ -61,6 +61,11 @@ everybody else's.
 session that makes the code travel further and therefore the one that makes this
 lock worth keeping.
 
+This refuses **that** field and not every field. The same entry puts a code field
+on the home for `/invite/:code`, and it is safe for the reason this one is not:
+the poster grants nothing — no seat, no console, no token — where the console is
+the room itself. What must never happen is the two being served by one field.
+
 ## Server hardening found on the way, and owed by this session
 
 **No message handler checks `isHostConnected`.** The only gates are

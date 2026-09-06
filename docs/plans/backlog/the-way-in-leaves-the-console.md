@@ -82,9 +82,20 @@ column and broke across two lines. Nothing warns.
   the first snapshot. An existence check on the `GET /api/rooms/:code` that
   `join-with-code.tsx:68` already calls is worth having — projecting a dead code
   onto a wall is the failure it prevents — but it must not gate the first paint.
-- **Reached from the host's menu, and it must open in a new tab.** A plain
+- **Three doors, because the machine projecting it is often not the one
+  hosting.** The URL alone is the first and it needs nothing else, which is the
+  point of taking no socket: a laptop wired to a projector has no room to join.
+  The host's menu is the second, and it **must open in a new tab** — a plain
   navigation off the console drops the host socket, and the server cannot tell
   that from a closed tab. This is the `Exits` rule met from a new direction.
+- **The third is a code field on the home, and it is safe where the one this
+  backlog refuses is not.** Typing a URL by hand on an event laptop is the thing
+  the product refuses everywhere else. The refusal in
+  [the host's way back](the-hosts-way-back.md) is about the door to
+  `/host/:code`, which hands over the room; **this page grants nothing** — no
+  seat, no console, no token, no frame sent. It draws what the room is already
+  showing on a wall. The two must not be collapsed into one field: the poster
+  takes a code and shows it, and that is the whole of its authority.
 
 ## Strings
 
