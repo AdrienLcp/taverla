@@ -156,8 +156,28 @@ const fetchPack = async (packId: number): Promise<UpstreamPack | null> => {
  */
 const SHORTEST_NOTE = 4
 
+/**
+ * Upstream stores the anecdote in a 255-character column and lets it run into
+ * the wall, so ten of them end mid-word — *une protection robuste fixée à la
+ * cein*. The note is read out to the whole room once the answer is public, and a
+ * sentence that stops in the middle of a word reads as a bug in the screen
+ * rather than a truncated database field.
+ *
+ * Cutting back to the last full stop is the repair, and it is a rule rather than
+ * ten rows in `question-repairs.json` because the cap is upstream's and will
+ * take the next long anecdote too. A fragment with no sentence in it at all is
+ * no anecdote, the same way a lone dash is not one.
+ */
+const wholeSentencesOf = (anecdote: string): string => {
+  if (/[.!?»]$/u.test(anecdote)) {
+    return anecdote
+  }
+
+  return anecdote.slice(0, anecdote.lastIndexOf('.') + 1)
+}
+
 const noteIn = (question: UpstreamQuestion): string | null => {
-  const anecdote = question.anecdote?.trim() ?? ''
+  const anecdote = wholeSentencesOf(question.anecdote?.trim() ?? '')
 
   return anecdote.length < SHORTEST_NOTE ? null : anecdote
 }

@@ -55,6 +55,7 @@ export const QUESTIONS = [
     accepted: ['Cervin'],
     answer: 'Le Cervin',
     category: 'geography',
+    choiceOnly: false,
     decoys: ['Le Chasseral', 'Le Suchet', 'Le Roti'],
     id: 'question-1',
     note: 'Zermatt sits at its foot.',
@@ -64,6 +65,7 @@ export const QUESTIONS = [
     accepted: [],
     answer: 'Quatre',
     category: 'geography',
+    choiceOnly: false,
     decoys: ['Trois', 'Deux', 'Une'],
     id: 'question-2',
     note: 'Romansh is the fourth, spoken in Grisons.',
@@ -73,6 +75,7 @@ export const QUESTIONS = [
     accepted: [],
     answer: 'Zurich',
     category: 'geography',
+    choiceOnly: false,
     decoys: ['Lausanne', 'Geneva', 'Basel'],
     id: 'question-3',
     note: 'More than thirty per cent of its residents are foreign.',
@@ -89,13 +92,11 @@ export const questionBankStub = () => ({
     isUsable,
     playedIds
   }: {
-    isUsable?: (question: (typeof QUESTIONS)[number]) => boolean
+    isUsable: (question: (typeof QUESTIONS)[number]) => boolean
     playedIds: ReadonlySet<string>
   }) =>
     QUESTIONS.find(
-      (question) =>
-        !playedIds.has(question.id) &&
-        (isUsable === undefined || isUsable(question))
+      (question) => !playedIds.has(question.id) && isUsable(question)
     ) ?? null,
   hostQuestionOf: <TQuestion>(question: TQuestion) => question
 })

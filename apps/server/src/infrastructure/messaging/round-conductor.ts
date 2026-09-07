@@ -1,6 +1,6 @@
 import type { RoomCode, RoundId } from '@taverla/protocol/identifiers'
 
-import { isEligiblePrompt } from '@taverla/core/lefake/prompt-eligibility'
+import { canBeLiedAbout } from '@taverla/core/lefake/answer-eligibility'
 
 import type { Room } from '@/domain/room/room'
 import { releaseAbandonedSeats } from '@/domain/room/room-service'
@@ -87,11 +87,16 @@ export const beginRound = async (room: Room): Promise<void> => {
   // else's web server being down. Running out of unplayed questions can still
   // happen, and it is the room's own doing rather than an outage.
   if (game.kind === 'quiz' || game.kind === 'lefake') {
+    // A `choiceOnly` row is a question only while its own three decoys are on
+    // screen, which is a quiz in `choice` mode and nothing else — Le Fake shows
+    // the prompt with no candidates at all.
+    const showsItsCandidates =
+      game.kind === 'quiz' && room.settings.mode.kind === 'choice'
+
     const question = drawQuestion({
-      isUsable:
-        game.kind === 'lefake'
-          ? ({ answer, prompt }) => isEligiblePrompt({ answer, prompt })
-          : undefined,
+      isUsable: (row) =>
+        (showsItsCandidates || !row.choiceOnly) &&
+        (game.kind !== 'lefake' || canBeLiedAbout(row)),
       playedIds: room.playedContentIds,
       settings: game
     })

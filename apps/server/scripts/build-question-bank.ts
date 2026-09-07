@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -30,14 +31,76 @@ const BANK_PATH = join(
 )
 
 /**
- * What a source got wrong and will keep getting wrong, by id. It is not a place
- * to improve a question — only to repair one whose own row disagrees with
- * itself, which is the only kind a rebuild can be trusted to reapply blind.
+ * What a source got wrong and this repository puts back, by row id. Three
+ * kinds, and every one of them a repair a rebuild can reapply blind:
+ *
+ * - an `answer` whose own row disagrees with itself — the prompt asks for the
+ *   island and the note spells it right underneath, or the row's own `note`
+ *   names a different answer than the one it banks. Where the right answer is
+ *   sitting among the three `decoys`, the repair carries both and the pair is
+ *   swapped, so the row keeps four distinct candidates;
+ * - a `prompt` written for a pack read in order, where the subject was named by
+ *   an earlier question and this one says only *elle*. A room is dealt one
+ *   question at a time and never sees the pack, so "dans quelle comédie est-elle
+ *   DRH" is a question about nobody. What the pronoun pointed at is the pack's
+ *   own theme, which is why putting it back is a repair rather than an
+ *   improvement;
+ * - a `note`, set to `null` where the source's anecdote has aged past being
+ *   true — it is read out to the room after the reveal, and *Barack Obama est
+ *   l'actuel président* under a correct answer is the screen being wrong out
+ *   loud. The question itself survives;
+ * - an `isAdult`, which only ever goes on: a row the source did not rate and a
+ *   room that did not ask for it;
+ * - a `drop`, for the row that means nothing in any mode — an artist the world
+ *   does not have, a sentence the source garbled past reading.
+ *
+ * It is not a place to make a question better. Every row carries the `why` it
+ * was repaired for, so a later reader can disagree with the judgement rather
+ * than guess at it.
  */
-const CORRECTIONS: Record<string, string> = {
-  /** The prompt asks for the island and the note spells it right underneath. */
-  'oqdb-163-1': 'Alcatraz'
+type QuestionRepair = {
+  answer?: string
+  decoys?: [string, string, string]
+  drop?: boolean
+  isAdult?: boolean
+  note?: string | null
+  prompt?: string
+  why: string
 }
+
+const repairs: Record<string, QuestionRepair> = JSON.parse(
+  readFileSync(join(HERE, 'question-repairs.json'), 'utf8')
+)
+
+/**
+ * Rows that are only a question because their own three decoys are under them.
+ * *Which country drives on the left side of the road?* answers Japan, and so
+ * does India, and seventy others: nothing in the wording is wrong, the answer is
+ * simply picked out of a set the sentence never names. A room typing into a
+ * field cannot win one.
+ *
+ * It is a column rather than a rule because no rule finds it. The regex that
+ * used to stand in for this caught the three quarters that say *which of these*
+ * out loud and missed *what country is not a part of Scandinavia?*, which is the
+ * same question with no marker at all — and it excluded 154 rows that are
+ * perfectly answerable. Reading all 6 286 is what produced the list, and the
+ * list is the artefact worth keeping.
+ */
+const choiceOnlyIds = new Set<string>(
+  (
+    JSON.parse(
+      readFileSync(join(HERE, 'choice-only-questions.json'), 'utf8')
+    ) as ReadonlyArray<{ id: string }>
+  ).map(({ id }) => id)
+)
+
+/** What the bank holds, which is the ingested row plus this repository's own judgement of it. */
+type BankRow = BankedQuestion & { choiceOnly: boolean }
+
+const banked = (question: BankedQuestion): BankRow => ({
+  ...question,
+  choiceOnly: choiceOnlyIds.has(question.id)
+})
 
 /**
  * A question typed mode cannot be won at. The decoys are the source saying what
@@ -55,10 +118,19 @@ const isWinnableTyped = (question: BankedQuestion): boolean =>
     (decoy) => gradeQuizGuess({ guess: decoy, question }).isCorrect
   )
 
-const corrected = (question: BankedQuestion): BankedQuestion => {
-  const answer = CORRECTIONS[question.id]
+const repaired = (question: BankedQuestion): BankedQuestion => {
+  const repair = repairs[question.id]
 
-  return answer === undefined ? question : { ...question, answer }
+  return repair === undefined
+    ? question
+    : {
+        ...question,
+        answer: repair.answer ?? question.answer,
+        decoys: repair.decoys ?? question.decoys,
+        isAdult: repair.isAdult ?? question.isAdult,
+        note: repair.note === undefined ? question.note : repair.note,
+        prompt: repair.prompt ?? question.prompt
+      }
 }
 
 const report = (ingested: IngestedQuestions): void => {
@@ -99,12 +171,15 @@ const run = async (): Promise<void> => {
   console.info('\nOpen Trivia DB (en)')
   const english = await ingestOpenTdb()
 
-  const offered = [...french.questions, ...english.questions].map(corrected)
+  const sourced = [...french.questions, ...english.questions]
+  const offered = sourced
+    .filter((question) => repairs[question.id]?.drop !== true)
+    .map(repaired)
   const questions = offered.filter(isWinnableTyped)
 
   const bank = {
     attributions: [french.attribution, english.attribution],
-    questions
+    questions: questions.map(banked)
   }
 
   await writeFile(BANK_PATH, `${JSON.stringify(bank, null, 2)}\n`, 'utf8')
@@ -122,6 +197,20 @@ const run = async (): Promise<void> => {
 
   for (const rejection of [...french.rejections, ...english.rejections]) {
     console.info(`  rejected ${rejection}`)
+  }
+
+  const sourcedIds = new Set(sourced.map(({ id }) => id))
+
+  for (const id of Object.keys(repairs)) {
+    if (!sourcedIds.has(id)) {
+      console.warn(`  stale repair ${id}: no row carries that id any more`)
+    }
+  }
+
+  for (const id of choiceOnlyIds) {
+    if (!sourcedIds.has(id)) {
+      console.warn(`  stale choice-only ${id}: no row carries that id any more`)
+    }
   }
 }
 

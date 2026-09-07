@@ -1,0 +1,4082 @@
+[
+  {
+    "id": "oqdb-111-2",
+    "language": "fr",
+    "prompt": "En combien de temps la course Ironman est-elle réalisée ?",
+    "why": "\"Moins d'1 jour\" is a comparison a player cannot guess the wording of; a typed room would answer with a number of hours"
+  },
+  {
+    "id": "oqdb-128-3",
+    "language": "fr",
+    "prompt": "Combien pèsent les testicules de la baleine mâle ?",
+    "why": "the answer is \"Environ 70 kg\" — the \"Environ\" prefix and the unit formatting cannot be guessed in a text field; all four options are built for a pick"
+  },
+  {
+    "id": "oqdb-143-4",
+    "language": "fr",
+    "prompt": "Qui fut la première à animer « Disney Parade » avec Jean-Pierre Foucault ?",
+    "why": "the answer is a bare first name; a room answering \"Anne Meso\" to a \"Qui\" question is marked wrong"
+  },
+  {
+    "id": "oqdb-171-1",
+    "language": "fr",
+    "prompt": "Dans quel portefeuille peuvent être stockés les Ethers ?",
+    "why": "\"portefeuille\" in the prompt is simply the French for the banked answer \"Wallet\", so the question asks which wallet and any of MetaMask, Ledger, a cold wallet or a hardware wallet fits it as written"
+  },
+  {
+    "id": "oqdb-173-2",
+    "language": "fr",
+    "prompt": "Quelle était la profession de Barack Obama avant de devenir président ?",
+    "why": "\"la profession avant de devenir président\" fits avocat, professeur de droit and sénateur just as well as the banked \"consultant financier\", and a room typing any of those is marked wrong"
+  },
+  {
+    "id": "oqdb-201-3",
+    "language": "fr",
+    "prompt": "Lequel de ces fromages français est vendu dans une boîte en bois ?",
+    "why": "« Lequel de ces fromages » needs the candidates on screen"
+  },
+  {
+    "id": "oqdb-207-4",
+    "language": "fr",
+    "prompt": "Quel pourcentage du poids du requin le foie peut-il représenter ?",
+    "why": "the answer is a choice-shaped range with an unguessable prefix; a room typing \"25%\" can never match \"Jusqu'à 25 %\""
+  },
+  {
+    "id": "oqdb-217-4",
+    "language": "fr",
+    "prompt": "Dans quel film de 2003 voit-on des Sentinelles, robots insectoïdes ?",
+    "why": "les Sentinelles apparaissent dans les deux Matrix sortis en 2003, « Reloaded » et « Revolutions » ; rien dans l'énoncé ne dit lequel est attendu"
+  },
+  {
+    "id": "oqdb-229-3",
+    "language": "fr",
+    "prompt": "Combien de morceaux de sucre contient une canette de cola 33 cl  ?",
+    "why": "the hedge word in \"Environ sept\" is unguessable; a player who types \"sept\" or \"7\" gives the right answer and is marked wrong"
+  },
+  {
+    "id": "oqdb-253-2",
+    "language": "fr",
+    "prompt": "Parmi ces joueurs de tennis professionnels, lequel est le plus âgé ?",
+    "why": "asks which of the listed players is oldest, meaningless without the candidates"
+  },
+  {
+    "id": "oqdb-265-3",
+    "language": "fr",
+    "prompt": "Qui a été une figure historique du JT de France 3 ?",
+    "why": "\"une figure historique du JT de France 3\" fits several anchors (Henri Sannier, Élise Lucet, Catherine Matausch) and the wording names no criterion"
+  },
+  {
+    "id": "oqdb-287-4",
+    "language": "fr",
+    "prompt": "Quel est un trait typique de la production musicale de Jul ?",
+    "why": "la réponse « Très productif » est un adjectif de commentaire qu'aucun joueur ne produira au mot près dans un champ libre"
+  },
+  {
+    "id": "oqdb-293-1",
+    "language": "fr",
+    "prompt": "Dans quel club espagnol Antoine Griezmann a-t-il été marquant à ses débuts ?",
+    "why": "\"a ses debuts\" points at Real Sociedad, where Griezmann actually started and made his name in Spain, while the banked answer is Atletico"
+  },
+  {
+    "id": "oqdb-299-1",
+    "language": "fr",
+    "prompt": "Dans quel film de la série James Bond Léa Seydoux a-t-elle joué ?",
+    "why": "Léa Seydoux joue Madeleine Swann dans deux James Bond, « Spectre » et « Mourir peut attendre » ; en saisie libre la seconde réponse est juste et sera comptée fausse"
+  },
+  {
+    "id": "oqdb-313-3",
+    "language": "fr",
+    "prompt": "Quel groupe anglais a obtenu son premier numéro un avec « Relax » ?",
+    "why": "la réponse attendue est l'acronyme « FGTH » alors qu'un joueur tapera « Frankie Goes to Hollywood », et rien dans le prompt ne réclame des initiales"
+  },
+  {
+    "id": "oqdb-401-3",
+    "language": "fr",
+    "prompt": "Quel quartet acid jazz est renommé pour ses performances live ?",
+    "why": "la réponse attendue est l'acronyme « JTQ » alors qu'un joueur qui connaît le groupe tapera « James Taylor Quartet », le nom que la note elle-même donne"
+  },
+  {
+    "id": "oqdb-404-2",
+    "language": "fr",
+    "prompt": "Lequel de ces termes faisait autrefois référence aux Vikings ?",
+    "why": "« lequel de ces termes » needs the four candidates on screen"
+  },
+  {
+    "id": "oqdb-419-3",
+    "language": "fr",
+    "prompt": "Lequel de ces pays ou territoires n'utilise pas le degré Celsius ?",
+    "why": "asks which of the on-screen countries is meant"
+  },
+  {
+    "id": "oqdb-433-1",
+    "language": "fr",
+    "prompt": "Lequel de ces personnages n'est pas un des enfants de Marge Simpson ?",
+    "why": "asks which of the listed characters is not Marge's child"
+  },
+  {
+    "id": "oqdb-434-1",
+    "language": "fr",
+    "prompt": "Laquelle de ces propositions désigne un titre de Depeche Mode ?",
+    "why": "asks which of the on-screen candidates is a Depeche Mode title"
+  },
+  {
+    "id": "oqdb-456-1",
+    "language": "fr",
+    "prompt": "Laquelle de ces inventions ne porte pas le nom de son inventeur ?",
+    "why": "asks which of the listed inventions, unanswerable without the candidates"
+  },
+  {
+    "id": "oqdb-472-3",
+    "language": "fr",
+    "prompt": "Quelle est l'altitude de croisière d'un Airbus A320 ?",
+    "why": "valeur numérique avec unité et espacement impossibles à deviner au clavier — 10000, 10 km, 33 000 pieds ou FL330 disent la même chose"
+  },
+  {
+    "id": "oqdb-473-1",
+    "language": "fr",
+    "prompt": "Laquelle de ces communes importantes est la plus peuplée d'Italie ?",
+    "why": "asks which of the on-screen communes is meant"
+  },
+  {
+    "id": "oqdb-503-2",
+    "language": "fr",
+    "prompt": "Combien de brevets Nikola Tesla a-t-il déposé au cours de sa vie ?",
+    "why": "the \"Environ\" prefix is unguessable in a text field, and it is only there because all four options carry it"
+  },
+  {
+    "id": "oqdb-51-4",
+    "language": "fr",
+    "prompt": "Qui donne la réplique à Charles Bronson dans « Le Passager de la pluie » ?",
+    "why": "Bronson's co-star in « Le Passager de la pluie » is Marlène Jobert, whose character the note itself describes; Annie Cordy plays her mother"
+  },
+  {
+    "id": "oqdb-91-4",
+    "language": "fr",
+    "prompt": "Le lac Titicaca sert entre autres de frontière à quels pays ?",
+    "why": "the answer is a two-item list whose order and conjunction a player cannot guess: \"Perou et Bolivie\" is the same answer and would not match"
+  },
+  {
+    "id": "otdb-00f65b763bd4",
+    "language": "en",
+    "prompt": "In \"The Elder Scrolls 3: Morrowind\", which of the following factions is not joinable?",
+    "why": "NOT-question over the listed Morrowind factions"
+  },
+  {
+    "id": "otdb-018338c3c600",
+    "language": "en",
+    "prompt": "Which of the following awards do Matt Stone and Trey Parker NOT have?",
+    "why": "negative over an unbounded set of awards they lack"
+  },
+  {
+    "id": "otdb-01ae64cd5ffc",
+    "language": "en",
+    "prompt": "Which of these Nickelodeon game shows aired first?",
+    "why": "'aired first' is relative to the candidate set alone"
+  },
+  {
+    "id": "otdb-01d4c1515026",
+    "language": "en",
+    "prompt": "Which of these is NOT DLC for the video game called \"Tabletop Simulator\"?",
+    "why": "negative over the DLC titles offered"
+  },
+  {
+    "id": "otdb-01d54c5b9ec8",
+    "language": "en",
+    "prompt": "Which of the following chemicals are found in eggplant seeds?",
+    "why": "\"which of the following chemicals are found in eggplant seeds\" has no options in a typed field, and many chemicals are found there"
+  },
+  {
+    "id": "otdb-0204464c72e2",
+    "language": "en",
+    "prompt": "Which of the following is not a real Pokémon?",
+    "why": "NOT-question: any invented name satisfies it"
+  },
+  {
+    "id": "otdb-0216a4f54fab",
+    "language": "en",
+    "prompt": "Which species of Brown Bear is not extinct?",
+    "why": "several brown bear subspecies are extant"
+  },
+  {
+    "id": "otdb-02c9d461040a",
+    "language": "en",
+    "prompt": "What country is not a part of Scandinavia?",
+    "why": "most countries are not Scandinavian"
+  },
+  {
+    "id": "otdb-032d8f436863",
+    "language": "en",
+    "prompt": "Which of the following characters is NOT a female marriage candidate in the game Stardew Valley?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-0345338e52c0",
+    "language": "en",
+    "prompt": "What is Laos?",
+    "why": "\"What is Laos?\" asks nothing specific once the four options are hidden; a room typing a description, a region or a language all fit the wording"
+  },
+  {
+    "id": "otdb-03ce5b2c00f4",
+    "language": "en",
+    "prompt": "In Touhou 12: Undefined Fantastic Object, which of these was not a playable character?",
+    "why": "negative over the Touhou characters offered"
+  },
+  {
+    "id": "otdb-0446ea942d63",
+    "language": "en",
+    "prompt": "Which of the following vehicles featured a full glass roof at base model?",
+    "why": "many cars ship a glass roof as standard"
+  },
+  {
+    "id": "otdb-04898dd0b3a7",
+    "language": "en",
+    "prompt": "In the video game DOTA 2, which of these is NOT a hero?",
+    "why": "negative: any name not in Dota 2 qualifies"
+  },
+  {
+    "id": "otdb-04de47668137",
+    "language": "en",
+    "prompt": "Which of these chemical compounds is NOT found in gastric acid?",
+    "why": "any compound absent from gastric acid satisfies it"
+  },
+  {
+    "id": "otdb-05218aab09dc",
+    "language": "en",
+    "prompt": "When was \"YouTube\" founded?",
+    "why": "'when was YouTube founded' invites a year; the banked answer is a full month-day-year date, and the same bank answers the reddit and WhatsApp equivalents with a bare year"
+  },
+  {
+    "id": "otdb-0537b2e11e03",
+    "language": "en",
+    "prompt": "Which of these countries is \"doubly landlocked\" (surrounded entirely by one or more landlocked countries)?",
+    "why": "Liechtenstein is doubly landlocked too; the set decides"
+  },
+  {
+    "id": "otdb-05d261ce80ca",
+    "language": "en",
+    "prompt": "Which genre is the Touhou Project associated with?",
+    "why": "the answer is a compound genre with a parenthetical gloss, \"Shoot 'em up (bullet-hell) & Fighting\", unguessable verbatim"
+  },
+  {
+    "id": "otdb-063de15ae85c",
+    "language": "en",
+    "prompt": "Which of these bands are NOT from Australia?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-065c0255d754",
+    "language": "en",
+    "prompt": "Which of the following countries was not an axis power during World War II?",
+    "why": "a negative over the candidate set"
+  },
+  {
+    "id": "otdb-0674ff3bbf5a",
+    "language": "en",
+    "prompt": "In the second-generation Pokémon games, which Pokémon can you start with?",
+    "why": "the answer is a list of three starter Pokemon with the exact joining punctuation"
+  },
+  {
+    "id": "otdb-06ac79ae409f",
+    "language": "en",
+    "prompt": "When was the Playstation 3 released?",
+    "why": "'when was the Playstation 3 released' invites a year; the banked answer is a full month-day-year date whose granularity is unguessable"
+  },
+  {
+    "id": "otdb-06ad327a8b5a",
+    "language": "en",
+    "prompt": "In the game Enter the Gungeon, which one of these is not a playable character?",
+    "why": "NOT-question over the listed Gungeon characters"
+  },
+  {
+    "id": "otdb-0783ea0ebee3",
+    "language": "en",
+    "prompt": "Which one of the following is NOT a sub-company of the Volkswagen Group?",
+    "why": "any brand outside the VW Group satisfies it"
+  },
+  {
+    "id": "otdb-0a197d17771f",
+    "language": "en",
+    "prompt": "Out of these four buildings, which one is the tallest, with a height of 1,483 ft (451.9 m)?",
+    "why": "the answer appends a country the prompt never asks for, so the building's name alone is scored wrong"
+  },
+  {
+    "id": "otdb-0a541ebe0696",
+    "language": "en",
+    "prompt": "Which actor was not a major character in TV Show Freaks and Geeks?",
+    "why": "negative: any actor not in the show satisfies it"
+  },
+  {
+    "id": "otdb-0a670a9c38ac",
+    "language": "en",
+    "prompt": "Which of these is NOT a car model produced by Malaysian car manufacturer Proton?",
+    "why": "any model Proton never built satisfies it"
+  },
+  {
+    "id": "otdb-0a9bd2bcf71e",
+    "language": "en",
+    "prompt": "Which song is not by TheFatRat?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-0ab26a479fb4",
+    "language": "en",
+    "prompt": "Of the following space shooter games, which came out first?",
+    "why": "\"which came out first\" is ordering over the candidate set"
+  },
+  {
+    "id": "otdb-0c286ea90ccd",
+    "language": "en",
+    "prompt": "In the film \"Interstellar\", how long did they spend on Miller's planet?",
+    "why": "the answer is a composite duration, \"23 years, 4 months, and 8 days\", whose exact wording and formatting a player could never reproduce"
+  },
+  {
+    "id": "otdb-0c6bac2620d6",
+    "language": "en",
+    "prompt": "What was the world's first video game?",
+    "why": "\"the world's first video game\" is a contested title claimed for Nimrod, OXO, Tennis for Two and the decoy Spacewar! as well as Strachey's draughts; the wording gives no way to know which convention is wanted"
+  },
+  {
+    "id": "otdb-0d1bb44e2cce",
+    "language": "en",
+    "prompt": "Which of these Generation 1 Pokemon did NOT have an evolution in Generation 4?",
+    "why": "NOT-question over the listed Gen 1 Pokemon"
+  },
+  {
+    "id": "otdb-0d372a7c67b0",
+    "language": "en",
+    "prompt": "Which of these is NOT a song on The Beatles' 1968 self titled album, also known as the White album?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-0dcd69ce16ce",
+    "language": "en",
+    "prompt": "Which of these facilities was not present on the Titanic?",
+    "why": "a negative over the candidate set"
+  },
+  {
+    "id": "otdb-0e50fee7451d",
+    "language": "en",
+    "prompt": "Which kind of algorithm is Ron Rivest not famous for creating?",
+    "why": "everything Rivest did not create satisfies it"
+  },
+  {
+    "id": "otdb-0efa190fc61f",
+    "language": "en",
+    "prompt": "Where is the area commonly known as the Bermuda Triangle?",
+    "why": "the answer is a descriptive clause with a comma, not a name a player could type"
+  },
+  {
+    "id": "otdb-0f0cfd9e5146",
+    "language": "en",
+    "prompt": "Which one of the following actors did not voice a character in \"Saints Row: The Third\"?",
+    "why": "negative over an unbounded set of actors"
+  },
+  {
+    "id": "otdb-0f3590eb90b0",
+    "language": "en",
+    "prompt": "Which of these positions did the astronomer and physicist Isaac Newton not hold?",
+    "why": "a negative over the candidate set"
+  },
+  {
+    "id": "otdb-0f81cc1718a0",
+    "language": "en",
+    "prompt": "Which one of these songs did the group \"Men At Work\" NOT make?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-0f91d106e277",
+    "language": "en",
+    "prompt": "\"The Singing Cowboy\" Gene Autry is credited with the first recording for all but which classic Christmas jingle?",
+    "why": "\"all but which\" ranges over the four shown"
+  },
+  {
+    "id": "otdb-0ff4c32af0a9",
+    "language": "en",
+    "prompt": "What was the punishment for Sysiphus's craftiness?",
+    "why": "the answer is a whole sentence ending in a full stop"
+  },
+  {
+    "id": "otdb-1046b0c6f2a3",
+    "language": "en",
+    "prompt": "Which of the following films was Don Bluth both the writer, director, and producer for?",
+    "why": "several Bluth films fit all three credits"
+  },
+  {
+    "id": "otdb-1059611032dc",
+    "language": "en",
+    "prompt": "The US state of New York has about as many inhabitants as?",
+    "why": "many countries hold roughly New York's population"
+  },
+  {
+    "id": "otdb-106d4f7dd86c",
+    "language": "en",
+    "prompt": "Which candy is NOT made by Mars?",
+    "why": "NOT-question over every candy Mars does not make"
+  },
+  {
+    "id": "otdb-106f3c610794",
+    "language": "en",
+    "prompt": "Which of these is NOT a player class in Team Fortress 2?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-10b77ad848b7",
+    "language": "en",
+    "prompt": "What colour hair does the main character of the Yu-Gi-Oh! original anime series have?",
+    "why": "the prompt asks \"what colour\" in the singular but the answer is a three-item ordered list (\"Red, black and yellow\") whose composition and order a player cannot guess"
+  },
+  {
+    "id": "otdb-11255676f261",
+    "language": "en",
+    "prompt": "Which of the following is not a piece from the 1950's musical West Side Story?",
+    "why": "negative over the candidate set: countless things are not a West Side Story number"
+  },
+  {
+    "id": "otdb-1148ebd2a4f0",
+    "language": "en",
+    "prompt": "Which one of these archipelagos are NOT a part of the United Kingdom?",
+    "why": "every archipelago outside the UK satisfies it"
+  },
+  {
+    "id": "otdb-1153fe965636",
+    "language": "en",
+    "prompt": "Which of these Bojack Horseman characters is a human?",
+    "why": "BoJack has several human characters; only the offered four pick one"
+  },
+  {
+    "id": "otdb-11aa2526aea8",
+    "language": "en",
+    "prompt": "Which of the following has Jennifer Taylor NOT voiced?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-11b8bfe7cbf9",
+    "language": "en",
+    "prompt": "Which of these movies did Jeff Bridges not star in?",
+    "why": "every film without Jeff Bridges satisfies it"
+  },
+  {
+    "id": "otdb-11e1c51924b4",
+    "language": "en",
+    "prompt": "Which of these country's capitals starts with the letter B?",
+    "why": "many capitals start with B"
+  },
+  {
+    "id": "otdb-124b3f58087c",
+    "language": "en",
+    "prompt": "Which of these is NOT a real tectonic plate?",
+    "why": "infinitely many names are not tectonic plates"
+  },
+  {
+    "id": "otdb-12726427dc48",
+    "language": "en",
+    "prompt": "Which of the following is not a type of computer mouse?",
+    "why": "the invented type is only spottable among the four"
+  },
+  {
+    "id": "otdb-12bdbb5bd18f",
+    "language": "en",
+    "prompt": "Which of these characters from \"SpongeBob SquarePants\" is not a squid?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-12c2afb1f485",
+    "language": "en",
+    "prompt": "Which Game Boy from the Game Boy series of portable video game consoles was released first?",
+    "why": "\"released first\" is true only relative to the four listed Game Boys"
+  },
+  {
+    "id": "otdb-138c085f05ca",
+    "language": "en",
+    "prompt": "Which of the following Arab countries does NOT have a flag containing only Pan-Arab colours?",
+    "why": "a NOT over the four Arab flags offered"
+  },
+  {
+    "id": "otdb-13b4a1035a31",
+    "language": "en",
+    "prompt": "Which of the following is NOT one of the main characters in Grand Theft Auto V’s story mode?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-13f20ed548a3",
+    "language": "en",
+    "prompt": "In Pokémon Chronicles, why was Misty afraid of Gyarados?",
+    "why": "the answer is a whole sentence (\"She crawled into it's mouth as a baby.\"), unproducible verbatim in a free-text field"
+  },
+  {
+    "id": "otdb-13f5cbe0323f",
+    "language": "en",
+    "prompt": "In Terraria, which of these items is NOT crafted at a Mythril Anvil?",
+    "why": "open negative — most Terraria items are not Mythril Anvil recipes"
+  },
+  {
+    "id": "otdb-140e0bacfd1c",
+    "language": "en",
+    "prompt": "Which of the following games in the The Legend of Zelda franchise was released in Japan before North America?",
+    "why": "most Zelda games shipped in Japan first; the set picks one"
+  },
+  {
+    "id": "otdb-1421130b2a28",
+    "language": "en",
+    "prompt": "Which of these does Charlie NOT read in The Perks of Being a Wallflower?",
+    "why": "every book Charlie does not read satisfies it"
+  },
+  {
+    "id": "otdb-14c8313b3da3",
+    "language": "en",
+    "prompt": "Which of the following is NOT a work done by Shakespeare?",
+    "why": "every play Shakespeare did not write satisfies it"
+  },
+  {
+    "id": "otdb-14d717bda0d2",
+    "language": "en",
+    "prompt": "What is a dead mall?",
+    "why": "the answer is a whole definition clause, \"A mall with high vacancy rates or low consumer foot traffic\""
+  },
+  {
+    "id": "otdb-151d5623cf8a",
+    "language": "en",
+    "prompt": "In which of these TV shows did the chef Gordon Ramsay not appear?",
+    "why": "countless shows Ramsay never appeared in"
+  },
+  {
+    "id": "otdb-1599032897d7",
+    "language": "en",
+    "prompt": "Which of these is not a layer in the OSI model for data communications?",
+    "why": "any non-OSI name satisfies it"
+  },
+  {
+    "id": "otdb-15a7f22fa241",
+    "language": "en",
+    "prompt": "Panic! At the Disco's sixth album \"Pray For The Wicked\" was released on which date?",
+    "why": "the answer is an exact calendar date, \"June 22, 2018\", and any other date formatting a player types will miss"
+  },
+  {
+    "id": "otdb-15b845838e59",
+    "language": "en",
+    "prompt": "Why were only only 300,000 copies of Uniracers were produced?",
+    "why": "the answer is a full sentence naming a lawsuit and its consequence, impossible to reproduce in a text field"
+  },
+  {
+    "id": "otdb-16c8f257e48d",
+    "language": "en",
+    "prompt": "Which of the following was NOT a playable character in the game Kingdom Hearts: Birth by Sleep?",
+    "why": "NOT-question: any non-playable character satisfies it"
+  },
+  {
+    "id": "otdb-17896fcb3550",
+    "language": "en",
+    "prompt": "In the \"Pikmin\" games, which of the following pikmin colors lacks it's own \"Onion\" nest?",
+    "why": "Purple and White both lack an Onion; the set disambiguates"
+  },
+  {
+    "id": "otdb-17b00cd33611",
+    "language": "en",
+    "prompt": "All of the following programs are classified as raster graphics editors EXCEPT:",
+    "why": "an EXCEPT over a list that is not shown typed"
+  },
+  {
+    "id": "otdb-17b9e97f6a2f",
+    "language": "en",
+    "prompt": "Which one of these cartoon characters is NOT voiced by Rob Paulsen?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-17dfcbf4cb1d",
+    "language": "en",
+    "prompt": "In the remake of \"Resident Evil 2\", which medallion does not exist?",
+    "why": "NOT-question: any invented medallion satisfies it"
+  },
+  {
+    "id": "otdb-17f99a3ee82d",
+    "language": "en",
+    "prompt": "Which of these cities does NOT have a United States Minting location?",
+    "why": "NOT-question over every city without a mint"
+  },
+  {
+    "id": "otdb-18ae936edfa2",
+    "language": "en",
+    "prompt": "Which of the following is NOT a summon in the game \"South Park: The Stick of Truth\"?",
+    "why": "NOT-question over the listed summons"
+  },
+  {
+    "id": "otdb-18efb6c35e32",
+    "language": "en",
+    "prompt": "Which country was NOT part of the Soviet Union?",
+    "why": "most countries were never Soviet"
+  },
+  {
+    "id": "otdb-195cc5807fb9",
+    "language": "en",
+    "prompt": "Which mountain has the highest peak in Australia?",
+    "why": "the prompt asks which mountain, but the answer appends an Australian state a player has no reason to type"
+  },
+  {
+    "id": "otdb-1984c3dc7a68",
+    "language": "en",
+    "prompt": "In WarioWare: Smooth Moves, which one of these is NOT a Form?",
+    "why": "open negative — anything is not a WarioWare Form"
+  },
+  {
+    "id": "otdb-19df41f5c389",
+    "language": "en",
+    "prompt": "Which of the following former Yugoslavian states is landlocked?",
+    "why": "Serbia, North Macedonia and Kosovo all qualify"
+  },
+  {
+    "id": "otdb-19f7408cd6ef",
+    "language": "en",
+    "prompt": "Which of the following films was NOT directed by Hayao Miyazaki?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-19f8ddfe7dae",
+    "language": "en",
+    "prompt": "Which of the following is not a work authored by Fyodor Dostoevsky?",
+    "why": "every work not by Dostoevsky satisfies it"
+  },
+  {
+    "id": "otdb-1a4ea9d74507",
+    "language": "en",
+    "prompt": "What happened to Half-Life 2 prior to its release, which resulted in Valve starting over the development of the game?",
+    "why": "the answer is a whole sentence (\"The source code got leaked\") rather than a nameable thing"
+  },
+  {
+    "id": "otdb-1a88ab57c30b",
+    "language": "en",
+    "prompt": "Which of these is not a character in the game, \"Lethal League\"?",
+    "why": "open negative — anything is not a Lethal League character"
+  },
+  {
+    "id": "otdb-1adf6523ce98",
+    "language": "en",
+    "prompt": "What are the names of the two \"Canon fan trolls\" in \"Homestuck\"?",
+    "why": "the answer is two invented full names with unguessable spellings joined by \"and\"; it cannot be produced in a free-text field"
+  },
+  {
+    "id": "otdb-1b203c4317a8",
+    "language": "en",
+    "prompt": "Which of the following landlocked countries is entirely contained within another country?",
+    "why": "Lesotho, San Marino and Vatican City all fit"
+  },
+  {
+    "id": "otdb-1b422f38d54c",
+    "language": "en",
+    "prompt": "Which DC superhero was NOT included in the 2017 movie \"Justice League\"?",
+    "why": "every DC hero left out satisfies it"
+  },
+  {
+    "id": "otdb-1ba559aa68d2",
+    "language": "en",
+    "prompt": "Which of the following actors does not play a role in the movie \"The Usual Suspects?\"",
+    "why": "NOT-in-cast: any actor alive qualifies without the list"
+  },
+  {
+    "id": "otdb-1c44bf671f32",
+    "language": "en",
+    "prompt": "Which of the following is NOT a class in Dungeons and Dragons 5e?",
+    "why": "any non-class satisfies it"
+  },
+  {
+    "id": "otdb-1c4911c206e0",
+    "language": "en",
+    "prompt": "Which of these is NOT an island that is part of the Philippines?",
+    "why": "every island outside the Philippines satisfies it"
+  },
+  {
+    "id": "otdb-1c5102b1fc2a",
+    "language": "en",
+    "prompt": "Which of these elements on the Periodic Table is a Noble Gas?",
+    "why": "six noble gases qualify equally"
+  },
+  {
+    "id": "otdb-1ca4c4a86b01",
+    "language": "en",
+    "prompt": "Which of the following is NOT a real element?",
+    "why": "any invented name satisfies it"
+  },
+  {
+    "id": "otdb-1d38ee2693b3",
+    "language": "en",
+    "prompt": "Which of the following is not another name for the eggplant?",
+    "why": "NOT-question over everything that is not an eggplant synonym"
+  },
+  {
+    "id": "otdb-1d5e6af5bab6",
+    "language": "en",
+    "prompt": "In Monster Hunter Generations, which of these hunter arts are exclusive to the Longsword?",
+    "why": "many hunter arts are Longsword-exclusive; only the four options narrow it"
+  },
+  {
+    "id": "otdb-1d8c8eb05284",
+    "language": "en",
+    "prompt": "In Terraria, what does the Wall of Flesh not drop upon defeat?",
+    "why": "endless things the boss does not drop"
+  },
+  {
+    "id": "otdb-1da7a9458396",
+    "language": "en",
+    "prompt": "Which car brand does NOT belong to General Motors?",
+    "why": "any brand outside GM satisfies it"
+  },
+  {
+    "id": "otdb-1e34d20f29b6",
+    "language": "en",
+    "prompt": "What is the punishment for playing Postal 2 in New Zealand?",
+    "why": "the answer is a compound phrase with a term and a sum (\"10 years in prison and a fine of $50,000\") that cannot be produced in a text field"
+  },
+  {
+    "id": "otdb-1eba23b77451",
+    "language": "en",
+    "prompt": "Which of these automotive brands originated in Sweden?",
+    "why": "Sweden has several car brands"
+  },
+  {
+    "id": "otdb-1f568bd0b07f",
+    "language": "en",
+    "prompt": "What is the half-life of Uranium-235?",
+    "why": "the answer is a comma-grouped nine-digit figure with a unit, \"703,800,000 years\"; a room would type \"700 million\" or \"703.8 million\""
+  },
+  {
+    "id": "otdb-1fe1745f237e",
+    "language": "en",
+    "prompt": "What character is NOT apart of the Grand Theft Auto series?",
+    "why": "negative: any name outside GTA qualifies"
+  },
+  {
+    "id": "otdb-208b485e6c6d",
+    "language": "en",
+    "prompt": "In which situation was musician John Lennon assassinated?",
+    "why": "the answer is a full descriptive clause, \"Attempting to enter the Dakota Apartments building\""
+  },
+  {
+    "id": "otdb-20a747172c0b",
+    "language": "en",
+    "prompt": "All of the following human genetic haplogroup names are shared between Y-chromosome and mitochondrial DNA haplogroups EXCEPT:",
+    "why": "EXCEPT over the listed haplogroups"
+  },
+  {
+    "id": "otdb-2105f25ac693",
+    "language": "en",
+    "prompt": "What UK Train does NOT go over 125MPH?",
+    "why": "most UK trains never reach 125mph"
+  },
+  {
+    "id": "otdb-211e1f025db4",
+    "language": "en",
+    "prompt": "What country has a horizontal bicolor red and white flag?",
+    "why": "Indonesia and Poland also have plain horizontal red-and-white bicolour flags, so a typed answer other than Monaco is right yet marked wrong"
+  },
+  {
+    "id": "otdb-21eaaefecee4",
+    "language": "en",
+    "prompt": "In Terry Pratchett's Discworld novel 'Wyrd Sisters', which of these are not one of the three main witches?",
+    "why": "any name that is not one of the three witches satisfies it"
+  },
+  {
+    "id": "otdb-22243b0a4d21",
+    "language": "en",
+    "prompt": "Which of the following is not true about the life of Tiresias?",
+    "why": "any false statement about Tiresias satisfies it"
+  },
+  {
+    "id": "otdb-22582aa2d672",
+    "language": "en",
+    "prompt": "Which of these is NOT considered a woodwind instrument?",
+    "why": "NOT-a-woodwind: every non-woodwind qualifies"
+  },
+  {
+    "id": "otdb-2265d73891d7",
+    "language": "en",
+    "prompt": "Which of the following is not the name of a \"Bond Girl\"?",
+    "why": "every name that is not a Bond girl satisfies it"
+  },
+  {
+    "id": "otdb-22aab2ed9fb1",
+    "language": "en",
+    "prompt": "The word \"astasia\" means which of the following?",
+    "why": "'means which of the following' shows no options in a text field, and the answer is a clause whose exact wording cannot be reproduced"
+  },
+  {
+    "id": "otdb-2301b08a284f",
+    "language": "en",
+    "prompt": "Which one of these games wasn't released in 2016?",
+    "why": "NOT-question: any game outside 2016 satisfies it"
+  },
+  {
+    "id": "otdb-233336863b0b",
+    "language": "en",
+    "prompt": "Which of these is not a single by Pink Floyd guitarist, David Gilmour?",
+    "why": "NOT-a-single: any other title qualifies"
+  },
+  {
+    "id": "otdb-23432106ab46",
+    "language": "en",
+    "prompt": "Which two teams played in Super Bowl XLII?",
+    "why": "the answer is two team names joined by an ampersand, a list rather than a single producible answer"
+  },
+  {
+    "id": "otdb-2363a4e2b208",
+    "language": "en",
+    "prompt": "In \"JoJo's Bizarre Adventure\", which of the following Stands does NOT have a time-based ability?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-2376fada5213",
+    "language": "en",
+    "prompt": "What is not a default game mode in Counter-Strike (2000)?",
+    "why": "open negative — anything at all is not a default Counter-Strike mode"
+  },
+  {
+    "id": "otdb-23a7861c7f11",
+    "language": "en",
+    "prompt": "Which operating system was released first?",
+    "why": "first is relative to the four systems offered"
+  },
+  {
+    "id": "otdb-23c67eb76e14",
+    "language": "en",
+    "prompt": "From where does the Nintendo video game character Mario derive his name?",
+    "why": "the answer is a descriptive clause (\"The landlord of the American headquarters\") that free typing cannot reproduce"
+  },
+  {
+    "id": "otdb-240a8300b324",
+    "language": "en",
+    "prompt": "What ingredients are required to make a cake in Minecraft?",
+    "why": "the answer is a four-item list whose order and punctuation no player could reproduce in a free-text field"
+  },
+  {
+    "id": "otdb-2422cc109110",
+    "language": "en",
+    "prompt": "Which of the following is an album by punk rock band Anti-Flag?",
+    "why": "Anti-Flag have many albums; only the four pick one"
+  },
+  {
+    "id": "otdb-248a0d5c104f",
+    "language": "en",
+    "prompt": "In vanilla Minecraft, which of the following cannot be made into a block?",
+    "why": "open negative — most Minecraft items cannot be made into a block"
+  },
+  {
+    "id": "otdb-254e773bb7db",
+    "language": "en",
+    "prompt": "What is the molecular formula of the active component of chili peppers(Capsaicin)?",
+    "why": "the answer is a long molecular formula, C18H27NO3, which nobody produces in a free-text field"
+  },
+  {
+    "id": "otdb-258d833b04d8",
+    "language": "en",
+    "prompt": "Which of the following commercial vehicles from Grand Theft Auto IV did NOT reappear in Grand Theft Auto V?",
+    "why": "NOT-question over the listed GTA IV vehicles"
+  },
+  {
+    "id": "otdb-25dcf96cf20f",
+    "language": "en",
+    "prompt": "Which of these characters in \"Undertale\" can the player NOT go on a date with?",
+    "why": "negative over the option set — nearly every Undertale character is undateable"
+  },
+  {
+    "id": "otdb-25ec925078bb",
+    "language": "en",
+    "prompt": "Which of the following stars was not mentioned in the lyrics of Madonna's \"Vogue\"?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-265aba8d0702",
+    "language": "en",
+    "prompt": "Which of these countries is not a United Nations member state?",
+    "why": "many territories are not UN members"
+  },
+  {
+    "id": "otdb-27001a8417de",
+    "language": "en",
+    "prompt": "Which of the following is the oldest of these computers by release date?",
+    "why": "oldest is defined only over the candidates"
+  },
+  {
+    "id": "otdb-276302349565",
+    "language": "en",
+    "prompt": "Which movie did NOT feature the late actor John Candy?",
+    "why": "every film without John Candy satisfies it"
+  },
+  {
+    "id": "otdb-2769b3b85587",
+    "language": "en",
+    "prompt": "Which of the following carbonated soft drinks were introduced first?",
+    "why": "'first' is relative to the four candidates only"
+  },
+  {
+    "id": "otdb-28261e362f6c",
+    "language": "en",
+    "prompt": "Deionized water is water with which of the following removed?",
+    "why": "typed, the answer is \"ions\"; only the listed substances make iron the answer"
+  },
+  {
+    "id": "otdb-285a931d702d",
+    "language": "en",
+    "prompt": "In the game The World Ends With You, all of these characters act as a game partner with Neku for a week except:",
+    "why": "\"all of these characters ... except\" is a constraint over the candidate set"
+  },
+  {
+    "id": "otdb-28b9949d5a1a",
+    "language": "en",
+    "prompt": "In Team Fortress 2, which class wields a shotgun?",
+    "why": "the answer is \"Everyone Listed\" — meaningless without the option list"
+  },
+  {
+    "id": "otdb-28e3c969d7f2",
+    "language": "en",
+    "prompt": "Which language is NOT Indo-European?",
+    "why": "most of the world's languages are not Indo-European"
+  },
+  {
+    "id": "otdb-29218b4f539e",
+    "language": "en",
+    "prompt": "Where does water from Poland Spring water bottles come from?",
+    "why": "the answer appends ', United States' to the state name, which a player typing the source has no cue to add"
+  },
+  {
+    "id": "otdb-2950045c8508",
+    "language": "en",
+    "prompt": "Which of the following spacecraft never touched the moon?",
+    "why": "countless spacecraft never touched the moon"
+  },
+  {
+    "id": "otdb-2a228d9627c7",
+    "language": "en",
+    "prompt": "Which of the following is not a faction in Tom Clancy's The Division?",
+    "why": "open negative — anything is not a Division faction"
+  },
+  {
+    "id": "otdb-2a3fe9332c21",
+    "language": "en",
+    "prompt": "Which of the following nations was NOT a belligerent in World War I?",
+    "why": "many nations stayed neutral in WWI"
+  },
+  {
+    "id": "otdb-2ab7ee5eac4f",
+    "language": "en",
+    "prompt": "Psych-Horror \"Eternal Darkness: Sanity's Requiem\", developed by Silicon Knights in 2002, was published by who and on what platform?",
+    "why": "the answer pairs a publisher and a platform separated by a pipe and carries registered/trademark symbols (\"Nintendo® Co. Ltd. | GameCube™\"), a formatting no player could guess"
+  },
+  {
+    "id": "otdb-2b62bc2f670b",
+    "language": "en",
+    "prompt": "All of the following are names of the Seven Warring States EXCEPT:",
+    "why": "\"all of the following EXCEPT\" is a constraint over the candidate set"
+  },
+  {
+    "id": "otdb-2b6a4a881b7b",
+    "language": "en",
+    "prompt": "In Terraria, which debuff does the ankh charm not provide immunity to?",
+    "why": "many debuffs are outside the Ankh Charm; the options pick one"
+  },
+  {
+    "id": "otdb-2bbd7c29b016",
+    "language": "en",
+    "prompt": "Which one of these rappers is NOT a member of the rap group Wu-Tang Clan?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-2c14bdc6911a",
+    "language": "en",
+    "prompt": "Which of these fast-food chains is NOT mainly known to sell pizza?",
+    "why": "every non-pizza chain satisfies it"
+  },
+  {
+    "id": "otdb-2c3dee8d4878",
+    "language": "en",
+    "prompt": "Which of these was NOT a launch title for the Nintendo 64?",
+    "why": "open negative — countless games were not N64 launch titles"
+  },
+  {
+    "id": "otdb-2c77b7197949",
+    "language": "en",
+    "prompt": "In the first Left 4 Dead, which four characters can you play as?",
+    "why": "the answer is a list of four survivor names in a fixed order"
+  },
+  {
+    "id": "otdb-2d050eb9658c",
+    "language": "en",
+    "prompt": "Which of the following Autobot names in Michael Bay's movies was NOT a name for a Transformer in the original 1980's cartoon?",
+    "why": "negative over the Autobot names offered"
+  },
+  {
+    "id": "otdb-2d0d2063645d",
+    "language": "en",
+    "prompt": "Which of these is NOT a bone found in the human arm?",
+    "why": "any bone outside the arm satisfies it"
+  },
+  {
+    "id": "otdb-2d7eca4abce4",
+    "language": "en",
+    "prompt": "Which of these is not one of Dracula's relics found in the video game \"Castlevania II: Simon's Quest\"?",
+    "why": "NOT-question: any non-relic satisfies it"
+  },
+  {
+    "id": "otdb-2dca844b7e2d",
+    "language": "en",
+    "prompt": "Which member of the Velvet Room is not a playable character in Persona 4 Arena Ultimax?",
+    "why": "several Velvet Room members are unplayable in P4AU"
+  },
+  {
+    "id": "otdb-2de9b7f2d423",
+    "language": "en",
+    "prompt": "Which of the following was a map that was in Team Fortress 2 at launch?",
+    "why": "TF2 launched with six maps; the options choose which is meant"
+  },
+  {
+    "id": "otdb-2e7fc5926939",
+    "language": "en",
+    "prompt": "Which is not a country in Africa?",
+    "why": "every non-African country satisfies it"
+  },
+  {
+    "id": "otdb-2e930e2c4244",
+    "language": "en",
+    "prompt": "Which country was NOT formerly part of Yugoslavia?",
+    "why": "almost every country was never in Yugoslavia"
+  },
+  {
+    "id": "otdb-2ea96284ae93",
+    "language": "en",
+    "prompt": "Which mountain has the highest peak in Africa?",
+    "why": "the answer appends a country, \"Mount Kilimanjaro, Tanzania\", which a typed guess of \"Kilimanjaro\" cannot match"
+  },
+  {
+    "id": "otdb-2f03a6766992",
+    "language": "en",
+    "prompt": "Which of the following countries is an island?",
+    "why": "dozens of countries are islands"
+  },
+  {
+    "id": "otdb-2f1c301f3e95",
+    "language": "en",
+    "prompt": "Which of these animals belongs in class Chondrichthyes?",
+    "why": "every shark and ray qualifies"
+  },
+  {
+    "id": "otdb-2f30e3afc5d6",
+    "language": "en",
+    "prompt": "Which of these is a type of stretch/deep tendon reflex?",
+    "why": "several deep tendon reflexes qualify equally"
+  },
+  {
+    "id": "otdb-2f346272fc99",
+    "language": "en",
+    "prompt": "Which of these films is NOT set in Los Angeles?",
+    "why": "NOT-set-in-LA: most films qualify"
+  },
+  {
+    "id": "otdb-2fee6b66ffe9",
+    "language": "en",
+    "prompt": "Which one of these countries was NOT in the Central Powers during WWI?",
+    "why": "most countries were outside the Central Powers"
+  },
+  {
+    "id": "otdb-30270c10df38",
+    "language": "en",
+    "prompt": "Which of the following is NOT a Russian car manufacturer?",
+    "why": "any non-Russian maker satisfies it"
+  },
+  {
+    "id": "otdb-305eac2f4ec6",
+    "language": "en",
+    "prompt": "In the original \"Super Mario Bros.\", what is the acceleration of Mario if he was in free fall?",
+    "why": "the answer is a physical value with units and two decimals (\"91.28 m/s^2\") that no player could produce in a text field"
+  },
+  {
+    "id": "otdb-305ff13634a3",
+    "language": "en",
+    "prompt": "Which of these jersey numbers has Shaquille O'Neal never worn?",
+    "why": "countless numbers he never wore; only the four narrow it"
+  },
+  {
+    "id": "otdb-30eecf95737e",
+    "language": "en",
+    "prompt": "Which of the following is a major muscle of the back?",
+    "why": "several back muscles qualify equally"
+  },
+  {
+    "id": "otdb-318e62c5b296",
+    "language": "en",
+    "prompt": "In \"Gravity Falls\", what does Quentin Trembley do when he is driven out from the White House?",
+    "why": "the answer is a compound sentence (\"Eat a salamander and jump out the window.\") that a typing player could never match"
+  },
+  {
+    "id": "otdb-31972cb5ecd3",
+    "language": "en",
+    "prompt": "Which of the following is NOT a computer science algorithm?",
+    "why": "everything that is not an algorithm satisfies it"
+  },
+  {
+    "id": "otdb-31f9126c45ea",
+    "language": "en",
+    "prompt": "Which of the following rappers were NOT part of the hip-hop group Odd Future?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-32532af0ca63",
+    "language": "en",
+    "prompt": "In Fallout: New Vegas, which one of these casinos can you not play in?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-32d28d6d5b7a",
+    "language": "en",
+    "prompt": "\"Decapods\" are an order of ten-footed crustaceans.  Which of these are NOT decapods?",
+    "why": "any non-decapod crustacean satisfies it"
+  },
+  {
+    "id": "otdb-3353d14fcc70",
+    "language": "en",
+    "prompt": "Which of these landmarks is not included in the original 'Seven Wonders of the Ancient World'?",
+    "why": "every landmark but seven satisfies it"
+  },
+  {
+    "id": "otdb-335dabe98a65",
+    "language": "en",
+    "prompt": "Which of these NHL players have never won a Hart Trophy for Regular Season MVP?",
+    "why": "almost every NHL player has never won a Hart"
+  },
+  {
+    "id": "otdb-33d7d23224b0",
+    "language": "en",
+    "prompt": "Brendan Fraser starred in the following movies, except which one?",
+    "why": "'the following movies' is the candidate list itself"
+  },
+  {
+    "id": "otdb-3425bd00876d",
+    "language": "en",
+    "prompt": "The name of the Metroid series comes from what?",
+    "why": "the answer is a descriptive phrase (\"An enemy in the game\") with no wording a typing player could be expected to hit"
+  },
+  {
+    "id": "otdb-34494b6a5d31",
+    "language": "en",
+    "prompt": "Which of the following presidents is not on Mount Rushmore?",
+    "why": "every president but four satisfies it"
+  },
+  {
+    "id": "otdb-349f46235a27",
+    "language": "en",
+    "prompt": "Which of these probability distributions is NOT discrete?",
+    "why": "every continuous distribution satisfies it"
+  },
+  {
+    "id": "otdb-35070b3b4ad4",
+    "language": "en",
+    "prompt": "Which of the following Pokémon games released first?",
+    "why": "ordering over the candidate set"
+  },
+  {
+    "id": "otdb-35520392150b",
+    "language": "en",
+    "prompt": "Which of these characters was considered, but ultimately not included, for Super Smash Bros. Melee?",
+    "why": "several characters were considered for Melee; only the options pick one"
+  },
+  {
+    "id": "otdb-36a9ffa61d1f",
+    "language": "en",
+    "prompt": "In Yakuza 0, what is the order of the fighting styles acquired as Kazuma Kiryu?",
+    "why": "the answer is an ordered list of four fighting-style names, which nobody can produce in a text field"
+  },
+  {
+    "id": "otdb-36db5bcdb154",
+    "language": "en",
+    "prompt": "Which of the following games was not a launch title for the Nintendo Gamecube?",
+    "why": "negative constraint over the candidate set — countless games were not GameCube launch titles"
+  },
+  {
+    "id": "otdb-36f953d6fe6c",
+    "language": "en",
+    "prompt": "The acronym \"RIP\" stands for which of these?",
+    "why": "RIP expands many ways; only the set picks the routing one"
+  },
+  {
+    "id": "otdb-3773a2a44514",
+    "language": "en",
+    "prompt": "Which of these Elements is a metalloid?",
+    "why": "several metalloids qualify equally"
+  },
+  {
+    "id": "otdb-37a3e296b0b3",
+    "language": "en",
+    "prompt": "Which of these is not a playable character in \"Enter The Gungeon?\"",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-37a443bc81c8",
+    "language": "en",
+    "prompt": "What is an example of a bacterial pathogen?",
+    "why": "hundreds of bacterial pathogens satisfy it"
+  },
+  {
+    "id": "otdb-37e783c280d9",
+    "language": "en",
+    "prompt": "Which of these cities has a 4° East longitude.",
+    "why": "many cities sit near 4 degrees East"
+  },
+  {
+    "id": "otdb-38402e4d13c7",
+    "language": "en",
+    "prompt": "Which song is NOT by singer Tom Jones?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-392f5ee4dd5b",
+    "language": "en",
+    "prompt": "Which of these Counter-Strike maps is a bomb defuse scenario?",
+    "why": "dozens of CS maps are defuse maps; only the options narrow it"
+  },
+  {
+    "id": "otdb-39397a83f44f",
+    "language": "en",
+    "prompt": "What is radiation measured in?",
+    "why": "radiation is measured in several units depending on the quantity — becquerel for activity, gray for absorbed dose, sievert for equivalent dose — and the prompt says which is wanted"
+  },
+  {
+    "id": "otdb-393e7191ae8f",
+    "language": "en",
+    "prompt": "Which of these are the name of a famous marker brand?",
+    "why": "many marker brands are famous"
+  },
+  {
+    "id": "otdb-39579d37febd",
+    "language": "en",
+    "prompt": "How many objects are equivalent to one mole?",
+    "why": "the answer is \"6.022 x 10^23\", a notation whose exact formatting (spaces, x, caret) a player cannot guess"
+  },
+  {
+    "id": "otdb-39917771d36b",
+    "language": "en",
+    "prompt": "Which of these songs is NOT in The Beatles' album \"Sgt. Pepper's Lonely Hearts Club Band\"?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-39b67dbcb81d",
+    "language": "en",
+    "prompt": "What is centralism?",
+    "why": "the answer is a whole definition sentence, \"Concentration of power and authority in a central organization.\""
+  },
+  {
+    "id": "otdb-39b705754d41",
+    "language": "en",
+    "prompt": "In Haikyuu!!, who is not a member of Karasuno VBC?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-39bff5447a23",
+    "language": "en",
+    "prompt": "Which of these is NOT the name of a team leader in Pokémon GO?",
+    "why": "NOT-question: any non-leader name satisfies it"
+  },
+  {
+    "id": "otdb-3aa8dd0251a0",
+    "language": "en",
+    "prompt": "Which of these banks are NOT authorized to issue currency notes in Hong Kong?",
+    "why": "NOT-question over every bank outside the Hong Kong note issuers"
+  },
+  {
+    "id": "otdb-3ad8747d0563",
+    "language": "en",
+    "prompt": "Which one of these paintings is not by Caspar David Friedrich?",
+    "why": "negation over the candidate set"
+  },
+  {
+    "id": "otdb-3aeebc4f5e4d",
+    "language": "en",
+    "prompt": "Which of these teams isn't a member of the NHL's \"Original Six\" era?",
+    "why": "every team but six qualifies"
+  },
+  {
+    "id": "otdb-3b518f0fe21a",
+    "language": "en",
+    "prompt": "Which of the following is NOT a capital city?",
+    "why": "almost every city is not a capital"
+  },
+  {
+    "id": "otdb-3b5c9418aa51",
+    "language": "en",
+    "prompt": "Which of the following music bands is not from Finland?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-3c8ea3419812",
+    "language": "en",
+    "prompt": "Which of these black metal acts was a solo project?",
+    "why": "many black metal solo projects; only the four narrow it"
+  },
+  {
+    "id": "otdb-3cfdb195d234",
+    "language": "en",
+    "prompt": "What were Marcel Duchamp's readymades?",
+    "why": "the answer is a descriptive clause, \"utilitarian objects elevated to the status of art\", not a nameable term"
+  },
+  {
+    "id": "otdb-3d4971518668",
+    "language": "en",
+    "prompt": "What are the tallest twin buildings in the world, with a height of 1,483 ft (451.9 m)?",
+    "why": "the answer appends a country the prompt never asks for, so the building's name alone is scored wrong"
+  },
+  {
+    "id": "otdb-3d8b980e9ba7",
+    "language": "en",
+    "prompt": "In 2008, British celebrity chef Gordon Ramsay believes he almost died after suffering what accident in Iceland while filming?",
+    "why": "the answer is a narrative clause, \"Slipping off a cliff, and nearly drowning in icy water\", not a nameable value"
+  },
+  {
+    "id": "otdb-3d9d831b1d69",
+    "language": "en",
+    "prompt": "Which of the following games has the most playable characters?",
+    "why": "superlative over the candidate set"
+  },
+  {
+    "id": "otdb-3db4cf0b9ee2",
+    "language": "en",
+    "prompt": "Which of these is NOT a playable character in \"Left 4 Dead\"?",
+    "why": "NOT-question over the listed survivors"
+  },
+  {
+    "id": "otdb-3f4186cdd012",
+    "language": "en",
+    "prompt": "Which of the following mathematicians made major contributions to game theory?",
+    "why": "Nash, Shapley and others also qualify"
+  },
+  {
+    "id": "otdb-41167999f57c",
+    "language": "en",
+    "prompt": "In the \"Toaru Majutsu no Index\" anime, Touma Kamijou is a level 0 esper that has the ability to do what?",
+    "why": "the answer is a six-word descriptive phrase (misspelt \"Dispell\") that no free typist would reproduce; they would write \"negate powers\""
+  },
+  {
+    "id": "otdb-4164c18a1151",
+    "language": "en",
+    "prompt": "Which of these characters was NOT planned to be playable for Super Smash Bros. 64?",
+    "why": "NOT-question over the listed characters"
+  },
+  {
+    "id": "otdb-4178dfeb58c1",
+    "language": "en",
+    "prompt": "Which of the following is not a megadiverse country - one that harbors a high number of the earth's endemic species?",
+    "why": "most countries are not megadiverse"
+  },
+  {
+    "id": "otdb-42c3c7ddb2da",
+    "language": "en",
+    "prompt": "Which of these holidays is NOT usually celebrated in the month of December?",
+    "why": "NOT-question over every holiday outside December"
+  },
+  {
+    "id": "otdb-431b9a9764e9",
+    "language": "en",
+    "prompt": "In the Kingdom Hearts series, which is not an optional boss you can fight?",
+    "why": "open negative — most Kingdom Hearts bosses are not optional"
+  },
+  {
+    "id": "otdb-4424fc5bd152",
+    "language": "en",
+    "prompt": "In the 1969 Cartoon show \"Dastardly and Muttley in Their Flying Machines\", which were NOT one of the lyrics in the opening theme?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-44b519066ee0",
+    "language": "en",
+    "prompt": "Which of these weapons is NOT available to the Terrorist team in the game, \"Counter-Strike: Global Offensive\"?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-452c93d28e87",
+    "language": "en",
+    "prompt": "Which country has the Union Jack in its flag?",
+    "why": "Australia, Fiji, Tuvalu and the UK all satisfy it"
+  },
+  {
+    "id": "otdb-45612bd0ed84",
+    "language": "en",
+    "prompt": "Which one of these is NOT a character in the video game Overwatch",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-459d9c032d53",
+    "language": "en",
+    "prompt": "What are the chances of being dealt a Royal Flush within Poker/Video Poker?",
+    "why": "the answer is an odds value whose exact formatting (\"1 in 649,740\", with the \"1 in\" prefix and the comma) a player could never guess"
+  },
+  {
+    "id": "otdb-461f428867f3",
+    "language": "en",
+    "prompt": "Which of these celebrities was not a member of the Jackson 5?",
+    "why": "anyone not in the Jackson 5 satisfies it"
+  },
+  {
+    "id": "otdb-462181a2f726",
+    "language": "en",
+    "prompt": "Which of these actors have NOT played Spiderman in the movies?",
+    "why": "every actor who never played Spider-Man satisfies it"
+  },
+  {
+    "id": "otdb-4637e1ed7920",
+    "language": "en",
+    "prompt": "Which of these is NOT a terrorist faction in Counter-Strike (2000)?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-464e1f972acb",
+    "language": "en",
+    "prompt": "Which of these characters wasn't a villian in Club Penguin?",
+    "why": "NOT-question over the listed Club Penguin characters"
+  },
+  {
+    "id": "otdb-4669720bc90c",
+    "language": "en",
+    "prompt": "Which of these people was NOT a founder of Apple Inc?",
+    "why": "anyone but the three founders satisfies it"
+  },
+  {
+    "id": "otdb-469b5d03da44",
+    "language": "en",
+    "prompt": "Which of these games was NOT a Nintendo Switch launch title in the United States?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-46cca1c696ac",
+    "language": "en",
+    "prompt": "Which of these game-based comics were published in 2011 by DC Comics?",
+    "why": "DC published more than one game tie-in in 2011"
+  },
+  {
+    "id": "otdb-47448caa7fef",
+    "language": "en",
+    "prompt": "Which of the following is a character in the video game Destiny?",
+    "why": "Destiny has many characters; only the options pick one"
+  },
+  {
+    "id": "otdb-477ee15e3e5d",
+    "language": "en",
+    "prompt": "Which one of the following is not made by Ford?",
+    "why": "any non-Ford model satisfies it"
+  },
+  {
+    "id": "otdb-47b3e9a5e652",
+    "language": "en",
+    "prompt": "The following Spanish provinces are located in the northern area of Spain except:",
+    "why": "except clause is over the listed provinces"
+  },
+  {
+    "id": "otdb-480675b77afd",
+    "language": "en",
+    "prompt": "Which sport is NOT traditionally played during the Mongolian Naadam festival?",
+    "why": "every sport but the three manly games satisfies it"
+  },
+  {
+    "id": "otdb-48a6d68b1f5d",
+    "language": "en",
+    "prompt": "What is the correct order of operations for solving equations?",
+    "why": "the answer is an ordered six-item list of operation names; no player types that in a text field"
+  },
+  {
+    "id": "otdb-48de2d50dcf8",
+    "language": "en",
+    "prompt": "Which of the following is an existing family in \"The Sims\"?",
+    "why": "the Sims ships many premade families; only the set picks one"
+  },
+  {
+    "id": "otdb-496775c041e9",
+    "language": "en",
+    "prompt": "All of the following are classified as Finno-Ugric languages EXCEPT:",
+    "why": "an EXCEPT over a list the prompt never shows"
+  },
+  {
+    "id": "otdb-49a1b3d2a248",
+    "language": "en",
+    "prompt": "What are the Three Virtues of Bionicle?",
+    "why": "the answer is a three-item list (\"Unity, Duty, Destiny\") that a text field cannot reasonably grade"
+  },
+  {
+    "id": "otdb-49c11372eff3",
+    "language": "en",
+    "prompt": "Which of these people is NOT a part of the Internet comedy group Mega64?",
+    "why": "anyone outside Mega64 satisfies it"
+  },
+  {
+    "id": "otdb-4a268d11f041",
+    "language": "en",
+    "prompt": "In the show 'Doctor Who', what is the name of the time-capsule model stolen by 'the Doctor'?",
+    "why": "the answer's formatting, \"TT Type 40, Mark 3 (TARDIS)\", is unguessable; even a fan who knows it is a Type 40 cannot produce that string"
+  },
+  {
+    "id": "otdb-4a87e96169cd",
+    "language": "en",
+    "prompt": "Which of these TrackMania environments was NOT in the original game?",
+    "why": "negative over the option set of TrackMania environments"
+  },
+  {
+    "id": "otdb-4aa43368fdf1",
+    "language": "en",
+    "prompt": "What English word means to \"think deeply\"?",
+    "why": "ponder, muse, meditate all fit; only the options pick one"
+  },
+  {
+    "id": "otdb-4ab2fc107bfc",
+    "language": "en",
+    "prompt": "Which of these Nicktoons were NOT originally a short on Oh Yeah! Cartoons before becoming their own series?",
+    "why": "every Nicktoon not from that showcase satisfies it"
+  },
+  {
+    "id": "otdb-4ac3a00ab3a0",
+    "language": "en",
+    "prompt": "Which of the following was not one of \"The Magnificent Seven\"?",
+    "why": "every actor outside the cast satisfies it"
+  },
+  {
+    "id": "otdb-4b2b96271ca0",
+    "language": "en",
+    "prompt": "Which of these is not a member of the virtual band Gorillaz?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-4b8041582512",
+    "language": "en",
+    "prompt": "In the anime Seven Deadly Sins what is the name of one of the sins?",
+    "why": "seven sins qualify; only the set picks Diane"
+  },
+  {
+    "id": "otdb-4b9187035804",
+    "language": "en",
+    "prompt": "Which Grand Theft Auto (GTA) games have the same setting?",
+    "why": "several GTA pairs share a setting; only the options pick one"
+  },
+  {
+    "id": "otdb-4bf69c3558ad",
+    "language": "en",
+    "prompt": "Which mountain has the highest peak in Europe?",
+    "why": "the prompt asks which mountain, but the answer appends a country a player has no reason to type"
+  },
+  {
+    "id": "otdb-4c6b147eec3b",
+    "language": "en",
+    "prompt": "Which of the following card games revolves around numbers and basic math?",
+    "why": "many card games turn on numbers; only the options pick Uno"
+  },
+  {
+    "id": "otdb-4c8184b54149",
+    "language": "en",
+    "prompt": "Which animated movie was first to feature a celebrity as a voice actor?",
+    "why": "many animated features long before Aladdin (1992) cast celebrities as voices, Disney's The Jungle Book (1967) among them, so \"first\" fits several answers and the room cannot tell which is wanted"
+  },
+  {
+    "id": "otdb-4c89797b368d",
+    "language": "en",
+    "prompt": "Which of these Pokemon is NOT exclusively female?",
+    "why": "negative over the option set — most Pokémon are not female-only"
+  },
+  {
+    "id": "otdb-4d55b8ef5fbe",
+    "language": "en",
+    "prompt": "Which of these is NOT a playable character in the 2016 video game Overwatch?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-4dd9364bc7cc",
+    "language": "en",
+    "prompt": "Which of these is NOT a name of a city in the main island of PLAYERUNKNOWN'S BATTLEGROUNDS?",
+    "why": "negative: any place not on Erangel qualifies"
+  },
+  {
+    "id": "otdb-4e1070546c84",
+    "language": "en",
+    "prompt": "In the game \"Overwatch,\" which quote does the hero \"McCree\" NOT say upon using his flashbang ability?",
+    "why": "open negative — any quote McCree never says would do"
+  },
+  {
+    "id": "otdb-4ea526b0347e",
+    "language": "en",
+    "prompt": "Which of the following is NOT one of Aesop's fables?",
+    "why": "a NOT-question over everything that is not an Aesop fable"
+  },
+  {
+    "id": "otdb-4eb456164c45",
+    "language": "en",
+    "prompt": "Which person from \"JoJo's Bizarre Adventure\" does NOT house a reference to a band, artist, or song earlier than 1980?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-4edefa5a85af",
+    "language": "en",
+    "prompt": "Which character is from \"Splatoon\"?",
+    "why": "any Splatoon character satisfies it"
+  },
+  {
+    "id": "otdb-4f385f3f2db0",
+    "language": "en",
+    "prompt": "Which of these songs did Jimi Hendrix cover?",
+    "why": "answer is literally \"All of these songs\""
+  },
+  {
+    "id": "otdb-4f68c4df28d1",
+    "language": "en",
+    "prompt": "Which painting was not made by Vincent Van Gogh?",
+    "why": "every painting Van Gogh did not make satisfies it"
+  },
+  {
+    "id": "otdb-5017d66bb47f",
+    "language": "en",
+    "prompt": "Which of these Disney shows is classified as an anime?",
+    "why": "no way to know which Disney shows are on offer"
+  },
+  {
+    "id": "otdb-5052bba525ab",
+    "language": "en",
+    "prompt": "Which of the following films was NOT directed by Quentin Tarantino?",
+    "why": "NOT-directed-by: every other film qualifies"
+  },
+  {
+    "id": "otdb-510bc981a21e",
+    "language": "en",
+    "prompt": "What was the best selling album of 2015?",
+    "why": "the answer is stored as the artist-comma-title pair \"Adele, 25\", a formatting a player who knows the album would never guess"
+  },
+  {
+    "id": "otdb-522849c703a7",
+    "language": "en",
+    "prompt": "How long is a light-year?",
+    "why": "a value whose precision, unit and spelling (\"9.461 Trillion Kilometres\") a player could never guess"
+  },
+  {
+    "id": "otdb-5233b1ba1492",
+    "language": "en",
+    "prompt": "Which of these in the Star Trek series is NOT Klingon food?",
+    "why": "negative: anything not Klingon food qualifies"
+  },
+  {
+    "id": "otdb-525af10d9727",
+    "language": "en",
+    "prompt": "In Yu-Gi-Oh, how does a player perform an Xyz Summon?",
+    "why": "the answer is a whole sentence describing a procedure, not a value a player can type"
+  },
+  {
+    "id": "otdb-5274b8aa1cbd",
+    "language": "en",
+    "prompt": "Which of the following sports is not part of the triathlon?",
+    "why": "every sport but three satisfies it"
+  },
+  {
+    "id": "otdb-52d758f3ba46",
+    "language": "en",
+    "prompt": "Which of the following did not feature in the cartoon 'Wacky Races'?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-5347a5eb21a0",
+    "language": "en",
+    "prompt": "What's the famous line Vaas says in \"Far Cry 3\"?",
+    "why": "the answer is a whole quoted sentence, \"Did I ever tell you the definition of Insanity?\", which no room could reproduce word for word in a text field"
+  },
+  {
+    "id": "otdb-53cf35738726",
+    "language": "en",
+    "prompt": "Which musical artist was NOT featured as playable avatars in the game \"DJ Hero\"?",
+    "why": "NOT-question: any absent artist satisfies it"
+  },
+  {
+    "id": "otdb-53defe178e99",
+    "language": "en",
+    "prompt": "Who was the original drummer for The Beatles?",
+    "why": "\"original drummer for The Beatles\" fits Tommy Moore, Pete Best (the drummer before Ringo, and the usual answer) and Colin Hanton of the Quarrymen, with nothing in the wording to pick between them"
+  },
+  {
+    "id": "otdb-5472ff3f9c14",
+    "language": "en",
+    "prompt": "Which of the following  British Monarchs never appeared on a circulated pound sterling coin?",
+    "why": "'which of the following' with no options shown: dozens of British monarchs never appeared on a circulated sterling coin, so Edward VIII is only findable from the list"
+  },
+  {
+    "id": "otdb-5561256950e5",
+    "language": "en",
+    "prompt": "What is the name of one of the Neo-Aramaic languages spoken by the Jewish population from Northwestern Iraq?",
+    "why": "asks for one of several languages; typed is a lottery"
+  },
+  {
+    "id": "otdb-560bff7fb1e1",
+    "language": "en",
+    "prompt": "What does the Prt Sc button do?",
+    "why": "the answer is a full sentence, \"Captures what's on the screen and copies it to your clipboard\""
+  },
+  {
+    "id": "otdb-56533f799e30",
+    "language": "en",
+    "prompt": "Which of these two plates are best know for forming earthquakes and tsunami's?",
+    "why": "\"which of these two plates\" only means anything beside the options"
+  },
+  {
+    "id": "otdb-56f7c9281932",
+    "language": "en",
+    "prompt": "All of the following countries have official claims to territory in Antartica EXCEPT:",
+    "why": "EXCEPT clause is over the listed set"
+  },
+  {
+    "id": "otdb-57d3a3b40ee6",
+    "language": "en",
+    "prompt": "Which country drives on the left side of the road?",
+    "why": "dozens of countries drive on the left; only the four options pick Japan"
+  },
+  {
+    "id": "otdb-581fb9459f71",
+    "language": "en",
+    "prompt": "Which of these is not a key value of Agile software development?",
+    "why": "everything outside the Agile values satisfies it"
+  },
+  {
+    "id": "otdb-582392b874a2",
+    "language": "en",
+    "prompt": "Which of the following are cells of the adaptive immune system?",
+    "why": "T cells and B cells both qualify"
+  },
+  {
+    "id": "otdb-58e31057996e",
+    "language": "en",
+    "prompt": "Which one of these was not a beach landing site in the Invasion of Normandy?",
+    "why": "a negative over the candidate set"
+  },
+  {
+    "id": "otdb-5905b133519b",
+    "language": "en",
+    "prompt": "Which of these are NOT a Men at Work song?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-59dca48e8986",
+    "language": "en",
+    "prompt": "Which of these musicals won the Tony Award for Best Musical?",
+    "why": "dozens of musicals have won Best Musical"
+  },
+  {
+    "id": "otdb-5aa719534406",
+    "language": "en",
+    "prompt": "Which of these words means \"idle spectator\"?",
+    "why": "\"which of these words means idle spectator\" has no options in a typed field, and onlooker, loafer or rubbernecker all fit"
+  },
+  {
+    "id": "otdb-5ad40107d94b",
+    "language": "en",
+    "prompt": "Which of these companies does NOT manufacture automobiles?",
+    "why": "NOT-question over every company that is not a carmaker"
+  },
+  {
+    "id": "otdb-5b69dc43447c",
+    "language": "en",
+    "prompt": "What are the four corner states of the US?",
+    "why": "the answer is a four-item list of states whose order and separators a player could never reproduce"
+  },
+  {
+    "id": "otdb-5be9b74e3df2",
+    "language": "en",
+    "prompt": "Which retro video game was released first?",
+    "why": "ordering only meaningful over the four options"
+  },
+  {
+    "id": "otdb-5c2f3ad2c831",
+    "language": "en",
+    "prompt": "Which of these animals is NOT a lizard?",
+    "why": "any non-lizard satisfies it"
+  },
+  {
+    "id": "otdb-5d6f66c1052a",
+    "language": "en",
+    "prompt": "Which of these is not an additional variation of the color purple?",
+    "why": "any non-purple colour name satisfies it"
+  },
+  {
+    "id": "otdb-5db3bd67982f",
+    "language": "en",
+    "prompt": "What is the area of Vatican City?",
+    "why": "\"0.44km^2\" is a value whose decimal precision, unit and caret exponent formatting a player could never reproduce"
+  },
+  {
+    "id": "otdb-5db9e9c84aea",
+    "language": "en",
+    "prompt": "Which of the following car models has been badge-engineered (rebadged) the most?",
+    "why": "most is measured across the candidates"
+  },
+  {
+    "id": "otdb-5dd038b6e624",
+    "language": "en",
+    "prompt": "Who was a voice actor for the English dubbing of HOWL'S MOVING CASTLE (2004)?",
+    "why": "the whole English dub cast satisfies 'a voice actor'"
+  },
+  {
+    "id": "otdb-5dfa00e436f9",
+    "language": "en",
+    "prompt": "Which of the following is not a Flintstones character?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-5e32d66d38a1",
+    "language": "en",
+    "prompt": "Which of these operators from \"Tom Clancy's Rainbow Six Siege\" has the ability to damage reinforced walls?",
+    "why": "several operators breach reinforced walls"
+  },
+  {
+    "id": "otdb-5e6b31f890ce",
+    "language": "en",
+    "prompt": "Which of these numbers is closest to the total number of possible states for an army standard Enigma Machine?",
+    "why": "closest is defined only over the offered numbers"
+  },
+  {
+    "id": "otdb-5e75a17e0219",
+    "language": "en",
+    "prompt": "Which of the following guitarists recorded an album as a member of the Red Hot Chili Peppers?",
+    "why": "several guitarists recorded RHCP albums; only the four pick one"
+  },
+  {
+    "id": "otdb-5e7b8c652a28",
+    "language": "en",
+    "prompt": "Which of these is not the name of a city in the Grand Theft Auto series?",
+    "why": "negative over the GTA place names offered"
+  },
+  {
+    "id": "otdb-5eb2579d57e1",
+    "language": "en",
+    "prompt": "Which one of these countries borders with Poland?",
+    "why": "seven countries border Poland; only the set picks one"
+  },
+  {
+    "id": "otdb-5ebc6a69dad2",
+    "language": "en",
+    "prompt": "Which of the following characters is NOT playable in \"Resident Evil 6\"?",
+    "why": "NOT-question over the listed characters"
+  },
+  {
+    "id": "otdb-5edda3828450",
+    "language": "en",
+    "prompt": "Which of these Pokémon cannot learn Surf?",
+    "why": "hundreds of Pokemon cannot learn Surf"
+  },
+  {
+    "id": "otdb-5fa59640e79d",
+    "language": "en",
+    "prompt": "Which of these blocks in \"Minecraft\" has the lowest blast resistance?",
+    "why": "\"lowest blast resistance\" is only true among the four listed blocks"
+  },
+  {
+    "id": "otdb-5feb1dba369d",
+    "language": "en",
+    "prompt": "In the \"S.T.A.L.K.E.R.\" series, which of these items can't be used to lower the player's accumulated radiation?",
+    "why": "open negative — most S.T.A.L.K.E.R. items do nothing for radiation"
+  },
+  {
+    "id": "otdb-6012ee0f8088",
+    "language": "en",
+    "prompt": "What is the exact length of one non-curved part in Lane 1 of an Olympic Track?",
+    "why": "\"84.39m\" is a two-decimal metric length whose precision and unit formatting a player could never guess"
+  },
+  {
+    "id": "otdb-610add705854",
+    "language": "en",
+    "prompt": "Which is the largest of these 4 islands?",
+    "why": "largest is decided only among 'these 4 islands'"
+  },
+  {
+    "id": "otdb-617beff8216b",
+    "language": "en",
+    "prompt": "Which of these paintings did Johannes Vermeer not paint?",
+    "why": "a negative over the candidate set"
+  },
+  {
+    "id": "otdb-62f8b6a4f3f8",
+    "language": "en",
+    "prompt": "Which of the following liquids is least viscous? Assume temperature is 25°C.",
+    "why": "least viscous is relative to the four liquids offered"
+  },
+  {
+    "id": "otdb-632629679b38",
+    "language": "en",
+    "prompt": "At what temperature does water boil?",
+    "why": "the prompt names no temperature scale, so 100 (Celsius) and 373 (Kelvin) fit as well as 212 (Fahrenheit)"
+  },
+  {
+    "id": "otdb-6343c7576353",
+    "language": "en",
+    "prompt": "Which anime did Seiji Kishi NOT direct?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-6359939b8be4",
+    "language": "en",
+    "prompt": "Which of the following is NOT a venomous snake?",
+    "why": "any non-venomous snake satisfies it"
+  },
+  {
+    "id": "otdb-637d739e9eb6",
+    "language": "en",
+    "prompt": "Which of these island countries is located in the Caribbean?",
+    "why": "a dozen island countries sit in the Caribbean"
+  },
+  {
+    "id": "otdb-6537dbb61c5a",
+    "language": "en",
+    "prompt": "Which of the following bones is not in the leg?",
+    "why": "hundreds of bones are not in the leg"
+  },
+  {
+    "id": "otdb-65b21bc87aa6",
+    "language": "en",
+    "prompt": "Which of these car models are produced by Lamborghini?",
+    "why": "Lamborghini has many models"
+  },
+  {
+    "id": "otdb-66e20f1d014c",
+    "language": "en",
+    "prompt": "Which of the following authors was not born in England?",
+    "why": "every author born outside England satisfies it"
+  },
+  {
+    "id": "otdb-66f6ec2cc260",
+    "language": "en",
+    "prompt": "Which lyric is about Red Hot Chili Peppers frontman Anthony Kiedis?",
+    "why": "picks a lyric out of an unbounded set"
+  },
+  {
+    "id": "otdb-66f99bf7ed56",
+    "language": "en",
+    "prompt": "This album, now considered to be one of the greatest of all time, was a commercial failure when it was released.",
+    "why": "dangling \"this album\"; countless acclaimed albums flopped on release"
+  },
+  {
+    "id": "otdb-675bcaf4c6b5",
+    "language": "en",
+    "prompt": "Which of these 1900s tanks were designed and built BEFORE the others?",
+    "why": "\"before the others\" is a comparison over the candidate set"
+  },
+  {
+    "id": "otdb-6773242ad198",
+    "language": "en",
+    "prompt": "Which of the following buildings is example of a structure primarily built in the Art Deco architectural style?",
+    "why": "thousands of Art Deco buildings; only the set names this one"
+  },
+  {
+    "id": "otdb-682bfe501b3e",
+    "language": "en",
+    "prompt": "The file hosting service, \"Google Drive\" was launched on what day?",
+    "why": "the answer is a full month-day-year date; nothing in the prompt says a bare year will not do"
+  },
+  {
+    "id": "otdb-68aecb769ac5",
+    "language": "en",
+    "prompt": "In the anime Noragami who is one of the main protagonists?",
+    "why": "several main protagonists qualify; only the set picks Yukine"
+  },
+  {
+    "id": "otdb-68d16293f6cd",
+    "language": "en",
+    "prompt": "Which of the following Presidents of the United States was assassinated?",
+    "why": "four presidents were assassinated; only the set picks one"
+  },
+  {
+    "id": "otdb-68dbc8a9dfcb",
+    "language": "en",
+    "prompt": "\"Doctor Who\" star David Tennant performed in a rendition of which Shakespearean play?",
+    "why": "David Tennant has performed in many Shakespeare plays — Much Ado About Nothing, Richard II, Love's Labour's Lost, Romeo and Juliet, Macbeth — and the prompt gives no way to know Hamlet is wanted"
+  },
+  {
+    "id": "otdb-68f09f069308",
+    "language": "en",
+    "prompt": "In Animal Crossing: New Leaf, which of these paintings from Redd's Art Gallery is always genuine?",
+    "why": "several New Leaf artworks are always genuine; the set narrows it"
+  },
+  {
+    "id": "otdb-69e892c1f1fa",
+    "language": "en",
+    "prompt": "Which of the following is NOT a song in BROCKHAMPTON's SATURATION album series?",
+    "why": "NOT-on-SATURATION: any other title qualifies"
+  },
+  {
+    "id": "otdb-6a0726594b47",
+    "language": "en",
+    "prompt": "In the original DOOM (1993) which of the following is NOT a cheat code?",
+    "why": "NOT-question: any non-cheat string satisfies it"
+  },
+  {
+    "id": "otdb-6a23fe11a836",
+    "language": "en",
+    "prompt": "In The Lord of the Rings: The Fellowship of the Ring, which one of the following characters from the book was left out of the film?",
+    "why": "several book characters were cut; only the options pick one"
+  },
+  {
+    "id": "otdb-6a5f4f55c92d",
+    "language": "en",
+    "prompt": "Which of the following Mario Kart 8 Deluxe items will NOT make you invincible?",
+    "why": "most items do not grant invincibility"
+  },
+  {
+    "id": "otdb-6a7664c7c8df",
+    "language": "en",
+    "prompt": "Which one of these superhero teams appears in the Invincible comics?",
+    "why": "several teams appear in Invincible"
+  },
+  {
+    "id": "otdb-6b85ca19d662",
+    "language": "en",
+    "prompt": "Which of the following was not developed by Bethesda?",
+    "why": "negative: most games were not developed by Bethesda"
+  },
+  {
+    "id": "otdb-6bbbb2f977e9",
+    "language": "en",
+    "prompt": "What is the mnemonic device for remembering the fates of the wives of Henry VIII?",
+    "why": "the answer is a six-item ordered list, \"Divorced, Beheaded, Died, Divorced, Beheaded, Survived\""
+  },
+  {
+    "id": "otdb-6bf1ef092be3",
+    "language": "en",
+    "prompt": "Which of the following physical typologies are used with Ethernet Networks?",
+    "why": "Ethernet has used bus and star; the set picks one"
+  },
+  {
+    "id": "otdb-6c36680f99a5",
+    "language": "en",
+    "prompt": "Out of these four buildings, which one is the tallest, with a height of 2,717 ft (828 m)?",
+    "why": "the answer appends a country the prompt never asks for, so the building's name alone is scored wrong"
+  },
+  {
+    "id": "otdb-6d1277108810",
+    "language": "en",
+    "prompt": "Which of the following is NOT a real song from the band Thousand Foot Krutch?",
+    "why": "the fake title only exists among the candidates"
+  },
+  {
+    "id": "otdb-6f18d8dc6a7a",
+    "language": "en",
+    "prompt": "Which Nation did NOT have a Colony in modern-day North America?",
+    "why": "most nations held no North American colony"
+  },
+  {
+    "id": "otdb-6f295ff71433",
+    "language": "en",
+    "prompt": "Which of these is NOT a city in Saudi Arabia?",
+    "why": "every city outside Saudi Arabia satisfies it"
+  },
+  {
+    "id": "otdb-6f4052c248ef",
+    "language": "en",
+    "prompt": "Which of these Russian cities did NOT contain a stadium that was used in the 2018 FIFA World Cup?",
+    "why": "most Russian cities had no 2018 World Cup stadium"
+  },
+  {
+    "id": "otdb-6f9249d2ca36",
+    "language": "en",
+    "prompt": "Of the following, which Stephen King novel was published earliest?",
+    "why": "earliest only relative to the four listed"
+  },
+  {
+    "id": "otdb-7001cad2d21b",
+    "language": "en",
+    "prompt": "Which of these games was NOT developed by Markus Persson?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-70c55bef62f5",
+    "language": "en",
+    "prompt": "Which of the following is not one of the seven Millennium Prize Problems?",
+    "why": "everything outside the seven problems satisfies it"
+  },
+  {
+    "id": "otdb-7152b2b08b7a",
+    "language": "en",
+    "prompt": "What numbers are in the 5th row of Pascal's Triangle?",
+    "why": "the answer is a five-number sequence whose separators and spacing a player could never guess"
+  },
+  {
+    "id": "otdb-7197119a813b",
+    "language": "en",
+    "prompt": "Which of these choices is not one of the phases of mitosis?",
+    "why": "any non-phase satisfies it"
+  },
+  {
+    "id": "otdb-71b286489aff",
+    "language": "en",
+    "prompt": "Which of these countries is NOT the only country to start with that letter of the alphabet?",
+    "why": "'that letter' refers to the candidates themselves"
+  },
+  {
+    "id": "otdb-72840a187479",
+    "language": "en",
+    "prompt": "Which of these names was an actual codename for a cancelled Microsoft project?",
+    "why": "any invented codename satisfies it without the set"
+  },
+  {
+    "id": "otdb-73832a553408",
+    "language": "en",
+    "prompt": "In \"Star Trek\", what is the Ferengi's First Rule of Acquisition?",
+    "why": "the answer is a whole sentence of quoted dialogue, \"Once you have their money, you never give it back.\", which no player can reproduce word for word in a field"
+  },
+  {
+    "id": "otdb-73ac432ab994",
+    "language": "en",
+    "prompt": "In the 1999 movie Fight Club, which of these is not a rule of the \"fight club\"?",
+    "why": "NOT-a-rule: anything not a rule qualifies"
+  },
+  {
+    "id": "otdb-75dde8bc875a",
+    "language": "en",
+    "prompt": "How tall is the Burj Khalifa?",
+    "why": "the answer \"2,722 ft\" carries units, a thousands separator and an imperial figure a player would more likely give as 828 m"
+  },
+  {
+    "id": "otdb-75f0a07d48ad",
+    "language": "en",
+    "prompt": "In \"Hunter x Hunter\", which of the following is NOT a type of Nen aura?",
+    "why": "anything outside the six Nen types satisfies it"
+  },
+  {
+    "id": "otdb-7640f2796f0a",
+    "language": "en",
+    "prompt": "Who was not in the band \"The Smiths\"?",
+    "why": "everyone alive was not in The Smiths; only the four narrow it"
+  },
+  {
+    "id": "otdb-769f941143c0",
+    "language": "en",
+    "prompt": "Which of the following games has the largest map size?",
+    "why": "comparison only meaningful over the four options"
+  },
+  {
+    "id": "otdb-77669036e36b",
+    "language": "en",
+    "prompt": "In linguistics, which of the following is not one of the Gricean Maxims under the Cooperative Principal?",
+    "why": "NOT-question over everything outside the four maxims"
+  },
+  {
+    "id": "otdb-777313e4e002",
+    "language": "en",
+    "prompt": "Which of these songs is not on the \"untitled\" album by Led Zeppelin?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-77b79ac77036",
+    "language": "en",
+    "prompt": "Which of these is NOT a playable character race in the video game \"Starbound\"?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-78410176354f",
+    "language": "en",
+    "prompt": "One of the early prototypes of the Sega Dreamcast controller resembled which of the following?",
+    "why": "\"resembled which of the following\" only resolves against the options"
+  },
+  {
+    "id": "otdb-78ac212384aa",
+    "language": "en",
+    "prompt": "According to the lore of \"Starbound\", what does the \"Colony Deed\" do when it is placed down?",
+    "why": "the answer is a full sentence describing a behaviour (\"Sends out an advertisement for someone to move in.\"), not a value a player can type"
+  },
+  {
+    "id": "otdb-78d74d79ac3a",
+    "language": "en",
+    "prompt": "What does the term \"isolation\" refer to in microbiology?",
+    "why": "the answer is a whole textbook sentence: \"The separation of a strain from a natural, mixed population of living microbes\""
+  },
+  {
+    "id": "otdb-792d1f8a26b1",
+    "language": "en",
+    "prompt": "Which of these track-and-field events is NOT included in the Olympic men's decathlon?",
+    "why": "every event outside the decathlon satisfies it"
+  },
+  {
+    "id": "otdb-793f3e0a4a5e",
+    "language": "en",
+    "prompt": "Which of the following cellular device companies is NOT headquartered in Asia?",
+    "why": "any non-Asian phone maker satisfies it"
+  },
+  {
+    "id": "otdb-79a68c134ff5",
+    "language": "en",
+    "prompt": "Which of these songs does NOT play during the Ruins segments of the 2015 game \"Undertale\"?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-7ad8c329bad1",
+    "language": "en",
+    "prompt": "Which of the following computer components can be built using only NAND gates?",
+    "why": "any digital component can be built from NAND gates"
+  },
+  {
+    "id": "otdb-7c12312e53ce",
+    "language": "en",
+    "prompt": "Which of the following is not one of the Greek Fates?",
+    "why": "anyone who is not a Fate satisfies it"
+  },
+  {
+    "id": "otdb-7c77692f70e3",
+    "language": "en",
+    "prompt": "Which of these is not a real character in the cartoon series My Little Pony: Friendship is Magic?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-7c9c370fa852",
+    "language": "en",
+    "prompt": "Which of the following is NOT a god in Norse Mythology.",
+    "why": "any name that is not a Norse god satisfies it"
+  },
+  {
+    "id": "otdb-7c9e48e9f13a",
+    "language": "en",
+    "prompt": "Which of these is NOT the name of a playable map in PUBG: Battlegrounds?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-7d253bc5ba22",
+    "language": "en",
+    "prompt": "Which of the following games in the The Legend of Zelda franchise was released in North America before Japan?",
+    "why": "several Zelda games shipped in NA first; only the four options pick one"
+  },
+  {
+    "id": "otdb-7e4da19a3bf2",
+    "language": "en",
+    "prompt": "Which game is NOT part of the Science Adventure series by 5pb. and Nitroplus?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-7e79f8e13aae",
+    "language": "en",
+    "prompt": "The lesser-known continuation of the saying \"Curiosity killed the cat...\" is:",
+    "why": "the answer is a quoted sentence fragment with leading ellipsis and quote marks, \"...but satisfaction brought it back.\""
+  },
+  {
+    "id": "otdb-7eaf9dabd88e",
+    "language": "en",
+    "prompt": "Which actors made up the trio in \"The Good, the Bad, and the Ugly\"?",
+    "why": "the answer is a list of three names, \"Clint Eastwood, Eli Wallach, and Lee Van Cleef\""
+  },
+  {
+    "id": "otdb-7f4ab1d5331a",
+    "language": "en",
+    "prompt": "In \"Sonic the Hedgehog 2\" for the Sega Genesis, what do you input in the sound test screen to access the secret level select?",
+    "why": "the answer is a meta-description (\"The Lead Programmer's birthday\") rather than the code actually entered, so no typed line could match"
+  },
+  {
+    "id": "otdb-7f52eb44177c",
+    "language": "en",
+    "prompt": "Which of these game franchises were made by Namco?",
+    "why": "Namco made dozens of franchises; only the offered four narrow it"
+  },
+  {
+    "id": "otdb-7fec29d498cb",
+    "language": "en",
+    "prompt": "Which of the following physicists did NOT work on the Manhattan project?",
+    "why": "almost every physicist missed the Manhattan project"
+  },
+  {
+    "id": "otdb-803a6befa8c9",
+    "language": "en",
+    "prompt": "Which of these is NOT a game under the Worms series?",
+    "why": "NOT-question: countless games are not in the Worms series"
+  },
+  {
+    "id": "otdb-803ab3be203f",
+    "language": "en",
+    "prompt": "Botanically speaking, which of these fruits is NOT a berry?",
+    "why": "most fruits are not berries botanically"
+  },
+  {
+    "id": "otdb-816e32031209",
+    "language": "en",
+    "prompt": "Which of the following movies was not based on a novel by Stephen King?",
+    "why": "every film not from a King novel satisfies it"
+  },
+  {
+    "id": "otdb-818e086ac1ea",
+    "language": "en",
+    "prompt": "Which of these is NOT a song featured on the Lockjaw EP released in 2013 by Flume & Chet Faker?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-81ad17f9e170",
+    "language": "en",
+    "prompt": "Which of these is NOT a name of a playable character in Apex Legends?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-81c3937b6f86",
+    "language": "en",
+    "prompt": "Which of these is the name of a cut enemy from \"Half-Life 2\"?",
+    "why": "Half-Life 2 had many cut enemies; the set picks which one is meant"
+  },
+  {
+    "id": "otdb-81c4517b7639",
+    "language": "en",
+    "prompt": "In Skylanders Giants, why was Zaps' Wow Pow named \"For Riley\" ?",
+    "why": "the answer is a free-form clause explaining why, which no player can phrase verbatim"
+  },
+  {
+    "id": "otdb-81e4f1d0ee7b",
+    "language": "en",
+    "prompt": "Which car is NOT featured in \"Need for Speed: Hot Pursuit 2\"?",
+    "why": "open negative — most cars are not in Hot Pursuit 2"
+  },
+  {
+    "id": "otdb-826ff8dfb243",
+    "language": "en",
+    "prompt": "The core of the Sun can reach which temperature?",
+    "why": "the answer is \"27° Million F (15° Million C)\", a dual-unit value with invented formatting"
+  },
+  {
+    "id": "otdb-82aaf92fc2a4",
+    "language": "en",
+    "prompt": "Which of these songs was released in 1996?",
+    "why": "thousands of songs were released in 1996"
+  },
+  {
+    "id": "otdb-835919f4b031",
+    "language": "en",
+    "prompt": "Which of these cars is NOT considered one of the 5 Modern Supercars by Ferrari?",
+    "why": "any Ferrari outside the five satisfies it"
+  },
+  {
+    "id": "otdb-83f6cdb32ee0",
+    "language": "en",
+    "prompt": "In the \"Worms\" series of video games, which of these weapons is affected by wind?",
+    "why": "several Worms weapons are wind-affected"
+  },
+  {
+    "id": "otdb-84841f09b54c",
+    "language": "en",
+    "prompt": "Which one of these was not a member of the Fiendish Five in the game Sly Cooper and the Thievius Raccoonus?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-84c539987d6c",
+    "language": "en",
+    "prompt": "Which of these is NOT considered to be a colour that makes up the rainbow?",
+    "why": "any non-rainbow colour satisfies it; only the four narrow it"
+  },
+  {
+    "id": "otdb-8520ff8e11bc",
+    "language": "en",
+    "prompt": "Which of these Japanese islands is the largest by area?",
+    "why": "largest is decided only among the four listed"
+  },
+  {
+    "id": "otdb-86a51e8a3ff3",
+    "language": "en",
+    "prompt": "In \"Fallout 4\" which faction is not present in the game?",
+    "why": "endless factions absent from the game"
+  },
+  {
+    "id": "otdb-86d3ac3281ef",
+    "language": "en",
+    "prompt": "All of the following are towns/villages in the Pacific Island nation of Kiribati EXCEPT:",
+    "why": "EXCEPT clause is over the listed set"
+  },
+  {
+    "id": "otdb-884353a59c2c",
+    "language": "en",
+    "prompt": "Which one of the following titles by Valve is not based on a Community Mod?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-8885a3ed9606",
+    "language": "en",
+    "prompt": "In \"Kingdom Hearts\", what mission are Donald and Goofy assigned by King Mickey?",
+    "why": "the answer is a whole sentence with punctuation, \"To find the Key bearer and stick with him!\", impossible to produce verbatim by typing"
+  },
+  {
+    "id": "otdb-88f137cd8876",
+    "language": "en",
+    "prompt": "Who is a pioneer of \"Minimal Music\" in 1960s?",
+    "why": "several 1960s minimalists qualify; the list picks one"
+  },
+  {
+    "id": "otdb-898ce7082b93",
+    "language": "en",
+    "prompt": "Which of these is NOT the name of an album released by American rapper Viper?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-89d322a85094",
+    "language": "en",
+    "prompt": "What two characters from the game Undertale are never in a relationship or not related?",
+    "why": "countless Undertale pairs are unrelated; only the options pick one"
+  },
+  {
+    "id": "otdb-8a707c1a9854",
+    "language": "en",
+    "prompt": "Which of the following songs was not originally released by Sir Elton John?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-8a7d01149bca",
+    "language": "en",
+    "prompt": "Which of these countries is NOT located in Africa?",
+    "why": "every non-African country satisfies it"
+  },
+  {
+    "id": "otdb-8a981785aa60",
+    "language": "en",
+    "prompt": "Which of these is NOT one of Donald Trump's children?",
+    "why": "a negative over the candidate set"
+  },
+  {
+    "id": "otdb-8ab1dbe7b337",
+    "language": "en",
+    "prompt": "Which of these is NOT a Disney cartoon character?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-8bb4f58a42ad",
+    "language": "en",
+    "prompt": "What is Tasmania?",
+    "why": "'What is Tasmania?' fits an island, an Australian state, a sea, and more, with no cue as to which is wanted"
+  },
+  {
+    "id": "otdb-8be1b3418a24",
+    "language": "en",
+    "prompt": "Which of the following is not the host of a program on NPR?",
+    "why": "NOT-question over everyone who does not host on NPR"
+  },
+  {
+    "id": "otdb-8c3049e88d97",
+    "language": "en",
+    "prompt": "Which of these songs is NOT included in the Suicide Squad OST?",
+    "why": "NOT-on-the-OST: any other song qualifies"
+  },
+  {
+    "id": "otdb-8c666cc793d3",
+    "language": "en",
+    "prompt": "In Monster Hunter Generations, which of the following monsters are a part of the \"Fated Four\"?",
+    "why": "four monsters satisfy it, only options narrow"
+  },
+  {
+    "id": "otdb-8caaa2ef3677",
+    "language": "en",
+    "prompt": "Which one of these characters is from \"Legendz : Tale of the Dragon Kings\"?",
+    "why": "any character of that show qualifies; only the set narrows it"
+  },
+  {
+    "id": "otdb-8dd55ebeb630",
+    "language": "en",
+    "prompt": "Which of the following is true when alligators are behaving territorially?",
+    "why": "a true/false test over the four statements"
+  },
+  {
+    "id": "otdb-8f134a696a75",
+    "language": "en",
+    "prompt": "Which of the following games was NOT included in Valve's Orange Box?",
+    "why": "NOT-question: any game outside the Orange Box satisfies it"
+  },
+  {
+    "id": "otdb-8feeed10cd72",
+    "language": "en",
+    "prompt": "Which of these is NOT a city in India?",
+    "why": "every city outside India satisfies it"
+  },
+  {
+    "id": "otdb-9048b23f643e",
+    "language": "en",
+    "prompt": "The video game publishers known as \"tinyBuild\" published which of these games?",
+    "why": "tinyBuild published many games; only the options narrow it"
+  },
+  {
+    "id": "otdb-90ab80ee4a4b",
+    "language": "en",
+    "prompt": "Which of the following is NOT a passive electrical component?",
+    "why": "any active component satisfies it"
+  },
+  {
+    "id": "otdb-90fa9254640e",
+    "language": "en",
+    "prompt": "Which of these countries is located the FURTHEST away from the South China Sea?",
+    "why": "furthest is decided only among the four"
+  },
+  {
+    "id": "otdb-9113ebac070a",
+    "language": "en",
+    "prompt": "In the Team Fortress 2 canon, what did Shakespearicles NOT invent?",
+    "why": "negative: everything Shakespearicles did not invent qualifies"
+  },
+  {
+    "id": "otdb-913467882924",
+    "language": "en",
+    "prompt": "Which \"Fallout: New Vegas\" quest is NOT named after a real-life song?",
+    "why": "NOT-question over the listed quests"
+  },
+  {
+    "id": "otdb-91410a264e02",
+    "language": "en",
+    "prompt": "Which of the following is NOT an official game in Nintendo's Super Smash Bros. series?",
+    "why": "NOT-question: any non-Smash title satisfies it"
+  },
+  {
+    "id": "otdb-91c2278891d2",
+    "language": "en",
+    "prompt": "Which of these Movies was NOT released in 1996?",
+    "why": "NOT-released-in-1996: every other year qualifies"
+  },
+  {
+    "id": "otdb-92515b89c642",
+    "language": "en",
+    "prompt": "Which of these is NOT a song featured on Green Day's 21st Century Breakdown album?",
+    "why": "NOT-on-the-album: any other song qualifies"
+  },
+  {
+    "id": "otdb-92e27abd2449",
+    "language": "en",
+    "prompt": "Which of the following Copy Abilities was only featured in \"Kirby & The Amazing Mirror\"?",
+    "why": "several abilities are exclusive to that game"
+  },
+  {
+    "id": "otdb-930c91143a02",
+    "language": "en",
+    "prompt": "Which one of these is not a real game in the Dungeons & Dragons series?",
+    "why": "any invented title satisfies it"
+  },
+  {
+    "id": "otdb-93cb82460c8b",
+    "language": "en",
+    "prompt": "The word \"aprosexia\" means which of the following?",
+    "why": "'means which of the following' shows no options in a text field, and the answer is a clause whose exact wording cannot be reproduced"
+  },
+  {
+    "id": "otdb-940dce0c0848",
+    "language": "en",
+    "prompt": "Disney's Haunted Mansion is home to a trio of Hitchhiking Ghosts. Which of these is NOT one of them?",
+    "why": "NOT-question over every name that is not one of the three ghosts"
+  },
+  {
+    "id": "otdb-945b58f05c9d",
+    "language": "en",
+    "prompt": "All the following metal elements are liquids at or near room temperature EXCEPT:",
+    "why": "EXCEPT over the listed metals"
+  },
+  {
+    "id": "otdb-95ea93654c55",
+    "language": "en",
+    "prompt": "Which of these songs is not by Tatsuro Yamashita?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-9643bbbd2241",
+    "language": "en",
+    "prompt": "Which of these video game series have NOT had a promotional item appear in Team Fortress 2?",
+    "why": "negative: most series never had a TF2 promo item"
+  },
+  {
+    "id": "otdb-966c9d097c54",
+    "language": "en",
+    "prompt": "Which of these languages was NOT included in the 2016 song \"Don't Mind\" by Kent Jones?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-96ab335e3272",
+    "language": "en",
+    "prompt": "Which nation claims ownership of Antarctica?",
+    "why": "the answer is a non-answer nobody would type"
+  },
+  {
+    "id": "otdb-96ae8a776438",
+    "language": "en",
+    "prompt": "Which driver has been the Formula 1 world champion for a record 7 times?",
+    "why": "since 2020 Lewis Hamilton also holds seven Formula 1 titles, so two drivers answer \"champion a record 7 times\" and a typed \"Hamilton\" would be marked wrong"
+  },
+  {
+    "id": "otdb-96b923b57810",
+    "language": "en",
+    "prompt": "Which one of these is not a typical European sword design?",
+    "why": "every non-European sword design satisfies it"
+  },
+  {
+    "id": "otdb-9713bb83dc02",
+    "language": "en",
+    "prompt": "At what depth should you make a decompression stop, or safety stop, on a typical scuba dive?",
+    "why": "the answer carries two units joined by a slash, \"15 Feet / 5 Meters\", so no typed form matches"
+  },
+  {
+    "id": "otdb-975a5db97b4d",
+    "language": "en",
+    "prompt": "Which country was an allied power in World War II?",
+    "why": "dozens of Allied powers; only the set picks one"
+  },
+  {
+    "id": "otdb-97e6784a386f",
+    "language": "en",
+    "prompt": "How do you tame a horse in Minecraft?",
+    "why": "the answer is a method described as a clause (\"By continually mounting it\"), not a typeable term"
+  },
+  {
+    "id": "otdb-988e30803129",
+    "language": "en",
+    "prompt": "Which of the following blood vessels carries deoxygenated blood?",
+    "why": "every vein qualifies; the set forces the pulmonary artery"
+  },
+  {
+    "id": "otdb-999949dda03a",
+    "language": "en",
+    "prompt": "Which of these places is a location in Cornwall?",
+    "why": "a Cornish hamlet named Barcelona is only findable among options"
+  },
+  {
+    "id": "otdb-99f2301a3dfa",
+    "language": "en",
+    "prompt": "Which of the following figures did NOT have a cameo on \"The Drew Carey Show\" (1995-2004)?",
+    "why": "negative: almost everyone did not cameo on the show"
+  },
+  {
+    "id": "otdb-9a97fb1f60bf",
+    "language": "en",
+    "prompt": "Which of the following James Bond villains is not affiliated with the SPECTRE organization?",
+    "why": "non-SPECTRE Bond villains are many"
+  },
+  {
+    "id": "otdb-9ac3fc321bac",
+    "language": "en",
+    "prompt": "What was the total length of the Titanic?",
+    "why": "the answer is a pipe-separated dual-unit value, \"882 ft | 268.8 m\", whose formatting no player could reproduce in a text field"
+  },
+  {
+    "id": "otdb-9b2221208ed8",
+    "language": "en",
+    "prompt": "Which of the following tabletop games is the oldest?",
+    "why": "superlative over the candidate set only"
+  },
+  {
+    "id": "otdb-9b94401183f9",
+    "language": "en",
+    "prompt": "What game mode was not in the original \"Wii Sports\"?",
+    "why": "open negative — endless modes were not in Wii Sports"
+  },
+  {
+    "id": "otdb-9b9621fae292",
+    "language": "en",
+    "prompt": "In the world strategy game 'Sid Meier's Civilization', a programming bug caused the AI depiction of Gandhi to do which of the following?",
+    "why": "the prompt asks the room to pick \"which of the following\" and the answer is a descriptive clause, so a typed field shows a question with no list and no producible answer"
+  },
+  {
+    "id": "otdb-9ba20cea8f6c",
+    "language": "en",
+    "prompt": "Which of these artists was NOT a member of the electronic music supergroup Swedish House Mafia, which split up in 2013?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-9bbdbb78b1a2",
+    "language": "en",
+    "prompt": "What are the three starter Pokemon available in Pokemon Black and White?",
+    "why": "the answer is a list of three Pokémon names"
+  },
+  {
+    "id": "otdb-9c48912f90a5",
+    "language": "en",
+    "prompt": "In the programming language \"Python\", which of these statements would display the string \"Hello World\" correctly?",
+    "why": "picks the valid statement out of shown syntax variants"
+  },
+  {
+    "id": "otdb-9d6226a63634",
+    "language": "en",
+    "prompt": "When was Pong released?",
+    "why": "'when was Pong released' invites a year; the banked answer is a full month-day-year date whose granularity and formatting are unguessable"
+  },
+  {
+    "id": "otdb-9e782f98c1eb",
+    "language": "en",
+    "prompt": "Which of the following landmarks is not located in New York City?",
+    "why": "every landmark outside New York satisfies it"
+  },
+  {
+    "id": "otdb-9e7e793c607f",
+    "language": "en",
+    "prompt": "Which of the following movies was not based on a book?",
+    "why": "NOT-based-on-a-book: countless films qualify"
+  },
+  {
+    "id": "otdb-9edef0d6f1fa",
+    "language": "en",
+    "prompt": "Which of these is NOT a Humongous Entertainment game franchise?",
+    "why": "NOT-question over the listed franchises"
+  },
+  {
+    "id": "otdb-a0339f11ef23",
+    "language": "en",
+    "prompt": "Which of the following was not an actor/actress on the American television show \"Saturday Night Live\" in Season 42?",
+    "why": "negative over an unbounded set of non-cast members"
+  },
+  {
+    "id": "otdb-a05574177f34",
+    "language": "en",
+    "prompt": "In Disney's \"Toontown Online\", which of these species wasn't available as a Toon?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-a0bf04d0300b",
+    "language": "en",
+    "prompt": "Which of these roles in Town of Salem is mafia?",
+    "why": "Town of Salem has a dozen mafia roles; only the four pick one"
+  },
+  {
+    "id": "otdb-a0c6a001d555",
+    "language": "en",
+    "prompt": "Which of these animals are not real?",
+    "why": "any mythical creature satisfies it"
+  },
+  {
+    "id": "otdb-a11807349264",
+    "language": "en",
+    "prompt": "Which one of these nations was added to Civilization V with the \"Gods & Kings\" expansion?",
+    "why": "Gods & Kings added nine civilizations; the options pick one"
+  },
+  {
+    "id": "otdb-a164e38701c3",
+    "language": "en",
+    "prompt": "Which of these Marvel games was released on the Playstation 2?",
+    "why": "dozens of Marvel games shipped on PS2"
+  },
+  {
+    "id": "otdb-a1773175ddf6",
+    "language": "en",
+    "prompt": "Which of the following is NOT a quote from the 1942 film Casablanca?",
+    "why": "NOT-a-quote: any other line qualifies"
+  },
+  {
+    "id": "otdb-a1b5385d0a60",
+    "language": "en",
+    "prompt": "Which of the following is not in the Indo-European language family?",
+    "why": "thousands of languages are not Indo-European"
+  },
+  {
+    "id": "otdb-a1d488f27696",
+    "language": "en",
+    "prompt": "Which one of these action movies are shot entirely in one take?",
+    "why": "class membership over the candidates: many films are single-take"
+  },
+  {
+    "id": "otdb-a1fa43e8ad59",
+    "language": "en",
+    "prompt": "In \"Super Mario World 2: Yoshi's Island\", which of these colors is NOT represented by a Yoshi?",
+    "why": "NOT-question over the listed colours"
+  },
+  {
+    "id": "otdb-a24ca9b5d17d",
+    "language": "en",
+    "prompt": "Which one of these characters is NOT a playable fighter in Super Smash Bros. Ultimate?",
+    "why": "open negative — countless characters are unplayable in Ultimate"
+  },
+  {
+    "id": "otdb-a2b28d227fb6",
+    "language": "en",
+    "prompt": "Which of the following is not a character in the video game Doki Doki Literature Club?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-a2d33e8d9401",
+    "language": "en",
+    "prompt": "Which of these English football clubs is based in Liverpool?",
+    "why": "Everton and Liverpool are both Liverpool clubs"
+  },
+  {
+    "id": "otdb-a3607eda79a1",
+    "language": "en",
+    "prompt": "Which of these is not a world in the anime \"Buddyfight\"?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-a36dc66335a1",
+    "language": "en",
+    "prompt": "Of the following months, which has the most amount of days?",
+    "why": "seven months have 31 days; only the four narrow it"
+  },
+  {
+    "id": "otdb-a4225a9f63b7",
+    "language": "en",
+    "prompt": "Which of these is NOT a name of an album released by American rapper Pitbull?",
+    "why": "NOT-an-album: the decoy exists only on screen"
+  },
+  {
+    "id": "otdb-a527c4494267",
+    "language": "en",
+    "prompt": "In vanilla Minecraft, you can make armor out of all BUT which of the following?",
+    "why": "exclusion over the listed materials"
+  },
+  {
+    "id": "otdb-a614442a931b",
+    "language": "en",
+    "prompt": "The '64' in the Nintendo-64 console refers to what?",
+    "why": "the answer is the phrase \"The bits in the CPU architecture\"; a typed room would write \"bits\" or \"64-bit CPU\" and miss"
+  },
+  {
+    "id": "otdb-a66aed86e0c2",
+    "language": "en",
+    "prompt": "Which of the following games was NOT included in Valve's \"The Orange Box\"?",
+    "why": "open negative — almost every game was not in The Orange Box"
+  },
+  {
+    "id": "otdb-a6fde9897fbd",
+    "language": "en",
+    "prompt": "Which of these is NOT an Australian state or territory?",
+    "why": "everything not Australian satisfies it"
+  },
+  {
+    "id": "otdb-a71673ba2335",
+    "language": "en",
+    "prompt": "The word \"abulia\" means which of the following?",
+    "why": "the answer is a clause, \"The inability to make decisions\", not a word a room could type"
+  },
+  {
+    "id": "otdb-a74b7259e60a",
+    "language": "en",
+    "prompt": "In Forza Motorsport 6, which of these track-exclusive cars was NOT featured in the game, either originally with the game or added as DLC?",
+    "why": "NOT-question over the listed track-exclusive cars"
+  },
+  {
+    "id": "otdb-a7621b529542",
+    "language": "en",
+    "prompt": "In Cook, Serve, Delicious!, which food is NOT included in the game?",
+    "why": "negative: any food absent from the game qualifies"
+  },
+  {
+    "id": "otdb-a7796c5ee781",
+    "language": "en",
+    "prompt": "Which of these movies is NOT considered to be part of the Marvel Cinematic Universe?",
+    "why": "every non-MCU film satisfies it"
+  },
+  {
+    "id": "otdb-a77b241de6ee",
+    "language": "en",
+    "prompt": "In Kingdom Hearts which of the following people can NOT wield a keyblade?",
+    "why": "NOT-question over the listed characters"
+  },
+  {
+    "id": "otdb-a7e4477fd951",
+    "language": "en",
+    "prompt": "Which character does voice actress Tara Strong NOT voice?",
+    "why": "negative: countless characters Tara Strong does not voice"
+  },
+  {
+    "id": "otdb-a832a7fcb016",
+    "language": "en",
+    "prompt": "Which of the following is not a prosecutor in the \"Ace Attorney\" video game series?",
+    "why": "open negative — most Ace Attorney characters are not prosecutors"
+  },
+  {
+    "id": "otdb-a878be6c52d2",
+    "language": "en",
+    "prompt": "Which of these is NOT the name of a rival gang in the video game Saint's Row 2?",
+    "why": "open negative — any gang name outside Saints Row 2 fits"
+  },
+  {
+    "id": "otdb-a8852366d29e",
+    "language": "en",
+    "prompt": "List the following Iranic empires in chronological order:",
+    "why": "'the following' is the candidate list itself"
+  },
+  {
+    "id": "otdb-a8880804dfa9",
+    "language": "en",
+    "prompt": "Which of the following superheros did Wonder Woman NOT have a love interest in?",
+    "why": "any hero she never loved satisfies it"
+  },
+  {
+    "id": "otdb-a88d0355b295",
+    "language": "en",
+    "prompt": "In PROTOTYPE 2, which of the following abilities/weapons is NOT obtained by an Evolved?",
+    "why": "NOT-question over the listed abilities"
+  },
+  {
+    "id": "otdb-a8ded9e84734",
+    "language": "en",
+    "prompt": "In Marvel comics, which of the following is not one of the infinity stones?",
+    "why": "any non-stone satisfies it"
+  },
+  {
+    "id": "otdb-a9a2863a6991",
+    "language": "en",
+    "prompt": "Which of the following men does not have a chemical element named after him?",
+    "why": "nearly every man has no element named after him"
+  },
+  {
+    "id": "otdb-aa8b57cdf509",
+    "language": "en",
+    "prompt": "Which game was exclusive to Dreamcast?",
+    "why": "many games were Dreamcast exclusives; only the options narrow it"
+  },
+  {
+    "id": "otdb-aaa4951175fa",
+    "language": "en",
+    "prompt": "Which is not a playable character in the 2005 video game Killer7?",
+    "why": "NOT-question over the listed Killer7 characters"
+  },
+  {
+    "id": "otdb-ab0e72f545d9",
+    "language": "en",
+    "prompt": "Which mountain has the highest peak in North America?",
+    "why": "the answer appends a country, \"Denali, USA\""
+  },
+  {
+    "id": "otdb-ab3c81316cfd",
+    "language": "en",
+    "prompt": "The country of Belize borders which country?",
+    "why": "Belize borders Mexico as well as Guatemala, and the prompt gives no way to know which of the two is wanted"
+  },
+  {
+    "id": "otdb-ab67596396cd",
+    "language": "en",
+    "prompt": "Which of these African regions does *not* directly border the Democratic Republic of The Congo?",
+    "why": "most African regions do not border the DRC"
+  },
+  {
+    "id": "otdb-ab70d82717c0",
+    "language": "en",
+    "prompt": "Which of the following anime of the mecha genre began airing in 1982?",
+    "why": "several mecha anime began airing in 1982"
+  },
+  {
+    "id": "otdb-ab878b1b1fba",
+    "language": "en",
+    "prompt": "Which of these programming languages is a low-level language?",
+    "why": "several languages are low-level; the set picks one"
+  },
+  {
+    "id": "otdb-abdacc5d72e5",
+    "language": "en",
+    "prompt": "In \"Star Trek Nemesis\", why was Praetor Shinzon created?",
+    "why": "the answer is a free-form clause, \"To replace Picard as a Romulan Agent\""
+  },
+  {
+    "id": "otdb-abf4a84b2de2",
+    "language": "en",
+    "prompt": "Which of these is NOT a catchphrase used by Rick Sanchez in the TV show \"Rick and Morty\"?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-ad0516a7d791",
+    "language": "en",
+    "prompt": "Which of these is not a song on the album Graduation by Kanye West?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-ad31bc4b17d1",
+    "language": "en",
+    "prompt": "Which of these cartoon girlfriends of popular characters first appeared before their boyfriends?",
+    "why": "a comparison made only against the four offered"
+  },
+  {
+    "id": "otdb-ad6358a88882",
+    "language": "en",
+    "prompt": "What is not a wind instrument?",
+    "why": "almost anything is not a wind instrument"
+  },
+  {
+    "id": "otdb-adbef8c37c47",
+    "language": "en",
+    "prompt": "Which of the following bands is Tom DeLonge not a part of?",
+    "why": "NOT-a-DeLonge-band: every other band qualifies"
+  },
+  {
+    "id": "otdb-addb7de5699e",
+    "language": "en",
+    "prompt": "Which of these cities is NOT in England?",
+    "why": "every city outside England satisfies it"
+  },
+  {
+    "id": "otdb-ade6e14bb898",
+    "language": "en",
+    "prompt": "According to Algonquian folklore, how does one transform into a Wendigo?",
+    "why": "the answer is a whole sentence ending in a full stop"
+  },
+  {
+    "id": "otdb-ae648bca4128",
+    "language": "en",
+    "prompt": "Which band name isn't a Stand in \"JoJo's Bizarre Adventure\"?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-ae7c378628cb",
+    "language": "en",
+    "prompt": "Which of the following passenger jets is the longest?",
+    "why": "longest only among the four listed"
+  },
+  {
+    "id": "otdb-aebc9a6a9ab4",
+    "language": "en",
+    "prompt": "What song is played during the ending credits of Guitar Hero: World Tour?",
+    "why": "the prompt asks which song, but the answer bundles artist and title in \"Artist - Song\" form (\"Dream Theater - Pull Me Under\"), so the natural typed answer would not match"
+  },
+  {
+    "id": "otdb-afe6a659c6e2",
+    "language": "en",
+    "prompt": "Who was the first female protagonist in a video game?",
+    "why": "\"first female protagonist in a video game\" is contested - Ms. Pac-Man (1982) and Baraduke's Toby Masuyo (1985) both predate Metroid, and the decoy Alis Landale is itself commonly cited"
+  },
+  {
+    "id": "otdb-b00570ed03ad",
+    "language": "en",
+    "prompt": "Which of the following ancient peoples was NOT classified as Hellenic (Greek)?",
+    "why": "nearly every ancient people was not Hellenic"
+  },
+  {
+    "id": "otdb-b06d252becf4",
+    "language": "en",
+    "prompt": "Which of the following characters were considered for inclusion in Super Smash Bros. Melee?",
+    "why": "many characters were considered for Melee; the options pick one"
+  },
+  {
+    "id": "otdb-b090f9446ec3",
+    "language": "en",
+    "prompt": "George Orwell's novel \"Animal Farm\" was inspired by which historical event?",
+    "why": "the answer is a whole sentence, \"The rise of communism and Stalin's policies.\", which no player could reproduce in a text field"
+  },
+  {
+    "id": "otdb-b1553fa31429",
+    "language": "en",
+    "prompt": "Which of these books was NOT written by the Czech author Karel Čapek?",
+    "why": "every book Capek did not write satisfies it"
+  },
+  {
+    "id": "otdb-b1ac8ce5b75b",
+    "language": "en",
+    "prompt": "In Romance of the Three Kingdoms, who was not a member of the Peach Garden Oath?",
+    "why": "every character outside the three oath-takers satisfies it"
+  },
+  {
+    "id": "otdb-b2285f4a0af2",
+    "language": "en",
+    "prompt": "Which of these teams has Jaromir Jagr not played for?",
+    "why": "most teams are ones Jagr never played for"
+  },
+  {
+    "id": "otdb-b252c134dac0",
+    "language": "en",
+    "prompt": "Which of these words refers to something made, distributed, or sold illegally?",
+    "why": "contraband and illicit fit the definition just as well as bootleg"
+  },
+  {
+    "id": "otdb-b2f8e82a3cd4",
+    "language": "en",
+    "prompt": "Who is the star of the AMC series Breaking Bad?",
+    "why": "\"Who is the star\" reads as the actor, Bryan Cranston, but the banked answer is the character Walter White; another row in the bank asks for the actor with the same subject"
+  },
+  {
+    "id": "otdb-b2fb1899d087",
+    "language": "en",
+    "prompt": "Which of these companies does NOT manufacture motorcycles?",
+    "why": "any non-motorcycle maker satisfies it"
+  },
+  {
+    "id": "otdb-b2fb9e73ef51",
+    "language": "en",
+    "prompt": "Which of these Indian languages is not part of the Indo-European language family?",
+    "why": "every Dravidian language fits; only the set picks Tamil"
+  },
+  {
+    "id": "otdb-b3778e7be954",
+    "language": "en",
+    "prompt": "Which of the following languages does NOT use gender as a part of its grammar?",
+    "why": "dozens of genderless languages satisfy it"
+  },
+  {
+    "id": "otdb-b433c90d6621",
+    "language": "en",
+    "prompt": "Which of these is a stop codon in DNA?",
+    "why": "three stop codons qualify; the set picks which"
+  },
+  {
+    "id": "otdb-b4fce8d2c455",
+    "language": "en",
+    "prompt": "Which of these species is not extinct?",
+    "why": "any living species satisfies it"
+  },
+  {
+    "id": "otdb-b60c898513c5",
+    "language": "en",
+    "prompt": "Which of these women is not a member of the Korean girl group TWICE?",
+    "why": "NOT-in-TWICE: any other idol qualifies"
+  },
+  {
+    "id": "otdb-b621feff5ca4",
+    "language": "en",
+    "prompt": "In the book \"The Martian\", how long was Mark Watney trapped on Mars (in Sols)?",
+    "why": "the prompt asks for a count in Sols but the answer is formatted \"549 Days\", so the unit a player is told to use cannot match"
+  },
+  {
+    "id": "otdb-b630474c0b57",
+    "language": "en",
+    "prompt": "Frank Lloyd Wright was the architect behind what famous building?",
+    "why": "Wright designed many famous buildings; typed, Fallingwater is as good"
+  },
+  {
+    "id": "otdb-b6f4c5101311",
+    "language": "en",
+    "prompt": "Which of these characters does not appear in \"Nier: Automata\"?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-b747527c7160",
+    "language": "en",
+    "prompt": "Which of these countries is NOT a part of the Asian continent?",
+    "why": "every non-Asian country satisfies it"
+  },
+  {
+    "id": "otdb-b811e51de223",
+    "language": "en",
+    "prompt": "Which of these names are not a character of JoJo's Bizarre Adventure?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-b865b322ce15",
+    "language": "en",
+    "prompt": "Which of these is NOT a main playable character in \"Grand Theft Auto V\"?",
+    "why": "NOT-question: any non-protagonist satisfies it"
+  },
+  {
+    "id": "otdb-b8804216afaa",
+    "language": "en",
+    "prompt": "What ingredient is NOT used to craft a cake in Minecraft?",
+    "why": "NOT-question: any non-ingredient satisfies it"
+  },
+  {
+    "id": "otdb-b9095c2bf3d8",
+    "language": "en",
+    "prompt": "What was the first Infinity Coaster in the world and where is it located?",
+    "why": "the prompt asks two things at once and the answer is a three-part list of ride, park and country"
+  },
+  {
+    "id": "otdb-b98db72cb6e1",
+    "language": "en",
+    "prompt": "What three movies, in order from release date, make up the \"Dollars Trilogy\"?",
+    "why": "the answer is three film titles that must be given in the right order, which no player can produce in a text field"
+  },
+  {
+    "id": "otdb-b9c126f1a78a",
+    "language": "en",
+    "prompt": "Out of these four buildings, which one is the tallest, with a height of 1,776 ft (541.3 m)?",
+    "why": "the answer appends a country the prompt never asks for, so the building's name alone is scored wrong"
+  },
+  {
+    "id": "otdb-ba987bbee536",
+    "language": "en",
+    "prompt": "Which of the following weapons in \"Counter-Strike: Global Offensive\" does not have a right-click function?",
+    "why": "many CS:GO weapons lack a right-click"
+  },
+  {
+    "id": "otdb-bae07df6b6a5",
+    "language": "en",
+    "prompt": "Which of these artists do NOT originate from France?",
+    "why": "NOT-French: most artists qualify"
+  },
+  {
+    "id": "otdb-bcb09fa295d3",
+    "language": "en",
+    "prompt": "Which of the following is a class in the game \"Hearthstone\"?",
+    "why": "Hearthstone has nine-plus classes; only the options pick one"
+  },
+  {
+    "id": "otdb-bcf2ab133cef",
+    "language": "en",
+    "prompt": "Which of these did mathematician Leonhard Euler NOT develop?",
+    "why": "everything Euler did not develop satisfies it"
+  },
+  {
+    "id": "otdb-bd33a99882df",
+    "language": "en",
+    "prompt": "Which of the following countries does \"JoJo's Bizarre Adventure: Stardust Crusaders\" not take place in?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-be2c68ec2fc6",
+    "language": "en",
+    "prompt": "Which of these countries was NOT a part of the Soviet Union?",
+    "why": "a negative over the candidate set"
+  },
+  {
+    "id": "otdb-be43c9138363",
+    "language": "en",
+    "prompt": "In the anime Initial D, how does Takumi Fujiwara describe a drift?",
+    "why": "the answer is a full quoted sentence ('. . . the front tires slide so the car won't face the inside'), which no player could produce in a text field"
+  },
+  {
+    "id": "otdb-becc80f519d1",
+    "language": "en",
+    "prompt": "Which of these is NOT an album released by The Beatles?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-bfce0e6df967",
+    "language": "en",
+    "prompt": "Which of these bands is the oldest?",
+    "why": "\"the oldest\" is only defined against the four shown"
+  },
+  {
+    "id": "otdb-bff51d531740",
+    "language": "en",
+    "prompt": "Which of the following dice is not a platonic solid?",
+    "why": "every non-platonic die satisfies it"
+  },
+  {
+    "id": "otdb-c0d3634ca3b4",
+    "language": "en",
+    "prompt": "Who out of these actresses is the youngest?",
+    "why": "youngest only among the four listed"
+  },
+  {
+    "id": "otdb-c0f830960577",
+    "language": "en",
+    "prompt": "Which of these colours is NOT featured in the logo for Google?",
+    "why": "every colour but four satisfies it"
+  },
+  {
+    "id": "otdb-c177e2d5ed76",
+    "language": "en",
+    "prompt": "Which of these \"Worms\" games featured 3D gameplay?",
+    "why": "several Worms games are 3D"
+  },
+  {
+    "id": "otdb-c188d6b7bc8a",
+    "language": "en",
+    "prompt": "Which one of these artists appears in the album Deltron 3030?",
+    "why": "many artists appear on Deltron 3030; only the four pick one"
+  },
+  {
+    "id": "otdb-c1ef989e7c97",
+    "language": "en",
+    "prompt": "Which of these is not a wonder weapon in \"Call Of Duty: Zombies\"?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-c2262c53f001",
+    "language": "en",
+    "prompt": "The Axiom of Preventive Medicine states that people with ___ risk for a disease should be screened and we should treat ___ of those people.",
+    "why": "a two-blank cloze that only the offered pairs resolve"
+  },
+  {
+    "id": "otdb-c226afec6e9a",
+    "language": "en",
+    "prompt": "Which of these board games do NOT utilize standard 6-sided dice?",
+    "why": "exclusion over the listed board games"
+  },
+  {
+    "id": "otdb-c25e90a68b70",
+    "language": "en",
+    "prompt": "Which of these was an official candidate in the 2017 British General Election?",
+    "why": "thousands stood in that election; only the four narrow it"
+  },
+  {
+    "id": "otdb-c2748148e2c3",
+    "language": "en",
+    "prompt": "Where does the book \"The Silence of the Lambs\" get its title from?",
+    "why": "the answer is a free-form clause, \"The main character's trauma in childhood\", unguessable word for word"
+  },
+  {
+    "id": "otdb-c2b44eb8fb1e",
+    "language": "en",
+    "prompt": "On the show \"Rick and Morty\", in episode \"Total Rickall\", who was a parasite?",
+    "why": "nearly every character in Total Rickall was a parasite"
+  },
+  {
+    "id": "otdb-c4086ee30999",
+    "language": "en",
+    "prompt": "Dee from \"It's Always Sunny in Philadelphia\" has dated all of the following guys EXCEPT",
+    "why": "EXCEPT clause is meaningless without the list"
+  },
+  {
+    "id": "otdb-c50db171326b",
+    "language": "en",
+    "prompt": "Which of these actors/actresses is NOT a part of the cast for the 2016 movie \"Suicide Squad\"?",
+    "why": "NOT-in-the-cast: only the four narrow it"
+  },
+  {
+    "id": "otdb-c53b341c7e79",
+    "language": "en",
+    "prompt": "What was Mountain Dew's original slogan?",
+    "why": "the answer is a whole slogan with interjection and ellipsis that no player could reproduce verbatim in a text field"
+  },
+  {
+    "id": "otdb-c6861673e3a8",
+    "language": "en",
+    "prompt": "The F1 season of 1994 is remembered for what tragic event?",
+    "why": "the answer is a descriptive phrase with a parenthetical venue, \"Death of Ayrton Senna (San Marino)\", which no player could produce verbatim in a text field"
+  },
+  {
+    "id": "otdb-c728ab4a3386",
+    "language": "en",
+    "prompt": "Which of these is not a Dragon Age Origins \"Origin\":",
+    "why": "open negative — anything is not a Dragon Age Origin"
+  },
+  {
+    "id": "otdb-c78144de5bec",
+    "language": "en",
+    "prompt": "Which one of these tanks was designed and operated by the United Kingdom?",
+    "why": "dozens of tanks were British; only the set picks Tog II"
+  },
+  {
+    "id": "otdb-c79604857970",
+    "language": "en",
+    "prompt": "Which of these artists did NOT remix the song \"Faded\" by Alan Walker?",
+    "why": "NOT-a-remixer: everyone else qualifies"
+  },
+  {
+    "id": "otdb-c7b617436a9f",
+    "language": "en",
+    "prompt": "Which game did NOT get financed via Crowdfunding?",
+    "why": "open negative — almost every game was not crowdfunded"
+  },
+  {
+    "id": "otdb-c895c8167bd6",
+    "language": "en",
+    "prompt": "Which of these champions from the MOBA 'League of Legends' is NOT a Yordle?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-ca288f08e123",
+    "language": "en",
+    "prompt": "Which of the following ancient Near Eastern peoples still exists as a modern ethnic group?",
+    "why": "Jews, Copts and Armenians qualify too; the set decides"
+  },
+  {
+    "id": "otdb-ca9ae061f05b",
+    "language": "en",
+    "prompt": "Which of these is NOT a possible drink to be made in the game \"VA-11 HALL-A: Cyberpunk Bartender Action\"?",
+    "why": "NOT-question over the listed drinks"
+  },
+  {
+    "id": "otdb-cb23cd8daa5f",
+    "language": "en",
+    "prompt": "Which one of these chassis codes are used by BMW 3-series?",
+    "why": "the 3-series has many chassis codes"
+  },
+  {
+    "id": "otdb-cbb89e4d6ad9",
+    "language": "en",
+    "prompt": "Which of the following was not one of Joseph Stalin's ten blows during World War II?",
+    "why": "a negative over the candidate set"
+  },
+  {
+    "id": "otdb-cbe709383555",
+    "language": "en",
+    "prompt": "Which one of these is not an official development name for a Ubuntu release?",
+    "why": "any invented codename satisfies it"
+  },
+  {
+    "id": "otdb-cc21c31d8527",
+    "language": "en",
+    "prompt": "Which is not a type of neuron?",
+    "why": "any invented neuron type satisfies it"
+  },
+  {
+    "id": "otdb-cc540145645d",
+    "language": "en",
+    "prompt": "Which of these weapon classes DO NOT appear in the first Monster Hunter game?",
+    "why": "negative over the weapon classes offered"
+  },
+  {
+    "id": "otdb-cd48a6a7708d",
+    "language": "en",
+    "prompt": "Which one of these people has been in the band ''Metallica'' in the past?",
+    "why": "several people have passed through Metallica; only the four pick one"
+  },
+  {
+    "id": "otdb-cd4f1f3860dd",
+    "language": "en",
+    "prompt": "Which song on Daft Punk's \"Random Access Memories\" features Pharrell Williams?",
+    "why": "two songs on Random Access Memories feature Pharrell Williams — \"Get Lucky\" and \"Lose Yourself to Dance\" — and the prompt gives no way to tell which is wanted"
+  },
+  {
+    "id": "otdb-ce6bc0d03dbd",
+    "language": "en",
+    "prompt": "What do the 4 Rings in Audi's Logo represent?",
+    "why": "the banked answer is a four-word descriptive phrase no player would reproduce verbatim in a text field; a free typist would write \"Auto Union\" or \"the four founding companies\""
+  },
+  {
+    "id": "otdb-ce9b05e8111a",
+    "language": "en",
+    "prompt": "Which of the following is not a character in the Street Fighter series?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-cef08aff8e84",
+    "language": "en",
+    "prompt": "Which of these Fortnite emotes does NOT involve a sport in some way?",
+    "why": "negative over the option set — most Fortnite emotes involve no sport"
+  },
+  {
+    "id": "otdb-d042fb306ad3",
+    "language": "en",
+    "prompt": "Which is NOT a book in the Harry Potter Series?",
+    "why": "every non-Potter title satisfies it"
+  },
+  {
+    "id": "otdb-d0cd4b8c1edc",
+    "language": "en",
+    "prompt": "Which of the following is NOT a Nintendo game console?",
+    "why": "open negative — every non-Nintendo console satisfies it"
+  },
+  {
+    "id": "otdb-d0e702fb1955",
+    "language": "en",
+    "prompt": "Which of these songs was NOT released in the 90s?",
+    "why": "NOT-released-in-the-90s: any other decade qualifies"
+  },
+  {
+    "id": "otdb-d1c9cc19d382",
+    "language": "en",
+    "prompt": "What do the video games No Man’s Sky and Mighty No. 9 have in common?",
+    "why": "endless things two games have in common"
+  },
+  {
+    "id": "otdb-d2bbccbe7d2f",
+    "language": "en",
+    "prompt": "Which of the music artists did NOT perform in the Live Aid concert in Wembley Stadium, London in 1985?",
+    "why": "NOT-at-Live-Aid: most artists qualify"
+  },
+  {
+    "id": "otdb-d36be0c6b3fd",
+    "language": "en",
+    "prompt": "What is the equation for the area of a sphere?",
+    "why": "the answer is an algebraic formula with Greek letters and exponents, unproducible in a free-text field"
+  },
+  {
+    "id": "otdb-d38c8215eb5b",
+    "language": "en",
+    "prompt": "Which Nintendo 64 game did NOT have Luigi in it?",
+    "why": "almost every N64 game lacks Luigi"
+  },
+  {
+    "id": "otdb-d4053e2999d9",
+    "language": "en",
+    "prompt": "Which of the following countries banned the use of personal genetic ancestry tests?",
+    "why": "France restricts them too; only the set picks Germany"
+  },
+  {
+    "id": "otdb-d4280b6d2538",
+    "language": "en",
+    "prompt": "The original Roman alphabet lacked the following letters EXCEPT:",
+    "why": "\"the following letters EXCEPT\" names no letters without the options"
+  },
+  {
+    "id": "otdb-d4b7df9bb153",
+    "language": "en",
+    "prompt": "Which Audi does not use Haldex based all wheel drive system?",
+    "why": "many Audi models skip the Haldex system"
+  },
+  {
+    "id": "otdb-d617169ac521",
+    "language": "en",
+    "prompt": "Which one is NOT the function of engine oil in car engines?",
+    "why": "anything oil does not do satisfies it"
+  },
+  {
+    "id": "otdb-d6db298cfe55",
+    "language": "en",
+    "prompt": "In \"Star Trek\", what is the Klingon death ritual?",
+    "why": "the answer is a free-form sentence describing a ritual, \"Look into sky and yell loudly in mourning.\", with no canonical wording a player could type"
+  },
+  {
+    "id": "otdb-d6f9f940bfb5",
+    "language": "en",
+    "prompt": "Which actor has NOT portrayed Billy Flynn in the musical \"Chicago\"?",
+    "why": "every actor alive has NOT played Billy Flynn; only the four narrow it"
+  },
+  {
+    "id": "otdb-d75f1e87cb81",
+    "language": "en",
+    "prompt": "Which of these book series is by James Patterson?",
+    "why": "Patterson wrote many series; only the options pick one"
+  },
+  {
+    "id": "otdb-d7e685250917",
+    "language": "en",
+    "prompt": "Which of these actors does NOT appear in the 1998 movie \"Saving Private Ryan\"?",
+    "why": "every actor absent from the film satisfies it"
+  },
+  {
+    "id": "otdb-d8292cc81d1d",
+    "language": "en",
+    "prompt": "Which of these aliases has NOT been used by electronic musician Aphex Twin?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-d87ca950facd",
+    "language": "en",
+    "prompt": "In \"One Piece\", which one of the following is NOT an Ancient Weapon?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-d894a7cdd932",
+    "language": "en",
+    "prompt": "Which car did not appear in the 2002 Lego Game: Drome Racers?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-d8cb659de7af",
+    "language": "en",
+    "prompt": "Which of these American cities has fewer than 1,000,000 people?",
+    "why": "most American cities are under a million"
+  },
+  {
+    "id": "otdb-d8f2b2f7bdd5",
+    "language": "en",
+    "prompt": "Which of the following elements is typically used in the doping of the semiconductor silicon?",
+    "why": "many elements dope silicon; only the shown set picks boron"
+  },
+  {
+    "id": "otdb-d931b84bd266",
+    "language": "en",
+    "prompt": "Which of these is NOT a faction included in the game Counter-Strike: Global Offensive?",
+    "why": "open negative — anything is not a CS:GO faction"
+  },
+  {
+    "id": "otdb-d9e3ebedf1f4",
+    "language": "en",
+    "prompt": "In Terraria, which of the following items does the Martian Saucer mini-boss NOT drop?",
+    "why": "NOT-question over the listed Terraria items"
+  },
+  {
+    "id": "otdb-da3de076f951",
+    "language": "en",
+    "prompt": "In \"Call Of Duty: Zombies\", which weapon does NOT deal any damage?",
+    "why": "NOT-question over the offered weapons"
+  },
+  {
+    "id": "otdb-dae6108d2630",
+    "language": "en",
+    "prompt": "In CSS, which of these values CANNOT be used with the \"position\" property?",
+    "why": "unbounded set of values position rejects"
+  },
+  {
+    "id": "otdb-db7d169ebf36",
+    "language": "en",
+    "prompt": "Which of these is NOT a map included in the game Counter-Strike: Global Offensive?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-dbd34c511fd1",
+    "language": "en",
+    "prompt": "Which of the following is not one of the groups on the periodic table?",
+    "why": "any invented group name satisfies it"
+  },
+  {
+    "id": "otdb-dc75f9c914ba",
+    "language": "en",
+    "prompt": "Which of these artists has NOT been a member of dancehall group Major Lazer?",
+    "why": "NOT-a-Major-Lazer-member: most artists qualify"
+  },
+  {
+    "id": "otdb-dc86e883c08d",
+    "language": "en",
+    "prompt": "What is the speed of light in a vacuum?",
+    "why": "the answer is \"299,792,458 m/s\" — exact digits, comma grouping and unit that a typed guess could never match"
+  },
+  {
+    "id": "otdb-dcd80894f945",
+    "language": "en",
+    "prompt": "Which of these is NOT the name of an album released by Miami-based producer DJ Khaled?",
+    "why": "NOT-an-album: the decoy exists only on screen"
+  },
+  {
+    "id": "otdb-dcda45a20297",
+    "language": "en",
+    "prompt": "In the video game Team Fortress 2, which of these is NOT a primary?",
+    "why": "negative over the option set — most TF2 weapons are not primaries"
+  },
+  {
+    "id": "otdb-ddbe2ed6bfd6",
+    "language": "en",
+    "prompt": "Why is the night sky dark?",
+    "why": "typed, the naive answer is 'the sun is not up'; only the set asks for Olbers"
+  },
+  {
+    "id": "otdb-df3b63212c78",
+    "language": "en",
+    "prompt": "Which one of the following rhythm games was made by Harmonix?",
+    "why": "Harmonix also made Guitar Hero, Dance Central and Amplitude"
+  },
+  {
+    "id": "otdb-e05fc1d63d03",
+    "language": "en",
+    "prompt": "Which one of these Manga titles was not created by Urasawa Naoki?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-e096acdf89ec",
+    "language": "en",
+    "prompt": "Which of the following countries is within the Eurozone but outside of the Schengen Area?",
+    "why": "Ireland also fits eurozone-without-Schengen"
+  },
+  {
+    "id": "otdb-e0f27a6377f8",
+    "language": "en",
+    "prompt": "Which character was introduced to the Super Smash Bros franchise in Super Smash Bros Melee?",
+    "why": "Melee introduced a dozen newcomers; only the four pick one"
+  },
+  {
+    "id": "otdb-e0fa1ac321af",
+    "language": "en",
+    "prompt": "In the game Sonic Forces, which of the following was not from a previous game?",
+    "why": "NOT-question over the listed Sonic Forces elements"
+  },
+  {
+    "id": "otdb-e1aea39af535",
+    "language": "en",
+    "prompt": "Out of these four buildings, which one is the tallest, with a height of 1,250 ft (381 m)?",
+    "why": "the answer appends a country the prompt never asks for, so the building's name alone is scored wrong"
+  },
+  {
+    "id": "otdb-e1ee1aa56ad4",
+    "language": "en",
+    "prompt": "Which of these founding fathers of the United States of America later became president?",
+    "why": "many founding fathers became president; only the four narrow it"
+  },
+  {
+    "id": "otdb-e1fb51ff44da",
+    "language": "en",
+    "prompt": "Which country does Austria not border?",
+    "why": "nearly every country fails to border Austria"
+  },
+  {
+    "id": "otdb-e257cef7f1db",
+    "language": "en",
+    "prompt": "Which of these levels does NOT appear in the console/PC versions of the game \"Sonic Generations\"?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-e263e398dc6b",
+    "language": "en",
+    "prompt": "Which one of these characters appeared in Marvel vs Capcom: Infinite?",
+    "why": "the roster is large; only the options pick one"
+  },
+  {
+    "id": "otdb-e2ce71eb48ac",
+    "language": "en",
+    "prompt": "Who was a military strategist in the Eastern Zhou period?",
+    "why": "\"a military strategist in the Eastern Zhou period\" fits Sun Bin, Wu Qi and Wei Liao as well as Sun Tzu"
+  },
+  {
+    "id": "otdb-e2f6f5adb10a",
+    "language": "en",
+    "prompt": "During World War 2, with tank was the most fear by the allies?",
+    "why": "\"most feared\" is an opinion with no settled answer, and the Tiger — offered as a decoy — is at least as commonly named as the Panther"
+  },
+  {
+    "id": "otdb-e41ae996d7fa",
+    "language": "en",
+    "prompt": "Which of the following originated as a manga?",
+    "why": "thousands of works originated as manga"
+  },
+  {
+    "id": "otdb-e45b6225e933",
+    "language": "en",
+    "prompt": "Which of the following is NOT classified as a Semetic language?",
+    "why": "nearly every language is not Semitic"
+  },
+  {
+    "id": "otdb-e491941bf2cb",
+    "language": "en",
+    "prompt": "Which of these is NOT a team available in the game Pokémon Go?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-e4cbebfb8b09",
+    "language": "en",
+    "prompt": "In Super Smash Bros. Ultimate, which of the following pair of characters are NOT considered \"Echo Fighters\"?",
+    "why": "NOT-question over the listed character pairs"
+  },
+  {
+    "id": "otdb-e4d799d89395",
+    "language": "en",
+    "prompt": "In \"Rainbow Six: Siege\", which of the following operators cannot breach reinforced walls?",
+    "why": "most operators cannot breach reinforced walls"
+  },
+  {
+    "id": "otdb-e4f5f0a49aec",
+    "language": "en",
+    "prompt": "Which of these cities is NOT featured in the Pandemic board game?",
+    "why": "any city absent from Pandemic satisfies it"
+  },
+  {
+    "id": "otdb-e50135dc3404",
+    "language": "en",
+    "prompt": "What is not a playable race in \"Final Fantasy XIV: A Realm Reborn\"?",
+    "why": "negative: anything at all is not a playable FFXIV race"
+  },
+  {
+    "id": "otdb-e50c34733d29",
+    "language": "en",
+    "prompt": "In \"Toriko\", which of the following foods is knowingly compatible with Toriko?",
+    "why": "any food could be the compatible one; only the set narrows it"
+  },
+  {
+    "id": "otdb-e52f8e9d4247",
+    "language": "en",
+    "prompt": "Which of the following Pokemon Types was present in the original games, Red and Blue?",
+    "why": "fifteen types were in Red and Blue; only the four narrow it"
+  },
+  {
+    "id": "otdb-e5d5606e8fc3",
+    "language": "en",
+    "prompt": "Which of these is a type of monster found in Minecraft?",
+    "why": "many Minecraft mobs satisfy it; only the four narrow it"
+  },
+  {
+    "id": "otdb-e6dea553aae0",
+    "language": "en",
+    "prompt": "Which of the following is not an Ivy League University?",
+    "why": "every university but eight satisfies it"
+  },
+  {
+    "id": "otdb-e82c88e54cfa",
+    "language": "en",
+    "prompt": "Which of the following characters is not in the board game Clue?",
+    "why": "any name absent from Clue satisfies it"
+  },
+  {
+    "id": "otdb-e8c02168ee05",
+    "language": "en",
+    "prompt": "Which of these is NOT a province in China?",
+    "why": "everything on earth is not a province of China"
+  },
+  {
+    "id": "otdb-e8d4f232c42a",
+    "language": "en",
+    "prompt": "Which of the following is not a studio album by the band Pink Floyd?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-e91085922e71",
+    "language": "en",
+    "prompt": "Which one of these films are shot entirely in one-take?",
+    "why": "several one-take features exist; only the options pick one"
+  },
+  {
+    "id": "otdb-e937e0f8f749",
+    "language": "en",
+    "prompt": "In Minecraft: Java Edition, which of the following feature/block was added to Survival mode in Beta 1.3?",
+    "why": "Beta 1.3 added several features; only the options pick beds"
+  },
+  {
+    "id": "otdb-ea68f2ae6881",
+    "language": "en",
+    "prompt": "Who is a co-founder of music streaming service Spotify?",
+    "why": "the prompt asks for 'a co-founder' and Spotify has two, so Martin Lorentzon is equally correct and would be marked wrong"
+  },
+  {
+    "id": "otdb-eabc93e4b832",
+    "language": "en",
+    "prompt": "Which of the following actors has only been in a Quentin Tarantino directed film once?",
+    "why": "constraint holds over the offered actors only"
+  },
+  {
+    "id": "otdb-eb25f2c41140",
+    "language": "en",
+    "prompt": "Which one of these rulers did not belong to the Habsburg dynasty?",
+    "why": "nearly every ruler was not a Habsburg"
+  },
+  {
+    "id": "otdb-eb268f6e9e3f",
+    "language": "en",
+    "prompt": "Which of these NHL teams originally played in Atlanta?",
+    "why": "Flames and Thrashers both started in Atlanta"
+  },
+  {
+    "id": "otdb-eb5ddb86b17f",
+    "language": "en",
+    "prompt": "Which of these countries' national teams qualified for the 2018 FIFA World Cup in Russia?",
+    "why": "32 teams qualified; only the four narrow it"
+  },
+  {
+    "id": "otdb-ed7ae82d6751",
+    "language": "en",
+    "prompt": "Which of the following is a castle?",
+    "why": "thousands of castles satisfy it"
+  },
+  {
+    "id": "otdb-edb0628ee2e6",
+    "language": "en",
+    "prompt": "Which of these stages is not playable in \"Super Smash Bros. for Wii U\"?",
+    "why": "open negative — countless stages are not in Smash for Wii U"
+  },
+  {
+    "id": "otdb-eeb42cb0c7a1",
+    "language": "en",
+    "prompt": "Which of the following is a personal computer made by the Japanese company Fujitsu?",
+    "why": "Fujitsu made many personal computers"
+  },
+  {
+    "id": "otdb-eef9c70f67f0",
+    "language": "en",
+    "prompt": "Which of the Master levels in \"Super Monkey Ball\" is also used in the arcade version of the game, simply named \"Monkey Ball\"?",
+    "why": "the answer prefixes the level name with its number in the bank's own formatting (\"MASTER 9 - Bridge Master\"); a room that knows it would type only \"Bridge Master\""
+  },
+  {
+    "id": "otdb-ef358cfc34cc",
+    "language": "en",
+    "prompt": "What is the most-visited website out of these options?",
+    "why": "'out of these options' is the whole constraint"
+  },
+  {
+    "id": "otdb-f08caa528f5d",
+    "language": "en",
+    "prompt": "Which of the following FIA Rally cars was approved for use in the Group B class first?",
+    "why": "first is an ordering over the four listed"
+  },
+  {
+    "id": "otdb-f10e00754da6",
+    "language": "en",
+    "prompt": "Which of the following is NOT a word used to describe an earthquake?",
+    "why": "any word not describing earthquakes satisfies it"
+  },
+  {
+    "id": "otdb-f129806fe02b",
+    "language": "en",
+    "prompt": "Which franchise was NOT featured in the 2015 video game \"Lego Dimensions\"?",
+    "why": "NOT-question: any absent franchise satisfies it"
+  },
+  {
+    "id": "otdb-f1399a8e589a",
+    "language": "en",
+    "prompt": "Which of these albums is a Wu-Tang Clan album?",
+    "why": "Wu-Tang has many albums; only the four pick one"
+  },
+  {
+    "id": "otdb-f15f3a1dd267",
+    "language": "en",
+    "prompt": "Which movie sequel had improved box office results compared to its original film?",
+    "why": "many sequels outgrossed their original"
+  },
+  {
+    "id": "otdb-f1a0fcd40757",
+    "language": "en",
+    "prompt": "Why was The Green Monster at Fenway Park was originally built?",
+    "why": "the answer is a whole sentence ending in a full stop"
+  },
+  {
+    "id": "otdb-f1e3d0ba9626",
+    "language": "en",
+    "prompt": "Which of these is not a Fallout protagonist?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-f25fbc4987bc",
+    "language": "en",
+    "prompt": "Which of these is the name of a song by Tears for Fears?",
+    "why": "Tears for Fears have many songs; only the four pick one"
+  },
+  {
+    "id": "otdb-f2add783e682",
+    "language": "en",
+    "prompt": "In the film \"John Wick\" why does John Wick get out of retirement?",
+    "why": "the answer is a whole sentence, \"His puppy is killed and his car was stolen\""
+  },
+  {
+    "id": "otdb-f334afa3de71",
+    "language": "en",
+    "prompt": "Which of these countries remained neutral during World War II?",
+    "why": "many countries stayed neutral; only the four narrow it"
+  },
+  {
+    "id": "otdb-f351bcb394da",
+    "language": "en",
+    "prompt": "Before it's redesign of the company logo in the year 2000, which 3D shape is NOT represented in the Electronic Arts logo?",
+    "why": "NOT-question over the listed shapes"
+  },
+  {
+    "id": "otdb-f4542b824ac0",
+    "language": "en",
+    "prompt": "In \"Donkey Kong Country\", why does Donkey Kong want to know the secret of the crystal coconut?",
+    "why": "the answer is a whole sentence, \"He's the big kahuna.\", answering a \"why\" question"
+  },
+  {
+    "id": "otdb-f466803882b2",
+    "language": "en",
+    "prompt": "What is real haggis made of?",
+    "why": "the answer is a three-item list of organs whose exact wording and order cannot be produced in a free-text field"
+  },
+  {
+    "id": "otdb-f4d19701a944",
+    "language": "en",
+    "prompt": "Which of these is NOT the name of an album released by English singer-songwriter Adele?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-f504ca09199f",
+    "language": "en",
+    "prompt": "Which of these characters is NOT a boss in Crash Bash?",
+    "why": "open negative — most Crash characters are not Crash Bash bosses"
+  },
+  {
+    "id": "otdb-f56ef38fec46",
+    "language": "en",
+    "prompt": "Which one of the following musical instruments is NOT a part of the Woodwind section?",
+    "why": "every non-woodwind instrument satisfies it"
+  },
+  {
+    "id": "otdb-f619e3353096",
+    "language": "en",
+    "prompt": "Which of the following is not a playable race in the MMORPG Guild Wars 2?",
+    "why": "open negative — most Guild Wars 2 races are unplayable"
+  },
+  {
+    "id": "otdb-f62e5cbc94d5",
+    "language": "en",
+    "prompt": "Which of these is not a DLC vehicle in \"Mario Kart 8\"?",
+    "why": "negative over the candidate set"
+  },
+  {
+    "id": "otdb-f690ddd77539",
+    "language": "en",
+    "prompt": "Which of the following is the world's best-selling book?",
+    "why": "typed answer would be the Bible; only the options pick this one"
+  },
+  {
+    "id": "otdb-f6cc531e3b1c",
+    "language": "en",
+    "prompt": "Which mountain has the highest peak in South America?",
+    "why": "the answer appends a country, \"Aconcagua, Argentina\""
+  },
+  {
+    "id": "otdb-f6efd3851402",
+    "language": "en",
+    "prompt": "Which of these NHL teams have never moved since their inception?",
+    "why": "many NHL teams have never relocated"
+  },
+  {
+    "id": "otdb-f6fb374f4b93",
+    "language": "en",
+    "prompt": "Which of the following Terran units from the RTS game Starcraft was first introduced in the expansion Brood War?",
+    "why": "Brood War added both Medic and Valkyrie"
+  },
+  {
+    "id": "otdb-f72f9b07b960",
+    "language": "en",
+    "prompt": "Which of these countries is not written in its native language?",
+    "why": "the constraint is over the four spellings shown"
+  },
+  {
+    "id": "otdb-f79515e07f01",
+    "language": "en",
+    "prompt": "In the 1995 film \"Balto\", who are Steele's accomplices?",
+    "why": "the answer is a list of three names, \"Kaltag, Nikki, and Star\""
+  },
+  {
+    "id": "otdb-f7a5b86e2165",
+    "language": "en",
+    "prompt": "In Slay the Spire, which of the following is NOT a playable character?",
+    "why": "negative: any invented name is not a Slay the Spire character"
+  },
+  {
+    "id": "otdb-f7d373f0add8",
+    "language": "en",
+    "prompt": "Which one of these colors are not featured in Mondrian's Broadway Boogie-Woogie?",
+    "why": "a negative over the candidate set"
+  },
+  {
+    "id": "otdb-f7f097e1aa88",
+    "language": "en",
+    "prompt": "Which of these is NOT a song by Pegboard Nerds?",
+    "why": "NOT-a-song: the fake title lives only in the list"
+  },
+  {
+    "id": "otdb-f85347791ec7",
+    "language": "en",
+    "prompt": "In \"Super Mario Sunshine\", how do you unlock the \"Corona Mountain\" level?",
+    "why": "the answer is a procedural clause (\"By clearing every 7th episode\"), not a name a player could reproduce in a text field"
+  },
+  {
+    "id": "otdb-f88e76a0f0dc",
+    "language": "en",
+    "prompt": "Who out of these Team Fortress 2 characters, does not use a Shotgun as a secondary weapon?",
+    "why": "\"out of these\" negative; several TF2 classes have no secondary shotgun"
+  },
+  {
+    "id": "otdb-fa8a0780bfff",
+    "language": "en",
+    "prompt": "Which of these voices wasn't a choice for the House AI in \"The Simpsons Treehouse of Horror\" short, House of Whacks?",
+    "why": "negative over the voices offered in the sketch"
+  },
+  {
+    "id": "otdb-fb05ed70bf2e",
+    "language": "en",
+    "prompt": "In the game \"Terraria\", which of these bosses are pre-hardmode bosses?",
+    "why": "many Terraria bosses are pre-hardmode"
+  },
+  {
+    "id": "otdb-fb55543b675b",
+    "language": "en",
+    "prompt": "The derisive acronym \"PIIGS\" refers to which of the following European countries and their economic statuses?",
+    "why": "the answer is a five-country list, \"Portugal, Ireland, Italy, Greece, Spain\", unproducible in the exact order and punctuation banked"
+  },
+  {
+    "id": "otdb-fbd59a182b31",
+    "language": "en",
+    "prompt": "In the Panic! At the Disco's song \"Nothern Downpour\", which lyric follows 'I know the world's a broken bone'.",
+    "why": "the answer is a whole quoted lyric line, double quotes included, that no player could reproduce in a text field"
+  },
+  {
+    "id": "otdb-fc4692f4a195",
+    "language": "en",
+    "prompt": "Which actor auditioned for the role of Luke Skywalker?",
+    "why": "many actors auditioned for Luke; the list picks one"
+  },
+  {
+    "id": "otdb-fc7d100e4618",
+    "language": "en",
+    "prompt": "Which of the following languages does NOT use the Latin alphabet?",
+    "why": "hundreds of languages avoid the Latin alphabet; only the four narrow it"
+  },
+  {
+    "id": "otdb-fcf9887cc10b",
+    "language": "en",
+    "prompt": "Which of the following is not a color of mana in Magic: The Gathering?",
+    "why": "everything that is not a mana colour satisfies it"
+  },
+  {
+    "id": "otdb-fd1e496f8953",
+    "language": "en",
+    "prompt": "Which of these is NOT a part of the structure of a typical neuron?",
+    "why": "any non-neuron structure satisfies it"
+  },
+  {
+    "id": "otdb-fd8c1a6b022c",
+    "language": "en",
+    "prompt": "What European country is not a part of the EU?",
+    "why": "many European countries are outside the EU"
+  },
+  {
+    "id": "otdb-fdb11b91448d",
+    "language": "en",
+    "prompt": "Who was the Confederate general in the American Civil War?",
+    "why": "\"the Confederate general\" fits Lee, Jackson, Longstreet, Beauregard and many others, and nothing in the wording picks one"
+  },
+  {
+    "id": "otdb-fe1dad7797ce",
+    "language": "en",
+    "prompt": "Which one of these is NOT an official map in Counter-Strike: Global Offensive?",
+    "why": "open negative — unbounded set of non-official CS:GO map names"
+  },
+  {
+    "id": "otdb-fe55878c07af",
+    "language": "en",
+    "prompt": "Which of the following Mesopotamian mythological figures was NOT a deity?",
+    "why": "every non-deity figure satisfies it"
+  },
+  {
+    "id": "otdb-fe6c533f5c8c",
+    "language": "en",
+    "prompt": "In the TV show \"Rick and Morty\", Rick uses the catchphrase \"Wubba Lubba Dub Dub\", which means what in Birdperson?",
+    "why": "the answer is a whole sentence translation (\"I am in great pain, please help me.\"), and the decoy \"I am suffering, please help me.\" shows how unguessable the exact wording is"
+  },
+  {
+    "id": "otdb-fec17d94b86c",
+    "language": "en",
+    "prompt": "Which of the following Assyrian kings did NOT rule during the Neo-Assyrian Empire?",
+    "why": "a negative over the candidate set"
+  },
+  {
+    "id": "otdb-ff5aedcb9ebc",
+    "language": "en",
+    "prompt": "If someone said \"you are olid\", what would they mean?",
+    "why": "the answer is a whole sentence, \"You smell extremely unpleasant.\""
+  },
+  {
+    "id": "otdb-ff68b12d9570",
+    "language": "en",
+    "prompt": "Which of following is rude and dishonorable by Klingon standards?",
+    "why": "many acts are dishonorable to Klingons; only the four narrow it"
+  }
+]

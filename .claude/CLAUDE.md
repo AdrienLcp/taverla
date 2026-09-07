@@ -148,7 +148,11 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   `MOST_A_SPEED_BONUS_PAYS` at nought, falling linearly to nothing when the
   round runs out, so two players in the same second are paid the same; typing
   pays 3 for the pair where a right pick pays 1, because producing an answer
-  from nothing is not recognising it among four. **The clock never pays more
+  from nothing is not recognising it among four. A banked question that is only
+  a question beside its own decoys — *which country drives on the left?* answers
+  Japan, and seventy others — carries `choiceOnly` and is dealt to a `choice`
+  room alone; the column is a census read row by row, because no rule finds one.
+  **The clock never pays more
   than the answer did** — its amplitude is the lower of the two, so being fast
   doubles a score at most, and the big screen prints the two halves apart
   (`2 +2`) rather than their total. It stays a *room* setting the

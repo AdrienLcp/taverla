@@ -13,14 +13,22 @@ import {
 import { hasAdultContent } from '@taverla/core/quiz/adult-content'
 import { gradeQuizGuess } from '@taverla/core/quiz/question-answer'
 
-import { drawQuestion } from './question-bank'
+import { type BankedQuestion, drawQuestion } from './question-bank'
 import bank from './question-bank.json' with { type: 'json' }
 
 const NOTHING_PLAYED: ReadonlySet<string> = new Set()
 
-const drawMany = (settings: QuizSettings, times = 400) =>
+type DrawManyOptions = {
+  isUsable?: (question: BankedQuestion) => boolean
+  times?: number
+}
+
+const drawMany = (
+  settings: QuizSettings,
+  { isUsable = () => true, times = 400 }: DrawManyOptions = {}
+) =>
   Array.from({ length: times }, () =>
-    drawQuestion({ playedIds: NOTHING_PLAYED, settings })
+    drawQuestion({ isUsable, playedIds: NOTHING_PLAYED, settings })
   ).filter((question) => question !== null)
 
 describe('drawQuestion', () => {
@@ -71,7 +79,11 @@ describe('drawQuestion', () => {
     const played = new Set<string>()
 
     while (true) {
-      const question = drawQuestion({ playedIds: played, settings })
+      const question = drawQuestion({
+        isUsable: () => true,
+        playedIds: played,
+        settings
+      })
 
       if (question === null) {
         break
@@ -82,7 +94,9 @@ describe('drawQuestion', () => {
     }
 
     expect(played.size).toBeGreaterThan(0)
-    expect(drawQuestion({ playedIds: played, settings })).toBeNull()
+    expect(
+      drawQuestion({ isUsable: () => true, playedIds: played, settings })
+    ).toBeNull()
   })
 
   /**
@@ -111,7 +125,7 @@ describe('drawQuestion', () => {
   it('[bank] mixes the subjects evenly when the host has ticked none', () => {
     const counts = new Map<QuestionCategory, number>()
 
-    for (const question of drawMany(DEFAULT_QUIZ_SETTINGS, 1_200)) {
+    for (const question of drawMany(DEFAULT_QUIZ_SETTINGS, { times: 1_200 })) {
       counts.set(question.category, (counts.get(question.category) ?? 0) + 1)
     }
 
@@ -131,6 +145,26 @@ describe('drawQuestion', () => {
    * the data's, and are gone from the bank rather than excused here: a test
    * with a list of exceptions beside it stops being a rule.
    */
+  /**
+   * The room in typed mode has a text field and nothing else, so a row that is
+   * only a question beside its own decoys — *which country drives on the left?*
+   * answers Japan, and India, and seventy others — is one it cannot win. The
+   * second half of this matters as much as the first: a bank that lost the
+   * column on a rebuild would pass the exclusion vacuously.
+   */
+  it('[bank] keeps a question that needs its own candidates away from a typed room', () => {
+    const typed = drawMany(DEFAULT_QUIZ_SETTINGS, {
+      isUsable: (question) => !question.choiceOnly
+    })
+
+    expect(typed.length).toBe(400)
+    expect(typed.some((question) => question.choiceOnly)).toBe(false)
+
+    const anyMode = drawMany(DEFAULT_QUIZ_SETTINGS, { times: 1_200 })
+
+    expect(anyMode.some((question) => question.choiceOnly)).toBe(true)
+  })
+
   it('[bank] holds no question whose own decoy would be graded right', () => {
     const winnable = bank.questions.filter((question) =>
       question.decoys.some(
@@ -168,7 +202,10 @@ describe('drawQuestion', () => {
    */
   it('[bank] stays inside the language the room is playing', () => {
     for (const language of questionLanguages) {
-      const drawn = drawMany({ ...DEFAULT_QUIZ_SETTINGS, language }, 50)
+      const drawn = drawMany(
+        { ...DEFAULT_QUIZ_SETTINGS, language },
+        { times: 50 }
+      )
 
       expect(drawn.length).toBe(50)
       expect(drawn.every((question) => question.language === language)).toBe(

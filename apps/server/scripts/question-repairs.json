@@ -1,0 +1,778 @@
+{
+  "oqdb-4-2": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — Akhénaton was born and reigned as Amenhotep IV before renaming himself, so the decoys \"Amenhotep\" and \"Aménophis\" (the Greek form of the same name) both name Néfertiti's husband"
+  },
+  "oqdb-4-4": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — \"à ce jour la plus fréquentée\" is an explicit current-holder claim about motorway traffic, which shifts between the A1, A6 and A86 with each year's counts"
+  },
+  "oqdb-18-3": {
+    "prompt": "Quel mammifère semi-aquatique adulte n'a pas d'autre prédateur que l'homme ?",
+    "why": "the hippopotamus is a mammal, not an amphibian"
+  },
+  "oqdb-49-3": {
+    "note": null,
+    "why": "the note called Barack Obama the sitting president"
+  },
+  "oqdb-59-3": {
+    "answer": "Kurt Russell",
+    "why": "the name was misspelt, so the right spelling was graded wrong"
+  },
+  "oqdb-63-4": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — Sinope stopped being the outermost known moon once the distant irregular satellites were found; Neptune's Neso orbits at roughly 49 million km, twice Sinope's 24 million"
+  },
+  "oqdb-81-2": {
+    "prompt": "Combien de doigts possède le gant tricoté par Thérèse dans « Le Père Noël est une ordure » ?",
+    "why": "film never named, only the theme supplies it"
+  },
+  "oqdb-83-3": {
+    "note": null,
+    "why": "the note said Régine owns nightclubs; she died in 2022"
+  },
+  "oqdb-85-3": {
+    "note": null,
+    "why": "the note announced a 2011 film adaptation that never came out"
+  },
+  "oqdb-85-4": {
+    "drop": true,
+    "why": "Asimov died in 1992 and OpenAI opened in 2015, so no candidate answers it"
+  },
+  "oqdb-95-3": {
+    "prompt": "Qui est la partenaire de Jack Nicholson dans « Le facteur sonne toujours deux fois » ?",
+    "why": "dangling « sa », the actor is never named"
+  },
+  "oqdb-104-1": {
+    "note": null,
+    "why": "the note lost its superscript ordinals to « le IX ? et le XI ? siècle »"
+  },
+  "oqdb-109-4": {
+    "note": null,
+    "why": "the note does not parse"
+  },
+  "oqdb-113-4": {
+    "prompt": "Quel trio Florence Foresti a-t-elle formé avec Céline Iannucci et Cécile Giroud ?",
+    "why": "dangling elle"
+  },
+  "oqdb-116-4": {
+    "prompt": "Qu'est-ce que Polnareff avait affiché à Paris pour « Polnarévolution » ?",
+    "why": "the singer’s name was misspelt two words from its correct spelling"
+  },
+  "oqdb-123-2": {
+    "prompt": "Que mange-t-on à Noël depuis une coutume instaurée par Charles IX ?",
+    "why": "Charles VII died before the turkey reached Europe; the custom is Charles IX’s"
+  },
+  "oqdb-125-1": {
+    "prompt": "Qui a présenté aux côtés de Christophe Dechavanne la série télévisée des « 100 plus grands » ?",
+    "why": "dangling « ses côtés » with no antecedent"
+  },
+  "oqdb-125-4": {
+    "prompt": "Christophe Dechavanne a obtenu en 2006 le retrait de quel magazine le montrant nu ?",
+    "why": "the pack named him, the prompt only said « le »"
+  },
+  "oqdb-131-1": {
+    "prompt": "Dans quel film Sharon Stone incarne-t-elle une romancière « au pic à glace » ?",
+    "why": "dangling « elle », subject only in the theme"
+  },
+  "oqdb-131-4": {
+    "prompt": "Dans quel film Sharon Stone incarne-t-elle une tueuse face à Arnold Schwarzenegger ?",
+    "why": "dangling « elle », subject only in the theme"
+  },
+  "oqdb-137-1": {
+    "prompt": "Quel tournoi Maria Sharapova est-elle la première joueuse russe à avoir remporté ?",
+    "why": "dangling « Elle », the player named only by the pack"
+  },
+  "oqdb-161-2": {
+    "prompt": "Dans lequel de ses films Valérie Lemercier se fait-elle passer pour un garçon ?",
+    "why": "dangling « elle », the actress named only by the pack"
+  },
+  "oqdb-161-4": {
+    "prompt": "Dans quelle comédie Valérie Lemercier est-elle DRH dans une compagnie maritime ?",
+    "why": "dangling « elle », the actress named only by the pack"
+  },
+  "oqdb-163-1": {
+    "answer": "Alcatraz",
+    "why": "the prompt asks for the island and the note spells it right underneath"
+  },
+  "oqdb-165-4": {
+    "prompt": "Au rugby, quelle action sanctionne des remises en jeu incorrectes ?",
+    "why": "sport never named"
+  },
+  "oqdb-171-2": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — a public blockchain's defining property is that every transaction is permanently traceable, so the decoy \"Tracabilite\" answers the prompt at least as well as \"Anonymat\", which is only pseudonymity"
+  },
+  "oqdb-185-4": {
+    "decoys": ["Murder by Numbers", "The Net", "Speed"],
+    "why": "a stray markup tag in a decoy"
+  },
+  "oqdb-191-3": {
+    "prompt": "Quelle entreprise Steve Jobs a-t-il créée dans le garage de sa maison d'enfance ?",
+    "why": "dangling « il » with no antecedent"
+  },
+  "oqdb-195-2": {
+    "prompt": "Quelle est la couleur de la robe de Marilyn Monroe dans « Sept ans de réflexion » ?",
+    "why": "dangling « sa » with no possessor named"
+  },
+  "oqdb-205-3": {
+    "note": null,
+    "why": "the note’s second clause is garbled"
+  },
+  "oqdb-208-1": {
+    "note": null,
+    "why": "the note ranked Titanic second of all time, which it no longer is"
+  },
+  "oqdb-211-3": {
+    "note": null,
+    "why": "the note carries a scraped encyclopedia title, « Le Opera (gateau) »"
+  },
+  "oqdb-222-1": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — le leurre « Granit » est une graphie française parfaitement valide de granite (Larousse : « granit ou granite »)"
+  },
+  "oqdb-233-3": {
+    "prompt": "Dans quelle franchise d'action Keanu Reeves incarne-t-il un ancien assassin redouté ?",
+    "why": "dangling « il », the actor is never named"
+  },
+  "oqdb-233-4": {
+    "prompt": "Pour quelle raison Keanu Reeves ne participa-t-il pas au tournage de « Speed 2 » ?",
+    "why": "dangling « il », the actor is never named"
+  },
+  "oqdb-239-4": {
+    "prompt": "Quelle jeune chanteuse est la petite protégée du rappeur Eminem ?",
+    "why": "two words were fused"
+  },
+  "oqdb-270-1": {
+    "isAdult": true,
+    "why": "the source left it unrated, and no room asked for it"
+  },
+  "oqdb-279-2": {
+    "prompt": "Sous quel pseudonyme Patrick Sébastien a-t-il écrit « La Cellule de Zarkane » ?",
+    "why": "dangling « il », subject only in the theme"
+  },
+  "oqdb-279-4": {
+    "prompt": "Quelle a été la première grande émission animée par Patrick Sébastien sur TF1 ?",
+    "why": "dangling « sa », possessor never named"
+  },
+  "oqdb-280-3": {
+    "drop": true,
+    "why": "the mouse was invented and patented at SRI, and the pack needs an answer starting with X"
+  },
+  "oqdb-285-1": {
+    "decoys": ["Neuf", "Huit", "Dix"],
+    "why": "a garbled decoy"
+  },
+  "oqdb-292-4": {
+    "note": null,
+    "why": "the note counted Yoda’s five episodes before Episode VIII"
+  },
+  "oqdb-293-1": {
+    "prompt": "Dans quel club espagnol Antoine Griezmann a-t-il été marquant à ses débuts ?",
+    "why": "dangling « il »"
+  },
+  "oqdb-293-2": {
+    "prompt": "Contre qui Antoine Griezmann a-t-il perdu sa finale de l'Euro 2016 avec la France ?",
+    "why": "dangling « il »"
+  },
+  "oqdb-293-4": {
+    "prompt": "Quel est le numéro emblématique d'Antoine Griezmann en sélection française ?",
+    "why": "dangling « son »"
+  },
+  "oqdb-299-3": {
+    "answer": "Inglourious Basterds",
+    "why": "Léa Seydoux plays Charlotte LaPadite there and is not in Django Unchained"
+  },
+  "oqdb-299-4": {
+    "prompt": "Dans quel pays Léa Seydoux a-t-elle une forte carrière internationale ?",
+    "why": "dangling « elle », the actress is never named"
+  },
+  "oqdb-301-3": {
+    "prompt": "Dans quel véhicule cuisinent Walter et Jesse au début de « Breaking Bad » ?",
+    "why": "dangling « la série », never named"
+  },
+  "oqdb-305-1": {
+    "prompt": "Quelle spécialité humoristique a rendu François Damiens célèbre à ses débuts ?",
+    "why": "dangling l' and ses"
+  },
+  "oqdb-305-2": {
+    "prompt": "Dans quel film belge culte François Damiens joue-t-il un rôle marquant ?",
+    "why": "dangling il"
+  },
+  "oqdb-305-3": {
+    "answer": "Le père",
+    "why": "« La père » is ungrammatical"
+  },
+  "oqdb-312-1": {
+    "prompt": "Quel roman de Stephen King met en scène une ado dotée de pouvoirs paranormaux ?",
+    "why": "author domain implicit, unanswerable alone"
+  },
+  "oqdb-317-1": {
+    "prompt": "Dans quel film Marion Cotillard apparaît-elle aux côtés de Leonardo DiCaprio ?",
+    "why": "dangling « elle » with no antecedent"
+  },
+  "oqdb-317-3": {
+    "prompt": "Dans quelle saga populaire française Marion Cotillard est-elle apparue ?",
+    "why": "dangling « elle » with no antecedent"
+  },
+  "oqdb-317-4": {
+    "prompt": "Pour quel film Marion Cotillard a-t-elle remporté l'Oscar de la meilleure actrice ?",
+    "why": "dangling « elle » with no antecedent"
+  },
+  "oqdb-329-4": {
+    "prompt": "Quel titre d'Aya Nakamura contient la phrase « j'suis trop djomb » ?",
+    "why": "lyric quoted with no artist named"
+  },
+  "oqdb-330-4": {
+    "prompt": "Sur combien de temps est réglée la bombe placée par Zorg dans « Le Cinquième Élément » ?",
+    "why": "the film Zorg belongs to is never named"
+  },
+  "oqdb-333-1": {
+    "answer": "Mark Zuckerberg",
+    "drop": true,
+    "note": null,
+    "why": "the answer has a shelf life and it has run out — the note read out says he is \"aujourd'hui le plus jeune milliardaire du monde\", which stopped being true long before 2026"
+  },
+  "oqdb-335-2": {
+    "prompt": "Quel personnage emblématique Gary Oldman joue-t-il dans « The Dark Knight Trilogy » ?",
+    "why": "dangling il"
+  },
+  "oqdb-346-3": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — détenteur « actuel » d'un classement de consommation, qui bouge et n'est pas daté dans le prompt"
+  },
+  "oqdb-348-1": {
+    "prompt": "Quel bâtiment situé en montagne accueille les randonneurs ?",
+    "why": "« acceuille » was misspelt on the screen the room reads"
+  },
+  "oqdb-351-2": {
+    "prompt": "Dans lequel de ses films Valérie Lemercier se fait-elle passer pour un garçon ?",
+    "why": "dangling « elle »; the same row also sits in the Valérie Lemercier pack, which names her"
+  },
+  "oqdb-359-1": {
+    "decoys": ["Franc", "Livre", "Mark"],
+    "why": "a country among three currencies"
+  },
+  "oqdb-359-4": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — le leurre « Vienne » est aussi célèbre pour Mozart, qui y a composé l'essentiel de son œuvre, y est mort et y est enterré"
+  },
+  "oqdb-360-3": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — \"the city with the most taxis in the world\" is a current-holder record that shifts with fleet regulation, and the note supports New York rather than the banked answer Mexico"
+  },
+  "oqdb-361-2": {
+    "prompt": "Dans quel pays faut-il aller pour bronzer à Rimini ?",
+    "why": "asks for a direction but expects a country, which only the theme supplies"
+  },
+  "oqdb-366-1": {
+    "prompt": "En quelle année OpenAI a-t-elle été fondée ?",
+    "why": "it asked for the capped-profit company, which the note dates to 2019, making a decoy right"
+  },
+  "oqdb-369-3": {
+    "note": null,
+    "why": "the note called Kobe Bryant the only active player past 30 000 points"
+  },
+  "oqdb-371-4": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the decoy \"Son museau\" is also right — the mole's snout carries the Eimer's organs it navigates its tunnels with"
+  },
+  "oqdb-378-1": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — the French top-tier basketball league dropped the name Pro A in 2018 (Jeep Elite, then Betclic Elite since 2021), so the present-tense prompt no longer matches"
+  },
+  "oqdb-378-3": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — a current-holder claim resting on a 2010-2011 note; Canada has supplied the most non-American NBA players for several seasons now, ahead of France"
+  },
+  "oqdb-378-4": {
+    "drop": true,
+    "why": "FLBB is Luxembourg’s federation, and no candidate is Belgium’s"
+  },
+  "oqdb-389-1": {
+    "prompt": "Dans « Alien », quelle est la couleur du fluide vital qui remplace le sang des androïdes ?",
+    "why": "which androids is left to the theme"
+  },
+  "oqdb-389-3": {
+    "prompt": "Dans la saga « Alien », qui sauve et répare David, le majordome androïde ?",
+    "why": "franchise never named"
+  },
+  "oqdb-392-4": {
+    "drop": true,
+    "why": "no ship in the saga returns to Earth, and the note is about a decoy"
+  },
+  "oqdb-397-4": {
+    "prompt": "Dans « Hunger Games », quel personnage important porte généralement une rose blanche ?",
+    "why": "names no work; the franchise comes only from the pack theme"
+  },
+  "oqdb-401-4": {
+    "prompt": "Quel symbole retrouve-t-on sur tous les albums des Brand New Heavies ?",
+    "why": "it asked for a « sigle » where every candidate is an animal"
+  },
+  "oqdb-403-3": {
+    "answer": "Épée",
+    "decoys": ["Boule de feu", "Flèche", "Bougie"],
+    "why": "the row's own note says Cato ran Peeta through with a sword"
+  },
+  "oqdb-405-3": {
+    "prompt": "Combien peut-on environ gravir de marches dans les parcours publics du Louvre ?",
+    "why": "implicit venue never named"
+  },
+  "oqdb-405-4": {
+    "answer": "5",
+    "why": "the Louvre holds five Leonardo paintings, not three"
+  },
+  "oqdb-409-3": {
+    "prompt": "Quel roman de Maxime Chattam se déroule en partie au Mont Saint-Michel ?",
+    "why": "author domain implicit, unanswerable alone"
+  },
+  "oqdb-412-2": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — un effectif de votants adossé à l'année en cours (2026) : le corps électoral de l'Académie change chaque année et la question se périme dès la saison suivante"
+  },
+  "oqdb-418-1": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — in tasting vocabulary \"le nez\" designates precisely the olfactory sensations of a wine, and the note itself restricts \"bouquet\" to bottle-ageing aromas, which makes the decoy \"Nez\" the broader correct answer"
+  },
+  "oqdb-420-4": {
+    "prompt": "Au XXe siècle, en quelle année a-t-on connu une crise économique mondiale ?",
+    "why": "no period given, so 2008 answers it as well as 1929"
+  },
+  "oqdb-427-1": {
+    "decoys": ["Brad Pitt", "John Travolta", "Tom Hanks"],
+    "why": "a misspelt decoy"
+  },
+  "oqdb-427-2": {
+    "decoys": ["Nescafé", "Senseo", "Café Grand'Mère"],
+    "why": "a misspelt decoy"
+  },
+  "oqdb-432-2": {
+    "prompt": "Quel tatouage sur la fesse droite de Jenna Jameson est devenu sa marque de fabrique ?",
+    "why": "dangling « sa », the owner of the tattoo is never named"
+  },
+  "oqdb-432-3": {
+    "prompt": "Combien d'implants mammaires Jenna Jameson a-t-elle reçus entre 1994 et 2004 ?",
+    "why": "dangling « elle », the subject is never named"
+  },
+  "oqdb-436-1": {
+    "prompt": "Comment appelle-t-on la « boîte » recherchée en geocaching ?",
+    "why": "« recharchée » is not a word"
+  },
+  "oqdb-441-2": {
+    "prompt": "Qui fut le partenaire de Clara Morgane, en privé et à l'écran, de 1997 à 2002 ?",
+    "why": "dangling « son », the subject named only by the pack"
+  },
+  "oqdb-448-3": {
+    "decoys": ["Neptune", "Nereus", "Poseidon"],
+    "why": "a mangled HTML tag in a decoy"
+  },
+  "oqdb-450-3": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the decoy \"NPA\" (Nulle Part Ailleurs) is where Les Nuls' fake newscast, le JTN, was first and long broadcast, so it answers the prompt too"
+  },
+  "oqdb-465-4": {
+    "prompt": "Quel outil philatélique compte les dents d'un timbre-poste ?",
+    "why": "« debts » for « dents »"
+  },
+  "oqdb-472-1": {
+    "answer": "Avion",
+    "why": "the Royal Flying Doctor Service flies fixed-wing aircraft"
+  },
+  "oqdb-474-4": {
+    "note": null,
+    "why": "the note is garbled"
+  },
+  "oqdb-478-1": {
+    "prompt": "En haltérophilie, de combien d'essais dispose-t-on pour chaque mouvement ?",
+    "why": "the sport is never named"
+  },
+  "oqdb-484-1": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the decoy Tack is the other windsurfing turn and changes direction just as the jibe does; the prompt gives no way to tell which is wanted"
+  },
+  "oqdb-484-4": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the decoy Boom names the same part as the answer, as the note itself concedes when it calls the wishbone a double-boom"
+  },
+  "oqdb-486-3": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — sheep per capita in New Zealand is a ratio that falls every year: about 6.5 in 2015, around 5 near 2020 and roughly 4.5 by 2024, so the decoy \"Quatre\" is now closer than the banked \"Cinq\""
+  },
+  "oqdb-498-4": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — Red Bull, which is the energy drink the prompt asks for, has been a documented Neymar sponsor since 2016 (Neymar Jr's Five); Powerade is a sports drink"
+  },
+  "oqdb-500-1": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the decoy \"Chasse-neige\" is literally a cabin vehicle that drives on snow-covered roads, so it answers the prompt as written just as well as the intended autoneige"
+  },
+  "oqdb-500-2": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the decoy \"Caravane\" is an everyday French word for a habitable vehicle; nothing in the prompt requires the vehicle to be self-propelled"
+  },
+  "oqdb-501-1": {
+    "prompt": "Selon la superstition, que ne faut-il pas ouvrir à l'intérieur de sa maison ?",
+    "why": "implicit superstition domain never named"
+  },
+  "oqdb-502-1": {
+    "answer": "Sept",
+    "why": "seven associations founded FIFA in 1904"
+  },
+  "oqdb-508-4": {
+    "answer": "Savoie",
+    "decoys": ["Béarn", "Jura", "Tarn"],
+    "why": "Marignan is a Vin de Savoie cru, and the note names Haute-Savoie landmarks"
+  },
+  "oqdb-514-4": {
+    "answer": "Riesling",
+    "decoys": ["Sylvaner", "Müller-Thurgau", "Mauzac"],
+    "why": "Riesling has led Germany's white plantings since the 1990s, and the note's 24 % is its figure"
+  },
+  "otdb-0bca0b231fe6": {
+    "prompt": "Which field is sometimes known as “The Dismal Science”?",
+    "why": "a bare 'This field ...' clue with no question and no antecedent"
+  },
+  "otdb-1b40f470a4fc": {
+    "prompt": "How many sharps does the key of G# minor contain?",
+    "why": "the sentence is garbled and asks nothing"
+  },
+  "otdb-2c77b7197949": {
+    "prompt": "In the first Left 4 Dead, which four characters can you play as?",
+    "why": "'these four characters' points at options and asks nothing"
+  },
+  "otdb-2f5173e78891": {
+    "drop": true,
+    "why": "the bloodiest event in US history is not a single battle, and no candidate is right"
+  },
+  "otdb-4a1c6e49bf44": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — a 'youngest ever' record; still Malala in 2026 but it changes the day a younger laureate is named"
+  },
+  "otdb-4be33db6620f": {
+    "answer": "46",
+    "why": "body cells carry 46 chromosomes; 23 is the haploid count"
+  },
+  "otdb-4fe608931e91": {
+    "prompt": "What M83 song was featured on Grand Theft Auto V's radio?",
+    "why": "the noun the question asks for is missing"
+  },
+  "otdb-5b7e24e95efe": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — Subway lost the lead: it has fallen to roughly 37,000 outlets while McDonald's is above 43,000 and Starbucks above 40,000, so the answer is now wrong and two decoys beat it"
+  },
+  "otdb-5efa52ea2935": {
+    "answer": "Android",
+    "decoys": ["iOS", "BlackBerry", "Symbian"],
+    "why": "Android held about 69 % of 2012 smartphone shipments against iOS at 19 %"
+  },
+  "otdb-6b76b196bb72": {
+    "prompt": "Muscle fiber is constructed of bundles of small long organelles called what?",
+    "why": "a missing word left the sentence meaningless"
+  },
+  "otdb-6e7e4bbba10d": {
+    "prompt": "Which Ghanaian entrepreneur is a pioneer of microlending?",
+    "why": "a bare 'This ...' clue with no question and no antecedent"
+  },
+  "otdb-6e047639fa39": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — \"longest active band with no breaks or line-up changes\" is an unanchored record that shifts, and U2's unbroken run ended when Larry Mullen Jr. sat out the 2023-24 residency"
+  },
+  "otdb-7ce7b9938b38": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — Grover Cleveland is no longer the only US president to serve two non-consecutive terms — Donald Trump began a second, non-consecutive term in 2025"
+  },
+  "otdb-8a0703397f75": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the nickname SpongeBob gives Patrick is \"Pinhead Larry\"; the decoy \"Larry\" is the other half of the very answer banked as \"Pinhead\""
+  },
+  "otdb-8cb17ecf1198": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — Viacom ceased to be Nickelodeon's parent when it merged with CBS in 2019; the parent has since been ViacomCBS, then Paramount Global, then Paramount Skydance"
+  },
+  "otdb-8d194a2f1dcb": {
+    "prompt": "In meme culture, which Mario game did \"Weegee\" originate from?",
+    "why": "\"immerged\" is not a word"
+  },
+  "otdb-8f2e68958907": {
+    "answer": "Nuclei",
+    "decoys": ["Ribosomes", "Lysosomes", "Mitochondria"],
+    "why": "DNA replication happens in the nucleus; ribosomes make protein"
+  },
+  "otdb-8fea97554911": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — Bedrock has exactly the same blast resistance as Barrier (3,600,000, the maximum in the game), so the decoy \"Bedrock\" answers the prompt as well as the keyed answer"
+  },
+  "otdb-15b845838e59": {
+    "prompt": "Why were only 300,000 copies of Uniracers produced?",
+    "why": "\"only only\", and a doubled verb"
+  },
+  "otdb-20b44d7a8c64": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — a running count of known moons goes stale with every new confirmation, and the prompt pins itself to \"As of the year 2026\""
+  },
+  "otdb-26ee9b4f7709": {
+    "drop": true,
+    "why": "all four artists feature on Humanz, so the row has no answer"
+  },
+  "otdb-28fd86b1799e": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the decoy \"Wish You Were Here\" is likewise a Pink Floyd song about departed frontman Syd Barrett, so a room picking it is marked wrong for being right"
+  },
+  "otdb-35c2f5f28496": {
+    "prompt": "Which building was set aflame on August 24th, 1814?",
+    "why": "the White House burned in 1814, not 1812"
+  },
+  "otdb-52d3d29e0963": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — an unanchored RIAA certification record with no year in the prompt, so the leading artist can change under it"
+  },
+  "otdb-60dafa95557d": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — \"Black\" fits the prompt as well as \"Blue\" — no rose produces a true black either, and blue roses have in fact been produced by genetic engineering (Suntory's \"Applause\"), which the prompt explicitly rules out"
+  },
+  "otdb-78d25ae8e436": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — \"Jumpman\" is the documented original name of the character in Donkey Kong, and \"Mr. Video\" is Miyamoto's own earlier name for him; both are defensible answers to \"originally\""
+  },
+  "otdb-91ad2b17c629": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the decoy \"Solid State Disk\" is a commonly used expansion of SSD alongside \"Solid State Drive\""
+  },
+  "otdb-91eaa5d74678": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — asks which satellite \"currently\" holds an operational-life record while Landsat 8 and 9 are still accruing years in orbit"
+  },
+  "otdb-93a880760b3a": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — \"fastest road legal car in the world\" is a live record; the Agera RS's 2017 mark has since been contested by the Bugatti Chiron Super Sport 300+, the SSC Tuatara and the Koenigsegg Jesko Absolut"
+  },
+  "otdb-247a2dea19bd": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the decoy 'Glycolysis' is a step of cellular respiration that forms ATP (net 2 by substrate-level phosphorylation), so it answers the prompt as written"
+  },
+  "otdb-381a77d9f33e": {
+    "prompt": "America's Strategic Defense System during the Cold War was nicknamed after which famous movie?",
+    "why": "'this famous movie' has no antecedent and asks nothing"
+  },
+  "otdb-638bf4fd39f4": {
+    "prompt": "In Margaret Atwood's \"The Handmaid's Tale\", what is Offred's real name implied to be?",
+    "why": "a doubled verb"
+  },
+  "otdb-698b3fcb16eb": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the decoy \"Skyward Sword\" also did not feature Ganon as a final boss - its final boss is Demise, and Ganon never appears in that game"
+  },
+  "otdb-850e33e09a73": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — 300 was the Overwatch 1 value; Take A Breather was reworked in Overwatch 2 to heal a larger amount over a channel, so a balance-patch number like this goes stale"
+  },
+  "otdb-878fc1cc731c": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the decoy \"Christian\" also answers the prompt, since Georges Lemaitre was a Catholic and therefore a Christian priest"
+  },
+  "otdb-967cd0585b58": {
+    "drop": true,
+    "why": "the apex of Maslow’s pyramid is self-actualisation, which is not offered"
+  },
+  "otdb-0795d39788e3": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the decoy \"Facepunch Studios\" is the studio credited as the developer of Garry's Mod, so it also answers \"Who made Garry's Mod?\""
+  },
+  "otdb-1309cc7b8346": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the decoy Donald Trump announced his presidential candidacy in June 2015, so it answers the prompt as written just as well as Kanye West"
+  },
+  "otdb-2428d18b56d3": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — \"critically regarded as the best film of all time\" is a shifting title: Sight & Sound's poll replaced Citizen Kane with Vertigo in 2012 and with Jeanne Dielman in 2022"
+  },
+  "otdb-9448ac1753e9": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the options are open-ended buckets, so if the answer is \"8+\" then the decoys \"6+\", \"5+\" and \"4+\" are all literally true as well"
+  },
+  "otdb-28261e362f6c": {
+    "answer": "Ions",
+    "why": "deionisation removes ions, which is what the decoy \"Uncharged atoms\" contrasts with"
+  },
+  "otdb-61330c7aee26": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the decoy \"Cujoh\" is the official English romanisation of the same surname 空条 (used for Jolyne Cujoh in Stone Ocean), so it names Jotaro's family just as correctly as \"Kujo\""
+  },
+  "otdb-70319dcf51d9": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — \"largest known star\" is a record that has moved: UY Scuti's radius was revised sharply downward after Gaia distances, and current estimates put RW Cephei (a decoy) at or above it"
+  },
+  "otdb-89263f34b5a7": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the decoy 'Five' is the ordinary answer for anyone who counts the thumb among the fingers; nothing in the prompt says to exclude it"
+  },
+  "otdb-424924b71d10": {
+    "prompt": "Which two countries held a commonwealth from the 16th to the 18th century?",
+    "why": "\"These two countries\" points at nothing, and it is a statement, not a question"
+  },
+  "otdb-0503212f1e40": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — \"how many ended up closing afterwards\" counts closures to date, and season one aired in 2007, so the tally keeps moving"
+  },
+  "otdb-52807809e3ae": {
+    "answer": "Freedom",
+    "decoys": ["Raise Hell", "Skewer the Winged Beast", "Ascend from Darkness"],
+    "drop": true,
+    "why": "a decoy answers the prompt too — \"Freedom\" is the actual final step of the Little Lost Girl easter egg and is listed as a decoy"
+  },
+  "otdb-649088511aa4": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the decoy \"Minecraft\" was first released to the public in May 2009, before Terraria's May 2011 launch; only Minecraft's 1.0 release is later, and the same bank elsewhere dates Minecraft to 2009"
+  },
+  "otdb-56957559405b": {
+    "prompt": "Which Half-Life 2 character is the default playermodel of Garry's Mod?",
+    "why": "dangling \"this character\" in statement form"
+  },
+  "otdb-a61e53108caf": {
+    "prompt": "What is the main CPU in the Sega Mega Drive / Sega Genesis?",
+    "why": "\"is\" where it needs \"in\""
+  },
+  "otdb-a087e2c23101": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — Nashville overtook Memphis as Tennessee's largest city around 2016 and has stayed ahead since"
+  },
+  "otdb-a3051ccfd98a": {
+    "prompt": "During the development of the original Pokémon games, what was the first Pokémon ever created?",
+    "why": "\"the game's development\" has no antecedent in the prompt"
+  },
+  "otdb-a34132ef5e5f": {
+    "answer": "P.E.K.K.A's Playhouse",
+    "decoys": ["Barbarian Bowl", "Spell Valley", "Royal Arena"],
+    "why": "Arena 4 is P.E.K.K.A’s Playhouse; Spell Valley is Arena 5"
+  },
+  "otdb-a422915f24e2": {
+    "prompt": "Which song written by Nine Inch Nails frontman Trent Reznor did Johnny Cash cover?",
+    "why": "dangling \"this song\" in a statement, though the answer is pinned"
+  },
+  "otdb-ae348676b300": {
+    "answer": "28",
+    "decoys": ["36", "20", "32"],
+    "why": "excluding wisdom teeth an adult has 28"
+  },
+  "otdb-b4dce2d10b1b": {
+    "prompt": "Who was the winner of season 10 of \"Big Brother\" in the United States?",
+    "why": "country unstated, and UK series 10 has a different winner"
+  },
+  "otdb-b05c3a32bc76": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — the prompt says \"the recent new album\", but Perturbator's Uncanny Valley came out in 2016 and is no longer recent"
+  },
+  "otdb-b16bed40f3c6": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — an open record — most Tony awards won by a musical — that any future season can take from The Producers"
+  },
+  "otdb-bb682bd910e2": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the spotted hyena's giggle is standardly described as a sign of nervousness or excitement, so the decoy Excitement is also right"
+  },
+  "otdb-bd77947a49df": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — an all-time NBA games-played record: Robert Parish's 1,611 has been overtaken by LeBron James during the 2025-26 season"
+  },
+  "otdb-beae86a6d731": {
+    "prompt": "When was the first official international soccer game played?",
+    "why": "never names the sport it means"
+  },
+  "otdb-bec37a9fe710": {
+    "prompt": "After England, more Shakespeare plays are set in which present-day country than in any other?",
+    "why": "declarative 'this present day country' points at options, never asks"
+  },
+  "otdb-c5d1e489aa0a": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — a cumulative worldwide sales figure that keeps climbing; the Black Album is now generally cited well above 20.5 million"
+  },
+  "otdb-d5bd729b7d3a": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — \"Filthy Acts Done For A Reasonable Price\" is the official English localisation of the very same stand, so a room picking it is marked wrong for being right"
+  },
+  "otdb-d6ae6c406b9f": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — a 'largest in the world' record with a hard station count baked in; Shanghai Metro's own count already passes 472 and metro networks keep expanding"
+  },
+  "otdb-d36be0c6b3fd": {
+    "answer": "4πr^2",
+    "decoys": ["(4/3)πr^3", "(1/3)πhr^2", "πr^4"],
+    "why": "(4/3)πr³ is the volume of a sphere; its area was sitting in the decoys"
+  },
+  "otdb-d516b07df399": {
+    "prompt": "Which weapon in Counter-Strike: Global Offensive does not exist in real life?",
+    "why": "dangling \"this weapon\" with no antecedent"
+  },
+  "otdb-d957b5ebc197": {
+    "answer": "193",
+    "why": "the UN has 193 members; 195 counts the two observer states"
+  },
+  "otdb-d196521ca2f1": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — \"the longest bridge in the world\" is a record that a new span can take at any time"
+  },
+  "otdb-d028388526ea": {
+    "prompt": "Which composer worked on the 2003 TV series Battlestar Galactica?",
+    "why": "'This composer' has no antecedent and the line asks nothing"
+  },
+  "otdb-dd5dfdf9c9c5": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the decoy \"Content Distribution Network\" is an equally standard expansion of CDN, so a room picking it is marked wrong for being right"
+  },
+  "otdb-e2f6f5adb10a": {
+    "prompt": "During World War 2, which tank was the most feared by the Allies?",
+    "why": "garbled English, \"with tank was the most fear\""
+  },
+  "otdb-e2f1097a0e71": {
+    "prompt": "During World War I, the monarchs of which three nations were blood relatives?",
+    "why": "asks for one nation while the answer is three"
+  },
+  "otdb-e1865026f0da": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — the Overwatch hero named McCree was renamed Cassidy in October 2021, so the banked answer is no longer the character's name"
+  },
+  "otdb-edee009d10f2": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — Wayne Rooney was England's top scorer when written; Harry Kane passed his 53 goals in March 2023 and now leads"
+  },
+  "otdb-efac808e7cbc": {
+    "drop": true,
+    "why": "'Lil A' names no real artist; unanswerable in either mode"
+  },
+  "otdb-f2a6f1ec29d4": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — the \"speaking part in every Pixar feature\" claim is a running streak that no longer holds — Ratzenberger is absent from several recent Pixar features"
+  },
+  "otdb-f05d2bd06c25": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — the prompt is in the present tense but Josh Mansour left Penrith after the 2020 season, played for South Sydney in 2021-22 and has since retired"
+  },
+  "otdb-f8048e9f5f23": {
+    "drop": true,
+    "why": "the answer has a shelf life and it has run out — a smallest-by-population comparison that has flipped: Slovakia (~5.4M) is now below Norway (~5.6M)"
+  },
+  "otdb-f183374d84d4": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the prompt says \"Disney movie\", not \"Disney animated feature\", and the decoy Tron (1982) is a Disney film that used CGI three years before The Black Cauldron"
+  },
+  "otdb-f03810769fba": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the decoy \"A Summoning Stone\" is the same object as the Meeting Stone, which was renamed Summoning Stone from The Burning Crusade onward"
+  },
+  "otdb-fc81ae43efba": {
+    "answer": "H2O",
+    "why": "the answer was written with a digit zero"
+  },
+  "otdb-fd17a41a0e02": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the decoy \"Cincinnati Reds\" is the other standard answer for oldest MLB team (professional since 1869), while the Braves' claim rests on continuous operation since 1871"
+  },
+  "otdb-fefc2a97ee86": {
+    "prompt": "In the game \"Brawlhalla\", what species is the character Bödvar?",
+    "why": "a doubled verb"
+  },
+  "otdb-ffae5f7a3108": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — the decoys \"Juha Bach\", \"Yuhabah\" and \"Juhabach\" are all common romanisations of the same character (ユーハバッハ) as the answer \"Yhwach\", so a room naming the right villain can be marked wrong on spelling"
+  }
+}

@@ -22,6 +22,13 @@ import bank from './question-bank.json' with { type: 'json' }
  * of a party.
  */
 const bankedQuestionSchema = hostQuestionSchema.extend({
+  /**
+   * Whether the prompt is only a question with its own three decoys under it.
+   * *Which country drives on the left side of the road?* answers Japan, and so
+   * does India: the sentence names no set, so only the four on screen do. Drawn
+   * for a room that will show them and nowhere else — see `drawQuestion`.
+   */
+  choiceOnly: z.boolean(),
   /** Drawn only for a room whose host asked for it — see `allowsAdultContent`. */
   isAdult: z.boolean(),
   language: questionLanguageSchema,
@@ -85,17 +92,19 @@ export const hostQuestionOf = ({
  * runs: a category whose questions have all been played is not in `eligible`
  * any more, so it stops being offered.
  *
- * `isUsable` is how a game asks for a shape of question rather than a subject.
- * Le Fake passes one because a quarter of the English bank presupposes the four
- * candidates it is normally read beside; the quiz passes none, because there
- * every banked question is a question it can ask.
+ * `isUsable` is how a game asks for a shape of question rather than a subject,
+ * and **both games that draw from the bank pass one**. A `choiceOnly` row wants
+ * its own decoys on screen, which is true of a quiz in `choice` mode and of
+ * nothing else: typed mode has a text field, and Le Fake shows the prompt with
+ * no candidates at all. Le Fake adds a rule of its own on top — see
+ * `canBeLiedAbout`.
  */
 export const drawQuestion = ({
   isUsable,
   playedIds,
   settings
 }: {
-  isUsable?: (question: BankedQuestion) => boolean
+  isUsable: (question: BankedQuestion) => boolean
   playedIds: ReadonlySet<string>
   settings: QuestionDrawSettings
 }): BankedQuestion | null => {
@@ -105,7 +114,7 @@ export const drawQuestion = ({
       (settings.allowsAdultContent || !question.isAdult) &&
       (settings.categories.length === 0 ||
         settings.categories.includes(question.category)) &&
-      (isUsable === undefined || isUsable(question))
+      isUsable(question)
   )
 
   const byCategory = new Map<QuestionCategory, BankedQuestion[]>()

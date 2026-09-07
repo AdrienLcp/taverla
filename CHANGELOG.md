@@ -563,6 +563,57 @@ one part.
 
 ### Fixes
 
+- `[Server]` **The whole question bank was read end to end, and 191 rows carry a
+  repair.** It started with three questions a room could not answer and ended as
+  an audit with eight lenses over all 6 286 rows. What it found: 29 answers that
+  are simply wrong — *how many chromosomes are in your body cells* answered 23,
+  *the area of a sphere* answered with its volume, `H20` written with a digit
+  zero — and **ten of them had the right answer sitting among their own three
+  decoys**, so a repair can swap the pair now and keep four candidates. 35 rows
+  of garbled text (*Polanreff*, *chanteuseest*, *les debts d'un timbre-poste*, a
+  decoy reading `Neptune>/I>`). 36 rows where a decoy answers the prompt as well
+  as the answer does, dropped the way `isWinnableTyped` already drops the ones
+  the *matcher* grades right. 40 rows whose answer has a shelf life, dropped
+  except the eleven where only the anecdote had aged — those keep the question
+  and lose the note, because it is read out to the room and *Barack Obama est
+  l'actuel président* under a correct answer is the screen being wrong out loud.
+  One systematic fault turned into a rule rather than data: upstream stores its
+  anecdote in a 255-character column and ten of them end mid-word, so `noteIn`
+  cuts an unterminated one back to its last full stop. The bank stands at **6 209
+  rows**, 77 fewer and 122 repaired. See
+  [`docs/plans/backlog/the-bank-read-end-to-end.md`](docs/plans/backlog/the-bank-read-end-to-end.md)
+
+- `[Server]` **A question the room cannot answer with a text field is no longer
+  dealt to one.** *Which country drives on the left side of the road?* answers
+  Japan, and India, and seventy others: the row is only a question because three
+  of its four buttons say otherwise. `choiceOnly` is a column on the banked row
+  now, stamped from a committed census of **680 rows** — 14.7 % of the English
+  half — and `drawQuestion` deals one only where its own decoys will be on
+  screen, which is a quiz in `choice` mode and nothing else. It replaces a regex
+  that was Le Fake's alone and wrong in both directions: **75 % recall**, and 154
+  rows excluded that a room can answer perfectly well. Le Fake gains those 154
+  and loses 136 the regex was letting through. `isUsable` is required now, so the
+  next game to draw from the bank cannot forget to say what shape it can ask —
+  which is exactly what the quiz had done. `prompt-eligibility.ts` is
+  `answer-eligibility.ts`, down to the one rule that is genuinely Le Fake's:
+  nobody is believed over a bare number
+
+- `[Server]` **Sixty questions asked the room about nobody.** OpenQuizzDB writes
+  packs of four meant to be read in order with the theme on screen, so its second
+  row says *elle* and means whoever the first named — and this game deals one
+  question, alone, with the theme nowhere. *Dans quelle comédie est-elle DRH dans
+  une compagnie maritime ?* is a question about nobody, and *De combien d'essais
+  dispose-t-on pour chaque mouvement ?* is about no sport. All 6 286 rows were
+  read, French by pack so the referent was visible; the fault is 44 French rows,
+  plus **16 English ones for a different reason** — Open Trivia DB rows written as
+  statements (*This composer worked on the 2003 TV series…*), which are a clue
+  with four buttons under them and ask a typing room nothing. Sixty prompts are
+  repaired and one row is gone: it names an artist the world does not have. The
+  repairs live in `apps/server/scripts/question-repairs.json`, keyed by row id and
+  each carrying the `why` it was made, so a rebuild reapplies them and warns for
+  one whose row upstream has renumbered away. No repaired prompt contains its own
+  answer, which is checked rather than trusted
+
 - `[Game]` **A player's reveal on a laptop cut every nickname over about seven
   characters** — `Adrien 2` was drawn as `Adr…`. The board sat in a column that
   never grew: the split reveal declares `1fr minmax(15rem, 0.8fr)`, and `1fr`

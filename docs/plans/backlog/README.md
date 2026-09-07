@@ -47,6 +47,9 @@ planning it:
 
 | Session | Landed |
 |---|---|
+| [A question about nobody](a-question-about-nobody.md) | 7 Sep 2026 |
+| [The answer only four buttons give](answer-only-four-buttons-give.md) | 7 Sep 2026 |
+| [The bank read end to end](the-bank-read-end-to-end.md) | 7 Sep 2026 |
 | [A reconnecting phone stays half-dead](reconnecting-phone-half-dead.md) | 15 Aug 2026 |
 | [Three exits that say nothing](three-exits-that-say-nothing.md) | 15 Aug 2026 |
 | [The question bank's spelling](question-bank-spelling.md) | 15 Aug 2026 |
@@ -72,8 +75,14 @@ planning it:
 | [The borders that do not quite carry](borders-that-do-not-quite-carry.md) | 4 Sep 2026 |
 | [The chrome keeps the palette the page left](theme-color-after-the-menu.md) | 4 Sep 2026 |
 
-**Three delivered entries are worth opening**, and each warns about a different
+**Four delivered entries are worth opening**, and each warns about a different
 half of what is written here.
+
+[The bank read end to end](the-bank-read-end-to-end.md): eight lenses over 6 285
+rows, and **one of the eight was noise** — `miscategorised` ran from 0 to 25 per
+identical shard, which is an agent applying its own taxonomy rather than reading
+one. Flatness across shards is what told the seven good lenses from the bad one,
+and it is worth measuring before acting on any lens a fan-out reports.
 
 [The question bank's spelling](question-bank-spelling.md): two of the three
 faults it was given turned out not to be faults at all. A **diagnosis** written
