@@ -1088,6 +1088,36 @@ one part.
 
 ### Internal
 
+- **Dependencies up to latest, majors and the package manager included.**
+  pnpm 11.25 to **12.3.4** — the Rust rewrite, whose npm package is a wrapper
+  that fetches a native binary, so the lockfile now names pnpm itself under
+  `packageManagerDependencies` with a `@pnpm/exe.*` entry per platform;
+  `lockfileVersion` stays `'9.0'` and a clean `--frozen-lockfile` install takes
+  13 seconds. **Vitest 4 to 5** across all three suites: 511 tests, three
+  configs, not one line changed — every breaking change in that release lands on
+  something this repo does not do, `sequential`, benchmarks, the moved entry
+  points, `toThrow('')`, an unawaited `resolves`. The one that could have landed
+  silently is `clearMocks` defaulting to `true`, and every mock here is armed
+  inside the test that reads it. **tsdown 0.22 to 0.23**, which deletes the
+  options it carried for tsup's sake and flips `deps.resolveDepSubpath` to
+  `false` — the server bundle was built on both and is byte-identical at
+  2 632 873 bytes. Then the patches: react-aria-components 1.21.1, hono 4.13.7,
+  hono-rate-limiter 0.5.4, sass 1.104, Playwright 1.63, `@types/react-dom`
+  19.2.7, `@rolldown/plugin-babel` 0.2.4 and Biome 2.5.12, which reformats a
+  `biome-ignore` inside a type-argument list and moves its own `$schema` pin.
+
+  `@babel/core` stays on 7.29.7 with 8.0.1 out, which is what
+  `vite.config.ts` has thrown on since the pin was written.
+
+  Two things the upgrade uncovered rather than caused.
+  `onlyBuiltDependencies` left `pnpm-workspace.yaml`: it has done nothing since
+  **v11** replaced it with `allowBuilds`, which sat four lines above it naming
+  the same two packages — a dead setting kept beside its live replacement, and
+  pnpm 12 still tolerates the key, which is why it would have stayed forever.
+  And `@vitest/coverage-v8` is in no `package.json` while all three vitest
+  configs declare `provider: 'v8'`, so `vitest --coverage` has never been able
+  to run without prompting for an install.
+
 - `[Shared]` **The i18n engine is one library again, shared with the project
   it was adapted from.** It moves to `packages/core/src/i18n/lib/` as four files
   that name nothing of this project: `defineTranslations` becomes
