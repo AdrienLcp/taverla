@@ -15,12 +15,16 @@ file rather than half-landing.
 
 ## Open
 
-Four entries. **Two wait on a phone and two wait on a session.** Of the pair that
+Five entries. **Two wait on a phone and three wait on a session.** Of the pair that
 wait on a phone, one needs a line read off the Android that produced note 6, and
 the other needs two handsets side by side because the colour it is about cannot
 be seen on the sRGB monitor this repository is written on; of the two decisions
 the oklch palette opened, the one about borders is taken and is below, and the
 one about colour stops exactly where a screen has to be looked at.
+
+The third that waits on a session is the newest, and it was opened by the change
+that made it visible: the reveal hold is a duration a host can set now, and no
+screen anywhere says how much of it is left.
 
 The pair that wait on a session are **one argument split in two**, and the order
 matters: the first puts the room's code on every screen in the room, and the
@@ -33,6 +37,7 @@ Take them in that order or read both entries before starting either.
 | [The fields a phone could show](fields-a-phone-could-show.md) | `oklch()` can name a colour sRGB cannot, and every phone in the room has a P3 screen. The three widest fields are derived and every pair re-measured; what is left is holding two phones together and keeping it or not | waits on a phone | the derived table in the entry | why it is a design decision and not a conversion |
 | [The way in leaves the console](the-way-in-leaves-the-console.md) | The QR code is host-only and a host can be a phone, so the invitation can end up in one hand and no other. It goes to the player's lobby and menu, `finished` gets its badge back, and `/invite/:code` projects it alone | one session | `RoomInvitation` moving out of `features/host/` with a stylesheet of its own | why the square does **not** go on the round screen |
 | [The host's way back](the-hosts-way-back.md) | The room survives a closed tab and the token outlives it by 24 hours — what is missing is a door. The home lists the rooms this device holds a token for | one session | the two refusals, before anything is drawn | why a public list of open rooms is a different product |
+| [Nobody knows how long the reveal has](nobody-knows-how-long-the-reveal-has.md) | The reveal hold is a duration the host can set now, and no screen says how much of it is left — `advancesAt` reaches nobody. At 8 s that went unnoticed; at 25 s it is a table wondering whether the screen is stuck | one session | why [the gap between two rounds](gap-between-two-rounds.md) declined this and why that no longer holds | the second half: the hold is remembered per host, the reading is per game |
 
 **One diagnosis disagrees with the note that raised it** — read the entry before
 planning it:

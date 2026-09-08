@@ -254,7 +254,7 @@ export const EN_DICTIONARY = defineDictionary({
     answerWindow: {
       label: 'Time to answer after a buzz'
     },
-    autoAdvance: 'Chain rounds by itself',
+    autoAdvance: 'Time before the next round',
     backToRoom: 'Back to the table',
     closeRoom: {
       confirm: 'Yes, clear it',

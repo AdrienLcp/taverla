@@ -230,7 +230,7 @@ export const FR_DICTIONARY: Dictionary = {
     answerWindow: {
       label: 'Temps pour répondre après un buzz'
     },
-    autoAdvance: 'Enchaîner tout seul',
+    autoAdvance: 'Temps avant la tournée suivante',
     backToRoom: 'Retour à la table',
     closeRoom: {
       confirm: 'Oui, on lève',

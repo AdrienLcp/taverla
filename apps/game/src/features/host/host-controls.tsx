@@ -4,17 +4,25 @@ import { playsAudioIn } from '@taverla/protocol/game'
 import type { RoomSettings } from '@taverla/protocol/room'
 
 import { Slider } from '@/presentation/components/slider'
-import { Switch } from '@/presentation/components/switch'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
+
+import { NO_LIMIT, NumberChoice, useDurationLabels } from './number-choice'
 
 import './host-controls.sass'
 
 /**
- * Long enough to read the cover and hear someone say "oh I knew that", short
- * enough that the room does not go quiet. The host can always press "next"
- * before it elapses.
+ * How long the answer stays up before the room is moved on, and the only strip
+ * outside the setup fold: it is the setting a host reaches *because* of what
+ * they just watched happen, on the screen where they watched it.
+ *
+ * `NO_LIMIT` is the default and means the reveal waits for the host, which is
+ * the only option that cannot be too short. The rest are read against what the
+ * room has to get through — a quiz answer carries a note in four French rounds
+ * out of five, and the median one is twenty words, so eight seconds pays for
+ * the note and nothing else. Fifteen leaves room for the scoreline and for
+ * somebody saying "oh I knew that"; twenty-five is a table that reads aloud.
  */
-const AUTO_ADVANCE_MS = 8_000
+const AUTO_ADVANCE_OPTIONS_MS = [8_000, 15_000, 25_000, NO_LIMIT] as const
 
 type HostControlsProps = {
   /** The socket is open. The volume ignores it: that one never leaves this machine. */
@@ -34,6 +42,7 @@ export const HostControls: React.FC<HostControlsProps> = ({
   volume
 }) => {
   const translate = useTranslate()
+  const { openEnded } = useDurationLabels()
 
   return (
     <div className='host-controls'>
@@ -54,16 +63,18 @@ export const HostControls: React.FC<HostControlsProps> = ({
           value={volume}
         />
       )}
-      <Switch
+      <NumberChoice
         isDisabled={!isLive}
-        isSelected={settings.autoAdvanceMs !== null}
         label={translate('host.autoAdvance')}
-        onChange={(isSelected) => {
+        onChange={(chosen) => {
           onSettingsChange({
             ...settings,
-            autoAdvanceMs: isSelected ? AUTO_ADVANCE_MS : null
+            autoAdvanceMs: chosen === NO_LIMIT ? null : chosen
           })
         }}
+        optionLabel={openEnded}
+        options={AUTO_ADVANCE_OPTIONS_MS}
+        value={settings.autoAdvanceMs ?? NO_LIMIT}
       />
     </div>
   )

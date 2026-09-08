@@ -362,6 +362,17 @@ one part.
   mode it refuses. A host who has already played a game keeps what they last
   left it set to — `HostPreferences` wins over the opening default, by design
 
+- `[Game]` **How long an answer stays up is a duration, not a switch.**
+  `host.autoAdvance` was a boolean writing one hard-coded `8_000`, and the
+  2–30 s the protocol has always accepted were unreachable from any screen. It
+  is the panel's own `NumberChoice` now — 8 s, 15 s, 25 s, *you decide* — with
+  `null` still the default, and *Time before the next round* as the label
+  because that is what the value is. Eight seconds pays for a quiz note and
+  nothing else: four French rounds in five carry one, and the median is twenty
+  words. `NO_LIMIT`, `NumberChoice` and the two duration labels moved out of
+  `settings-panel.tsx` into `number-choice.tsx`, which is what lets a second
+  strip exist at all
+
 - `[Game]` **The palette is `oklch()`, and each pair is one `light-dark()`.**
   All twenty-nine colours were hex in two blocks a mixin applied to the two
   places a theme can be decided from; they are now one list of `light-dark()`

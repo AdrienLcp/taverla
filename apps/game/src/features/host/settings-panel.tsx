@@ -33,14 +33,9 @@ import {
   scoringKey
 } from '@/presentation/i18n/translation'
 
-import './settings-panel.sass'
+import { NO_LIMIT, NumberChoice, useDurationLabels } from './number-choice'
 
-/**
- * `0` stands for "no window", "no limit" and "the host says when": the strips
- * carry strings, and a segment whose value is the empty string is one a screen
- * reader announces as nothing.
- */
-const NO_LIMIT = 0
+import './settings-panel.sass'
 
 const ROUND_COUNTS = [5, 10, 20, 30] as const
 const CLIP_DURATIONS_MS = [10_000, 20_000, 30_000] as const
@@ -68,46 +63,6 @@ const VOTING_DURATIONS_MS = [20_000, 30_000, 60_000, NO_LIMIT] as const
 
 const ANSWER_WINDOWS_MS = [5_000, 10_000, 20_000, NO_LIMIT] as const
 const ROUND_COUNT_OPTIONS = [...ROUND_COUNTS, NO_LIMIT] as const
-
-type NumberChoiceProps = {
-  isDisabled: boolean
-  label: string
-  onChange: (value: number) => void
-  /** How each option reads. `NO_LIMIT` arrives here like any other number. */
-  optionLabel: (value: number) => string
-  options: readonly number[]
-  value: number
-}
-
-/**
- * A strip of numbers, which is most of this panel. react-aria addresses a
- * segment by string, so the number has to be found again on the way back up.
- */
-const NumberChoice: React.FC<NumberChoiceProps> = ({
-  isDisabled,
-  label,
-  onChange,
-  optionLabel,
-  options,
-  value
-}) => (
-  <SegmentedControl
-    isDisabled={isDisabled}
-    label={label}
-    onChange={(next) => {
-      const chosen = options.find((option) => String(option) === next)
-
-      if (chosen !== undefined) {
-        onChange(chosen)
-      }
-    }}
-    options={options.map((option) => ({
-      label: optionLabel(option),
-      value: String(option)
-    }))}
-    value={String(value)}
-  />
-)
 
 /**
  * Both games that draw from the bank, in the one type their shared controls
@@ -258,13 +213,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     draftSource ?? (game?.kind === 'blindtest' ? game.source : null)
   const pinsItsOwnDifficulty = chosenSource?.kind === 'film'
 
-  const secondsLabel = (milliseconds: number): string =>
-    translate('host.seconds', { seconds: milliseconds / 1_000 })
-
-  const openEndedSecondsLabel = (milliseconds: number): string =>
-    milliseconds === NO_LIMIT
-      ? translate('host.hostDecides')
-      : secondsLabel(milliseconds)
+  const { openEnded: openEndedSecondsLabel, seconds: secondsLabel } =
+    useDurationLabels()
 
   return (
     <section className='settings-panel'>
