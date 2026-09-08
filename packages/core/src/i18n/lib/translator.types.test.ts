@@ -173,10 +173,9 @@ describe('rich values', () => {
   })
 
   it('[types] asks for nothing at all when the message marks nothing', () => {
-    expectTypeOf<
-      RichValuesFor<'Nobody got it', string>
-    >().toEqualTypeOf<// biome-ignore lint/complexity/noBannedTypes: the empty object type is the assertion
-    {}>()
+    expectTypeOf<RichValuesFor<'Nobody got it', string>>().toEqualTypeOf<
+      // biome-ignore lint/complexity/noBannedTypes: the empty object type is the assertion
+      {}>()
   })
 })
 
