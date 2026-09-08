@@ -37,7 +37,7 @@ export const JoinReminder: React.FC<JoinReminderProps> = ({ roomCode }) => {
         value={playUrlFor(roomCode)}
       />
       <div className='words'>
-        <p className='label'>{translate('host.joinLate')}</p>
+        <p className='label'>{translate('invite.joinLate')}</p>
         <p className='code'>{roomCode}</p>
       </div>
     </aside>

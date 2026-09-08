@@ -1,0 +1,72 @@
+@use '../styles/typography'
+
+@layer components
+  // The stack, the gaps, the square and the address line — everything that is
+  // true of the invitation wherever it is drawn. How *large* it is belongs to
+  // the stage that draws it, through the two custom properties below: the same
+  // object is read from four metres on a console, from a 280px popover, and
+  // from across a room off a projector.
+  //
+  // `container-type` is declared here so the pairing cannot be split. `21cqi`
+  // written by any stage resolves against this box, because a container unit is
+  // evaluated on the element that consumes it — which is what stops the size
+  // silently re-basing onto whatever box the stage happens to sit in.
+  .room-invitation
+    --invitation-code-size: min(clamp(2.75rem, 14vmin, 9rem), 21cqi)
+    --invitation-qr-max-width: 256px
+
+    align-items: flex-start
+    container-type: inline-size
+    display: flex
+    flex-direction: column
+    gap: var(--space-l)
+    justify-content: center
+    min-width: 0
+    width: 100%
+
+    // The code and the button that copies it are one object, so they sit
+    // closer to each other than to the QR card below them.
+    .code
+      align-items: flex-start
+      display: flex
+      flex-direction: column
+      gap: var(--space-s)
+      width: 100%
+
+    // Selectable against the reset, along with the URL below: the copy button
+    // is the fast path, and someone reading the code to a laptop still wants to
+    // be able to grab it by hand.
+    .room-code
+      @include typography.monument
+
+      font-size: var(--invitation-code-size)
+      user-select: text
+      width: 100%
+      word-break: break-all
+
+    .qr
+      color: var(--ink)
+      display: flex
+      flex-direction: column
+      gap: var(--space-xs)
+      max-width: var(--invitation-qr-max-width)
+      width: 100%
+
+      svg
+        height: auto
+        width: 100%
+
+    // The room code is named by the button that copies it. Nothing named the QR
+    // card, and an address is not a verb — the URL below says where, not that
+    // scanning is what you do with it.
+    .invite
+      @include typography.label
+
+      color: var(--ink-muted)
+
+    .join-url
+      @include typography.caption
+
+      color: var(--ink-muted)
+      overflow-wrap: anywhere
+      user-select: text

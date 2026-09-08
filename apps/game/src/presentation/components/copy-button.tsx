@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 
 import { copyToClipboard } from '@/infrastructure/env'
-import { Button } from '@/presentation/components/button'
-import { CheckIcon } from '@/presentation/components/check-icon'
-import { CopyIcon } from '@/presentation/components/copy-icon'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import type { PlainTranslationKey } from '@/presentation/i18n/translation'
+
+import { Button } from './button'
+import { CheckIcon } from './check-icon'
+import { CopyIcon } from './copy-icon'
 
 /** Long enough to be read from where the host is standing, gone before the next glance. */
 const CONFIRMATION_MS = 2_000
@@ -13,9 +14,9 @@ const CONFIRMATION_MS = 2_000
 type CopyState = 'copied' | 'failed' | 'idle'
 
 const COPY_KEYS: Record<CopyState, PlainTranslationKey> = {
-  copied: 'host.copied',
-  failed: 'host.copyFailed',
-  idle: 'host.copyCode'
+  copied: 'invite.copied',
+  failed: 'invite.copyFailed',
+  idle: 'invite.copyCode'
 }
 
 type CopyButtonProps = {
@@ -32,6 +33,10 @@ type CopyButtonProps = {
  * The word stays beside the glyph rather than giving way to it. Both a child
  * and a grandparent are expected here, and a bare icon asks them to already
  * know what it means.
+ *
+ * It says *the code* rather than *this*, because the room code is the only
+ * thing in the product anybody copies — a generic label would be the wrapper
+ * pretending to a reach it does not have.
  */
 export const CopyButton = ({ value }: CopyButtonProps) => {
   const translate = useTranslate()

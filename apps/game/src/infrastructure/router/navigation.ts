@@ -42,6 +42,7 @@ export const localizedPaths = {
  */
 export const roomPaths = {
   host: '/host/:roomCode',
+  invite: '/invite/:roomCode',
   play: '/play/:roomCode'
 } as const
 
@@ -103,6 +104,9 @@ export const gameHomePathFor = ({
 export const hostPathFor = (code: RoomCode): string =>
   pathFor(paths.host, { roomCode: code })
 
+export const invitePathFor = (code: RoomCode): string =>
+  pathFor(paths.invite, { roomCode: code })
+
 export const playPathFor = (code: RoomCode): string =>
   pathFor(paths.play, { roomCode: code })
 
@@ -114,6 +118,15 @@ export const playPathFor = (code: RoomCode): string =>
  */
 export const playUrlFor = (code: RoomCode): string =>
   `${location.origin}${playPathFor(code)}`
+
+/**
+ * The invitation on a screen of its own, for the machine wired to the projector
+ * — which is rarely the machine running the room. Absolute for the same reason
+ * `playUrlFor` is: the console offers it as a new tab, and a new tab is a
+ * document request rather than a client-side navigation.
+ */
+export const inviteUrlFor = (code: RoomCode): string =>
+  `${location.origin}${invitePathFor(code)}`
 
 /** Where an unprefixed page belongs, once a language has been negotiated for it. */
 export const localizedPathFor = ({
@@ -159,7 +172,9 @@ export const useNavigateToLocale = (): ((locale: Locale) => void) => {
  */
 export const useRoomCodeParam = (): RoomCode | null => {
   const { roomCode } =
-    useParams<RouteParamOf<typeof paths.host | typeof paths.play>>()
+    useParams<
+      RouteParamOf<typeof paths.host | typeof paths.invite | typeof paths.play>
+    >()
 
   return roomCode === undefined ? null : normalizeRoomCode(roomCode)
 }

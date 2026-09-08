@@ -22,10 +22,24 @@
       // its min-content, and a nickname's is *zero* — `overflow: hidden` is what
       // buys the ellipsis — so the final board handed every player one letter
       // and a full stop.
+      //
+      // The invitation joins them for the second half of that sentence: its own
+      // box is already `width: 100%`, but a centred `text-align` inherits into
+      // a code that is left-aligned in its box and an address that wraps, so
+      // the two would disagree about where the line starts.
+      .room-invitation,
       .round-board,
       .scoreboard
         text-align: start
         width: 100%
+
+    // The lobby is the only phase that draws it, and the register is a phone's
+    // rather than a console's: this screen is held at forty centimetres and the
+    // code shares it with the pitch above and the roster below. `vmin` is what
+    // keeps it from swallowing a short screen in landscape, and the container
+    // unit is what keeps it honest on the laptop this column also serves.
+    .room-invitation
+      --invitation-code-size: min(clamp(2.5rem, 12vmin, 5rem), 24cqi)
 
     // What the round was and what it paid this player: one half of the reveal,
     // and one child, so the other half can sit beside it.

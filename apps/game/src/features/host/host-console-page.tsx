@@ -58,6 +58,7 @@ import {
 import { AskedQuestion } from '@/presentation/components/asked-question'
 import { Button } from '@/presentation/components/button'
 import { Countdown } from '@/presentation/components/countdown'
+import { RoomInvitation } from '@/presentation/components/room-invitation'
 import { RoundProgress } from '@/presentation/components/round-progress'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
@@ -79,7 +80,6 @@ import { JoinReminder } from './join-reminder'
 import { LobbyStage } from './lobby-stage'
 import { ReflexStage } from './reflex-stage'
 import { RevealPanel } from './reveal-panel'
-import { RoomInvitation } from './room-invitation'
 import { useRoundAudio } from './round-audio'
 import { SetupFold } from './setup-fold'
 import { useRestoreStoredSetup } from './use-restore-stored-setup'
@@ -275,9 +275,16 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
                 })}
           </p>
         )}
-        {view !== null &&
-          view.phase !== 'lobby' &&
-          view.phase !== 'finished' && <JoinReminder roomCode={roomCode} />}
+        {/*
+          The lobby is the one phase that excludes it, because the invitation
+          is already the stage's larger half there. `finished` used to be
+          excluded too and that was backwards: the final board is precisely
+          when somebody says *on en refait une, j'appelle Marc*, and the room
+          still answers.
+        */}
+        {view !== null && view.phase !== 'lobby' && (
+          <JoinReminder roomCode={roomCode} />
+        )}
       </header>
 
       <Stage

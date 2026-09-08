@@ -237,9 +237,6 @@ export const FR_DICTIONARY: Dictionary = {
       label: 'Lever la table',
       warning: 'Toute la tablée sort, et le code cesse de fonctionner.'
     },
-    copied: 'Copié',
-    copyCode: 'Copier le code',
-    copyFailed: 'Copie impossible',
     countdown: 'Décompte',
     endGame: 'Terminer la partie',
     final: {
@@ -255,10 +252,6 @@ export const FR_DICTIONARY: Dictionary = {
       prompt: 'Choisis-en un et la table est prête. Tu pourras changer d’avis.'
     },
     hostDecides: 'Tu décides',
-    invite: {
-      title: 'Scanne et prends place'
-    },
-    joinLate: 'La porte est ouverte',
     needsGame: 'Choisis à quoi la table joue',
     needsPlayer: 'Il faut au moins quelqu’un à table',
     nextRound: 'Tournée suivante',
@@ -312,6 +305,27 @@ export const FR_DICTIONARY: Dictionary = {
       wrong: 'Raté'
     },
     volume: 'Volume'
+  },
+  invite: {
+    copied: 'Copié',
+    copyCode: 'Copier le code',
+    copyFailed: 'Copie impossible',
+    documentTitle: 'Invitation — Taverla',
+    door: {
+      action: 'Afficher',
+      description:
+        'Elle ne donne rien : pas de place, pas de partie, aucun moyen de tenir la table. Elle montre ce que la table affiche déjà.',
+      label: 'Afficher l’invitation d’une table',
+      summary: 'Le code et le carré, sur un écran à part'
+    },
+    joinLate: 'La porte est ouverte',
+    project: 'Sur un écran à part',
+    title: 'Scanne et prends place',
+    unknown: {
+      description:
+        'Ce code n’ouvre aucune table. Elle a peut-être été levée, ou le code mal lu.',
+      title: 'Aucune table ici'
+    }
   },
   join: {
     divider: 'ou',

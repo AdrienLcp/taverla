@@ -8,24 +8,39 @@ import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import { CopyButton } from './copy-button'
 
+import './room-invitation.sass'
+
 type RoomInvitationProps = {
   /**
-   * Read from the address bar rather than from a view, which is what lets the
-   * console put the code up before the socket has answered.
+   * Read from the address bar rather than from a view, which is what lets a
+   * screen put the code up before the socket has answered — and what lets the
+   * poster page carry the invitation with no socket at all.
    */
   roomCode: RoomCode
 }
 
 /**
- * What the room is reading, as opposed to what the host is deciding: the code
- * to say out loud, the square to scan, the address to type.
+ * What the room is reading, as opposed to what any one screen is deciding: the
+ * code to say out loud, the square to scan, the address to type.
+ *
+ * It belongs to the shell rather than to the host, because the way into a room
+ * cannot live only on the screen running it — that screen is allowed to be a
+ * phone, and then the invitation is in one hand and nobody else's.
+ *
+ * **The size is the stage's, not the component's.** `--invitation-code-size`
+ * and `--invitation-qr-max-width` are the two seams: a console reads its code
+ * from four metres, a popover has 280px to spend, and a projector has a wall.
+ * The default is the sentence the console's comment already made — as large as
+ * its own column allows — because `container-type` is declared here, so a
+ * container unit written by any stage resolves against this box wherever it is
+ * rendered.
  */
 export const RoomInvitation: React.FC<RoomInvitationProps> = ({ roomCode }) => {
   const translate = useTranslate()
   const joinUrl = playUrlFor(roomCode)
 
   return (
-    <section className='invitation'>
+    <section className='room-invitation'>
       <div className='code'>
         <p className='room-code'>{roomCode}</p>
         <CopyButton value={roomCode} />
@@ -49,7 +64,7 @@ export const RoomInvitation: React.FC<RoomInvitationProps> = ({ roomCode }) => {
           size={256}
           value={joinUrl}
         />
-        <p className='invite'>{translate('host.invite.title')}</p>
+        <p className='invite'>{translate('invite.title')}</p>
         <p className='join-url'>{joinUrl}</p>
       </div>
     </section>

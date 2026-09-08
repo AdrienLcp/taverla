@@ -6,12 +6,12 @@ import type { HostRoomView, RoomSettings } from '@taverla/protocol/room'
 import type { HostPreferences } from '@taverla/core/room/host-preferences'
 import { isShelvedGame } from '@taverla/core/room/shelved-game'
 
+import { RoomInvitation } from '@/presentation/components/room-invitation'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { gameDescriptionKey, scoringKey } from '@/presentation/i18n/translation'
 
 import { GamePicker } from './game-picker'
-import { RoomInvitation } from './room-invitation'
 
 type LobbyStageProps = {
   /** The socket is open. The picker sends a frame, so it does nothing without one. */

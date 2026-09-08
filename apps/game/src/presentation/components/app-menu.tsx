@@ -22,6 +22,7 @@ import { fetchHealth } from '@/infrastructure/api/taverla-api'
 import {
   creditsPathFor,
   homePathFor,
+  inviteUrlFor,
   useNavigateToLocale,
   useRoomCodeParam
 } from '@/infrastructure/router/navigation'
@@ -47,6 +48,7 @@ import {
 } from './connection-status'
 import { Disclosure } from './disclosure'
 import { Link } from './link'
+import { RoomInvitation } from './room-invitation'
 import { SegmentedControl } from './segmented-control'
 import { TextField } from './text-field'
 import { TextLink } from './text-link'
@@ -284,6 +286,10 @@ export const AppMenu = () => {
   const { preference, setPreference } = useTheme()
   const connection = useConnection()
   const isInsideRoom = useIsInsideRoom()
+  const roomCode = useRoomCodeParam()
+  // The console is the screen that can send the invitation somewhere else, and
+  // `closeRoom` is what says a screen is one — the same test `RoomExit` makes.
+  const { closeRoom } = useRoomActions()
   const [build, setBuild] = useState<string | null>(null)
 
   const alert =
@@ -331,6 +337,44 @@ export const AppMenu = () => {
                     clock={connection.clock}
                     status={connection.status}
                   />
+                )}
+
+                {/*
+                  The way in, on every screen at every phase — which is the one
+                  thing the console's lobby could not offer, because it stops
+                  being on screen the moment the first round starts and it was
+                  never on a player's screen at all. Behind the popover no thumb
+                  aiming at the game can hit, which is the placement this menu
+                  already exists to give.
+
+                  Above the preferences rather than beside the exits: it is the
+                  only thing here somebody opens the menu *during* a game to
+                  find, and it is not a way out of the room.
+                */}
+                {isInsideRoom && roomCode !== null && (
+                  <div className='invitation'>
+                    <RoomInvitation roomCode={roomCode} />
+
+                    {/*
+                      A new tab, and it has to be: a plain navigation off this
+                      screen closes the host socket, and the server cannot tell
+                      that from a closed tab. react-aria's router leaves a
+                      `target` alone, so this is a document request rather than
+                      a client-side navigation — which is also what makes it
+                      openable on the machine wired to the projector, by
+                      dragging the tab onto it.
+                    */}
+                    {closeRoom !== null && (
+                      <Link
+                        href={inviteUrlFor(roomCode)}
+                        rel='noreferrer'
+                        target='_blank'
+                        variant='underlined'
+                      >
+                        {translate('invite.project')}
+                      </Link>
+                    )}
+                  </div>
                 )}
 
                 <SegmentedControl

@@ -112,3 +112,25 @@ somebody's decision — it is simply not this one's.
 Put the three values behind `@media (color-gamut: p3)` in a branch, open the
 front door and a buzzed round on a P3 phone beside a phone showing the sRGB
 build, and keep it or drop it. That is the whole remaining session.
+
+## The screens exist, and one of them is enough
+
+**8 September 2026.** Measured on the machine this repository is written on:
+`matchMedia('(color-gamut: p3)')` is `false`, `srgb` is `true`. So the entry's
+premise holds — nothing here can show what the change changes.
+
+Adrien has two screens that can: a **Galaxy S25 Ultra** and an **iPhone 13**,
+both DCI-P3. That closes the *waits on a phone* half of this entry.
+
+**And it needs one screen, not two.** The entry says *a phone, held next to
+another phone*, which is the hard way: it compares a shipped sRGB build against
+a P3 build, so it needs two devices and two states of the code. A page that
+draws **both values explicitly, side by side, in one document** shows the same
+difference on a single P3 screen — the browser renders each correctly, nothing
+has to be deployed, and all twelve contrast pairs can be judged in one look
+instead of one navigation each. Two handsets then answer a *different* question,
+which is whether Samsung and Apple agree, and that one is worth asking second.
+
+On the S25 Ultra, check the screen mode first: Samsung's **Natural** profile
+clamps the panel to sRGB, and the comparison page would honestly show no
+difference at all. **Vivid** is the mode this is judged in.

@@ -354,6 +354,14 @@ Three things follow from that ceiling, and each is a rule of its own:
   the container stops being the viewport.** The room code broke onto two lines
   the moment the cap landed — 302px of type in a 928px column — and is `21cqi`
   now, which is what "as large as its column allows" actually says.
+
+  **And the container has to be the box the text sits in**, which is one level
+  further than that sentence goes. The poster page splits the same invitation
+  into two columns, so the unit measured against the invitation was measuring
+  twice the box the code is drawn in, and `7T9` landed on one line with `Y` on
+  the next — the identical failure, one composition on. `container-type` goes on
+  `.code` there. The tell is that both versions *look* deliberate: nothing warns,
+  and the type is the right size for a box that is not the one it is in.
 - **The fixed menu belongs to the field, not to the corner.** It is pinned to the
   same band, or it sits hundreds of pixels clear of everything it is chrome for.
 - **A centred column only clears that corner when the viewport is far wider than
@@ -419,7 +427,14 @@ Two things follow, and both fail *silently* rather than loudly:
   Dividing `100dvh` minus the measured chrome is the less precise instrument and
   the right one: its worst case is a scroll, not a collision.
 
-**A component says what it costs; a stage says how much there is.** The two
+**A component says what it costs; a stage says how much there is.** The
+invitation is the plainest case and the one with four stages: `RoomInvitation`
+owns the stack, the square, the address and its own container, and every stage
+answers `--invitation-code-size` and `--invitation-qr-max-width`. The console
+reads its code from four metres, the phone's lobby from forty centimetres, the
+menu's popover is a box 280px wide holding a square scanned off the screen it is
+drawn on, and the poster has a wall. One object, four registers, and not one of
+them is a variant of the component. The two
 halves of a fitting formula are known in different places, and neither can guess
 the other's: the reveal panel knows whether it draws an artist line or a note,
 the stage knows the chrome around it and whether a countdown sits on top. So the

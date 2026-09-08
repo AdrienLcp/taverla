@@ -34,6 +34,37 @@ one part.
 
 ### Features
 
+- `[Game]` **The way into a room is on every screen now, not only on the one
+  running it.** The QR code was the console's and nobody else's, and a console
+  is allowed to be a phone — so the invitation could end up in one hand and no
+  other, which is the evening where nobody else can read the code. It moves to
+  the shell: the **player's lobby carries it in full**, code, square and address,
+  between the pitch and the roster; the **menu carries it everywhere else**, on
+  every screen at every phase, behind the popover no thumb aiming at the game
+  can hit; the player's header line becomes **selectable**, the way the
+  console's own code already was; and `finished` gets its badge back, because
+  the final board is precisely when somebody says *on en refait une, j'appelle
+  Marc*. The badge also stops moving: it holds the end of its line whether or
+  not a round index is there to push it, where `space-between` had been handing
+  a lone child the start.
+
+- `[Game]` **`/invite/:roomCode` is the invitation on a screen with nothing else
+  on it**, for the machine wired to the projector — which is rarely the machine
+  hosting. It opens **no socket and holds no seat**: the code comes from the
+  address bar and the address from this origin, so it draws before anything is
+  asked of the server, and the existence check that follows only ever takes the
+  invitation *down* — an unreachable server says nothing about a code, and
+  blanking a wall on a dropped request is the same fault wearing a different
+  hat. Three doors reach it, and the difference between them is what makes the
+  third safe: the URL alone, the console's menu (**a new tab**, because a plain
+  navigation off that screen closes the host socket and the server cannot tell
+  that from a closed tab), and a folded code field on the home. That field
+  **grants nothing** — no seat, no console, no token, no frame — which is the
+  whole difference between it and the one this repository refuses on the same
+  page. It is folded and last rather than a third field beside the two real
+  doors: a fork every visitor reads past, for a job almost none of them have.
+
+
 - `[Game]` **Every page a crawler reaches now has a URL per language.** The
   seven indexable pages live under `/fr` and `/en`; the rooms deliberately do not,
   because nobody indexes an evening and a locale segment would lengthen the two
@@ -347,6 +378,21 @@ one part.
   and the rest would be somebody's evening quietly rearranged between two rounds
 
 ### Improvements
+
+- `[Game]` **`RoomInvitation` and `CopyButton` are the shell's**, in
+  `presentation/components/` with a stylesheet of their own — three consumers is
+  what makes a component shared, and every rule for it had been nested under the
+  host stage, so rendered anywhere else it was unstyled. The split is the seam
+  `DESIGN.md` already names: **a component says what it costs, a stage says how
+  much there is.** The component owns the stack, the square and the address and
+  declares its own container; `--invitation-code-size` and
+  `--invitation-qr-max-width` are what each stage answers — the console keeps
+  `min(clamp(4.5rem, 21vmin, 20rem), 21cqi)`, the phone gets a register a phone
+  can hold, the popover a flat `rem` and a 180px square scanned at arm's length,
+  and the poster `vmin` with no ceiling of its own. Their strings leave `host.*`
+  for `invite.*`, because a prefix that names a *screen* stops being true the
+  moment two roles read the same words.
+
 
 - `[Shared]` **A game opens on the mode it is played in.** `DEFAULT_ANSWER_MODE`
   is a per-game record beside `DEFAULT_ROUND_COUNT`, so the quiz opens on

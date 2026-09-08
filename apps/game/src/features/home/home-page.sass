@@ -35,6 +35,19 @@
 
       text-wrap: balance
 
+    // A fold, so its own contents carry the column the two doors above it get
+    // from the page. The panel is the disclosure's; what is in it is this
+    // page's.
+    .project-with-code
+      .react-aria-Form
+        align-items: start
+        display: flex
+        flex-direction: column
+        gap: var(--space-s)
+
+        .text-field
+          align-self: stretch
+
     .start
       display: flex
       flex-direction: column

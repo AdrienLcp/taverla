@@ -1,0 +1,77 @@
+@use '../../presentation/styles/layout'
+@use '../../presentation/styles/typography'
+
+@layer components
+  // The one screen in the product with nothing else on it, so the invitation
+  // takes the whole field rather than a column of it. `vmin` with no ceiling of
+  // its own: this page is looked at from wherever the projector reaches, and
+  // there is no second object for the code to grow into.
+  //
+  // Bounded all the same, at the poster width below — `--stage-max-width` is
+  // what stops a 21:9 wall putting a thousand pixels between the code and the
+  // square it belongs to.
+  .invite-page
+    @include layout.arriving
+
+    align-items: center
+    display: flex
+    flex: 1
+    flex-direction: column
+    justify-content: center
+    // The fixed menu is in the corner of the field, and a centred composition
+    // only clears it once the viewport is far wider than the composition. On a
+    // phone opening this to show somebody, it is not.
+    padding-block: var(--menu-block-inset) var(--layout-padding-block-end)
+    padding-inline: var(--layout-padding-inline-start) var(--layout-padding-inline-end)
+    width: 100%
+
+    .room-invitation
+      // The same composition the lobby makes one screen earlier — what the room
+      // is reading, beside the square it scans — on the ratio the front doors
+      // already become posters on. Below that width it stays the stack the
+      // component makes, because two columns of this are worse than one.
+      @include layout.poster
+
+      --invitation-code-size: min(30vmin, 28cqi)
+      --invitation-qr-max-width: min(60vmin, 100%)
+
+      gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
+
+      // The code's column, not the invitation's. Split in two, the invitation is
+      // twice the box the code is drawn in, and a unit measured against the
+      // whole grid put `7T9` on one line and `Y` on the next — the same failure
+      // the stage ceiling produced on the console, one composition further on.
+      // A container declared here is the nearest one, so the token above means
+      // what it says wherever this page puts it.
+      .code
+        container-type: inline-size
+
+      // The address is the way in for anybody who cannot point a camera at the
+      // wall, so on the one screen read from across a room it is sized like the
+      // rest of the poster rather than like a caption on a page. The component
+      // sets the register; how large it is here is this screen's own business,
+      // the same way the code's is.
+      .invite
+        font-size: clamp(0.75rem, 1.8vmin, 1.75rem)
+
+      .join-url
+        font-size: clamp(0.875rem, 2.4vmin, 2.5rem)
+
+    // Nothing to project. A code that resolves to no room is the one failure
+    // this page can put on a wall, so it says so instead of drawing a square
+    // that leads nowhere.
+    &.missing
+      gap: var(--space-m)
+      margin: 0 auto
+      max-width: var(--column-max-width)
+      text-align: center
+
+      h1
+        @include typography.billboard
+
+        text-wrap: balance
+
+      p
+        @include typography.body
+
+        color: var(--ink-muted)

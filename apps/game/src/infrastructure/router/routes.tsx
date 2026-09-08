@@ -69,6 +69,12 @@ const pageFor = {
     }),
     module: 'src/features/host/host-console-page.tsx'
   },
+  [paths.invite]: {
+    lazy: async () => ({
+      Component: (await import('@/features/invite/invite-page')).InvitePage
+    }),
+    module: 'src/features/invite/invite-page.tsx'
+  },
   [paths.play]: {
     lazy: async () => ({
       Component: (await import('@/features/player/player-page')).PlayerPage

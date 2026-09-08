@@ -33,11 +33,13 @@ import {
   reflexContent
 } from '@/helpers/round-content'
 import { buzzFeedback } from '@/infrastructure/env'
+import { useRoomCodeParam } from '@/infrastructure/router/navigation'
 import { AskedQuestion } from '@/presentation/components/asked-question'
 import { Countdown } from '@/presentation/components/countdown'
 import { FloorClock } from '@/presentation/components/floor-clock'
 import { ReactionBoard } from '@/presentation/components/reaction-board'
 import { RevealedLieBoard } from '@/presentation/components/revealed-lie-board'
+import { RoomInvitation } from '@/presentation/components/room-invitation'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import {
@@ -84,6 +86,7 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
   view
 }) => {
   const translate = useTranslate()
+  const roomCode = useRoomCodeParam()
   const round = view.round
 
   // Ahead of every mode, because the server has frozen the round and none of
@@ -116,6 +119,15 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
         ) : (
           <p className='paused'>{translate('buzz.blocked.host_away')}</p>
         )}
+        {/*
+          The way in, on the screen of somebody who is already through it. The
+          room's code is on the big screen — which is allowed to be a phone in
+          one person's hand, and is exactly the evening where nobody else can
+          read it. Between the pitch and the roster rather than under them: it
+          is the action this phase is for, and a roster grows.
+        */}
+        {roomCode !== null && <RoomInvitation roomCode={roomCode} />}
+
         <Scoreboard
           label={translate('player.table')}
           players={view.players}

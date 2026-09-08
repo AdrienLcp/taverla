@@ -15,27 +15,28 @@ file rather than half-landing.
 
 ## Open
 
-Five entries. **Two wait on a phone and three wait on a session.** Of the pair that
-wait on a phone, one needs a line read off the Android that produced note 6, and
-the other needs two handsets side by side because the colour it is about cannot
-be seen on the sRGB monitor this repository is written on; of the two decisions
-the oklch palette opened, the one about borders is taken and is below, and the
-one about colour stops exactly where a screen has to be looked at.
+Four entries. **Two wait on a phone and two wait on a session.** Of the pair
+that wait on a phone, one needs a line read off the Android that produced note
+6; the other is about a colour the sRGB monitor this repository is written on
+cannot display, and its entry now names the two P3 handsets that can and
+corrects the check it prescribed — **one screen is enough**, if the page draws
+both values side by side. Of the two decisions the oklch palette opened, the one
+about borders is taken and is below, and the one about colour stops exactly
+where a screen has to be looked at.
 
-The third that waits on a session is the newest, and it was opened by the change
-that made it visible: the reveal hold is a duration a host can set now, and no
-screen anywhere says how much of it is left.
-
-The pair that wait on a session are **one argument split in two**, and the order
-matters: the first puts the room's code on every screen in the room, and the
-second is what keeps that from also handing the console to whoever reads it.
-Take them in that order or read both entries before starting either.
+The two that wait on a session no longer depend on each other. They were **one
+argument split in two** — put the room's code on every screen, then keep that
+from also handing the console to whoever reads it — and the first half landed on
+8 September. [The host's way back](the-hosts-way-back.md) is what is left of it,
+and it is now free to be taken on its own; its premise is unchanged, and the
+soft lock it prices is still the one in force. The other is the newest here, and
+it was opened by the change that made it visible: the reveal hold is a duration
+a host can set now, and no screen anywhere says how much of it is left.
 
 | Session | In one line | Cost | Starts with | Holds |
 |---|---|---|---|---|
 | [The room is silent, unexplained](silent-room-unexplained.md) | **Half done.** Two of the three causes are ruled out and the console names the third; one reading on the Android phone closes it | waits on a phone | — | note 6, and what each of the three lines means |
-| [The fields a phone could show](fields-a-phone-could-show.md) | `oklch()` can name a colour sRGB cannot, and every phone in the room has a P3 screen. The three widest fields are derived and every pair re-measured; what is left is holding two phones together and keeping it or not | waits on a phone | the derived table in the entry | why it is a design decision and not a conversion |
-| [The way in leaves the console](the-way-in-leaves-the-console.md) | The QR code is host-only and a host can be a phone, so the invitation can end up in one hand and no other. It goes to the player's lobby and menu, `finished` gets its badge back, and `/invite/:code` projects it alone | one session | `RoomInvitation` moving out of `features/host/` with a stylesheet of its own | why the square does **not** go on the round screen |
+| [The fields a phone could show](fields-a-phone-could-show.md) | `oklch()` can name a colour sRGB cannot, and every phone in the room has a P3 screen. The three widest fields are derived and every pair re-measured; what is left is looking at it on a P3 screen and keeping it or not — **the screens exist now**, and the entry's own two-phone check is corrected at the end of it | waits on a phone | the derived table, then the correction under it | why it is a design decision and not a conversion, and why Samsung's *Natural* mode would show nothing |
 | [The host's way back](the-hosts-way-back.md) | The room survives a closed tab and the token outlives it by 24 hours — what is missing is a door. The home lists the rooms this device holds a token for | one session | the two refusals, before anything is drawn | why a public list of open rooms is a different product |
 | [Nobody knows how long the reveal has](nobody-knows-how-long-the-reveal-has.md) | The reveal hold is a duration the host can set now, and no screen says how much of it is left — `advancesAt` reaches nobody. At 8 s that went unnoticed; at 25 s it is a table wondering whether the screen is stuck | one session | why [the gap between two rounds](gap-between-two-rounds.md) declined this and why that no longer holds | the second half: the hold is remembered per host, the reading is per game |
 
@@ -52,6 +53,7 @@ planning it:
 
 | Session | Landed |
 |---|---|
+| [The way in leaves the console](the-way-in-leaves-the-console.md) | 8 Sep 2026 |
 | [A question about nobody](a-question-about-nobody.md) | 7 Sep 2026 |
 | [The answer only four buttons give](answer-only-four-buttons-give.md) | 7 Sep 2026 |
 | [The bank read end to end](the-bank-read-end-to-end.md) | 7 Sep 2026 |
@@ -80,8 +82,15 @@ planning it:
 | [The borders that do not quite carry](borders-that-do-not-quite-carry.md) | 4 Sep 2026 |
 | [The chrome keeps the palette the page left](theme-color-after-the-menu.md) | 4 Sep 2026 |
 
-**Four delivered entries are worth opening**, and each warns about a different
+**Five delivered entries are worth opening**, and each warns about a different
 half of what is written here.
+
+[The way in leaves the console](the-way-in-leaves-the-console.md): the diagnosis
+held in full and one of its four prescriptions was overruled on a cost it had
+not priced — a third code field on the home is *safe*, which is what the entry
+argued and won, and still wrong at the weight it asked for. It also found the
+rule underneath its own warning: sizing against a container rather than the
+viewport is not enough, the container has to be **the box the text sits in**.
 
 [The bank read end to end](the-bank-read-end-to-end.md): eight lenses over 6 285
 rows, and **one of the eight was noise** — `miscategorised` ran from 0 to 25 per

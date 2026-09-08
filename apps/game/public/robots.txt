@@ -6,4 +6,5 @@ User-agent: *
 # which is why no game is named here — a list of them would go stale the day
 # one is added, and buy nothing while it was right.
 Disallow: /host/
+Disallow: /invite/
 Disallow: /play/

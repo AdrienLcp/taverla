@@ -121,3 +121,50 @@ Real browser, muted — `taverla:volume` to `'0'` in an init script before the
 first navigation, per `docs/browser-driving.md`. Three screens and one width
 each: the player lobby on a phone, the player menu open mid-round, and
 `/invite/:code` at projector width.
+
+## What landed, 8 September 2026
+
+All of it, and four things the plan did not say.
+
+**The stylesheet seam held, and the container unit had one more level to it.**
+The component declares `container-type` so the pairing the plan warns about
+cannot be split, and each stage answers `--invitation-code-size` and
+`--invitation-qr-max-width`. That is enough everywhere except the poster, where
+the invitation is *two columns*: `28cqi` measured against the whole grid put
+`7T9` on one line and `Y` on the next — the console's own 302px fault, one
+composition further on. The fix is `container-type: inline-size` on `.code`, so
+the unit means the column the code is actually drawn in. **The rule the console
+learned is one level short of the truth**: it is not enough to size against a
+container rather than the viewport, the container has to be the box the text
+sits in. Recorded in `apps/game/DESIGN.md`.
+
+**The badge moved when it came back.** `finished` has no round index, and the
+header is `justify-content: space-between` — which hands a lone child the
+*start*. So the way in crossed the screen at the exact moment the room is
+deciding whether to play another. `margin-inline-start: auto` pins it, and it is
+the general fix rather than a `finished` special case.
+
+**The menu's square is 180px, not 256.** In a 320px popover the invitation was
+half the menu and pushed language, theme and every exit below the fold. The
+square there is scanned at arm's length off the screen it is drawn on — a
+console's own big one is on the field behind it — so seven pixels a module is
+plenty and the controls get their room back.
+
+**The home's door is a fold, not a third field.** The plan argued the field is
+*safe*, and it is; what it did not price is what a third code field costs the
+two doors above it. Two fields side by side, one that seats you and one that
+projects, is a fork every visitor has to read past for a job almost none of them
+have. It is a `Disclosure` under the shelf: a ruled row that names itself, which
+is the material this design system already gives a section somebody opens. The
+argument the plan won is untouched — the field exists, and it grants nothing.
+
+**Refused a second time, and now for a measured reason**: the poster does not
+strip the copy button, though it is useless on a wall. It is one component with
+four stages, and forking it on a prop for one of them is the variance this
+repository does not invent before there are two cases.
+
+Verified in a browser, muted, at 414px, 1280px, 1920px and 3440px: the console
+lobby (unchanged, `21cqi` still resolving to 200.2px on one line), the player
+lobby, both menus, `finished`, the home fold, and the poster at four widths with
+the code on one line at every one of them. `pnpm validate` green — 498 unit
+tests and the three journeys.

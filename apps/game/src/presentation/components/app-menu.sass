@@ -79,6 +79,35 @@
       font-size: 1rem
       white-space: normal
 
+    // The one object in this menu that is read *by* somebody else: the register
+    // is a box 280px wide held at arm's length, where the console's is a column
+    // read from four metres. It is the same rule as the two above — what is
+    // sized against the viewport has to be sized against its container once the
+    // container stops being the viewport — so the code takes a flat `rem` here
+    // and nothing viewport-relative survives into this box.
+    //
+    // Its gap closes to the dialog's own, because the popover already spends
+    // `--space-m` between every block in it and a wider one inside would read
+    // as two blocks rather than one.
+    // One group, so the door to the poster reads as belonging to the invitation
+    // above it rather than to the preferences below. The dialog spends
+    // `--space-m` between blocks; inside one, less.
+    .invitation
+      display: flex
+      flex-direction: column
+      gap: var(--space-s)
+
+    .room-invitation
+      --invitation-code-size: 2.5rem
+      // Scanned at arm's length off the screen it is drawn on, never across a
+      // room: a console's own square is already on the field behind this, and
+      // this one is for the host holding a phone out to somebody. At 180px the
+      // modules of a room URL are seven pixels each, and the half a popover it
+      // was spending goes back to the controls under it.
+      --invitation-qr-max-width: 180px
+
+      gap: var(--space-m)
+
     // Every other summary in this product is a list of settings, which is why
     // the register mutes it. This one is a person, and it is the whole reason
     // the row exists — a device that has played before never sees its name

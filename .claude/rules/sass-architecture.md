@@ -91,7 +91,10 @@ Two defaults the browser applies to a *document* and this is not one:
   will not act on — a buzzer disabled because you already buzzed — falls through
   to a text selection, and Android answers it with a "search for SALON" sheet
   over the game. What is genuinely worth lifting off a screen opts back in where
-  it is styled: `.room-code`, `.join-url`, and every input.
+  it is styled: `.room-code`, `.join-url`, `.join-reminder .code`, the player
+  header's own `.room`, and every input. The list grows with every surface that
+  puts the room code somewhere new — a code you cannot lift is a code somebody
+  retypes.
 - **`-webkit-tap-highlight-color: transparent`.** The grey flash follows the
   element's box and ignores its radius, so on the buzzer — the one round object
   in the product — it drew a rectangle. Nothing is lost: every control answers a

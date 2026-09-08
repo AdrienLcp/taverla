@@ -2,6 +2,7 @@ import { Link } from 'react-aria-components'
 
 import { shelvedGames } from '@taverla/protocol/game'
 
+import { ProjectWithCode } from '@/features/invite/project-with-code'
 import { JoinWithCode } from '@/features/join/join-with-code'
 import { gameHomePathFor } from '@/infrastructure/router/navigation'
 import { Button } from '@/presentation/components/button'
@@ -85,6 +86,14 @@ export const HomePage: React.FC = () => {
             </Link>
           ))}
         </section>
+
+        {/*
+          Folded and last, because it is a rare job beside the two above it and
+          the shelf is what the page is otherwise spending its length on. It is
+          a door to a screen, not a way into a room — see the component for why
+          it does not collapse into the join field it sits under.
+        */}
+        <ProjectWithCode />
       </div>
     </main>
   )
