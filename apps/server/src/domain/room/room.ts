@@ -130,6 +130,16 @@ export type Round = {
     frozenWithMsLeft: number | null
     playerId: PlayerId
   } | null
+  /**
+   * When the reveal on screen gives way to the next round, and `null` whenever
+   * nothing is counting it down. The hold is stamped where it *starts* rather
+   * than where its timer is armed, because every path to a reveal broadcasts
+   * before arming: a deadline computed beside the `setTimeout` would reach the
+   * room one snapshot after the reveal it belongs to. `armAutoAdvance` reads
+   * this instead of the setting, which is also what stops a second call
+   * extending a hold already running.
+   */
+  advancesAt: number | null
   /** Buzzer mode leaves this empty; the other two fill it as frames arrive. */
   attempts: PlayerAttempts[]
   awards: Award[]

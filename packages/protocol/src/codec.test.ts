@@ -8,6 +8,7 @@ import { PROTOCOL_VERSION } from './version'
 
 const runningRound = {
   activeBuzz: null,
+  advancesAt: null,
   answers: [],
   awards: [],
   content: {

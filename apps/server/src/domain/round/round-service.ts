@@ -127,6 +127,7 @@ export const openRound = ({
 }): Round => {
   const round: Round = {
     activeBuzz: null,
+    advancesAt: null,
     attempts: [],
     awards: [],
     content,
@@ -1124,6 +1125,9 @@ export const holdRoundClock = (room: Room, now: number): void => {
 
   freezeAnswerWindow(room.round, now)
   pauseRoundClock(room.round, now)
+  // Nothing is counting the reveal down any more, and a deadline left standing
+  // would have every phone drain a bar against a timer that was just cancelled.
+  room.round.advancesAt = null
   touch(room, now)
 }
 
@@ -1169,6 +1173,16 @@ export const resumeRoundClock = (room: Room, now: number): void => {
     round.activeBuzz.expiresAt = now + round.activeBuzz.frozenWithMsLeft
     round.activeBuzz.frozenWithMsLeft = null
     touch(room, now)
+
+    return
+  }
+
+  // A reveal restarts its hold rather than resuming it, which is the one place
+  // this function is not a mirror. The reveal is reading time, and a room that
+  // spent the wait looking at a console that had gone has not read any of it.
+  if (room.phase === 'revealed') {
+    startAutoAdvanceHold(room, now)
+    touch(room, now)
   }
 }
 
@@ -1183,7 +1197,24 @@ export const revealRound = (room: Room, now: number): void => {
   round.activeBuzz = null
   round.revealed = true
   room.phase = 'revealed'
+  startAutoAdvanceHold(room, now)
   touch(room, now)
+}
+
+/**
+ * Starts the wait between this reveal and the next round, and the one place
+ * that turns the setting into a moment. Every caller runs before the broadcast
+ * that puts the reveal on screen, which is what lets the deadline travel with
+ * the reveal rather than one frame behind it.
+ */
+export const startAutoAdvanceHold = (room: Room, now: number): void => {
+  const holdMs = room.settings.autoAdvanceMs
+
+  if (room.round === null) {
+    return
+  }
+
+  room.round.advancesAt = holdMs === null ? null : now + holdMs
 }
 
 /**

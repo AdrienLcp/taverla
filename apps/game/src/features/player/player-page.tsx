@@ -10,6 +10,7 @@ import {
 import type { PlayerRoomView } from '@taverla/protocol/room'
 
 import { standingOf } from '@taverla/core/scoring/scoreboard'
+import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
 import { NotFoundPage } from '@/features/not-found/not-found-page'
 import {
@@ -24,7 +25,10 @@ import {
 import { forgetSessionId } from '@/infrastructure/storage/session-storage'
 import { Button } from '@/presentation/components/button'
 import { ConnectionRefused } from '@/presentation/components/connection-refused'
-import { RoundProgress } from '@/presentation/components/round-progress'
+import {
+  RevealHold,
+  RoundProgress
+} from '@/presentation/components/round-progress'
 import { TextField } from '@/presentation/components/text-field'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
 import { useRoomDocumentTitle } from '@/presentation/head/use-room-document-title'
@@ -242,7 +246,7 @@ const Lobby = ({
       ) : (
         <>
           <Scoreline view={view} />
-          <RoundClock view={view} />
+          <RoundClock clock={clock} view={view} />
           <PlayerRound
             clock={clock}
             error={error?.code ?? null}
@@ -266,10 +270,29 @@ const Lobby = ({
 
 /**
  * The clock the big screen is showing, on the phone that is answering against
- * it. Absent while the host is away: the server has the round frozen then, and
- * a bar that kept draining would be timing nobody.
+ * it — and then the wait until the next round, which is the same question one
+ * phase later. One bar in one place rather than two: a measure that moved when
+ * the phase turned would read as a second object arriving.
+ *
+ * Absent whenever nothing is counting. For the round that is the host being
+ * away, because the server has it frozen and a bar still draining would be
+ * timing nobody; for the hold `advancesAt` says the same thing on its own,
+ * covering a host who advances by hand and a host who has gone at once.
  */
-const RoundClock = ({ view }: { view: PlayerRoomView }) => {
+const RoundClock = ({
+  clock,
+  view
+}: {
+  clock: ClockEstimate | null
+  view: PlayerRoomView
+}) => {
+  const holdMs = view.settings.autoAdvanceMs
+  const advancesAt = view.round?.advancesAt ?? null
+
+  if (view.phase === 'revealed' && advancesAt !== null && holdMs !== null) {
+    return <RevealHold advancesAt={advancesAt} clock={clock} holdMs={holdMs} />
+  }
+
   const durationMs = roundDurationMsOf(view.settings.game)
 
   if (

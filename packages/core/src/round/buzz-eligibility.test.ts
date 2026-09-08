@@ -17,6 +17,7 @@ import {
 
 const runningRound: RoundView = {
   activeBuzz: null,
+  advancesAt: null,
   answers: [],
   awards: [],
   content: { choices: [], kind: 'blindtest', revealedTrack: null },

@@ -105,6 +105,18 @@
       // that is the half the room is looking at. The standings take the place
       // the question had.
       &.revealed
+        // Hoisted out of the split below, because the row the hold bar spends
+        // is its own height plus one of these gaps.
+        --reveal-gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
+        // What that row costs the three height formulas below, and nothing at
+        // all when no bar is drawn — a host advancing by hand, or one whose
+        // screen has gone. `28px` is the bar's own height, measured off
+        // `round-progress.sass` the way `31rem` was measured off this screen.
+        --hold-bar: 0px
+
+        &.holding
+          --hold-bar: calc(28px + var(--reveal-gap))
+
         @include layout.narrow
           justify-content: center
 
@@ -122,9 +134,19 @@
         // at 1080 and 469px at 768.
         @include layout.wide
           display: grid
-          gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
+          gap: var(--reveal-gap)
           grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr)
-          grid-template-rows: minmax(0, 1fr)
+          grid-template-rows: minmax(0, 1fr) auto
+
+          // Under both halves rather than beside either: it is the screen's own
+          // clock, not the reveal's or the standings'. And the whole width,
+          // against the component's own 900px ceiling — that ceiling is a
+          // measure for a bar inside one column, and a screen this wide read it
+          // as an object stopping short of nothing rather than as the stage
+          // counting itself down.
+          .round-progress
+            grid-column: 1 / -1
+            width: 100%
 
           // No subtraction beyond that, unlike the vote's board, because nothing
           // in a row is a fixed size here: the gaps and the padding are in `em`
@@ -138,7 +160,7 @@
           // table of five still clamps to the full size; only a room that wrote
           // ten reads them smaller, which is the room with more to read.
           .revealed-lie-board
-            font-size: clamp(0.8rem, calc((100dvh - 31rem) / var(--board-lines, 5) / 4), 1.75rem)
+            font-size: clamp(0.8rem, calc((100dvh - 31rem - var(--hold-bar)) / var(--board-lines, 5) / 4), 1.75rem)
             gap: 0.7em
 
             li
@@ -167,7 +189,7 @@
           // and the panel's header have not already spent. The panel says what
           // its header costs, because that is the half it knows.
           .reveal-panel
-            --outcome-budget: calc(100dvh - var(--outcome-header, 44rem))
+            --outcome-budget: calc(100dvh - var(--outcome-header, 44rem) - var(--hold-bar))
 
           // The same bargain on the other side, and the reason this board does
           // not take the final board's two columns: halving the width truncated
@@ -178,7 +200,7 @@
           // `line-height` is the reset's 1.5 until it is said otherwise, which
           // on a numeral this size is half a row of nothing, ten times over.
           .scoreboard li
-            font-size: clamp(0.9rem, calc((100dvh - 31rem) / var(--standings-rows, 8) / 2.8), 1.75rem)
+            font-size: clamp(0.9rem, calc((100dvh - 31rem - var(--hold-bar)) / var(--standings-rows, 8) / 2.8), 1.75rem)
             padding: 0.45em 0
 
             .rank

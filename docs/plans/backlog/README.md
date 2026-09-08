@@ -29,16 +29,17 @@ argument split in two** — put the room's code on every screen, then keep that
 from also handing the console to whoever reads it — and the first half landed on
 8 September. [The host's way back](the-hosts-way-back.md) is what is left of it,
 and it is now free to be taken on its own; its premise is unchanged, and the
-soft lock it prices is still the one in force. The other is the newest here, and
-it was opened by the change that made it visible: the reveal hold is a duration
-a host can set now, and no screen anywhere says how much of it is left.
+soft lock it prices is still the one in force. The other has had its own first
+half taken the same day: the reveal now says how long it has, and what remains
+of it is the question that clock made answerable rather than urgent — which game
+the hold belongs to.
 
 | Session | In one line | Cost | Starts with | Holds |
 |---|---|---|---|---|
 | [The room is silent, unexplained](silent-room-unexplained.md) | **Half done.** Two of the three causes are ruled out and the console names the third; one reading on the Android phone closes it | waits on a phone | — | note 6, and what each of the three lines means |
 | [The fields a phone could show](fields-a-phone-could-show.md) | `oklch()` can name a colour sRGB cannot, and every phone in the room has a P3 screen. The three widest fields are derived and every pair re-measured; what is left is looking at it on a P3 screen and keeping it or not — **the screens exist now**, and the entry's own two-phone check is corrected at the end of it | waits on a phone | the derived table, then the correction under it | why it is a design decision and not a conversion, and why Samsung's *Natural* mode would show nothing |
 | [The host's way back](the-hosts-way-back.md) | The room survives a closed tab and the token outlives it by 24 hours — what is missing is a door. The home lists the rooms this device holds a token for | one session | the two refusals, before anything is drawn | why a public list of open rooms is a different product |
-| [Nobody knows how long the reveal has](nobody-knows-how-long-the-reveal-has.md) | The reveal hold is a duration the host can set now, and no screen says how much of it is left — `advancesAt` reaches nobody. At 8 s that went unnoticed; at 25 s it is a table wondering whether the screen is stuck | one session | why [the gap between two rounds](gap-between-two-rounds.md) declined this and why that no longer holds | the second half: the hold is remembered per host, the reading is per game |
+| [Nobody knows how long the reveal has](nobody-knows-how-long-the-reveal-has.md) | **Half done.** The clock landed on 8 September: `advancesAt` is on the round view and the round's own bar counts the hold on both surfaces. What is left is its second half — `autoAdvanceMs` is remembered per host, so 25 s picked for a quiz full of notes follows the room onto the reflex race | one session | section Two, and nothing above the rule | the three ways out, and why moving it into `GameSetup` is the recommendation |
 
 **One diagnosis disagrees with the note that raised it** — read the entry before
 planning it:

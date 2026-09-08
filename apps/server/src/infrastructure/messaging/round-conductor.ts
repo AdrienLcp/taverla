@@ -250,11 +250,16 @@ export const closeLefakePhase = (room: Room): void => {
  * Idempotent, and called from every path that reaches a reveal as well as from
  * the switch itself — a host who turns the mode on while a reveal is already on
  * screen expects that reveal to move on, not the one after it.
+ *
+ * It obeys `round.advancesAt` rather than the setting, which is what makes the
+ * idempotence real: a second call re-aims the timer at the deadline the room is
+ * already watching drain, where reading the setting again would hand it a fresh
+ * full hold. `startAutoAdvanceHold` is the only thing that moves the deadline.
  */
 export const armAutoAdvance = (room: Room): void => {
-  const delayMs = room.settings.autoAdvanceMs
+  const advancesAt = room.round?.advancesAt ?? null
 
-  if (room.phase !== 'revealed' || delayMs === null) {
+  if (room.phase !== 'revealed' || advancesAt === null) {
     cancelRoundTimer(room.code, 'advance')
 
     return
@@ -262,7 +267,7 @@ export const armAutoAdvance = (room: Room): void => {
 
   scheduleRoundTimer({
     code: room.code,
-    delayMs,
+    delayMs: Math.max(0, advancesAt - Date.now()),
     kind: 'advance',
     run: () => {
       if (room.phase !== 'revealed') {

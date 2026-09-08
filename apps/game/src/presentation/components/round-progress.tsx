@@ -1,5 +1,10 @@
 import type React from 'react'
 
+import {
+  type ClockEstimate,
+  millisecondsUntil
+} from '@taverla/core/time/clock-sync'
+
 import './round-progress.sass'
 
 type RoundProgressProps = {
@@ -42,3 +47,34 @@ export const RoundProgress: React.FC<RoundProgressProps> = ({
     />
   )
 }
+
+type RevealHoldProps = {
+  /** Server time the reveal gives way to the next round. */
+  advancesAt: number
+  /** This device's estimate of the server clock; `null` before the first pong. */
+  clock: ClockEstimate | null
+  /** The whole wait, from the setting its deadline was stamped against. */
+  holdMs: number
+}
+
+/**
+ * The same bar, counting the wait between a reveal and the round after it. The
+ * hold travels as a deadline rather than as time already spent — the server
+ * cancels and restarts it along with the round — so this is where it becomes
+ * the two numbers the bar draws with, once rather than on each screen.
+ *
+ * `Date.now()` in the render body is the point rather than an oversight: the
+ * reading is taken once per snapshot and the animation carries the drain in
+ * between, which is the same bargain the round's bar makes with the server's
+ * own count.
+ */
+export const RevealHold: React.FC<RevealHoldProps> = ({
+  advancesAt,
+  clock,
+  holdMs
+}) => (
+  <RoundProgress
+    durationMs={holdMs}
+    elapsedMs={holdMs - millisecondsUntil(clock, advancesAt, Date.now())}
+  />
+)

@@ -59,7 +59,10 @@ import { AskedQuestion } from '@/presentation/components/asked-question'
 import { Button } from '@/presentation/components/button'
 import { Countdown } from '@/presentation/components/countdown'
 import { RoomInvitation } from '@/presentation/components/room-invitation'
-import { RoundProgress } from '@/presentation/components/round-progress'
+import {
+  RevealHold,
+  RoundProgress
+} from '@/presentation/components/round-progress'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
 import { useRoomDocumentTitle } from '@/presentation/head/use-room-document-title'
@@ -600,6 +603,14 @@ const Stage = ({
   }
 
   if (view.phase === 'revealed' && round != null) {
+    const holdMs = view.settings.autoAdvanceMs
+    // The pair travels stamped together, so one of them missing means nothing
+    // is counting this reveal down and the screen owes the room no bar.
+    const hold =
+      round.advancesAt === null || holdMs === null
+        ? null
+        : { advancesAt: round.advancesAt, holdMs }
+
     // The standings, at the one moment the room asks for them. They are on this
     // screen during `playing` already, where nobody is looking at them — the
     // reveal is when the table wants to know what the round did to the game.
@@ -607,12 +618,17 @@ const Stage = ({
       // How many rows the standings hold, for the same reason the board carries
       // its own count: beside a board and on half the width, this one buys its
       // height by dividing its box rather than by taking a second column.
+      //
+      // `holding` is what the height budgets read: a bar spends a row of the
+      // screen the three formulas below are dividing, so they have to know
+      // whether it is there.
       <div
-        className='stage revealed'
+        className={`stage revealed${hold === null ? '' : ' holding'}`}
         style={{ '--standings-rows': view.players.length }}
       >
         <RevealPanel players={view.players} round={round} />
         <Scoreboard players={view.players} />
+        {hold !== null && <RevealHold clock={clock} {...hold} />}
       </div>
     )
   }

@@ -128,6 +128,7 @@ Shared by both:
     "id": "…",
     "index": 3,                    // 1-based
     "startsAt": 1786215012000,     // server clock; schedule against your offset
+    "advancesAt": 1786215042000,   // reveal only; null → nothing is counting it down
     "activeBuzz": { "playerId": "…", "atServerTime": 1786215014311,
                     "expiresAt": 1786215024311 },  // null → the host decides
     "lockedOutPlayerIds": ["…"],   // answered wrong, out for this round
@@ -143,9 +144,20 @@ Shared by both:
 `settings.game`, `settings.mode` and `round.content` are all discriminated on
 `kind`. The first and the last are where the split between the shelf and one
 game on it is drawn: `roundCount`, `countdownMs`, `autoAdvanceMs`, `startsAt`,
+`advancesAt`,
 the buzz, the lockout and the awards are every game's, and what the round is
 *asking* belongs to the game asking it. A client that does not recognise a `kind` has no business
 rendering that room at all, which is why the shape moving bumps the version.
+
+`advancesAt` is read with `settings.autoAdvanceMs` beside it: the deadline says
+*when*, the setting says how long the whole wait was, and a screen needs both to
+draw how much of it is left. They are stamped together and go `null` together,
+so one of them missing means nothing is counting this reveal down — the host
+advances by hand, or their screen has gone and the server has the room frozen.
+Neither case owes the room a bar, and a bar that never empties is worse than
+none. A hold the host changes mid-reveal restarts from the change rather than
+keeping the reveal's first deadline, because the number they just picked is the
+wait they are expecting to watch.
 
 The bare buzzer's `content` is `{ "kind": "buzzer" }` and nothing else — the
 room owns the question, and the server never learns it. The arm exists rather

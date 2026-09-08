@@ -34,6 +34,27 @@ one part.
 
 ### Features
 
+- `[Shared]` **The reveal says how long it has.** The hold before the next round
+  opens itself was a server-side `setTimeout` that reached no screen, so a room
+  reading a question's note had no idea whether it had two seconds or twenty. At
+  eight seconds that went unnoticed; at twenty-five — a value the host can pick
+  now — it is a table wondering whether the screen is stuck. `RoundView` gains
+  `advancesAt`, a server deadline rather than a remaining duration, and the bar
+  the round already drains counts it: on the phone in the slot the round's own
+  clock uses, on the console across the full width of the reveal stage.
+
+  It is **absent whenever nothing is counting** — a host who advances by hand,
+  or a host whose screen has gone and the round is frozen — because a bar that
+  never empties is worse than none, which is the rule the round's clock already
+  followed. The deadline is stamped where the hold *starts* rather than beside
+  the timer that serves it: every path to a reveal broadcasts before arming, so
+  a number computed next to the `setTimeout` would have reached the room one
+  frame late. `armAutoAdvance` reads the stamp instead of the setting, which is
+  also what stops a settings change mid-reveal quietly handing the room a fresh
+  full wait. Changing the hold itself does restart it, from the change — the
+  number just picked is the wait the host expects to watch. `PROTOCOL_VERSION`
+  is unmoved: an older client ignores the field.
+
 - `[Game]` **The way into a room is on every screen now, not only on the one
   running it.** The QR code was the console's and nobody else's, and a console
   is allowed to be a phone — so the invitation could end up in one hand and no

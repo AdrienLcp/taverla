@@ -312,6 +312,23 @@ three duration tokens at `0ms`).
   away, because the server has the round frozen and a bar draining then would be
   timing nobody.
 
+  **The same bar counts the reveal's hold**, where the wait reaches it as a
+  deadline rather than as time already spent and `RevealHold` is where the two
+  become the numbers it draws with. One object in one place on each surface —
+  the phone's sits under the scoreline in both phases, the console's runs the
+  full width of the stage under both its columns — because a measure that moved
+  when the phase turned would read as a second object arriving. At eight seconds
+  nobody needed it; at twenty-five, silence with no clock is a table wondering
+  whether the screen is stuck.
+
+  On the console it costs a row of a screen three formulas are dividing, so
+  `.stage.revealed` publishes `--hold-bar` and all three subtract it — `0px`
+  when there is no hold, which is the same absence the round's bar has under a
+  frozen room. And it gives up the component's own 900px ceiling there: that
+  ceiling measures a bar inside one column, and across a split stage it read as
+  an object stopping short of nothing rather than as the screen counting itself
+  down.
+
 `--timing` is an exponential ease-out: things arrive fast and settle, the way a
 card flips rather than the way a panel slides.
 

@@ -290,6 +290,15 @@ export const roundContentSchema = z.discriminatedUnion('kind', [
 
 export const roundViewSchema = z.object({
   activeBuzz: activeBuzzSchema.nullable(),
+  /**
+   * Server time the reveal gives way to the next round, or `null` when nothing
+   * is counting — the host advances by hand, or their screen is away and the
+   * server has the room frozen. A server time rather than what is left of the
+   * hold, for the reason `activeBuzz.expiresAt` is one: the wait is cancelled
+   * and restarted along with the round, and a duration would have to be
+   * re-sent on every snapshot to stay true.
+   */
+  advancesAt: serverTimeSchema.nullable(),
   /** Buzzer mode leaves this empty; the other two fill it as frames arrive. */
   answers: z.array(roundAnswerSchema),
   /** Points already granted this round, in the order the host granted them. */

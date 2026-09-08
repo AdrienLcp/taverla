@@ -144,6 +144,7 @@ const toRoundView = ({
           expiresAt: round.activeBuzz.expiresAt,
           playerId: round.activeBuzz.playerId
         },
+  advancesAt: round.advancesAt,
   answers: round.attempts.map(({ firstGuessedAt, playerId }) => ({
     atServerTime: firstGuessedAt,
     playerId

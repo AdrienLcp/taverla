@@ -50,6 +50,7 @@ import {
   registerVote,
   releaseBuzz,
   restartGame,
+  startAutoAdvanceHold,
   type VerdictOutcome
 } from '@/domain/round/round-service'
 import { discardPoolIfStale } from '@/domain/round/track-pool'
@@ -1025,11 +1026,26 @@ export const createRoomSocketEvents = (
       return
     }
 
+    const now = Date.now()
     const previousGame = room.settings.game
+    const previousHoldMs = room.settings.autoAdvanceMs
 
-    updateSettings(room, settings, Date.now())
+    updateSettings(room, settings, now)
     discardPoolIfStale({ previousGame, room })
     unseatConsolesThatMustJudge(room)
+
+    // `revealed` sits outside `isRoundInPlay`, so the hold is the one setting a
+    // host can change while the thing it governs is on screen. It restarts from
+    // the change rather than keeping the reveal's original deadline, because
+    // the frame that carries the new number is read as the wait from here — and
+    // the stamp has to move before the broadcast, not beside the timer after it.
+    if (
+      room.phase === 'revealed' &&
+      settings.autoAdvanceMs !== previousHoldMs
+    ) {
+      startAutoAdvanceHold(room, now)
+    }
+
     broadcastRoom(room)
     armAutoAdvance(room)
   }
