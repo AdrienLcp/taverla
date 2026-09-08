@@ -8,8 +8,8 @@ import type {
   DictionaryFor,
   DotPath,
   PlainKey
-} from '@taverla/core/i18n/lib/dictionary'
-import type { Translator } from '@taverla/core/i18n/lib/translator'
+} from '@taverla/core/i18n/vendor/dictionary'
+import type { Translator } from '@taverla/core/i18n/vendor/translator'
 import type { BuzzBlocker } from '@taverla/core/round/buzz-eligibility'
 
 import type { ApiError } from '@/infrastructure/api/taverla-api'

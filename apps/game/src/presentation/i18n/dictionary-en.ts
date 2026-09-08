@@ -1,5 +1,5 @@
-import { defineTranslation } from '@taverla/core/i18n/lib/define-translation'
-import { defineDictionary } from '@taverla/core/i18n/lib/dictionary'
+import { defineTranslation } from '@taverla/core/i18n/vendor/define-translation'
+import { defineDictionary } from '@taverla/core/i18n/vendor/dictionary'
 
 /**
  * The reference dictionary: its keys are the type every other locale is checked

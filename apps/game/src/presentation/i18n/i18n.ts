@@ -1,7 +1,7 @@
 import { DEFAULT_LOCALE, type Locale } from '@taverla/protocol/locale'
 
-import { createI18n } from '@taverla/core/i18n/lib/create-i18n'
-import type { Dictionary } from '@taverla/core/i18n/lib/dictionary'
+import { createI18n } from '@taverla/core/i18n/vendor/create-i18n'
+import type { Dictionary } from '@taverla/core/i18n/vendor/dictionary'
 
 import { EN_DICTIONARY } from './dictionary-en'
 import { FR_DICTIONARY } from './dictionary-fr'

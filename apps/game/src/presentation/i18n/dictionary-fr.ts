@@ -1,4 +1,4 @@
-import { defineTranslation } from '@taverla/core/i18n/lib/define-translation'
+import { defineTranslation } from '@taverla/core/i18n/vendor/define-translation'
 
 import type { Dictionary } from './translation'
 

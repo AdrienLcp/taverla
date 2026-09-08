@@ -1136,7 +1136,7 @@ one part.
 
 
 - `[Shared]` **The i18n engine is one library again, shared with the project
-  it was adapted from.** It moves to `packages/core/src/i18n/lib/` as four files
+  it was adapted from.** It moves to `packages/core/src/i18n/vendor/` as four files
   that name nothing of this project: `defineTranslations` becomes
   `defineDictionary`, `TranslationsLike` becomes `DictionaryFor`, and
   `createTranslator` takes `dictionary` where it took `translations`. Not one
