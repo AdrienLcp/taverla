@@ -373,6 +373,22 @@ one part.
   `settings-panel.tsx` into `number-choice.tsx`, which is what lets a second
   strip exist at all
 
+- `[Game]` **Three screens that showed a control and never said what it costs.**
+  The reflex race's phone drew one live button reading *Buzz* and nothing else,
+  so the game's whole trap — a thumb that goes early loses the round — was
+  reachable by the thumb resting on it and named on the host's screen alone. It
+  carries the cost now, centred under the buzzer like every other line under
+  that object, and it is the cost rather than *watch the screen* so it stays
+  true on both sides of the flip and never moves under a wait that must not
+  move. The four-candidate grid said nothing where the typed field has said *as
+  many goes as you like* since it existed, and it is the harder of the two to
+  guess — four buttons look like something you can try; it says *one pick only,
+  and the sooner pays the more*, above the grid because it changes which button
+  a thumb commits to. And the host lobby prints the scoring line under the
+  pitch: every phone in the room was told what the round pays and the one screen
+  that never was is the one whose job is to explain the game out loud — the
+  sentence was in the setup fold, which is collapsed at every width
+
 - `[Game]` **The palette is `oklch()`, and each pair is one `light-dark()`.**
   All twenty-nine colours were hex in two blocks a mixin applied to the two
   places a theme can be decided from; they are now one list of `light-dark()`

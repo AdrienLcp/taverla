@@ -8,7 +8,7 @@ import { isShelvedGame } from '@taverla/core/room/shelved-game'
 
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
-import { gameDescriptionKey } from '@/presentation/i18n/translation'
+import { gameDescriptionKey, scoringKey } from '@/presentation/i18n/translation'
 
 import { GamePicker } from './game-picker'
 import { RoomInvitation } from './room-invitation'
@@ -78,14 +78,34 @@ export const LobbyStage: React.FC<LobbyStageProps> = ({
  * it. A room reached through that door arrives with it already answered; one
  * opened from the shelf's front page arrives with nothing chosen, and this is
  * where the host reads what each of them is before deciding.
+ *
+ * The pitch alone was half of it. Every phone in the room is told what the
+ * round pays — `UpNext` prints it while the table fills up — and the one screen
+ * that never was is the one whose job is to explain the game out loud: the
+ * sentence was in the setup fold, which is collapsed at every width. So it is
+ * here too, under the promise it is the terms of.
  */
 const GamePitch = ({ view }: { view: HostRoomView }) => {
   const translate = useTranslate()
   const game = view.settings.game
 
-  return game !== null && isShelvedGame(game.kind) ? (
-    <p className='pitch'>{translate(gameDescriptionKey(game.kind))}</p>
-  ) : (
-    <p className='prompt'>{translate('host.game.prompt')}</p>
+  if (game === null || !isShelvedGame(game.kind)) {
+    return <p className='prompt'>{translate('host.game.prompt')}</p>
+  }
+
+  return (
+    <>
+      <p className='pitch'>{translate(gameDescriptionKey(game.kind))}</p>
+      <p className='scoring'>
+        {translate(
+          scoringKey({
+            answerMode: view.settings.mode.kind,
+            asksForAFilm:
+              game.kind === 'blindtest' && game.source.kind === 'film',
+            game: game.kind
+          })
+        )}
+      </p>
+    </>
   )
 }

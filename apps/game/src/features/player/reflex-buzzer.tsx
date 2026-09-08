@@ -107,6 +107,19 @@ export const ReflexBuzzer: React.FC<ReflexBuzzerProps> = ({
       >
         {translate('buzz.action')}
       </ReactAriaButton>
+      {/*
+        The one thing this screen has to say, and the only screen that was not
+        saying it: the button is live through the whole wait, so the game's own
+        trap is reachable by the thumb already resting on it. The room's screen
+        carries `reflex.waiting`; the phone carries what going early costs,
+        because that is the half a player cannot work out from a button.
+
+        It is the cost rather than *watch the screen*, so the line is true on
+        both sides of the flip and never has to change under a thumb waiting on
+        it — the field inverting is the signal, and a second one moving here
+        would be a way for the table to read the flip off somebody's phone.
+      */}
+      <p className='hint'>{translate('reflex.hold')}</p>
     </section>
   )
 }

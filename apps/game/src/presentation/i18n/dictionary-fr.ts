@@ -503,6 +503,7 @@ export const FR_DICTIONARY: Dictionary = {
       title: 'Parti avant que l’écran change.'
     },
     flip: 'VAS-Y',
+    hold: 'Appuie avant qu’il change et tu passes la tournée.',
     home: {
       description:
         'Rien à savoir, rien à dire. L’écran reste immobile, puis il change — et le premier pouce posé rafle la tournée. Pars avant qu’il change et celle-là, tu la regardes depuis le banc.'
@@ -530,6 +531,7 @@ export const FR_DICTIONARY: Dictionary = {
       label: 'Ta réponse',
       locked: 'Réponse envoyée. On attend les autres…',
       missed: 'Pas celle-là.',
+      oneShot: 'Un seul essai, et le plus tôt paie le plus.',
       retry: 'Autant d’essais que tu veux.',
       submit: 'Envoyer',
       waiting: defineTranslation('{count:plural}', {

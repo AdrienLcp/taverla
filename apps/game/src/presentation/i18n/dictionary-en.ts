@@ -555,6 +555,7 @@ export const EN_DICTIONARY = defineDictionary({
       title: 'Gone before the screen changed.'
     },
     flip: 'GO',
+    hold: 'Press before it changes and you sit the round out.',
     home: {
       description:
         'Nothing to know and nothing to say. The screen holds still, then it changes — and the first thumb down takes the round. Go before it changes and you watch that one from the bench.'
@@ -587,6 +588,7 @@ export const EN_DICTIONARY = defineDictionary({
        * as a grade — without it a wrong guess and a dropped frame look alike.
        */
       missed: 'Not that one.',
+      oneShot: 'One pick only, and the sooner pays the more.',
       retry: 'As many goes as you like.',
       submit: 'Send it',
       waiting: defineTranslation('{count:plural}', {

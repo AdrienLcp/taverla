@@ -19,6 +19,18 @@
 
       font-size: clamp(3rem, 20vmin, 9rem)
 
+    // What going early costs, under the button that can still do it. Same step
+    // down as the tally it shares the slot with, so the two states of this
+    // screen weigh the same.
+    .hint
+      @include typography.caption
+
+      color: var(--ink-muted)
+      margin-inline: auto
+      max-width: 28ch
+      text-align: center
+      text-wrap: balance
+
     // A step under the number it follows, because a race already over is not
     // what this screen is about — it is what tells its owner whether the round
     // still is.

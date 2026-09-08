@@ -8,6 +8,16 @@
     gap: var(--space-m)
     justify-content: center
 
+    // What the form does not otherwise say, read before the answering rather
+    // than after it. Same step down as the status line under it, because the
+    // two are the same voice at opposite ends of one screen.
+    .hint
+      @include typography.caption
+
+      color: var(--ink-muted)
+      text-align: center
+      text-wrap: balance
+
     .status
       @include typography.caption
 

@@ -90,6 +90,7 @@ export const ChoiceAnswer: React.FC<ChoiceAnswerProps> = ({
   round,
   youId
 }) => {
+  const translate = useTranslate()
   const [hasSent, setHasSent] = useState(false)
 
   if (round === null) {
@@ -104,6 +105,16 @@ export const ChoiceAnswer: React.FC<ChoiceAnswerProps> = ({
 
   return (
     <section className='answer-form choices'>
+      {/*
+        The typed field has said *as many goes as you like* since it existed;
+        the grid beside it said nothing at all, and it is the harder of the two
+        to guess — four buttons look like a thing you can try. It is also the
+        mode the quiz now opens on, so it is the first form most players meet.
+
+        Above the grid rather than under it: it changes which button a thumb
+        commits to, so it is read before the choosing and not after.
+      */}
+      <p className='hint'>{translate('round.answer.oneShot')}</p>
       <ul>
         {candidatesIn(round).map((candidate, index) => (
           <li key={candidate.key}>
