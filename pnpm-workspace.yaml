@@ -6,7 +6,10 @@ allowBuilds:
   '@parcel/watcher': true
   esbuild: true
 
-# Fail the install when the running Node/pnpm doesn't satisfy package.json "engines".
+# Fail the install when a *dependency* declares an engine this machine cannot
+# satisfy. It says nothing about the root project's own "engines": pnpm 12
+# dropped that check, and neither this nor the .npmrc key it replaced refuses an
+# install here any more. What still guards pnpm is the "packageManager" pin.
 engineStrict: true
 
 publicHoistPattern:

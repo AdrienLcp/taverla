@@ -3,6 +3,7 @@
     "zod": "^4.5.4"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "5.0.0",
     "vitest": "^5.0.0"
   },
   "exports": {

@@ -1109,14 +1109,31 @@ one part.
   `@babel/core` stays on 7.29.7 with 8.0.1 out, which is what
   `vite.config.ts` has thrown on since the pin was written.
 
-  Two things the upgrade uncovered rather than caused.
-  `onlyBuiltDependencies` left `pnpm-workspace.yaml`: it has done nothing since
-  **v11** replaced it with `allowBuilds`, which sat four lines above it naming
-  the same two packages — a dead setting kept beside its live replacement, and
-  pnpm 12 still tolerates the key, which is why it would have stayed forever.
-  And `@vitest/coverage-v8` is in no `package.json` while all three vitest
-  configs declare `provider: 'v8'`, so `vitest --coverage` has never been able
-  to run without prompting for an install.
+  Three things the upgrade uncovered rather than caused, and the third is the
+  one to remember. `onlyBuiltDependencies` left `pnpm-workspace.yaml`: it has
+  done nothing since **v11** replaced it with `allowBuilds`, which sat four
+  lines above it naming the same two packages — a dead setting kept beside its
+  live replacement, and pnpm 12 still tolerates the key, which is why it would
+  have stayed forever. `@vitest/coverage-v8` was in no `package.json` while all
+  three vitest configs declare `provider: 'v8'`, so `vitest --coverage` could
+  never run without prompting for an install; it is a dev dependency of all
+  three now, and `packages/core` reports 96.41% of statements covered.
+
+  And **the engine floor stopped being enforced.** `package.json` declares
+  `engines`, `pnpm-workspace.yaml` set `engineStrict: true` and `.npmrc` set
+  `engine-strict=true` — three lines saying the install must refuse a machine
+  that cannot satisfy them. Under pnpm 12 it does not: a fresh install of this
+  workspace with `engines.node` set to `>=99.0.0` completed in 12.7 seconds
+  without an error or a warning, where pnpm 10 refused it outright. pnpm 12's
+  `engineStrict` governs the engines a *dependency* declares — the release notes
+  spend it reaching further into optional subtrees — and dropped the check on
+  the root project's own. So `.npmrc` is deleted, it held that key and nothing
+  else, and the comment above `engineStrict` says what the setting now does
+  instead of what it used to. What still refuses a wrong pnpm is the
+  `packageManager` pin, which 12 turned into a hard `ERR_PNPM_BAD_PM_VERSION`.
+  Nothing refuses a wrong Node any more; CI, Render and `.nvmrc` each pin 24 on
+  their own.
+
 
 - `[Shared]` **The i18n engine is one library again, shared with the project
   it was adapted from.** It moves to `packages/core/src/i18n/lib/` as four files
