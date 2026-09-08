@@ -9,9 +9,5 @@ allowBuilds:
 # Fail the install when the running Node/pnpm doesn't satisfy package.json "engines".
 engineStrict: true
 
-onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - esbuild
-
 publicHoistPattern:
   - '@biomejs/*'
