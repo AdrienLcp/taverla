@@ -7,6 +7,8 @@ import {
 } from '@taverla/protocol/game'
 import type { Locale } from '@taverla/protocol/locale'
 import {
+  type AnswerMode,
+  DEFAULT_MODE_SETTINGS,
   DEFAULT_ROOM_SETTINGS,
   type ModeSettings,
   type RoomSettings
@@ -29,6 +31,28 @@ const DEFAULT_ROUND_COUNT: Record<GameKind, number | null> = {
   quiz: 10,
   /** A heat is a wait and a thumb, so ten of them is under two minutes. */
   reflex: 10
+}
+
+/**
+ * How a game expects to be answered before anybody has said otherwise. It is
+ * the game's preference and not the room's rule: `modeOfferedBy` still narrows
+ * it, so an entry naming a mode its own game does not offer is corrected rather
+ * than served.
+ *
+ * The split between the two banks' games is what the question is made of. A
+ * quiz question is a sentence with one fact missing, and a table reads it faster
+ * than it types it — four candidates is the shape the room actually plays, and
+ * the shape most of the bank was written in. A blind test's question is a clip:
+ * the title and the artist are two answers worth a point each, retries are
+ * free, and its candidates are drawn from the room's own pool rather than
+ * authored beside the answer. Typing is the game there, not a fallback.
+ */
+const DEFAULT_ANSWER_MODE: Record<GameKind, AnswerMode> = {
+  blindtest: 'typed',
+  buzzer: 'buzzer',
+  lefake: 'choice',
+  quiz: 'choice',
+  reflex: 'buzzer'
 }
 
 /**
@@ -73,7 +97,10 @@ const openedSetup = ({
   locale: Locale
 }): GameSetup => ({
   game: openedGameSettings({ game, locale }),
-  mode: modeOfferedBy({ game, preferred: DEFAULT_ROOM_SETTINGS.mode }),
+  mode: modeOfferedBy({
+    game,
+    preferred: DEFAULT_MODE_SETTINGS[DEFAULT_ANSWER_MODE[game]]
+  }),
   roundCount: DEFAULT_ROUND_COUNT[game]
 })
 

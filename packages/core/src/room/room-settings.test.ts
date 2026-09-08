@@ -36,6 +36,18 @@ describe('roomSettingsFor', () => {
     }
   })
 
+  // The two games that offer all three modes want different ones, and a single
+  // room-wide default was serving the quiz a field where the room reads faster
+  // than it types.
+  it('[room-settings] opens each game on the mode it is played in', () => {
+    expect(roomSettingsFor({ game: 'quiz', locale: 'fr' }).mode).toEqual(
+      DEFAULT_MODE_SETTINGS.choice
+    )
+    expect(roomSettingsFor({ game: 'blindtest', locale: 'fr' }).mode).toEqual(
+      DEFAULT_MODE_SETTINGS.typed
+    )
+  })
+
   it('[room-settings] leaves a game with no natural end running until the host stops it', () => {
     expect(
       roomSettingsFor({ game: 'buzzer', locale: 'fr' }).roundCount

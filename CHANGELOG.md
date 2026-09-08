@@ -348,6 +348,20 @@ one part.
 
 ### Improvements
 
+- `[Shared]` **A game opens on the mode it is played in.** `DEFAULT_ANSWER_MODE`
+  is a per-game record beside `DEFAULT_ROUND_COUNT`, so the quiz opens on
+  **`choice`** where a single room-wide `typed` used to answer for everything.
+  A quiz question is a sentence with one fact missing and a table reads four
+  candidates faster than it types an answer; it is also the shape most of the
+  bank was written in, so the 680 rows that are only a question beside their own
+  decoys are dealt by default rather than filtered out. The blind test stays on
+  `typed` and that is not deference: its question is a clip, the title and the
+  artist are two answers worth a point each, retries are free, and its
+  candidates come from the room's own pool rather than authored beside the
+  answer. `modeOfferedBy` still narrows, so the record cannot serve a game a
+  mode it refuses. A host who has already played a game keeps what they last
+  left it set to — `HostPreferences` wins over the opening default, by design
+
 - `[Game]` **The palette is `oklch()`, and each pair is one `light-dark()`.**
   All twenty-nine colours were hex in two blocks a mixin applied to the two
   places a theme can be decided from; they are now one list of `light-dark()`
