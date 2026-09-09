@@ -68,7 +68,7 @@ the room itself. What must never happen is the two being served by one field.
 
 ## Server hardening found on the way — **landed 9 September 2026**
 
-**No message handler checks `isHostConnected`.** The only gates are
+**No message handler checked `isHostConnected`.** The only gates were
 `HOST_ONLY_MESSAGE_TYPES` and whether the room resolves. When the host leaves,
 `holdRoundWhileHostIsAway` (`round-conductor.ts:337-343`) cancels all four timers
 and freezes the clock, and the phone draws a paused screen
@@ -77,9 +77,11 @@ accepts `player.answer`, so everyone answering satisfies `everyoneIsDone`, close
 the round, and `armAutoAdvance` → `beginRound` → `armCountdown` puts the clip
 timer back with nobody connected to play the clip.
 
-Nothing reaches this through the shipped UI. It is still the wrong way round for
+Nothing reached it through the shipped UI. It was still the wrong way round for
 this repository: **the server decides**, and a frozen round is a server fact that
-only the client currently enforces. The guard went one level up from where this entry put it. `registerAnswer` and
+only the client was enforcing.
+
+The guard went one level up from where this entry put it. `registerAnswer` and
 `registerBuzz` are two of **four** frames that move a round along from the floor
 — `lefake.submit` and `lefake.vote` carry the same fault, and a guard threaded
 through four domain functions is four places to forget the fifth. So
