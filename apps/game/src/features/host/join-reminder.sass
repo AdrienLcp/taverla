@@ -1,3 +1,4 @@
+@use '../../presentation/styles/layout'
 @use '../../presentation/styles/typography'
 
 @layer components
@@ -7,19 +8,44 @@
     display: flex
     gap: var(--space-s)
 
+    // `flex: none` because the square was not merely small on a phone, it was
+    // *not square*: a flex item shrinks by default, so 64px of declared width
+    // was drawn at 35 against 64 of height, and a rectangle is scannable by
+    // nothing.
+    //
+    // Hidden outright below the width a column stops being a phone's, which is
+    // the same argument that keeps the QR off the player's round screen: the
+    // square exists because a code read at four metres cannot be typed, and a
+    // console this narrow is in one person's hand with nobody else looking at
+    // it. Phone to phone the four characters win, which is what an alphabet
+    // with no confusable glyphs is for. It also bought the sentence beside it
+    // the room to stop wrapping onto three lines.
     svg
+      flex: none
       height: 64px
       width: 64px
+
+      @include layout.narrow
+        display: none
 
     .words
       display: flex
       flex-direction: column
       gap: var(--space-2xs)
 
+    // The big screen's half, like the square above it. A console this narrow is
+    // one person's phone and they know what their own code is for, and the
+    // header has 242px for two facts once the corner menu takes its inset — at
+    // which the sentence and the round index were both wrapping onto two lines.
+    // It is on the aside as its accessible name, so nothing is lost by not
+    // drawing it.
     .label
       @include typography.label
 
       color: var(--ink-muted)
+
+      @include layout.narrow
+        display: none
 
     .code
       @include typography.title

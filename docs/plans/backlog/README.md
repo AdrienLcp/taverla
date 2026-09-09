@@ -15,34 +15,23 @@ file rather than half-landing.
 
 ## Open
 
-Two entries, and **both wait on a phone.** One needs a line read off the
-Android that produced note 6; the other is about a colour the sRGB monitor this
-repository is written on cannot display, and its entry now names the two P3
-handsets that can and corrects the check it prescribed — **one screen is
-enough**, if the page draws both values side by side. Of the two decisions the
-oklch palette opened, the one about borders is taken and is below, and the one
-about colour stops exactly where a screen has to be looked at.
+**Nothing.** Every entry ever opened here has landed or been answered, and the
+last two were closed on 9 September 2026 by looking at the app on the handset
+they were waiting for: the palette was read on a P3 screen and kept as it is,
+and the silent room did not reproduce. Their files went with their rows rather
+than into an archive — a backlog that keeps what has been answered stops being a
+list of what is left.
 
-**Nothing here waits on a session any more.** The last one was half of an
-argument split in two — put the room's code on every screen, then keep that from
-also handing the console to whoever reads it — and both halves are now delivered:
-the first on 8 September, [the host's way back](the-hosts-way-back.md) on the
-9th. The soft lock it priced is still the one in force, and its two refusals are
-worth reading before anybody proposes a room list again.
+The last session-sized entry was half of **an argument split in two** — put the
+room's code on every screen, then keep that from also handing the console to
+whoever reads it — and both halves are delivered: the first on 8 September,
+[the host's way back](the-hosts-way-back.md) on the 9th. The soft lock it priced
+is still the one in force, and its two refusals are worth reading before anybody
+proposes a public list of rooms again.
 
-| Session | In one line | Cost | Starts with | Holds |
-|---|---|---|---|---|
-| [The room is silent, unexplained](silent-room-unexplained.md) | **Half done.** Two of the three causes are ruled out and the console names the third; one reading on the Android phone closes it | waits on a phone | — | note 6, and what each of the three lines means |
-| [The fields a phone could show](fields-a-phone-could-show.md) | `oklch()` can name a colour sRGB cannot, and every phone in the room has a P3 screen. The three widest fields are derived and every pair re-measured; what is left is looking at it on a P3 screen and keeping it or not — **the screens exist now**, and the entry's own two-phone check is corrected at the end of it | waits on a phone | the derived table, then the correction under it | why it is a design decision and not a conversion, and why Samsung's *Natural* mode would show nothing |
-
-**One diagnosis disagrees with the note that raised it** — read the entry before
-planning it:
-
-- **A seated host's clip is not withheld.** The server sends `audioUrl` to a
-  seated host and holds back only the title and artist. *Le son ne sort pas
-  d'ici.* is an autoplay message that predates the seat entirely, and the
-  silence has a different cause. **Do not pick a fix before somebody has read
-  the refusal on the Android phone that produced note 6.**
+New entries come from a testing session, from a note somebody writes down mid
+game, or from a stage that turned out to be two. The sections below are what
+they are measured against.
 
 ## Delivered
 

@@ -25,7 +25,10 @@ export const JoinReminder: React.FC<JoinReminderProps> = ({ roomCode }) => {
   const translate = useTranslate()
 
   return (
-    <aside className='join-reminder'>
+    // The sentence names the landmark rather than only sitting inside it, so it
+    // still says what these four characters are on a screen too narrow to draw
+    // it.
+    <aside aria-label={translate('invite.joinLate')} className='join-reminder'>
       {/* Hidden for the reason `RoomInvitation` gives, and the code beside it
           is what a listener can actually act on. */}
       <QRCodeSVG

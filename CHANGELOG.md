@@ -733,6 +733,21 @@ one part.
 
 ### Fixes
 
+- `[Game]` **The console's join reminder was drawing a QR code no camera could
+  read.** A flex item shrinks by default and the square had no `flex`, so on a
+  phone 64px of declared width was drawn at **35 against 64 of height** — not a
+  small QR, a rectangle, scannable by nothing. It cost 93px of a 844px screen to
+  do it, with the sentence beside it wrapping onto three lines and the round
+  index onto two, because the corner menu's inset takes 132px of a 390px header.
+  The square is `flex: none` now so it cannot be squashed at any width, and
+  below `layout.$wide-screen` neither it nor the sentence is drawn: both are the
+  big screen's half of this, by the same argument that keeps the QR off the
+  player's round screen — a console that narrow is in one person's hand with
+  nobody else looking at it, and phone to phone the four characters win. The
+  sentence names the `aside` at every width instead, so nothing is lost by not
+  drawing it. The header goes from 93px to 44px and carries the round and the
+  code, one line each.
+
 - `[Game]` **The console asked for a recovery code where no code could help.**
   `HostRefused` drew the token form for *every* refusal, so a URL naming a room
   that does not exist answered `No table under that code.` and then asked for

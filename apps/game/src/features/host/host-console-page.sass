@@ -17,6 +17,10 @@
         @include typography.label
 
         color: var(--ink-muted)
+        // It is the one line here long enough to wrap once the corner menu has
+        // taken its inset, and a lone `10` on the second line reads as a stray
+        // number beside the room's code.
+        text-wrap: balance
 
       // It holds the end of the line whether or not the round index is there to
       // push it. `space-between` hands a lone child the *start*, and at
