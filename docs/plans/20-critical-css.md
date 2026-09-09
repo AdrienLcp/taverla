@@ -213,12 +213,12 @@ which is the case that had to keep working.
 - **`theme-color` still does not follow the menu.** The script fixes the load;
   `ThemeProvider` does not touch the meta tags, so changing theme from the menu
   leaves the browser chrome on the previous palette until the next navigation.
-  It is in [`backlog/`](backlog/README.md).
+  It was fixed on 4 September 2026.
 
 - **Nothing was done about the 550 KB of JavaScript.** It no longer gates the
   paint, and it still gates interactivity. The dictionary split
   [19](19-locale-urls.md) repriced was settled here rather than left hanging:
   the unused locale is 6 610 B gzipped, 1.2% of a cold load, and splitting it
-  buys less than the states it adds — [`backlog/README.md`](backlog/README.md)
-  carries the measurement. What is left in that chunk is react-aria's locale
+  buys less than the states it adds, so it is not coming back for a smaller
+  number. What is left in that chunk is react-aria's locale
   machinery, 72 KB gzipped, which nobody has weighed.

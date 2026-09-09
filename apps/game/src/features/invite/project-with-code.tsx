@@ -28,9 +28,9 @@ type FieldError =
  * an event is rarely the laptop hosting.
  *
  * **Typing a code here grants nothing** — no seat, no console, no token, no
- * frame sent. That is the whole difference between this field and the one the
- * backlog refuses on the same page, which would hand over the room to whoever
- * read the code off the wall. So it does not collapse into the join field
+ * frame sent. That is the whole difference between this field and the console
+ * door that was proposed for the same page and refused, which would have handed
+ * over the room to whoever read the code off the wall. So it does not collapse into the join field
  * either: that one seats you, this one shows what the table is already showing.
  *
  * It asks the server nothing. Whether the code opens a room is the poster's own

@@ -229,8 +229,8 @@ gives.
   all**. What it can still buy is bandwidth the stylesheets are competing for,
   and the blocking time after the paint. That is a different case from the one
   this bullet weighed. It was argued on those terms and **dropped** — the
-  numbers and the reasoning are in
-  [`backlog/README.md`](backlog/README.md), under what nobody re-opens.
+  numbers and the reasoning are in [`20-critical-css.md`](20-critical-css.md),
+  which is the stage that made them measurable.
 - **Three render-blocking stylesheets** (4.1 + 1.2 + 1.0 KiB gzipped) were
   costed at ~150 ms in round trips. They cost **1.28 s** — measured after the
   stage, above: the estimate priced the round trips and not the queue, and once

@@ -13,8 +13,7 @@ import './held-rooms.sass'
  *
  * It is offered **to the device that holds the key** and to nobody else, which
  * is what lets the console's door stay URL-only: a public list of open rooms
- * would hand a stranger not a seat but the console. See
- * `docs/plans/backlog/the-hosts-way-back.md`.
+ * would hand a stranger not a seat but the console.
  *
  * A row is one line rather than the two a shelf card takes, because a room has
  * one fact — its code — and the word beside it says which door the press opens.

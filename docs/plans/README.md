@@ -4,11 +4,6 @@ One file per stage, each scoped to a single session. Read the stage's plan
 before starting, and update it when reality diverges — a plan that no longer
 describes the code is worse than no plan.
 
-**[`backlog/`](backlog/README.md) is where a session that is not a stage is picked
-up** — the faults a room has already met, the polish it asked for, and the two
-decisions still open. It is ordered, and each entry is scoped to one session the
-same way a stage is.
-
 | Stage | State | What it delivers |
 |---|---|---|
 | [00 — Bootstrap](00-bootstrap.md) | **done** | Contract, server, lobby, QR, join, live roster, clock sync |
@@ -116,7 +111,7 @@ the other way from the ones above: a rule written for *the* host breaks the day
 there are two of them.
 
 The same question asked once more — *and which of the two owns the room?* — is
-what closed the last open decision in [`backlog/`](backlog/README.md). A room now
+what closed the last open decision this raised. A room now
 mints a token for the screen that opened it, and a claim carrying it beats
 whatever is connected; without one, a second console waits out a minute's grace
 before the code alone is enough. What that session is worth remembering for is
@@ -130,8 +125,8 @@ Expect more of this than of stages. The plans cover what is missing; what is
 
 The first playtest with somebody who had not built it — 14 August 2026, two
 people, an iPhone and a laptop — produced thirteen notes in one evening, which
-is more than any stage has. They were diagnosed and split into nine sessions in
-[`backlog/`](backlog/README.md), and **all nine landed on 15 August 2026**.
+is more than any stage has. They were diagnosed and split into nine sessions,
+and **all nine landed on 15 August 2026**.
 
 What that day is worth remembering for is how much of it the diagnosis got
 wrong, and in which direction:
@@ -154,10 +149,9 @@ Expect the same ratio next time. A note from a room is evidence that something
 is wrong; it is rarely evidence of what.
 
 **The second playtest — 16 August 2026, on Android — proved that in one
-evening.** Eight notes, diagnosed into one entry each in
-[`backlog/`](backlog/README.md), and **two of the eight were reports of things that
-already work**: the speed bonus [shipped the day
-before](backlog/speed-pays-by-rank.md) is wired into
+evening.** Eight notes, diagnosed into one session each, and **two of the eight
+were reports of things that already work**: the speed bonus shipped the day
+before is wired into
 every simultaneous round, and a seated host is still sent the clip it thinks it
 is being denied. In both cases something *is* wrong — the bonus is on no screen
 the room looks at, and the console cannot say why it failed to arm — but neither

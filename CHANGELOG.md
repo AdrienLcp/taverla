@@ -49,7 +49,7 @@ one part.
   A lookup that merely *fails* is not a refusal and the room is still offered.
   It sits **under** the two doors rather than over them, because it arrives once
   the server has answered and above them it moved the button a thumb aims at by
-  221px. See [`docs/plans/backlog/the-hosts-way-back.md`](docs/plans/backlog/the-hosts-way-back.md)
+  221px.
 
 - `[Game]` **A shelf card opens the table.** Pressing a game on the front door
   led to that game's own page, whose only content was a second press: nothing on
@@ -178,8 +178,7 @@ one part.
   that game's three screens belonging to a thumb already down. Nothing moved on
   the wire. **The running scoreboard mid-round was deliberately dropped**: a
   player mid-round is racing a clock, the standings are what they read after it,
-  and the persistent strip already says *2nd of 6* at every phase. See
-  [`docs/plans/backlog/everything-the-phone-is-already-sent.md`](docs/plans/backlog/everything-the-phone-is-already-sent.md)
+  and the persistent strip already says *2nd of 6* at every phase.
 
 - `[Game]` **A phone now knows what the round did to the room, not only to
   itself.** The big screen is often somebody else's — across the room, angled
@@ -459,8 +458,7 @@ one part.
   let a page decide the colour of the field; `:focus-within` and the trigger's
   own `aria-expanded` keep it up while somebody is in it. The room that resolves
   to nothing keeps every bit of its chrome, because that screen *is* read at a
-  keyboard and its way home is the only thing on it. See
-  [`docs/plans/backlog/the-invitation-is-a-wall.md`](docs/plans/backlog/the-invitation-is-a-wall.md)
+  keyboard and its way home is the only thing on it.
 
 - `[Game]` **`RoomInvitation` and `CopyButton` are the shell's**, in
   `presentation/components/` with a stylesheet of their own — three consumers is
@@ -847,8 +845,7 @@ one part.
   One systematic fault turned into a rule rather than data: upstream stores its
   anecdote in a 255-character column and ten of them end mid-word, so `noteIn`
   cuts an unterminated one back to its last full stop. The bank stands at **6 209
-  rows**, 77 fewer and 122 repaired. See
-  [`docs/plans/backlog/the-bank-read-end-to-end.md`](docs/plans/backlog/the-bank-read-end-to-end.md)
+  rows**, 77 fewer and 122 repaired.
 
 - `[Server]` **A question the room cannot answer with a text field is no longer
   dealt to one.** *Which country drives on the left side of the road?* answers
