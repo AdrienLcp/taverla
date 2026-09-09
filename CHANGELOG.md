@@ -733,6 +733,16 @@ one part.
 
 ### Fixes
 
+- `[Game]` **The console asked for a recovery code where no code could help.**
+  `HostRefused` drew the token form for *every* refusal, so a URL naming a room
+  that does not exist answered `No table under that code.` and then asked for
+  the recovery code of a table that is not there. A token says **who** may hold
+  a room, never **which**, so it can only answer a refusal that turned on the
+  room already having a console — `host_already_connected` and
+  `host_reconnecting`. Everywhere else the form is a control that cannot work,
+  and a screen offering one reads as a puzzle rather than as an answer. On
+  `room_not_found` the screen is now the sentence and its two ways out.
+
 - `[Game]` **A room code was breaking in half on the wall, and could on the
   console.** `--invitation-code-size` asked the projector page for `28cqi` and
   the console for `21cqi`, both on the estimate that four characters need every

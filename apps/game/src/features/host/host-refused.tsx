@@ -50,6 +50,15 @@ export const HostRefused = ({
   const wasTokenRefused =
     hasOfferedToken && error?.code === 'host_already_connected'
 
+  // A token says *who* may hold a room, never *which*, so it can only answer a
+  // refusal that turned on the room already having a console. Offered on the
+  // others it is a control that cannot work: `room_not_found` was asking for a
+  // recovery code for a table that does not exist, and the screen read as a
+  // puzzle rather than as an answer.
+  const isAnsweredByToken =
+    error?.code === 'host_already_connected' ||
+    error?.code === 'host_reconnecting'
+
   const offer = (event: FormEvent): void => {
     event.preventDefault()
 
@@ -71,29 +80,31 @@ export const HostRefused = ({
           <p className='rejected'>{translate('host.recovery.refused')}</p>
         )}
 
-        <Form onSubmit={offer}>
-          <TextField
-            autoCapitalize='characters'
-            autoComplete='off'
-            description={translate('host.recovery.description')}
-            errorMessage={translate('host.recovery.invalid')}
-            isInvalid={isTokenInvalid}
-            label={translate('host.recovery.field')}
-            maxLength={HOST_TOKEN_LENGTH + 2}
-            name='hostToken'
-            onChange={(next) => {
-              setToken(next)
-              setIsTokenInvalid(false)
-            }}
-            // Derived rather than written, so it cannot drift from the length
-            // the server actually mints. Dots carry no language.
-            placeholder={'•'.repeat(HOST_TOKEN_LENGTH)}
-            value={token}
-          />
-          <Button size='large' type='submit' variant='filled'>
-            {translate('host.recovery.action')}
-          </Button>
-        </Form>
+        {isAnsweredByToken && (
+          <Form onSubmit={offer}>
+            <TextField
+              autoCapitalize='characters'
+              autoComplete='off'
+              description={translate('host.recovery.description')}
+              errorMessage={translate('host.recovery.invalid')}
+              isInvalid={isTokenInvalid}
+              label={translate('host.recovery.field')}
+              maxLength={HOST_TOKEN_LENGTH + 2}
+              name='hostToken'
+              onChange={(next) => {
+                setToken(next)
+                setIsTokenInvalid(false)
+              }}
+              // Derived rather than written, so it cannot drift from the length
+              // the server actually mints. Dots carry no language.
+              placeholder={'•'.repeat(HOST_TOKEN_LENGTH)}
+              value={token}
+            />
+            <Button size='large' type='submit' variant='filled'>
+              {translate('host.recovery.action')}
+            </Button>
+          </Form>
+        )}
 
         <Button onPress={onRetry} size='small' variant='underlined'>
           {translate('host.recovery.retry')}
