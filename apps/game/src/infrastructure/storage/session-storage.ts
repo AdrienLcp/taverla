@@ -14,6 +14,8 @@ import {
 
 import {
   forgetSeat,
+  type HeldRoom,
+  heldRooms,
   hostTokenFor,
   hostTokensWithout,
   type RememberedHostToken,
@@ -169,6 +171,27 @@ export const readHostToken = (roomCode: RoomCode): HostToken | null =>
 /** Called when the room is disbanded: the code stops resolving, so this opens nothing. */
 export const forgetHostToken = (roomCode: RoomCode): void => {
   writeHostTokens(hostTokensWithout({ roomCode, tokens: readHostTokens() }))
+}
+
+/**
+ * Every room this device still has a way back into, newest first. It is offered
+ * *before* the server has been asked whether any of them resolve — the home
+ * checks each one and drops what has gone, which is what keeps a list of ghosts
+ * off the front door.
+ */
+export const readHeldRooms = (): HeldRoom[] =>
+  heldRooms({ seats: readSeats(), tokens: readHostTokens() })
+
+/**
+ * The code has stopped resolving, so nothing this device holds for it opens
+ * anything: the token, the console's seat and the phone's all go together. It
+ * keeps the eight slots each store has for rooms that still exist, which is what
+ * stops a device that plays often pushing a live room out with dead ones.
+ */
+export const forgetRoom = (roomCode: RoomCode): void => {
+  forgetHostToken(roomCode)
+  forgetSessionId({ role: 'host', roomCode })
+  forgetSessionId({ role: 'player', roomCode })
 }
 
 /**

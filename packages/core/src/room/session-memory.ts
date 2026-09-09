@@ -154,3 +154,57 @@ export const rememberHostToken = ({
   [{ at, hostToken, roomCode }, ...hostTokensWithout({ roomCode, tokens })]
     .filter((kept) => kept.at > at - SEAT_MEMORY_MS)
     .slice(0, MAX_REMEMBERED_SEATS)
+
+/**
+ * One room this device can still walk back into, and which door it opens. The
+ * `role` is what the front door presses: `'host'` reaches the console, `'player'`
+ * the seat.
+ */
+export type HeldRoom = {
+  at: number
+  role: ConnectionRole
+  roomCode: RoomCode
+}
+
+/**
+ * A front door is not a history. Four rows is the most it can carry without the
+ * page's own two doors leaving the screen, and the store is newest-first, so the
+ * fifth is always older than the one somebody just lost.
+ */
+export const MOST_ROOMS_OFFERED = 4
+
+/**
+ * What this device holds a way back into, newest first — the list the home
+ * offers before it has asked the server whether any of them still resolve.
+ *
+ * Two exclusions carry the whole rule. **A host seat is not a way in**: only the
+ * token opens the console, which is what keeps that door shut against a code
+ * read off a wall. And **a seat with no nickname is not a seat**: a socket opens
+ * before the join is answered, so a refused arrival leaves an entry behind, and
+ * offering it would send somebody back to a room they never got into.
+ */
+export const heldRooms = ({
+  seats,
+  tokens
+}: {
+  seats: RememberedSeat[]
+  tokens: RememberedHostToken[]
+}): HeldRoom[] => {
+  const hosted = tokens.map(({ at, roomCode }) => ({
+    at,
+    role: 'host' as const,
+    roomCode
+  }))
+  const hostedCodes = new Set(hosted.map(({ roomCode }) => roomCode))
+
+  const seated = seats
+    .filter(
+      ({ nickname, role, roomCode }) =>
+        role === 'player' && nickname !== null && !hostedCodes.has(roomCode)
+    )
+    .map(({ at, roomCode }) => ({ at, role: 'player' as const, roomCode }))
+
+  return [...hosted, ...seated]
+    .sort((older, newer) => newer.at - older.at)
+    .slice(0, MOST_ROOMS_OFFERED)
+}

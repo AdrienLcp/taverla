@@ -34,6 +34,23 @@ one part.
 
 ### Features
 
+- `[Game]` **The front door offers the rooms this device can walk back into.**
+  Closing the console's tab lost nothing — the room outlives its host by ten
+  minutes and a single connected player keeps it alive indefinitely, the token
+  in `taverla:host-tokens` always wins a claim, and the seat in `taverla:seats`
+  survives a locked screen. What was missing was the lock to put the key in:
+  `hostPathFor` had exactly one caller and it was reached only after a `POST`
+  that minted a *new* room. `HeldRooms` is that lock. It is offered **to the
+  device holding the key** and to nobody else, which is what lets the console's
+  door stay URL-only — a public list of open rooms would hand a stranger not a
+  seat but the console, and it stays refused. Every candidate is resolved
+  through `GET /api/rooms/:code` before it is offered and a confirmed absence is
+  pruned from the store, so the morning after a party the list repeats nothing.
+  A lookup that merely *fails* is not a refusal and the room is still offered.
+  It sits **under** the two doors rather than over them, because it arrives once
+  the server has answered and above them it moved the button a thumb aims at by
+  221px. See [`docs/plans/backlog/the-hosts-way-back.md`](docs/plans/backlog/the-hosts-way-back.md)
+
 - `[Game]` **A shelf card opens the table.** Pressing a game on the front door
   led to that game's own page, whose only content was a second press: nothing on
   it feeds the request, which carries the game the card names and the locale the

@@ -1,0 +1,42 @@
+@use '../../presentation/styles/layout'
+@use '../../presentation/styles/typography'
+
+@layer components
+  // The one section on this page that is not there when the page is: it goes up
+  // once the server has said which of the remembered rooms still resolve. So it
+  // takes the product's own arrival rather than appearing between two frames —
+  // the same eight pixels and fade every screen enters on, and the same nothing
+  // at all for somebody who asked for no motion.
+  .held-rooms
+    @include layout.arriving
+
+    display: flex
+    flex-direction: column
+    gap: var(--space-s)
+
+    h2
+      @include typography.title
+
+      color: var(--ink-muted)
+
+    // The control centres its label, and this one is a row: the code at one
+    // edge, the door it opens at the other.
+    .link
+      justify-content: space-between
+
+    // Four characters over an alphabet with no confusable glyphs — it is the
+    // room's identity and it never shrinks, so the word beside it is what gives
+    // way. `min-width` is the other half of that: a flex item's floor is its own
+    // content until it is told otherwise.
+    .code
+      flex: none
+
+    // The small wide caps that name a control, which is what this word is: the
+    // code is the room and this says which door it opens. At the control's own
+    // voice the two read as one heading with a gap in it.
+    .door
+      @include typography.label
+
+      min-width: 0
+      overflow: hidden
+      text-overflow: ellipsis

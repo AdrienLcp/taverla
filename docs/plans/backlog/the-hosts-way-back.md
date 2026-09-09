@@ -91,6 +91,44 @@ as prescribed, and it needed a sentence in both dictionaries before it compiled.
 `host-absence.test.ts` covers it: the floor answers a frozen round in full and
 the round is still `playing` afterwards.
 
+## The door — **landed 9 September 2026**
+
+`HeldRooms` sits in `features/home/`, under the two doors and above the shelf.
+Three things it decided that the section above did not.
+
+**Where it goes was settled by a measurement, not by rank.** It is drawn only
+once the server has answered — the lookup returns a bare boolean, so there is
+nothing to enrich a row with afterwards and a row put up early would be an offer
+withdrawn. Above the two doors that arrival moved `Open a table` down **221px**,
+which is the same fault as the verdict line that shifted a form by 20px, six
+times over. A block whose height is unknown cannot sit above the one action a
+thumb aims at, and reserving does not save it: a candidate that turns out to be
+dead collapses the reservation and moves the same button the other way. So it
+goes under both doors, where its arrival pushes only the shelf, and at 414px it
+still opens at y=627 on a 896px screen — visible without scrolling, which was
+the whole reason to want it high.
+
+**A lookup that fails is not a refusal.** Only `exists: false` says a room has
+gone; a request that never landed says nothing, and withholding the door then is
+the failure this entry exists to fix. So an unanswered candidate is still
+offered and the room page's own refusal screen says so if it turns out to be
+dead. Only a confirmed absence prunes, and it prunes the token *and* both seats,
+which is what keeps the eight slots each store has for rooms that still exist.
+
+**Two exclusions carry the security posture**, and both live in
+`heldRooms` in `packages/core/src/room/session-memory.ts` with tests. A **host
+seat is not a way in** — only the token opens the console, so a device left
+holding a seat and no token is offered nothing, which is the soft lock this
+entry spent its argument protecting. And a **seat with no nickname is not a
+seat**: the socket opens before the join is answered, so a refused arrival
+leaves an entry behind, and offering it would send somebody back to a room they
+never got into. Four rows is the ceiling — a front door is not a history.
+
+A row is one line: the code at one edge, `Your table` or `Your seat` at the
+other in the `label` register. It is the design system's `Link`, `outlined` and
+`large`, rather than a fourth hand-rolled surface — a room has one fact and the
+word beside it says which door the press opens.
+
 ## Verifying it
 
 Real browser, muted — `taverla:volume` to `'0'` before the first navigation. The

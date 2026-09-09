@@ -218,6 +218,11 @@ export const FR_DICTIONARY: Dictionary = {
   },
   home: {
     games: 'Les jeux',
+    heldRooms: {
+      host: 'Votre table',
+      player: 'Votre place',
+      title: 'Où vous étiez'
+    },
     tagline: 'La taverne est ouverte.',
     title: 'Taverla'
   },

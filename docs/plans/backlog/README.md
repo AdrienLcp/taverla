@@ -15,27 +15,25 @@ file rather than half-landing.
 
 ## Open
 
-Three entries. **Two wait on a phone and one waits on a session.** Of the pair
-that wait on a phone, one needs a line read off the Android that produced note
-6; the other is about a colour the sRGB monitor this repository is written on
-cannot display, and its entry now names the two P3 handsets that can and
-corrects the check it prescribed — **one screen is enough**, if the page draws
-both values side by side. Of the two decisions the oklch palette opened, the one
-about borders is taken and is below, and the one about colour stops exactly
-where a screen has to be looked at.
+Two entries, and **both wait on a phone.** One needs a line read off the
+Android that produced note 6; the other is about a colour the sRGB monitor this
+repository is written on cannot display, and its entry now names the two P3
+handsets that can and corrects the check it prescribed — **one screen is
+enough**, if the page draws both values side by side. Of the two decisions the
+oklch palette opened, the one about borders is taken and is below, and the one
+about colour stops exactly where a screen has to be looked at.
 
-The one that waits on a session was half of **an argument split in two** — put
-the room's code on every screen, then keep that from also handing the console to
-whoever reads it — and the first half landed on 8 September.
-[The host's way back](the-hosts-way-back.md) is what is left of it, and it is
-now free to be taken on its own; its premise is unchanged, and the soft lock it
-prices is still the one in force.
+**Nothing here waits on a session any more.** The last one was half of an
+argument split in two — put the room's code on every screen, then keep that from
+also handing the console to whoever reads it — and both halves are now delivered:
+the first on 8 September, [the host's way back](the-hosts-way-back.md) on the
+9th. The soft lock it priced is still the one in force, and its two refusals are
+worth reading before anybody proposes a room list again.
 
 | Session | In one line | Cost | Starts with | Holds |
 |---|---|---|---|---|
 | [The room is silent, unexplained](silent-room-unexplained.md) | **Half done.** Two of the three causes are ruled out and the console names the third; one reading on the Android phone closes it | waits on a phone | — | note 6, and what each of the three lines means |
 | [The fields a phone could show](fields-a-phone-could-show.md) | `oklch()` can name a colour sRGB cannot, and every phone in the room has a P3 screen. The three widest fields are derived and every pair re-measured; what is left is looking at it on a P3 screen and keeping it or not — **the screens exist now**, and the entry's own two-phone check is corrected at the end of it | waits on a phone | the derived table, then the correction under it | why it is a design decision and not a conversion, and why Samsung's *Natural* mode would show nothing |
-| [The host's way back](the-hosts-way-back.md) | **Half done.** The server hardening it owed landed on 9 September; what is left is the door — the home lists the rooms this device holds a token for | one session | the two refusals, before anything is drawn | why a public list of open rooms is a different product |
 
 **One diagnosis disagrees with the note that raised it** — read the entry before
 planning it:
@@ -80,6 +78,7 @@ planning it:
 | [Everything the phone is already sent](everything-the-phone-is-already-sent.md) | 19 Aug 2026, in two halves |
 | [The borders that do not quite carry](borders-that-do-not-quite-carry.md) | 4 Sep 2026 |
 | [The chrome keeps the palette the page left](theme-color-after-the-menu.md) | 4 Sep 2026 |
+| [The host's way back](the-hosts-way-back.md) | 9 Sep 2026, in two halves |
 
 **Six delivered entries are worth opening**, and each warns about a different
 half of what is written here.

@@ -242,6 +242,11 @@ export const EN_DICTIONARY = defineDictionary({
   },
   home: {
     games: 'The games',
+    heldRooms: {
+      host: 'Your table',
+      player: 'Your seat',
+      title: 'Where you were'
+    },
     tagline: 'The tavern is open.',
     title: 'Taverla'
   },

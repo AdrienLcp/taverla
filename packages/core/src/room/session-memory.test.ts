@@ -2,9 +2,11 @@ import { describe, expect, it } from 'vitest'
 
 import {
   forgetSeat,
+  heldRooms,
   hostTokenFor,
   hostTokensWithout,
   MAX_REMEMBERED_SEATS,
+  MOST_ROOMS_OFFERED,
   type RememberedHostToken,
   type RememberedSeat,
   refusalVoidsSeat,
@@ -277,5 +279,76 @@ describe('rememberHostToken', () => {
         tokens: [tokenIn('ABCD', NOW), tokenIn('BCDE', NOW)]
       })
     ).toEqual([tokenIn('BCDE', NOW)])
+  })
+})
+
+describe('heldRooms', () => {
+  const heldTokenIn = (roomCode: string, at: number): RememberedHostToken => ({
+    at,
+    hostToken: `token-${roomCode}`,
+    roomCode
+  })
+
+  const seatedIn = (
+    roomCode: string,
+    at: number,
+    role: RememberedSeat['role'] = 'player'
+  ): RememberedSeat => ({
+    at,
+    nickname: 'Adrien',
+    role,
+    roomCode,
+    sessionId: `session-${roomCode}`
+  })
+
+  it('[session-memory] offers a token as the console door and a seat as the player one', () => {
+    expect(
+      heldRooms({
+        seats: [seatedIn('BCDE', NOW)],
+        tokens: [heldTokenIn('ABCD', NOW + 1)]
+      })
+    ).toEqual([
+      { at: NOW + 1, role: 'host', roomCode: 'ABCD' },
+      { at: NOW, role: 'player', roomCode: 'BCDE' }
+    ])
+  })
+
+  it('[session-memory] offers one row for a room this device both hosts and plays', () => {
+    expect(
+      heldRooms({
+        seats: [seatedIn('ABCD', NOW)],
+        tokens: [heldTokenIn('ABCD', NOW)]
+      })
+    ).toEqual([{ at: NOW, role: 'host', roomCode: 'ABCD' }])
+  })
+
+  it('[session-memory] refuses a host seat the token no longer backs', () => {
+    expect(
+      heldRooms({ seats: [seatedIn('ABCD', NOW, 'host')], tokens: [] })
+    ).toEqual([])
+  })
+
+  it('[session-memory] refuses a seat left behind by an arrival that was never granted', () => {
+    expect(heldRooms({ seats: [seatIn('ABCD', NOW)], tokens: [] })).toEqual([])
+  })
+
+  it('[session-memory] puts the room most recently held first', () => {
+    expect(
+      heldRooms({
+        seats: [seatedIn('BCDE', NOW), seatedIn('CDEF', NOW + 2)],
+        tokens: [heldTokenIn('ABCD', NOW + 1)]
+      }).map((room) => room.roomCode)
+    ).toEqual(['CDEF', 'ABCD', 'BCDE'])
+  })
+
+  it('[session-memory] offers no more rows than a front door has room for', () => {
+    expect(
+      heldRooms({
+        seats: ROOM_CODES.map((roomCode, index) =>
+          seatedIn(roomCode, NOW - index)
+        ),
+        tokens: []
+      })
+    ).toHaveLength(MOST_ROOMS_OFFERED)
   })
 })
