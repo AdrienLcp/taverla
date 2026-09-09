@@ -439,6 +439,54 @@ one part.
 
 ### Improvements
 
+- `[Server]` **The French bank more than doubles, from a source that had to be
+  filtered down by a factor of thirty.** PolyFact is 58 807 French
+  multiple-choice questions generated from Wikidata, CC BY-SA 4.0 — and what it
+  actually holds is **fourteen sentence templates** filled in over and over,
+  most of them about entities no room has heard of. Seven of the fourteen are
+  banked; the other seven fail for reasons of their own, and `country`,
+  `continent` and `official language` fail three times over — asked about
+  villages, answered by inherently famous entities, and leaking the answer into
+  the prompt (*dans quel pays se trouve la cathédrale Notre-Dame de
+  **Strasbourg** ?*). Of the 26 079 rows left, a row is kept when the subject's
+  French Wikipedia article took **300 views over sixty days** and all four
+  candidates took 60: **4 321 subjects clear the first bar and 2 144 rows clear
+  both**. French rows go **2 018 → 4 162**, the whole bank **6 455 → 8 599**.
+
+  **Notability is traffic, not sitelinks**, and that cost a day to learn. How
+  many Wikipedias hold an article is a measure of *bot coverage*: the Cebuano,
+  Waray and Swedish bots wrote one for every municipality on Earth, so
+  *Torralba del Pinar*, sixty inhabitants, clears any bar *Jumanji* clears —
+  filtering on it keeps `official language` and throws away `author`. Two API
+  traps came with it and both are written down in `frwiki-notability.ts`:
+  `prop=pageviews` **paginates**, and a one-shot request over four thousand
+  titles leaves three quarters reading zero, which is indistinguishable from an
+  article nobody opens; and the HuggingFace `/rows` API cannot carry 56 324
+  rows, refusing from around the eleven-thousandth whatever the throttle, so the
+  three splits are fetched as parquet in one request each through `hyparquet`.
+
+  **One entity was the wrong answer under 253 of the 327 `creator` rows** —
+  *Gunter Demnig* laid the Stolpersteine and is therefore the creator of tens of
+  thousands of Wikidata items, and uncapped he would have been one French arts
+  row in nine, twice an evening. `withDecoysSpread` caps any entity at 2% of its
+  relation and swaps the excess for the candidate that relation has leant on
+  least, checked against the real grader so a swap cannot cost the row.
+  `[bank] leans on no single wrong answer` is what holds it, over any language
+  and subject with enough rows for a share to mean anything.
+
+  What it does **not** buy: PolyFact is Wikidata relations about people and
+  works, so French history stays at 64 rows and geography at 156. The 2 144 land
+  as 1 507 `arts`, 632 `everyday` and 5 `science` — and because the draw picks a
+  category first, that makes those two more *varied* rather than more likely.
+
+- `[Game]` **The credits page names three banks, not two.** CC BY-SA asks for
+  the credit to travel with the work, and PolyFact's sentence has to stay true
+  to what the ingestion does to it — so it says which seven of the fourteen
+  shapes were kept, that a row survives only when the room has heard of its
+  subject and all four candidates, and that a wrong answer the source leaned on
+  was swapped out. The list was one entry per *language*; it is one per source
+  now, because the French half is written by two people who never met.
+
 - `[Server]` **The French question bank grows by a seventh, and stops asking the
   same thing twice.** Three cheap sources, none of them a new upstream: the
   cached OpenQuizzDB listing was fetched in August and holds 516 packs where the

@@ -35,10 +35,11 @@ type QuestionCredit = {
  * language — and CC BY-SA 4.0 §3(a)(2) names the link as a reasonable way to
  * satisfy it.
  *
- * One entry per language, because the bank is written in each rather than
- * translated from one into the other, and the two halves have different
- * authors. Both are named whatever the room is playing: the credit is for the
- * data that shipped, not for the rows a given evening happened to draw.
+ * One entry per source rather than per language, because nothing here is
+ * translated from anything — each bank is written in its own language, and the
+ * French half is now written by two people who never met. All of them are named
+ * whatever the room is playing: the credit is for the data that shipped, not
+ * for the rows a given evening happened to draw.
  *
  * It mirrors the `attributions` header of `question-bank.json`, which is the
  * machine-readable copy that travels with the data itself. The two are separate
@@ -50,6 +51,12 @@ const QUESTION_CREDITS: QuestionCredit[] = [
     changes: 'credits.openquizzdb',
     source: 'OpenQuizzDB',
     sourceUrl: 'https://www.openquizzdb.org'
+  },
+  {
+    author: 'jvonrad',
+    changes: 'credits.polyfact',
+    source: 'PolyFact',
+    sourceUrl: 'https://huggingface.co/datasets/jvonrad/PolyFact'
   },
   {
     author: 'PIXELTAIL GAMES LLC',

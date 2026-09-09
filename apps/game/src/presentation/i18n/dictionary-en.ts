@@ -185,7 +185,7 @@ export const EN_DICTIONARY = defineDictionary({
     refused: 'Disconnected'
   },
   /**
-   * These two sentences are not blurb. CC BY-SA 4.0 §3(a)(1)(B) asks that a
+   * These three sentences are not blurb. CC BY-SA 4.0 §3(a)(1)(B) asks that a
    * modification be indicated, and it is the one item on that list owed
    * whatever the upstream supplied — so each has to stay true to what the
    * ingestion in `apps/server/scripts/` actually does to that bank.
@@ -195,6 +195,8 @@ export const EN_DICTIONARY = defineDictionary({
       'Its rubrics were mapped onto the six subjects used here, its anecdotes kept as the line shown once an answer is public, and its adult-rated questions marked so an innkeeper can leave them out. Questions that did not carry exactly three wrong answers were left behind, as were the ones whose wrong answers cannot be told from the right one once written down. One answer spelled against its own anecdote was corrected.',
     opentdb:
       'Its text arrives HTML-encoded and was decoded, its categories were mapped onto the six subjects used here, and questions that did not carry exactly three wrong answers were left behind, as were the ones whose wrong answers cannot be told from the right one once written down.',
+    polyfact:
+      'It is built from Wikidata in fourteen question shapes, and seven of them were kept and mapped onto the six subjects used here — the others ask about hamlets nobody has heard of, or give the answer away in the question. Of what remained, only the questions whose subject and whose four candidates all have a French Wikipedia article people actually read were banked. A wrong answer the source leaned on far too often was swapped for one it had barely used, and questions whose wrong answers cannot be told from the right one once written down were left behind.',
     shareAlike:
       'The assembled bank is shared under the same licence, and the code that assembles it is open.',
     title: 'Credits',

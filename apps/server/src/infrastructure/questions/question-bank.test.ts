@@ -152,6 +152,11 @@ describe('drawQuestion', () => {
    * answers Japan, and India, and seventy others — is one it cannot win. The
    * second half of this matters as much as the first: a bank that lost the
    * column on a rebuild would pass the exclusion vacuously.
+   *
+   * Its budget moved when PolyFact took the bank past eight thousand rows: a
+   * draw scans the eligible set, so sixteen hundred of them grew past vitest's
+   * default while the argument for the two counts did not. Cutting the draws
+   * instead would have quietly cut the certainty they buy.
    */
   it('[bank] keeps a question that needs its own candidates away from a typed room', () => {
     const typed = drawMany(DEFAULT_QUIZ_SETTINGS, {
@@ -164,7 +169,7 @@ describe('drawQuestion', () => {
     const anyMode = drawMany(DEFAULT_QUIZ_SETTINGS, { times: 1_200 })
 
     expect(anyMode.some((question) => question.choiceOnly)).toBe(true)
-  })
+  }, 30_000)
 
   it('[bank] holds no question whose own decoy would be graded right', () => {
     const winnable = bank.questions.filter((question) =>
@@ -197,6 +202,55 @@ describe('drawQuestion', () => {
     }
 
     expect(repeated).toEqual([])
+  })
+
+  /**
+   * A source that draws its decoys from a pool it never rebalances hands one
+   * entity a whole subject: *Gunter Demnig* laid the Stolpersteine and is
+   * therefore the creator of tens of thousands of Wikidata items, so he was the
+   * wrong answer under **253 of PolyFact's 327 `creator` rows** — one French
+   * arts row in nine, which is twice an evening. The build spreads them; this is
+   * what says so, and what goes red the day a source lands without that pass.
+   *
+   * Only over a subject with enough rows for a share to mean anything. French
+   * history is sixty-four rows, so one decoy appearing twice is three per cent
+   * and nothing is wrong — measuring there would be measuring the sample.
+   */
+  it('[bank] leans on no single wrong answer', () => {
+    const ENOUGH_ROWS = 500
+    const MOST_OF_A_SUBJECT = 0.05
+
+    const subjects = new Map<string, string[][]>()
+
+    for (const question of bank.questions) {
+      const subject = `${question.language}/${question.category}`
+
+      subjects.set(subject, [...(subjects.get(subject) ?? []), question.decoys])
+    }
+
+    const overused: string[] = []
+
+    for (const [subject, rows] of subjects) {
+      if (rows.length < ENOUGH_ROWS) {
+        continue
+      }
+
+      const uses = new Map<string, number>()
+
+      for (const decoys of rows) {
+        for (const decoy of decoys) {
+          uses.set(decoy, (uses.get(decoy) ?? 0) + 1)
+        }
+      }
+
+      for (const [decoy, used] of uses) {
+        if (used / rows.length > MOST_OF_A_SUBJECT) {
+          overused.push(`${subject}: ${decoy} under ${used} of ${rows.length}`)
+        }
+      }
+    }
+
+    expect(overused).toEqual([])
   })
 
   /**

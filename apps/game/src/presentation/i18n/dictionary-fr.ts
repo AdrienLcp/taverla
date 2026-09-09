@@ -169,6 +169,8 @@ export const FR_DICTIONARY: Dictionary = {
       'Ses rubriques ont été rattachées aux six sujets utilisés ici, ses anecdotes conservées comme la ligne affichée une fois la réponse dévoilée, et ses questions classées adulte signalées pour qu’un aubergiste puisse les laisser de côté. Les questions qui ne portaient pas exactement trois mauvaises réponses ont été écartées, comme celles dont une mauvaise réponse ne se distingue plus de la bonne une fois écrite. Une réponse mal orthographiée par rapport à sa propre anecdote a été corrigée.',
     opentdb:
       'Son texte arrive encodé en HTML et a été décodé, ses catégories ont été rattachées aux six sujets utilisés ici, et les questions qui ne portaient pas exactement trois mauvaises réponses ont été écartées, comme celles dont une mauvaise réponse ne se distingue plus de la bonne une fois écrite.',
+    polyfact:
+      'Elle est bâtie sur Wikidata en quatorze formes de question, dont sept ont été retenues et rattachées aux six sujets utilisés ici — les autres portent sur des hameaux dont personne n’a entendu parler, ou donnent la réponse dans l’énoncé. Parmi ce qui restait, seules les questions dont le sujet et les quatre propositions ont tous un article de Wikipédia en français réellement lu ont été gardées. Une mauvaise réponse sur laquelle la source revenait bien trop souvent a été remplacée par une qu’elle n’utilisait presque pas, et les questions dont une mauvaise réponse ne se distingue plus de la bonne une fois écrite ont été écartées.',
     shareAlike:
       'La banque assemblée est diffusée sous la même licence, et le code qui l’assemble est ouvert.',
     title: 'Crédits',

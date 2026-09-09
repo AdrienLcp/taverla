@@ -22,6 +22,7 @@ paid on every read of the code.
 |---|---|
 | Deezer (via `fetch`) | `apps/server/src/infrastructure/music/deezer-client.ts` |
 | the question banks | `apps/server/src/infrastructure/questions/question-bank.ts` |
+| `hyparquet` | `apps/server/scripts/polyfact-source.ts` — one upstream ships its half-million rows as parquet and nothing else here reads a byte of it |
 | `hono`, `@hono/*`, `hono-rate-limiter` | `apps/server/src/infrastructure/http/`, `apps/server/src/index.ts` |
 | `WebSocket` (browser) | `apps/game/src/infrastructure/messaging/use-room-socket.ts` |
 | `hono/ws` (server) | `apps/server/src/infrastructure/messaging/` |

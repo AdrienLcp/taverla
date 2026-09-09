@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -63,6 +63,69 @@ export const cached = async (
 
     return body
   }
+}
+
+/**
+ * A download too binary and too large to hold as a string — a parquet file runs
+ * to seven megabytes of it — cached under its own name and handed back as a
+ * path, so the reader can seek into the file rather than decode the whole of it.
+ */
+export const cachedFile = async ({
+  name,
+  url
+}: {
+  name: string
+  url: string
+}): Promise<string> => {
+  await mkdir(CACHE_DIRECTORY, { recursive: true })
+
+  const path = join(CACHE_DIRECTORY, name)
+
+  try {
+    await access(path)
+  } catch {
+    const response = await fetch(url)
+
+    if (!response.ok) {
+      throw new Error(`${url} answered ${response.status}`)
+    }
+
+    await writeFile(path, new Uint8Array(await response.arrayBuffer()))
+  }
+
+  return path
+}
+
+/**
+ * A cache several runs fill in, where `cached` holds one download whole. Two
+ * hundred thousand Wikidata entities are resolved a few hundred at a time over
+ * the better part of an hour, and a run that dies at minute fifty must resume
+ * rather than start again — so what is already known is written back as it is
+ * learnt, keyed by the thing itself instead of by its position in a queue that
+ * the next rule change would renumber.
+ */
+export const readCachedEntries = async <TValue>(
+  name: string
+): Promise<Record<string, TValue>> => {
+  try {
+    return JSON.parse(
+      await readFile(join(CACHE_DIRECTORY, name), 'utf8')
+    ) as Record<string, TValue>
+  } catch {
+    return {}
+  }
+}
+
+export const writeCachedEntries = async <TValue>({
+  entries,
+  name
+}: {
+  entries: Record<string, TValue>
+  name: string
+}): Promise<void> => {
+  await mkdir(CACHE_DIRECTORY, { recursive: true })
+
+  await writeFile(join(CACHE_DIRECTORY, name), JSON.stringify(entries), 'utf8')
 }
 
 /**

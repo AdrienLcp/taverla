@@ -8,18 +8,21 @@ import { normalizeAnswer } from '@taverla/core/round/answer-matching'
 
 import { ingestOpenQuizzDb } from './openquizzdb-source'
 import { ingestOpenTdb } from './opentdb-source'
+import { ingestPolyFact } from './polyfact-source'
 import type { BankedQuestion, IngestedQuestions } from './question-source'
 
 /**
- * Rebuilds the question bank from the two sources it is written in, both under
+ * Rebuilds the question bank from the three sources it is written in, all under
  * CC BY-SA 4.0. Run it with `pnpm --filter @taverla/server questions:build`; it
  * is a one-off rather than part of the build, because the upstream packs change
  * a few times a year and a deploy should not depend on somebody else's web
  * server being up.
  *
  * Downloads are cached under `.cache/`, so a re-run after a mapping change costs
- * nothing — which matters more for the English half, whose drain is rate-limited
- * to one request every five seconds and takes a quarter of an hour cold.
+ * nothing. Cold it is slow twice over: the English drain is rate-limited to one
+ * request every five seconds and takes a quarter of an hour, and PolyFact's rule
+ * asks Wikidata and French Wikipedia how well known a hundred thousand entities
+ * are, which takes about as long again.
  */
 const HERE = dirname(fileURLToPath(import.meta.url))
 const BANK_PATH = join(
@@ -173,9 +176,11 @@ const report = (ingested: IngestedQuestions): void => {
     )
   }
 
-  const { language } = ingested.attribution
+  const { language, source } = ingested.attribution
 
-  console.info(`\n${ingested.questions.length} questions in ${language}:`)
+  console.info(
+    `\n${ingested.questions.length} questions from ${source} (${language}):`
+  )
 
   for (const [category, count] of [...byCategory].sort(
     ([, left], [, right]) => right - left
@@ -198,10 +203,17 @@ const run = async (): Promise<void> => {
   console.info('OpenQuizzDB (fr)')
   const french = await ingestOpenQuizzDb()
 
+  console.info('\nPolyFact (fr)')
+  const wikidata = await ingestPolyFact()
+
   console.info('\nOpen Trivia DB (en)')
   const english = await ingestOpenTdb()
 
-  const sourced = [...french.questions, ...english.questions]
+  const sourced = [
+    ...french.questions,
+    ...wikidata.questions,
+    ...english.questions
+  ]
   const offered = sourced
     .filter((question) => repairs[question.id]?.drop !== true)
     .map(repaired)
@@ -209,13 +221,18 @@ const run = async (): Promise<void> => {
   const questions = withoutRepeatedPrompts(winnable)
 
   const bank = {
-    attributions: [french.attribution, english.attribution],
+    attributions: [
+      french.attribution,
+      wikidata.attribution,
+      english.attribution
+    ],
     questions: questions.map(banked)
   }
 
   await writeFile(BANK_PATH, `${JSON.stringify(bank, null, 2)}\n`, 'utf8')
 
   report(french)
+  report(wikidata)
   report(english)
 
   console.info(`\n${bank.questions.length} questions → ${BANK_PATH}`)
@@ -232,7 +249,11 @@ const run = async (): Promise<void> => {
     console.info(`  repeated ${question.id}: "${question.prompt}"`)
   }
 
-  for (const rejection of [...french.rejections, ...english.rejections]) {
+  for (const rejection of [
+    ...french.rejections,
+    ...wikidata.rejections,
+    ...english.rejections
+  ]) {
     console.info(`  rejected ${rejection}`)
   }
 
