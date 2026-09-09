@@ -169,8 +169,13 @@ labels in the longer locale rather than taken from a device size: the game
 picker's French row comes to 433px, so it stacks below `28rem`. It is a
 **container** query, because the same picker is 369px inside the lobby's column
 and 900px inside the setup fold at one and the same 1000px viewport. Six other
-strips still wrap this way — measured, listed, and waiting on one decision in
-[a row that reads as chosen](../../docs/plans/backlog/a-row-that-reads-as-chosen.md).
+strips still wrap this way and take the same escape — measured and listed in
+[a row that reads as chosen](../../docs/plans/backlog/a-row-that-reads-as-chosen.md),
+along with the alternative that was drawn on the screen and declined: hairlines
+around each segment need no thresholds at all, and cost the strip its outer
+boundary and its equal columns, which is the die-cut block this whole system is
+made of. The thresholds are read off the dictionary, so what makes them safe is
+the check that no strip ever holds rows of two different lengths.
 
 **A section a reader opens is a ruled row, not a block.** A bordered control
 beside the one action on the screen reads as a second one, so `Disclosure`'s

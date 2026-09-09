@@ -44,35 +44,66 @@ Two findings worth keeping:
   stack all five for nothing, which is why the fix cannot be one number in the
   mixin.
 
-## The decision this needs
+## The decision, taken
 
-`stacks-below($width)` works and is proved on the picker, but its `$width` is
-measured off the dictionary, so **seven of them is seven numbers that a
-translation edit silently invalidates**. Nothing would warn: the strip goes back
-to wrapping and looks deliberate. Before applying it six more times, weigh it
-against the other shape of fix.
+**Keep the strip as it is built and give the remaining six their own
+`stacks-below()`, with a test that keeps the numbers honest.** Decided
+9 September 2026, after putting the alternative on the screen rather than
+arguing it.
 
-**Change how the strip draws its rules.** The stretch exists only because the
-separators are 2px gaps with the strip's `--rule` ground showing through, so a
-short row that did not stretch would leave a solid rule-coloured band. Give each
-segment its own hairline instead — an overlapping `box-shadow` ring, which is
-what makes the outer border free as well — and the leftover of a short row is
-just field. Then a `4+1` reads as a row that ran out, nothing reads as selected,
-and there are no numbers at all.
+The alternative was to change what draws the separators. They are 2px gaps with
+the strip's `--rule` ground showing through, which is the whole reason a short
+row must stretch: a row that stopped would leave a solid rule-coloured band. Give
+each segment its own hairline instead and the leftover is just field, so nothing
+has to stretch, nothing reads as selected, and there is not a single threshold
+anywhere.
 
-It costs a change to a material `DESIGN.md` records deliberately, with the
-reason it was chosen: *a `border-right` has nothing to say about a row below it,
-and no `:last-child` can name the end of a row*. That reason is about **borders
-between** segments and does not answer a ring **around** each one, so it is not
-an argument already made against this — but it is a change to what every room
-sees, on every strip in the product, and that makes it Adrien's call rather than
-a session's.
+It was tried at 390px over the quiz's fold, and the reason it loses is not the
+one that was expected. Without the stretch the stamps are only as wide as their
+own labels — on *every* row, not just the last — so each strip stops being one
+object: no outer boundary, ragged right edges, and a column of settings that
+reads as a loose heap of chips. It also replaces the hard-edged die-cut block the
+whole product is built from. The screenshots are in the session that took this
+decision; the short version is that it is a correct control and a worse one.
 
-The third way is to keep the per-strip numbers and stop them going stale: the
-sweep above is a Playwright pass over every strip asserting that no strip ever
-holds rows of two different lengths. That is a real e2e test rather than a
-comment, and it turns seven numbers from debt into something that fails loudly.
-It composes with either fix and is worth doing whichever wins.
+Against that, the only real charge against the thresholds is that they fail
+**silently** — a dictionary edit moves a row and the strip goes back to wrapping
+looking deliberate. That is what the test removes, so the permanent cost loses to
+the repairable one.
+
+## What the session does
+
+1. **Write the check first**, and watch it fail on the six. It is the sweep this
+   entry was measured with: for each game, at a handful of widths, in both
+   locales, assert that no strip holds rows of two different lengths. Read the
+   top of each `.segment`'s bounding box, group by row, and compare the counts.
+   Note that `.claude/rules/e2e.md` says three journeys and this is not a fourth
+   — it is one pass over one screen, and where it lives is worth a minute's
+   thought before it is written.
+
+2. **Measure, then apply.** The widths below are what today's sweep read in
+   French, which binds on every one of these. They are a starting point and not
+   a result — this backlog has been wrong about its own measured numbers before
+   — so re-read them from the check in (1) and round up for headroom the way the
+   picker's 433px became `28rem`.
+
+   | Strip | Needs on one row | Suggested |
+   |---|---|---|
+   | Comment on répond | 479px | `31rem` |
+   | À quel point c'est connu | 441px | `28rem` |
+   | Sur quels sujets | 702px | `45rem` |
+   | D'où viennent les titres | 812px | `52rem` |
+   | Temps pour écrire, Temps pour voter | 279px each | `18rem` |
+
+3. **Leave `Quelle musique` alone.** Twelve options, and twelve divides into
+   every column count the wrap produces, so it never holds an unequal row at any
+   width. A threshold there would stack twelve options into a wall for nothing.
+
+4. **Check the height it buys back.** `Sur quels sujets` goes from three wrapped
+   rows to six full-width ones, roughly +90px in a fold that is opened
+   deliberately, and each row becomes a better target for a thumb. If any of the
+   six reads worse stacked than wrapped, that strip is the one worth arguing
+   about — not the rule.
 
 ## Where the code is
 
