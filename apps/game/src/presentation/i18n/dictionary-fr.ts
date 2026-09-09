@@ -187,6 +187,7 @@ export const FR_DICTIONARY: Dictionary = {
     cannot_vote_for_own_lie: 'Celle-là est la tienne. Choisis-en une autre.',
     false_start: 'Trop tôt. Attends que ça change.',
     host_already_connected: 'Quelqu’un tient déjà cette table.',
+    host_away: 'L’aubergiste a décroché. La tournée attend son retour.',
     host_only_action: 'Seul l’aubergiste peut faire ça.',
     host_reconnecting:
       'Cette table vient de perdre son aubergiste, et l’attend encore.',

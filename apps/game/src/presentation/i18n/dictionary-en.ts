@@ -211,6 +211,7 @@ export const EN_DICTIONARY = defineDictionary({
     cannot_vote_for_own_lie: 'That one is yours. Pick another.',
     false_start: 'Too soon. Wait for the change.',
     host_already_connected: 'Someone is already keeping this table.',
+    host_away: 'The innkeeper stepped away. The round is waiting for them.',
     host_only_action: 'Only the innkeeper can do that.',
     host_reconnecting:
       'This table has just lost its innkeeper, and is waiting for them.',
