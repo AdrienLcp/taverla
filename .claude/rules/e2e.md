@@ -36,6 +36,28 @@ out, so the landing is awaited between the two clicks.
 Playwright is the slowest tool available. Before adding a fourth spec, ask what
 it covers that a socket test cannot; the answer is usually "nothing".
 
+## One spec that is not a journey
+
+`strip-rows.spec.ts` plays nothing. It opens one room, walks every game in both
+locales, and asserts that no choice strip ever holds rows of two different
+lengths — the defect where a wrap leaves a short row, `flex: 1` stretches it,
+and an unselected stamp ends up wearing the shape of a selected one.
+
+It is the answer to the question above rather than an exception to it: the
+stacking widths in `_strip.sass`'s call sites are **measured numbers**, a
+dictionary edit moves them, and geometry is the one thing no socket test has an
+opinion about. It cost 21 seconds when it was written.
+
+It sweeps the **strip's own box**, not the viewport — one `page.evaluate` per
+game instead of eighty resizes — and starts each strip at the width the layout
+hands it at 320px, so it never reports a band no screen can reach. The box is
+the nearest ancestor with `container-type: inline-size`, because the playlist
+picker's two grids take their column count from the picker and not from
+themselves.
+
+Its floor, `STRIPS_EXPECTED`, is the guard that matters: a sweep that stopped
+finding controls reports exactly what a console with nothing wrong reports.
+
 ## Locators are roles and accessible names
 
 Gathered in `support/locators.ts` — never a `data-testid` — and shaped **by

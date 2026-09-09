@@ -1,3 +1,4 @@
+@use '../../presentation/styles/strip'
 @use '../../presentation/styles/typography'
 
 @layer components
@@ -12,6 +13,13 @@
     flex-direction: column
     gap: var(--space-s)
     padding-top: var(--space-m)
+
+    // The longest row on the console: 812px of French against 608 of English,
+    // measured on the page. Five sources, and five is prime — so every wrap it
+    // has leaves a short row for `flex: 1` to stretch into a chosen-looking
+    // stamp, the same defect the grid below was written for.
+    .track-source
+      @include strip.stacks-below(52rem)
 
     .genres,
     .decades

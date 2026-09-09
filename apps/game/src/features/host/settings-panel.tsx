@@ -107,6 +107,7 @@ const QuestionBankSettings: React.FC<{
         value={game.language}
       />
       <ToggleGroup
+        className='question-subjects'
         isDisabled={isDisabled}
         label={translate('quiz.category.label')}
         onSelectionChange={(keys) => {
@@ -232,6 +233,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           */}
           {offeredModes.length > 1 && (
             <SegmentedControl
+              className='answer-mode'
               isDisabled={isHeldByRound}
               label={translate('host.answerMode.label')}
               onChange={(next) => {
@@ -265,6 +267,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
 
       {game?.kind === 'blindtest' && (
         <SegmentedControl
+          className='track-difficulty'
           isDisabled={isDisabled || pinsItsOwnDifficulty}
           label={translate('blindtest.difficulty.label')}
           onChange={(next) => {
@@ -358,6 +361,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       {game?.kind === 'lefake' && (
         <>
           <NumberChoice
+            className='write-duration'
             isDisabled={isHeldByRound}
             label={translate('lefake.write.duration')}
             onChange={(chosen) => {
@@ -374,6 +378,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
             value={game.roundDurationMs ?? NO_LIMIT}
           />
           <NumberChoice
+            className='vote-duration'
             isDisabled={isHeldByRound}
             label={translate('lefake.vote.duration')}
             onChange={(chosen) => {

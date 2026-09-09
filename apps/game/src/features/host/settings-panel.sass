@@ -1,3 +1,4 @@
+@use '../../presentation/styles/strip'
 @use '../../presentation/styles/typography'
 
 @layer components
@@ -7,6 +8,28 @@
     flex-direction: column
     gap: var(--space-s)
     padding-top: var(--space-m)
+
+    // Each strip stacks below the width its own labels need on one row,
+    // measured on the page in the locale that binds — which is **not** always
+    // French: the difficulty needs 444px there and 464 in English. Rounded up
+    // to the next `rem` for headroom, the way the game picker's 433 became 28.
+    //
+    //   answer mode 480 · difficulty 464 · subjects 704 · write and vote 280
+    //
+    // The strips left alone are the ones that hold one row down to 273px, which
+    // is what a 320px screen gives them — the narrowest there is.
+    .answer-mode
+      @include strip.stacks-below(31rem)
+
+    .track-difficulty
+      @include strip.stacks-below(30rem)
+
+    .question-subjects
+      @include strip.stacks-below(45rem)
+
+    .write-duration,
+    .vote-duration
+      @include strip.stacks-below(18rem)
 
     .hint
       @include typography.caption

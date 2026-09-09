@@ -199,6 +199,7 @@ export const PlaylistPicker: React.FC<PlaylistPickerProps> = ({
   return (
     <section className='playlist-picker'>
       <SegmentedControl
+        className='track-source'
         label={translate('blindtest.source.label')}
         onChange={(next) => {
           if (isSourceKind(next)) {

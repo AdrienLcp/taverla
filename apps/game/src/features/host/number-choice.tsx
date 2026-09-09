@@ -11,6 +11,8 @@ import { useTranslate } from '@/presentation/i18n/i18n-provider'
 export const NO_LIMIT = 0
 
 type NumberChoiceProps = {
+  /** Passed through to the strip, which is where a stacking width is set. */
+  className?: string
   isDisabled: boolean
   label: string
   onChange: (value: number) => void
@@ -25,6 +27,7 @@ type NumberChoiceProps = {
  * segment by string, so the number has to be found again on the way back up.
  */
 export const NumberChoice: React.FC<NumberChoiceProps> = ({
+  className,
   isDisabled,
   label,
   onChange,
@@ -33,6 +36,7 @@ export const NumberChoice: React.FC<NumberChoiceProps> = ({
   value
 }) => (
   <SegmentedControl
+    className={className}
     isDisabled={isDisabled}
     label={label}
     onChange={(next) => {

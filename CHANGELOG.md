@@ -733,6 +733,23 @@ one part.
 
 ### Fixes
 
+- `[Game]` **A choice strip no longer hands its short row the shape of a chosen
+  one.** A strip that runs out of width wraps, and `flex: 1` stretches whatever
+  is left over so the strip's own ground cannot show through — which makes an
+  unselected stamp four times the width of its neighbours, the shape a
+  *selected* one has. The game picker was fixed; six more do it, and they are
+  the six now carrying a `stacks-below()` of their own: the answer mode, the
+  blind test's difficulty and its source, the quiz and Le Fake's subjects, and
+  Le Fake's two clocks. **Twelve strips need nothing** — they hold one row down
+  to 273px, which is what a 320px screen gives them, so every band they break in
+  is one no room can reach; measuring the strip rather than the layout would
+  have stacked all twelve for nothing. The widths are measured in the locale
+  that binds, and that is **not always French**: the difficulty needs 444px
+  there and 464 in English, which is the one threshold the measurement corrected.
+  `e2e/strip-rows.spec.ts` is what keeps them honest — the only spec here that
+  plays nothing, sweeping each strip's own box rather than the viewport, because
+  a dictionary edit moves a row and nothing else would say so.
+
 - `[Game]` **The console's join reminder was drawing a QR code no camera could
   read.** A flex item shrinks by default and the square had no `flex`, so on a
   phone 64px of declared width was drawn at **35 against 64 of height** — not a

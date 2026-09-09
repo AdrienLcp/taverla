@@ -118,6 +118,23 @@ Twelve more that cost time to learn:
   never runs. Reach that branch by hand instead: drop whatever the user agent
   would have dropped, then `document.dispatchEvent(new Event('visibilitychange'))`.
 
+## Sweeping a responsive control without resizing the window
+
+Setting `element.style.width` on the element that carries `container-type:
+inline-size` drives its container queries exactly as a resize would, and the
+whole sweep fits in **one** `browser_evaluate` — where eighty `setViewportSize`
+calls are eighty round trips. Walk up from the control to the nearest ancestor
+whose computed `containerType` is `inline-size`, or use the control itself when
+there is none; the playlist picker's two grids take their column count from the
+picker rather than from themselves, and sweeping the strip would have moved
+nothing.
+
+Two things it cannot tell you on its own. **The widths a layout can actually
+produce** are not every width — read them at a 320px viewport first, which is
+the floor, or the sweep reports bands no screen reaches. And **a wrap point is
+at least one segment wide**, sixty-odd pixels, so a 4px step is three times finer
+than it needs to be; a 1px sweep buys nothing but seconds.
+
 ## Reaching a state that closes before a tool call returns
 
 **Batch the whole timed sequence into one `browser_evaluate`.** A round trip is
