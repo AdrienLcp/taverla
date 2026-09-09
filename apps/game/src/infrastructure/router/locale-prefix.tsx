@@ -1,3 +1,4 @@
+import type React from 'react'
 import { useLayoutEffect } from 'react'
 import { Navigate, Outlet, useLocation } from 'react-router'
 
@@ -13,7 +14,7 @@ import { useI18n } from '@/presentation/i18n/i18n-provider'
  * it has to answer with a language rather than with nothing — and every other
  * path arrives as a link written back when the languages shared one URL.
  */
-export const NegotiatedLocaleRedirect = () => {
+export const NegotiatedLocaleRedirect: React.FC = () => {
   const { locale } = useI18n()
   const { pathname } = useLocation()
 
@@ -29,7 +30,7 @@ export const NegotiatedLocaleRedirect = () => {
  * its own has matched no parameter yet and would read the segment as absent —
  * which here is indistinguishable from a redirect that has to happen, and loops.
  */
-export const LocalePrefixedRoutes = () => {
+export const LocalePrefixedRoutes: React.FC = () => {
   const { pathname } = useLocation()
   const localeInUrl = localeInPath(pathname)
   const { locale, setLocale } = useI18n()

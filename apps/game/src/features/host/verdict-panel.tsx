@@ -135,7 +135,7 @@ export const VerdictPanel: React.FC<VerdictPanelProps> = ({
  * owns has nothing to print, and neither has a host who took a seat: the server
  * stops sending them what they are meant to be guessing.
  */
-const Answer = ({ content }: { content: HostRoundContent }) => {
+const Answer: React.FC<{ content: HostRoundContent }> = ({ content }) => {
   switch (content.kind) {
     case 'blindtest':
       return content.track === null ? null : (

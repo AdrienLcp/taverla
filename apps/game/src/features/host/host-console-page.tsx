@@ -1,3 +1,4 @@
+import type React from 'react'
 import { useCallback, useState } from 'react'
 
 import type { ClientMessage } from '@taverla/protocol/client-message'
@@ -385,7 +386,7 @@ type StageProps = {
   view: HostRoomView | null
 }
 
-const Stage = ({
+const Stage: React.FC<StageProps> = ({
   canPlay,
   clock,
   isLive,
@@ -398,7 +399,7 @@ const Stage = ({
   roomCode,
   send,
   view
-}: StageProps) => {
+}) => {
   const translate = useTranslate()
   const lastRevealed = useRoundStillBeingTalkedAbout(view)
 

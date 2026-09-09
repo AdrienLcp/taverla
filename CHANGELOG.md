@@ -1311,6 +1311,16 @@ one part.
 
 ### Internal
 
+- `[Game]` **Every component carries `React.FC<Props>`.** The shape was already
+  in `code-style.md`, as an example rather than as a sentence, and forty-one
+  components had drifted off it — twenty-five of them in files that carried no
+  annotated component at all, sixteen private ones sitting under an exported
+  sibling that had one. Props move from the parameter to the annotation, and
+  the six files that named `ReactNode` or `SVGProps` in a second import from
+  `react` now read them off the namespace `React.FC` already brings in. The rule now says it in
+  words, names the generic component as the one exception `React.FC` cannot
+  express, and says where the React types come from.
+
 - **CI no longer installs Chromium through Google's apt repository.**
   `playwright install --with-deps` runs `apt-get update` over every source the
   runner image carries, and one of them is Google's own Chrome repository — a

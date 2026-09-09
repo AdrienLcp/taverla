@@ -1,3 +1,4 @@
+import type React from 'react'
 import { type FormEvent, useState } from 'react'
 import { Form } from 'react-aria-components'
 import { useNavigate } from 'react-router'
@@ -32,7 +33,7 @@ type FieldError =
  * a code is a room, and the room knows which game it is running. Someone handed
  * four characters over the phone types them here whatever is being played.
  */
-export const JoinWithCode = () => {
+export const JoinWithCode: React.FC = () => {
   const navigate = useNavigate()
   const translate = useTranslate()
   const [code, setCode] = useState('')

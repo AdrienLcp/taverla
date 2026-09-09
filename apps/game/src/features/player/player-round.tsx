@@ -289,7 +289,7 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
  * and not a gap. Once they have, the game names itself and says what it pays —
  * the same pitch the shelf shows, on the screen the player is holding.
  */
-const UpNext = ({ view }: { view: PlayerRoomView }) => {
+const UpNext: React.FC<{ view: PlayerRoomView }> = ({ view }) => {
   const translate = useTranslate()
   const game = view.settings.game
 
@@ -331,13 +331,10 @@ const UpNext = ({ view }: { view: PlayerRoomView }) => {
  * says it by name, by points and for everybody rather than for the one player
  * above, so the line is gone rather than printed twice.
  */
-const YourRound = ({
-  round,
-  view
-}: {
+const YourRound: React.FC<{
   round: RoundView
   view: PlayerRoomView
-}) => {
+}> = ({ round, view }) => {
   const translate = useTranslate()
   const award = round.awards.find((entry) => entry.playerId === view.youId)
 
@@ -367,7 +364,7 @@ const YourRound = ({
  * two on the same score reads "1st" on both phones, and `host.final.tie` is
  * already saying so across the room.
  */
-const YourPlacing = ({ view }: { view: PlayerRoomView }) => {
+const YourPlacing: React.FC<{ view: PlayerRoomView }> = ({ view }) => {
   const translate = useTranslate()
 
   if (!hasAnybodyScored(view.players)) {
@@ -392,15 +389,11 @@ const YourPlacing = ({ view }: { view: PlayerRoomView }) => {
   )
 }
 
-const Buzzer = ({
-  clock,
-  onBuzz,
-  view
-}: {
+const Buzzer: React.FC<{
   clock: ClockEstimate | null
   onBuzz: (roundId: string) => boolean
   view: PlayerRoomView
-}) => {
+}> = ({ clock, onBuzz, view }) => {
   const translate = useTranslate()
   const [hasFailed, setHasFailed] = useState(false)
   const [claimedRoundId, setClaimedRoundId] = useState<string | null>(null)
@@ -495,13 +488,10 @@ const fitting = (answer: string): React.CSSProperties => ({
  * panel is two columns and needs the column held, and this is a stack where a
  * reserved box for an image that will never arrive is a hole in the screen.
  */
-const Revealed = ({
-  round,
-  view
-}: {
+const Revealed: React.FC<{
   round: RoundView
   view: PlayerRoomView
-}) => {
+}> = ({ round, view }) => {
   const translate = useTranslate()
   const track = blindtestContent(round)?.revealedTrack ?? null
   const question = quizContent(round)?.revealedQuestion ?? null
@@ -555,7 +545,7 @@ const Revealed = ({
   return null
 }
 
-const TheirName = ({ view }: { view: PlayerRoomView }) => {
+const TheirName: React.FC<{ view: PlayerRoomView }> = ({ view }) => {
   const translate = useTranslate()
   const nickname = view.players.find(
     (player) => player.id === view.round?.activeBuzz?.playerId

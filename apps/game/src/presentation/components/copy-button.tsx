@@ -1,3 +1,4 @@
+import type React from 'react'
 import { useEffect, useState } from 'react'
 
 import { copyToClipboard } from '@/infrastructure/env'
@@ -38,7 +39,7 @@ type CopyButtonProps = {
  * thing in the product anybody copies — a generic label would be the wrapper
  * pretending to a reach it does not have.
  */
-export const CopyButton = ({ value }: CopyButtonProps) => {
+export const CopyButton: React.FC<CopyButtonProps> = ({ value }) => {
   const translate = useTranslate()
   const [state, setState] = useState<CopyState>('idle')
 

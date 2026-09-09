@@ -1,3 +1,4 @@
+import type React from 'react'
 import { useState } from 'react'
 import {
   Dialog,
@@ -60,7 +61,7 @@ import './app-menu.sass'
  * asked for: this menu opens on a console that is often a television, and a code
  * the room can read over the host's shoulder is a room the room can take.
  */
-const RoomRecovery = ({ roomCode }: { roomCode: RoomCode }) => {
+const RoomRecovery: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   const [isRevealed, setIsRevealed] = useState(false)
   const translate = useTranslate()
   const hostToken = readHostToken(roomCode)
@@ -96,7 +97,7 @@ const RoomRecovery = ({ roomCode }: { roomCode: RoomCode }) => {
  * somewhere on every screen at every phase — and the row carries the name
  * itself, which leaves the panel for the rarer half of the job.
  */
-const SeatName = () => {
+const SeatName: React.FC = () => {
   const { refusedNickname, rename, seatNickname } = useRoomActions()
   const translate = useTranslate()
   const [draft, setDraft] = useState<string | null>(null)
@@ -169,7 +170,7 @@ const SeatName = () => {
  * Closing asks twice, because it is the only one that cannot be undone: the
  * code stops resolving, so a phone cannot reload its way back in.
  */
-const RoomExit = ({ onDone }: { onDone: () => void }) => {
+const RoomExit: React.FC<{ onDone: () => void }> = ({ onDone }) => {
   const { locale } = useI18n()
   const { closeRoom, endGame, leaveSeat } = useRoomActions()
   const [isConfirmingClose, setIsConfirmingClose] = useState(false)
@@ -280,7 +281,7 @@ const THEME_KEYS: Record<ThemePreference, PlainTranslationKey> = {
  * A healthy socket says nothing beyond the dot on the trigger. The state only
  * takes room on the screen once it is worth interrupting a game for.
  */
-export const AppMenu = () => {
+export const AppMenu: React.FC = () => {
   const { locale, setLocale, translate } = useI18n()
   const navigateToLocale = useNavigateToLocale()
   const { preference, setPreference } = useTheme()

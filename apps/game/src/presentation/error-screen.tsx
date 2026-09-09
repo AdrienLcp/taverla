@@ -1,3 +1,4 @@
+import type React from 'react'
 import { useRouteError } from 'react-router'
 
 import { homePathFor } from '@/infrastructure/router/navigation'
@@ -24,7 +25,7 @@ const reload = (): void => {
  * and re-rendering asks for the same missing file. A "try again" that cannot
  * work is worse than one button that does.
  */
-export const ErrorScreen = () => {
+export const ErrorScreen: React.FC = () => {
   const { locale } = useI18n()
   const translate = useTranslate()
   const error = useRouteError()

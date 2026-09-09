@@ -14,7 +14,17 @@ export const myFunction = (param: string): string => { … }
 export const MyComponent: React.FC<Props> = ({ … }) => { … }
 ```
 
-In a `.tsx` file a generic takes a trailing comma to disambiguate from JSX:
+**A component's props are carried by the annotation, never by the parameter** —
+`React.FC<Props>` on the left, a bare destructuring on the right. It holds for a
+private component in the same file and for an inline props type as much as for
+an exported one, and `React` is imported for it as `import type React from
+'react'`. That leaves the namespace already in the file, so a React type inside
+a props declaration is written through it — `React.ReactNode`, not a second
+named import.
+
+The exception is a **generic** component, which `React.FC` cannot express: it
+keeps its props on the parameter, and in a `.tsx` file its generic takes a
+trailing comma to disambiguate from JSX —
 `export const List = <T,>({ items }: ListProps<T>) => …`. TypeScript overloads
 are the one shape that requires a `function` declaration.
 

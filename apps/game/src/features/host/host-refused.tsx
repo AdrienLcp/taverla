@@ -1,3 +1,4 @@
+import type React from 'react'
 import { type FormEvent, useState } from 'react'
 import { Form } from 'react-aria-components'
 
@@ -35,12 +36,12 @@ type HostRefusedProps = {
  * way through it: the room is somebody else's until this screen proves it holds
  * the token, which is what keeps a takeover from being final.
  */
-export const HostRefused = ({
+export const HostRefused: React.FC<HostRefusedProps> = ({
   error,
   hasOfferedToken,
   onOfferToken,
   onRetry
-}: HostRefusedProps) => {
+}) => {
   const translate = useTranslate()
   const [token, setToken] = useState('')
   const [isTokenInvalid, setIsTokenInvalid] = useState(false)

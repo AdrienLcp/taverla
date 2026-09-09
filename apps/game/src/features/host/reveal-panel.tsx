@@ -118,7 +118,7 @@ export const RevealPanel: React.FC<RevealPanelProps> = ({ players, round }) => {
   )
 }
 
-const Outcome = ({ players, round }: RevealPanelProps) => {
+const Outcome: React.FC<RevealPanelProps> = ({ players, round }) => {
   const translate = useTranslate()
   const scorers = round.awards.filter((award) => award.points > 0)
 

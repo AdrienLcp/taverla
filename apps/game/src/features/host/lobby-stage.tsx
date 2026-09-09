@@ -99,7 +99,7 @@ export const LobbyStage: React.FC<LobbyStageProps> = ({
  * sentence was in the setup fold, which is collapsed at every width. So it is
  * here too, under the promise it is the terms of.
  */
-const GamePitch = ({ view }: { view: HostRoomView }) => {
+const GamePitch: React.FC<{ view: HostRoomView }> = ({ view }) => {
   const translate = useTranslate()
   const game = view.settings.game
 

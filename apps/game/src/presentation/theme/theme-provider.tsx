@@ -1,4 +1,5 @@
-import { type ReactNode, useEffect, useState } from 'react'
+import type React from 'react'
+import { useEffect, useState } from 'react'
 
 import { createSafeContext } from '@/helpers/contexts'
 import { type ThemePreference, themeColorMediaFor } from '@/helpers/theme'
@@ -15,7 +16,9 @@ type ThemeContextValue = {
 export const [ThemeContext, useTheme] =
   createSafeContext<ThemeContextValue>('ThemeProvider')
 
-export const ThemeProvider = ({ children }: { children: ReactNode }) => {
+export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
+  children
+}) => {
   const [preference, setPreference] = useState<ThemePreference>(
     () => readStoredThemePreference() ?? 'system'
   )

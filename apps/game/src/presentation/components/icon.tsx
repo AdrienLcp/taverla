@@ -1,8 +1,8 @@
-import type { ReactNode, SVGProps } from 'react'
+import type React from 'react'
 
-type IconProps = SVGProps<SVGSVGElement> & {
+type IconProps = React.SVGProps<SVGSVGElement> & {
   /** The geometry, drawn on a 24-unit grid. Nothing else — stroke and size are the family's. */
-  children: ReactNode
+  children: React.ReactNode
 }
 
 /**
@@ -18,7 +18,7 @@ type IconProps = SVGProps<SVGSVGElement> & {
  * Decorative by default. A glyph carrying meaning on its own is a glyph whose
  * control is missing its name.
  */
-export const Icon = ({ children, ...props }: IconProps) => (
+export const Icon: React.FC<IconProps> = ({ children, ...props }) => (
   <svg
     aria-hidden='true'
     fill='none'

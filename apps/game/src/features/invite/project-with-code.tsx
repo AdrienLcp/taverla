@@ -1,3 +1,4 @@
+import type React from 'react'
 import { type FormEvent, useState } from 'react'
 import { Form } from 'react-aria-components'
 import { useNavigate } from 'react-router'
@@ -42,7 +43,7 @@ type FieldError =
  * field at the weight of *open a table* and *pull up a chair* is a fork every
  * visitor has to read past to reach the two that are theirs.
  */
-export const ProjectWithCode = () => {
+export const ProjectWithCode: React.FC = () => {
   const navigate = useNavigate()
   const translate = useTranslate()
   const [code, setCode] = useState('')

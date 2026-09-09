@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type React from 'react'
 
 import type { Locale } from '@taverla/protocol/locale'
 
@@ -7,7 +7,7 @@ import { ThemeProvider } from '@/presentation/theme/theme-provider'
 
 type AppProvidersProps = {
   /** The router the app is rendered under — a browser one, or a static one. */
-  children: ReactNode
+  children: React.ReactNode
   /**
    * Settled before this mounts: in the browser by `applyInitialLocale`, at build
    * time by which of the two documents is being written.
@@ -20,7 +20,10 @@ type AppProvidersProps = {
  * the browser renders come out of the same stack. A page prerendered under a
  * different set of providers is a page nobody has tested.
  */
-export const AppProviders = ({ children, locale }: AppProvidersProps) => (
+export const AppProviders: React.FC<AppProvidersProps> = ({
+  children,
+  locale
+}) => (
   <ThemeProvider>
     <I18nProvider locale={locale}>{children}</I18nProvider>
   </ThemeProvider>

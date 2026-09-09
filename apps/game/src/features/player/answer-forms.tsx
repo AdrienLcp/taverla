@@ -243,13 +243,10 @@ export const TypedAnswer: React.FC<TypedAnswerProps> = ({
  * button down under a thumb already aiming at them, and a live region that
  * arrives already holding its text is a change no screen reader watched happen.
  */
-const GuessFeedback = ({
-  asksForAFilm,
-  verdict
-}: {
+const GuessFeedback: React.FC<{
   asksForAFilm: boolean
   verdict: Verdict | null
-}) => {
+}> = ({ asksForAFilm, verdict }) => {
   const translate = useTranslate()
   const banked = bankedHalves(verdict)
 
@@ -280,16 +277,12 @@ const GuessFeedback = ({
   )
 }
 
-const AnswerStatus = ({
-  doneKey,
-  hasAnswered,
-  round
-}: {
+const AnswerStatus: React.FC<{
   /** What a player who has nothing left to do is told — the two modes end differently. */
   doneKey: PlainTranslationKey
   hasAnswered: boolean
   round: RoundView | null
-}) => {
+}> = ({ doneKey, hasAnswered, round }) => {
   const translate = useTranslate()
 
   return (

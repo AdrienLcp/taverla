@@ -1,3 +1,5 @@
+import type React from 'react'
+
 import './spinner.sass'
 
 /**
@@ -6,4 +8,6 @@ import './spinner.sass'
  * live region would say the same thing twice. It paints itself in
  * `--control-ink` when a control provides one, and in `currentColor` otherwise.
  */
-export const Spinner = () => <span aria-hidden='true' className='spinner' />
+export const Spinner: React.FC = () => (
+  <span aria-hidden='true' className='spinner' />
+)

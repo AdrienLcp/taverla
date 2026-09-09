@@ -1,4 +1,5 @@
-import { type ReactNode, useCallback, useEffect, useState } from 'react'
+import type React from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { createSafeContext } from '@/helpers/contexts'
 
@@ -49,7 +50,9 @@ const [ActionContext, useChannel] = createSafeContext<ActionChannel>(
   'RoomActionsProvider'
 )
 
-export const RoomActionsProvider = ({ children }: { children: ReactNode }) => {
+export const RoomActionsProvider: React.FC<{ children: React.ReactNode }> = ({
+  children
+}) => {
   const [actions, setActions] = useState<RoomActions>(NO_ACTIONS)
 
   // Stable, because it is a dependency of the effect that reports: rebuilt each

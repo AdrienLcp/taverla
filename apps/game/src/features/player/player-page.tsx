@@ -1,3 +1,4 @@
+import type React from 'react'
 import { type FormEvent, useCallback, useEffect, useState } from 'react'
 import { Form } from 'react-aria-components'
 
@@ -133,18 +134,13 @@ const PlayerScreen: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   )
 }
 
-const NicknameForm = ({
-  onSubmit,
-  refusedNickname,
-  rejection,
-  roomCode
-}: {
+const NicknameForm: React.FC<{
   onSubmit: (nickname: string) => void
   /** The name the refusal was given for, or `null` where none was tried yet. */
   refusedNickname: string | null
   rejection: ProtocolErrorCode | null
   roomCode: RoomCode
-}) => {
+}> = ({ onSubmit, refusedNickname, rejection, roomCode }) => {
   const translate = useTranslate()
   const [draft, setDraft] = useState(() => readStoredNickname() ?? '')
   // The refusal belongs to the name it was given for, and holding `isInvalid`
@@ -199,13 +195,10 @@ const NicknameForm = ({
   )
 }
 
-const Lobby = ({
-  connection,
-  roomCode
-}: {
+const Lobby: React.FC<{
   connection: PlayerConnection
   roomCode: RoomCode
-}) => {
+}> = ({ connection, roomCode }) => {
   const translate = useTranslate()
   const { clock, error, send, status, view } = connection
 
@@ -279,13 +272,10 @@ const Lobby = ({
  * timing nobody; for the hold `advancesAt` says the same thing on its own,
  * covering a host who advances by hand and a host who has gone at once.
  */
-const RoundClock = ({
-  clock,
-  view
-}: {
+const RoundClock: React.FC<{
   clock: ClockEstimate | null
   view: PlayerRoomView
-}) => {
+}> = ({ clock, view }) => {
   const holdMs = view.settings.autoAdvanceMs
   const advancesAt = view.round?.advancesAt ?? null
 
@@ -315,7 +305,7 @@ const RoundClock = ({
  * first point there is nothing to place, so it falls back to the count — every
  * ranked surface in the product goes quiet at the same threshold.
  */
-const Scoreline = ({ view }: { view: PlayerRoomView }) => {
+const Scoreline: React.FC<{ view: PlayerRoomView }> = ({ view }) => {
   const translate = useTranslate()
   const you = view.players.find((player) => player.id === view.youId)
   const score = you?.score ?? 0

@@ -1,3 +1,5 @@
+import type React from 'react'
+
 import { Loader } from '@/presentation/components/loader'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
@@ -18,7 +20,7 @@ export const ROUTE_FALLBACK_CLASS = 'route-fallback'
  * It replaces the shell for the same reason `ErrorScreen` does — the menu reads
  * a connection no page has reported yet.
  */
-export const RouteFallback = () => {
+export const RouteFallback: React.FC = () => {
   const translate = useTranslate()
 
   return (

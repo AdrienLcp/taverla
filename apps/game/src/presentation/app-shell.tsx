@@ -1,3 +1,4 @@
+import type React from 'react'
 import { RouterProvider as ReactAriaRouterProvider } from 'react-aria-components'
 import { Outlet, useNavigate } from 'react-router'
 
@@ -12,7 +13,7 @@ import './app-shell.sass'
  * navigation. Without it the browser reloads the page, which on the player
  * screen means dropping the socket and re-claiming the seat.
  */
-export const AppShell = () => {
+export const AppShell: React.FC = () => {
   const navigate = useNavigate()
 
   return (

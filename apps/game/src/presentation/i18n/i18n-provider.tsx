@@ -1,4 +1,5 @@
-import { type ReactNode, useEffect, useState } from 'react'
+import type React from 'react'
+import { useEffect, useState } from 'react'
 import { I18nProvider as ReactAriaI18nProvider } from 'react-aria-components'
 
 import type { Locale } from '@taverla/protocol/locale'
@@ -32,7 +33,7 @@ export const [I18nContext, useI18n] =
 export const useTranslate = (): Translate => useI18n().translate
 
 type I18nProviderProps = {
-  children: ReactNode
+  children: React.ReactNode
   /**
    * Negotiated in `main.tsx` and already on `<html lang>` by the time this
    * renders — which is the point, and why it is not read again here.
@@ -40,10 +41,10 @@ type I18nProviderProps = {
   locale: Locale
 }
 
-export const I18nProvider = ({
+export const I18nProvider: React.FC<I18nProviderProps> = ({
   children,
   locale: initialLocale
-}: I18nProviderProps) => {
+}) => {
   const [locale, setLocale] = useState<Locale>(initialLocale)
 
   useEffect(() => {

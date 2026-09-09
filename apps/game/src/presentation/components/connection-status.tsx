@@ -1,3 +1,5 @@
+import type React from 'react'
+
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
 import type { SocketStatus } from '@/infrastructure/messaging/use-room-socket'
@@ -21,7 +23,7 @@ type ConnectionDotProps = {
 }
 
 /** Decorative alone: whatever renders it also renders the word beside it. */
-export const ConnectionDot = ({ status }: ConnectionDotProps) => (
+export const ConnectionDot: React.FC<ConnectionDotProps> = ({ status }) => (
   <span aria-hidden='true' className={`connection-dot ${status}`} />
 )
 
@@ -31,7 +33,10 @@ type ConnectionStatusProps = {
   status: SocketStatus
 }
 
-export const ConnectionStatus = ({ clock, status }: ConnectionStatusProps) => {
+export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
+  clock,
+  status
+}) => {
   const translate = useTranslate()
 
   return (

@@ -1,4 +1,5 @@
-import { type ReactNode, useEffect, useState } from 'react'
+import type React from 'react'
+import { useEffect, useState } from 'react'
 
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
@@ -23,7 +24,9 @@ const [ConnectionContext, useChannel] =
  * belongs to the shell above it — so the state travels up rather than the menu
  * travelling down into three pages that would each mount their own.
  */
-export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
+export const ConnectionProvider: React.FC<{ children: React.ReactNode }> = ({
+  children
+}) => {
   const [connection, setConnection] = useState<ScreenConnection | null>(null)
 
   return (
