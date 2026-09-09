@@ -20,6 +20,8 @@ const prerenderManifestSchema = z.array(
   z.object({ file: z.string(), url: z.string() })
 )
 
+type PrerenderedDocument = z.infer<typeof prerenderManifestSchema>[number]
+
 /**
  * A name carrying its own content hash can be kept forever, because changing
  * the file changes the name. Everything else is revalidated: `index.html` is
@@ -59,7 +61,7 @@ const registerPrerenderedPages = ({
 }: {
   app: Hono
   root: string
-}): void => {
+}): PrerenderedDocument[] => {
   const path = `${root}/${PRERENDER_MANIFEST}`
 
   if (!existsSync(path)) {
@@ -67,7 +69,7 @@ const registerPrerenderedPages = ({
       expected: path
     })
 
-    return
+    return []
   }
 
   const documents = prerenderManifestSchema.parse(
@@ -82,6 +84,61 @@ const registerPrerenderedPages = ({
   }
 
   logger.info('Serving prerendered documents', { count: documents.length })
+
+  return documents
+}
+
+/**
+ * The origin a crawler actually reached us on. Render terminates TLS in front
+ * of the process, so the request's own URL says `http` on a site served over
+ * `https` — and a sitemap listing the wrong scheme lists URLs that redirect,
+ * which is the one thing a sitemap must not do.
+ */
+const originOf = (c: Context): string => {
+  const { host, protocol } = new URL(c.req.url)
+  const forwarded = c.req.header('x-forwarded-proto')?.split(',')[0]?.trim()
+
+  return `${forwarded ?? protocol.replace(':', '')}://${host}`
+}
+
+/**
+ * The prerendered documents, listed for a crawler. It exists because the front
+ * door stopped linking to them: a shelf card opens a room now rather than going
+ * to that game's page, and a page nothing points at is a page nobody finds.
+ * Built from the manifest for the same reason the routes are — a list kept by
+ * hand goes stale the day a game reaches the shelf.
+ */
+const registerSitemap = ({
+  app,
+  documents,
+  root
+}: {
+  app: Hono
+  documents: readonly PrerenderedDocument[]
+  root: string
+}): void => {
+  app.get('/sitemap.xml', (c) => {
+    const origin = originOf(c)
+    const entries = documents
+      .map(({ url }) => `  <url><loc>${origin}${url}</loc></url>`)
+      .join('\n')
+
+    return c.body(
+      `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries}\n</urlset>\n`,
+      200,
+      { 'Cache-Control': 'no-cache', 'Content-Type': 'application/xml' }
+    )
+  })
+
+  // The file keeps its own prose; only the one line that needs an absolute URL
+  // is added here, because a static file cannot know which origin it was asked
+  // for.
+  app.get('/robots.txt', (c) => {
+    const path = `${root}/robots.txt`
+    const rules = existsSync(path) ? readFileSync(path, 'utf8').trimEnd() : ''
+
+    return c.text(`${rules}\n\nSitemap: ${originOf(c)}/sitemap.xml\n`)
+  })
 }
 
 /**
@@ -105,7 +162,11 @@ export const registerStaticSite = (app: Hono): void => {
   // over the phone network of whichever flat the party is in.
   app.use('*', compress())
 
-  registerPrerenderedPages({ app, root })
+  registerSitemap({
+    app,
+    documents: registerPrerenderedPages({ app, root }),
+    root
+  })
 
   app.use('*', serveStatic({ onFound: cacheStaticFile, root }))
   app.get(
