@@ -12,6 +12,7 @@ import {
 
 import { hasAdultContent } from '@taverla/core/quiz/adult-content'
 import { gradeQuizGuess } from '@taverla/core/quiz/question-answer'
+import { normalizeAnswer } from '@taverla/core/round/answer-matching'
 
 import { type BankedQuestion, drawQuestion } from './question-bank'
 import bank from './question-bank.json' with { type: 'json' }
@@ -173,6 +174,29 @@ describe('drawQuestion', () => {
     )
 
     expect(winnable.map((question) => question.id)).toEqual([])
+  })
+
+  /**
+   * The guard a room has against repeating itself is by id, and upstream
+   * reissues a question under a new pack id often enough that the two banks
+   * carried forty-one copies. The build drops them; this is what says so, and
+   * what goes red the day a new source is folded in without that pass.
+   */
+  it('[bank] asks no question twice', () => {
+    const seen = new Set<string>()
+    const repeated: string[] = []
+
+    for (const question of bank.questions) {
+      const key = `${question.language}::${normalizeAnswer(question.prompt)}`
+
+      if (seen.has(key)) {
+        repeated.push(question.id)
+      }
+
+      seen.add(key)
+    }
+
+    expect(repeated).toEqual([])
   })
 
   /**

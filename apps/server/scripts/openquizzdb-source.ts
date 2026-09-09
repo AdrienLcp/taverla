@@ -42,6 +42,7 @@ const CATEGORY_OF_RUBRIC: Record<string, QuestionCategory> = {
   LITTERATURE: 'arts',
   LOISIRS: 'everyday',
   MONDE: 'geography',
+  MOTSCROISES: 'everyday',
   MUSIQUE: 'arts',
   NATURE: 'science',
   ORTHOQUIZZ: 'everyday',
@@ -59,7 +60,6 @@ const CATEGORY_OF_RUBRIC: Record<string, QuestionCategory> = {
  * simply went missing reads as an oversight — these are refusals, with reasons.
  */
 const SKIPPED_RUBRICS: Record<string, string> = {
-  MOTSCROISES: 'a crossword clue names the length and the first letter',
   QUADRIQUIZZ: 'asks for four answers and the pack carries one'
 }
 
@@ -125,6 +125,40 @@ const packUrl = async (packId: number): Promise<string | null> => {
   )
 }
 
+/** The lowest printable code point: everything under it is a control character. */
+const SPACE = 0x20
+
+const isControl = (character: string): boolean =>
+  (character.codePointAt(0) ?? SPACE) < SPACE
+
+/**
+ * Upstream lets a raw newline through into a string it is writing — one
+ * anecdote in pack 20 ends on one — and the whole pack is refused over a
+ * character nobody can see, costing every question in it. Folding the control
+ * characters a JSON string may not hold into spaces is a repair the next such
+ * pack gets for free, where mending the cached file would last until the cache
+ * is cleared.
+ */
+const withoutRawControls = (body: string): string => {
+  let isEscaped = false
+  let isInString = false
+  let repaired = ''
+
+  for (const character of body) {
+    repaired += isInString && isControl(character) ? ' ' : character
+
+    if (isEscaped) {
+      isEscaped = false
+    } else if (character === '\\') {
+      isEscaped = true
+    } else if (character === '"') {
+      isInString = !isInString
+    }
+  }
+
+  return repaired
+}
+
 const fetchPack = async (packId: number): Promise<UpstreamPack | null> => {
   const url = await packUrl(packId)
 
@@ -139,7 +173,7 @@ const fetchPack = async (packId: number): Promise<UpstreamPack | null> => {
   })
 
   try {
-    return JSON.parse(body) as UpstreamPack
+    return JSON.parse(withoutRawControls(body)) as UpstreamPack
   } catch {
     return null
   }

@@ -4,6 +4,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { gradeQuizGuess } from '@taverla/core/quiz/question-answer'
+import { normalizeAnswer } from '@taverla/core/round/answer-matching'
 
 import { ingestOpenQuizzDb } from './openquizzdb-source'
 import { ingestOpenTdb } from './opentdb-source'
@@ -118,6 +119,35 @@ const isWinnableTyped = (question: BankedQuestion): boolean =>
     (decoy) => gradeQuizGuess({ guess: decoy, question }).isCorrect
   )
 
+/**
+ * Upstream reissues a question under a new pack id — a crossword grid
+ * republished, a Gainsbourg question in two packs about him — and the guard a
+ * room already has against repeating itself is by id, so a game can ask the same
+ * thing twice. The prompt is what a player recognises, so that is the key,
+ * normalised the way a typed answer is.
+ *
+ * The first of a group survives, which is a coin toss wherever the copies
+ * disagree on the answer. Those are the ones worth a repair, so they are named
+ * rather than settled in silence.
+ */
+const withoutRepeatedPrompts = (
+  questions: BankedQuestion[]
+): BankedQuestion[] => {
+  const seen = new Set<string>()
+
+  return questions.filter((question) => {
+    const key = `${question.language}::${normalizeAnswer(question.prompt)}`
+
+    if (seen.has(key)) {
+      return false
+    }
+
+    seen.add(key)
+
+    return true
+  })
+}
+
 const repaired = (question: BankedQuestion): BankedQuestion => {
   const repair = repairs[question.id]
 
@@ -175,7 +205,8 @@ const run = async (): Promise<void> => {
   const offered = sourced
     .filter((question) => repairs[question.id]?.drop !== true)
     .map(repaired)
-  const questions = offered.filter(isWinnableTyped)
+  const winnable = offered.filter(isWinnableTyped)
+  const questions = withoutRepeatedPrompts(winnable)
 
   const bank = {
     attributions: [french.attribution, english.attribution],
@@ -193,6 +224,12 @@ const run = async (): Promise<void> => {
     console.info(
       `  unwinnable ${question.id}: "${question.answer}" among ${question.decoys.join(', ')}`
     )
+  }
+
+  const kept = new Set(questions.map(({ id }) => id))
+
+  for (const question of winnable.filter(({ id }) => !kept.has(id))) {
+    console.info(`  repeated ${question.id}: "${question.prompt}"`)
   }
 
   for (const rejection of [...french.rejections, ...english.rejections]) {

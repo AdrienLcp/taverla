@@ -143,6 +143,10 @@
     "prompt": "Quelle jeune chanteuse est la petite protégée du rappeur Eminem ?",
     "why": "two words were fused"
   },
+  "oqdb-250-3": {
+    "prompt": "Se rend en partant, mot de trois lettres commençant par un A ?",
+    "why": "the source reads \"trois lettre\", and the letter count is the half of a crossword clue a player counts on"
+  },
   "oqdb-270-1": {
     "isAdult": true,
     "why": "the source left it unrated, and no room asked for it"
@@ -264,6 +268,11 @@
   "oqdb-361-2": {
     "prompt": "Dans quel pays faut-il aller pour bronzer à Rimini ?",
     "why": "asks for a direction but expects a country, which only the theme supplies"
+  },
+  "oqdb-362-2": {
+    "decoys": ["Bananier", "Brouette", "Braderie"],
+    "prompt": "Ne manque pas d'énergie, mot de huit lettres commençant par un B ?",
+    "why": "the clue ruled out its own answer — \"Batterie\" is eight letters, not seven — and the three decoys were the only seven-letter words left, so correcting the count alone would have named the answer in choice mode"
   },
   "oqdb-366-1": {
     "prompt": "En quelle année OpenAI a-t-elle été fondée ?",
@@ -428,6 +437,100 @@
     "decoys": ["Sylvaner", "Müller-Thurgau", "Mauzac"],
     "why": "Riesling has led Germany's white plantings since the 1990s, and the note's 24 % is its figure"
   },
+  "oqdb-517-4": {
+    "note": "Herbert Léonard, de son vrai nom Hubert Loenhardt, est né à Strasbourg en 1945.",
+    "why": "the note misspelt the birth name, dropping its final t"
+  },
+  "oqdb-518-4": {
+    "answer": "15 ans",
+    "why": "born around 466 and king in 481, Clovis was fifteen rather than sixteen"
+  },
+  "oqdb-519-3": {
+    "prompt": "Quelle spécialité de veau panée est préparée à la milanaise ?",
+    "why": "a decoy answers the prompt too — osso buco is a veal dish famously served alla milanese, and only \"panée\" separates the two"
+  },
+  "oqdb-519-4": {
+    "prompt": "Quelle spécialité napolitaine est une pizza pliée et farcie, cuite au four ?",
+    "why": "a decoy answers the prompt too — panzerotti is the folded stuffed pizza, so the prompt pointed at the decoy until it named Naples"
+  },
+  "oqdb-520-2": {
+    "note": "Mensuel dès son lancement en 1953, « Playboy » est passé à une parution trimestrielle en 2019, avant l'arrêt de son édition papier américaine en 2020.",
+    "why": "the note had the magazine turning bimonthly in 2009; it cut its rate base that year and went quarterly in 2019"
+  },
+  "oqdb-521-2": {
+    "prompt": "Quelle expression les héros des « Trois Frères » emploient-ils pour la somme dont ils croient hériter ?",
+    "why": "a decoy answers the prompt too — \"100 briques\" names the same amount as \"100 patates\", so only the film's own wording makes one right"
+  },
+  "oqdb-521-4": {
+    "answer": "Maurice Risch",
+    "why": "the actor's name was misspelt"
+  },
+  "oqdb-522-1": {
+    "prompt": "Dans « Dragon Ball », combien de fois la Lune a-t-elle été détruite ?",
+    "why": "one of the two destructions the note counts happens in Dragon Ball rather than in Z, so the answer is only right over the whole series"
+  },
+  "oqdb-523-3": {
+    "prompt": "Quelle variété de pâtes en lanières est la spécialité de Bologne ?",
+    "why": "a decoy answers the prompt too — fettuccine is equally a flat ribbon pasta, and Bologna is what pins tagliatelle"
+  },
+  "oqdb-527-2": {
+    "note": "Huit ans après la fin de sa carrière, Nadia Comaneci fuit la Roumanie de Nicolae Ceausescu et s'installe aux États-Unis.",
+    "why": "the note was an ungrammatical fragment ending in \"pour le États-Unis\""
+  },
+  "oqdb-527-3": {
+    "prompt": "Qui fut la première femme à remporter une course d'un championnat du monde de vitesse moto ?",
+    "why": "the win the note cites was in World Supersport 300 rather than in Grand Prix racing, which the prompt claimed"
+  },
+  "oqdb-528-4": {
+    "prompt": "Quel titre porté par les monarques musulmans est apparu vers l'an 1000 ?",
+    "why": "two decoys answer the prompt too — émir and calife are titles borne by Muslim monarchs, and dating the title is what leaves one"
+  },
+  "oqdb-529-4": {
+    "note": "Rafael Nadal est devenu le deuxième joueur après Agassi à réaliser le Grand Chelem doré en carrière, en complétant sa collection à l'US Open 2010, deux ans après son titre olympique.",
+    "why": "in 2008 Nadal held only Roland-Garros and Wimbledon; the career Golden Slam was completed in 2010"
+  },
+  "oqdb-533-2": {
+    "note": "Naturalisée américaine, Surya Bonaly a entraîné à Las Vegas puis s'est installée à Minneapolis.",
+    "prompt": "Quelle patineuse française a réussi un salto arrière réceptionné sur une seule lame aux JO de 1998 ?",
+    "why": "Bonaly did not invent the backflip — Terry Kubicka landed one in 1976 — her own move was the one-blade landing, and the note's parenthesis about where she lives had gone stale"
+  },
+  "oqdb-533-4": {
+    "prompt": "Quelle athlète française a remporté trois titres olympiques sur 200 et 400 mètres ?",
+    "why": "the answer has a shelf life and it has run out — \"the only French woman with three Olympic titles\" stopped being true when Clarisse Agbégnénou reached three"
+  },
+  "oqdb-535-4": {
+    "answer": "Nekfeu",
+    "why": "the schoolyard fennec nickname and the whole note — S-Crew, L'Entourage, 5 Majeur, 1995 — describe Nekfeu rather than the banked answer"
+  },
+  "oqdb-537-4": {
+    "note": "Dans la version d'Hugues Aufray, le cheval blanc ne gagne pas : Stewball tombe après la rivière et doit être abattu.",
+    "why": "the French lyrics hold no grey mare and no victory — the horse falls and is put down"
+  },
+  "oqdb-540-3": {
+    "prompt": "Combien de passagers peuvent embarquer à bord de l'Airbus A380 ?",
+    "why": "the prompt read \"à bords\""
+  },
+  "oqdb-542-2": {
+    "prompt": "De quelle ville du Sud-Ouest proviennent de célèbres pruneaux IGP ?",
+    "why": "the pruneau d'Agen has held an IGP since 2002 and never an AOC"
+  },
+  "oqdb-542-3": {
+    "note": "Contrairement à Londres ou à Bruxelles, qui regroupent plusieurs dizaines de communes, Paris n'en forme qu'une seule, divisée en vingt arrondissements.",
+    "prompt": "Combien de communes la ville de Paris compte-t-elle ?",
+    "why": "\"sur une boucle de la Seine\" left the question unreadable, and the note rested on a 2012 census figure"
+  },
+  "oqdb-545-2": {
+    "prompt": "Quelle marque le lynx laisse-t-il sur les arbres pour délimiter son territoire ?",
+    "why": "a decoy answers the prompt too — a lynx scent-marks with scat as well, and naming the trees is what leaves the claw marks alone"
+  },
+  "oqdb-547-3": {
+    "drop": true,
+    "why": "a decoy answers the prompt too — \"cire\" is what ski wax is, and \"cirer ses skis\" is ordinary French, so no rewording separates it from \"fart\" without naming the answer"
+  },
+  "oqdb-549-4": {
+    "note": "Hannibal a franchi les Alpes avec 37 éléphants de guerre, dont un seul survécut à la traversée et aux combats qui suivirent.",
+    "why": "the ancient sources give 37 elephants, not 27"
+  },
   "otdb-0bca0b231fe6": {
     "prompt": "Which field is sometimes known as “The Dismal Science”?",
     "why": "a bare 'This field ...' clue with no question and no antecedent"
@@ -497,6 +600,10 @@
     "answer": "Nuclei",
     "decoys": ["Ribosomes", "Lysosomes", "Mitochondria"],
     "why": "DNA replication happens in the nucleus; ribosomes make protein"
+  },
+  "otdb-8f13cfd7df5e": {
+    "drop": true,
+    "why": "upstream banks this question twice and this copy answers \"Russian Federation\", which a typed room will not produce; dropping it leaves the copy answering \"Russia\""
   },
   "otdb-8fea97554911": {
     "drop": true,

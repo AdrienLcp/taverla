@@ -439,6 +439,37 @@ one part.
 
 ### Improvements
 
+- `[Server]` **The French question bank grows by a seventh, and stops asking the
+  same thing twice.** Three cheap sources, none of them a new upstream: the
+  cached OpenQuizzDB listing was fetched in August and holds 516 packs where the
+  live one serves 552; `MOTSCROISES` had been skipped on a taste call — *a
+  crossword clue names the length and the first letter* — which is what makes it
+  **more** playable typed, not less, and `ALPHAQUIZZ` and `ORTHOQUIZZ` are the
+  same family and were already banked; and `pack-20.json` was refused whole over
+  a raw newline upstream left inside a JSON string, so `fetchPack` now folds the
+  control characters a string may not hold into spaces rather than losing four
+  questions to a character nobody can see. French rows go **1 767 → 2 018**.
+
+  The pass over the 288 new rows is what found the older fault: the build had no
+  deduplication at all, and the two banks carried **41 questions twice** under
+  different pack ids — a crossword grid reissued, Gainsbourg asked the same thing
+  in two packs about him. The guard a room already has against repeating itself
+  is by id, so a game could serve the same question in two rounds.
+  `withoutRepeatedPrompts` keys on the language and the normalised prompt, keeps
+  the first of a group and names the ones it settles, because a group whose
+  copies disagree on the answer — *the largest country in the world* is banked as
+  both `Russia` and `Russian Federation` — is a coin toss worth a repair.
+  `[bank] asks no question twice` is what holds it.
+
+  Twenty-six repairs and fifteen `choiceOnly` flags came out of the same
+  read-through. The flags are all one shape: an answer no keyboard produces —
+  `Environ 850`, `110-120 volts`, `Par leurs sécrétions` — where the four options
+  make one question. The repairs are the usual two: a decoy that answers the
+  prompt as well as the answer does (osso buco *is* served alla milanese;
+  panzerotti *is* the folded stuffed pizza), and a claim with a shelf life that
+  has run out (Nadal's career Golden Slam is 2010, not 2008; Marie-José Pérec
+  stopped being the only French woman with three Olympic titles).
+
 - `[Game]` **The projector page is a wall, not a screen somebody is standing
   at.** `/invite/:code` exists to be thrown on a screen and left there, and both
   of the things that made it read as a page came off the same fact: it is the

@@ -1,5 +1,11 @@
 [
   {
+    "id": "oqdb-20-2",
+    "language": "fr",
+    "prompt": "Quel pourcentage de françaises trouvent les films pornos excitants ?",
+    "why": "an unsourced survey percentage nobody can produce in a text field, and every option is a percentage built for a pick"
+  },
+  {
     "id": "oqdb-111-2",
     "language": "fr",
     "prompt": "En combien de temps la course Ironman est-elle réalisée ?",
@@ -154,6 +160,90 @@
     "language": "fr",
     "prompt": "Le lac Titicaca sert entre autres de frontière à quels pays ?",
     "why": "the answer is a two-item list whose order and conjunction a player cannot guess: \"Perou et Bolivie\" is the same answer and would not match"
+  },
+  {
+    "id": "oqdb-521-4",
+    "language": "fr",
+    "prompt": "Lequel de ces acteurs n'apparaît pas dans « Le gendarme se marie » ?",
+    "why": "\"Lequel de ces acteurs\" only asks something beside the four options"
+  },
+  {
+    "id": "oqdb-536-2",
+    "language": "fr",
+    "prompt": "Quel environnement favorise les acariens ?",
+    "why": "the answer is a compound description, \"Chaud et humide\", where a typed room writes one of the two words"
+  },
+  {
+    "id": "oqdb-536-3",
+    "language": "fr",
+    "prompt": "Combien pèse environ la plus petite espèce de musaraigne connue ?",
+    "why": "the unit formatting of \"2 grammes\" cannot be guessed, and all four options are built for a pick"
+  },
+  {
+    "id": "oqdb-536-4",
+    "language": "fr",
+    "prompt": "Comment les mille-pattes se protègent-ils de leurs prédateurs ?",
+    "why": "the answer carries a \"Par leurs\" prefix a typed room has no reason to write"
+  },
+  {
+    "id": "oqdb-540-3",
+    "language": "fr",
+    "prompt": "Combien de passagers peuvent embarquer à bord de l'Airbus A380 ?",
+    "why": "the \"Environ\" prefix and the rounding behind it cannot be guessed in a text field"
+  },
+  {
+    "id": "oqdb-542-3",
+    "language": "fr",
+    "prompt": "Combien de communes la ville de Paris compte-t-elle ?",
+    "why": "the answer is the quantity phrase \"Une seule\", which a typed room writes as a numeral"
+  },
+  {
+    "id": "oqdb-544-2",
+    "language": "fr",
+    "prompt": "Combien de disques Johnny Hallyday a-t-il vendu de son vivant ?",
+    "why": "the unit is part of the stored answer and the four options are magnitudes built for a pick"
+  },
+  {
+    "id": "oqdb-545-3",
+    "language": "fr",
+    "prompt": "Taillé pour la course, jusqu'à quelle vitesse un guépard peut-il courir ?",
+    "why": "the unit formatting of \"120 km/h\" cannot be guessed, and all four options are speeds built for a pick"
+  },
+  {
+    "id": "oqdb-546-1",
+    "language": "fr",
+    "prompt": "À combien de degrés est égale la somme des angles d'un triangle ?",
+    "why": "the unit is part of the stored answer, and all four options are angles built for a pick"
+  },
+  {
+    "id": "oqdb-546-2",
+    "language": "fr",
+    "prompt": "Quel serait le poids d'un homme de 80 kg sur la Lune ?",
+    "why": "the \"Environ\" prefix and the unit formatting cannot be guessed in a text field"
+  },
+  {
+    "id": "oqdb-546-4",
+    "language": "fr",
+    "prompt": "Sur quelle tension électrique faut-il régler ses appareils à New York ?",
+    "why": "the answer is the range \"110-120 volts\", whose formatting a typed room has no way to reproduce"
+  },
+  {
+    "id": "oqdb-550-4",
+    "language": "fr",
+    "prompt": "Comment un gladiateur signalait-il qu'il abandonnait le combat ?",
+    "why": "the answer is the sentence \"Il lève le doigt\", where a typed room names the gesture alone"
+  },
+  {
+    "id": "oqdb-551-1",
+    "language": "fr",
+    "prompt": "En quelle année fut diffusée pour la première fois « Secret Story » sur TF1 ?",
+    "why": "the answer carries an \"En\" prefix and the four options are years built for a pick"
+  },
+  {
+    "id": "oqdb-552-1",
+    "language": "fr",
+    "prompt": "À quelle vitesse avance le lapin mécanique dans une course de lévriers ?",
+    "why": "the unit formatting of \"70 km/h\" cannot be guessed, and all four options are speeds built for a pick"
   },
   {
     "id": "otdb-00f65b763bd4",
