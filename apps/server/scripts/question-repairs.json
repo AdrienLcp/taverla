@@ -129,7 +129,7 @@
   },
   "oqdb-222-1": {
     "drop": true,
-    "why": "a decoy answers the prompt too — le leurre « Granit » est une graphie française parfaitement valide de granite (Larousse : « granit ou granite »)"
+    "why": "a decoy answers the prompt too — « Granit » is a perfectly valid French spelling of granite, which Larousse gives as « granit ou granite »"
   },
   "oqdb-233-3": {
     "prompt": "Dans quelle franchise d'action Keanu Reeves incarne-t-il un ancien assassin redouté ?",
@@ -243,7 +243,7 @@
   },
   "oqdb-346-3": {
     "drop": true,
-    "why": "the answer has a shelf life and it has run out — détenteur « actuel » d'un classement de consommation, qui bouge et n'est pas daté dans le prompt"
+    "why": "the answer has a shelf life and it has run out — the « current » holder of a consumption ranking, which moves and which the prompt never dates"
   },
   "oqdb-348-1": {
     "prompt": "Quel bâtiment situé en montagne accueille les randonneurs ?",
@@ -259,7 +259,7 @@
   },
   "oqdb-359-4": {
     "drop": true,
-    "why": "a decoy answers the prompt too — le leurre « Vienne » est aussi célèbre pour Mozart, qui y a composé l'essentiel de son œuvre, y est mort et y est enterré"
+    "why": "a decoy answers the prompt too — « Vienne » is every bit as famous for Mozart, who composed most of his work there, died there and is buried there"
   },
   "oqdb-360-3": {
     "drop": true,
@@ -337,7 +337,7 @@
   },
   "oqdb-412-2": {
     "drop": true,
-    "why": "the answer has a shelf life and it has run out — un effectif de votants adossé à l'année en cours (2026) : le corps électoral de l'Académie change chaque année et la question se périme dès la saison suivante"
+    "why": "the answer has a shelf life and it has run out — a headcount of voters pinned to the current year (2026), where the Académie's electorate changes every year and the question goes stale the season after"
   },
   "oqdb-418-1": {
     "drop": true,
