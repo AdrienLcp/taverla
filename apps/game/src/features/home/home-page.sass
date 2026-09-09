@@ -75,36 +75,62 @@
       gap: var(--space-s)
       grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr))
 
+      h2,
+      .error
+        grid-column: 1 / -1
+
       h2
         @include typography.label
 
         color: var(--ink-muted)
-        grid-column: 1 / -1
 
     .game
       @include focus.ring
 
       align-items: flex-start
+      // It opens a room rather than going anywhere, so it is a button — and a
+      // button brings a user-agent ground, centring and font with it.
+      appearance: none
+      background: none
       border: 2px solid var(--edge)
       color: var(--ink)
+      cursor: pointer
       display: flex
       flex-direction: column
+      font: inherit
       gap: var(--space-2xs)
       padding: var(--space-m)
-      text-decoration: none
+      text-align: start
+      width: 100%
 
       // A press paints what a hover paints: `data-hovered` never fires on a
       // touch screen, and this card is the first thing a phone lands on.
       &[data-hovered],
-      &[data-pressed]
+      &[data-pressed],
+      &[data-pending]
         background: var(--cut)
         color: var(--cut-ink)
 
-      &[data-pressed]
+      // The card stays down for as long as the room is opening, because that is
+      // what the press did. Blanking its label the way a control does would
+      // take the shelf's own reading away — the name is which door this is, and
+      // the spinner is beside it rather than over it.
+      &[data-pressed],
+      &[data-pending]
         transform: translateY(2px)
+
+      &[data-pending]
+        cursor: progress
 
       .name
         @include typography.title
+
+        align-items: center
+        display: flex
+        gap: var(--space-xs)
+        // Held from the empty state: a spinner arriving on press must not push
+        // the pitch under it down a line.
+        min-block-size: 1.1em
 
       .pitch
         @include typography.caption
@@ -112,5 +138,6 @@
         color: var(--ink-muted)
 
       &[data-hovered] .pitch,
-      &[data-pressed] .pitch
+      &[data-pressed] .pitch,
+      &[data-pending] .pitch
         color: inherit

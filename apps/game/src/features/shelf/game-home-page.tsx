@@ -37,7 +37,7 @@ const GameHome: React.FC<{ game: ShelvedGame }> = ({ game }) => {
 
   useIndexedPageTitle(game)
 
-  const { error, isCreating, open } = useCreateRoom()
+  const { isOpening, open, refusal } = useCreateRoom()
 
   return (
     <main className='game-home-page'>
@@ -51,7 +51,7 @@ const GameHome: React.FC<{ game: ShelvedGame }> = ({ game }) => {
 
         <div className='start'>
           <Button
-            isPending={isCreating}
+            isPending={isOpening(game)}
             onPress={() => {
               void open(game)
             }}
@@ -62,9 +62,9 @@ const GameHome: React.FC<{ game: ShelvedGame }> = ({ game }) => {
           <p className='aside'>{translate('join.host.description')}</p>
         </div>
 
-        {error !== null && (
+        {refusal !== null && (
           <p className='error' role='alert'>
-            {translate(error)}
+            {translate(refusal.error)}
           </p>
         )}
       </div>
