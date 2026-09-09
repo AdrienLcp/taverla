@@ -12,7 +12,23 @@
     // clear of everything it is chrome for.
     inset-inline-end: max(var(--layout-padding-inline-end), calc(50% - var(--stage-max-width) / 2 + var(--layout-padding-inline-end)))
     position: fixed
+    transition: opacity var(--transition-base, 0) var(--timing, ease)
     z-index: 1
+
+    // A wall is furniture, and after a few seconds nobody is at it. Only the
+    // screen that knows that says so — the invitation page stamps `data-idle`
+    // on the root — and the chrome goes with it, the way a video player's does
+    // over what it is playing. It comes back on the first pointer, key or
+    // focus, which is what lets somebody at an unfamiliar keyboard reach the
+    // theme and the language at all.
+    //
+    // Two exclusions, and neither is a state this component invented. A menu
+    // somebody has open is a menu somebody is at, and its popover is portalled
+    // out of this box so `:focus-within` never sees it — the trigger's own
+    // `aria-expanded` is what stays behind to say so.
+    :root[data-idle] &:not(:focus-within):not(:has(.trigger[aria-expanded='true']))
+      opacity: 0
+      pointer-events: none
 
     .alert
       @include typography.label

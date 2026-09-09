@@ -234,11 +234,17 @@
         // width it gets the day the stage grew a ceiling: on a 21:9 display the
         // code was 302px tall in a 930px column and broke across two lines. The
         // container unit is the sentence the comment above makes — as large as
-        // its column allows — and four characters at this weight need every bit
-        // of `21cqi`. It resolves against the invitation's own box, which
-        // declares the container it is measured from.
+        // its column allows. It resolves against the invitation's own box,
+        // which declares the container it is measured from.
+        //
+        // `20cqi` is where that sentence actually lands, measured on the page:
+        // four `W` — the widest glyph the code alphabet holds — set in
+        // `monument` come to 4.78 times their own font size, so one line holds
+        // up to `100 / 4.78 = 20.9cqi`. This read `21` on the estimate that
+        // four characters need every bit of it, and `WWWW` is the one code in
+        // six hundred thousand that number breaks in half.
         .room-invitation
-          --invitation-code-size: min(clamp(4.5rem, 21vmin, 20rem), 21cqi)
+          --invitation-code-size: min(clamp(4.5rem, 21vmin, 20rem), 20cqi)
 
       &.playing
         align-items: center

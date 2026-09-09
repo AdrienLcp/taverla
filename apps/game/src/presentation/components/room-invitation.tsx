@@ -12,6 +12,16 @@ import './room-invitation.sass'
 
 type RoomInvitationProps = {
   /**
+   * A screen nobody is at: a wall, a projector, a television across the room.
+   * It carries the invitation and no control, because the code cannot be taken
+   * anywhere from four metres away and a button there would be the only thing
+   * on the screen that is not the invitation.
+   *
+   * The other four stages are all screens somebody is holding or standing at,
+   * and on those the code is copied to be sent somewhere.
+   */
+  isUnattended?: boolean
+  /**
    * Read from the address bar rather than from a view, which is what lets a
    * screen put the code up before the socket has answered — and what lets the
    * poster page carry the invitation with no socket at all.
@@ -35,7 +45,10 @@ type RoomInvitationProps = {
  * container unit written by any stage resolves against this box wherever it is
  * rendered.
  */
-export const RoomInvitation: React.FC<RoomInvitationProps> = ({ roomCode }) => {
+export const RoomInvitation: React.FC<RoomInvitationProps> = ({
+  isUnattended,
+  roomCode
+}) => {
   const translate = useTranslate()
   const joinUrl = playUrlFor(roomCode)
 
@@ -43,7 +56,7 @@ export const RoomInvitation: React.FC<RoomInvitationProps> = ({ roomCode }) => {
     <section className='room-invitation'>
       <div className='code'>
         <p className='room-code'>{roomCode}</p>
-        <CopyButton value={roomCode} />
+        {!isUnattended && <CopyButton value={roomCode} />}
       </div>
       <div className='qr'>
         {/*

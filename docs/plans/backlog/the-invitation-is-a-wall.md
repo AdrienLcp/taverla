@@ -58,3 +58,72 @@ sizes, because the point is the one this repository cannot open: a laptop at
 1440 and a viewport wide enough to stand in for a projector. Confirm the code is
 readable at a distance the screenshot cannot show by measuring it — the `code`
 against the viewport, not against the card.
+
+## What it did — **9 September 2026**
+
+Both of the two it had to weigh came out on **the room**, and both answers are
+the same sentence: this is the only screen in the product nobody is at.
+
+**The copy button is gone from the wall alone.** `RoomInvitation` takes
+`isUnattended`, and the invitation page is the one stage that passes it. The
+other four are screens somebody is holding or standing at, and on those the code
+is copied to be *sent* — the console's lobby, the console mid-game, the menu's
+popover, and a player's phone showing the code to a friend. Hiding a live
+control with a page stylesheet was the cheaper edit and the wrong one: it stays
+in the tab order, it keeps mounting a component with a timer in it, and the next
+person to reorder the markup un-hides it with nothing to warn them.
+
+**The menu fades instead of going.** The entry offered hiding it outright and
+called that possibly right; it is not, and the case that kills it is the one the
+entry itself raised. The machine wired to the projector is often not the one
+running the room, so the tab is as likely to arrive by somebody typing the URL
+on an event PC as by being dragged across from the host's browser — and that
+browser has its own `taverla:theme`. With the menu gone, a light field in a dark
+room has no way to be said, on the one screen the product promises at four
+metres. There is no *before* to set it up in when the URL was typed straight in.
+
+So `useIdleChrome` stamps `data-idle` on the root four seconds after the last
+pointer, key or focus, and `app-menu.sass` reads it — the same seam
+`usePhaseField` already uses to let a page decide the colour of the field, which
+is the only way a page can reach chrome the shell draws one level above it. It
+is armed on arrival rather than on the first event, because a wall nobody sets
+up is the common case. Two exclusions, and neither is a state this code
+invented: `:focus-within`, and the trigger's own `aria-expanded` — the popover
+is portalled out of the box, so somebody reading it with no pointer moving would
+otherwise have it fade under them.
+
+**The missing room keeps every bit of its chrome**, as the entry asked. The hook
+is passed the same predicate the page branches on, so nothing is ever stamped
+there.
+
+## What the browser found that no reading would have
+
+**The code was breaking in half, and it had been all along.** `28cqi` put a
+four-character code 40px wider than its column at 1920, and `word-break` split
+`VGDQ` into `VGD` and `Q` — two objects on the one screen allowed to carry a
+single idea. The size seam this entry called *already there and not the problem*
+was the problem.
+
+The number is now measured rather than chosen. Four `W` — the widest glyph
+`ROOM_CODE_ALPHABET` holds — set in `monument` come to **4.78 times their own
+font size**, so a code holds one line up to `100 / 4.78 = 20.9cqi` and no
+further.
+
+**The console had the same fault, one tenth of a unit deep.** Its
+`--invitation-code-size` read `21cqi` on the estimate that four characters *need
+every bit* of it. They need slightly less than all of it: `WWWW` is the one code
+in six hundred thousand that `21` breaks in half, and it is now `20` there too.
+The comment that carried the estimate carries the measurement instead.
+
+| | code | column | worst code (`WWWW`) | lines |
+|---|---|---|---|---|
+| wall, 1920×1080 | 201px | 1003px | 959px | 1 |
+| wall, 1440×900 | 152px | 760px | 727px | 1 |
+| console, 1920×1080 | 191px | 953px | 911px | 1 |
+| console, 1440×900 | 150px | 751px | 718px | 1 |
+
+Driven muted, both palettes, both widths: no horizontal scroll, no control left
+inside the invitation on the wall and the copy button still named on the
+console, the chrome gone at four seconds and back on the first pointer, pinned
+while the popover is open, and `prefers-reduced-motion` collapsing the fade to
+`0s` without stranding it half-drawn.

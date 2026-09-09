@@ -32,7 +32,17 @@
       // component makes, because two columns of this are worse than one.
       @include layout.poster
 
-      --invitation-code-size: min(30vmin, 28cqi)
+      // `20cqi` is measured, not chosen. Four `W` — the widest glyph the code
+      // alphabet holds — set in `monument` come to 4.78 times their own font
+      // size, so a code holds one line up to `100 / 4.78 = 20.9cqi` and no
+      // further. At `28cqi` a four-character code overflowed its column by
+      // forty pixels and `word-break` split it, which on a wall is the one
+      // thing this screen exists to say read as two.
+      //
+      // The `vmin` half is what a short landscape wall needs: the container is
+      // the only thing `cqi` knows about, and a 1920×400 field would give a
+      // code taller than the screen it is on.
+      --invitation-code-size: min(30vmin, 20cqi)
       --invitation-qr-max-width: min(60vmin, 100%)
 
       gap: clamp(var(--space-l), 5vmin, var(--space-2xl))

@@ -423,6 +423,28 @@ one part.
 
 ### Improvements
 
+- `[Game]` **The projector page is a wall, not a screen somebody is standing
+  at.** `/invite/:code` exists to be thrown on a screen and left there, and both
+  of the things that made it read as a page came off the same fact: it is the
+  only surface in the product nobody is at. `RoomInvitation` takes
+  `isUnattended`, and the invitation page is the one stage that passes it — the
+  copy button is a target four metres from the nearest hand, and it was the only
+  thing on the screen that was not the invitation. The other four stages keep
+  it, because on a screen somebody is holding the code is copied to be sent.
+
+  The corner menu **fades instead of going**. Hiding it outright was the tidier
+  answer and the wrong one: the machine wired to the projector is often not the
+  one running the room, so the tab arrives as often by somebody typing the URL
+  on an event PC — with its own `taverla:theme` — as by being dragged across
+  from the host's browser, and a light field in a dark room would then have no
+  way to be said. `useIdleChrome` stamps `data-idle` on the root four seconds
+  after the last pointer, key or focus, the same seam `usePhaseField` uses to
+  let a page decide the colour of the field; `:focus-within` and the trigger's
+  own `aria-expanded` keep it up while somebody is in it. The room that resolves
+  to nothing keeps every bit of its chrome, because that screen *is* read at a
+  keyboard and its way home is the only thing on it. See
+  [`docs/plans/backlog/the-invitation-is-a-wall.md`](docs/plans/backlog/the-invitation-is-a-wall.md)
+
 - `[Game]` **`RoomInvitation` and `CopyButton` are the shell's**, in
   `presentation/components/` with a stylesheet of their own — three consumers is
   what makes a component shared, and every rule for it had been nested under the
@@ -693,6 +715,18 @@ one part.
   and the extra width is only void
 
 ### Fixes
+
+- `[Game]` **A room code was breaking in half on the wall, and could on the
+  console.** `--invitation-code-size` asked the projector page for `28cqi` and
+  the console for `21cqi`, both on the estimate that four characters need every
+  bit of their column. Measured instead: four `W` — the widest glyph
+  `ROOM_CODE_ALPHABET` holds — set in `monument` come to **4.78 times their own
+  font size**, so a code holds one line up to `100 / 4.78 = 20.9cqi` and no
+  further. At `28cqi` every code overflowed its column by forty pixels at 1920
+  and `word-break` split it, which put two objects on the one screen allowed to
+  carry a single idea; at `21cqi` the console breaks `WWWW` alone, one code in
+  six hundred thousand. Both are `20cqi` now, and the comments carry the
+  measurement rather than the estimate.
 
 - `[Server]` **A round with no console is frozen on the server too.** A host
   closing their tab stops every timer, and until now that was the whole freeze:
