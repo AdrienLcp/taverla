@@ -267,3 +267,18 @@ export const HOST_ONLY_MESSAGE_TYPES = new Set<ClientMessageType>([
   'host.removePlayer',
   'host.closeRoom'
 ])
+
+/**
+ * The frames that move a round along from the floor, partitioned out for the
+ * one gate that has to refuse all four at once: a room whose console is gone is
+ * frozen, and a freeze the floor can still fill in is not one. The seat frames
+ * — `player.leave`, `player.rename` — are deliberately not here, because
+ * leaving a room nobody is running is exactly what a phone should still be
+ * allowed to do.
+ */
+export const FLOOR_MESSAGE_TYPES = new Set<ClientMessageType>([
+  'player.buzz',
+  'player.answer',
+  'lefake.submit',
+  'lefake.vote'
+])

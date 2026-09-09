@@ -25,6 +25,15 @@ export const protocolErrorCodes = [
    */
   'host_reconnecting',
   'host_only_action',
+  /**
+   * A frame from the floor while the room has no console. The host's browser is
+   * the speaker and the judge, so their leaving freezes every timer — but a
+   * frozen round the floor can still fill in is not frozen: everyone answering
+   * satisfies `everyoneIsDone`, closes the round and arms the next clip for a
+   * screen that is not there to play it. The phone already draws the pause;
+   * this is the server saying the same thing, which is the half that decides.
+   */
+  'host_away',
   'wrong_phase',
   'stale_round',
   'already_buzzed',

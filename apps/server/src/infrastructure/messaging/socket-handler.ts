@@ -4,6 +4,7 @@ import { nanoid } from 'nanoid'
 import {
   type ClientMessage,
   clientMessageSchema,
+  FLOOR_MESSAGE_TYPES,
   type HelloMessage,
   HOST_ONLY_MESSAGE_TYPES
 } from '@taverla/protocol/client-message'
@@ -350,6 +351,21 @@ export const createRoomSocketEvents = (
 
     if (room === null) {
       reject(outbound, ws, 'room_not_found', 'The room is gone')
+
+      return
+    }
+
+    // `holdRoundWhileHostIsAway` stops every timer, and until this gate existed
+    // that was the whole freeze: the floor could still answer its way to the end
+    // of a round nobody was there to hear, which armed the next clip for an
+    // empty console. The phone draws the pause on its own; a client refusing is
+    // not the server deciding.
+    if (FLOOR_MESSAGE_TYPES.has(message.type) && !isHostConnected(room.code)) {
+      sendError(outbound, {
+        code: 'host_away',
+        fatal: false,
+        message: 'The room is on hold until the host is back'
+      })
 
       return
     }

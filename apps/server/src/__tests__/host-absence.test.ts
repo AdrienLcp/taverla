@@ -9,7 +9,9 @@ import {
 import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
 import {
+  errorsIn,
   FAST_GAME,
+  hostContent,
   hostView,
   type Peer,
   playerView,
@@ -174,6 +176,43 @@ describe('a host who walks away', () => {
     )
 
     expect(hostView(returned)?.phase).toBe('countdown')
+  })
+
+  /**
+   * The freeze used to be the client's alone. Every timer stopped, and the floor
+   * could still answer its way to the end of a round no console was there to
+   * hear — which closed it, revealed it, and armed the next clip for nobody.
+   */
+  it('[host-absence] refuses the floor rather than letting it finish the round alone', async () => {
+    const { code, host } = await harness.openRoom(LONG_CLIP_THE_CONSOLE_PLAYS)
+    const player = await harness.seat({ code, nickname: 'Zoe' })
+
+    host.send({ type: 'host.startRound' })
+    await waitFor(
+      () => playerView(player)?.phase === 'playing',
+      'the clip to start'
+    )
+
+    // Read while a console is still there to be sent it: the whole answer, so
+    // an accepted frame would bank both halves and end the round on its own.
+    const track = hostContent(host)?.track
+    const roundId = playerView(player)?.round?.id ?? ''
+
+    host.close()
+    await waitFor(
+      () => playerView(player)?.isHostConnected === false,
+      'the room to hear the host leave'
+    )
+
+    player.send({
+      answer: { guess: `${track?.title} ${track?.artist}`, kind: 'typed' },
+      roundId,
+      type: 'player.answer'
+    })
+    await waitFor(() => errorsIn(player).length === 1, 'the refusal')
+
+    expect(errorsIn(player).at(0)?.code).toBe('host_away')
+    expect(playerView(player)?.phase).toBe('playing')
   })
 
   it('[host-absence] hands the room back to a player who is still there', async () => {
