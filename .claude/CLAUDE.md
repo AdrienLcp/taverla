@@ -234,10 +234,14 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   refusal that displaces a console voids its seat, and a token dropped with it
   would make the takeover final
 - **The host's setup** — `HostPreferences`, stored on the console's own machine
-  and split on the seam `movedToGame` turns on. A game answers three of the
-  room's settings — `game`, `mode`, `roundCount`, together `GameSetup` — so
-  those are remembered *per game*, and everything no game answers is remembered
-  once and survives every switch. The console applies it over what the door
+  and split on the seam `movedToGame` turns on. A game answers four of the
+  room's settings — `game`, `mode`, `roundCount`, `autoAdvanceMs`, together
+  `GameSetup` — so those are remembered *per game*, and everything no game
+  answers is remembered once and survives every switch. The hold is the one no
+  game opens on a number of its own: every game takes the shell's `null`, and it
+  is on the game's side of the line to be *remembered* there — twenty-five
+  seconds picked so a quiz note can be read aloud is not what a reflex race
+  wants. The console applies it over what the door
   decided, as one `host.updateSettings` in the **lobby** and only on the first
   view it draws: a mid-game reload must re-apply nothing, because the server
   would refuse the three a round is built on and the rest would rearrange

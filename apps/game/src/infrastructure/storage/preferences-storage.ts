@@ -26,12 +26,18 @@ const hostPreferencesSchema = z.object({
   games: z.partialRecord(
     gameKindSchema,
     z.object({
+      autoAdvanceMs: roomSettingsSchema.shape.autoAdvanceMs,
       game: gameSettingsSchema,
       mode: modeSettingsSchema,
       roundCount: roomSettingsSchema.shape.roundCount
     })
   ),
-  room: roomSettingsSchema.omit({ game: true, mode: true, roundCount: true })
+  room: roomSettingsSchema.omit({
+    autoAdvanceMs: true,
+    game: true,
+    mode: true,
+    roundCount: true
+  })
 })
 
 export const DEFAULT_VOLUME = 0.8

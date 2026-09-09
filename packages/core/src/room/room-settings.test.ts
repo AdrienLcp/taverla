@@ -82,11 +82,24 @@ describe('movedToGame', () => {
       game: 'blindtest',
       locale: 'fr',
       remembered: null,
-      settings: { ...onTheBuzzer, autoAdvanceMs: 8_000, countdownMs: 10_000 }
+      settings: { ...onTheBuzzer, countdownMs: 10_000 }
     })
 
     expect(moved.countdownMs).toBe(10_000)
-    expect(moved.autoAdvanceMs).toBe(8_000)
+  })
+
+  // Twenty-five seconds is what a quiz note takes to read aloud, and a reflex
+  // race has nothing to read: the hold is the incoming game's, like the mode
+  // and the round count beside it.
+  it('[room-settings] does not carry the reveal hold onto the next game', () => {
+    const moved = movedToGame({
+      game: 'reflex',
+      locale: 'fr',
+      remembered: null,
+      settings: { ...onTheBuzzer, autoAdvanceMs: 25_000 }
+    })
+
+    expect(moved.autoAdvanceMs).toBeNull()
   })
 
   it('[room-settings] narrows to the one mode a bare buzzer can serve', () => {
@@ -107,6 +120,7 @@ describe('movedToGame', () => {
       game: 'blindtest',
       locale: 'fr',
       remembered: {
+        autoAdvanceMs: 15_000,
         game: { ...DEFAULT_BLINDTEST_SETTINGS, difficulty: 'obscure' },
         mode: DEFAULT_MODE_SETTINGS.choice,
         roundCount: 30
@@ -114,6 +128,7 @@ describe('movedToGame', () => {
       settings: onTheBuzzer
     })
 
+    expect(moved.autoAdvanceMs).toBe(15_000)
     expect(moved.mode).toEqual(DEFAULT_MODE_SETTINGS.choice)
     expect(moved.roundCount).toBe(30)
     expect(moved.game).toEqual({

@@ -15,7 +15,7 @@ file rather than half-landing.
 
 ## Open
 
-Four entries. **Two wait on a phone and two wait on a session.** Of the pair
+Three entries. **Two wait on a phone and one waits on a session.** Of the pair
 that wait on a phone, one needs a line read off the Android that produced note
 6; the other is about a colour the sRGB monitor this repository is written on
 cannot display, and its entry now names the two P3 handsets that can and
@@ -24,22 +24,18 @@ both values side by side. Of the two decisions the oklch palette opened, the one
 about borders is taken and is below, and the one about colour stops exactly
 where a screen has to be looked at.
 
-The two that wait on a session no longer depend on each other. They were **one
-argument split in two** — put the room's code on every screen, then keep that
-from also handing the console to whoever reads it — and the first half landed on
-8 September. [The host's way back](the-hosts-way-back.md) is what is left of it,
-and it is now free to be taken on its own; its premise is unchanged, and the
-soft lock it prices is still the one in force. The other has had its own first
-half taken the same day: the reveal now says how long it has, and what remains
-of it is the question that clock made answerable rather than urgent — which game
-the hold belongs to.
+The one that waits on a session was half of **an argument split in two** — put
+the room's code on every screen, then keep that from also handing the console to
+whoever reads it — and the first half landed on 8 September.
+[The host's way back](the-hosts-way-back.md) is what is left of it, and it is
+now free to be taken on its own; its premise is unchanged, and the soft lock it
+prices is still the one in force.
 
 | Session | In one line | Cost | Starts with | Holds |
 |---|---|---|---|---|
 | [The room is silent, unexplained](silent-room-unexplained.md) | **Half done.** Two of the three causes are ruled out and the console names the third; one reading on the Android phone closes it | waits on a phone | — | note 6, and what each of the three lines means |
 | [The fields a phone could show](fields-a-phone-could-show.md) | `oklch()` can name a colour sRGB cannot, and every phone in the room has a P3 screen. The three widest fields are derived and every pair re-measured; what is left is looking at it on a P3 screen and keeping it or not — **the screens exist now**, and the entry's own two-phone check is corrected at the end of it | waits on a phone | the derived table, then the correction under it | why it is a design decision and not a conversion, and why Samsung's *Natural* mode would show nothing |
 | [The host's way back](the-hosts-way-back.md) | The room survives a closed tab and the token outlives it by 24 hours — what is missing is a door. The home lists the rooms this device holds a token for | one session | the two refusals, before anything is drawn | why a public list of open rooms is a different product |
-| [Nobody knows how long the reveal has](nobody-knows-how-long-the-reveal-has.md) | **Half done.** The clock landed on 8 September: `advancesAt` is on the round view and the round's own bar counts the hold on both surfaces. What is left is its second half — `autoAdvanceMs` is remembered per host, so 25 s picked for a quiz full of notes follows the room onto the reflex race | one session | section Two, and nothing above the rule | the three ways out, and why moving it into `GameSetup` is the recommendation |
 
 **One diagnosis disagrees with the note that raised it** — read the entry before
 planning it:
@@ -54,6 +50,7 @@ planning it:
 
 | Session | Landed |
 |---|---|
+| [Nobody knows how long the reveal has](nobody-knows-how-long-the-reveal-has.md) | 8 Sep 2026, and 9 Sep for its second half |
 | [The way in leaves the console](the-way-in-leaves-the-console.md) | 8 Sep 2026 |
 | [A question about nobody](a-question-about-nobody.md) | 7 Sep 2026 |
 | [The answer only four buttons give](answer-only-four-buttons-give.md) | 7 Sep 2026 |

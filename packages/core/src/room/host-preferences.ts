@@ -5,13 +5,15 @@ import type { GameSetup } from './room-settings'
 
 /**
  * What one host keeps between rooms, split on the seam `movedToGame` turns on: a
- * game answers three of the room's settings, so those are remembered per game
+ * game answers four of the room's settings, so those are remembered per game
  * and everything else is remembered once.
  *
- * That is why `roundCount` sits on the game's side of the line despite being a
- * room setting. A host who lengthened the countdown meant it for every game; a
- * host who set Le Fake to five rounds did not mean it for the quiz, and neither
- * did the one whose bare buzzer runs until they stop it.
+ * That is why `roundCount` and `autoAdvanceMs` sit on the game's side of the
+ * line despite being room settings. A host who lengthened the countdown meant it
+ * for every game; a host who set Le Fake to five rounds did not mean it for the
+ * quiz, and neither did the one whose bare buzzer runs until they stop it. Nor
+ * did the one who held the reveal twenty-five seconds so a quiz note could be
+ * read aloud mean it for a reflex race, which has nothing to read.
  */
 export type HostPreferences = {
   /** What this host last left each game set to; absent until they have played it. */
@@ -68,8 +70,8 @@ export const restoredSettings = ({
  * joins `room` without an edit here.
  *
  * A room still deciding what to play remembers nothing per game — there is no
- * game to file it under, and its `mode` and `roundCount` are the shell's
- * placeholders rather than anybody's choice.
+ * game to file it under, and its `mode`, `roundCount` and reveal hold are the
+ * shell's placeholders rather than anybody's choice.
  */
 export const rememberSettings = ({
   preferences,
@@ -78,13 +80,16 @@ export const rememberSettings = ({
   preferences: HostPreferences | null
   settings: RoomSettings
 }): HostPreferences => {
-  const { game, mode, roundCount, ...room } = settings
+  const { autoAdvanceMs, game, mode, roundCount, ...room } = settings
 
   return {
     games:
       game === null
         ? (preferences?.games ?? {})
-        : { ...preferences?.games, [game.kind]: { game, mode, roundCount } },
+        : {
+            ...preferences?.games,
+            [game.kind]: { autoAdvanceMs, game, mode, roundCount }
+          },
     room
   }
 }

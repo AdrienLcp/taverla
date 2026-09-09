@@ -56,24 +56,31 @@ const DEFAULT_ANSWER_MODE: Record<GameKind, AnswerMode> = {
 }
 
 /**
- * The three fields a game gets a say in, as one value: which game, how it is
- * answered, and how long the evening runs. It is the seam `movedToGame` has
- * always turned on, and naming it is what lets a *remembered* answer come
- * through the same door the game's own defaults do.
+ * The four fields a game gets a say in, as one value: which game, how it is
+ * answered, how long the evening runs, and how long its reveal is held. It is
+ * the seam `movedToGame` has always turned on, and naming it is what lets a
+ * *remembered* answer come through the same door the game's own defaults do.
+ *
+ * The hold is the one no game answers with a number of its own — every game
+ * opens on the shell's, which waits for the host and so cannot be too short.
+ * What it is here for is being *remembered* per game: twenty-five seconds
+ * chosen for a quiz whose questions carry a note is not what a reflex race
+ * wants, whose reveal is a reaction time and a name.
  */
 export type GameSetup = {
+  autoAdvanceMs: RoomSettings['autoAdvanceMs']
   game: GameSettings
   mode: ModeSettings
   roundCount: RoomSettings['roundCount']
 }
 
 /**
- * What a freshly opened room is set to. The shell's defaults, with the three
+ * What a freshly opened room is set to. The shell's defaults, with the four
  * fields the game gets a say in.
  *
  * `null` is a room opened from the front door, where the code goes up before
  * anybody has decided what to play. It is the shell's defaults and nothing
- * else: the three fields below are the game's to answer, and there is no game
+ * else: the four fields below are the game's to answer, and there is no game
  * yet to answer them.
  */
 export const roomSettingsFor = ({
@@ -96,6 +103,7 @@ const openedSetup = ({
   game: GameKind
   locale: Locale
 }): GameSetup => ({
+  autoAdvanceMs: DEFAULT_ROOM_SETTINGS.autoAdvanceMs,
   game: openedGameSettings({ game, locale }),
   mode: modeOfferedBy({
     game,
@@ -125,11 +133,11 @@ const openedGameSettings = ({
 }
 
 /**
- * The same room, playing something else. The three fields a game gets a say in
+ * The same room, playing something else. The four fields a game gets a say in
  * take that game's answer, and the rest is the host's and survives: a countdown
  * they lengthened is not undone by changing their mind about the game.
  *
- * The three never carry over from the outgoing game, because carrying them is
+ * The four never carry over from the outgoing game, because carrying them is
  * what put a room on a blind test with no round limit that nobody could type an
  * answer into — the bare buzzer's settings, worn by a game that has its own.
  * What they may carry from is this host's *last evening on the incoming game*,

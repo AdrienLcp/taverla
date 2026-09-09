@@ -1,7 +1,7 @@
 ## Nobody knows how long the reveal has
 
-> **Section One is done, 8 September 2026. Section Two is what is left**, and it
-> is a session of its own — read it below and nothing above it.
+> **Delivered.** Section One landed 8 September 2026, Section Two on the 9th.
+> Kept for what the two sessions found; not a plan any more.
 
 **What shipped, against what this entry expected.** The prescription held in
 full — `advancesAt` on the round view, the round's own bar, absent under
@@ -75,7 +75,7 @@ on a timer, draw the same draining bar the round already has, and leave it
 absent under `null` — a bar that never empties is worse than none, and it is
 the same reasoning that keeps the clock off a round the host has frozen.
 
-### Two · The hold is remembered per host, and the reading is per game — **still open**
+### Two · The hold is remembered per host, and the reading is per game — **done**
 
 `autoAdvanceMs` is not in `GameSetup`, so it falls into `HostPreferences['room']`
 and survives every game switch. A host who sets 25 s because the quiz has notes
@@ -98,3 +98,25 @@ nobody can see the end of is the thing to fix before deciding how it is
 remembered. The clock exists now, so this is takeable — and the room it was
 argued from has moved, because a hold nobody could see was also a hold nobody
 could notice was wrong on the game it carried over to.
+
+**What it cost, 9 September 2026: one field on `GameSetup` and four documents.**
+The seam was already load-bearing enough that the code barely moved —
+`rememberSettings` destructures one more name, `HostPreferences['room']` is an
+`Omit` and shed it without an edit, and the storage schema's `omit` was the one
+place the fourth field had to be spelt twice. It cannot drift: the parsed blob
+is returned as `HostPreferences`, so a schema that forgets the field fails to
+compile.
+
+**What the entry got wrong is that this was a choice between three.** The second
+option — scaling the hold to what is on screen — is not an alternative to this
+one; it is a thing that could still be built *on top* of it, and it would now be
+scaling a number the host picked for this game rather than for the last one. The
+third was never live once the clock existed.
+
+**No game opens on a hold of its own**, and that is the deliberate half. The
+temptation, once the field is per game, is a `Record<GameKind, number | null>`
+beside `DEFAULT_ROUND_COUNT` — eight seconds for the reflex race, twenty-five
+for the quiz. It is refused because `null` waits for the host and therefore
+cannot be too short, which is the property the whole strip was given a `null`
+default for. Being on the game's side of the line buys the memory; the default
+stays the shell's until a room says otherwise.

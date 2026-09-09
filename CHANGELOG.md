@@ -671,6 +671,22 @@ one part.
 
 ### Fixes
 
+- `[Game]` **The reveal hold is remembered per game, not per host.**
+  `autoAdvanceMs` fell outside `GameSetup`, so it sat in the arm of
+  `HostPreferences` that survives every switch: a host who held the reveal
+  twenty-five seconds because a quiz question carries a note got twenty-five
+  seconds on the reflex race, whose reveal is a reaction time and a name. It
+  joins `game`, `mode` and `roundCount` on the game's side of the seam
+  `movedToGame` turns on, so a switch takes the incoming game's answer and a
+  switch back finds the one that was left there.
+
+  It is the only one of the four that no game opens on a number of its own —
+  every game takes the shell's `null`, which waits for the host and so cannot be
+  too short. Being on that side of the line buys the *memory*, not a default. A
+  console whose stored setup predates this reads a `games` arm missing the field
+  and falls back to the defaults, which is what `readStoredHostPreferences`
+  already does with any blob this build cannot read.
+
 - `[Server]` **The whole question bank was read end to end, and 191 rows carry a
   repair.** It started with three questions a room could not answer and ended as
   an audit with eight lenses over all 6 286 rows. What it found: 29 answers that

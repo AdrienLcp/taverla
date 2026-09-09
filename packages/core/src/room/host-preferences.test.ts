@@ -15,16 +15,18 @@ const onTheQuiz = roomSettingsFor({ game: 'quiz', locale: 'fr' })
 const onNothing = roomSettingsFor({ game: null, locale: 'fr' })
 
 describe('rememberSettings', () => {
-  it('[host-preferences] files the room’s three game-owned fields under that game', () => {
+  it('[host-preferences] files the room’s four game-owned fields under that game', () => {
     const remembered = rememberSettings({
       preferences: null,
       settings: {
         ...onTheQuiz,
+        autoAdvanceMs: 25_000,
         mode: DEFAULT_MODE_SETTINGS.choice,
         roundCount: 20
       }
     })
 
+    expect(remembered.games.quiz?.autoAdvanceMs).toBe(25_000)
     expect(remembered.games.quiz?.mode).toEqual(DEFAULT_MODE_SETTINGS.choice)
     expect(remembered.games.quiz?.roundCount).toBe(20)
     expect(remembered.games.quiz?.game.kind).toBe('quiz')
@@ -35,13 +37,10 @@ describe('rememberSettings', () => {
   it('[host-preferences] keeps what no game answers outside every game', () => {
     const remembered = rememberSettings({
       preferences: null,
-      settings: { ...onTheQuiz, autoAdvanceMs: 8_000, countdownMs: 10_000 }
+      settings: { ...onTheQuiz, countdownMs: 10_000 }
     })
 
-    expect(remembered.room).toEqual({
-      autoAdvanceMs: 8_000,
-      countdownMs: 10_000
-    })
+    expect(remembered.room).toEqual({ countdownMs: 10_000 })
   })
 
   it('[host-preferences] leaves the other games it has learned alone', () => {
@@ -88,13 +87,15 @@ describe('restoredSettings', () => {
     const restored = restoredSettings({ preferences, settings: onNothing })
 
     expect(restored.countdownMs).toBe(10_000)
-    expect(restored.autoAdvanceMs).toBe(8_000)
     expect(restored.game).toBeNull()
+    // The hold was the quiz's, and this room has not been told what it plays.
+    expect(restored.autoAdvanceMs).toBe(onNothing.autoAdvanceMs)
   })
 
   it('[host-preferences] applies a game’s own answers to a room already on it', () => {
     const restored = restoredSettings({ preferences, settings: onTheQuiz })
 
+    expect(restored.autoAdvanceMs).toBe(8_000)
     expect(restored.mode).toEqual(DEFAULT_MODE_SETTINGS.choice)
     expect(restored.roundCount).toBe(20)
   })
@@ -106,6 +107,7 @@ describe('restoredSettings', () => {
     const restored = restoredSettings({ preferences, settings: onTheBuzzer })
 
     expect(restored.countdownMs).toBe(10_000)
+    expect(restored.autoAdvanceMs).toBe(onTheBuzzer.autoAdvanceMs)
     expect(restored.mode).toEqual(onTheBuzzer.mode)
     expect(restored.roundCount).toBe(onTheBuzzer.roundCount)
   })
@@ -145,12 +147,13 @@ describe('rememberedSetupFor', () => {
     const preferences: HostPreferences = {
       games: {
         quiz: {
+          autoAdvanceMs: null,
           game: DEFAULT_BUZZER_SETTINGS,
           mode: DEFAULT_MODE_SETTINGS.buzzer,
           roundCount: null
         }
       },
-      room: { autoAdvanceMs: null, countdownMs: 3_000 }
+      room: { countdownMs: 3_000 }
     }
 
     expect(rememberedSetupFor({ game: 'quiz', preferences })).toBeNull()
