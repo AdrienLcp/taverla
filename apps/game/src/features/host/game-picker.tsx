@@ -14,6 +14,8 @@ import { SegmentedControl } from '@/presentation/components/segmented-control'
 import { useI18n } from '@/presentation/i18n/i18n-provider'
 import { gameNameKey } from '@/presentation/i18n/translation'
 
+import './game-picker.sass'
+
 type GamePickerProps = {
   /** The socket is closed, or a round is under way and the server would refuse the switch. */
   isDisabled: boolean
@@ -39,6 +41,7 @@ export const GamePicker: React.FC<GamePickerProps> = ({
 
   return (
     <SegmentedControl
+      className='game-picker'
       isDisabled={isDisabled}
       label={translate('host.game.label')}
       onChange={(next) => {

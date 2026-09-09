@@ -3,6 +3,30 @@
 @use 'focus'
 @use 'typography'
 
+/// One row or one column, and never the shape in between. A wrap that leaves
+/// rows of unequal length hands the short one's segments the width the missing
+/// ones would have had — `flex: 1` below is what does it — and a stamp four
+/// times its neighbours is the shape a *selected* one has. `Le premier qui
+/// buzze` alone across the top of a strip whose actual answer was `Quatre
+/// propositions` is the whole defect, and a phone is where it happens.
+///
+/// So a strip too narrow for one row takes the other shape. The width is the
+/// caller's because only the caller's labels know it: measure the row on the
+/// page in the longer of the two locales and pass it, rather than reaching for
+/// a device size. `$width` is a length, in `rem` so a reader who zooms crosses
+/// it where the labels do.
+///
+/// It is a **container** query. The same control is drawn in boxes the viewport
+/// cannot tell apart — at 1000px the console's lobby column gives the game
+/// picker 369px and the setup fold gives it 900px — so a media query gets one
+/// of the two wrong by construction.
+@mixin stacks-below($width)
+  container-type: inline-size
+
+  @container (width < #{$width})
+    .segments
+      flex-direction: column
+
 /// The look both choice strips wear — `SegmentedControl` for one answer,
 /// `ToggleGroup` for several. Declared once here rather than in a component
 /// they would both have to wrap, so a variant is one edit and never two.

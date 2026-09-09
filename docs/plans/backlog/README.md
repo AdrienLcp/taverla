@@ -15,7 +15,15 @@ file rather than half-landing.
 
 ## Open
 
-**Nothing.** Every entry ever opened here has landed or been answered, and the
+| Session | What it is |
+|---|---|
+| [A row that reads as chosen](a-row-that-reads-as-chosen.md) | A choice strip that wraps hands its short row the width the missing options would have had, so an unselected stamp wears the shape of a selected one. The game picker is fixed; six other strips are measured and waiting on one decision about how the strip draws its rules |
+
+It arrived the way the README below says they do — by playing, on a phone — and
+its own diagnosis is what widened it: the picker Adrien reported was one of
+seven, and the two the eye finds first are not the two the measurement flags.
+
+Before it, every entry ever opened here had landed or been answered, and the
 last two were closed on 9 September 2026 by looking at the app on the handset
 they were waiting for: the palette was read on a P3 screen and kept as it is,
 and the silent room did not reproduce. Their files went with their rows rather

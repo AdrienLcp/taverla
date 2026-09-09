@@ -1,0 +1,10 @@
+@use '../../presentation/styles/strip'
+
+@layer components
+  // Five is prime, so no wrap of two, three or four columns divides it and the
+  // strip's only orphan-free shapes are one row and one column. `28rem` is
+  // where the French row — `Blind test · Buzzer · Le Fake · Quiz · Réflexe`,
+  // the longer of the two locales — stops fitting: 433px of label, padding,
+  // gap and rule, measured on the page.
+  .game-picker
+    @include strip.stacks-below(28rem)

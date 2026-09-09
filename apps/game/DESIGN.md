@@ -158,6 +158,20 @@ block takes its label's contrast with it. A choice strip obeys the same rule the
 same way: the selected stamp drops its ink ground and keeps the ink as an inset
 edge, which is what lets a host read their settings over a dead socket.
 
+**A strip has two shapes, one row and one column, and nothing between them.**
+The segments share the width evenly, so a wrap that leaves rows of unequal
+length hands the short row's segments the width the missing ones would have had
+— and a stamp four times its neighbours is exactly the shape a *selected* one
+has. `Le premier qui buzze` alone across the top of a strip whose real answer
+was `Quatre propositions` is the defect, and a phone is where it happens.
+`strip.stacks-below($width)` is the escape, and its argument is measured off the
+labels in the longer locale rather than taken from a device size: the game
+picker's French row comes to 433px, so it stacks below `28rem`. It is a
+**container** query, because the same picker is 369px inside the lobby's column
+and 900px inside the setup fold at one and the same 1000px viewport. Six other
+strips still wrap this way — measured, listed, and waiting on one decision in
+[a row that reads as chosen](../../docs/plans/backlog/a-row-that-reads-as-chosen.md).
+
 **A section a reader opens is a ruled row, not a block.** A bordered control
 beside the one action on the screen reads as a second one, so `Disclosure`'s
 trigger carries no edge of its own — only the rule it shares with every other
