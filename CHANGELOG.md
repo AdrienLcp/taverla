@@ -741,7 +741,12 @@ one part.
   room already having a console — `host_already_connected` and
   `host_reconnecting`. Everywhere else the form is a control that cannot work,
   and a screen offering one reads as a puzzle rather than as an answer. On
-  `room_not_found` the screen is now the sentence and its two ways out.
+  `room_not_found` the screen is now the sentence and the one way out — the
+  retry went with the field, and for the same reason one control further down:
+  waiting is worth offering only where it could change the answer, and no room
+  comes back from being swept. Both are the **positive** list rather than the
+  exceptions, so an error code nobody has met yet lands on offering nothing,
+  which is the side of this to be wrong on.
 
 - `[Game]` **A room code was breaking in half on the wall, and could on the
   console.** `--invitation-code-size` asked the projector page for `28cqi` and

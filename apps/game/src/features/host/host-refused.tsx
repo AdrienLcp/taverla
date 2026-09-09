@@ -55,9 +55,23 @@ export const HostRefused = ({
   // others it is a control that cannot work: `room_not_found` was asking for a
   // recovery code for a table that does not exist, and the screen read as a
   // puzzle rather than as an answer.
-  const isAnsweredByToken =
+  const isRoomContested =
     error?.code === 'host_already_connected' ||
     error?.code === 'host_reconnecting'
+
+  // The same test, one control further down: waiting is worth offering only
+  // where it could change the answer. A console holding the room may give it
+  // up, a reconnection window runs out on its own, and a socket that died with
+  // nothing said may simply open. A room that is *gone* is gone — none survives
+  // a restart, and nothing brings a swept one back — so a retry there is the
+  // field's own fault wearing a button. It is the positive list rather than the
+  // exceptions on purpose: a code nobody has met yet lands on offering nothing,
+  // which is the side of this to be wrong on.
+  const canRetryHelp = isRoomContested || error === null
+
+  if (!canRetryHelp) {
+    return <ConnectionRefused error={error} />
+  }
 
   const offer = (event: FormEvent): void => {
     event.preventDefault()
@@ -80,7 +94,7 @@ export const HostRefused = ({
           <p className='rejected'>{translate('host.recovery.refused')}</p>
         )}
 
-        {isAnsweredByToken && (
+        {isRoomContested && (
           <Form onSubmit={offer}>
             <TextField
               autoCapitalize='characters'
