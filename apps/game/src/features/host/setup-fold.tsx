@@ -3,10 +3,6 @@ import type React from 'react'
 import type { HostRoomView, RoomSettings } from '@taverla/protocol/room'
 import type { TrackSource } from '@taverla/protocol/track'
 
-import {
-  isJudgedByHost,
-  isSeatWithheldByMode
-} from '@taverla/core/room/game-modes'
 import type { HostPreferences } from '@taverla/core/room/host-preferences'
 import { isRoundInPlay } from '@taverla/core/room/room-phase'
 import {
@@ -46,8 +42,10 @@ type SetupFoldProps = {
  * on the round after the one on screen, and a host who has to end the game to
  * reach them is a host who does not change them.
  *
- * The seat is the one thing a round in play still holds back, because taking it
- * reopens the socket and a re-seat mid-clip would drop the answer being typed.
+ * The game and the seat are here for every phase but the lobby, where each of
+ * them is the decision the room is waiting on and the stage draws it instead. A
+ * round in play holds the seat back on top of that, because taking it reopens
+ * the socket and a re-seat mid-clip would drop the answer being typed.
  */
 export const SetupFold: React.FC<SetupFoldProps> = ({
   draftSource,
@@ -60,15 +58,8 @@ export const SetupFold: React.FC<SetupFoldProps> = ({
 }) => {
   const translate = useTranslate()
   const game = view.settings.game
-  const answering = {
-    game: game?.kind ?? null,
-    mode: view.settings.mode.kind
-  }
   const isInLobby = view.phase === 'lobby'
   const roundInPlay = isRoundInPlay(view.phase)
-  // The name the room has for this seat, not the one this screen asked for: a
-  // console removed from its own roster row keeps the second and holds none.
-  const seat = view.players.find((player) => player.id === view.youId) ?? null
 
   const summaryPart = (part: SettingsSummaryPart): string => {
     switch (part.kind) {
@@ -124,35 +115,20 @@ export const SetupFold: React.FC<SetupFoldProps> = ({
         settings={view.settings}
       />
       {/*
-        Withheld from a round this screen has to judge, and from that alone: a
-        judge who is also answering is not one. The reflex race shares the mode
-        and needs no judge, so it keeps the seat.
+        The picker's own move, one section down and for the same reason. In the
+        lobby the seat is what the launch is refusing for, so it belongs on the
+        stage beside the roster that says the room is empty; here it is one
+        setting among the rest.
 
-        Every phase but a round in play, rather than the lobby alone. A seat can
-        go without this screen deciding it — a takeover hands the room back with
+        It has to stay reachable at every later phase, because a seat can go
+        without this screen deciding it — a takeover hands the room back with
         the roster's ghost still holding the name — and a control the host can
         only reach by ending the game is what turns that into a lost evening.
-        The round in play is still out, because taking the seat reopens the
-        socket underneath a clip that is running.
+        The round in play is the one exception, because taking the seat reopens
+        the socket underneath a clip that is running.
       */}
-      {!roundInPlay && !isJudgedByHost(answering) && (
-        <HostSeat
-          cost={
-            game?.kind === 'reflex'
-              ? 'host.seat.cost.sharedScreen'
-              : 'host.seat.cost.hiddenAnswer'
-          }
-          onTakeSeat={onTakeSeat}
-          takenAs={seat?.nickname ?? null}
-        />
-      )}
-      {/*
-        In its place, and only where the room could have had one: the control
-        vanishing on its own is what makes a quiz left on `buzzer` read as a
-        broken seat rather than as a room that owes a verdict.
-      */}
-      {!roundInPlay && isSeatWithheldByMode(answering) && (
-        <p className='held'>{translate('host.seat.judged')}</p>
+      {!isInLobby && !roundInPlay && (
+        <HostSeat onTakeSeat={onTakeSeat} view={view} />
       )}
     </Disclosure>
   )

@@ -410,6 +410,17 @@ URL — is what the room is reading; the game picker, the roster and the setup a
 the host's own. The picker is on the stage rather than in the fold for exactly
 as long as it is the decision everyone is waiting on: a room opens with nothing
 chosen, and once a round has run it is a setting like the countdown.
+
+**The seat makes the same move for the same reason**, one section down: in the
+lobby it is what the launch is refusing for in a room of one, so it sits inside
+the roster — under the count that says nobody has arrived, because taking a seat
+is joining that list. It takes no rule of its own there, since the roster's last
+row already closes on one and a second hairline twenty pixels below it is a band
+rather than a boundary. In the fold, where it is a section beside others, it
+keeps the rule. What stands in for it when the room owes a verdict — *you judge
+the buzzes, so no seat here* — travels with it, or a quiz left on `buzzer` would
+explain itself from behind a collapsed disclosure.
+
 Below 900px they stack, and that is where the setup had to learn to fold: eight
 strips of settings at the same weight as the QR code turned a title card into a
 form, and put the launch below everything. The fold is collapsed at every width,

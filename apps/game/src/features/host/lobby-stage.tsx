@@ -12,6 +12,7 @@ import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { gameDescriptionKey, scoringKey } from '@/presentation/i18n/translation'
 
 import { GamePicker } from './game-picker'
+import { HostSeat } from './host-seat'
 
 type LobbyStageProps = {
   /** The socket is open. The picker sends a frame, so it does nothing without one. */
@@ -19,6 +20,8 @@ type LobbyStageProps = {
   /** The ✕ beside a name — the console's own seat included, which is why it is not a frame. */
   onRemovePlayer: (playerId: PlayerId) => void
   onSettingsChange: (settings: RoomSettings) => void
+  /** Reopens the socket with a name on it, which is what takes the seat. */
+  onTakeSeat: (nickname: string) => void
   /** What this host last left each game set to, so picking one restores it. */
   preferences: HostPreferences | null
   roomCode: RoomCode
@@ -37,6 +40,7 @@ export const LobbyStage: React.FC<LobbyStageProps> = ({
   isLive,
   onRemovePlayer,
   onSettingsChange,
+  onTakeSeat,
   preferences,
   roomCode,
   view
@@ -67,6 +71,16 @@ export const LobbyStage: React.FC<LobbyStageProps> = ({
           ) : (
             <Scoreboard onRemove={onRemovePlayer} players={view.players} />
           )}
+
+          {/*
+            Inside the count rather than beside it, because taking a seat is
+            joining that list — and in a room of one it is what the launch is
+            refusing for, which it spent its whole life saying from behind a
+            collapsed disclosure three sections below the button it unblocks.
+            Every later phase keeps it there, where it is a setting rather than
+            the way in.
+          */}
+          <HostSeat onTakeSeat={onTakeSeat} view={view} />
         </section>
       </div>
     </div>

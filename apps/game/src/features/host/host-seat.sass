@@ -13,7 +13,12 @@
     .button
       align-self: flex-start
 
-    &.taken
+    // The two lines that stand in for the form. They keep the section's rule
+    // so the boundary above the seat is there whether or not there is one to
+    // take — a host who reads a settings column top to bottom should not have
+    // its last section appear and disappear as the mode changes.
+    &.taken,
+    &.held
       @include typography.caption
 
       color: var(--ink-muted)

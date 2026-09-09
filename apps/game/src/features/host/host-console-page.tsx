@@ -296,6 +296,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
         isLive={isLive}
         onRemovePlayer={removePlayer}
         onSettingsChange={changeSettings}
+        onTakeSeat={takeSeat}
         onUnlockAudio={unlock}
         preferences={preferences}
         refusal={refusal}
@@ -370,9 +371,11 @@ type StageProps = {
   isLive: boolean
   /** Aimed at the console's own seat too, which is why it is not a bare frame. */
   onRemovePlayer: (playerId: PlayerId) => void
+  onSettingsChange: (settings: RoomSettings) => void
+  /** Reopens the socket with a name on it, which is what takes the lobby's seat. */
+  onTakeSeat: (nickname: string) => void
   /** The gesture a screen that cannot play a clip has to be offered. */
   onUnlockAudio: () => void
-  onSettingsChange: (settings: RoomSettings) => void
   /** What this host last left each game set to, for the lobby's picker. */
   preferences: HostPreferences | null
   /** Why the last press did not arm this screen, and `null` while none has failed. */
@@ -388,6 +391,7 @@ const Stage = ({
   isLive,
   onRemovePlayer,
   onSettingsChange,
+  onTakeSeat,
   onUnlockAudio,
   preferences,
   refusal,
@@ -646,6 +650,7 @@ const Stage = ({
       isLive={isLive}
       onRemovePlayer={onRemovePlayer}
       onSettingsChange={onSettingsChange}
+      onTakeSeat={onTakeSeat}
       preferences={preferences}
       roomCode={roomCode}
       view={view}

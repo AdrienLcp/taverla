@@ -337,6 +337,15 @@
 
         color: var(--ink-muted)
 
+      // The list closes itself on the same hairline, so the seat's own would be
+      // a second one thirty pixels below it with nothing in between — a band
+      // rather than a boundary. Here the two are one region and the section's
+      // gap is what says so: this is the roster's action, not a section beside
+      // it. In the fold it is a section beside others and keeps the rule.
+      .host-seat
+        border-top: none
+        padding-top: 0
+
     .now
       @include typography.billboard
 
