@@ -103,6 +103,22 @@ const OPTION_VIEWS = 60
 const MAX_DECOY_SHARE = 0.02
 const SMALLEST_DECOY_CAP = 3
 
+/**
+ * The same defect on the other side of the row, and it is the worse one: the
+ * answer to *de quelle nationalité est X* is **France in 154 of the 418 rows
+ * upstream offers and the United States in 94**, so a room that answers France
+ * without reading the question takes better than one round in three. Typed mode
+ * pays that in full, and choice mode still pays it above the quarter a random
+ * pick is worth. `place of death` has the milder version of it — Paris, 29 rows
+ * of 214.
+ *
+ * Capped rather than filtered: dropping every France would teach a room the
+ * answer is *never* France, which is the same exploit facing the other way. The
+ * excess rows go, and the ones that stay leave the answer about as likely as
+ * any other the relation offers.
+ */
+const MOST_OF_A_RELATION = 0.05
+
 type UpstreamRow = {
   answer_text: string
   fact_id: string
@@ -167,6 +183,17 @@ const optionsOf = (row: UpstreamRow): string[] => [
   row.option_d
 ]
 
+/**
+ * Upstream has a template that forgot its interrogative word, and it is 59 rows
+ * of the banked set: *Merantau a été réalisé ou mis en scène par ?* is not a
+ * question, it is a sentence stopped short, and the screen the whole room is
+ * reading shows it as one. Putting `qui` back is the smallest repair that needs
+ * no agreement — rewriting it as *par qui X a-t-il été réalisé* would have to
+ * know whether the subject is masculine, and the subject is a film title.
+ */
+const withTheMissingInterrogative = (prompt: string): string =>
+  prompt.replace(/ par \?$/u, ' par qui ?')
+
 const toCandidate = (row: UpstreamRow): Candidate | null => {
   const category = CATEGORY_OF_RELATION[row.relation]
   const decoys = decoysOf({
@@ -179,6 +206,42 @@ const toCandidate = (row: UpstreamRow): Candidate | null => {
   }
 
   return { answer: row.answer_text, category, decoys, row }
+}
+
+/**
+ * The same candidates with no answer carrying more of its relation than the cap
+ * allows, the excess dropped. It runs before the decoys are spread, so the
+ * decoy caps are computed over the rows that will actually ship.
+ */
+const withoutOverusedAnswers = (
+  candidates: readonly Candidate[]
+): Candidate[] => {
+  const rowsOfRelation = new Map<string, number>()
+
+  for (const candidate of candidates) {
+    rowsOfRelation.set(
+      candidate.row.relation,
+      (rowsOfRelation.get(candidate.row.relation) ?? 0) + 1
+    )
+  }
+
+  const answered = new Map<string, number>()
+
+  return candidates.filter((candidate) => {
+    const key = `${candidate.row.relation}::${candidate.answer}`
+    const cap = Math.ceil(
+      (rowsOfRelation.get(candidate.row.relation) ?? 0) * MOST_OF_A_RELATION
+    )
+    const already = answered.get(key) ?? 0
+
+    if (already >= cap) {
+      return false
+    }
+
+    answered.set(key, already + 1)
+
+    return true
+  })
 }
 
 /**
@@ -297,7 +360,7 @@ const toBankedQuestion = ({
   isAdult: false,
   language: 'fr',
   note: null,
-  prompt: row.question,
+  prompt: withTheMissingInterrogative(row.question),
   theme: row.relation
 })
 
@@ -362,9 +425,15 @@ export const ingestPolyFact = async (): Promise<IngestedQuestions> => {
     candidates.push(candidate)
   }
 
+  const spread = withoutOverusedAnswers(candidates)
+
+  console.info(
+    `  ${spread.length} of those do not answer what the last one answered`
+  )
+
   return {
     attribution: ATTRIBUTION,
-    questions: withDecoysSpread(candidates).map(toBankedQuestion),
+    questions: withDecoysSpread(spread).map(toBankedQuestion),
     rejections
   }
 }

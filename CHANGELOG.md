@@ -451,7 +451,8 @@ one part.
   **Strasbourg** ?*). Of the 26 079 rows left, a row is kept when the subject's
   French Wikipedia article took **300 views over sixty days** and all four
   candidates took 60: **4 321 subjects clear the first bar and 2 144 rows clear
-  both**. French rows go **2 018 → 4 162**, the whole bank **6 455 → 8 599**.
+  both**. Three passes then take 244 of those back — see below. French rows go
+  **2 018 → 3 918**, the whole bank **6 455 → 8 355**.
 
   **Notability is traffic, not sitelinks**, and that cost a day to learn. How
   many Wikipedias hold an article is a measure of *bot coverage*: the Cebuano,
@@ -474,9 +475,27 @@ one part.
   `[bank] leans on no single wrong answer` is what holds it, over any language
   and subject with enough rows for a share to mean anything.
 
+  **The same defect sat on the answers, and it was the worse one.** *De quelle
+  nationalité est X* is answered **France in 154 of 418 rows and the United
+  States in 94** — so a room answering *France* without reading the question
+  takes better than one round in three, free in typed mode and above the quarter
+  a random pick is worth in choice. `withoutOverusedAnswers` caps an answer at 5%
+  of its relation and drops the excess, which takes France to 9.9% and costs 231
+  rows. Capped rather than filtered: dropping every France would teach a room the
+  answer is *never* France, which is the same exploit facing the other way.
+
+  A read-through of all 2 144 found the rest, and one of them was a rule: **59
+  prompts end *…a été réalisé ou mis en scène par ?***, a template that forgot
+  its interrogative word, and a sentence stopped short is what the screen shows.
+  `par qui ?` is the repair that needs no gender agreement. Thirteen more rows
+  are dropped and five repaired by hand — two unreleased games described in the
+  present tense, a handful of titles that collide with a famous namesake
+  (*La Jetée*, *Il bidone*), and four rows whose decoy answers the prompt as well
+  as the answer does, all of them a first-party studio beside its own publisher.
+
   What it does **not** buy: PolyFact is Wikidata relations about people and
-  works, so French history stays at 64 rows and geography at 156. The 2 144 land
-  as 1 507 `arts`, 632 `everyday` and 5 `science` — and because the draw picks a
+  works, so French history stays at 64 rows and geography at 156. The 1 900 land
+  as 1 488 `arts`, 407 `everyday` and 5 `science` — and because the draw picks a
   category first, that makes those two more *varied* rather than more likely.
 
 - `[Game]` **The credits page names three banks, not two.** CC BY-SA asks for

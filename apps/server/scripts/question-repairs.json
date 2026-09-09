@@ -881,5 +881,81 @@
   "otdb-ffae5f7a3108": {
     "drop": true,
     "why": "a decoy answers the prompt too — the decoys \"Juha Bach\", \"Yuhabah\" and \"Juhabach\" are all common romanisations of the same character (ユーハバッハ) as the answer \"Yhwach\", so a room naming the right villain can be marked wrong on spelling"
+  },
+  "polyfact-Q18403-P170-Q664300": {
+    "drop": true,
+    "why": "the prompt calls it the film \"Il bidone\" and banks the poster artist, so the room answers Fellini and is marked wrong"
+  },
+  "polyfact-Q161202-P178-Q1576335": {
+    "decoys": ["Rare", "Grasshopper Manufacture", "Spike Chunsoft"],
+    "why": "a decoy answers the prompt too — Visceral Games was Electronic Arts' own studio, so the publisher is as right an answer as the studio"
+  },
+  "polyfact-Q274041-P27-Q117": {
+    "drop": true,
+    "why": "the subject label is the common noun \"une nounou\", so the prompt asks which country a nanny is from"
+  },
+  "polyfact-Q467784-P170-Q107317": {
+    "drop": true,
+    "why": "the prompt says \"l'ecriture gothique\", which reads as blackletter calligraphy and has no single inventor, rather than the Gothic alphabet it banks"
+  },
+  "polyfact-Q468123-P27-Q12560": {
+    "prompt": "De quel pays Nilüfer Hatun était-elle originaire ?",
+    "why": "upstream wrote \"À quel pays X était-elle de nationalité ?\", which is not French; the wording is the one its own template uses everywhere else"
+  },
+  "polyfact-Q642069-P170-Q586666": {
+    "drop": true,
+    "why": "the prompt says \"l'equipe Galaxy\", which reads as the football club rather than the animated show it banks"
+  },
+  "polyfact-Q751191-P170-Q8880": {
+    "drop": true,
+    "why": "the subject is a market classification rather than a thing anybody created"
+  },
+  "polyfact-Q1397802-P170-Q385058": {
+    "drop": true,
+    "why": "the prompt names Fastlane and nothing else, so it asks who created something the room cannot identify"
+  },
+  "polyfact-Q1580327-P170-Q550381": {
+    "drop": true,
+    "why": "the prompt says only \"the police series set in Paris\", which names several"
+  },
+  "polyfact-Q1816205-P57-Q3181059": {
+    "drop": true,
+    "why": "the prompt names a character and no title, so it reads as asking who directed a person"
+  },
+  "polyfact-Q2276972-P170-Q5681": {
+    "drop": true,
+    "why": "the prompt says \"le Saint Sebastien\", and several famous paintings carry that name, two of them by the banked painter"
+  },
+  "polyfact-Q2405958-P170-Q1395905": {
+    "decoys": ["Tove Jansson", "Osamu Tezuka", "Auguste Bartholdi"],
+    "why": "a decoy answers the prompt too — Stan Lee co-created Firelord with the banked John Buscema"
+  },
+  "polyfact-Q12800832-P170-Q466880": {
+    "drop": true,
+    "why": "the prompt conflates the New7Wonders list with the older Seven Wonders of the Modern World, which have different authors"
+  },
+  "polyfact-Q60560171-P170-Q47493874": {
+    "drop": true,
+    "why": "the prompt calls it the series \"La Jetee\", which is the title of Chris Marker's film and not of the show it banks"
+  },
+  "polyfact-Q96216165-P178-Q1141245": {
+    "decoys": [
+      "Institut de technologie du Massachusetts",
+      "Sanzaru Games",
+      "Rocksteady Studios"
+    ],
+    "why": "a decoy answers the prompt too — Insomniac Games was Sony's own studio when it made Miles Morales"
+  },
+  "polyfact-Q97657013-P178-Q7882992": {
+    "drop": true,
+    "why": "a claim with a shelf life — State of Decay 3 is unreleased, so the present tense expires on its own"
+  },
+  "polyfact-Q110027938-P178-Q570081": {
+    "drop": true,
+    "why": "a claim with a shelf life — Star Wars Eclipse is unannounced as shipped, and \"est-il developpe\" stops being true the day it ships or is cancelled"
+  },
+  "polyfact-Q113835296-P178-Q752317": {
+    "decoys": ["Sunsoft", "Konami", "Ubisoft Toronto"],
+    "why": "a decoy answers the prompt too — EA Vancouver is Electronic Arts' own studio"
   }
 }
