@@ -750,6 +750,19 @@ one part.
   plays nothing, sweeping each strip's own box rather than the viewport, because
   a dictionary edit moves a row and nothing else would say so.
 
+- `[Game]` **A socket that reopens inside a blink no longer repaints the
+  console.** `isLive` is `status === 'open'` and it disables every control on
+  the screen, so taking a seat — which reopens the socket to put the name on the
+  next `hello` — put `data-disabled` on **sixty elements at once** and took it
+  off 61 ms later: every stamp inverted and came back, on localhost, and party
+  Wi-Fi does the same without being asked. `useSettledStatus` holds a status
+  leaving `open` for a second before publishing it. A **refusal** is not a gap
+  and goes through untouched, so a dead room is still told at once; the timer
+  starts once on the fall out of `open` and is never restarted, so the retry
+  ladder cannot hold a dead socket open for ever; and a `send` that could not
+  write reveals the held status immediately, because a press that goes nowhere
+  is the moment the truth is worth more than the calm.
+
 - `[Game]` **The console's join reminder was drawing a QR code no camera could
   read.** A flex item shrinks by default and the square had no `flex`, so on a
   phone 64px of declared width was drawn at **35 against 64 of height** — not a

@@ -28,6 +28,8 @@ import {
   readHostToken
 } from '@/infrastructure/storage/session-storage'
 
+import { useSettledStatus } from './use-settled-status'
+
 /**
  * `closed` and `refused` both mean "no socket", and the difference is the whole
  * point: `closed` is still counting down to another attempt, `refused` is the
@@ -93,7 +95,7 @@ export const useRoomSocket = ({
   role: ConnectionRole
   roomCode: RoomCode
 }): RoomSocket => {
-  const [status, setStatus] = useState<SocketStatus>('connecting')
+  const [socketStatus, setSocketStatus] = useState<SocketStatus>('connecting')
   const [error, setError] = useState<ProtocolErrorMessage | null>(null)
   const [clock, setClock] = useState<ClockEstimate | null>(null)
 
@@ -110,7 +112,7 @@ export const useRoomSocket = ({
 
   useEffect(() => {
     if (!enabled) {
-      setStatus('closed')
+      setSocketStatus('closed')
 
       return
     }
@@ -141,11 +143,11 @@ export const useRoomSocket = ({
       const socket = new WebSocket(`${socketOrigin()}/ws/rooms/${roomCode}`)
 
       socketRef.current = socket
-      setStatus('connecting')
+      setSocketStatus('connecting')
 
       socket.addEventListener('open', () => {
         attempt = 0
-        setStatus('open')
+        setSocketStatus('open')
         setError(null)
         // Everything the hello carries is read here rather than when the effect
         // ran: a refusal can have voided the seat since, and a screen handed the
@@ -208,7 +210,7 @@ export const useRoomSocket = ({
         // while staying open, since the server is answering a *third* party.
         if (control.message.fatal) {
           giveUp = true
-          setStatus('refused')
+          setSocketStatus('refused')
 
           if (refusalVoidsSeat(control.message.code)) {
             forgetSessionId({ role, roomCode })
@@ -220,7 +222,7 @@ export const useRoomSocket = ({
 
       socket.addEventListener('close', () => {
         window.clearInterval(pingTimer)
-        setStatus(giveUp ? 'refused' : 'closed')
+        setSocketStatus(giveUp ? 'refused' : 'closed')
 
         if (disposed || giveUp) {
           return
@@ -264,17 +266,25 @@ export const useRoomSocket = ({
     }
   }, [enabled, nickname, role, roomCode])
 
-  const send = useCallback((message: ClientMessage): boolean => {
-    const socket = socketRef.current
+  const { reveal, status } = useSettledStatus(socketStatus)
 
-    if (socket === null || socket.readyState !== WebSocket.OPEN) {
-      return false
-    }
+  const send = useCallback(
+    (message: ClientMessage): boolean => {
+      const socket = socketRef.current
 
-    socket.send(encodeMessage(message))
+      if (socket === null || socket.readyState !== WebSocket.OPEN) {
+        // The frame is gone, so the calm the blink was being given ends here.
+        reveal()
 
-    return true
-  }, [])
+        return false
+      }
+
+      socket.send(encodeMessage(message))
+
+      return true
+    },
+    [reveal]
+  )
 
   const clearError = useCallback(() => {
     setError(null)
