@@ -77,6 +77,15 @@ Twelve more that cost time to learn:
   the release. Dispatch `PointerEvent('pointerdown')` and `('pointerup')` with
   `pointerId`, `pointerType` and `isPrimary` set.
 
+- **One invalid entry costs the device the whole store.** `taverla:seats` and
+  `taverla:host-tokens` are re-parsed as a single Zod array, and a failure
+  returns `[]` rather than the entries that were fine — so a hand-written token
+  containing `O`, `S`, `I` or `Z` (the room alphabet excludes all four) silently
+  deletes every *real* token from the reading, and the screen under test draws
+  as though the device had never played. Nothing warns, and the store on disk is
+  untouched, which is what makes it read as a bug in the page. Seed with values
+  that would pass the schema, or seed nothing.
+
 - **An init script runs before `document.documentElement` exists**, so a
   `MutationObserver` pointed at it throws and observes nothing. The trap is that
   an observer which was never installed reports the same empty log as a page
