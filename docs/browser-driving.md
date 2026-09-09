@@ -64,6 +64,11 @@ Twelve more that cost time to learn:
   first.
 - Playwright MCP writes its screenshots and `.playwright-mcp/` at the
   **repository root**. Delete them before committing.
+- **The launch is disabled with an empty room**, so nothing that needs a round
+  can be driven from the console alone. A second page at `/play/:code` is what
+  unblocks it, and with `taverla:nickname` set it needs no interaction at all —
+  open it, wait, and the roster has somebody on it.
+
 - A `/play/:code` on a device with a stored `taverla:nickname` **joins on
   arrival** — there is no form to fill. Clear that key to drive the form, and
   expect a session id in `taverla:seats` either way: the socket now opens before
