@@ -1284,6 +1284,16 @@ one part.
 
 ### Internal
 
+- **CI no longer installs Chromium through Google's apt repository.**
+  `playwright install --with-deps` runs `apt-get update` over every source the
+  runner image carries, and one of them is Google's own Chrome repository — a
+  server nothing here installs from, Playwright shipping the Chromium it drives.
+  Google publishes that index a piece at a time, and an update landing between
+  the pieces fails on a hash mismatch: lint, build, test and the image job all
+  green, and the run red on a browser download. It failed twice in a row, so it
+  is not a race worth re-running. The step drops the source before installing,
+  and stands on Ubuntu's mirrors alone.
+
 - **Dependencies up to latest, majors and the package manager included.**
   pnpm 11.25 to **12.3.4** — the Rust rewrite, whose npm package is a wrapper
   that fetches a native binary, so the lockfile now names pnpm itself under

@@ -37,8 +37,18 @@ jobs:
 
       # Only Chromium: the journeys assert behaviour, not rendering, and a
       # second engine would double the slowest step to re-check the same thing.
+      #
+      # `--with-deps` runs `apt-get update` over every source the runner image
+      # carries, and one of them is Google's own Chrome repository — which
+      # nothing here installs from, Playwright shipping the Chromium it drives.
+      # Google publishes that index a piece at a time, so an update landing
+      # between the pieces fails on a hash mismatch and takes the whole job with
+      # it, for minutes or for hours. Dropping the source leaves the step
+      # standing on Ubuntu's mirrors alone.
       - name: Install Chromium
-        run: pnpm exec playwright install --with-deps chromium
+        run: |
+          sudo rm -f /etc/apt/sources.list.d/*google*
+          pnpm exec playwright install --with-deps chromium
 
       - name: Test end to end
         run: pnpm test:e2e
