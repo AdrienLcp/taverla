@@ -34,6 +34,29 @@ one part.
 
 ### Features
 
+- `[Game]` **A shelf card opens the table.** Pressing a game on the front door
+  led to that game's own page, whose only content was a second press: nothing on
+  it feeds the request, which carries the game the card names and the locale the
+  URL holds. The card is a button now — it acts rather than going anywhere — and
+  it carries the two states a link had no room for. The pressed painting stays
+  for as long as the room is opening, with a spinner beside the name rather than
+  over it, and a refusal is stamped under the card that earned it rather than at
+  the end of a list a phone reads five cards of. `useCreateRoom` became one
+  state instead of a boolean beside an error, because six doors now share it and
+  only the pressed one may spin — which is also what closes the second press,
+  with no card disabled to say so. The game's own page is untouched: it is one
+  of the fourteen prerendered documents, and the arrival a search result or a
+  shared link makes
+
+- `[Server]` **`/sitemap.xml`**, built from the prerender manifest the routes are
+  already registered from. The home page was the only thing linking to the five
+  game pages and its cards stopped linking anywhere, so ten of the fourteen
+  documents would have been reachable by URL alone. `robots.txt` keeps its own
+  prose and gains the one line that needs an absolute URL; both read the origin
+  off the request and honour `x-forwarded-proto`, because Render terminates TLS
+  in front of the process and a sitemap listing `http://` lists URLs that
+  redirect
+
 - `[Shared]` **The reveal says how long it has.** The hold before the next round
   opens itself was a server-side `setTimeout` that reached no screen, so a room
   reading a question's note had no idea whether it had two seconds or twenty. At
@@ -670,6 +693,15 @@ one part.
   and the extra width is only void
 
 ### Fixes
+
+- `[Server]` **A round with no console is frozen on the server too.** A host
+  closing their tab stops every timer, and until now that was the whole freeze:
+  the floor could still answer its way to the end of a round nobody was there to
+  hear, which closed it, revealed it and armed the next clip for a screen that
+  had gone. `FLOOR_MESSAGE_TYPES` partitions the four frames that move a round
+  along from the floor, and the gate sits beside the host-only one it mirrors,
+  refusing them with `host_away`. The seat frames stay out of it: leaving a room
+  nobody is running is exactly what a phone should still be allowed to do
 
 - `[Game]` **The reveal hold is remembered per game, not per host.**
   `autoAdvanceMs` fell outside `GameSetup`, so it sat in the arm of

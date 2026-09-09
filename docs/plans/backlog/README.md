@@ -35,7 +35,7 @@ prices is still the one in force.
 |---|---|---|---|---|
 | [The room is silent, unexplained](silent-room-unexplained.md) | **Half done.** Two of the three causes are ruled out and the console names the third; one reading on the Android phone closes it | waits on a phone | — | note 6, and what each of the three lines means |
 | [The fields a phone could show](fields-a-phone-could-show.md) | `oklch()` can name a colour sRGB cannot, and every phone in the room has a P3 screen. The three widest fields are derived and every pair re-measured; what is left is looking at it on a P3 screen and keeping it or not — **the screens exist now**, and the entry's own two-phone check is corrected at the end of it | waits on a phone | the derived table, then the correction under it | why it is a design decision and not a conversion, and why Samsung's *Natural* mode would show nothing |
-| [The host's way back](the-hosts-way-back.md) | The room survives a closed tab and the token outlives it by 24 hours — what is missing is a door. The home lists the rooms this device holds a token for | one session | the two refusals, before anything is drawn | why a public list of open rooms is a different product |
+| [The host's way back](the-hosts-way-back.md) | **Half done.** The server hardening it owed landed on 9 September; what is left is the door — the home lists the rooms this device holds a token for | one session | the two refusals, before anything is drawn | why a public list of open rooms is a different product |
 
 **One diagnosis disagrees with the note that raised it** — read the entry before
 planning it:

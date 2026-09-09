@@ -66,7 +66,7 @@ on the home for `/invite/:code`, and it is safe for the reason this one is not:
 the poster grants nothing — no seat, no console, no token — where the console is
 the room itself. What must never happen is the two being served by one field.
 
-## Server hardening found on the way, and owed by this session
+## Server hardening found on the way — **landed 9 September 2026**
 
 **No message handler checks `isHostConnected`.** The only gates are
 `HOST_ONLY_MESSAGE_TYPES` and whether the room resolves. When the host leaves,
@@ -79,9 +79,15 @@ timer back with nobody connected to play the clip.
 
 Nothing reaches this through the shipped UI. It is still the wrong way round for
 this repository: **the server decides**, and a frozen round is a server fact that
-only the client currently enforces. The guard belongs beside the phase check in
-`registerAnswer` / `registerBuzz`, with an error code of its own — `host_away`
-already exists as a client-side buzz blocker and is the name to reuse.
+only the client currently enforces. The guard went one level up from where this entry put it. `registerAnswer` and
+`registerBuzz` are two of **four** frames that move a round along from the floor
+— `lefake.submit` and `lefake.vote` carry the same fault, and a guard threaded
+through four domain functions is four places to forget the fifth. So
+`FLOOR_MESSAGE_TYPES` partitions the union in `client-message.ts` and the gate
+sits in `dispatch`, beside the host-only one it mirrors. `host_away` is the code,
+as prescribed, and it needed a sentence in both dictionaries before it compiled.
+`host-absence.test.ts` covers it: the floor answers a frozen round in full and
+the round is still `playing` afterwards.
 
 ## Verifying it
 
