@@ -77,6 +77,15 @@ const ADULT_RUBRIC = 'ADULTES'
  * bank needed a row-by-row reading: *Avec un S, il faut un pays* is Suisse, and
  * it is Sénégal, Suède and Slovaquie too. Only the four candidates make it one
  * answer, and a room typing into a field cannot win it.
+ *
+ * **No riddle is rated well-known, and none can be**: the rating is the traffic
+ * a subject's Wikipedia article takes, and a riddle has no subject — the pack
+ * fills its `wikipédia` field with a dash on all 120 rows. So a host holding
+ * the room to what it has heard of sees none of them, which is the safe
+ * direction of stage 21's rule rather than a judgement about these rows. The
+ * case for rating the rubric well-known by construction is that its answers are
+ * common nouns and its candidates carry the obscure ones — *Quintine* is a beer
+ * nobody knows, beside Quidam, Québec and Quota — and it has not been made.
  */
 const RIDDLE_RUBRIC = 'QUADRIQUIZZ'
 
