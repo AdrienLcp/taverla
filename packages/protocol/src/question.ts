@@ -90,7 +90,22 @@ export const questionDrawSettingsSchema = z.object({
   allowsAdultContent: z.boolean(),
   /** Empty means every category, the same way an empty genre list means every genre. */
   categories: z.array(questionCategorySchema),
-  language: questionLanguageSchema
+  language: questionLanguageSchema,
+  /**
+   * Whether the bank is held to the questions a room can be expected to have
+   * heard of. Off by default, so a room that says nothing plays the whole bank.
+   *
+   * A switch rather than a level picker because `drawQuestion` takes a category
+   * *before* it takes a question, so a level is only as good as the category it
+   * thins most — and thirds of the French bank leave geography ten questions.
+   * One threshold behaves where three bands do not; the measurements are in
+   * `docs/plans/21-well-known-questions.md`.
+   *
+   * It reads the same in both halves of the bank even though the two sources
+   * decide `isWellKnown` their own way, which is the point of the row carrying
+   * a verdict rather than a score.
+   */
+  wellKnownOnly: z.boolean()
 })
 
 export type QuestionDrawSettings = z.infer<typeof questionDrawSettingsSchema>

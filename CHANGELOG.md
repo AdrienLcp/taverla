@@ -8,6 +8,27 @@ one part.
 
 ### Breaking Changes
 
+- `[Shared]` **A host can hold the questions to what the room has heard of**,
+  and `PROTOCOL_VERSION` goes to 14. `wellKnownOnly` joins `QuestionDrawSettings`
+  beside `allowsAdultContent`, so it reaches the quiz and Le Fake at once — both
+  draw from the same bank, and the rating is the bank's rather than a game's. A
+  third multiplicative filter on `drawQuestion`'s eligible set is the whole of
+  the server side; off by default, so a room that says nothing plays all 8 355
+  rows.
+
+  It is a **switch and not a level picker**, which is the measurement stage 21
+  spent a session on: the draw takes a category before it takes a question, so a
+  level is only as good as the category it thins most, and thirds of the French
+  bank leave *difficile* ten geography questions. One threshold behaves where
+  three bands do not. The word is the blind test's — `difficulty` at the
+  protocol root already means `wellKnown | mixed | obscure` — so the quiz's own
+  arm is `wellKnownOnly` rather than a second `difficulty`, and it reads the
+  same in both halves of the bank even though the two sources decide
+  `isWellKnown` their own way. It is not on `reshapesRound`, so it moves
+  mid-game and lands on the next round, the same as the blind test's
+  difficulty. See
+  [`docs/plans/21-well-known-questions.md`](docs/plans/21-well-known-questions.md)
+
 - `[Shared]` A blind test can be filled from **film composers**, and
   `PROTOCOL_VERSION` goes to 13. `TrackSource` gains `{ kind: 'film' }` and
   `TrackIdentity` gains `film`, which is `null` on every other arm and is what

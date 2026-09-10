@@ -138,3 +138,29 @@ third multiplicative filter on `eligible` after categories and adult content.
 - The switch is visible on the host console in both locales, its strip does not
   overflow at 320 px, and a game played with it on is visibly easier — checked
   in a browser, muted.
+
+
+## What shipped, and where it diverged
+
+**The switch is on `QuestionDrawSettings`, not on the quiz's arm alone.** The
+plan said "the arm on the quiz's `settings.game`", written before the console
+was read: `BankDrawingGame` is one component rendering the language, the
+subjects and the adult switch for the quiz *and* Le Fake, and its strings
+already live under `quiz.*`. Both games draw from the same bank and the rating
+is the bank's, so `wellKnownOnly` sits beside `allowsAdultContent` and Le Fake
+gets it for the same reason it already gets the categories. The `quiz.*` prefix
+the plan asked for is where those strings live anyway.
+
+**No `stacks-below()` threshold, and `STRIPS_EXPECTED` stays at 16.** The plan's
+file list expected both, from before the switch-not-a-picker decision. A
+`Switch` is neither a `ToggleGroup` nor a `SegmentedControl`, so the sweep in
+`e2e/strip-rows.spec.ts` does not see it and there is no strip to stack.
+
+**It is not on `reshapesRound`**, so a host moves it mid-game and it lands on the
+next round — the same as the blind test's difficulty, and for the same reason:
+nothing already on screen was built on it.
+
+Verified in a browser, muted, at 320 px and 1440 px in both locales: the two
+switches take the same two lines and the same height at the narrowest screen
+there is, the value survives a reload, and a round opened under it drew *sur le
+tournage de quel film Mireille Darc a-t-elle rencontré Alain Delon*.

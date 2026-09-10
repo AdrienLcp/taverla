@@ -119,6 +119,7 @@ export const drawQuestion = ({
     (question) =>
       !playedIds.has(question.id) &&
       (settings.allowsAdultContent || !question.isAdult) &&
+      (!settings.wellKnownOnly || question.isWellKnown) &&
       (settings.categories.length === 0 ||
         settings.categories.includes(question.category)) &&
       isUsable(question)

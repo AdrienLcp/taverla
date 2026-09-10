@@ -171,7 +171,8 @@ export const DEFAULT_LEFAKE_SETTINGS: LefakeSettings = {
   kind: 'lefake',
   language: 'fr',
   roundDurationMs: 60_000,
-  voteDurationMs: 30_000
+  voteDurationMs: 30_000,
+  wellKnownOnly: false
 }
 
 export const DEFAULT_QUIZ_SETTINGS: QuizSettings = {
@@ -179,7 +180,8 @@ export const DEFAULT_QUIZ_SETTINGS: QuizSettings = {
   categories: [],
   kind: 'quiz',
   language: 'fr',
-  roundDurationMs: 30_000
+  roundDurationMs: 30_000,
+  wellKnownOnly: false
 }
 
 export const DEFAULT_REFLEX_SETTINGS: ReflexSettings = { kind: 'reflex' }

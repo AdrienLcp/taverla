@@ -517,7 +517,11 @@ export const FR_DICTIONARY: Dictionary = {
       typed:
         'Tout le monde tape sa réponse en même temps. La bonne rapporte 3 points, et plus tu la trouves tôt, plus la montre ajoute — jusqu’au double.'
     },
-    tagline: 'Une question, et le premier qui sait.'
+    tagline: 'Une question, et le premier qui sait.',
+    wellKnown: {
+      hint: 'Il y en a moins à tirer, mais personne ne sèche.',
+      label: 'Rester sur ce que tout le monde connaît'
+    }
   },
   reflex: {
     falseStart: {

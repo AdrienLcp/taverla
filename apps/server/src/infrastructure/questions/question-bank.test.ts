@@ -339,4 +339,37 @@ describe('drawQuestion', () => {
 
     expect(thin).toEqual([])
   })
+
+  /**
+   * The switch itself, over the real bank rather than a fixture — the rating is
+   * a property of eight thousand rows, and a filter that agreed with a handful
+   * of invented ones would say nothing about the evening.
+   *
+   * Sixty draws where its neighbours take four hundred, because the two counts
+   * carry different arguments: one question in twenty is adult, so four hundred
+   * is what makes a missing filter certain to surface, where three French rows
+   * in five and one English row in five fail this rating. Both languages are
+   * asked, which is the answer to whether the switch holds outside French — it
+   * reads the same in both halves, and a reason to split them would have to be
+   * found rather than assumed.
+   */
+  it('[bank] draws nothing the room has not heard of once the host asks', () => {
+    expect(DEFAULT_QUIZ_SETTINGS.wellKnownOnly).toBe(false)
+
+    for (const language of questionLanguages) {
+      const held = drawMany(
+        { ...DEFAULT_QUIZ_SETTINGS, language, wellKnownOnly: true },
+        { times: 60 }
+      )
+
+      expect(held.length).toBe(60)
+      expect(held.every((question) => question.isWellKnown)).toBe(true)
+
+      expect(
+        drawMany({ ...DEFAULT_QUIZ_SETTINGS, language }, { times: 60 }).some(
+          (question) => !question.isWellKnown
+        )
+      ).toBe(true)
+    }
+  })
 })

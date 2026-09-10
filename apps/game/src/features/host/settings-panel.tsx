@@ -127,6 +127,15 @@ const QuestionBankSettings: React.FC<{
       {game.categories.length === 0 && (
         <p className='hint'>{translate('quiz.category.none')}</p>
       )}
+      <Switch
+        description={translate('quiz.wellKnown.hint')}
+        isDisabled={isDisabled}
+        isSelected={game.wellKnownOnly}
+        label={translate('quiz.wellKnown.label')}
+        onChange={(wellKnownOnly) => {
+          onChange({ ...game, wellKnownOnly })
+        }}
+      />
       {/*
         Hidden where the bank has nothing to rate, for the same reason the mode
         strip is hidden when a game offers one: this one would keep its promise
