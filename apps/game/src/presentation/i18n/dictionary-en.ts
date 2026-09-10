@@ -572,7 +572,7 @@ export const EN_DICTIONARY = defineDictionary({
     tagline: 'A question, and the first one who knows it.',
     wellKnown: {
       hint: 'Fewer to draw from, but nobody is left stuck.',
-      label: 'Stay on what everyone knows'
+      label: 'Stay on the crowd-pleasers'
     }
   },
   reflex: {

@@ -520,7 +520,7 @@ export const FR_DICTIONARY: Dictionary = {
     tagline: 'Une question, et le premier qui sait.',
     wellKnown: {
       hint: 'Il y en a moins à tirer, mais personne ne sèche.',
-      label: 'Rester sur ce que tout le monde connaît'
+      label: 'Rester grand public'
     }
   },
   reflex: {
