@@ -55,6 +55,40 @@ one part.
 
 ### Features
 
+- `[Server]` **Three of the four thin French subjects now hold an evening of
+  their own.** Mintaka is the bank's fourth source and its second built on
+  Wikidata: 20 000 crowdsourced questions translated into eight languages, CC BY
+  4.0. French history goes from **64 rows to 519**, geography from 156 to 650
+  and sport from 123 to 368 — past the 300 the English half sits at, which is
+  what makes the graded difficulty picker buildable for the quiz at last. Three
+  bands over French history now deal a hundred and seventy questions each where
+  they would have dealt twenty-one. **Science does not move**: Mintaka has none
+  at all, and it is what the stage's second source exists for.
+
+  It is the first source that ships **no wrong answers**, so the three decoys
+  are found rather than spread. `wikidata-kinds.ts` asks Wikidata what kind of
+  thing each answer is — discipline, then trade, then class — and the decoys are
+  drawn from the entities filed under the same one, nearest in how much French
+  Wikipedia traffic they take. That is the reading `questionSchema` already
+  demanded and the bank had never had to satisfy: *1789 is not a plausible wrong
+  answer to which river runs through Paris*, and three other rivers are.
+
+  Four rules carry the quality, each measured rather than chosen. **Four of the
+  nine question shapes** are kept — `comparative` prints its own candidates in
+  the prompt, `difference` accepts more answers than it records, `multihop` is
+  where the corpus's staleness collects. **Questions naming the present go**,
+  because the corpus is fixed at October 2021 and a screen saying *l'actuel plus
+  jeune gouverneur* is wrong out loud in front of the room. **The answer must
+  have a French Wikipedia article people read**, which is also the American
+  filter no word list could be: the French translation of *Rebels d'Ole Miss*
+  names no league, and a French room's traffic has never opened it. **No answer
+  comes up more than five times in a subject**, against 34 rows answering *New
+  York* and 31 answering *Roosevelt* upstream.
+
+  Of the 20 000 rows, 1 194 are banked. The build reports 20 unwinnable and 68
+  repeated prompts across the whole bank, which now holds **9 663 questions**.
+  See [`docs/plans/22-thin-french-subjects.md`](docs/plans/22-thin-french-subjects.md)
+
 - `[Game]` **The front door offers the rooms this device can walk back into.**
   Closing the console's tab lost nothing — the room outlives its host by ten
   minutes and a single connected player keeps it alive indefinitely, the token

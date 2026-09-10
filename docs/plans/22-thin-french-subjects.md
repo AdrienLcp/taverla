@@ -170,6 +170,48 @@ POSTing `download.php` per pack and scraping the URL out of the response, which
 is what `openquizzdb-source.ts` does today. Worth a look the next time that
 ingestion is opened, and worth nothing on its own.
 
+## What session A found, 10 September 2026
+
+**Mintaka is ingested and three of the four subjects are done.** French history
+64 → **519**, geography 156 → **650**, sport 123 → **368**, all past the 300
+this stage was scoped to. Science stays at 170 and is untouched, which is
+Vikidia's whole job. 1 194 rows banked out of 20 000; the bank is now 9 663.
+
+Three things the plan had wrong, each corrected in code and worth reading before
+the Vikidia session repeats one of them:
+
+- **PolyFact has no decoy generator.** The plan promised "decoys off the
+  Wikidata QIDs through PolyFact's existing generator", and there is no such
+  thing: PolyFact's rows arrive with four candidates and `withDecoysSpread`
+  only *redistributes* them. Mintaka ships none at all, so the decoys had to be
+  built — `wikidata-kinds.ts` is the new module and it is what the named risk
+  cost. **Vikidia ships its own decoys**, so this does not recur there.
+- **The American half needed no word list.** The settled call was *the NBA
+  stays, the NFL and MLB go*, and a marker rule cannot find them: the French
+  translation of *Rebels d'Ole Miss* names no league. The notability bar on the
+  answer does it instead and does it better — a French room's Wikipedia traffic
+  keeps Michael Jordan and the Lakers and has never opened *Dennis Leonard* or
+  *Hiram College*. The decision is honoured; the instrument is not the one the
+  plan named.
+- **Four of the nine question shapes are usable**, not all of them. The three
+  refused each fail structurally rather than by degree — see
+  `mintaka-source.ts`, which names them.
+
+### What session A did not do
+
+- **The census.** No banked Mintaka row has been read one by one, so
+  `choice-only-questions.json` gained nothing. It is still owed.
+- **The short-name spellings.** **170 of the 1 194 banked rows answer with a
+  name a room would shorten** — *Lakers de Los Angeles* typed as *Lakers* is
+  graded wrong today, and 82 of them are sport. Wikidata's French `skos:altLabel`
+  is the honest source for `accepted`, over the same batched SPARQL the other
+  three lookups already use. This is worth more than the census and should go
+  first.
+- **One decoy defect measured and left standing**: about one sport row in
+  thirteen falls back from its discipline to a trade, and *Gerald Ford* is filed
+  as an American football player. `SAME_ERA_YEARS` at 100 does not separate him
+  from Tom Brady.
+
 ## The order this ships in
 
 1. **Mintaka first**, because it is the only candidate that reaches four figures

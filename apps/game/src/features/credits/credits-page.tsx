@@ -59,6 +59,12 @@ const QUESTION_CREDITS: QuestionCredit[] = [
     sourceUrl: 'https://huggingface.co/datasets/jvonrad/PolyFact'
   },
   {
+    author: 'Amazon Science',
+    changes: 'credits.mintaka',
+    source: 'Mintaka',
+    sourceUrl: 'https://github.com/amazon-science/mintaka'
+  },
+  {
     author: 'PIXELTAIL GAMES LLC',
     changes: 'credits.opentdb',
     source: 'Open Trivia DB',

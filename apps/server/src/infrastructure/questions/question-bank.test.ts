@@ -346,15 +346,14 @@ describe('drawQuestion', () => {
    * was set: eight thousand would have left thirty-two, and a twenty-round
    * evening takes about three questions from every category.
    *
-   * Under that floor is the bank's own. French history holds **64 rows in all**,
-   * sport 123, geography 156 and science 170, against 2 258 for arts and 1 261
-   * for everyday life — 87% of the French half in two subjects, where the
-   * English half spreads over six. So a host who ticks one thin subject runs it
-   * out in an evening whatever this setting says, and the graded picker the
-   * blind test offers waits on a **fourth source** rather than on a better rule:
-   * three bands over French history would deal twenty-one questions each. The
-   * blind test can afford its three levels because Deezer has no bottom; this
-   * bank ships with the server.
+   * Under that floor is the bank's own, and Mintaka is the fourth source it was
+   * waiting on. French history held **64 rows in all** and now holds 519, sport
+   * 123 and now 368, geography 156 and now 650 — so the graded picker the blind
+   * test offers is buildable here for the first time: three bands over French
+   * history deal a hundred and seventy each where they would have dealt
+   * twenty-one. **Science is the one that did not move**, because Mintaka has
+   * none at all; it is what stage 22's second source exists for. See the floor
+   * below and `docs/plans/22-thin-french-subjects.md`.
    */
   it('[bank] leaves every subject an evening of well-known questions', () => {
     const ENOUGH_FOR_AN_EVENING = 40
@@ -377,6 +376,42 @@ describe('drawQuestion', () => {
     }
 
     expect(thin).toEqual([])
+  })
+
+  /**
+   * The four subjects the French half was thin in, held to the depth the
+   * English half already had. Three hundred is where English sits and what lets
+   * three difficulty bands deal a hundred questions each rather than twenty-one
+   * — it is the target stage 22 was scoped to, not a round number.
+   *
+   * **Science is named as the shortfall rather than left to fail**, because a
+   * floor that is red for a reason already written down teaches nobody
+   * anything. Mintaka carries no science at all: its answer is a Wikidata
+   * entity, and a science question's answer is usually not one. Stage 22's
+   * second source is what moves it, and this exception comes out the day it
+   * does.
+   */
+  it('[bank] gives the four thin French subjects an evening of their own', () => {
+    const ENOUGH_FOR_A_SUBJECT = 300
+    const AWAITING_A_SOURCE_OF_ITS_OWN = 'science'
+
+    const short: string[] = []
+
+    for (const category of ['geography', 'history', 'science', 'sport']) {
+      const rows = bank.questions.filter(
+        (question) =>
+          question.category === category && question.language === 'fr'
+      )
+
+      if (
+        rows.length < ENOUGH_FOR_A_SUBJECT &&
+        category !== AWAITING_A_SOURCE_OF_ITS_OWN
+      ) {
+        short.push(`fr/${category}: ${rows.length}`)
+      }
+    }
+
+    expect(short).toEqual([])
   })
 
   /**

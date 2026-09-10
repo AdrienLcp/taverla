@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url'
 import { gradeQuizGuess } from '@taverla/core/quiz/question-answer'
 import { normalizeAnswer } from '@taverla/core/round/answer-matching'
 
+import { ingestMintaka } from './mintaka-source'
 import { ingestOpenQuizzDb } from './openquizzdb-source'
 import { ingestOpenTdb } from './opentdb-source'
 import { ingestPolyFact } from './polyfact-source'
@@ -211,12 +212,16 @@ const run = async (): Promise<void> => {
   console.info('\nPolyFact (fr)')
   const wikidata = await ingestPolyFact()
 
+  console.info('\nMintaka (fr)')
+  const mintaka = await ingestMintaka()
+
   console.info('\nOpen Trivia DB (en)')
   const english = await ingestOpenTdb()
 
   const sourced = [
     ...french.questions,
     ...wikidata.questions,
+    ...mintaka.questions,
     ...english.questions
   ]
   const offered = sourced
@@ -229,6 +234,7 @@ const run = async (): Promise<void> => {
     attributions: [
       french.attribution,
       wikidata.attribution,
+      mintaka.attribution,
       english.attribution
     ],
     questions: questions.map(banked)
@@ -238,6 +244,7 @@ const run = async (): Promise<void> => {
 
   report(french)
   report(wikidata)
+  report(mintaka)
   report(english)
 
   console.info(`\n${bank.questions.length} questions → ${BANK_PATH}`)
@@ -257,6 +264,7 @@ const run = async (): Promise<void> => {
   for (const rejection of [
     ...french.rejections,
     ...wikidata.rejections,
+    ...mintaka.rejections,
     ...english.rejections
   ]) {
     console.info(`  rejected ${rejection}`)

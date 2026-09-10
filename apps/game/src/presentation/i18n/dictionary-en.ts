@@ -191,6 +191,8 @@ export const EN_DICTIONARY = defineDictionary({
    * ingestion in `apps/server/scripts/` actually does to that bank.
    */
   credits: {
+    mintaka:
+      'It supplies questions and no wrong answers at all, so the three candidates beside each right one were built here, out of entities Wikidata files under the same kind as the answer and that are read about roughly as much in French. Three of its eight rubrics were kept and mapped onto the six subjects used here, along with four of its nine question shapes — the others name their own candidates in the question, accept more answers than they record, or ask in two hops. Questions that name the present were left behind, the corpus being fixed at October 2021. Of what remained, only the ones whose answer and whose subject have a French Wikipedia article people actually read were banked, and no answer comes up more than five times in one subject.',
     openquizzdb:
       'Its rubrics were mapped onto the six subjects used here, its anecdotes kept as the line shown once an answer is public, and its adult-rated questions marked so an innkeeper can leave them out. Questions that did not carry exactly three wrong answers were left behind, as were the ones whose wrong answers cannot be told from the right one once written down. One answer spelled against its own anecdote was corrected.',
     opentdb:
