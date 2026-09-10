@@ -5,10 +5,12 @@ import { gradeQuizGuess } from '@taverla/core/quiz/question-answer'
 import { frenchViewsOf, isWellKnownInFrench } from './frwiki-notability'
 import {
   type Attribution,
+  acceptedOf,
   type BankedQuestion,
   cached,
   type IngestedQuestions
 } from './question-source'
+import { frenchAliasesOf } from './wikidata-aliases'
 import { kindsOf } from './wikidata-kinds'
 import { birthYearsOf } from './wikidata-years'
 
@@ -268,6 +270,12 @@ const notabilityDistance = ({
 
 type PoolEntry = { entityId: string; label: string; views: number }
 
+/** A row with its three wrong answers found, before its other spellings are known. */
+type Dressed = {
+  candidate: Candidate
+  decoys: [PoolEntry, PoolEntry, PoolEntry]
+}
+
 /**
  * Three entities of the answer's own kind, as close to it in notability as the
  * cap allows and no further from it in time than a century. Greedy and in
@@ -290,7 +298,7 @@ const decoysFor = ({
   pool: readonly PoolEntry[]
   uses: Map<string, number>
   years: ReadonlyMap<string, number>
-}): [string, string, string] | null => {
+}): [PoolEntry, PoolEntry, PoolEntry] | null => {
   const answerYear = years.get(candidate.answerId)
 
   const fits = pool
@@ -323,17 +331,19 @@ const decoysFor = ({
     uses.set(entry.label, (uses.get(entry.label) ?? 0) + 1)
   }
 
-  return [first.label, second.label, third.label]
+  return [first, second, third]
 }
 
 const toBankedQuestion = ({
+  accepted,
   candidate,
   decoys
 }: {
+  accepted: string[]
   candidate: Candidate
   decoys: [string, string, string]
 }): BankedQuestion => ({
-  accepted: [],
+  accepted,
   answer: candidate.answer,
   category: candidate.category,
   choiceOnly: false,
@@ -626,7 +636,7 @@ export const ingestMintaka = async (): Promise<IngestedQuestions> => {
   const caps = decoyCaps(dressed)
 
   const uses = new Map<string, number>()
-  const questions: BankedQuestion[] = []
+  const banked: Dressed[] = []
 
   for (const { candidate, pool } of dressed) {
     if (pool === null) {
@@ -651,8 +661,41 @@ export const ingestMintaka = async (): Promise<IngestedQuestions> => {
       continue
     }
 
-    questions.push(toBankedQuestion({ candidate, decoys }))
+    banked.push({ candidate, decoys })
   }
+
+  const aliases = await frenchAliasesOf({
+    entityIds: banked.flatMap(({ candidate, decoys }) => [
+      candidate.answerId,
+      ...decoys.map(({ entityId }) => entityId)
+    ])
+  })
+
+  const questions = banked.map(({ candidate, decoys }) => {
+    const [first, second, third] = decoys
+    const wrong: [string, string, string] = [
+      first.label,
+      second.label,
+      third.label
+    ]
+
+    return toBankedQuestion({
+      accepted: acceptedOf({
+        answer: candidate.answer,
+        decoys: wrong,
+        spellings: aliases.get(candidate.answerId) ?? [],
+        wrongSpellings: decoys.flatMap(
+          ({ entityId }) => aliases.get(entityId) ?? []
+        )
+      }),
+      candidate,
+      decoys: wrong
+    })
+  })
+
+  console.info(
+    `  ${questions.filter(({ accepted }) => accepted.length > 0).length} of those answer to a name a room may shorten, and now take it`
+  )
 
   return { attribution: ATTRIBUTION, questions, rejections }
 }

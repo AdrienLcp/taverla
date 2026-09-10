@@ -3,7 +3,6 @@ import { z } from 'zod'
 import {
   type HostQuestion,
   hostQuestionSchema,
-  type QuestionCategory,
   type QuestionDrawSettings,
   questionLanguageSchema
 } from '@taverla/protocol/question'
@@ -125,14 +124,7 @@ export const drawQuestion = ({
       isUsable(question)
   )
 
-  const byCategory = new Map<QuestionCategory, BankedQuestion[]>()
-
-  for (const question of eligible) {
-    byCategory.set(question.category, [
-      ...(byCategory.get(question.category) ?? []),
-      question
-    ])
-  }
+  const byCategory = Map.groupBy(eligible, (question) => question.category)
 
   return pickOne(pickOne([...byCategory.values()]) ?? [])
 }

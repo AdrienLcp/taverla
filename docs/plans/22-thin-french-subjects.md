@@ -201,16 +201,41 @@ the Vikidia session repeats one of them:
 
 - **The census.** No banked Mintaka row has been read one by one, so
   `choice-only-questions.json` gained nothing. It is still owed.
-- **The short-name spellings.** **170 of the 1 194 banked rows answer with a
-  name a room would shorten** — *Lakers de Los Angeles* typed as *Lakers* is
-  graded wrong today, and 82 of them are sport. Wikidata's French `skos:altLabel`
-  is the honest source for `accepted`, over the same batched SPARQL the other
-  three lookups already use. This is worth more than the census and should go
-  first.
+- **The short-name spellings.** Done on 11 September 2026 — see below.
 - **One decoy defect measured and left standing**: about one sport row in
   thirteen falls back from its discipline to a trade, and *Gerald Ford* is filed
   as an American football player. `SAME_ERA_YEARS` at 100 does not separate him
   from Tom Brady.
+
+## What the spellings session found, 11 September 2026
+
+**The short-name spellings are banked.** `wikidata-aliases.ts` fills `accepted`
+from French `skos:altLabel`, and `acceptedOf` in `question-source.ts` decides
+which of them the bank will pay for. **769 of the 1 194 banked rows now hold a
+second name, 2 119 spellings, every one of them refused by the grader before**;
+140 accept a strict shortening of their own label. The estimate the plan
+carried — 170 rows — counted rows whose label *could* be shortened, and 140 is
+how many Wikidata actually holds the short form for.
+
+Two things the session found that the plan did not name:
+
+- **An alias can be the name of the row's own decoy, under a spelling the
+  labels do not share.** Wikidata files Augustus as *Gaius Julius Caesar*, and
+  *Jules César* is printed beside him as a wrong answer. Comparing the alias to
+  the three labels finds nothing, so the decoys are resolved to entities and
+  refused by every name *they* answer to. It is the one refusal in `acceptedOf`
+  that needs a second Wikidata lookup, and it is the only one that would have
+  paid for a wrong answer.
+- **`drawQuestion` was quadratic**, rebuilding each category's array once per
+  eligible row: twelve milliseconds a draw, and one corpus test had started
+  timing out at random. `Map.groupBy`, which the module already used one line
+  above. Unrelated to the stage and fixed on sight.
+
+**PolyFact carries the same defect and is out of this stage.** Its rows hold
+Wikidata identifiers too and its answers are people — *Jean-Luc Godard* typed
+as *Godard* is graded wrong the same way. It banks arts and everyday, which is
+neither of the subjects stage 22 exists for, so the seam is named here rather
+than opened.
 
 ## The order this ships in
 
@@ -312,7 +337,10 @@ alone:
   `label.fr` and the row refused where there is none, decoys built on the QIDs
   through PolyFact's existing generator. History, geography and sport move.
 - **Session B, Vikidia.** Seven API requests, a wikitext `<quiz>` parser, the
-  noise filtered. Science moves, and nothing else has to.
+  noise filtered. Science moves, and nothing else has to. **Still to do.**
+
+The short-name spellings took a session of their own between the two, which the
+cost table did not foresee because the plan did not know the defect was there.
 
 Each session carries its own census, credits entry, dictionary strings, corpus
 floor, rebuild, `pnpm validate` and changelog. The ingestion modules already

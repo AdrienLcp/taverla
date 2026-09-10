@@ -7,6 +7,9 @@ import type {
   QuestionLanguage
 } from '@taverla/protocol/question'
 
+import { gradeQuizGuess } from '@taverla/core/quiz/question-answer'
+import { normalizeAnswer } from '@taverla/core/round/answer-matching'
+
 const HERE = dirname(fileURLToPath(import.meta.url))
 const CACHE_DIRECTORY = join(HERE, '.cache')
 
@@ -169,3 +172,57 @@ export const decoysOf = ({
 
   return [first, second, third]
 }
+
+/**
+ * The fewest characters a spelling may fold down to before the bank will pay
+ * for it. Wikidata's French names for a country run to *É-U* and *ÉU*, and two
+ * letters typed into a field are as likely a slip as an answer — the grader
+ * forgives nothing below six characters precisely because nothing that short is
+ * safe, and this is the same argument one step earlier.
+ */
+const SHORTEST_ACCEPTED = 3
+
+/**
+ * The other spellings of an answer the bank will pay a typed room for, out of
+ * whatever the source found. A room shouts *Lakers* at a screen holding *Lakers
+ * de Los Angeles*, and without this it is told it was wrong.
+ *
+ * Two of the three refusals are the grader's own judgement rather than a rule
+ * of taste, asked in the shape a room would meet it:
+ *
+ * - **A spelling the row already wins on** buys nothing. *Los Angeles Lakers*
+ *   is inside the tolerance of the label, so banking it only makes the file
+ *   longer.
+ * - **A spelling one of the wrong answers goes by** is the one that would do
+ *   damage, and it is why the decoys' own names have to be asked for rather
+ *   than their labels alone. Wikidata calls Augustus *Gaius Julius Caesar*,
+ *   which is the name of the man printed beside him as a decoy — banking it
+ *   pays a player for the answer the question itself called wrong.
+ */
+export const acceptedOf = ({
+  answer,
+  decoys,
+  spellings,
+  wrongSpellings
+}: {
+  answer: string
+  decoys: readonly string[]
+  spellings: readonly string[]
+  /** The other names the row's own three wrong answers go by. */
+  wrongSpellings: readonly string[]
+}): string[] =>
+  spellings.filter(
+    (spelling) =>
+      normalizeAnswer(spelling).length >= SHORTEST_ACCEPTED &&
+      !gradeQuizGuess({
+        guess: spelling,
+        question: { accepted: [], answer, decoys }
+      }).isCorrect &&
+      ![...decoys, ...wrongSpellings].some(
+        (wrong) =>
+          gradeQuizGuess({
+            guess: spelling,
+            question: { accepted: [], answer: wrong, decoys: [answer] }
+          }).isCorrect
+      )
+  )

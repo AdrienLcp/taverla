@@ -494,6 +494,34 @@ one part.
 
 ### Improvements
 
+- `[Server]` **A room that shouts *Lakers* at a screen holding *Lakers de Los
+  Angeles* is now right.** Mintaka files an answer under the label Wikidata
+  gives it, and a label is the full name — *dynastie Tang*, *Warriors de Golden
+  State*, *Première Guerre mondiale* — where a table types the half of it
+  everybody says. The quiz grades a typed answer against the whole of what was
+  written and forgives a slipped finger rather than a dropped surname, so those
+  rows were told they were wrong.
+
+  `wikidata-aliases.ts` fills `accepted` from French `skos:altLabel`, through
+  the same batched, resumable SPARQL the title, kind and birth-date lookups
+  already go through — four queries for the source. **769 of the 1 194 banked
+  Mintaka rows now take a second name, 2 119 spellings in all, and every one of
+  them was refused before.** 140 rows accept a strict shortening of their own
+  label: *Lakers*, *Cavs*, *Ming*, *Shaq*, *Tanganyika*, and beside them the
+  names a room actually uses — *Grande Guerre*, *39-45*, *Fleuve Bleu*, *RDA*,
+  *Paname*.
+
+  `acceptedOf` is the guard, and the third of its three refusals is the one
+  worth naming. A spelling the row already wins on buys nothing, and one folding
+  to under three characters is as likely a slip as an answer — but **a spelling
+  one of the row's own decoys goes by pays for the answer the question called
+  wrong**, and the printed labels do not find it. Wikidata calls Augustus
+  *Gaius Julius Caesar*, and the man that names was standing beside him as a
+  decoy under *Jules César*. So the three decoys are resolved to entities too,
+  and the row refuses any name they answer to. Its dangerous neighbour was
+  already guarded: `[bank] holds no question whose own decoy would be graded
+  right` grades each decoy against the whole row, `accepted` included.
+
 - `[Server]` **A wrong answer is no longer from another century than the right
   one.** PolyFact draws its decoys from entities that answer the same relation
   somewhere in Wikidata, and that test passes on everybody — *Aristote* is the
@@ -915,6 +943,17 @@ one part.
   and the extra width is only void
 
 ### Fixes
+
+- `[Server]` **Drawing a question cost twelve milliseconds and now costs two
+  tenths of one.** `drawQuestion` grouped its eligible rows by category by
+  copying each category's array once per row, which is quadratic in the largest
+  category — 2 258 French arts rows is about two and a half million element
+  copies for a single draw. It is `Map.groupBy` now, the call the module already
+  makes to split the bank by language: 2 223 ms of grouping over four hundred
+  French draws becomes 33. Every round of the quiz and of Le Fake paid it, and
+  the corpus tests were the only place loud enough to hear it — the bank's own
+  test file ran 34 s and now runs 11, and one of its draws had started timing
+  out at random.
 
 - `[Game]` **A choice strip no longer hands its short row the shape of a chosen
   one.** A strip that runs out of width wraps, and `flex: 1` stretches whatever
