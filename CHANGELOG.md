@@ -460,6 +460,38 @@ one part.
 
 ### Improvements
 
+- `[Server]` **A wrong answer is no longer from another century than the right
+  one.** PolyFact draws its decoys from entities that answer the same relation
+  somewhere in Wikidata, and that test passes on everybody — *Aristote* is the
+  author of something, so he was offered as a possible author of a manga
+  published in 2015, beside *Terry Pratchett* under a fable by La Fontaine and
+  *Randall Munroe* under a novella by Mérimée. A room eliminates those knowing
+  nothing at all, so a question offering three of them is a question with one
+  candidate, and choice mode is where it is paid.
+
+  The fix is one Wikidata property. `wikidata-years.ts` resolves a birth date
+  for every candidate entity, resumable and cached the way the titles and views
+  already are, and `withDecoysSpread` swaps out any decoy born more than a
+  hundred years from its own answer. **A hundred is where the gaps say the tail
+  begins**: half the pairs were already within forty-one years and three
+  quarters within ninety-one, so the cut moves what upstream got wrong and
+  leaves what it got right. Measured over the banked rows, decoy slots more
+  than a century from their answer went from **24.6% to 0.3%** — the remainder
+  being the handful of antique rows whose relation offers no closer candidate,
+  where the old rule still stands.
+
+  It needs no list of the relations it applies to: only a person carries a birth
+  date, so `developer`, `place of death` and `country of citizenship` see it
+  never fire, which is right — a century is not what makes a studio or a city a
+  bad candidate. The trap it walked into first is worth the sentence: an undated
+  entity is never *known* to be an era away and has never been used, so ranking
+  a replacement on the absence of a fault put the *United States Holocaust
+  Memorial Museum* under a La Fontaine fable. A known year that fits now beats a
+  missing one. The rule is the one in the ingestion whose evidence is not in the
+  built bank — no year is banked, deliberately — so it is the one asked in
+  `scripts/polyfact-source.test.ts`, which is why vitest's server project now
+  looks in `scripts/` as well as `src/`.
+
 - `[Server]` **The French bank more than doubles, from a source that had to be
   filtered down by a factor of thirty.** PolyFact is 58 807 French
   multiple-choice questions generated from Wikidata, CC BY-SA 4.0 — and what it

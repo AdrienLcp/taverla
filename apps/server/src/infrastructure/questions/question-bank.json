@@ -37918,7 +37918,7 @@
       "answer": "Halina Reijn",
       "category": "arts",
       "decoys": [
-        "Georges Méliès",
+        "Éric Rohmer",
         "Brian De Palma",
         "Vladimir Bortko"
       ],
@@ -38279,7 +38279,7 @@
       "category": "arts",
       "decoys": [
         "Wych Kaosayananda",
-        "Georges Méliès",
+        "Susanna Fogel",
         "Samuel Fuller"
       ],
       "id": "polyfact-Q1165050-P57-Q47284",
@@ -38657,7 +38657,7 @@
       "category": "arts",
       "decoys": [
         "Michael Moore",
-        "Georges Méliès",
+        "Victor Salva",
         "Gustav Möller"
       ],
       "id": "polyfact-Q2778386-P57-Q110462",
@@ -38711,7 +38711,7 @@
       "category": "arts",
       "decoys": [
         "Émile Degelin",
-        "D. W. Griffith",
+        "Jerry London",
         "Massimo Pupillo"
       ],
       "id": "polyfact-Q27477640-P57-Q741655",
@@ -40313,7 +40313,7 @@
       "category": "arts",
       "decoys": [
         "Kyle Newacheck",
-        "William Kennedy Laurie Dickson",
+        "Pascal Chaumeil",
         "Hubert Frank"
       ],
       "id": "polyfact-Q124547601-P57-Q9267785",
@@ -40764,7 +40764,7 @@
       "decoys": [
         "Catherine Hardwicke",
         "Frederick Wiseman",
-        "Paul Hunter"
+        "J. Michael Muro"
       ],
       "id": "polyfact-Q1620093-P57-Q285928",
       "isAdult": false,
@@ -41842,7 +41842,7 @@
       "answer": "Paul Greengrass",
       "category": "arts",
       "decoys": [
-        "Éric Rohmer",
+        "Joseph Sargent",
         "Norman Z. McLeod",
         "Thomas Schlamme"
       ],
@@ -41860,7 +41860,7 @@
       "answer": "Andreas Dresen",
       "category": "arts",
       "decoys": [
-        "Georges Méliès",
+        "Shane Black",
         "Pietro Germi",
         "Mia Hansen-Løve"
       ],
@@ -41915,7 +41915,7 @@
       "category": "arts",
       "decoys": [
         "Patricia Riggen",
-        "Susanna Fogel",
+        "Kathryn Bigelow",
         "Robert Z. Leonard"
       ],
       "id": "polyfact-Q926885-P57-Q3141090",
@@ -42024,7 +42024,7 @@
       "decoys": [
         "Brian Kirk",
         "Chu Yuan",
-        "Louis Gasnier"
+        "Lexi Alexander"
       ],
       "id": "polyfact-Q38189374-P57-Q3570721",
       "isAdult": false,
@@ -42202,7 +42202,7 @@
       "answer": "Yann Samuell",
       "category": "arts",
       "decoys": [
-        "Georges Méliès",
+        "Stephen Daldry",
         "Tom Hooper",
         "Lucio Fulci"
       ],
@@ -42347,7 +42347,7 @@
       "category": "arts",
       "decoys": [
         "Jia Zhangke",
-        "Victor Salva",
+        "Bruno Podalydès",
         "Phil Karlson"
       ],
       "id": "polyfact-Q106299119-P57-Q7422783",
@@ -43103,7 +43103,7 @@
       "category": "arts",
       "decoys": [
         "Nick Lyon",
-        "Joe May",
+        "Roland Emmerich",
         "Sidney J. Furie"
       ],
       "id": "polyfact-Q107920304-P57-Q53815755",
@@ -47278,9 +47278,9 @@
       "answer": "Jean de La Fontaine",
       "category": "arts",
       "decoys": [
-        "Mary Norton",
-        "Terry Pratchett",
-        "Lucy Maud Montgomery"
+        "Matthäus Merian",
+        "Margaret Cavendish",
+        "Daniel Defoe"
       ],
       "id": "polyfact-Q3221782-P50-Q49496",
       "isAdult": false,
@@ -47333,7 +47333,7 @@
       "category": "arts",
       "decoys": [
         "William Goldman",
-        "Nathaniel Hawthorne",
+        "Tove Jansson",
         "Terry Bisson"
       ],
       "id": "polyfact-Q2933078-P50-Q223955",
@@ -47350,8 +47350,8 @@
       "answer": "Wilkie Collins",
       "category": "arts",
       "decoys": [
-        "Shun Matsuena",
-        "Kiran Desai",
+        "Mary Norton",
+        "Mika Waltari",
         "Robert A. Heinlein"
       ],
       "id": "polyfact-Q2362563-P50-Q210740",
@@ -47387,7 +47387,7 @@
       "category": "arts",
       "decoys": [
         "Franz Kafka",
-        "Percy Bysshe Shelley",
+        "Terry Pratchett",
         "Roger Zelazny"
       ],
       "id": "polyfact-Q200920-P50-Q23434",
@@ -47424,7 +47424,7 @@
       "decoys": [
         "Lord Dunsany",
         "Steven Pinker",
-        "Matthäus Merian"
+        "Harold Pinter"
       ],
       "id": "polyfact-Q7729402-P50-Q6132354",
       "isAdult": false,
@@ -47440,7 +47440,7 @@
       "answer": "Mary Norton",
       "category": "arts",
       "decoys": [
-        "Aristote",
+        "Aimé Césaire",
         "Gene Wolfe",
         "Vichnou-Sarma"
       ],
@@ -47460,7 +47460,7 @@
       "decoys": [
         "James Clavell",
         "Jorge Amado",
-        "Margaret Cavendish"
+        "Shun Matsuena"
       ],
       "id": "polyfact-Q3257270-P50-Q46248",
       "isAdult": false,
@@ -47476,7 +47476,7 @@
       "answer": "Léon Tolstoï",
       "category": "arts",
       "decoys": [
-        "Ayano Yamane",
+        "Nathaniel Hawthorne",
         "Gustavo Adolfo Bécquer",
         "Emily Brontë"
       ],
@@ -47494,9 +47494,9 @@
       "answer": "Prosper Mérimée",
       "category": "arts",
       "decoys": [
-        "Stephen King",
-        "Randall Munroe",
-        "Frederick Forsyth"
+        "Wilkie Collins",
+        "Ernest Hemingway",
+        "Percy Bysshe Shelley"
       ],
       "id": "polyfact-Q3213955-P50-Q160333",
       "isAdult": false,
@@ -47513,7 +47513,7 @@
       "category": "arts",
       "decoys": [
         "George Bernard Shaw",
-        "Pétrarque",
+        "Kiran Desai",
         "Librairie éditrice vaticane"
       ],
       "id": "polyfact-Q36393-P50-Q5816",
@@ -47532,7 +47532,7 @@
       "decoys": [
         "Léon Tolstoï",
         "Agatha Christie",
-        "Yoshiki Tanaka"
+        "Michael Crichton"
       ],
       "id": "polyfact-Q927292-P50-Q41502",
       "isAdult": false,
@@ -47566,8 +47566,8 @@
       "answer": "Daniel Kehlmann",
       "category": "arts",
       "decoys": [
-        "Ésope",
-        "Mahmoud de Kachgar",
+        "Frank Herbert",
+        "James Dashner",
         "Stephen King"
       ],
       "id": "polyfact-Q630282-P50-Q57477",
@@ -47584,9 +47584,9 @@
       "answer": "Djalâl ad-Dîn Rûmî",
       "category": "arts",
       "decoys": [
-        "Jérémie",
-        "Gonçalves Dias",
-        "William Gibson"
+        "Pétrarque",
+        "Snorri Sturluson",
+        "Clément V"
       ],
       "id": "polyfact-Q6579646-P50-Q43347",
       "isAdult": false,
@@ -47602,7 +47602,7 @@
       "answer": "Roald Dahl",
       "category": "arts",
       "decoys": [
-        "Elias Magnus Fries",
+        "Ayano Yamane",
         "Randall Munroe",
         "Laurent Gaudé"
       ],
@@ -47638,9 +47638,9 @@
       "answer": "Daniel Defoe",
       "category": "arts",
       "decoys": [
-        "George R. R. Martin",
-        "Anton Tchekhov",
-        "Paul VI"
+        "Jean de La Fontaine",
+        "Gotthold Ephraim Lessing",
+        "William Shakespeare"
       ],
       "id": "polyfact-Q612523-P50-Q40946",
       "isAdult": false,
@@ -47692,7 +47692,7 @@
       "answer": "Alan Moore",
       "category": "arts",
       "decoys": [
-        "Jésus-Christ",
+        "Frederick Forsyth",
         "Edward de Bono",
         "Allen Ginsberg"
       ],
@@ -47710,7 +47710,7 @@
       "answer": "Masami Kurumada",
       "category": "arts",
       "decoys": [
-        "Gotthold Ephraim Lessing",
+        "Mao Zedong",
         "Alan Bradley",
         "John Grisham"
       ],
@@ -47730,7 +47730,7 @@
       "decoys": [
         "Atsushi Ōkubo",
         "Randall Munroe",
-        "William Shakespeare"
+        "Yoshiki Tanaka"
       ],
       "id": "polyfact-Q15732099-P50-Q17158799",
       "isAdult": false,
@@ -47746,9 +47746,9 @@
       "answer": "Albert Hirschman",
       "category": "arts",
       "decoys": [
-        "Jacques-Henri Bernardin de Saint-Pierre",
-        "Nicolas Machiavel",
-        "Snorri Sturluson"
+        "Henryk Sienkiewicz",
+        "Robert Louis Stevenson",
+        "Daniel Kehlmann"
       ],
       "id": "polyfact-Q1383859-P50-Q215949",
       "isAdult": false,
@@ -47765,8 +47765,8 @@
       "category": "arts",
       "decoys": [
         "Patricia Highsmith",
-        "Paul Henri Thiry d’Holbach",
-        "Origène"
+        "Prosper Mérimée",
+        "Gonçalves Dias"
       ],
       "id": "polyfact-Q161531-P50-Q7243",
       "isAdult": false,
@@ -47782,9 +47782,9 @@
       "answer": "Cicéron",
       "category": "arts",
       "decoys": [
-        "Ibn Asakir",
-        "Abul al-Fazl ibn Mubarak",
-        "Andrea Camilleri"
+        "Claude",
+        "Publius Mucius Scævola",
+        "Horace"
       ],
       "id": "polyfact-Q1242501-P50-Q1541",
       "isAdult": false,
@@ -47818,9 +47818,9 @@
       "answer": "Jean-Sébastien Bach",
       "category": "arts",
       "decoys": [
-        "Randall Munroe",
-        "Robert E. Howard",
-        "China Miéville"
+        "Jacques-Henri Bernardin de Saint-Pierre",
+        "Paul Henri Thiry d’Holbach",
+        "Napoléon Ier"
       ],
       "id": "polyfact-Q465878-P50-Q1339",
       "isAdult": false,
@@ -47836,8 +47836,8 @@
       "answer": "Sophie Audouin-Mamikonian",
       "category": "arts",
       "decoys": [
-        "Henrik Ibsen",
-        "Sénèque",
+        "William Gibson",
+        "Roald Dahl",
         "Lucy Maud Montgomery"
       ],
       "id": "polyfact-Q1068491-P50-Q898083",
@@ -47854,9 +47854,9 @@
       "answer": "Vâtsyâyana",
       "category": "arts",
       "decoys": [
-        "Isaac Asimov",
-        "Shin Takahashi",
-        "Napoléon Ier"
+        "Quintus de Smyrne",
+        "Aristote",
+        "Ésope"
       ],
       "id": "polyfact-Q47228-P50-Q380234",
       "isAdult": false,
@@ -47873,8 +47873,8 @@
       "category": "arts",
       "decoys": [
         "Lucy Maud Montgomery",
-        "Diana Gabaldon",
-        "Suehiro Maruo"
+        "Elias Magnus Fries",
+        "Anton Tchekhov"
       ],
       "id": "polyfact-Q11866-P50-Q5673",
       "isAdult": false,
@@ -47908,7 +47908,7 @@
       "answer": "Lois Lowry",
       "category": "arts",
       "decoys": [
-        "Yusuf Khass Hajib",
+        "Kerstin Gier",
         "Hillary Clinton",
         "Edward Bernays"
       ],
@@ -47945,7 +47945,7 @@
       "category": "arts",
       "decoys": [
         "Jules Verne",
-        "Edward de Bono",
+        "Paul VI",
         "Léon Tolstoï"
       ],
       "id": "polyfact-Q3549814-P50-Q9711",
@@ -47981,7 +47981,7 @@
       "category": "arts",
       "decoys": [
         "Margaret Atwood",
-        "Tsukasa Hōjō",
+        "George R. R. Martin",
         "René Havard"
       ],
       "id": "polyfact-Q130295-P50-Q207544",
@@ -47998,9 +47998,9 @@
       "answer": "Paul Diacre",
       "category": "arts",
       "decoys": [
-        "Simon Winchester",
-        "Ibn Asakir",
-        "Jean-Paul Sartre"
+        "Fujiwara no Yoshifusa",
+        "Mahmoud de Kachgar",
+        "Jérémie"
       ],
       "id": "polyfact-Q660642-P50-Q160424",
       "isAdult": false,
@@ -48034,7 +48034,7 @@
       "answer": "Liu Cixin",
       "category": "arts",
       "decoys": [
-        "Richard Wagner",
+        "Hergé",
         "Kazuhiro Fujita",
         "Randall Munroe"
       ],
@@ -48053,8 +48053,8 @@
       "category": "arts",
       "decoys": [
         "Malcolm Gladwell",
-        "Tove Jansson",
-        "Jules Verne"
+        "Randall Munroe",
+        "Fuyumi Ono"
       ],
       "id": "polyfact-Q18460519-P50-Q51337465",
       "isAdult": false,
@@ -48106,9 +48106,9 @@
       "answer": "Edward Gibbon",
       "category": "arts",
       "decoys": [
-        "Michael Crichton",
-        "Longus",
-        "Evert Taube"
+        "Jean-Sébastien Bach",
+        "Henrik Ibsen",
+        "Hans Christian Andersen"
       ],
       "id": "polyfact-Q313030-P50-Q161841",
       "isAdult": false,
@@ -48124,9 +48124,9 @@
       "answer": "William Shakespeare",
       "category": "arts",
       "decoys": [
-        "Daniel Pennac",
-        "Isaac Asimov",
-        "Pie XII"
+        "Nicolas Machiavel",
+        "Abul al-Fazl ibn Mubarak",
+        "Louis XIV"
       ],
       "id": "polyfact-Q272169-P50-Q692",
       "isAdult": false,
@@ -48142,9 +48142,9 @@
       "answer": "Jean de La Fontaine",
       "category": "arts",
       "decoys": [
-        "Stephen King",
-        "Harold Pinter",
-        "Jimmy Wales"
+        "Marie-Catherine Le Jumel de Barneville, baronne d’Aulnoy",
+        "Alexander Pope",
+        "Pedro Calderón de la Barca"
       ],
       "id": "polyfact-Q3227205-P50-Q49496",
       "isAdult": false,
@@ -48160,8 +48160,8 @@
       "answer": "Ted Chiang",
       "category": "arts",
       "decoys": [
-        "Percy Bysshe Shelley",
-        "Jean de La Fontaine",
+        "Alan Moore",
+        "Randall Munroe",
         "Osamu Tezuka"
       ],
       "id": "polyfact-Q3045861-P50-Q503095",
@@ -48178,9 +48178,9 @@
       "answer": "Friedrich Nietzsche",
       "category": "arts",
       "decoys": [
-        "Mika Waltari",
+        "Albert Hirschman",
         "C. J. Cherryh",
-        "William Shakespeare"
+        "Andrea Camilleri"
       ],
       "id": "polyfact-Q1193302-P50-Q9358",
       "isAdult": false,
@@ -48214,9 +48214,9 @@
       "answer": "Louis XIV",
       "category": "arts",
       "decoys": [
-        "Beatrix Potter",
-        "Mary Renault",
-        "Gustave Flaubert"
+        "Edward Gibbon",
+        "Giacomo Casanova",
+        "Arai Hakuseki"
       ],
       "id": "polyfact-Q596843-P50-Q7742",
       "isAdult": false,
@@ -48233,7 +48233,7 @@
       "category": "arts",
       "decoys": [
         "Carlos Ruiz Zafón",
-        "Marie-Catherine Le Jumel de Barneville, baronne d’Aulnoy",
+        "Masami Kurumada",
         "Isaac Asimov"
       ],
       "id": "polyfact-Q1474920-P50-Q232772",
@@ -48251,7 +48251,7 @@
       "category": "arts",
       "decoys": [
         "Thomas M. Disch",
-        "Abul al-Fazl ibn Mubarak",
+        "Gamon Sakurai",
         "Steven Erikson"
       ],
       "id": "polyfact-Q2623505-P50-Q310048",
@@ -48270,7 +48270,7 @@
       "decoys": [
         "José Saramago",
         "Joseph Schumpeter",
-        "Samuel Taylor Coleridge"
+        "Amélie Nothomb"
       ],
       "id": "polyfact-Q3209840-P50-Q1388268",
       "isAdult": false,
@@ -48286,7 +48286,7 @@
       "answer": "Svetlana Aleksievitch",
       "category": "arts",
       "decoys": [
-        "Aimé Césaire",
+        "China Miéville",
         "Arthur Conan Doyle",
         "Burrhus Frederic Skinner"
       ],
@@ -48306,7 +48306,7 @@
       "decoys": [
         "Arina Tanemura",
         "John Brockman",
-        "Euripide"
+        "Sophie Audouin-Mamikonian"
       ],
       "id": "polyfact-Q658288-P50-Q9364",
       "isAdult": false,
@@ -48323,7 +48323,7 @@
       "category": "arts",
       "decoys": [
         "Tsutomu Minakami",
-        "Wilkie Collins",
+        "Shin Takahashi",
         "Agatha Christie"
       ],
       "id": "polyfact-Q3036950-P50-Q222944",
@@ -48340,9 +48340,9 @@
       "answer": "Amin Maalouf",
       "category": "arts",
       "decoys": [
-        "Ernest Hemingway",
-        "Héraclite",
-        "Léon Tolstoï"
+        "Diana Gabaldon",
+        "Suehiro Maruo",
+        "J. R. R. Tolkien"
       ],
       "id": "polyfact-Q7735877-P50-Q115243",
       "isAdult": false,
@@ -48359,8 +48359,8 @@
       "category": "arts",
       "decoys": [
         "C. S. Lewis",
-        "Cicéron",
-        "James Dashner"
+        "Lois Lowry",
+        "Nishio Ishin"
       ],
       "id": "polyfact-Q2883891-P50-Q165274",
       "isAdult": false,
@@ -48396,7 +48396,7 @@
       "decoys": [
         "Frank Miller",
         "Bobby Henderson",
-        "Fiodor Dostoïevski"
+        "Eckhart Tolle"
       ],
       "id": "polyfact-Q504818-P50-Q447925",
       "isAdult": false,
@@ -48412,7 +48412,7 @@
       "answer": "Katherine Paterson",
       "category": "arts",
       "decoys": [
-        "Léonard de Vinci",
+        "L. Frank Baum",
         "Setona Mizushiro",
         "Ben Aaronovitch"
       ],
@@ -48432,7 +48432,7 @@
       "decoys": [
         "J. D. Salinger",
         "Ian Fleming",
-        "Robert Louis Stevenson"
+        "Tsukasa Hōjō"
       ],
       "id": "polyfact-Q3269406-P50-Q379057",
       "isAdult": false,
@@ -48448,9 +48448,9 @@
       "answer": "Alexander Pope",
       "category": "arts",
       "decoys": [
-        "Frank Dikötter",
-        "Gō Nagai",
-        "Marshall McLuhan"
+        "Samuel Taylor Coleridge",
+        "Joseph von Eichendorff",
+        "Friedrich Schiller"
       ],
       "id": "polyfact-Q5367068-P50-Q164047",
       "isAdult": false,
@@ -48466,7 +48466,7 @@
       "answer": "Ann Brashares",
       "category": "arts",
       "decoys": [
-        "Robert Louis Stevenson",
+        "Simon Winchester",
         "carbonari",
         "Mouammar Kadhafi"
       ],
@@ -48521,8 +48521,8 @@
       "category": "arts",
       "decoys": [
         "Joseph von Eichendorff",
-        "Clément V",
-        "Prosper Mérimée"
+        "Honoré de Balzac",
+        "Richard Wagner"
       ],
       "id": "polyfact-Q2020094-P50-Q38337",
       "isAdult": false,
@@ -48539,8 +48539,8 @@
       "category": "arts",
       "decoys": [
         "Michael Ende",
-        "Mao Zedong",
-        "Pétrarque"
+        "Jean-Paul Sartre",
+        "James Frey"
       ],
       "id": "polyfact-Q957076-P50-Q315059",
       "isAdult": false,
@@ -48576,7 +48576,7 @@
       "decoys": [
         "Ian Fleming",
         "John Berger",
-        "Karl Marx"
+        "Liu Cixin"
       ],
       "id": "polyfact-Q81689-P50-Q7345",
       "isAdult": false,
@@ -48594,7 +48594,7 @@
       "decoys": [
         "Orson Scott Card",
         "Nicholas Sparks",
-        "Henryk Sienkiewicz"
+        "Evert Taube"
       ],
       "id": "polyfact-Q1570020-P50-Q357120",
       "isAdult": false,
@@ -48646,7 +48646,7 @@
       "answer": "China Miéville",
       "category": "arts",
       "decoys": [
-        "Daniel Kehlmann",
+        "Daniel Pennac",
         "Banana Yoshimoto",
         "Ikki Kajiwara"
       ],
@@ -48665,8 +48665,8 @@
       "category": "arts",
       "decoys": [
         "Guy Gavriel Kay",
-        "Josiah Willard Gibbs",
-        "Djalâl ad-Dîn Rûmî"
+        "Pie XII",
+        "Jimmy Wales"
       ],
       "id": "polyfact-Q1047909-P50-Q39829",
       "isAdult": false,
@@ -48683,8 +48683,8 @@
       "category": "arts",
       "decoys": [
         "Angiosperm Phylogeny Group",
-        "Roald Dahl",
-        "Ésope"
+        "Friedrich Nietzsche",
+        "Dmitri Gloukhovski"
       ],
       "id": "polyfact-Q1975638-P50-Q298334",
       "isAdult": false,
@@ -48718,9 +48718,9 @@
       "answer": "Platon",
       "category": "arts",
       "decoys": [
-        "Yasuhisa Hara",
-        "Kerstin Gier",
-        "Romain Rolland"
+        "Euripide",
+        "Qu Yuan",
+        "Aristophane"
       ],
       "id": "polyfact-Q471715-P50-Q859",
       "isAdult": false,
@@ -48736,7 +48736,7 @@
       "answer": "Larry Sanger",
       "category": "arts",
       "decoys": [
-        "Harriet Beecher Stowe",
+        "Mary Renault",
         "J. D. Salinger",
         "Svetlana Aleksievitch"
       ],
@@ -48754,9 +48754,9 @@
       "answer": "Nicolas Machiavel",
       "category": "arts",
       "decoys": [
-        "William Styron",
-        "Vladimir Arseniev",
-        "Ted Chiang"
+        "Léonard de Vinci",
+        "Étienne de La Boétie",
+        "Nicolas Copernic"
       ],
       "id": "polyfact-Q610942-P50-Q1399",
       "isAdult": false,
@@ -48772,9 +48772,9 @@
       "answer": "Averroès",
       "category": "arts",
       "decoys": [
-        "Ronald Reagan",
-        "Daniel Defoe",
-        "Jules Verne"
+        "Djalâl ad-Dîn Rûmî",
+        "Ibn Asakir",
+        "Hartmann von Aue"
       ],
       "id": "polyfact-Q3675181-P50-Q39837",
       "isAdult": false,
@@ -48791,7 +48791,7 @@
       "category": "arts",
       "decoys": [
         "Carlos Ruiz Zafón",
-        "August Strindberg",
+        "Susanna Clarke",
         "Leiji Matsumoto"
       ],
       "id": "polyfact-Q202531-P50-Q7345",
@@ -48808,9 +48808,9 @@
       "answer": "Napoléon Ier",
       "category": "arts",
       "decoys": [
-        "Clive Barker",
-        "Dave Smith",
-        "John Grisham"
+        "Gustave Flaubert",
+        "Fiodor Dostoïevski",
+        "Alexandre Dumas"
       ],
       "id": "polyfact-Q878016-P50-Q517",
       "isAdult": false,
@@ -48844,7 +48844,7 @@
       "answer": "A. E. van Vogt",
       "category": "arts",
       "decoys": [
-        "Clément V",
+        "Don DeLillo",
         "Raymond Queneau",
         "Tony Kushner"
       ],
@@ -48862,9 +48862,9 @@
       "answer": "Dziga Vertov",
       "category": "arts",
       "decoys": [
-        "Hergé",
+        "Patrick Modiano",
         "Daniel Handler",
-        "Pedro Calderón de la Barca"
+        "Amin Maalouf"
       ],
       "id": "polyfact-Q829250-P50-Q55193",
       "isAdult": false,
@@ -48881,8 +48881,8 @@
       "category": "arts",
       "decoys": [
         "Robert Ludlum",
-        "Fuyumi Ono",
-        "Friedrich Schiller"
+        "Jacques Prévert",
+        "Stefan Zweig"
       ],
       "id": "polyfact-Q2932421-P50-Q332689",
       "isAdult": false,
@@ -48898,8 +48898,8 @@
       "answer": "George du Maurier",
       "category": "arts",
       "decoys": [
-        "Alan Moore",
-        "Kazuhiro Fujita",
+        "Primo Levi",
+        "A. E. van Vogt",
         "H. P. Lovecraft"
       ],
       "id": "polyfact-Q1691967-P50-Q949700",
@@ -48917,7 +48917,7 @@
       "category": "arts",
       "decoys": [
         "H. P. Lovecraft",
-        "Masami Kurumada",
+        "Konrad Kujau",
         "Liane Moriarty"
       ],
       "id": "polyfact-Q642944-P50-Q311589",
@@ -48952,9 +48952,9 @@
       "answer": "Michael Dobbs",
       "category": "arts",
       "decoys": [
-        "Gamon Sakurai",
+        "Frank Dikötter",
         "Eugene O'Neill",
-        "Ibn Qayyim al-Jawziyya"
+        "Gō Nagai"
       ],
       "id": "polyfact-Q1055984-P50-Q1496611",
       "isAdult": false,
@@ -48970,9 +48970,9 @@
       "answer": "Giacomo Casanova",
       "category": "arts",
       "decoys": [
-        "Alexandre Beliaïev",
-        "Stephen King",
-        "John Updike"
+        "Karl Marx",
+        "Harriet Beecher Stowe",
+        "Juan Valera"
       ],
       "id": "polyfact-Q649013-P50-Q83321",
       "isAdult": false,
@@ -48989,7 +48989,7 @@
       "category": "arts",
       "decoys": [
         "Philippa Gregory",
-        "Arai Hakuseki",
+        "Ann Brashares",
         "François"
       ],
       "id": "polyfact-Q4115094-P50-Q259979",
@@ -49024,9 +49024,9 @@
       "answer": "Yūki Tabata",
       "category": "arts",
       "decoys": [
-        "Albert Hirschman",
-        "Aristote",
-        "Juan Valera"
+        "Dan Brown",
+        "Malcolm Lowry",
+        "Cesare Pavese"
       ],
       "id": "polyfact-Q20638503-P50-Q17161012",
       "isAdult": false,
@@ -49061,7 +49061,7 @@
       "category": "arts",
       "decoys": [
         "Nikolaï Leskov",
-        "Amélie Nothomb",
+        "Alfred Rosenberg",
         "Andrea Camilleri"
       ],
       "id": "polyfact-Q2550138-P50-Q78491",
@@ -49078,9 +49078,9 @@
       "answer": "Snorri Sturluson",
       "category": "arts",
       "decoys": [
-        "Philip K. Dick",
-        "Pétrarque",
-        "Qu Yuan"
+        "Averroès",
+        "Dante Alighieri",
+        "Wace"
       ],
       "id": "polyfact-Q1134288-P50-Q102323",
       "isAdult": false,
@@ -49096,7 +49096,7 @@
       "answer": "Hergé",
       "category": "arts",
       "decoys": [
-        "Elias Magnus Fries",
+        "Josiah Willard Gibbs",
         "Peter Mayle",
         "Haruki Murakami"
       ],
@@ -49134,7 +49134,7 @@
       "decoys": [
         "Lucy Maud Montgomery",
         "Yukio Mishima",
-        "Aristophane"
+        "Thomas Keneally"
       ],
       "id": "polyfact-Q2248978-P50-Q161955",
       "isAdult": false,
@@ -49151,7 +49151,7 @@
       "category": "arts",
       "decoys": [
         "J. M. Coetzee",
-        "Étienne de La Boétie",
+        "Philip Roth",
         "Ford Madox Ford"
       ],
       "id": "polyfact-Q2343322-P50-Q7199",
@@ -49169,8 +49169,8 @@
       "category": "arts",
       "decoys": [
         "Dan Simmons",
-        "Jean de La Fontaine",
-        "Dante Alighieri"
+        "Yasuhisa Hara",
+        "Larry Sanger"
       ],
       "id": "polyfact-Q7723889-P50-Q2070360",
       "isAdult": false,
@@ -49188,7 +49188,7 @@
       "decoys": [
         "Vladimir Nabokov",
         "Clement Greenberg",
-        "Jean-Sébastien Bach"
+        "Romain Rolland"
       ],
       "id": "polyfact-Q477823-P50-Q5685",
       "isAdult": false,
@@ -49206,7 +49206,7 @@
       "decoys": [
         "Steven Erikson",
         "Marshall McLuhan",
-        "Sophie Audouin-Mamikonian"
+        "Jésus-Christ"
       ],
       "id": "polyfact-Q457862-P50-Q47423",
       "isAdult": false,
@@ -49222,9 +49222,9 @@
       "answer": "Victor Hugo",
       "category": "arts",
       "decoys": [
-        "Yoshiharu Tsuge",
-        "Malcolm Gladwell",
-        "Vâtsyâyana"
+        "Vladimir Arseniev",
+        "August Strindberg",
+        "Dziga Vertov"
       ],
       "id": "polyfact-Q3085613-P50-Q535",
       "isAdult": false,
@@ -49240,9 +49240,9 @@
       "answer": "René Descartes",
       "category": "arts",
       "decoys": [
-        "James Frey",
         "François Pétis de La Croix",
-        "Hans Christian Andersen"
+        "François Pétis de La Croix",
+        "Charles Perrault"
       ],
       "id": "polyfact-Q1206702-P50-Q9191",
       "isAdult": false,
@@ -49259,7 +49259,7 @@
       "category": "arts",
       "decoys": [
         "J. D. Salinger",
-        "J. R. R. Tolkien",
+        "William Styron",
         "Tom Clancy"
       ],
       "id": "polyfact-Q3548931-P50-Q237087",
@@ -49278,7 +49278,7 @@
       "decoys": [
         "Judith Kerr",
         "Bertolt Brecht",
-        "William Shakespeare"
+        "Ronald Reagan"
       ],
       "id": "polyfact-Q157360-P50-Q9204",
       "isAdult": false,
@@ -49296,7 +49296,7 @@
       "decoys": [
         "Jill Sobule",
         "Frank Herbert",
-        "Paul de Tarse"
+        "Clive Barker"
       ],
       "id": "polyfact-Q4659340-P50-Q971382",
       "isAdult": false,
@@ -49312,9 +49312,9 @@
       "answer": "Avicenne",
       "category": "arts",
       "decoys": [
-        "Frank R. Stockton",
-        "Elias Magnus Fries",
-        "Wilbur Smith"
+        "Yusuf Khass Hajib",
+        "Al Masû'dî",
+        "Murasaki Shikibu"
       ],
       "id": "polyfact-Q1030940-P50-Q8011",
       "isAdult": false,
@@ -49366,7 +49366,7 @@
       "answer": "Stephen King",
       "category": "arts",
       "decoys": [
-        "Lois Lowry",
+        "Dave Smith",
         "Cory Doctorow",
         "Edward Bernays"
       ],
@@ -49384,9 +49384,9 @@
       "answer": "Tomoyoshi Miyazaki",
       "category": "arts",
       "decoys": [
-        "Elias Magnus Fries",
-        "Charles Perrault",
-        "Charles Dickens"
+        "Ken Akamatsu",
+        "Jack London",
+        "Michael Dobbs"
       ],
       "id": "polyfact-Q343033-P50-Q3531425",
       "isAdult": false,
@@ -49402,7 +49402,7 @@
       "answer": "Tsugumi Ōba",
       "category": "arts",
       "decoys": [
-        "Pie X",
+        "Alexandre Beliaïev",
         "Albert Hirschman",
         "Tetsu Yano"
       ],
@@ -49420,8 +49420,8 @@
       "answer": "Isaac Asimov",
       "category": "arts",
       "decoys": [
-        "Johann Wolfgang von Goethe",
-        "Snorri Sturluson",
+        "George du Maurier",
+        "John Updike",
         "Institut national de la statistique"
       ],
       "id": "polyfact-Q913482-P50-Q34981",
@@ -49439,7 +49439,7 @@
       "category": "arts",
       "decoys": [
         "Youn In-wan",
-        "Friedrich Engels",
+        "Cécile Aubry",
         "Anton Tchekhov"
       ],
       "id": "polyfact-Q464891-P50-Q3426350",
@@ -49457,8 +49457,8 @@
       "category": "arts",
       "decoys": [
         "Patricia Highsmith",
-        "Claude",
-        "Fiodor Dostoïevski"
+        "Roger Martin du Gard",
+        "Yūki Tabata"
       ],
       "id": "polyfact-Q967074-P50-Q958449",
       "isAdult": false,
@@ -49474,9 +49474,9 @@
       "answer": "Charles Messier",
       "category": "arts",
       "decoys": [
-        "Nishio Ishin",
-        "Gérard de Villiers",
-        "Madeleine L'Engle"
+        "Victor Hugo",
+        "Charles Dickens",
+        "Johann Wolfgang von Goethe"
       ],
       "id": "polyfact-Q14530-P50-Q14524",
       "isAdult": false,
@@ -49492,9 +49492,9 @@
       "answer": "Eric Idle",
       "category": "arts",
       "decoys": [
-        "Publius Mucius Scævola",
+        "Erik Larson",
         "Osamu Tezuka",
-        "Wilkie Collins"
+        "André Breton"
       ],
       "id": "polyfact-Q939143-P50-Q210741",
       "isAdult": false,
@@ -49548,7 +49548,7 @@
       "decoys": [
         "Yuval Noah Harari",
         "Laurent Gaudé",
-        "Edgar Allan Poe"
+        "Stephen Chbosky"
       ],
       "id": "polyfact-Q46887-P50-Q34660",
       "isAdult": false,
@@ -49584,7 +49584,7 @@
       "decoys": [
         "Mary Wollstonecraft",
         "Vyāsa",
-        "Dan Jurgens"
+        "Aldo Leopold"
       ],
       "id": "polyfact-Q190237-P50-Q1511",
       "isAdult": false,
@@ -49618,9 +49618,9 @@
       "answer": "Walter Scott",
       "category": "arts",
       "decoys": [
-        "Sławomir Mrożek",
+        "Frank R. Stockton",
         "Pie X",
-        "Vladimir Nabokov"
+        "Charles Messier"
       ],
       "id": "polyfact-Q840974-P50-Q79025",
       "isAdult": false,
@@ -49654,8 +49654,8 @@
       "answer": "Amos Oz",
       "category": "arts",
       "decoys": [
-        "Mahmoud de Kachgar",
-        "Sophocle",
+        "Yoshiharu Tsuge",
+        "Fred Vargas",
         "Bobby Henderson"
       ],
       "id": "polyfact-Q1124669-P50-Q151872",
@@ -49672,7 +49672,7 @@
       "answer": "Dieu en Islam",
       "category": "arts",
       "decoys": [
-        "Honoré de Balzac",
+        "Origène",
         "Neri Oxman",
         "Robert Burns"
       ],
@@ -49709,7 +49709,7 @@
       "category": "arts",
       "decoys": [
         "Stephen King",
-        "Eckhart Tolle",
+        "Wilbur Smith",
         "Kazuhiro Fujita"
       ],
       "id": "polyfact-Q2269371-P50-Q76409",
@@ -49727,7 +49727,7 @@
       "category": "arts",
       "decoys": [
         "T. S. Eliot",
-        "L. Frank Baum",
+        "John Fitzgerald Kennedy",
         "Paulo Coelho"
       ],
       "id": "polyfact-Q1266028-P50-Q1203",
@@ -49763,7 +49763,7 @@
       "category": "arts",
       "decoys": [
         "Candace Bushnell",
-        "Hartmann von Aue",
+        "Tsugumi Ōba",
         "Sandy Petersen"
       ],
       "id": "polyfact-Q1768389-P50-Q160163",
@@ -49800,7 +49800,7 @@
       "decoys": [
         "Dieu en Islam",
         "Thomas Harris",
-        "Paul Diacre"
+        "Gérard de Villiers"
       ],
       "id": "polyfact-Q7852806-P50-Q464185",
       "isAdult": false,
@@ -49817,7 +49817,7 @@
       "category": "arts",
       "decoys": [
         "Gregory Benford",
-        "William Harvey",
+        "Madeleine L'Engle",
         "Agatha Christie"
       ],
       "id": "polyfact-Q2267961-P50-Q229996",
@@ -49835,7 +49835,7 @@
       "category": "arts",
       "decoys": [
         "Sénèque",
-        "Liu Cixin",
+        "Cicéron",
         "Henry James"
       ],
       "id": "polyfact-Q181937-P50-Q236972",
@@ -49852,8 +49852,8 @@
       "answer": "Aristote",
       "category": "arts",
       "decoys": [
-        "Paul VI",
-        "Dmitri Gloukhovski",
+        "Platon",
+        "Archimède",
         "Free Software Foundation"
       ],
       "id": "polyfact-Q500930-P50-Q868",
@@ -49870,9 +49870,9 @@
       "answer": "Viet Thanh Nguyen",
       "category": "arts",
       "decoys": [
-        "Ivan Tourgueniev",
-        "Joris-Karl Huysmans",
-        "Cicéron"
+        "Eric Idle",
+        "Hermann Hesse",
+        "William Peter Blatty"
       ],
       "id": "polyfact-Q21162257-P50-Q23887092",
       "isAdult": false,
@@ -49888,9 +49888,9 @@
       "answer": "Étienne de La Boétie",
       "category": "arts",
       "decoys": [
-        "Edward Gibbon",
+        "René Descartes",
         "Vyāsa",
-        "Benoît XVI"
+        "William Harvey"
       ],
       "id": "polyfact-Q3030191-P50-Q290227",
       "isAdult": false,
@@ -49907,7 +49907,7 @@
       "category": "arts",
       "decoys": [
         "Albert Camus",
-        "Arthur Conan Doyle",
+        "J.K. Rowling",
         "John M. Ford"
       ],
       "id": "polyfact-Q1058984-P50-Q9116547",
@@ -49924,9 +49924,9 @@
       "answer": "Edgar Allan Poe",
       "category": "arts",
       "decoys": [
-        "Kim Newman",
+        "Georges Bernanos",
         "Vyāsa",
-        "Izō Hashimoto"
+        "Mary O'Hara"
       ],
       "id": "polyfact-Q733448-P50-Q16867",
       "isAdult": false,
@@ -49944,7 +49944,7 @@
       "decoys": [
         "Jack London",
         "Ted Chiang",
-        "Nicolas Copernic"
+        "Edgar Allan Poe"
       ],
       "id": "polyfact-Q11310767-P50-Q560015",
       "isAdult": false,
@@ -49960,9 +49960,9 @@
       "answer": "Alexandre Dumas",
       "category": "arts",
       "decoys": [
-        "Jean-Paul II",
+        "Walter Scott",
         "Oscar Wilde",
-        "Sandy Petersen"
+        "Ivan Tourgueniev"
       ],
       "id": "polyfact-Q451911-P50-Q38337",
       "isAdult": false,
@@ -49979,7 +49979,7 @@
       "category": "arts",
       "decoys": [
         "Mario Vargas Llosa",
-        "Victor Hugo",
+        "Dan Jurgens",
         "Valerie Solanas"
       ],
       "id": "polyfact-Q623394-P50-Q39829",
@@ -49996,9 +49996,9 @@
       "answer": "Georg Wilhelm Friedrich Hegel",
       "category": "arts",
       "decoys": [
-        "Friedrich Nietzsche",
-        "William Clay Ford, Jr",
-        "Astrid Lindgren"
+        "Joris-Karl Huysmans",
+        "Nicholas Wiseman",
+        "Emmanuel Kant"
       ],
       "id": "polyfact-Q1210941-P50-Q9235",
       "isAdult": false,
@@ -50014,9 +50014,9 @@
       "answer": "Théophile Gautier",
       "category": "arts",
       "decoys": [
-        "Carl Sagan",
-        "Wace",
-        "William Goldman"
+        "Hugh Lofting",
+        "Georg Wilhelm Friedrich Hegel",
+        "Astrid Lindgren"
       ],
       "id": "polyfact-Q3210879-P50-Q183713",
       "isAdult": false,
@@ -50032,8 +50032,8 @@
       "answer": "Philip Roth",
       "category": "arts",
       "decoys": [
-        "Ivan Tourgueniev",
-        "Louis XIV",
+        "Sławomir Mrożek",
+        "Rumiko Takahashi",
         "Suehiro Maruo"
       ],
       "id": "polyfact-Q1977121-P50-Q187019",
@@ -50051,8 +50051,8 @@
       "category": "arts",
       "decoys": [
         "Alexandre Douguine",
-        "Platon",
-        "Nicholas Wiseman"
+        "Amos Oz",
+        "Yuki Urushibara"
       ],
       "id": "polyfact-Q2618713-P50-Q14907982",
       "isAdult": false,
@@ -50068,9 +50068,9 @@
       "answer": "Emmanuel Kant",
       "category": "arts",
       "decoys": [
-        "Yuval Noah Harari",
-        "William Shakespeare",
-        "Chris Ware"
+        "Carlo Goldoni",
+        "Carl von Linné",
+        "Stephen A. Douglas"
       ],
       "id": "polyfact-Q220002-P50-Q9312",
       "isAdult": false,
@@ -50086,9 +50086,9 @@
       "answer": "Carlo Goldoni",
       "category": "arts",
       "decoys": [
-        "Frederick Forsyth",
-        "William Harvey",
-        "Alfred Bester"
+        "Charles Lyell",
+        "Madeleine de Scudéry",
+        "Alexis de Tocqueville"
       ],
       "id": "polyfact-Q3235201-P50-Q165534",
       "isAdult": false,
@@ -50106,7 +50106,7 @@
       "decoys": [
         "Michael Crichton",
         "Joshua Logan",
-        "William Shakespeare"
+        "Charles Bukowski"
       ],
       "id": "polyfact-Q468132-P50-Q34981",
       "isAdult": false,
@@ -50122,9 +50122,9 @@
       "answer": "Clément V",
       "category": "arts",
       "decoys": [
-        "Vernor Vinge",
-        "Archimède",
-        "Haruki Murakami"
+        "Ibn Qayyim al-Jawziyya",
+        "Ulrich von Zatzikhoven",
+        "Geoffrey Chaucer"
       ],
       "id": "polyfact-Q2064085-P50-Q131463",
       "isAdult": false,
@@ -50142,7 +50142,7 @@
       "decoys": [
         "George Coșbuc",
         "Bernard Malamud",
-        "Susanna Clarke"
+        "John Lennon"
       ],
       "id": "polyfact-Q223131-P50-Q35610",
       "isAdult": false,
@@ -50159,7 +50159,7 @@
       "category": "arts",
       "decoys": [
         "C. J. Cherryh",
-        "Don DeLillo",
+        "Norman Finkelstein",
         "Norman Mailer"
       ],
       "id": "polyfact-Q1574967-P50-Q201538",
@@ -50194,9 +50194,9 @@
       "answer": "Claude",
       "category": "arts",
       "decoys": [
-        "Patrick Modiano",
-        "Rodney Brooks",
-        "Sherrilyn Kenyon"
+        "Paul de Tarse",
+        "Jean le Presbytre",
+        "Silius Italicus"
       ],
       "id": "polyfact-Q3108-P50-Q1411",
       "isAdult": false,
@@ -50212,7 +50212,7 @@
       "answer": "H. P. Lovecraft",
       "category": "arts",
       "decoys": [
-        "Clément V",
+        "Daler Mehndi",
         "Honoré de Balzac",
         "Jeph Loeb"
       ],
@@ -50248,9 +50248,9 @@
       "answer": "Jules Verne",
       "category": "arts",
       "decoys": [
-        "Paulo Coelho",
+        "Benoît XVI",
         "Hergé",
-        "Dan Simmons"
+        "Jean-Paul II"
       ],
       "id": "polyfact-Q966572-P50-Q33977",
       "isAdult": false,
@@ -50266,9 +50266,9 @@
       "answer": "Pétrarque",
       "category": "arts",
       "decoys": [
-        "Jack Williamson",
-        "Alfred Rosenberg",
-        "Mouammar Kadhafi"
+        "Djalâl ad-Dîn Rûmî",
+        "Clément V",
+        "Ibn Qayyim al-Jawziyya"
       ],
       "id": "polyfact-Q777574-P50-Q1401",
       "isAdult": false,
@@ -50284,8 +50284,8 @@
       "answer": "Jean-Paul Sartre",
       "category": "arts",
       "decoys": [
-        "Aristote",
-        "Amin Maalouf",
+        "Jean M. Auel",
+        "Kim Newman",
         "Gustavo Adolfo Bécquer"
       ],
       "id": "polyfact-Q1217409-P50-Q9364",
@@ -50302,9 +50302,9 @@
       "answer": "Osamu Tezuka",
       "category": "arts",
       "decoys": [
-        "Honoré de Balzac",
-        "Jacques Prévert",
-        "Gustave Flaubert"
+        "Izō Hashimoto",
+        "William Clay Ford, Jr",
+        "Carl Sagan"
       ],
       "id": "polyfact-Q2462148-P50-Q193300",
       "isAdult": false,
@@ -50321,8 +50321,8 @@
       "category": "arts",
       "decoys": [
         "Patrick Modiano",
-        "Rei Hiroe",
-        "Stefan Zweig"
+        "Alfred Bester",
+        "Vernor Vinge"
       ],
       "id": "polyfact-Q339761-P50-Q9327",
       "isAdult": false,
@@ -50358,7 +50358,7 @@
       "decoys": [
         "Pablo Neruda",
         "Arthur Conan Doyle",
-        "Konrad Kujau"
+        "Edward Saïd"
       ],
       "id": "polyfact-Q718268-P50-Q42511",
       "isAdult": false,
@@ -50376,7 +50376,7 @@
       "decoys": [
         "Gotthold Ephraim Lessing",
         "Zhang Ailing",
-        "William Shakespeare"
+        "Jack Williamson"
       ],
       "id": "polyfact-Q628443-P50-Q33977",
       "isAdult": false,
@@ -50392,9 +50392,9 @@
       "answer": "Stephen King",
       "category": "arts",
       "decoys": [
-        "Alexander Pope",
+        "Lucy Maud Montgomery",
         "Cécile Aubry",
-        "Ann Brashares"
+        "Andrew Hussie"
       ],
       "id": "polyfact-Q1073160-P50-Q39829",
       "isAdult": false,
@@ -50410,9 +50410,9 @@
       "answer": "Jean le Presbytre",
       "category": "arts",
       "decoys": [
-        "Primo Levi",
-        "Rick Riordan",
-        "Hans Rosling"
+        "Flavius Josèphe",
+        "Quintilien",
+        "Jésus-Christ"
       ],
       "id": "polyfact-Q131101-P50-Q1698707",
       "isAdult": false,
@@ -50428,7 +50428,7 @@
       "answer": "Max Weber",
       "category": "arts",
       "decoys": [
-        "Charles Perrault",
+        "Rodney Brooks",
         "Richard Dehmel",
         "Alexandre Dumas"
       ],
@@ -50464,7 +50464,7 @@
       "answer": "Kazuo Ishiguro",
       "category": "arts",
       "decoys": [
-        "Silius Italicus",
+        "Chris Ware",
         "Anaïs Nin",
         "Harry Frankfurt"
       ],
@@ -50519,8 +50519,8 @@
       "category": "arts",
       "decoys": [
         "Orson Scott Card",
-        "A. E. van Vogt",
-        "Cicéron"
+        "H. G. Wells",
+        "Hans Rosling"
       ],
       "id": "polyfact-Q2915504-P50-Q713443",
       "isAdult": false,
@@ -50536,7 +50536,7 @@
       "answer": "Dieu en Islam",
       "category": "arts",
       "decoys": [
-        "Dan Brown",
+        "Vâtsyâyana",
         "Hans Christian Andersen",
         "Aristote"
       ],
@@ -50556,7 +50556,7 @@
       "decoys": [
         "Kohske",
         "Kerstin Gier",
-        "Malcolm Lowry"
+        "Sherrilyn Kenyon"
       ],
       "id": "polyfact-Q716766-P50-Q160783",
       "isAdult": false,
@@ -50572,9 +50572,9 @@
       "answer": "Anton Tchekhov",
       "category": "arts",
       "decoys": [
-        "Carl von Linné",
+        "Max Weber",
         "Charles Dickens",
-        "Cesare Pavese"
+        "Kazuo Ishiguro"
       ],
       "id": "polyfact-Q1192719-P50-Q5685",
       "isAdult": false,
@@ -50590,7 +50590,7 @@
       "answer": "Thomas Harris",
       "category": "arts",
       "decoys": [
-        "Ésope",
+        "Rei Hiroe",
         "L. Frank Baum",
         "William Howard Taft"
       ],
@@ -50609,8 +50609,8 @@
       "category": "arts",
       "decoys": [
         "Peter Mayle",
-        "Ben Jonson",
-        "Hugo Grotius"
+        "Friedrich Hayek",
+        "Shalom Anski"
       ],
       "id": "polyfact-Q1199882-P50-Q153701",
       "isAdult": false,
@@ -50627,8 +50627,8 @@
       "category": "arts",
       "decoys": [
         "Henry James",
-        "Thomas Keneally",
-        "Ulrich von Zatzikhoven"
+        "Michel Tournier",
+        "Justin Cronin"
       ],
       "id": "polyfact-Q1165753-P50-Q82104",
       "isAdult": false,
@@ -50644,8 +50644,8 @@
       "answer": "Jacques-Henri Bernardin de Saint-Pierre",
       "category": "arts",
       "decoys": [
-        "Hugo Ball",
-        "B. Traven",
+        "Leopold von Sacher-Masoch",
+        "Pierre Bayle",
         "Gustavo Adolfo Bécquer"
       ],
       "id": "polyfact-Q2293012-P50-Q361976",
@@ -50662,9 +50662,9 @@
       "answer": "Reginald Rose",
       "category": "arts",
       "decoys": [
-        "Philip Roth",
+        "B. Traven",
         "Robert A. Heinlein",
-        "Averroès"
+        "Shirley Jackson"
       ],
       "id": "polyfact-Q13709586-P50-Q1934890",
       "isAdult": false,
@@ -50682,7 +50682,7 @@
       "decoys": [
         "Robert A. Heinlein",
         "Joseph Roth",
-        "Larry Sanger"
+        "Rabîndranâth Tagore"
       ],
       "id": "polyfact-Q785580-P50-Q43718",
       "isAdult": false,
@@ -50698,9 +50698,9 @@
       "answer": "Shirley Jackson",
       "category": "arts",
       "decoys": [
-        "Richard Wagner",
-        "Ibn Qayyim al-Jawziyya",
-        "Luca Pacioli"
+        "Julietta Suzuki",
+        "Franklin Delano Roosevelt",
+        "Doris Lessing"
       ],
       "id": "polyfact-Q3819311-P50-Q239910",
       "isAdult": false,
@@ -50718,7 +50718,7 @@
       "decoys": [
         "Julietta Suzuki",
         "J. D. Salinger",
-        "Dziga Vertov"
+        "David Mitchell"
       ],
       "id": "polyfact-Q2519711-P50-Q140201",
       "isAdult": false,
@@ -50860,9 +50860,9 @@
       "answer": "Chuck Palahniuk",
       "category": "arts",
       "decoys": [
-        "Gautier Map",
-        "George du Maurier",
-        "Plaute"
+        "George Orwell",
+        "Kurt Vonnegut",
+        "F. Scott Fitzgerald"
       ],
       "id": "polyfact-Q2600527-P50-Q268181",
       "isAdult": false,
@@ -50879,8 +50879,8 @@
       "category": "arts",
       "decoys": [
         "F. Scott Fitzgerald",
-        "Archimède",
-        "Pie X"
+        "Chuck Palahniuk",
+        "Kazue Katō"
       ],
       "id": "polyfact-Q1609780-P50-Q357108",
       "isAdult": false,
@@ -50896,9 +50896,9 @@
       "answer": "François Villon",
       "category": "arts",
       "decoys": [
-        "Stephen A. Douglas",
-        "Kazue Katō",
-        "Charles Dickens"
+        "Luca Pacioli",
+        "Martin Luther",
+        "Pietro Bembo"
       ],
       "id": "polyfact-Q805129-P50-Q849",
       "isAdult": false,
@@ -50914,8 +50914,8 @@
       "answer": "Philip Pullman",
       "category": "arts",
       "decoys": [
-        "Ken Akamatsu",
-        "Fujiwara no Yoshifusa",
+        "Jeffrey Eugenides",
+        "Olivier Grenouilleau",
         "Eugene O'Neill"
       ],
       "id": "polyfact-Q2261853-P50-Q190220",
@@ -50933,7 +50933,7 @@
       "category": "arts",
       "decoys": [
         "John Grisham",
-        "Michael Dobbs",
+        "Philip Pullman",
         "Olivier Grenouilleau"
       ],
       "id": "polyfact-Q706167-P50-Q3181532",
@@ -50950,8 +50950,8 @@
       "answer": "Stephen A. Douglas",
       "category": "arts",
       "decoys": [
-        "Martin Johnson",
-        "Shin Takahashi",
+        "Mikhaïl Boulgakov",
+        "Comte de Lautréamont",
         "Joris-Karl Huysmans"
       ],
       "id": "polyfact-Q619762-P50-Q433174",
@@ -50968,9 +50968,9 @@
       "answer": "Mikhaïl Boulgakov",
       "category": "arts",
       "decoys": [
-        "William Shakespeare",
+        "Takeshi Konomi",
         "Charles Lyell",
-        "Giacomo Casanova"
+        "Martin Johnson"
       ],
       "id": "polyfact-Q3324321-P50-Q835",
       "isAdult": false,
@@ -50986,7 +50986,7 @@
       "answer": "Vichnou-Sarma",
       "category": "arts",
       "decoys": [
-        "Roger Martin du Gard",
+        "Paul Diacre",
         "Edith Wharton",
         "Sigmund Freud"
       ],
@@ -51005,7 +51005,7 @@
       "category": "arts",
       "decoys": [
         "Claude Piron",
-        "Erik Larson",
+        "José Antonio Abreu Anselmi",
         "H. G. Wells"
       ],
       "id": "polyfact-Q1213025-P50-Q294181",
@@ -51022,9 +51022,9 @@
       "answer": "Jules Verne",
       "category": "arts",
       "decoys": [
-        "André Breton",
+        "Alexandre Blok",
         "Richard Wagner",
-        "Alexandre Douguine"
+        "Antoine de Saint-Exupéry"
       ],
       "id": "polyfact-Q385511-P50-Q33977",
       "isAdult": false,
@@ -51077,7 +51077,7 @@
       "category": "arts",
       "decoys": [
         "Ottessa Moshfegh",
-        "Stephen Chbosky",
+        "Clark Ashton Smith",
         "Franklin Delano Roosevelt"
       ],
       "id": "polyfact-Q1199412-P50-Q93354",
@@ -51130,9 +51130,9 @@
       "answer": "Robert Louis Stevenson",
       "category": "arts",
       "decoys": [
-        "Assemblée générale des Nations unies",
-        "Mizuki Kawashita",
-        "René Descartes"
+        "Yasunari Kawabata",
+        "Khalil Gibran",
+        "Stephen King"
       ],
       "id": "polyfact-Q1196792-P50-Q1512",
       "isAdult": false,
@@ -51150,7 +51150,7 @@
       "decoys": [
         "Yasunari Kawabata",
         "Khalil Gibran",
-        "Madeleine de Scudéry"
+        "Mizuki Kawashita"
       ],
       "id": "polyfact-Q3844667-P50-Q312295",
       "isAdult": false,
@@ -51167,7 +51167,7 @@
       "category": "arts",
       "decoys": [
         "Jeph Loeb",
-        "Fred Vargas",
+        "Giovanni Gentile",
         "Ernest Hemingway"
       ],
       "id": "polyfact-Q1166201-P50-Q210059",
@@ -51185,8 +51185,8 @@
       "category": "arts",
       "decoys": [
         "Colette",
-        "Ésope",
-        "Avicenne"
+        "Neil Gaiman",
+        "Elias Canetti"
       ],
       "id": "polyfact-Q1068060-P50-Q380869",
       "isAdult": false,
@@ -51220,9 +51220,9 @@
       "answer": "Theodor W. Adorno",
       "category": "arts",
       "decoys": [
-        "Ésope",
-        "Alexandre Dumas",
-        "John Fitzgerald Kennedy"
+        "Alastair Reynolds",
+        "René Goscinny",
+        "Michiko Yokote"
       ],
       "id": "polyfact-Q1520631-P50-Q152388",
       "isAdult": false,
@@ -51238,9 +51238,9 @@
       "answer": "Alexis de Tocqueville",
       "category": "arts",
       "decoys": [
-        "Charles Bukowski",
-        "Tsugumi Ōba",
-        "John Lennon"
+        "Thomas Edward Lawrence",
+        "Jean XXIII",
+        "G. K. Chesterton"
       ],
       "id": "polyfact-Q3178724-P50-Q140694",
       "isAdult": false,
@@ -51256,9 +51256,9 @@
       "answer": "Sandy Petersen",
       "category": "arts",
       "decoys": [
-        "Paul Diacre",
-        "Al Masû'dî",
-        "Charles Messier"
+        "Shaun Tan",
+        "Miguel Hernández",
+        "Joyce Maynard"
       ],
       "id": "polyfact-Q1027121-P50-Q2703640",
       "isAdult": false,
@@ -51274,9 +51274,9 @@
       "answer": "Terry Pratchett",
       "category": "arts",
       "decoys": [
-        "Eric Idle",
+        "Richard Matheson",
         "Ellery Queen",
-        "Gustave Flaubert"
+        "Kate Wilhelm"
       ],
       "id": "polyfact-Q2746767-P50-Q46248",
       "isAdult": false,
@@ -51292,7 +51292,7 @@
       "answer": "Michiko Yokote",
       "category": "arts",
       "decoys": [
-        "Hermann Hesse",
+        "Toni Morrison",
         "Shaun Tan",
         "Miguel Hernández"
       ],
@@ -51311,7 +51311,7 @@
       "category": "arts",
       "decoys": [
         "Joyce Maynard",
-        "William Peter Blatty",
+        "Barthélemy Boganda",
         "Rick Riordan"
       ],
       "id": "polyfact-Q891857-P50-Q38757",
@@ -51330,7 +51330,7 @@
       "decoys": [
         "Kore Yamazaki",
         "Jean-Paul Sartre",
-        "Jean-Sébastien Bach"
+        "Buichi Terasawa"
       ],
       "id": "polyfact-Q1219445-P50-Q325130",
       "isAdult": false,
@@ -51348,7 +51348,7 @@
       "decoys": [
         "Kate Wilhelm",
         "Toni Morrison",
-        "Leopold von Sacher-Masoch"
+        "Terrance Dicks"
       ],
       "id": "polyfact-Q495919-P50-Q1093746",
       "isAdult": false,
@@ -51364,9 +51364,9 @@
       "answer": "Quintus de Smyrne",
       "category": "arts",
       "decoys": [
-        "Barthélemy Boganda",
-        "Robert A. Heinlein",
-        "Pie X"
+        "Asanga",
+        "Vâtsyâyana",
+        "Longus"
       ],
       "id": "polyfact-Q1998710-P50-Q352702",
       "isAdult": false,
@@ -51384,7 +51384,7 @@
       "decoys": [
         "Anton Tchekhov",
         "Buichi Terasawa",
-        "J.K. Rowling"
+        "Ai Yazawa"
       ],
       "id": "polyfact-Q654170-P50-Q35064",
       "isAdult": false,
@@ -51400,9 +51400,9 @@
       "answer": "Thomas Edward Lawrence",
       "category": "arts",
       "decoys": [
-        "Georges Bernanos",
+        "John le Carré",
         "Vyāsa",
-        "Martin Luther"
+        "Hiro Fujiwara"
       ],
       "id": "polyfact-Q24323-P50-Q170596",
       "isAdult": false,
@@ -51419,7 +51419,7 @@
       "category": "arts",
       "decoys": [
         "Terrance Dicks",
-        "Pietro Bembo",
+        "Katsura Hoshino",
         "Dmitri Gloukhovski"
       ],
       "id": "polyfact-Q151472-P50-Q82104",
@@ -51436,8 +51436,8 @@
       "answer": "Jean XXIII",
       "category": "arts",
       "decoys": [
-        "Thomas Malory",
-        "Dante Alighieri",
+        "Maxime Gorki",
+        "André Gide",
         "Kurt Vonnegut"
       ],
       "id": "polyfact-Q968895-P50-Q23873",
@@ -51472,7 +51472,7 @@
       "answer": "Ai Yazawa",
       "category": "arts",
       "decoys": [
-        "Pierre Bayle",
+        "Kōhei Horikoshi",
         "Dan Jurgens",
         "Bernard Malamud"
       ],
@@ -51492,7 +51492,7 @@
       "decoys": [
         "Nora Roberts",
         "Robert A. Heinlein",
-        "Mary O'Hara"
+        "Héraclite"
       ],
       "id": "polyfact-Q948437-P50-Q2095353",
       "isAdult": false,
@@ -51509,7 +51509,7 @@
       "category": "arts",
       "decoys": [
         "Izō Hashimoto",
-        "Stephen A. Douglas",
+        "Kiriko Nananan",
         "John le Carré"
       ],
       "id": "polyfact-Q458982-P50-Q428755",
@@ -51526,9 +51526,9 @@
       "answer": "Horace",
       "category": "arts",
       "decoys": [
-        "Suehiro Maruo",
-        "Walter Scott",
-        "Terry Pratchett"
+        "Cicéron",
+        "Sénèque",
+        "Paul de Tarse"
       ],
       "id": "polyfact-Q940007-P50-Q6197",
       "isAdult": false,
@@ -51544,9 +51544,9 @@
       "answer": "Frank Herbert",
       "category": "arts",
       "decoys": [
-        "Hans Christian Andersen",
+        "Paul Collier",
         "Hiro Fujiwara",
-        "Murasaki Shikibu"
+        "Richard Morgan"
       ],
       "id": "polyfact-Q401619-P50-Q7934",
       "isAdult": false,
@@ -51562,8 +51562,8 @@
       "answer": "Katsura Hoshino",
       "category": "arts",
       "decoys": [
-        "Rumiko Takahashi",
-        "Amos Oz",
+        "Matt Selman",
+        "Jeff Kinney",
         "Kōhei Horikoshi"
       ],
       "id": "polyfact-Q170019-P50-Q464351",
@@ -51580,9 +51580,9 @@
       "answer": "Flavius Josèphe",
       "category": "arts",
       "decoys": [
-        "Yuki Urushibara",
-        "Anton Tchekhov",
-        "Buichi Terasawa"
+        "Claude",
+        "Jean le Presbytre",
+        "Silius Italicus"
       ],
       "id": "polyfact-Q1232616-P50-Q134461",
       "isAdult": false,
@@ -51600,7 +51600,7 @@
       "decoys": [
         "Maxime Gorki",
         "André Gide",
-        "Walter Scott"
+        "James Joyce"
       ],
       "id": "polyfact-Q3818805-P50-Q2893079",
       "isAdult": false,
@@ -51634,7 +51634,7 @@
       "answer": "Stefan Zweig",
       "category": "arts",
       "decoys": [
-        "Norman Finkelstein",
+        "Stephen King",
         "Nicholas Sparks",
         "Léon Tolstoï"
       ],
@@ -51652,8 +51652,8 @@
       "answer": "Prosper Mérimée",
       "category": "arts",
       "decoys": [
-        "Kiriko Nananan",
-        "Asanga",
+        "Karl Robert Eduard von Hartmann",
+        "Enid Blyton",
         "Gonçalves Dias"
       ],
       "id": "polyfact-Q674832-P50-Q160333",
@@ -51688,7 +51688,7 @@
       "answer": "James Joyce",
       "category": "arts",
       "decoys": [
-        "William Harvey",
+        "Saddam Hussein",
         "Jeff Kinney",
         "Eugene O'Neill"
       ],
@@ -51706,9 +51706,9 @@
       "answer": "Jules Verne",
       "category": "arts",
       "decoys": [
-        "Sherrilyn Kenyon",
-        "René Descartes",
-        "Masami Kurumada"
+        "Pie IX",
+        "Waldemar Bonsels",
+        "Thomas Mann"
       ],
       "id": "polyfact-Q319202-P50-Q33977",
       "isAdult": false,
@@ -51724,9 +51724,9 @@
       "answer": "Wace",
       "category": "arts",
       "decoys": [
-        "Saddam Hussein",
-        "Atsushi Ōkubo",
-        "Fujiko F. Fujio"
+        "Gautier Map",
+        "Pierre Abélard",
+        "Abu'l-Majd Majdud"
       ],
       "id": "polyfact-Q3440935-P50-Q5382",
       "isAdult": false,
@@ -51742,9 +51742,9 @@
       "answer": "Aristophane",
       "category": "arts",
       "decoys": [
-        "Daler Mehndi",
-        "Carlo Goldoni",
-        "Richard Stallman"
+        "Sophocle",
+        "Euripide",
+        "Héraclite"
       ],
       "id": "polyfact-Q1215817-P50-Q43353",
       "isAdult": false,
@@ -51760,9 +51760,9 @@
       "answer": "Gustave Flaubert",
       "category": "arts",
       "decoys": [
-        "Richard Morgan",
-        "Jean M. Auel",
-        "Fuxi"
+        "Louisa May Alcott",
+        "Maurice Maeterlinck",
+        "Arthur Schopenhauer"
       ],
       "id": "polyfact-Q3026751-P50-Q43444",
       "isAdult": false,
@@ -51780,7 +51780,7 @@
       "decoys": [
         "Karl Robert Eduard von Hartmann",
         "Enid Blyton",
-        "Hugh Lofting"
+        "Assemblée générale des Nations unies"
       ],
       "id": "polyfact-Q734504-P50-Q309864",
       "isAdult": false,
@@ -51797,8 +51797,8 @@
       "category": "arts",
       "decoys": [
         "Albert Camus",
-        "Aristote",
-        "Georg Wilhelm Friedrich Hegel"
+        "Fujiko F. Fujio",
+        "Richard Stallman"
       ],
       "id": "polyfact-Q373536-P50-Q245407",
       "isAdult": false,
@@ -51815,8 +51815,8 @@
       "category": "arts",
       "decoys": [
         "Henrik Ibsen",
-        "Andrew Hussie",
-        "Ronald Reagan"
+        "Paul Verlaine",
+        "Axel Munthe"
       ],
       "id": "polyfact-Q606264-P50-Q43720",
       "isAdult": false,
@@ -51832,9 +51832,9 @@
       "answer": "Cicéron",
       "category": "arts",
       "decoys": [
-        "John Milton",
-        "Waldemar Bonsels",
-        "G. K. Chesterton"
+        "Publius Mucius Scævola",
+        "Horace",
+        "Claude"
       ],
       "id": "polyfact-Q246289-P50-Q1541",
       "isAdult": false,
@@ -51852,7 +51852,7 @@
       "decoys": [
         "Eli Pariser",
         "Carl Sagan",
-        "Garci Rodríguez de Montalvo"
+        "Richard Bach"
       ],
       "id": "polyfact-Q3205133-P50-Q297538",
       "isAdult": false,
@@ -51868,8 +51868,8 @@
       "answer": "François Truffaut",
       "category": "arts",
       "decoys": [
-        "Emmanuel Kant",
-        "Léon Tolstoï",
+        "Stephen King",
+        "Jon Ronson",
         "J. R. R. Tolkien"
       ],
       "id": "polyfact-Q1951421-P50-Q53002",
@@ -51887,7 +51887,7 @@
       "category": "arts",
       "decoys": [
         "Ted Chiang",
-        "Quintilien",
+        "François Truffaut",
         "Jon Ronson"
       ],
       "id": "polyfact-Q692988-P50-Q37030",
@@ -51904,9 +51904,9 @@
       "answer": "Rick Riordan",
       "category": "arts",
       "decoys": [
-        "Edward Saïd",
+        "Juan Díaz Canales",
         "Jack London",
-        "Léon Tolstoï"
+        "Arnold Drake"
       ],
       "id": "polyfact-Q3283718-P50-Q212727",
       "isAdult": false,
@@ -51922,9 +51922,9 @@
       "answer": "William Shakespeare",
       "category": "arts",
       "decoys": [
-        "Jean le Presbytre",
-        "Pie X",
-        "Arthur C. Clarke"
+        "Ben Jonson",
+        "Hugo Grotius",
+        "John Milton"
       ],
       "id": "polyfact-Q128610-P50-Q692",
       "isAdult": false,
@@ -51940,7 +51940,7 @@
       "answer": "Juan Díaz Canales",
       "category": "arts",
       "decoys": [
-        "Max Weber",
+        "Alan Dean Foster",
         "Fujiko F. Fujio",
         "Jorge Amado"
       ],
@@ -51959,7 +51959,7 @@
       "category": "arts",
       "decoys": [
         "J. R. R. Tolkien",
-        "Louisa May Alcott",
+        "Paul R. Ehrlich",
         "Ai Yazawa"
       ],
       "id": "polyfact-Q1132427-P50-Q297538",
@@ -51977,8 +51977,8 @@
       "category": "arts",
       "decoys": [
         "H. P. Lovecraft",
-        "Kazuo Ishiguro",
-        "Maurice Maeterlinck"
+        "Alex Ross",
+        "Thierry Culliford"
       ],
       "id": "polyfact-Q3050509-P50-Q1245984",
       "isAdult": false,
@@ -51994,9 +51994,9 @@
       "answer": "Jules Verne",
       "category": "arts",
       "decoys": [
-        "Paulo Coelho",
-        "Friedrich Hayek",
-        "Djalâl ad-Dîn Rûmî"
+        "Marquis de Sade",
+        "Gore Vidal",
+        "Léon Frapié"
       ],
       "id": "polyfact-Q1215553-P50-Q33977",
       "isAdult": false,
@@ -52012,9 +52012,9 @@
       "answer": "Arthur Schopenhauer",
       "category": "arts",
       "decoys": [
-        "Shalom Anski",
-        "Arnold Drake",
-        "Neil Gaiman"
+        "David Hume",
+        "Pierre Kropotkine",
+        "Lewis Carroll"
       ],
       "id": "polyfact-Q929229-P50-Q38193",
       "isAdult": false,
@@ -52031,7 +52031,7 @@
       "category": "arts",
       "decoys": [
         "Amélie Nothomb",
-        "Jules Verne",
+        "Jean-Claude Forest",
         "Isaac Asimov"
       ],
       "id": "polyfact-Q2136077-P50-Q105167",
@@ -52049,8 +52049,8 @@
       "category": "arts",
       "decoys": [
         "Stefan Zweig",
-        "Nicholas Sparks",
-        "John Grisham"
+        "Jürgen Habermas",
+        "Roger Hargreaves"
       ],
       "id": "polyfact-Q677592-P50-Q78474",
       "isAdult": false,
@@ -52067,7 +52067,7 @@
       "category": "arts",
       "decoys": [
         "Leiji Matsumoto",
-        "Alan Dean Foster",
+        "William Faulkner",
         "Paul R. Ehrlich"
       ],
       "id": "polyfact-Q1609408-P50-Q755",
@@ -52084,8 +52084,8 @@
       "answer": "Axel Munthe",
       "category": "arts",
       "decoys": [
-        "Michel Tournier",
-        "Justin Cronin",
+        "John Varley",
+        "David Rockwell",
         "André Gide"
       ],
       "id": "polyfact-Q1167410-P50-Q41580",
@@ -52102,9 +52102,9 @@
       "answer": "Archimède",
       "category": "arts",
       "decoys": [
-        "Alex Ross",
-        "Thierry Culliford",
-        "Louisa May Alcott"
+        "Plaute",
+        "Qu Yuan",
+        "Aristote"
       ],
       "id": "polyfact-Q217454-P50-Q8739",
       "isAdult": false,
@@ -52120,8 +52120,8 @@
       "answer": "Rick Riordan",
       "category": "arts",
       "decoys": [
-        "Ferdinand II du Saint-Empire",
-        "Shirley Jackson",
+        "Christopher Paolini",
+        "E. L. James",
         "Jean-Claude Forest"
       ],
       "id": "polyfact-Q1276821-P50-Q212727",
@@ -52139,7 +52139,7 @@
       "category": "arts",
       "decoys": [
         "Georges Simenon",
-        "Abraham Ortelius",
+        "Charlaine Harris",
         "Jürgen Habermas"
       ],
       "id": "polyfact-Q1101239-P50-Q47484",
@@ -52157,8 +52157,8 @@
       "category": "arts",
       "decoys": [
         "Johannes Kepler",
-        "David Mitchell",
-        "Christopher Paolini"
+        "Ferdinand II du Saint-Empire",
+        "John Locke"
       ],
       "id": "polyfact-Q2985121-P50-Q128460",
       "isAdult": false,
@@ -52174,9 +52174,9 @@
       "answer": "Marquis de Sade",
       "category": "arts",
       "decoys": [
-        "John Varley",
-        "René Descartes",
-        "Roger Hargreaves"
+        "Lord Byron",
+        "Henry Dunant",
+        "Pierre-Joseph Proudhon"
       ],
       "id": "polyfact-Q1329470-P50-Q123867",
       "isAdult": false,
@@ -52194,7 +52194,7 @@
       "decoys": [
         "Clark Ashton Smith",
         "Michael Connelly",
-        "Qu Yuan"
+        "Naoko Takeuchi"
       ],
       "id": "polyfact-Q2398227-P50-Q9364",
       "isAdult": false,
@@ -52211,7 +52211,7 @@
       "category": "arts",
       "decoys": [
         "Shirley Jackson",
-        "David Rockwell",
+        "Vonda McIntyre",
         "Rick Jones"
       ],
       "id": "polyfact-Q763184-P50-Q210798",
@@ -52228,9 +52228,9 @@
       "answer": "David Hume",
       "category": "arts",
       "decoys": [
-        "Gore Vidal",
-        "E. L. James",
-        "Ivan Tourgueniev"
+        "Domingo Faustino Sarmiento",
+        "Jean de La Fontaine",
+        "Nathaniel Hawthorne"
       ],
       "id": "polyfact-Q2451675-P50-Q37160",
       "isAdult": false,
@@ -52247,8 +52247,8 @@
       "category": "arts",
       "decoys": [
         "Jean-Paul II",
-        "Henry James",
-        "Gotthold Ephraim Lessing"
+        "Jean Giraud",
+        "Michael E. Brown"
       ],
       "id": "polyfact-Q666121-P50-Q233566",
       "isAdult": false,
@@ -52264,9 +52264,9 @@
       "answer": "Alexandre Dumas",
       "category": "arts",
       "decoys": [
-        "Katsu Aki",
+        "Elizabeth Goudge",
         "Léon Frapié",
-        "Aristophane"
+        "Karel Čapek"
       ],
       "id": "polyfact-Q1141764-P50-Q38337",
       "isAdult": false,
@@ -52283,7 +52283,7 @@
       "category": "arts",
       "decoys": [
         "Yuki Urushibara",
-        "Elias Magnus Fries",
+        "Stanisław Lem",
         "Naoko Takeuchi"
       ],
       "id": "polyfact-Q484259-P50-Q6308970",
@@ -52301,8 +52301,8 @@
       "category": "arts",
       "decoys": [
         "William Faulkner",
-        "George Orwell",
-        "Vonda McIntyre"
+        "Nicanor Parra",
+        "Witold Gombrowicz"
       ],
       "id": "polyfact-Q1217245-P50-Q43444",
       "isAdult": false,
@@ -52318,9 +52318,9 @@
       "answer": "Christopher Paolini",
       "category": "arts",
       "decoys": [
-        "Selma Lagerlöf",
+        "Dan Ariely",
         "Leiji Matsumoto",
-        "Chuck Palahniuk"
+        "Colleen McCullough"
       ],
       "id": "polyfact-Q60672-P50-Q93620",
       "isAdult": false,
@@ -52336,9 +52336,9 @@
       "answer": "Jean Giraud",
       "category": "arts",
       "decoys": [
-        "Nicolas Copernic",
+        "Jirō Taniguchi",
         "Michael E. Brown",
-        "Jeffrey Eugenides"
+        "Kia Asamiya"
       ],
       "id": "polyfact-Q92791-P50-Q309240",
       "isAdult": false,
@@ -52354,7 +52354,7 @@
       "answer": "H. P. Lovecraft",
       "category": "arts",
       "decoys": [
-        "François Villon",
+        "Satoshi Shiki",
         "Guillaume Apollinaire",
         "Arthur Conan Doyle"
       ],
@@ -52372,9 +52372,9 @@
       "answer": "Aristophane",
       "category": "arts",
       "decoys": [
-        "J. M. Coetzee",
-        "Stanisław Lem",
-        "Elizabeth Goudge"
+        "Platon",
+        "Sophocle",
+        "Euripide"
       ],
       "id": "polyfact-Q1164079-P50-Q43353",
       "isAdult": false,
@@ -52391,7 +52391,7 @@
       "category": "arts",
       "decoys": [
         "Dan Ariely",
-        "Philip Pullman",
+        "Mercè Rodoreda",
         "Bertolt Brecht"
       ],
       "id": "polyfact-Q685165-P50-Q228801",
@@ -52409,7 +52409,7 @@
       "category": "arts",
       "decoys": [
         "Michael Dobbs",
-        "Takeshi Konomi",
+        "Martin Gardner",
         "Nicanor Parra"
       ],
       "id": "polyfact-Q1526490-P50-Q723853",
@@ -52426,9 +52426,9 @@
       "answer": "Pierre Kropotkine",
       "category": "arts",
       "decoys": [
-        "Daniel Handler",
-        "Mikhaïl Boulgakov",
-        "Kia Asamiya"
+        "Gabriel García Márquez",
+        "Gerald Brenan",
+        "Murray Rothbard"
       ],
       "id": "polyfact-Q3141640-P50-Q5752",
       "isAdult": false,
@@ -52445,8 +52445,8 @@
       "category": "arts",
       "decoys": [
         "Jules Verne",
-        "Euripide",
-        "Tony Kushner"
+        "Lion Feuchtwanger",
+        "José Martiniano de Alencar"
       ],
       "id": "polyfact-Q193417-P50-Q43444",
       "isAdult": false,
@@ -52463,8 +52463,8 @@
       "category": "arts",
       "decoys": [
         "Yukio Mishima",
-        "Pétrarque",
-        "Comte de Lautréamont"
+        "Elizabeth Kolbert",
+        "Kōsuke Fujishima"
       ],
       "id": "polyfact-Q435722-P50-Q39829",
       "isAdult": false,
@@ -52498,7 +52498,7 @@
       "answer": "Lewis Carroll",
       "category": "arts",
       "decoys": [
-        "J. M. Coetzee",
+        "François Mauriac",
         "Fiodor Dostoïevski",
         "Mercè Rodoreda"
       ],
@@ -52517,7 +52517,7 @@
       "category": "arts",
       "decoys": [
         "Kore Yamazaki",
-        "Convention nationale",
+        "Kim Stanley Robinson",
         "Martin Gardner"
       ],
       "id": "polyfact-Q1194994-P50-Q155855",
@@ -52534,9 +52534,9 @@
       "answer": "Aristote",
       "category": "arts",
       "decoys": [
-        "Stephen A. Douglas",
-        "Pierre Abélard",
-        "Thomas Edward Lawrence"
+        "Aristophane",
+        "Platon",
+        "Qu Yuan"
       ],
       "id": "polyfact-Q1180576-P50-Q868",
       "isAdult": false,
@@ -52572,7 +52572,7 @@
       "decoys": [
         "Gerald Brenan",
         "Jean XXIII",
-        "Charles Lyell"
+        "Agota Kristof"
       ],
       "id": "polyfact-Q1231505-P50-Q209641",
       "isAdult": false,
@@ -52606,7 +52606,7 @@
       "answer": "Robert Louis Stevenson",
       "category": "arts",
       "decoys": [
-        "Alan Moore",
+        "Daniel Goleman",
         "Stefan Zweig",
         "Robert Burns"
       ],
@@ -52624,9 +52624,9 @@
       "answer": "Ésope",
       "category": "arts",
       "decoys": [
-        "Murray Rothbard",
-        "Publius Mucius Scævola",
-        "Elizabeth Kolbert"
+        "Jérémie",
+        "Héraclite",
+        "Avicenne"
       ],
       "id": "polyfact-Q1190945-P50-Q43423",
       "isAdult": false,
@@ -52642,9 +52642,9 @@
       "answer": "Pierre Bayle",
       "category": "arts",
       "decoys": [
-        "Guy de Maupassant",
-        "Albert Hirschman",
-        "Kōsuke Fujishima"
+        "Matthäus Merian",
+        "Margaret Cavendish",
+        "Daniel Defoe"
       ],
       "id": "polyfact-Q1210365-P50-Q214816",
       "isAdult": false,
@@ -52662,7 +52662,7 @@
       "decoys": [
         "George Orwell",
         "Margaret Atwood",
-        "Antoine de Saint-Exupéry"
+        "Winston Groom"
       ],
       "id": "polyfact-Q629438-P50-Q35064",
       "isAdult": false,
@@ -52696,9 +52696,9 @@
       "answer": "Percy Bysshe Shelley",
       "category": "arts",
       "decoys": [
-        "Qu Yuan",
+        "Pie XI",
         "Lord Byron",
-        "Haruki Murakami"
+        "John Maynard Keynes"
       ],
       "id": "polyfact-Q662166-P50-Q93343",
       "isAdult": false,
@@ -52714,7 +52714,7 @@
       "answer": "Agota Kristof",
       "category": "arts",
       "decoys": [
-        "Geoffrey Chaucer",
+        "Shekhar Kapur",
         "Mattel",
         "Kim Stanley Robinson"
       ],
@@ -52732,9 +52732,9 @@
       "answer": "Henry Dunant",
       "category": "arts",
       "decoys": [
-        "Charles Perrault",
-        "Daniel Goleman",
-        "Paul Collier"
+        "Daphne Du Maurier",
+        "Stan Lee",
+        "Elbert Green Hubbard"
       ],
       "id": "polyfact-Q1306291-P50-Q12091",
       "isAdult": false,
@@ -52750,7 +52750,7 @@
       "answer": "Mozilla Foundation",
       "category": "arts",
       "decoys": [
-        "Giovanni Gentile",
+        "William Shakespeare",
         "Philip Roth",
         "Aldo Leopold"
       ],
@@ -52768,9 +52768,9 @@
       "answer": "Pierre-Joseph Proudhon",
       "category": "arts",
       "decoys": [
-        "John Varley",
-        "Alastair Reynolds",
-        "Martin Luther"
+        "George F. Kennan",
+        "Mika Waltari",
+        "Wilkie Collins"
       ],
       "id": "polyfact-Q3962164-P50-Q5749",
       "isAdult": false,
@@ -52786,7 +52786,7 @@
       "answer": "Winston Groom",
       "category": "arts",
       "decoys": [
-        "José Martiniano de Alencar",
+        "David Deutsch",
         "Carlos Ruiz Zafón",
         "Naoko Takeuchi"
       ],
@@ -52805,7 +52805,7 @@
       "category": "arts",
       "decoys": [
         "Shekhar Kapur",
-        "René Goscinny",
+        "Tove Jansson",
         "Stefan Zweig"
       ],
       "id": "polyfact-Q107790-P50-Q19878",
@@ -52840,7 +52840,7 @@
       "answer": "Daphne Du Maurier",
       "category": "arts",
       "decoys": [
-        "Alexis de Tocqueville",
+        "Terry Pratchett",
         "Shun Matsuena",
         "Haruki Murakami"
       ],
@@ -52858,8 +52858,8 @@
       "answer": "Rick Riordan",
       "category": "arts",
       "decoys": [
-        "Michiko Yokote",
-        "Pie XI",
+        "Viet Thanh Nguyen",
+        "Harold Pinter",
         "René Goscinny"
       ],
       "id": "polyfact-Q17985964-P50-Q212727",
@@ -52877,7 +52877,7 @@
       "category": "arts",
       "decoys": [
         "Thomas Mann",
-        "Richard Matheson",
+        "Arthur C. Clarke",
         "Gérard de Villiers"
       ],
       "id": "polyfact-Q127546-P50-Q2086841",
@@ -52894,8 +52894,8 @@
       "answer": "Lucy Maud Montgomery",
       "category": "arts",
       "decoys": [
-        "Abu'l-Majd Majdud",
-        "Quintus de Smyrne",
+        "Sarah Waters",
+        "Anton Tchekhov",
         "Diana Gabaldon"
       ],
       "id": "polyfact-Q1352419-P50-Q273034",
@@ -52912,9 +52912,9 @@
       "answer": "Diana Gabaldon",
       "category": "arts",
       "decoys": [
-        "Averroès",
+        "Aimé Césaire",
         "José Saramago",
-        "René Descartes"
+        "William Goldman"
       ],
       "id": "polyfact-Q943712-P50-Q272492",
       "isAdult": false,
@@ -52930,9 +52930,9 @@
       "answer": "Jean-Paul Sartre",
       "category": "arts",
       "decoys": [
-        "Horace",
-        "Aristote",
-        "Katsura Hoshino"
+        "Terry Bisson",
+        "Kiran Desai",
+        "Guy de Maupassant"
       ],
       "id": "polyfact-Q119709-P50-Q9364",
       "isAdult": false,
@@ -52949,8 +52949,8 @@
       "category": "arts",
       "decoys": [
         "Tove Jansson",
-        "Quintilien",
-        "John Locke"
+        "Franz Kafka",
+        "Percy Bysshe Shelley"
       ],
       "id": "polyfact-Q1199748-P50-Q35064",
       "isAdult": false,
@@ -52967,7 +52967,7 @@
       "category": "arts",
       "decoys": [
         "John Maynard Keynes",
-        "Cicéron",
+        "Friedrich Engels",
         "Susanna Clarke"
       ],
       "id": "polyfact-Q872215-P50-Q78509",
@@ -52984,8 +52984,8 @@
       "answer": "Henrik Ibsen",
       "category": "arts",
       "decoys": [
-        "Yuval Noah Harari",
-        "Emmanuel Kant",
+        "Lord Dunsany",
+        "James Clavell",
         "Vyāsa"
       ],
       "id": "polyfact-Q669694-P50-Q36661",
@@ -53002,7 +53002,7 @@
       "answer": "Jean-Claude Forest",
       "category": "arts",
       "decoys": [
-        "Flavius Josèphe",
+        "Steven Pinker",
         "J. D. Salinger",
         "Stan Lee"
       ],
@@ -53057,8 +53057,8 @@
       "category": "arts",
       "decoys": [
         "David Deutsch",
-        "Domingo Faustino Sarmiento",
-        "James Joyce"
+        "James Dashner",
+        "Ayano Yamane"
       ],
       "id": "polyfact-Q2545720-P50-Q296752",
       "isAdult": false,
@@ -57234,7 +57234,7 @@
       "decoys": [
         "Relic Entertainment",
         "Level-5",
-        "Nintendo Platform Technology Development"
+        "Lucas Pope"
       ],
       "id": "polyfact-Q1145746-P178-Q454544",
       "isAdult": false,
@@ -57250,7 +57250,7 @@
       "answer": "Shiny Entertainment",
       "category": "arts",
       "decoys": [
-        "Sinclair Research",
+        "Nintendo Platform Technology Development",
         "Ubisoft Reflections",
         "Factor 5"
       ],
@@ -57287,7 +57287,7 @@
       "category": "arts",
       "decoys": [
         "Infogrames Entertainment",
-        "Lucas Pope",
+        "Sinclair Research",
         "Camelot Software Planning"
       ],
       "id": "polyfact-Q3335888-P178-Q3008126",
@@ -59104,7 +59104,7 @@
       "answer": "John Backus",
       "category": "arts",
       "decoys": [
-        "High Voltage Software",
+        "Henri Cohen",
         "Atlassian",
         "High Voltage Software"
       ],
@@ -59285,8 +59285,8 @@
       "category": "arts",
       "decoys": [
         "Piper Aircraft",
-        "Henri Cohen",
-        "Freebird Games"
+        "Freebird Games",
+        "Fedora Project"
       ],
       "id": "polyfact-Q107217236-P178-Q302251",
       "isAdult": false,
@@ -59304,7 +59304,7 @@
       "decoys": [
         "NetEase",
         "Monster Games",
-        "Fedora Project"
+        "MercurySteam Entertainment"
       ],
       "id": "polyfact-Q92464687-P178-Q903621",
       "isAdult": false,
@@ -59321,7 +59321,7 @@
       "category": "arts",
       "decoys": [
         "Henri Cohen",
-        "MercurySteam Entertainment",
+        "NanaOn-Sha",
         "Freebird Games"
       ],
       "id": "polyfact-Q1043375-P178-Q45700",
@@ -59410,7 +59410,7 @@
       "answer": "MercurySteam Entertainment",
       "category": "arts",
       "decoys": [
-        "NanaOn-Sha",
+        "Alibaba Group",
         "BlueSky Software",
         "NanaOn-Sha"
       ],
@@ -60077,7 +60077,7 @@
       "category": "arts",
       "decoys": [
         "Amusement Vision",
-        "Loïc Le Meur",
+        "Howard Hughes",
         "Irem"
       ],
       "id": "polyfact-Q1481002-P178-Q114347",
@@ -60130,7 +60130,7 @@
       "answer": "Klaus-Jürgen Wrede",
       "category": "arts",
       "decoys": [
-        "Howard Hughes",
+        "Taibi Kahler",
         "Sony Interactive Entertainment",
         "ACE Team"
       ],
@@ -60294,7 +60294,7 @@
       "decoys": [
         "Tango Gameworks",
         "Meta",
-        "Université McGill"
+        "Eugene Roshal"
       ],
       "id": "polyfact-Q1072885-P178-Q272508",
       "isAdult": false,
@@ -60310,7 +60310,7 @@
       "answer": "Konami",
       "category": "arts",
       "decoys": [
-        "Eugene Roshal",
+        "Université McGill",
         "Gen Digital",
         "Université polytechnique de Valence"
       ],
@@ -60564,7 +60564,7 @@
       "decoys": [
         "Telltale Games",
         "EA Montréal",
-        "National Instruments"
+        "Vladimir Tchelomeï"
       ],
       "id": "polyfact-Q276140-P178-Q312969",
       "isAdult": false,
@@ -60635,7 +60635,7 @@
       "category": "arts",
       "decoys": [
         "Evolution Studios",
-        "Akella",
+        "National Instruments",
         "Jeremy Ashkenas"
       ],
       "id": "polyfact-Q18754076-P178-Q1576915",
@@ -60672,7 +60672,7 @@
       "decoys": [
         "Tom Fulp",
         "Deck13 Interactive",
-        "Université de Californie à Santa Cruz"
+        "Akella"
       ],
       "id": "polyfact-Q2478949-P178-Q2633052",
       "isAdult": false,
@@ -60690,7 +60690,7 @@
       "decoys": [
         "Omega Force",
         "Sunsoft",
-        "Union internationale des télécommunications"
+        "Université de Californie à Santa Cruz"
       ],
       "id": "polyfact-Q4558721-P178-Q870095",
       "isAdult": false,
@@ -60708,7 +60708,7 @@
       "decoys": [
         "SAP",
         "Arika",
-        "Norinco"
+        "Union internationale des télécommunications"
       ],
       "id": "polyfact-Q853541-P178-Q2568920",
       "isAdult": false,
@@ -60834,7 +60834,7 @@
       "decoys": [
         "centre de l'accélérateur linéaire de Stanford",
         "Huawei",
-        "Bombardier Aéronautique"
+        "Norinco"
       ],
       "id": "polyfact-Q129000-P178-Q642707",
       "isAdult": false,
@@ -60886,7 +60886,7 @@
       "answer": "Criterion Games",
       "category": "arts",
       "decoys": [
-        "Vladimir Tchelomeï",
+        "Rockstar Vancouver",
         "Namco Tales Studio",
         "Digital Equipment Corporation"
       ],
@@ -60904,8 +60904,8 @@
       "answer": "Pyro Studios",
       "category": "arts",
       "decoys": [
-        "Rockstar Vancouver",
         "2K Marin",
+        "Nick Santora",
         "Toys for Bob"
       ],
       "id": "polyfact-Q2278202-P178-Q1187273",
@@ -60940,7 +60940,7 @@
       "answer": "Midway Games",
       "category": "arts",
       "decoys": [
-        "Nick Santora",
+        "Université du Michigan",
         "Game Freak",
         "Gremlin Graphics Software"
       ],
@@ -60959,7 +60959,7 @@
       "category": "arts",
       "decoys": [
         "Atari Inc.",
-        "Université du Michigan",
+        "Playdead",
         "Fiat Aviazione"
       ],
       "id": "polyfact-Q613511-P178-Q1383563",
@@ -61013,7 +61013,7 @@
       "category": "arts",
       "decoys": [
         "Krafton",
-        "Playdead",
+        "Crytek",
         "Traveller's Tales"
       ],
       "id": "polyfact-Q17634308-P178-Q122741",
@@ -61049,8 +61049,8 @@
       "category": "arts",
       "decoys": [
         "Sunsoft",
-        "Crytek",
-        "Chengdu Aircraft Corporation"
+        "Chengdu Aircraft Corporation",
+        "Firefly Studios"
       ],
       "id": "polyfact-Q302839-P178-Q1204929",
       "isAdult": false,
@@ -61066,7 +61066,7 @@
       "answer": "Ubisoft Montpellier",
       "category": "arts",
       "decoys": [
-        "Firefly Studios",
+        "David Wain",
         "Gust",
         "TaleWorlds"
       ],
@@ -61103,7 +61103,7 @@
       "category": "arts",
       "decoys": [
         "Gust",
-        "David Wain",
+        "Ludovic Maublanc",
         "Telltale Games"
       ],
       "id": "polyfact-Q109901438-P178-Q1267825",
@@ -61192,7 +61192,7 @@
       "answer": "Coktel Vision",
       "category": "arts",
       "decoys": [
-        "Ludovic Maublanc",
+        "Environmental Systems Research Institute",
         "Crytek",
         "Deck13 Interactive"
       ],
@@ -61228,7 +61228,7 @@
       "answer": "David Crane",
       "category": "arts",
       "decoys": [
-        "Antonio Moro",
+        "Paul Attanasio",
         "Sonny Grosso",
         "Gunter Demnig"
       ],
@@ -61282,8 +61282,8 @@
       "answer": "Claude Monet",
       "category": "arts",
       "decoys": [
-        "Jérôme Bosch",
-        "Raphaël",
+        "J. R. R. Tolkien",
+        "Louis-Jules Dumoulin",
         "CyberLink"
       ],
       "id": "polyfact-Q7723379-P170-Q296",
@@ -61300,9 +61300,9 @@
       "answer": "Raphaël",
       "category": "arts",
       "decoys": [
-        "Shinji Mikami",
+        "Antonio Moro",
         "Vyāsa",
-        "Adam Shankman"
+        "Jérôme Bosch"
       ],
       "id": "polyfact-Q328079-P170-Q5597",
       "isAdult": false,
@@ -61320,7 +61320,7 @@
       "decoys": [
         "Gunter Demnig",
         "Louis-Jules Dumoulin",
-        "Thomas Eakins"
+        "David Crane"
       ],
       "id": "polyfact-Q50817-P170-Q44430",
       "isAdult": false,
@@ -61390,9 +61390,9 @@
       "answer": "Chris Gerolmo",
       "category": "arts",
       "decoys": [
-        "Eadweard Muybridge",
+        "Julian Jarrold",
         "Markus Persson",
-        "Paul Attanasio"
+        "Shinji Mikami"
       ],
       "id": "polyfact-Q1858443-P170-Q737289",
       "isAdult": false,
@@ -61408,8 +61408,8 @@
       "answer": "Peter Paige",
       "category": "arts",
       "decoys": [
-        "David Crane",
-        "Charles Dickens",
+        "Adam Shankman",
+        "Vince McMahon",
         "René Magritte"
       ],
       "id": "polyfact-Q20667070-P170-Q919229",
@@ -61427,8 +61427,8 @@
       "category": "arts",
       "decoys": [
         "Microsoft",
-        "Julian Jarrold",
-        "Giovanni Bellini"
+        "Claude Monet",
+        "Thomas Eakins"
       ],
       "id": "polyfact-Q901217-P170-Q7546",
       "isAdult": false,
@@ -61444,7 +61444,7 @@
       "answer": "Leslie Charteris",
       "category": "arts",
       "decoys": [
-        "J. R. R. Tolkien",
+        "Tom Stoppard",
         "J.K. Rowling",
         "Elzie Crisler Segar"
       ],
@@ -61462,9 +61462,9 @@
       "answer": "Vincent van Gogh",
       "category": "arts",
       "decoys": [
-        "Cecily von Ziegesar",
+        "Margaret Mitchell",
         "Fred Moore",
-        "Claude Monet"
+        "Eadweard Muybridge"
       ],
       "id": "polyfact-Q19363214-P170-Q5582",
       "isAdult": false,
@@ -61480,9 +61480,9 @@
       "answer": "Bram Stoker",
       "category": "arts",
       "decoys": [
-        "Noah Baumbach",
-        "Harmony Korine",
-        "Tom Stoppard"
+        "Charles Dickens",
+        "Ingmar Bergman",
+        "Leslie Charteris"
       ],
       "id": "polyfact-Q1622359-P170-Q36184",
       "isAdult": false,
@@ -61516,7 +61516,7 @@
       "answer": "Robert McKimson",
       "category": "arts",
       "decoys": [
-        "Margaret Mitchell",
+        "Chris Gerolmo",
         "Edmund Blair Leighton",
         "Gaston Leroux"
       ],
@@ -61535,8 +61535,8 @@
       "category": "arts",
       "decoys": [
         "J.K. Rowling",
-        "Lucas Cranach l'Ancien",
-        "Chris Gerolmo"
+        "Peter Paige",
+        "Vincent van Gogh"
       ],
       "id": "polyfact-Q1247632-P170-Q740071",
       "isAdult": false,
@@ -61570,7 +61570,7 @@
       "answer": "Bruno Bianchi",
       "category": "arts",
       "decoys": [
-        "Vincent van Gogh",
+        "Cecily von Ziegesar",
         "World Wide Web Consortium",
         "Aaron Sorkin"
       ],
@@ -61588,7 +61588,7 @@
       "answer": "Jim Steranko",
       "category": "arts",
       "decoys": [
-        "Peter Paige",
+        "Bram Stoker",
         "Roy Lichtenstein",
         "Mark Baker"
       ],
@@ -61624,7 +61624,7 @@
       "answer": "Robert Kirkman",
       "category": "arts",
       "decoys": [
-        "Ingmar Bergman",
+        "Noah Baumbach",
         "Organisation des Nations unies pour l'éducation, la science et la culture",
         "Michael Ende"
       ],
@@ -61643,7 +61643,7 @@
       "category": "arts",
       "decoys": [
         "Frank Elstner",
-        "Leslie Charteris",
+        "Harmony Korine",
         "Ted Elliott"
       ],
       "id": "polyfact-Q1247248-P170-Q504720",
@@ -61661,7 +61661,7 @@
       "category": "arts",
       "decoys": [
         "J. R. R. Tolkien",
-        "Bram Stoker",
+        "Robert McKimson",
         "Cris Morena"
       ],
       "id": "polyfact-Q928202-P170-Q298827",
@@ -61678,7 +61678,7 @@
       "answer": "Annie Proulx",
       "category": "arts",
       "decoys": [
-        "Ben Stein",
+        "Irwin Allen",
         "Siegbert Tarrasch",
         "Université de Californie à Berkeley"
       ],
@@ -61698,7 +61698,7 @@
       "decoys": [
         "Egon Schiele",
         "Nippon Television",
-        "Robert McKimson"
+        "Bruno Bianchi"
       ],
       "id": "polyfact-Q86661226-P170-Q316844",
       "isAdult": false,
@@ -61714,9 +61714,9 @@
       "answer": "Bill Walsh",
       "category": "arts",
       "decoys": [
-        "Irwin Allen",
+        "Jim Steranko",
         "Gouvernement de Meiji",
-        "Gilbert Stuart"
+        "William Steig"
       ],
       "id": "polyfact-Q2518996-P170-Q373128",
       "isAdult": false,
@@ -61732,8 +61732,8 @@
       "answer": "David Shore",
       "category": "arts",
       "decoys": [
-        "Caroline Quine",
-        "Luis de Morales",
+        "Robert Kirkman",
+        "David Edward Kelley",
         "Joe Pytka"
       ],
       "id": "polyfact-Q29908604-P170-Q434272",
@@ -61750,7 +61750,7 @@
       "answer": "Tim Burton",
       "category": "arts",
       "decoys": [
-        "Merry-Joseph Blondel",
+        "Vincent Chalvon-Demersay",
         "Orson Scott Card",
         "Gōshō Aoyama"
       ],
@@ -61768,8 +61768,8 @@
       "answer": "David Chase",
       "category": "arts",
       "decoys": [
-        "Pierre-Joseph Redouté",
-        "Bruno Bianchi",
+        "Annie Proulx",
+        "Ryan Murphy",
         "Bernard Slade"
       ],
       "id": "polyfact-Q2335344-P170-Q381982",
@@ -61786,9 +61786,9 @@
       "answer": "Andreas Deja",
       "category": "arts",
       "decoys": [
-        "Pierre Auguste Cot",
-        "Jane Austen",
-        "Jim Steranko"
+        "Bill Walsh",
+        "David Shore",
+        "Tim Burton"
       ],
       "id": "polyfact-Q2331578-P170-Q64046",
       "isAdult": false,
@@ -61804,9 +61804,9 @@
       "answer": "Scott Fellows",
       "category": "arts",
       "decoys": [
-        "William Steig",
+        "David Chase",
         "Rod Serling",
-        "Polyclète"
+        "Amedeo Modigliani"
       ],
       "id": "polyfact-Q834814-P170-Q2062797",
       "isAdult": false,
@@ -61823,7 +61823,7 @@
       "category": "arts",
       "decoys": [
         "Fabrice Bellard",
-        "Auguste Rodin",
+        "Dick Wolf",
         "Amedeo Modigliani"
       ],
       "id": "polyfact-Q238245-P170-Q314353",
@@ -61842,7 +61842,7 @@
       "decoys": [
         "Yolanda Vargas Dulché",
         "Shinji Mikami",
-        "David Edward Kelley"
+        "Pierre Auguste Cot"
       ],
       "id": "polyfact-Q777062-P170-Q35064",
       "isAdult": false,
@@ -61860,7 +61860,7 @@
       "decoys": [
         "David Austin",
         "Kevin Smith",
-        "Ivan Chichkine"
+        "Agatha Christie"
       ],
       "id": "polyfact-Q2403686-P170-Q298025",
       "isAdult": false,
@@ -61877,8 +61877,8 @@
       "category": "arts",
       "decoys": [
         "Marcel Proust",
-        "Vincent Chalvon-Demersay",
-        "Diego Vélasquez"
+        "Joss Whedon",
+        "Johnston McCulley"
       ],
       "id": "polyfact-Q2498328-P170-Q965484",
       "isAdult": false,
@@ -61913,8 +61913,8 @@
       "category": "arts",
       "decoys": [
         "Rob Minkoff",
-        "Nicolas Poussin",
-        "Annie Proulx"
+        "Merry-Joseph Blondel",
+        "Jane Austen"
       ],
       "id": "polyfact-Q2713628-P170-Q298827",
       "isAdult": false,
@@ -61931,7 +61931,7 @@
       "category": "arts",
       "decoys": [
         "Bruce Timm",
-        "Ryan Murphy",
+        "Bruno Heller",
         "Maurice Duverger"
       ],
       "id": "polyfact-Q2622764-P170-Q242329",
@@ -61950,7 +61950,7 @@
       "decoys": [
         "Lilly et Lana Wachowski",
         "Nigel Kneale",
-        "Bill Walsh"
+        "American Society of Civil Engineers"
       ],
       "id": "polyfact-Q27955792-P170-Q26097618",
       "isAdult": false,
@@ -61966,7 +61966,7 @@
       "answer": "Tim Kring",
       "category": "arts",
       "decoys": [
-        "David Shore",
+        "Deepa Mehta",
         "George R. R. Martin",
         "Michael Jacobs"
       ],
@@ -62003,7 +62003,7 @@
       "category": "arts",
       "decoys": [
         "Shōtarō Ishinomori",
-        "Tim Burton",
+        "Auguste Rodin",
         "Scott Fellows"
       ],
       "id": "polyfact-Q2625062-P170-Q218022",
@@ -62020,8 +62020,8 @@
       "answer": "Victor Hugo",
       "category": "arts",
       "decoys": [
-        "John Buscema",
-        "David Chase",
+        "Gilbert Stuart",
+        "Pierre-Joseph Redouté",
         "L. Frank Baum"
       ],
       "id": "polyfact-Q2748568-P170-Q535",
@@ -62038,8 +62038,8 @@
       "answer": "Eiichirō Oda",
       "category": "arts",
       "decoys": [
-        "Hokusai",
-        "Dick Wolf",
+        "George Lucas",
+        "Shonda Rhimes",
         "Philip Pullman"
       ],
       "id": "polyfact-Q1061765-P170-Q2010",
@@ -62056,9 +62056,9 @@
       "answer": "Diego Vélasquez",
       "category": "arts",
       "decoys": [
-        "Joss Whedon",
-        "David Bowie",
-        "Shigeru Miyamoto"
+        "Luis de Morales",
+        "Nicolas Poussin",
+        "Jean Siméon Chardin"
       ],
       "id": "polyfact-Q984058-P170-Q297",
       "isAdult": false,
@@ -62076,7 +62076,7 @@
       "decoys": [
         "Blizzard Entertainment",
         "Harlan Coben",
-        "Bruno Heller"
+        "John Buscema"
       ],
       "id": "polyfact-Q222800-P170-Q325396",
       "isAdult": false,
@@ -62092,9 +62092,9 @@
       "answer": "L. Frank Baum",
       "category": "arts",
       "decoys": [
-        "Johnston McCulley",
+        "Ivan Chichkine",
         "Jules Verne",
-        "Kevin James"
+        "Victor Hugo"
       ],
       "id": "polyfact-Q2583524-P170-Q207544",
       "isAdult": false,
@@ -62112,7 +62112,7 @@
       "decoys": [
         "J. R. R. Tolkien",
         "Gidi Raff",
-        "Andrea Mantegna"
+        "Eiichirō Oda"
       ],
       "id": "polyfact-Q1064404-P170-Q318750",
       "isAdult": false,
@@ -62128,9 +62128,9 @@
       "answer": "Jean Siméon Chardin",
       "category": "arts",
       "decoys": [
-        "Andrea Mantegna",
-        "Michel-Ange Buronarroti",
-        "Shonda Rhimes"
+        "Diego Vélasquez",
+        "Hokusai",
+        "Honoré de Balzac"
       ],
       "id": "polyfact-Q3212142-P170-Q207447",
       "isAdult": false,
@@ -62146,9 +62146,9 @@
       "answer": "Geoffroy de Monmouth",
       "category": "arts",
       "decoys": [
-        "George Lucas",
-        "frères Duffer",
-        "C. S. Lewis"
+        "Caroline Quine",
+        "Polyclète",
+        "Andrea Mantegna"
       ],
       "id": "polyfact-Q6129446-P170-Q188344",
       "isAdult": false,
@@ -62183,7 +62183,7 @@
       "category": "arts",
       "decoys": [
         "George Pérez",
-        "Tim Kring",
+        "Álex Pina",
         "Leo Burnett Worldwide"
       ],
       "id": "polyfact-Q2887157-P170-Q3379350",
@@ -62200,9 +62200,9 @@
       "answer": "Le Caravage",
       "category": "arts",
       "decoys": [
-        "Piero Manzoni",
-        "Alain Resnais",
-        "Winslow Homer"
+        "Albrecht Dürer",
+        "Giuseppe Arcimboldo",
+        "Le Greco"
       ],
       "id": "polyfact-Q1132479-P170-Q42207",
       "isAdult": false,
@@ -62218,9 +62218,9 @@
       "answer": "Shonda Rhimes",
       "category": "arts",
       "decoys": [
-        "Jean Siméon Chardin",
+        "David Bowie",
         "Robert E. Howard",
-        "Victor Hugo"
+        "Shigeru Miyamoto"
       ],
       "id": "polyfact-Q438406-P170-Q242329",
       "isAdult": false,
@@ -62254,7 +62254,7 @@
       "answer": "Philippe Francq",
       "category": "arts",
       "decoys": [
-        "Eiichirō Oda",
+        "Judd Apatow",
         "Noah Baumbach",
         "Luc Besson"
       ],
@@ -62273,8 +62273,8 @@
       "category": "arts",
       "decoys": [
         "Gene Roddenberry",
-        "Hans Memling",
-        "Álex Pina"
+        "Kevin James",
+        "Stephen Hillenburg"
       ],
       "id": "polyfact-Q28465-P170-Q188492",
       "isAdult": false,
@@ -62291,7 +62291,7 @@
       "category": "arts",
       "decoys": [
         "Jack Kirby",
-        "Jules Verne",
+        "Piero Manzoni",
         "Apichatpong Weerasethakul"
       ],
       "id": "polyfact-Q939789-P170-Q179877",
@@ -62308,7 +62308,7 @@
       "answer": "Aitor Gabilondo",
       "category": "arts",
       "decoys": [
-        "Alexandre Dumas",
+        "C. S. Lewis",
         "Hanna-Barbera Productions",
         "Ben Stein"
       ],
@@ -62326,8 +62326,8 @@
       "answer": "Robert Flaherty",
       "category": "arts",
       "decoys": [
-        "Julie Chapon",
-        "Judd Apatow",
+        "Philippe Besnard",
+        "Winslow Homer",
         "Rowntree's"
       ],
       "id": "polyfact-Q918401-P170-Q263148",
@@ -62346,7 +62346,7 @@
       "decoys": [
         "Claude Chabrol",
         "Danny Bilson",
-        "Stephen Hillenburg"
+        "Philippe Francq"
       ],
       "id": "polyfact-Q843345-P170-Q208582",
       "isAdult": false,
@@ -62363,8 +62363,8 @@
       "category": "arts",
       "decoys": [
         "Henri Bergson",
-        "Shonda Rhimes",
-        "Philippe Besnard"
+        "Alexandre Dumas",
+        "Robert Flaherty"
       ],
       "id": "polyfact-Q2731317-P170-Q35610",
       "isAdult": false,
@@ -62380,9 +62380,9 @@
       "answer": "Michael Widenius",
       "category": "arts",
       "decoys": [
-        "Le Caravage",
+        "Seth MacFarlane",
         "Mario Puzo",
-        "Albrecht Dürer"
+        "Jonathan M. Shiff"
       ],
       "id": "polyfact-Q787177-P170-Q1362152",
       "isAdult": false,
@@ -62399,8 +62399,8 @@
       "category": "arts",
       "decoys": [
         "Ludwig Mies van der Rohe",
-        "Giuseppe Arcimboldo",
-        "Philippe Francq"
+        "Arthur Conan Doyle",
+        "John le Carré"
       ],
       "id": "polyfact-Q2290103-P170-Q191050",
       "isAdult": false,
@@ -62417,8 +62417,8 @@
       "category": "arts",
       "decoys": [
         "John le Carré",
-        "Daniel Chester French",
-        "Seth MacFarlane"
+        "Aitor Gabilondo",
+        "Julie Chapon"
       ],
       "id": "polyfact-Q578623-P170-Q42574",
       "isAdult": false,
@@ -62434,7 +62434,7 @@
       "answer": "Mark Baker",
       "category": "arts",
       "decoys": [
-        "Jonathan M. Shiff",
+        "Michael Widenius",
         "Jacques Rivette",
         "Toei"
       ],
@@ -62452,8 +62452,8 @@
       "answer": "Damien Hirst",
       "category": "arts",
       "decoys": [
-        "Aitor Gabilondo",
-        "Le Greco",
+        "James Cameron",
+        "Jordan Mechner",
         "Jordan Mechner"
       ],
       "id": "polyfact-Q6400207-P170-Q294326",
@@ -62470,7 +62470,7 @@
       "answer": "Leslie Stevens",
       "category": "arts",
       "decoys": [
-        "Robert Flaherty",
+        "Ambrose Bierce",
         "Walt Disney",
         "Edward Kitsis"
       ],
@@ -62489,7 +62489,7 @@
       "category": "arts",
       "decoys": [
         "Pam Brady",
-        "Raphaël",
+        "Damien Hirst",
         "Brad Bird"
       ],
       "id": "polyfact-Q941961-P170-Q242329",
@@ -62507,7 +62507,7 @@
       "category": "arts",
       "decoys": [
         "Meilland",
-        "Commission européenne",
+        "Daniel Chester French",
         "René Magritte"
       ],
       "id": "polyfact-Q1245354-P170-Q40599",
@@ -62526,7 +62526,7 @@
       "decoys": [
         "Aaron Swartz",
         "Frank D. Gilroy",
-        "Michael Widenius"
+        "Édouard Manet"
       ],
       "id": "polyfact-Q745077-P170-Q182870",
       "isAdult": false,
@@ -62542,8 +62542,8 @@
       "answer": "Jonathan Ames",
       "category": "arts",
       "decoys": [
-        "Phidias",
-        "Ambrose Bierce",
+        "Jan Lenica",
+        "Patrick O'Brian",
         "Bill Walsh"
       ],
       "id": "polyfact-Q521289-P170-Q2390663",
@@ -62560,9 +62560,9 @@
       "answer": "Nicolas Poussin",
       "category": "arts",
       "decoys": [
-        "Robert Kirkman",
-        "Patrick O'Brian",
-        "James Cameron"
+        "Le Caravage",
+        "Antoine Watteau",
+        "José de Ribera"
       ],
       "id": "polyfact-Q6485124-P170-Q41554",
       "isAdult": false,
@@ -62578,9 +62578,9 @@
       "answer": "Albrecht Dürer",
       "category": "arts",
       "decoys": [
-        "Ian Fleming",
-        "Damien Hirst",
-        "Ben Bocquelet"
+        "Hans Memling",
+        "Andrea del Verrocchio",
+        "Le Pérugin"
       ],
       "id": "polyfact-Q748518-P170-Q5580",
       "isAdult": false,
@@ -62597,7 +62597,7 @@
       "category": "arts",
       "decoys": [
         "George Lucas",
-        "François Boucher",
+        "Jonathan Ames",
         "David Austin"
       ],
       "id": "polyfact-Q4808020-P170-Q203401",
@@ -62651,7 +62651,7 @@
       "category": "arts",
       "decoys": [
         "David Bowie",
-        "Leslie Stevens",
+        "Ian Fleming",
         "Robert Kirkman"
       ],
       "id": "polyfact-Q2659146-P170-Q604524",
@@ -62668,7 +62668,7 @@
       "answer": "Antoine Watteau",
       "category": "arts",
       "decoys": [
-        "George Lucas",
+        "François Boucher",
         "Fonds international pour la protection des animaux",
         "Nicolas Poussin"
       ],
@@ -62688,7 +62688,7 @@
       "decoys": [
         "Peter Paige",
         "George Lopez",
-        "Édouard Manet"
+        "Ben Bocquelet"
       ],
       "id": "polyfact-Q778263-P170-Q559844",
       "isAdult": false,
@@ -62706,7 +62706,7 @@
       "decoys": [
         "Katsura Hoshino",
         "Gustav Klimt",
-        "Jan Lenica"
+        "Edward Hopper"
       ],
       "id": "polyfact-Q673984-P170-Q159907",
       "isAdult": false,
@@ -62722,9 +62722,9 @@
       "answer": "Piet Mondrian",
       "category": "arts",
       "decoys": [
-        "Jonathan Ames",
+        "Clive Cussler",
         "Harald Sohlberg",
-        "Waxahatchee"
+        "Peter Jackson"
       ],
       "id": "polyfact-Q2915406-P170-Q151803",
       "isAdult": false,
@@ -62742,7 +62742,7 @@
       "decoys": [
         "Fritz Erler",
         "Timothy Zahn",
-        "Edward Hopper"
+        "Glen A. Larson"
       ],
       "id": "polyfact-Q24620-P170-Q314935",
       "isAdult": false,
@@ -62759,7 +62759,7 @@
       "category": "arts",
       "decoys": [
         "Georgianne Levangie",
-        "Clive Cussler",
+        "Haim Saban",
         "Jack Kirby"
       ],
       "id": "polyfact-Q104845082-P170-Q13638984",
@@ -62777,7 +62777,7 @@
       "category": "arts",
       "decoys": [
         "Frederic Edwin Church",
-        "Peter Jackson",
+        "Geoffroy de Monmouth",
         "Rasmus Lerdorf"
       ],
       "id": "polyfact-Q1211075-P170-Q95",
@@ -62794,9 +62794,9 @@
       "answer": "L. Frank Baum",
       "category": "arts",
       "decoys": [
-        "Glen A. Larson",
-        "Eiichirō Oda",
-        "Andrea del Verrocchio"
+        "David Hockney",
+        "Piet Mondrian",
+        "Paul Haggis"
       ],
       "id": "polyfact-Q3822980-P170-Q207544",
       "isAdult": false,
@@ -62812,8 +62812,8 @@
       "answer": "Vincent van Gogh",
       "category": "arts",
       "decoys": [
-        "Raphaël",
-        "Antoine Watteau",
+        "George Orwell",
+        "Iwao Takamoto",
         "George Orwell"
       ],
       "id": "polyfact-Q2271805-P170-Q5582",
@@ -62831,7 +62831,7 @@
       "category": "arts",
       "decoys": [
         "Iwao Takamoto",
-        "Haim Saban",
+        "Commission européenne",
         "Walt Disney Television"
       ],
       "id": "polyfact-Q25457495-P170-Q1666594",
@@ -62848,8 +62848,8 @@
       "answer": "Francisco de Goya",
       "category": "arts",
       "decoys": [
-        "Le Pérugin",
-        "Diego Vélasquez",
+        "William Bouguereau",
+        "Henri Rousseau",
         "Jean Siméon Chardin"
       ],
       "id": "polyfact-Q1747282-P170-Q5432",
@@ -62866,7 +62866,7 @@
       "answer": "Toei",
       "category": "arts",
       "decoys": [
-        "David Hockney",
+        "Phidias",
         "J. R. R. Tolkien",
         "William Bouguereau"
       ],
@@ -62884,7 +62884,7 @@
       "answer": "Marina Abramović",
       "category": "arts",
       "decoys": [
-        "Piet Mondrian",
+        "Waxahatchee",
         "Elaine May",
         "Vincent van Gogh"
       ],
@@ -62902,7 +62902,7 @@
       "answer": "J. R. R. Tolkien",
       "category": "arts",
       "decoys": [
-        "Paul Haggis",
+        "Chris Miller",
         "J.K. Rowling",
         "Toei"
       ],
@@ -62920,8 +62920,8 @@
       "answer": "Silvio Horta",
       "category": "arts",
       "decoys": [
-        "Antonello de Messine",
-        "Chris Miller",
+        "Marina Abramović",
+        "Giannino Castiglioni",
         "Julian Jarrold"
       ],
       "id": "polyfact-Q2562776-P170-Q2975651",
@@ -62938,9 +62938,9 @@
       "answer": "J. R. R. Tolkien",
       "category": "arts",
       "decoys": [
-        "Google",
+        "Silvio Horta",
         "Giannino Castiglioni",
-        "Jean Siméon Chardin"
+        "Masami Kurumada"
       ],
       "id": "polyfact-Q81738-P170-Q892",
       "isAdult": false,
@@ -62958,7 +62958,7 @@
       "decoys": [
         "Masami Kurumada",
         "J.K. Rowling",
-        "Francisco de Goya"
+        "Tony Robinson"
       ],
       "id": "polyfact-Q47001863-P170-Q1159071",
       "isAdult": false,
@@ -62974,9 +62974,9 @@
       "answer": "Rudyard Kipling",
       "category": "arts",
       "decoys": [
-        "Lucas Cranach l'Ancien",
+        "Richard Garfield",
         "David Austin",
-        "Marina Abramović"
+        "Nina Companeez"
       ],
       "id": "polyfact-Q2790180-P170-Q34743",
       "isAdult": false,
@@ -62992,8 +62992,8 @@
       "answer": "Donatello",
       "category": "arts",
       "decoys": [
-        "Silvio Horta",
-        "Tony Robinson",
+        "Antonello de Messine",
+        "Fra Angelico",
         "Fra Angelico"
       ],
       "id": "polyfact-Q771017-P170-Q37562",
@@ -63010,7 +63010,7 @@
       "answer": "Amedeo Modigliani",
       "category": "arts",
       "decoys": [
-        "Donatello",
+        "Dan Futterman",
         "Henri Rousseau",
         "Aaron McGruder"
       ],
@@ -63030,7 +63030,7 @@
       "decoys": [
         "Microsoft",
         "Richard Garfield",
-        "Gustav Klimt"
+        "Sam Lake"
       ],
       "id": "polyfact-Q471456-P170-Q314506",
       "isAdult": false,
@@ -63046,9 +63046,9 @@
       "answer": "Nina Companeez",
       "category": "arts",
       "decoys": [
-        "Le Pérugin",
-        "José de Ribera",
-        "Dan Futterman"
+        "Rudyard Kipling",
+        "Paul Scheuring",
+        "Steven Moffat"
       ],
       "id": "polyfact-Q1211936-P170-Q457123",
       "isAdult": false,
@@ -63066,7 +63066,7 @@
       "decoys": [
         "Sam Lake",
         "Ian Fleming",
-        "Rudyard Kipling"
+        "Stieg Larsson"
       ],
       "id": "polyfact-Q1799459-P170-Q298025",
       "isAdult": false,
@@ -63083,8 +63083,8 @@
       "category": "arts",
       "decoys": [
         "William Steig",
-        "Giuseppe Arcimboldo",
-        "Paul Scheuring"
+        "Greg Daniels",
+        "Daniel Écija"
       ],
       "id": "polyfact-Q1765307-P170-Q461003",
       "isAdult": false,
@@ -63100,9 +63100,9 @@
       "answer": "Stieg Larsson",
       "category": "arts",
       "decoys": [
-        "Nina Companeez",
+        "Jack Arnold",
         "Shonda Rhimes",
-        "Auguste Renoir"
+        "Tappei Nagatsuki"
       ],
       "id": "polyfact-Q1191282-P170-Q186317",
       "isAdult": false,
@@ -63118,8 +63118,8 @@
       "answer": "Vincent van Gogh",
       "category": "arts",
       "decoys": [
-        "Steven Moffat",
-        "Greg Daniels",
+        "Auguste Renoir",
+        "Bernard Deyriès",
         "Ben Stein"
       ],
       "id": "polyfact-Q2282256-P170-Q5582",
@@ -63138,7 +63138,7 @@
       "decoys": [
         "Chris Gerolmo",
         "Jack Arnold",
-        "Stieg Larsson"
+        "Federico Fellini"
       ],
       "id": "polyfact-Q837329-P170-Q5798797",
       "isAdult": false,
@@ -63154,7 +63154,7 @@
       "answer": "Bernard Deyriès",
       "category": "arts",
       "decoys": [
-        "Daniel Écija",
+        "Hirohiko Araki",
         "Tappei Nagatsuki",
         "Ricky Gervais"
       ],
@@ -63172,9 +63172,9 @@
       "answer": "Federico Fellini",
       "category": "arts",
       "decoys": [
-        "Le Tintoret",
-        "Michel-Ange Buronarroti",
-        "Bernard Deyriès"
+        "Deng Xiaoping",
+        "James Cruze",
+        "Ann Biderman"
       ],
       "id": "polyfact-Q18411-P170-Q7371",
       "isAdult": false,
@@ -63190,8 +63190,8 @@
       "answer": "Hans Christian Andersen",
       "category": "arts",
       "decoys": [
-        "Hirohiko Araki",
-        "Federico Fellini",
+        "Francisco de Goya",
+        "Jean-Auguste Dominique Ingres",
         "Mikalojus Konstantinas Čiurlionis"
       ],
       "id": "polyfact-Q11870-P170-Q5673",
@@ -63208,9 +63208,9 @@
       "answer": "Jane Austen",
       "category": "arts",
       "decoys": [
-        "Deng Xiaoping",
-        "J.K. Rowling",
-        "Judd Apatow"
+        "Hans Christian Andersen",
+        "Arkhip Kouïndji",
+        "Edvard Munch"
       ],
       "id": "polyfact-Q2250982-P170-Q36322",
       "isAdult": false,
@@ -63227,7 +63227,7 @@
       "category": "arts",
       "decoys": [
         "Luc Besson",
-        "Hans Christian Andersen",
+        "Franz Kafka",
         "Brad Bird"
       ],
       "id": "polyfact-Q15070536-P170-Q3308269",
@@ -63244,9 +63244,9 @@
       "answer": "Ann Biderman",
       "category": "arts",
       "decoys": [
+        "Dan Fogelman",
         "James Cruze",
-        "James Cruze",
-        "Jean-Auguste Dominique Ingres"
+        "Michael Schur"
       ],
       "id": "polyfact-Q2579964-P170-Q2380902",
       "isAdult": false,
@@ -63262,9 +63262,9 @@
       "answer": "Honoré de Balzac",
       "category": "arts",
       "decoys": [
-        "Masami Kurumada",
+        "Max Liebermann",
         "Franz Kafka",
-        "Joss Whedon"
+        "Ivan Aïvazovski"
       ],
       "id": "polyfact-Q3060265-P170-Q9711",
       "isAdult": false,
@@ -63280,9 +63280,9 @@
       "answer": "Dan Fogelman",
       "category": "arts",
       "decoys": [
-        "Léonard de Vinci",
-        "Ann Biderman",
-        "Vincent van Gogh"
+        "Craig McCracken",
+        "Simon Wincer",
+        "Melville Shavelson"
       ],
       "id": "polyfact-Q16868834-P170-Q5213495",
       "isAdult": false,
@@ -63300,7 +63300,7 @@
       "decoys": [
         "Claude Monet",
         "Stephen Hillenburg",
-        "Dan Fogelman"
+        "Google"
       ],
       "id": "polyfact-Q934247-P170-Q596139",
       "isAdult": false,
@@ -63316,9 +63316,9 @@
       "answer": "Michael Schur",
       "category": "arts",
       "decoys": [
-        "Mattel",
-        "Titien",
-        "Fra Angelico"
+        "Roger Kumble",
+        "Kevin Williamson",
+        "Bobby Henderson"
       ],
       "id": "polyfact-Q22908690-P170-Q1929297",
       "isAdult": false,
@@ -63336,7 +63336,7 @@
       "decoys": [
         "Simon Wincer",
         "Melville Shavelson",
-        "Michael Schur"
+        "Genndy Tartakovsky"
       ],
       "id": "polyfact-Q1236206-P170-Q655250",
       "isAdult": false,
@@ -63353,7 +63353,7 @@
       "category": "arts",
       "decoys": [
         "Toei",
-        "Craig McCracken",
+        "Clive Barker",
         "Damien Hirst"
       ],
       "id": "polyfact-Q11125522-P170-Q315577",
@@ -63370,7 +63370,7 @@
       "answer": "Kevin Williamson",
       "category": "arts",
       "decoys": [
-        "Antonello de Messine",
+        "Philip Rosenthal",
         "Hasbro",
         "Roger Kumble"
       ],
@@ -63388,8 +63388,8 @@
       "answer": "Victor Hugo",
       "category": "arts",
       "decoys": [
-        "Kevin Williamson",
-        "Rembrandt",
+        "Constantin Makovski",
+        "Auguste Bartholdi",
         "Arkhip Kouïndji"
       ],
       "id": "polyfact-Q2585477-P170-Q535",
@@ -63406,8 +63406,8 @@
       "answer": "Bobby Henderson",
       "category": "arts",
       "decoys": [
-        "Genndy Tartakovsky",
-        "Albrecht Dürer",
+        "Paul Reubens",
+        "Kathryn Bigelow",
         "George R. R. Martin"
       ],
       "id": "polyfact-Q14397660-P170-Q379057",
@@ -63424,7 +63424,7 @@
       "answer": "Clive Barker",
       "category": "arts",
       "decoys": [
-        "Bobby Henderson",
+        "Shu Takumi",
         "Genndy Tartakovsky",
         "Iwao Takamoto"
       ],
@@ -63443,8 +63443,8 @@
       "category": "arts",
       "decoys": [
         "Joss Whedon",
-        "Lucas Cranach l'Ancien",
-        "Clive Barker"
+        "Eric Bress",
+        "Martin Szekely"
       ],
       "id": "polyfact-Q208568-P170-Q946980",
       "isAdult": false,
@@ -63461,8 +63461,8 @@
       "category": "arts",
       "decoys": [
         "Mario Puzo",
-        "Le Bernin",
-        "Fra Carnevale"
+        "Stephen Sommers",
+        "Joel Coen"
       ],
       "id": "polyfact-Q654170-P170-Q35064",
       "isAdult": false,
@@ -63480,7 +63480,7 @@
       "decoys": [
         "Paul Reubens",
         "Kathryn Bigelow",
-        "Philip Rosenthal"
+        "Tove Jansson"
       ],
       "id": "polyfact-Q3342420-P170-Q484779",
       "isAdult": false,
@@ -63496,8 +63496,8 @@
       "answer": "Edvard Munch",
       "category": "arts",
       "decoys": [
-        "Albrecht Dürer",
-        "Shu Takumi",
+        "Carlton Cuse",
+        "Isaac Levitan",
         "Ingmar Bergman"
       ],
       "id": "polyfact-Q1683743-P170-Q41406",
@@ -63514,9 +63514,9 @@
       "answer": "Josh Schwartz",
       "category": "arts",
       "decoys": [
-        "Edvard Munch",
-        "Rembrandt",
-        "Vincent van Gogh"
+        "Doug Ellin",
+        "Jonathan Glassner",
+        "Peter S. Fischer"
       ],
       "id": "polyfact-Q379494-P170-Q728217",
       "isAdult": false,
@@ -63533,7 +63533,7 @@
       "category": "arts",
       "decoys": [
         "Shu Takumi",
-        "Le Bernin",
+        "Bill Cosby",
         "Vincent van Gogh"
       ],
       "id": "polyfact-Q685481-P170-Q2446029",
@@ -63550,9 +63550,9 @@
       "answer": "Jean Chalopin",
       "category": "arts",
       "decoys": [
-        "Eric Bress",
+        "Anne Giafferi",
         "Martin Szekely",
-        "Max Liebermann"
+        "Ben Edlund"
       ],
       "id": "polyfact-Q923405-P170-Q673924",
       "isAdult": false,
@@ -63569,8 +63569,8 @@
       "category": "arts",
       "decoys": [
         "Stephen Sommers",
-        "Ivan Aïvazovski",
-        "Ivan Aïvazovski"
+        "Richard Buckminster Fuller",
+        "Arianna Huffington"
       ],
       "id": "polyfact-Q750117-P170-Q13595311",
       "isAdult": false,
@@ -63587,8 +63587,8 @@
       "category": "arts",
       "decoys": [
         "Constantin Makovski",
-        "Joel Coen",
-        "Le Pérugin"
+        "Friz Freleng",
+        "Todd Field"
       ],
       "id": "polyfact-Q1757822-P170-Q472756",
       "isAdult": false,
@@ -63605,8 +63605,8 @@
       "category": "arts",
       "decoys": [
         "Antonio Canova",
-        "Tove Jansson",
-        "Vince McMahon"
+        "Gustave Courbet",
+        "Jacques-Louis David"
       ],
       "id": "polyfact-Q926536-P170-Q223274",
       "isAdult": false,
@@ -63640,8 +63640,8 @@
       "answer": "Carlton Cuse",
       "category": "arts",
       "decoys": [
-        "Isaac Levitan",
-        "Henri Rousseau",
+        "J. Howard Miller",
+        "Sydney Pollack",
         "Isaac Levitan"
       ],
       "id": "polyfact-Q17299853-P170-Q443440",
@@ -63658,9 +63658,9 @@
       "answer": "Stephen Hillenburg",
       "category": "arts",
       "decoys": [
-        "Carlton Cuse",
-        "Doug Ellin",
-        "Arthur Conan Doyle"
+        "J.K. Rowling",
+        "Darren Star",
+        "Michael Green"
       ],
       "id": "polyfact-Q1189756-P170-Q318750",
       "isAdult": false,
@@ -63676,9 +63676,9 @@
       "answer": "Antonio Canova",
       "category": "arts",
       "decoys": [
-        "Doug Ellin",
-        "Jonathan Glassner",
-        "Jonathan Glassner"
+        "John La Farge",
+        "Hercule Florence",
+        "Lewis Carroll"
       ],
       "id": "polyfact-Q517408-P170-Q5547",
       "isAdult": false,
@@ -63694,9 +63694,9 @@
       "answer": "Hasbro",
       "category": "arts",
       "decoys": [
-        "Peter S. Fischer",
+        "Donatello",
         "Hermann Joha",
-        "Bill Cosby"
+        "Le Tintoret"
       ],
       "id": "polyfact-Q2292505-P170-Q501476",
       "isAdult": false,
@@ -63730,7 +63730,7 @@
       "answer": "Bill Cosby",
       "category": "arts",
       "decoys": [
-        "Anne Giafferi",
+        "Jean Roba",
         "George Lucas",
         "Anne Giafferi"
       ],
@@ -63749,7 +63749,7 @@
       "category": "arts",
       "decoys": [
         "David Austin",
-        "Wulfila",
+        "Andy Breckman",
         "Richard Buckminster Fuller"
       ],
       "id": "polyfact-Q206818-P170-Q892",
@@ -63766,9 +63766,9 @@
       "answer": "Joss Whedon",
       "category": "arts",
       "decoys": [
+        "Pierre Bonnard",
         "Arianna Huffington",
-        "Arianna Huffington",
-        "Gustave Courbet"
+        "Stephenie Meyer"
       ],
       "id": "polyfact-Q632022-P170-Q298025",
       "isAdult": false,
@@ -63785,8 +63785,8 @@
       "category": "arts",
       "decoys": [
         "Kordes",
-        "Nicolas Maes",
-        "Todd Field"
+        "Paul Dini",
+        "Paul Klee"
       ],
       "id": "polyfact-Q1248567-P170-Q457864",
       "isAdult": false,
@@ -63803,8 +63803,8 @@
       "category": "arts",
       "decoys": [
         "Todd Field",
-        "Giorgione",
-        "Jacques-Louis David"
+        "Mike Mignola",
+        "Mike Flanagan"
       ],
       "id": "polyfact-Q205683-P170-Q445100",
       "isAdult": false,
@@ -63839,7 +63839,7 @@
       "category": "arts",
       "decoys": [
         "J. Howard Miller",
-        "Friz Freleng",
+        "Dan Aykroyd",
         "Claude Monet"
       ],
       "id": "polyfact-Q2364157-P170-Q51522",
@@ -63856,8 +63856,8 @@
       "answer": "Darren Star",
       "category": "arts",
       "decoys": [
-        "Sydney Pollack",
-        "Michael Green",
+        "Beau Willimon",
+        "Tom Perrotta",
         "Michael Green"
       ],
       "id": "polyfact-Q440938-P170-Q452063",
@@ -63874,7 +63874,7 @@
       "answer": "Jean Roba",
       "category": "arts",
       "decoys": [
-        "José de Ribera",
+        "Harper Lee",
         "Deepa Mehta",
         "Agatha Christie"
       ],
@@ -63892,9 +63892,9 @@
       "answer": "Andy Breckman",
       "category": "arts",
       "decoys": [
-        "Numa Pompilius",
-        "Darren Star",
-        "Pierre Paul Rubens"
+        "Felicia Day",
+        "Graham Yost",
+        "Pablo Picasso"
       ],
       "id": "polyfact-Q189068-P170-Q525458",
       "isAdult": false,
@@ -63911,8 +63911,8 @@
       "category": "arts",
       "decoys": [
         "Edvard Munch",
-        "Donatello",
-        "Jean Roba"
+        "Henry Moore",
+        "William Anders"
       ],
       "id": "polyfact-Q141557-P170-Q55375",
       "isAdult": false,
@@ -63928,8 +63928,8 @@
       "answer": "Robert Kirkman",
       "category": "arts",
       "decoys": [
-        "Andy Breckman",
-        "Pierre Bonnard",
+        "Gordon G. Gallup",
+        "Jeff Koons",
         "Yolanda Vargas Dulché"
       ],
       "id": "polyfact-Q20976234-P170-Q311891",
@@ -63946,9 +63946,9 @@
       "answer": "Stephenie Meyer",
       "category": "arts",
       "decoys": [
-        "John La Farge",
+        "Vlaada Chvátil",
         "Mario Puzo",
-        "John La Farge"
+        "Aaron Spelling"
       ],
       "id": "polyfact-Q2716380-P170-Q160219",
       "isAdult": false,
@@ -63982,8 +63982,8 @@
       "answer": "Mike Mignola",
       "category": "arts",
       "decoys": [
-        "Jan Hus",
-        "Stephenie Meyer",
+        "Mike Judge",
+        "Steven Knight",
         "Ben Edlund"
       ],
       "id": "polyfact-Q2703729-P170-Q544975",
@@ -64001,7 +64001,7 @@
       "category": "arts",
       "decoys": [
         "Phidias",
-        "Mike Mignola",
+        "Rembrandt",
         "Le Bernin"
       ],
       "id": "polyfact-Q367251-P170-Q695070",
@@ -64018,8 +64018,8 @@
       "answer": "John le Carré",
       "category": "arts",
       "decoys": [
-        "Eadweard Muybridge",
-        "Pieter Brueghel l'Ancien",
+        "Ilia Répine",
+        "Frédéric Bazille",
         "J. R. R. Tolkien"
       ],
       "id": "polyfact-Q2335880-P170-Q209641",
@@ -64037,8 +64037,8 @@
       "category": "arts",
       "decoys": [
         "Mario Puzo",
-        "Pierre Paul Rubens",
-        "Dan Aykroyd"
+        "Franc Roddam",
+        "Roland Joffé"
       ],
       "id": "polyfact-Q105304384-P170-Q19668417",
       "isAdult": false,
@@ -64055,7 +64055,7 @@
       "category": "arts",
       "decoys": [
         "Rowntree's",
-        "Mike Flanagan",
+        "Joseph Pernet-Ducher",
         "William Bouguereau"
       ],
       "id": "polyfact-Q19363211-P170-Q5582",
@@ -64072,9 +64072,9 @@
       "answer": "Jérôme Bosch",
       "category": "arts",
       "decoys": [
-        "Giovanni de Pise",
-        "David Austin",
-        "Dan Aykroyd"
+        "Fra Carnevale",
+        "Giorgione",
+        "Jan Hus"
       ],
       "id": "polyfact-Q2467518-P170-Q130531",
       "isAdult": false,
@@ -64091,7 +64091,7 @@
       "category": "arts",
       "decoys": [
         "Eiichirō Oda",
-        "Giovanni de Pise",
+        "Hans Makart",
         "Beau Willimon"
       ],
       "id": "polyfact-Q544290-P170-Q181900",
@@ -64108,9 +64108,9 @@
       "answer": "Claude Monet",
       "category": "arts",
       "decoys": [
-        "Tom Perrotta",
+        "Gustave Caillebotte",
         "Jules Bass",
-        "Harper Lee"
+        "Jacob Epstein"
       ],
       "id": "polyfact-Q1167912-P170-Q296",
       "isAdult": false,
@@ -64127,8 +64127,8 @@
       "category": "arts",
       "decoys": [
         "Harper Lee",
-        "Felicia Day",
-        "Hercule Florence"
+        "Léon Tolstoï",
+        "Hayao Miyazaki"
       ],
       "id": "polyfact-Q1428628-P170-Q1512",
       "isAdult": false,
@@ -64145,8 +64145,8 @@
       "category": "arts",
       "decoys": [
         "David Austin",
-        "Georges de La Tour",
-        "Hercule Florence"
+        "Matthew Weiner",
+        "Porl Thompson"
       ],
       "id": "polyfact-Q2535518-P170-Q160219",
       "isAdult": false,
@@ -64162,8 +64162,8 @@
       "answer": "George R. R. Martin",
       "category": "arts",
       "decoys": [
-        "Graham Yost",
-        "Raphaël",
+        "Douglas Adams",
+        "Diana Gabaldon",
         "Tetsuya Nomura"
       ],
       "id": "polyfact-Q3472490-P170-Q181677",
@@ -64180,9 +64180,9 @@
       "answer": "Jacques Rivette",
       "category": "arts",
       "decoys": [
-        "Vincenzo Foppa",
+        "Kazuki Takahashi",
         "Paul Haggis",
-        "Le Greco"
+        "Sam Mendes"
       ],
       "id": "polyfact-Q25513-P170-Q167475",
       "isAdult": false,
@@ -64198,7 +64198,7 @@
       "answer": "Toei",
       "category": "arts",
       "decoys": [
-        "Pablo Picasso",
+        "Wulfila",
         "Georges de La Tour",
         "Glen A. Larson"
       ],
@@ -64216,9 +64216,9 @@
       "answer": "Graham Yost",
       "category": "arts",
       "decoys": [
-        "Raytheon",
+        "Niki de Saint Phalle",
         "Roy Lichtenstein",
-        "Vincenzo Foppa"
+        "Todd McFarlane"
       ],
       "id": "polyfact-Q1535208-P170-Q2712978",
       "isAdult": false,
@@ -64234,7 +64234,7 @@
       "answer": "Philip Pullman",
       "category": "arts",
       "decoys": [
-        "Henry Moore",
+        "Bruce LaBruce",
         "Pablo Picasso",
         "Raytheon"
       ],
@@ -64254,7 +64254,7 @@
       "decoys": [
         "Henry Moore",
         "Claude Monet",
-        "Michel-Ange Buronarroti"
+        "Mikhaïl Boulgakov"
       ],
       "id": "polyfact-Q178776-P170-Q38082",
       "isAdult": false,
@@ -64272,7 +64272,7 @@
       "decoys": [
         "William Anders",
         "Ilia Répine",
-        "Lewis Carroll"
+        "Hugh Hefner"
       ],
       "id": "polyfact-Q1639626-P170-Q9204",
       "isAdult": false,
@@ -64289,8 +64289,8 @@
       "category": "arts",
       "decoys": [
         "Kordes",
-        "Gordon G. Gallup",
-        "Gordon G. Gallup"
+        "Enrique Simonet",
+        "John William Waterhouse"
       ],
       "id": "polyfact-Q2003287-P170-Q30755",
       "isAdult": false,
@@ -64306,9 +64306,9 @@
       "answer": "Gordon G. Gallup",
       "category": "arts",
       "decoys": [
-        "Valentin de Boulogne",
-        "Pieter Brueghel l'Ancien",
-        "Valentin de Boulogne"
+        "Ryan Coogler",
+        "Bill Watterson",
+        "Rumiko Takahashi"
       ],
       "id": "polyfact-Q1430725-P170-Q3110897",
       "isAdult": false,
@@ -64324,7 +64324,7 @@
       "answer": "Jeff Koons",
       "category": "arts",
       "decoys": [
-        "Johannes Vermeer",
+        "Paul Reiser",
         "Mattel",
         "Philip Pullman"
       ],
@@ -64342,9 +64342,9 @@
       "answer": "Johannes Vermeer",
       "category": "arts",
       "decoys": [
-        "Jonathan Ames",
-        "Jeff Koons",
-        "Gidi Raff"
+        "Nicolas Maes",
+        "Pierre Paul Rubens",
+        "Valentin de Boulogne"
       ],
       "id": "polyfact-Q151143-P170-Q41264",
       "isAdult": false,
@@ -64360,7 +64360,7 @@
       "answer": "Masashi Kishimoto",
       "category": "arts",
       "decoys": [
-        "Nintendo Entertainment Analysis and Development",
+        "Dan O'Bannon",
         "Piero Manzoni",
         "Nintendo Entertainment Analysis and Development"
       ],
@@ -64379,7 +64379,7 @@
       "category": "arts",
       "decoys": [
         "Cecily von Ziegesar",
-        "Frédéric Bazille",
+        "Lucas Pope",
         "Charles Dickens"
       ],
       "id": "polyfact-Q2245825-P170-Q1333848",
@@ -64398,7 +64398,7 @@
       "decoys": [
         "Frédéric Bazille",
         "Joseph Pernet-Ducher",
-        "Vlaada Chvátil"
+        "Martin Guillaume Biennais"
       ],
       "id": "polyfact-Q1649854-P170-Q38337",
       "isAdult": false,
@@ -64415,7 +64415,7 @@
       "category": "arts",
       "decoys": [
         "Margaret Mitchell",
-        "Hans Makart",
+        "Kevin Shinick",
         "J. R. R. Tolkien"
       ],
       "id": "polyfact-Q25203543-P170-Q1791461",
@@ -64432,9 +64432,9 @@
       "answer": "Shonda Rhimes",
       "category": "arts",
       "decoys": [
-        "Aaron Spelling",
+        "Philip K. Dick",
         "Agatha Christie",
-        "Hans Makart"
+        "Claude Shannon"
       ],
       "id": "polyfact-Q2397174-P170-Q242329",
       "isAdult": false,
@@ -64450,7 +64450,7 @@
       "answer": "William Anders",
       "category": "arts",
       "decoys": [
-        "Giovanni Bellini",
+        "John Romero",
         "Joss Whedon",
         "Aaron Spelling"
       ],
@@ -64468,8 +64468,8 @@
       "answer": "Gustave Caillebotte",
       "category": "arts",
       "decoys": [
-        "Albrecht Dürer",
-        "Mike Judge",
+        "Joel Chandler Harris",
+        "Marcel Duchamp",
         "Honoré de Balzac"
       ],
       "id": "polyfact-Q2335560-P170-Q295144",
@@ -64486,9 +64486,9 @@
       "answer": "Mike Judge",
       "category": "arts",
       "decoys": [
-        "Gustave Caillebotte",
+        "Danny Boyle",
         "Hideo Kojima",
-        "Titien"
+        "Hua Guofeng"
       ],
       "id": "polyfact-Q511726-P170-Q434585",
       "isAdult": false,
@@ -64506,7 +64506,7 @@
       "decoys": [
         "Franc Roddam",
         "Roland Joffé",
-        "Giambattista Tiepolo"
+        "Kim Jee-woon"
       ],
       "id": "polyfact-Q111938992-P170-Q1337354",
       "isAdult": false,
@@ -64522,9 +64522,9 @@
       "answer": "Ilia Répine",
       "category": "arts",
       "decoys": [
-        "Giambattista Tiepolo",
-        "Steven Knight",
-        "Matthew Weiner"
+        "John Ball",
+        "Henri Matisse",
+        "Stephen Frears"
       ],
       "id": "polyfact-Q175628-P170-Q172911",
       "isAdult": false,
@@ -64541,8 +64541,8 @@
       "category": "arts",
       "decoys": [
         "Jacob Epstein",
-        "Drogön Chögyal Phagpa",
-        "Léon Tolstoï"
+        "René Balcer",
+        "Benjamin Heisenberg"
       ],
       "id": "polyfact-Q222041-P170-Q350903",
       "isAdult": false,
@@ -64558,9 +64558,9 @@
       "answer": "Alfredo Castelli",
       "category": "arts",
       "decoys": [
-        "Le Caravage",
-        "Nintendo",
-        "Léon Tolstoï"
+        "Kurt Sutter",
+        "Matt Groening",
+        "Jeff Franklin"
       ],
       "id": "polyfact-Q684109-P170-Q2577273",
       "isAdult": false,
@@ -64578,7 +64578,7 @@
       "decoys": [
         "Stephen Hillenburg",
         "Eiichirō Oda",
-        "Porl Thompson"
+        "Numa Pompilius"
       ],
       "id": "polyfact-Q56898-P170-Q8093",
       "isAdult": false,
@@ -64594,9 +64594,9 @@
       "answer": "Lewis Carroll",
       "category": "arts",
       "decoys": [
-        "Brad Bird",
+        "J. D. Salinger",
         "Microsoft",
-        "Frans Hals"
+        "Marcel Breuer"
       ],
       "id": "polyfact-Q2561830-P170-Q38082",
       "isAdult": false,
@@ -64613,8 +64613,8 @@
       "category": "arts",
       "decoys": [
         "Shōtarō Ishinomori",
-        "Frans Hals",
-        "Douglas Adams"
+        "Éric Chahi",
+        "Peter Berg"
       ],
       "id": "polyfact-Q1934350-P170-Q739650",
       "isAdult": false,
@@ -64630,7 +64630,7 @@
       "answer": "Diana Gabaldon",
       "category": "arts",
       "decoys": [
-        "Hayao Miyazaki",
+        "Richard Stallman",
         "Douglas Adams",
         "Deng Xiaoping"
       ],
@@ -64649,7 +64649,7 @@
       "category": "arts",
       "decoys": [
         "Mikalojus Konstantinas Čiurlionis",
-        "Diana Gabaldon",
+        "Kōshun Takami",
         "Kazuki Takahashi"
       ],
       "id": "polyfact-Q1939137-P170-Q55400",
@@ -64667,7 +64667,7 @@
       "category": "arts",
       "decoys": [
         "Rob Minkoff",
-        "Sam Mendes",
+        "Josh Groban",
         "Mike Judge"
       ],
       "id": "polyfact-Q716835-P170-Q160219",
@@ -64685,7 +64685,7 @@
       "category": "arts",
       "decoys": [
         "Sam Mendes",
-        "Afro-Américains",
+        "H. P. Lovecraft",
         "Édouard Manet"
       ],
       "id": "polyfact-Q949846-P170-Q168704",
@@ -64720,9 +64720,9 @@
       "answer": "William Shakespeare",
       "category": "arts",
       "decoys": [
-        "Mikhaïl Boulgakov",
-        "Edmund Blair Leighton",
-        "Shinji Mikami"
+        "Pieter Brueghel l'Ancien",
+        "Johannes Vermeer",
+        "Frans Hals"
       ],
       "id": "polyfact-Q1767900-P170-Q692",
       "isAdult": false,
@@ -64738,9 +64738,9 @@
       "answer": "Pieter Brueghel l'Ancien",
       "category": "arts",
       "decoys": [
-        "Jacob van Ruisdael",
-        "Niki de Saint Phalle",
-        "Vlaada Chvátil"
+        "William Shakespeare",
+        "Albert Cuyp",
+        "Jacob Jordaens"
       ],
       "id": "polyfact-Q1192570-P170-Q43270",
       "isAdult": false,
@@ -64757,8 +64757,8 @@
       "category": "arts",
       "decoys": [
         "Jack Kirby",
-        "William Shakespeare",
-        "Albert Cuyp"
+        "Stephen Herek",
+        "Tomonobu Itagaki"
       ],
       "id": "polyfact-Q150820-P170-Q194280",
       "isAdult": false,
@@ -64775,8 +64775,8 @@
       "category": "arts",
       "decoys": [
         "Kevin Smith",
-        "Jules Verne",
-        "Hugh Hefner"
+        "Alan Gibson",
+        "Reginald Rose"
       ],
       "id": "polyfact-Q123953931-P170-Q7383978",
       "isAdult": false,
@@ -64792,9 +64792,9 @@
       "answer": "J.K. Rowling",
       "category": "arts",
       "decoys": [
-        "François Boucher",
-        "Luis de Morales",
-        "L. Frank Baum"
+        "Russell T Davies",
+        "Eric Schopler",
+        "Andy Warhol"
       ],
       "id": "polyfact-Q716941-P170-Q34660",
       "isAdult": false,
@@ -64812,7 +64812,7 @@
       "decoys": [
         "Bill Watterson",
         "Kordes",
-        "Ryan Coogler"
+        "Xu Bing"
       ],
       "id": "polyfact-Q935079-P170-Q318750",
       "isAdult": false,
@@ -64828,9 +64828,9 @@
       "answer": "Jérôme Bosch",
       "category": "arts",
       "decoys": [
-        "Enrique Simonet",
-        "Jacob Jordaens",
-        "Jacob Jordaens"
+        "Vincenzo Foppa",
+        "Parmigianino",
+        "Sandro Botticelli"
       ],
       "id": "polyfact-Q2304870-P170-Q130531",
       "isAdult": false,
@@ -64846,7 +64846,7 @@
       "answer": "Raytheon",
       "category": "arts",
       "decoys": [
-        "Rumiko Takahashi",
+        "Giovanni de Pise",
         "Édouard Manet",
         "Darren Star"
       ],
@@ -64864,9 +64864,9 @@
       "answer": "Léonard de Vinci",
       "category": "arts",
       "decoys": [
-        "Pierre-Joseph Redouté",
-        "Gene Roddenberry",
-        "Gardner Fox"
+        "Jan van Eyck",
+        "Conrad von Soest",
+        "Rogier van der Weyden"
       ],
       "id": "polyfact-Q797902-P170-Q762",
       "isAdult": false,
@@ -64882,9 +64882,9 @@
       "answer": "Francisco de Goya",
       "category": "arts",
       "decoys": [
-        "George R. R. Martin",
-        "Rumiko Takahashi",
-        "Margaret Cavendish"
+        "Giambattista Tiepolo",
+        "Eugène Delacroix",
+        "Angelica Kauffmann"
       ],
       "id": "polyfact-Q3543882-P170-Q5432",
       "isAdult": false,
@@ -64900,9 +64900,9 @@
       "answer": "Arthur Conan Doyle",
       "category": "arts",
       "decoys": [
-        "Shinji Mikami",
+        "Paul Gauguin",
         "David Edward Kelley",
-        "Parmigianino"
+        "Fred Seibert"
       ],
       "id": "polyfact-Q283111-P170-Q35610",
       "isAdult": false,
@@ -64918,9 +64918,9 @@
       "answer": "Léon Tolstoï",
       "category": "arts",
       "decoys": [
-        "Diego Vélasquez",
+        "Jackson Pollock",
         "Claude Monet",
-        "Parmigianino"
+        "Isaac Asimov"
       ],
       "id": "polyfact-Q3340761-P170-Q7243",
       "isAdult": false,
@@ -64937,8 +64937,8 @@
       "category": "arts",
       "decoys": [
         "George R. R. Martin",
-        "Paul Reiser",
-        "Hokusai"
+        "Wes McKinney",
+        "Candace Bushnell"
       ],
       "id": "polyfact-Q200344-P170-Q102071",
       "isAdult": false,
@@ -64955,7 +64955,7 @@
       "category": "arts",
       "decoys": [
         "Mark Baker",
-        "John William Waterhouse",
+        "Tom Hall",
         "Robert Kirkman"
       ],
       "id": "polyfact-Q59-P170-Q92768",
@@ -64973,8 +64973,8 @@
       "category": "arts",
       "decoys": [
         "Damien Hirst",
-        "Dan O'Bannon",
-        "John William Waterhouse"
+        "David Heinemeier Hansson",
+        "William Eggleston"
       ],
       "id": "polyfact-Q752365-P170-Q430922",
       "isAdult": false,
@@ -65008,9 +65008,9 @@
       "answer": "Lucas Pope",
       "category": "arts",
       "decoys": [
-        "Digital Equipment Corporation",
+        "Martin Wallace",
         "Frank Elstner",
-        "Raphaël"
+        "Dennis Spooner"
       ],
       "id": "polyfact-Q14565978-P170-Q15732499",
       "isAdult": false,
@@ -65027,7 +65027,7 @@
       "category": "arts",
       "decoys": [
         "Chris Miller",
-        "Lucas Pope",
+        "Chuck Barris",
         "Vincent van Gogh"
       ],
       "id": "polyfact-Q51746-P170-Q38222",
@@ -65044,7 +65044,7 @@
       "answer": "George Lucas",
       "category": "arts",
       "decoys": [
-        "Kevin Shinick",
+        "Jean-Claude Forest",
         "Ben Stein",
         "Kevin Shinick"
       ],
@@ -65080,9 +65080,9 @@
       "answer": "Martin Guillaume Biennais",
       "category": "arts",
       "decoys": [
-        "Claude Shannon",
+        "Harriet Beecher Stowe",
         "Université Carnegie-Mellon",
-        "Michael Jacobs"
+        "Jean-Baptiste Guillot"
       ],
       "id": "polyfact-Q1515173-P170-Q1694164",
       "isAdult": false,
@@ -65100,7 +65100,7 @@
       "decoys": [
         "Jim Steranko",
         "John Romero",
-        "Francisco de Zurbarán"
+        "Kang Eun-kyung"
       ],
       "id": "polyfact-Q2755612-P170-Q892",
       "isAdult": false,
@@ -65134,9 +65134,9 @@
       "answer": "J.K. Rowling",
       "category": "arts",
       "decoys": [
-        "Martin Guillaume Biennais",
+        "Antony Gormley",
         "Danny Boyle",
-        "The Walt Disney Company"
+        "Joe Eszterhas"
       ],
       "id": "polyfact-Q181291-P170-Q34660",
       "isAdult": false,
@@ -65152,9 +65152,9 @@
       "answer": "Michel-Ange Buronarroti",
       "category": "arts",
       "decoys": [
-        "Simon Wincer",
-        "Marcel Duchamp",
-        "Richard Garfield"
+        "Pieter Pourbus",
+        "Petrus Plancius",
+        "Antonio Moro"
       ],
       "id": "polyfact-Q500242-P170-Q5592",
       "isAdult": false,
@@ -65170,8 +65170,8 @@
       "answer": "Harlan Coben",
       "category": "arts",
       "decoys": [
-        "Hua Guofeng",
-        "Kim Jee-woon",
+        "Jean-Luc Godard",
+        "Stephen King",
         "Marcel Duchamp"
       ],
       "id": "polyfact-Q24206207-P170-Q318099",
@@ -65189,8 +65189,8 @@
       "category": "arts",
       "decoys": [
         "Hua Guofeng",
-        "Jacob van Ruisdael",
-        "René Balcer"
+        "Jimmy Carter",
+        "Rick Rosner"
       ],
       "id": "polyfact-Q485462-P170-Q484522",
       "isAdult": false,
@@ -65206,7 +65206,7 @@
       "answer": "René Balcer",
       "category": "arts",
       "decoys": [
-        "Sandro Botticelli",
+        "McG",
         "Stephenie Meyer",
         "David Bowie"
       ],
@@ -65224,9 +65224,9 @@
       "answer": "Sandro Botticelli",
       "category": "arts",
       "decoys": [
-        "Stephen Hillenburg",
-        "John Ball",
-        "Le Caravage"
+        "Jérôme Bosch",
+        "Raphaël",
+        "Giovanni Bellini"
       ],
       "id": "polyfact-Q2426058-P170-Q5669",
       "isAdult": false,
@@ -65243,7 +65243,7 @@
       "category": "arts",
       "decoys": [
         "C. S. Lewis",
-        "Jacob van Ruisdael",
+        "Zourab Tsereteli",
         "Dan Aykroyd"
       ],
       "id": "polyfact-Q1247708-P170-Q3809058",
@@ -65260,8 +65260,8 @@
       "answer": "Harmony Korine",
       "category": "arts",
       "decoys": [
-        "Benjamin Heisenberg",
-        "Le Tintoret",
+        "Hugh Lofting",
+        "Tatsuo Yoshida",
         "David Shore"
       ],
       "id": "polyfact-Q1781285-P170-Q528949",
@@ -65278,7 +65278,7 @@
       "answer": "Kurt Sutter",
       "category": "arts",
       "decoys": [
-        "Matt Groening",
+        "John Lee Hancock",
         "Benjamin Heisenberg",
         "Pierre Bonnard"
       ],
@@ -65296,8 +65296,8 @@
       "answer": "Matt Groening",
       "category": "arts",
       "decoys": [
-        "Kurt Sutter",
-        "Jeff Franklin",
+        "David Austin",
+        "Jim Henson",
         "Arianna Huffington"
       ],
       "id": "polyfact-Q7810-P170-Q43994",
@@ -65314,9 +65314,9 @@
       "answer": "Jeff Franklin",
       "category": "arts",
       "decoys": [
-        "Jan van Eyck",
-        "William Shakespeare",
-        "Jan van Eyck"
+        "Marie Kondō",
+        "Anne Rice",
+        "Daisuke Ishiwatari"
       ],
       "id": "polyfact-Q20714712-P170-Q1752764",
       "isAdult": false,
@@ -65332,7 +65332,7 @@
       "answer": "Henri Matisse",
       "category": "arts",
       "decoys": [
-        "Éric Chahi",
+        "Harold W. Kuhn",
         "Éric Chahi",
         "Porl Thompson"
       ],
@@ -65351,7 +65351,7 @@
       "category": "arts",
       "decoys": [
         "Franc Roddam",
-        "Michel-Ange Buronarroti",
+        "Carl Gustav Jung",
         "Jordan Mechner"
       ],
       "id": "polyfact-Q223367-P170-Q55258",
@@ -65370,7 +65370,7 @@
       "decoys": [
         "Édouard Manet",
         "Masami Kurumada",
-        "Henri Matisse"
+        "Salvador Dalí"
       ],
       "id": "polyfact-Q720235-P170-Q79904",
       "isAdult": false,
@@ -65386,9 +65386,9 @@
       "answer": "Peter Berg",
       "category": "arts",
       "decoys": [
-        "Stephen Frears",
-        "Vishvamitra",
-        "Jacques-Louis David"
+        "René de Saussure",
+        "Simon Cowell",
+        "Ernest Daltroff"
       ],
       "id": "polyfact-Q4507-P170-Q183141",
       "isAdult": false,
@@ -65405,8 +65405,8 @@
       "category": "arts",
       "decoys": [
         "Tantau",
-        "Honoré de Balzac",
-        "J. D. Salinger"
+        "Jhonen Vasquez",
+        "Len Wein"
       ],
       "id": "polyfact-Q2629013-P170-Q57588",
       "isAdult": false,
@@ -65422,9 +65422,9 @@
       "answer": "Le Bernin",
       "category": "arts",
       "decoys": [
-        "Peter Berg",
-        "Francisco de Goya",
-        "Marcel Breuer"
+        "Jacob van Ruisdael",
+        "Margaret Cavendish",
+        "Francisco de Zurbarán"
       ],
       "id": "polyfact-Q766487-P170-Q160538",
       "isAdult": false,
@@ -65440,9 +65440,9 @@
       "answer": "Akira Toriyama",
       "category": "arts",
       "decoys": [
-        "Eugène Delacroix",
+        "Astrid Lindgren",
         "Jacques Rivette",
-        "Francisco de Goya"
+        "Alex Raymond"
       ],
       "id": "polyfact-Q2142-P170-Q208582",
       "isAdult": false,
@@ -65459,8 +65459,8 @@
       "category": "arts",
       "decoys": [
         "Ryan Murphy",
-        "Michel-Ange Buronarroti",
-        "Kōshun Takami"
+        "Sacha Baron Cohen",
+        "Wes Craven"
       ],
       "id": "polyfact-Q44571-P170-Q7439",
       "isAdult": false,
@@ -65478,7 +65478,7 @@
       "decoys": [
         "Judd Apatow",
         "Mike Judge",
-        "Richard Stallman"
+        "Romain Goupil"
       ],
       "id": "polyfact-Q6599435-P170-Q3637925",
       "isAdult": false,
@@ -65494,7 +65494,7 @@
       "answer": "Anakin Skywalker",
       "category": "arts",
       "decoys": [
-        "Josh Groban",
+        "Drogön Chögyal Phagpa",
         "Kōshun Takami",
         "Josh Groban"
       ],
@@ -65512,8 +65512,8 @@
       "answer": "H. P. Lovecraft",
       "category": "arts",
       "decoys": [
-        "Conrad von Soest",
-        "Anakin Skywalker",
+        "Alexander Helwig Wyant",
+        "William Wetmore Story",
         "Stephen Herek"
       ],
       "id": "polyfact-Q2039651-P170-Q169566",
@@ -65530,9 +65530,9 @@
       "answer": "J.K. Rowling",
       "category": "arts",
       "decoys": [
-        "Rogier van der Weyden",
+        "Ewan McGregor",
         "Monolith Soft",
-        "H. P. Lovecraft"
+        "Rick Riordan"
       ],
       "id": "polyfact-Q2019811-P170-Q34660",
       "isAdult": false,
@@ -65548,8 +65548,8 @@
       "answer": "Alan Gibson",
       "category": "arts",
       "decoys": [
-        "Tomonobu Itagaki",
-        "Wulfila",
+        "Suzanne Collins",
+        "Joseph L. Mankiewicz",
         "Tomonobu Itagaki"
       ],
       "id": "polyfact-Q128236-P170-Q533522",
@@ -65585,7 +65585,7 @@
       "category": "arts",
       "decoys": [
         "Eric Schopler",
-        "Jérôme Bosch",
+        "Tom Holland",
         "Andy Warhol"
       ],
       "id": "polyfact-Q609572-P170-Q37693",
@@ -65604,7 +65604,7 @@
       "decoys": [
         "Shōtarō Ishinomori",
         "Xu Bing",
-        "Alan Gibson"
+        "Larry Sanger"
       ],
       "id": "polyfact-Q45726-P170-Q348059",
       "isAdult": false,
@@ -65621,8 +65621,8 @@
       "category": "arts",
       "decoys": [
         "Fred Seibert",
-        "Antonello de Messine",
-        "Russell T Davies"
+        "Colleen Ballinger",
+        "Dan Jurgens"
       ],
       "id": "polyfact-Q15967387-P170-Q22279146",
       "isAdult": false,
@@ -65640,7 +65640,7 @@
       "decoys": [
         "Tom Hall",
         "Jack Arnold",
-        "Paul Gauguin"
+        "Solomon Linda"
       ],
       "id": "polyfact-Q860320-P170-Q254820",
       "isAdult": false,
@@ -65656,9 +65656,9 @@
       "answer": "Jean-Auguste Dominique Ingres",
       "category": "arts",
       "decoys": [
-        "Bruce LaBruce",
-        "David Heinemeier Hansson",
-        "Jeff Koons"
+        "Joseph Wright of Derby",
+        "Jean-Honoré Fragonard",
+        "Lucy Maud Montgomery"
       ],
       "id": "polyfact-Q5818528-P170-Q23380",
       "isAdult": false,
@@ -65674,9 +65674,9 @@
       "answer": "Zanabazar",
       "category": "arts",
       "decoys": [
-        "Jackson Pollock",
-        "Aaron Swartz",
-        "Wes McKinney"
+        "Eustache Le Sueur",
+        "Claude Gellée",
+        "Antoine van Dyck"
       ],
       "id": "polyfact-Q857896-P170-Q735871",
       "isAdult": false,
@@ -65694,7 +65694,7 @@
       "decoys": [
         "William Eggleston",
         "Shonda Rhimes",
-        "Giovanni Bellini"
+        "Mark Brazill"
       ],
       "id": "polyfact-Q7781352-P170-Q311607",
       "isAdult": false,
@@ -65712,7 +65712,7 @@
       "decoys": [
         "Stan Lee",
         "Daniel Chester French",
-        "Candace Bushnell"
+        "Marc Cherry"
       ],
       "id": "polyfact-Q1159897-P170-Q169566",
       "isAdult": false,
@@ -65729,7 +65729,7 @@
       "category": "arts",
       "decoys": [
         "Pieter Pourbus",
-        "Zanabazar",
+        "Nintendo",
         "Mexicas"
       ],
       "id": "polyfact-Q909166-P170-Q191224",
@@ -65766,7 +65766,7 @@
       "decoys": [
         "Hans Makart",
         "Shigeru Miyamoto",
-        "Walt Disney Pictures"
+        "Hergé"
       ],
       "id": "polyfact-Q1195616-P170-Q3023200",
       "isAdult": false,
@@ -65782,7 +65782,7 @@
       "answer": "Chuck Barris",
       "category": "arts",
       "decoys": [
-        "Dennis Spooner",
+        "Marcello Piacentini",
         "Jean-Claude Forest",
         "Stan Lee"
       ],
@@ -65800,9 +65800,9 @@
       "answer": "Kang Eun-kyung",
       "category": "arts",
       "decoys": [
-        "Chuck Barris",
-        "Sandro Botticelli",
-        "Vincenzo Foppa"
+        "Dan Curtis",
+        "Hugh Wilson",
+        "Garry Shandling"
       ],
       "id": "polyfact-Q27067918-P170-Q6823918",
       "isAdult": false,
@@ -65818,8 +65818,8 @@
       "answer": "Antony Gormley",
       "category": "arts",
       "decoys": [
-        "Albrecht Dürer",
-        "Kang Eun-kyung",
+        "José Guadalupe Posada",
+        "Lee Tamahori",
         "L. Frank Baum"
       ],
       "id": "polyfact-Q1325290-P170-Q360371",
@@ -65838,7 +65838,7 @@
       "decoys": [
         "David Bowie",
         "Kordes",
-        "Ilia Répine"
+        "Michael Bond"
       ],
       "id": "polyfact-Q1214882-P170-Q363402",
       "isAdult": false,
@@ -65854,8 +65854,8 @@
       "answer": "Joe Eszterhas",
       "category": "arts",
       "decoys": [
-        "Antony Gormley",
-        "Eustache Le Sueur",
+        "Jimmy Fallon",
+        "Carl Barks",
         "Parker"
       ],
       "id": "polyfact-Q2742701-P170-Q220834",
@@ -65872,9 +65872,9 @@
       "answer": "Jean-Luc Godard",
       "category": "arts",
       "decoys": [
-        "Joe Eszterhas",
+        "Josh Schwartz",
         "Édouard Manet",
-        "Angelica Kauffmann"
+        "Paul Attanasio"
       ],
       "id": "polyfact-Q2533567-P170-Q53001",
       "isAdult": false,
@@ -65890,9 +65890,9 @@
       "answer": "Vincent van Gogh",
       "category": "arts",
       "decoys": [
-        "Jean-Luc Godard",
-        "Stephen King",
-        "Felicia Day"
+        "Anton Tchekhov",
+        "Sonny Grosso",
+        "Robert Louis Stevenson"
       ],
       "id": "polyfact-Q45585-P170-Q5582",
       "isAdult": false,
@@ -65908,9 +65908,9 @@
       "answer": "Vishvamitra",
       "category": "arts",
       "decoys": [
-        "Victor Hugo",
-        "Raphaël",
-        "Jimmy Carter"
+        "Afro-Américains",
+        "Digital Equipment Corporation",
+        "The Walt Disney Company"
       ],
       "id": "polyfact-Q728880-P170-Q2773345",
       "isAdult": false,
@@ -65927,8 +65927,8 @@
       "category": "arts",
       "decoys": [
         "Organisation des Nations unies pour l'éducation, la science et la culture",
-        "Rick Rosner",
-        "McG"
+        "David Crane",
+        "Vincent van Gogh"
       ],
       "id": "polyfact-Q383876-P170-Q39829",
       "isAdult": false,
@@ -65944,7 +65944,7 @@
       "answer": "Masashi Kishimoto",
       "category": "arts",
       "decoys": [
-        "Zourab Tsereteli",
+        "Adam Shankman",
         "Graham Yost",
         "Jimmy Carter"
       ],
@@ -66000,7 +66000,7 @@
       "decoys": [
         "Isaac Asimov",
         "Zourab Tsereteli",
-        "Petrus Plancius"
+        "Vince McMahon"
       ],
       "id": "polyfact-Q18949486-P170-Q182658",
       "isAdult": false,
@@ -66016,8 +66016,8 @@
       "answer": "Ludwig Mies van der Rohe",
       "category": "arts",
       "decoys": [
-        "Hugh Lofting",
-        "Petrus Plancius",
+        "Thomas Eakins",
+        "Tom Stoppard",
         "René Magritte"
       ],
       "id": "polyfact-Q737484-P170-Q41508",
@@ -66035,7 +66035,7 @@
       "category": "arts",
       "decoys": [
         "Marina Abramović",
-        "Harriet Beecher Stowe",
+        "Akira Toriyama",
         "Hugh Lofting"
       ],
       "id": "polyfact-Q700127-P170-Q516177",
@@ -66052,8 +66052,8 @@
       "answer": "Philip K. Dick",
       "category": "arts",
       "decoys": [
-        "Tatsuo Yoshida",
-        "Harriet Beecher Stowe",
+        "Alekseï Pajitnov",
+        "Cristian Mungiu",
         "Arthur Conan Doyle"
       ],
       "id": "polyfact-Q943048-P170-Q171091",
@@ -66070,7 +66070,7 @@
       "answer": "John Lee Hancock",
       "category": "arts",
       "decoys": [
-        "Francisco de Goya",
+        "Markus Persson",
         "Matt Groening",
         "Peter Jackson"
       ],
@@ -66088,7 +66088,7 @@
       "answer": "Jim Henson",
       "category": "arts",
       "decoys": [
-        "François Boucher",
+        "Leslie Charteris",
         "Xu Bing",
         "Ryan Murphy"
       ],
@@ -66106,7 +66106,7 @@
       "answer": "Matthew Weiner",
       "category": "arts",
       "decoys": [
-        "Andrea Mantegna",
+        "Elzie Crisler Segar",
         "Marie Kondō",
         "Paul Reubens"
       ],
@@ -66124,9 +66124,9 @@
       "answer": "Anne Rice",
       "category": "arts",
       "decoys": [
-        "Claude Gellée",
+        "Fred Moore",
         "Jin Yong",
-        "John Lee Hancock"
+        "D. W. Griffith"
       ],
       "id": "polyfact-Q682242-P170-Q184785",
       "isAdult": false,
@@ -66143,7 +66143,7 @@
       "category": "arts",
       "decoys": [
         "Daisuke Ishiwatari",
-        "Luis de Morales",
+        "Alfredo Castelli",
         "Gouvernement de Meiji"
       ],
       "id": "polyfact-Q1535338-P170-Q2062797",
@@ -66160,9 +66160,9 @@
       "answer": "H. P. Lovecraft",
       "category": "arts",
       "decoys": [
-        "Francisco de Goya",
+        "Eadweard Muybridge",
         "Stieg Larsson",
-        "Jim Henson"
+        "Bram Stoker"
       ],
       "id": "polyfact-Q12038-P170-Q169566",
       "isAdult": false,
@@ -66178,8 +66178,8 @@
       "answer": "Carl Gustav Jung",
       "category": "arts",
       "decoys": [
-        "Anne Rice",
-        "Diego Vélasquez",
+        "Harmony Korine",
+        "Edmund Blair Leighton",
         "Harold W. Kuhn"
       ],
       "id": "polyfact-Q935990-P170-Q41532",
@@ -66196,9 +66196,9 @@
       "answer": "René Magritte",
       "category": "arts",
       "decoys": [
-        "Pierre Paul Rubens",
-        "Antoine van Dyck",
-        "Carl Gustav Jung"
+        "Robert McKimson",
+        "Irwin Allen",
+        "Karl May"
       ],
       "id": "polyfact-Q2022606-P170-Q7836",
       "isAdult": false,
@@ -66216,7 +66216,7 @@
       "decoys": [
         "Auguste Rodin",
         "Ryan Murphy",
-        "Salvador Dalí"
+        "Vishvamitra"
       ],
       "id": "polyfact-Q944287-P170-Q3565642",
       "isAdult": false,
@@ -66233,8 +66233,8 @@
       "category": "arts",
       "decoys": [
         "Salvador Dalí",
-        "René de Saussure",
-        "Simon Cowell"
+        "Jürgen Thorwald",
+        "Bruno Bianchi"
       ],
       "id": "polyfact-Q3577037-P170-Q299194",
       "isAdult": false,
@@ -66250,7 +66250,7 @@
       "answer": "Joss Whedon",
       "category": "arts",
       "decoys": [
-        "Diego Vélasquez",
+        "Aaron Sorkin",
         "René de Saussure",
         "Ian Fleming"
       ],
@@ -66268,9 +66268,9 @@
       "answer": "Simon Cowell",
       "category": "arts",
       "decoys": [
-        "Ernest Daltroff",
+        "Michael Ende",
         "Mario Puzo",
-        "Pieter Pourbus"
+        "Ted Elliott"
       ],
       "id": "polyfact-Q5453652-P170-Q162629",
       "isAdult": false,
@@ -66286,7 +66286,7 @@
       "answer": "Ernest Daltroff",
       "category": "arts",
       "decoys": [
-        "Jacques-Louis David",
+        "Vincent Chalvon-Demersay",
         "Darren Star",
         "Université Carnegie-Mellon"
       ],
@@ -66304,9 +66304,9 @@
       "answer": "Jhonen Vasquez",
       "category": "arts",
       "decoys": [
-        "Jean-Baptiste Guillot",
+        "Katsuhiro Ōtomo",
         "Ingmar Bergman",
-        "Jean-Baptiste Guillot"
+        "Cris Morena"
       ],
       "id": "polyfact-Q607346-P170-Q667386",
       "isAdult": false,
@@ -66322,7 +66322,7 @@
       "answer": "Akira Toriyama",
       "category": "arts",
       "decoys": [
-        "Jhonen Vasquez",
+        "Egon Schiele",
         "Frank Herbert",
         "Ricky Gervais"
       ],
@@ -66342,7 +66342,7 @@
       "decoys": [
         "McG",
         "Astrid Lindgren",
-        "Alex Raymond"
+        "Joe Pytka"
       ],
       "id": "polyfact-Q2456058-P170-Q51057",
       "isAdult": false,
@@ -66359,7 +66359,7 @@
       "category": "arts",
       "decoys": [
         "Anne Giafferi",
-        "Len Wein",
+        "Tim Burton",
         "Alex Raymond"
       ],
       "id": "polyfact-Q2349069-P170-Q242329",
@@ -66377,8 +66377,8 @@
       "category": "arts",
       "decoys": [
         "Stephenie Meyer",
-        "Joseph Wright of Derby",
-        "José de Ribera"
+        "Orson Scott Card",
+        "Bernard Slade"
       ],
       "id": "polyfact-Q2362299-P170-Q173540",
       "isAdult": false,
@@ -66395,7 +66395,7 @@
       "category": "arts",
       "decoys": [
         "Cecily von Ziegesar",
-        "Joseph Wright of Derby",
+        "Pierre Auguste Cot",
         "Tatsunoko Production"
       ],
       "id": "polyfact-Q2519837-P170-Q452745",
@@ -66412,9 +66412,9 @@
       "answer": "Luc Besson",
       "category": "arts",
       "decoys": [
-        "Sacha Baron Cohen",
-        "Jean-Auguste Dominique Ingres",
-        "Le Caravage"
+        "Rod Serling",
+        "Dick Wolf",
+        "Fabrice Bellard"
       ],
       "id": "polyfact-Q445816-P170-Q484779",
       "isAdult": false,
@@ -66430,8 +66430,8 @@
       "answer": "Glen A. Larson",
       "category": "arts",
       "decoys": [
-        "Hans Memling",
-        "Alexander Helwig Wyant",
+        "Marcel Proust",
+        "Bruno Heller",
         "Sacha Baron Cohen"
       ],
       "id": "polyfact-Q1088996-P170-Q604524",
@@ -66449,8 +66449,8 @@
       "category": "arts",
       "decoys": [
         "J. R. R. Tolkien",
-        "Eustache Le Sueur",
-        "Wes Craven"
+        "L. Ron Hubbard",
+        "Bruce Timm"
       ],
       "id": "polyfact-Q105086938-P170-Q26764773",
       "isAdult": false,
@@ -66486,7 +66486,7 @@
       "decoys": [
         "George R. R. Martin",
         "Carl Gustav Jung",
-        "William Wetmore Story"
+        "Johnston McCulley"
       ],
       "id": "polyfact-Q1514450-P170-Q43994",
       "isAdult": false,
@@ -66504,7 +66504,7 @@
       "decoys": [
         "Wes Craven",
         "Gustave Courbet",
-        "Romain Goupil"
+        "Ivan Chichkine"
       ],
       "id": "polyfact-Q3572177-P170-Q649801",
       "isAdult": false,
@@ -66520,8 +66520,8 @@
       "answer": "William Wetmore Story",
       "category": "arts",
       "decoys": [
-        "George R. R. Martin",
-        "Ewan McGregor",
+        "Gilbert Stuart",
+        "Merry-Joseph Blondel",
         "Tove Jansson"
       ],
       "id": "polyfact-Q531989-P170-Q1335728",
@@ -66538,8 +66538,8 @@
       "answer": "Joss Whedon",
       "category": "arts",
       "decoys": [
-        "Édouard Manet",
-        "Rick Riordan",
+        "Maurice Duverger",
+        "Nigel Kneale",
         "Romain Goupil"
       ],
       "id": "polyfact-Q2624998-P170-Q298025",
@@ -66556,7 +66556,7 @@
       "answer": "Frank D. Gilroy",
       "category": "arts",
       "decoys": [
-        "Michel-Ange Buronarroti",
+        "Michael Jacobs",
         "Franc Roddam",
         "Rumiko Takahashi"
       ],
@@ -66574,9 +66574,9 @@
       "answer": "Ewan McGregor",
       "category": "arts",
       "decoys": [
-        "Suzanne Collins",
+        "Tim Kring",
         "Franc Roddam",
-        "Giuseppe Arcimboldo"
+        "Grant Morrison"
       ],
       "id": "polyfact-Q1055793-P170-Q165518",
       "isAdult": false,
@@ -66593,7 +66593,7 @@
       "category": "arts",
       "decoys": [
         "Rick Riordan",
-        "Joseph L. Mankiewicz",
+        "Vincent van Gogh",
         "Suzanne Collins"
       ],
       "id": "polyfact-Q581192-P170-Q102289",
@@ -66610,8 +66610,8 @@
       "answer": "J. R. R. Tolkien",
       "category": "arts",
       "decoys": [
-        "Francisco de Goya",
-        "Taddeo Gaddi",
+        "Alain Resnais",
+        "John Buscema",
         "Joseph Pernet-Ducher"
       ],
       "id": "polyfact-Q213480-P170-Q892",
@@ -66628,8 +66628,8 @@
       "answer": "Joseph L. Mankiewicz",
       "category": "arts",
       "decoys": [
-        "Larry Sanger",
-        "Taddeo Gaddi",
+        "Álex Pina",
+        "Harlan Coben",
         "Harriet Beecher Stowe"
       ],
       "id": "polyfact-Q200299-P170-Q51583",
@@ -66646,9 +66646,9 @@
       "answer": "Larry Sanger",
       "category": "arts",
       "decoys": [
-        "Tom Holland",
+        "Kevin James",
         "Jonathan Glassner",
-        "Colleen Ballinger"
+        "Gidi Raff"
       ],
       "id": "polyfact-Q187801-P170-Q185",
       "isAdult": false,
@@ -66665,8 +66665,8 @@
       "category": "arts",
       "decoys": [
         "John le Carré",
-        "Dan Jurgens",
-        "Tom Holland"
+        "Pierre-Joseph Redouté",
+        "Jane Austen"
       ],
       "id": "polyfact-Q250371-P170-Q38082",
       "isAdult": false,
@@ -66683,7 +66683,7 @@
       "category": "arts",
       "decoys": [
         "Colleen Ballinger",
-        "Mark Brazill",
+        "Jules Verne",
         "Dan Jurgens"
       ],
       "id": "polyfact-Q753923-P170-Q775883",
@@ -66719,7 +66719,7 @@
       "category": "arts",
       "decoys": [
         "Robert Louis Stevenson",
-        "Hergé",
+        "Victor Hugo",
         "Clive Cussler"
       ],
       "id": "polyfact-Q3212521-P170-Q40599",
@@ -66738,7 +66738,7 @@
       "decoys": [
         "L. Frank Baum",
         "David Shore",
-        "Marcello Piacentini"
+        "George Pérez"
       ],
       "id": "polyfact-Q51801-P170-Q38222",
       "isAdult": false,
@@ -66754,7 +66754,7 @@
       "answer": "Ian Fleming",
       "category": "arts",
       "decoys": [
-        "Jean-Honoré Fragonard",
+        "Winslow Homer",
         "Marcello Piacentini",
         "Iwao Takamoto"
       ],
@@ -66774,7 +66774,7 @@
       "decoys": [
         "Vlaada Chvátil",
         "Mike Judge",
-        "Lucy Maud Montgomery"
+        "Robert E. Howard"
       ],
       "id": "polyfact-Q867283-P170-Q310960",
       "isAdult": false,
@@ -66790,8 +66790,8 @@
       "answer": "Anne Giafferi",
       "category": "arts",
       "decoys": [
-        "Jean-Honoré Fragonard",
-        "Dan Curtis",
+        "Jean Chalopin",
+        "Philippe Francq",
         "Lucy Maud Montgomery"
       ],
       "id": "polyfact-Q3234618-P170-Q16028487",
@@ -66808,9 +66808,9 @@
       "answer": "Katsuhiro Ōtomo",
       "category": "arts",
       "decoys": [
-        "Le Caravage",
-        "Hugh Wilson",
-        "Valentin de Boulogne"
+        "Seth MacFarlane",
+        "Apichatpong Weerasethakul",
+        "Jonathan M. Shiff"
       ],
       "id": "polyfact-Q1115803-P170-Q378710",
       "isAdult": false,
@@ -66827,7 +66827,7 @@
       "category": "arts",
       "decoys": [
         "Isaac Levitan",
-        "Garry Shandling",
+        "Aitor Gabilondo",
         "Hugh Wilson"
       ],
       "id": "polyfact-Q1166225-P170-Q692808",
@@ -66845,7 +66845,7 @@
       "category": "arts",
       "decoys": [
         "Garry Shandling",
-        "José Guadalupe Posada",
+        "Julie Chapon",
         "Andy Warhol"
       ],
       "id": "polyfact-Q52347-P170-Q38222",
@@ -66864,7 +66864,7 @@
       "decoys": [
         "Patrick O'Brian",
         "Lewis Carroll",
-        "Lee Tamahori"
+        "Hokusai"
       ],
       "id": "polyfact-Q1084690-P170-Q732526",
       "isAdult": false,
@@ -66880,8 +66880,8 @@
       "answer": "Lee Tamahori",
       "category": "arts",
       "decoys": [
-        "Sandro Botticelli",
-        "Michael Bond",
+        "Robert Flaherty",
+        "Claude Chabrol",
         "Michael Bond"
       ],
       "id": "polyfact-Q30931-P170-Q449104",
@@ -66898,9 +66898,9 @@
       "answer": "Claude Monet",
       "category": "arts",
       "decoys": [
-        "Jimmy Fallon",
+        "Alexandre Dumas",
         "Carl Barks",
-        "Josh Schwartz"
+        "Ludwig Mies van der Rohe"
       ],
       "id": "polyfact-Q2381272-P170-Q296",
       "isAdult": false,
@@ -66916,7 +66916,7 @@
       "answer": "J.K. Rowling",
       "category": "arts",
       "decoys": [
-        "Paul Attanasio",
+        "Danny Bilson",
         "CyberLink",
         "Shonda Rhimes"
       ],
@@ -70480,8 +70480,8 @@
       "answer": "Claude-Louis Berthollet",
       "category": "science",
       "decoys": [
-        "Eric Walter Elst",
-        "John Horton Conway",
+        "Iwan Müller",
+        "John Hanning Speke",
         "Iwan Müller"
       ],
       "id": "polyfact-Q912226-P61-Q312587",

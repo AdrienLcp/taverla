@@ -12,6 +12,7 @@ import {
   decoysOf,
   type IngestedQuestions
 } from './question-source'
+import { birthYearsOf } from './wikidata-years'
 
 /**
  * PolyFact is fifty-eight thousand French multiple-choice questions generated
@@ -118,6 +119,28 @@ const SMALLEST_DECOY_CAP = 3
  * any other the relation offers.
  */
 const MOST_OF_A_RELATION = 0.05
+
+/**
+ * How far from its own answer a decoy may have been born. Upstream's wrong
+ * answers are entities that answer the same relation somewhere in Wikidata,
+ * which passes on everybody — *Aristote* is the author of something, so he was
+ * offered as a possible author of a manga published in 2015. **One decoy slot in
+ * six sat more than a hundred and fifty years from its answer**, and a room
+ * eliminates those knowing nothing at all.
+ *
+ * A hundred years is where the gaps themselves say the tail begins: half the
+ * pairs are within forty-one years and three quarters within ninety-one, so the
+ * cut leaves what upstream got right and moves what it did not. Wider lets
+ * *Pétrarque* stand under the Little Red Book; much narrower starts moving
+ * decoys a room would have had to know something to eliminate, which is what a
+ * decoy is for.
+ *
+ * It needs no list of the relations it applies to. Only a person carries a birth
+ * date, so a studio, a city and a country have none and the rule never fires on
+ * `developer`, `place of death` or `country of citizenship` — where a century is
+ * not what makes a candidate wrong anyway.
+ */
+const SAME_ERA_YEARS = 100
 
 type UpstreamRow = {
   answer_text: string
@@ -259,14 +282,18 @@ const withoutOverusedAnswers = (
  */
 const leastUsedFit = ({
   answer,
+  answerYear,
   beside,
   pool,
-  uses
+  uses,
+  years
 }: {
   answer: string
+  answerYear: number | undefined
   beside: readonly string[]
   pool: readonly string[]
   uses: Map<string, number>
+  years: ReadonlyMap<string, number>
 }): string | null => {
   const taken = new Set([answer, ...beside])
 
@@ -281,16 +308,94 @@ const leastUsedFit = ({
     )
     .sort((left, right) => (uses.get(left) ?? 0) - (uses.get(right) ?? 0))
 
-  return fits[0] ?? null
+  const ofTheEra = fits.filter((label) =>
+    isOfTheEra({ answerYear, label, years })
+  )
+
+  return ofTheEra[0] ?? fits[0] ?? null
+}
+
+/**
+ * Dated *and* near, rather than merely not known to be far. An undated entity
+ * passes every era test there is and has never been used, so ranking on the
+ * absence of a fault put it first every time: the *United States Holocaust
+ * Memorial Museum* stood as a possible author of a La Fontaine fable, and
+ * *Vichnou-Sarma* under two rows at once. Neither is a person, which is why
+ * neither has a birth date — the missing year is the tell, not the excuse.
+ */
+const isOfTheEra = ({
+  answerYear,
+  label,
+  years
+}: {
+  answerYear: number | undefined
+  label: string
+  years: ReadonlyMap<string, number>
+}): boolean => {
+  const decoyYear = years.get(label)
+
+  return (
+    answerYear !== undefined &&
+    decoyYear !== undefined &&
+    Math.abs(answerYear - decoyYear) <= SAME_ERA_YEARS
+  )
+}
+
+/**
+ * Only where both sides are dated, so an entity Wikidata holds no birth date for
+ * is left where upstream put it rather than moved on a guess.
+ */
+const isAnEraApart = ({
+  answerYear,
+  decoyYear
+}: {
+  answerYear: number | undefined
+  decoyYear: number | undefined
+}): boolean =>
+  answerYear !== undefined &&
+  decoyYear !== undefined &&
+  Math.abs(answerYear - decoyYear) > SAME_ERA_YEARS
+
+/**
+ * The pool speaks labels and Wikidata speaks entity ids, so the two are joined
+ * here: `option_ids` is positionally aligned with `option_a` through `option_d`,
+ * which is the only place that correspondence exists.
+ */
+const birthYearsOfLabels = async (
+  candidates: readonly Candidate[]
+): Promise<Map<string, number>> => {
+  const byEntity = await birthYearsOf({
+    entityIds: candidates.flatMap((candidate) => candidate.row.option_ids)
+  })
+  const byLabel = new Map<string, number>()
+
+  for (const { row } of candidates) {
+    optionsOf(row).forEach((label, index) => {
+      const year = byEntity.get(row.option_ids[index] ?? '')
+
+      if (year !== undefined) {
+        byLabel.set(label, year)
+      }
+    })
+  }
+
+  return byLabel
 }
 
 /**
  * The same candidates with no entity carrying more of a relation than the cap
- * allows. Greedy and in order: a decoy already at the cap when the row is
- * reached is the one swapped, so the entities upstream over-drew are the ones
- * that move and everything else is left alone.
+ * allows, and no decoy an era away from the answer it stands beside. Greedy and
+ * in order: a decoy already at the cap when the row is reached is the one
+ * swapped, so the entities upstream over-drew are the ones that move and
+ * everything else is left alone.
  */
-const withDecoysSpread = (candidates: readonly Candidate[]): Candidate[] => {
+export const withDecoysSpread = ({
+  candidates,
+  years
+}: {
+  candidates: readonly Candidate[]
+  years: ReadonlyMap<string, number>
+}): Candidate[] => {
   const byRelation = new Map<string, Candidate[]>()
 
   for (const candidate of candidates) {
@@ -313,23 +418,35 @@ const withDecoysSpread = (candidates: readonly Candidate[]): Candidate[] => {
     const uses = new Map<string, number>()
 
     let swapped = 0
+    let dated = 0
 
     for (const candidate of ofRelation) {
       const kept: string[] = []
+      const answerYear = years.get(candidate.answer)
 
       for (const decoy of candidate.decoys) {
+        const eraApart = isAnEraApart({
+          answerYear,
+          decoyYear: years.get(decoy)
+        })
         const fit =
-          (uses.get(decoy) ?? 0) < cap
+          (uses.get(decoy) ?? 0) < cap && !eraApart
             ? decoy
             : (leastUsedFit({
                 answer: candidate.answer,
+                answerYear,
                 beside: kept,
                 pool,
-                uses
+                uses,
+                years
               }) ?? decoy)
 
         if (fit !== decoy) {
           swapped++
+
+          if (eraApart) {
+            dated++
+          }
         }
 
         uses.set(fit, (uses.get(fit) ?? 0) + 1)
@@ -346,7 +463,7 @@ const withDecoysSpread = (candidates: readonly Candidate[]): Candidate[] => {
     }
 
     console.info(
-      `  ${relation}: ${ofRelation.length} rows, decoy cap ${cap}, ${swapped} swapped`
+      `  ${relation}: ${ofRelation.length} rows, decoy cap ${cap}, ${swapped} swapped (${dated} an era apart)`
     )
   }
 
@@ -445,7 +562,10 @@ export const ingestPolyFact = async (): Promise<IngestedQuestions> => {
 
   return {
     attribution: ATTRIBUTION,
-    questions: withDecoysSpread(spread).map(toBankedQuestion),
+    questions: withDecoysSpread({
+      candidates: spread,
+      years: await birthYearsOfLabels(spread)
+    }).map(toBankedQuestion),
     rejections
   }
 }
