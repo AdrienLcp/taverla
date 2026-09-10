@@ -211,6 +211,7 @@ const toBankedQuestion = ({
     accepted: [],
     answer,
     category,
+    choiceOnly: false,
     decoys,
     id: idOf(prompt),
     isAdult: false,

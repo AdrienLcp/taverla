@@ -47,21 +47,13 @@ const CATEGORY_OF_RUBRIC: Record<string, QuestionCategory> = {
   MUSIQUE: 'arts',
   NATURE: 'science',
   ORTHOQUIZZ: 'everyday',
+  QUADRIQUIZZ: 'everyday',
   QUOTIDIEN: 'everyday',
   SCIENCES: 'science',
   SPORTS: 'sport',
   TELEVISION: 'arts',
   TOURISME: 'geography',
   WEB: 'science'
-}
-
-/**
- * Rubrics whose questions cannot be asked the way this game asks them. Absent
- * from the mapping above would have been enough to skip them, but a rubric that
- * simply went missing reads as an oversight — these are refusals, with reasons.
- */
-const SKIPPED_RUBRICS: Record<string, string> = {
-  QUADRIQUIZZ: 'asks for four answers and the pack carries one'
 }
 
 /**
@@ -72,6 +64,32 @@ const SKIPPED_RUBRICS: Record<string, string> = {
  * field of its own rather than a seventh category.
  */
 const ADULT_RUBRIC = 'ADULTES'
+
+/**
+ * The rubric that is one riddle rather than a set of questions. A row chains
+ * four clues under a letter — *Avec un G, il faut un alcool, un lieu de départ,
+ * un engin et une couleur* — and carries a single answer for the four, which is
+ * the first clue's on all 120 of them. The other three clues are answered by
+ * the propositions standing beside it, so cutting the enumeration after the
+ * first clue leaves a whole question with its three decoys already written.
+ *
+ * It is also the one place a *rule* finds `choiceOnly`, where the rest of the
+ * bank needed a row-by-row reading: *Avec un S, il faut un pays* is Suisse, and
+ * it is Sénégal, Suède and Slovaquie too. Only the four candidates make it one
+ * answer, and a room typing into a field cannot win it.
+ */
+const RIDDLE_RUBRIC = 'QUADRIQUIZZ'
+
+/**
+ * The prompt a chained riddle becomes, or `null` where it does not enumerate —
+ * which is a row this rewrite cannot cut and would otherwise bank as four
+ * questions over one answer.
+ */
+const firstRiddleIn = (prompt: string): string | null => {
+  const [, firstRiddle] = /^(.*?\bil faut\b[^,]+),/u.exec(prompt) ?? []
+
+  return firstRiddle === undefined ? null : `${firstRiddle}.`
+}
 
 type UpstreamQuestion = {
   anecdote?: string
@@ -256,14 +274,18 @@ const articleOf = (question: UpstreamQuestion): string | null => {
 
 const toBankedQuestion = ({
   category,
+  choiceOnly,
   isAdult,
   packId,
+  prompt,
   question,
   theme
 }: {
   category: QuestionCategory
+  choiceOnly: boolean
   isAdult: boolean
   packId: number
+  prompt: string
   question: UpstreamQuestion
   theme: string
 }): Unrated | null => {
@@ -281,12 +303,13 @@ const toBankedQuestion = ({
     answer: question.réponse,
     article: articleOf(question),
     category,
+    choiceOnly,
     decoys,
     id: `oqdb-${packId}-${question.id}`,
     isAdult,
     language: 'fr',
     note: noteIn(question),
-    prompt: question.question,
+    prompt,
     theme
   }
 }
@@ -303,14 +326,8 @@ export const ingestOpenQuizzDb = async (): Promise<IngestedQuestions> => {
   const rejections: string[] = []
 
   for (const [rubric, packIds] of [...byRubric].sort()) {
-    const skipped = SKIPPED_RUBRICS[rubric]
-
-    if (skipped !== undefined) {
-      console.info(`  skip ${rubric} (${packIds.length} packs) — ${skipped}`)
-      continue
-    }
-
     const isAdult = rubric === ADULT_RUBRIC
+    const isRiddle = rubric === RIDDLE_RUBRIC
     const category = isAdult ? 'arts' : CATEGORY_OF_RUBRIC[rubric]
 
     if (category === undefined) {
@@ -327,10 +344,21 @@ export const ingestOpenQuizzDb = async (): Promise<IngestedQuestions> => {
       }
 
       for (const question of pack.quizz ?? []) {
+        const prompt = isRiddle
+          ? firstRiddleIn(question.question)
+          : question.question
+
+        if (prompt === null) {
+          rejections.push(`${packId}/${question.id}: four clues and no comma`)
+          continue
+        }
+
         const banked = toBankedQuestion({
           category,
+          choiceOnly: isRiddle,
           isAdult,
           packId,
+          prompt,
           question,
           theme: pack.thème ?? rubric
         })

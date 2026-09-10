@@ -171,6 +171,35 @@ describe('drawQuestion', () => {
     expect(anyMode.some((question) => question.choiceOnly)).toBe(true)
   }, 30_000)
 
+  /**
+   * QUADRIQUIZZ chains four clues under one letter — *Avec un G, il faut un
+   * alcool, un lieu de départ, un engin et une couleur* — and the pack carries
+   * a single answer for the four. The ingestion cuts every row back to the clue
+   * that answer belongs to, and one that arrives whole is a question no room can
+   * win: three of its four clues have no answer on screen, and nothing says
+   * which of them counts.
+   *
+   * The floor is the other half of it. A rewrite that stopped matching refuses
+   * the row rather than banking it whole, so the shape on its own would pass
+   * over a rubric that had silently gone missing.
+   */
+  it('[bank] cuts a chained riddle back to the clue it answers', () => {
+    const A_RUBRIC = 100
+
+    const riddles = bank.questions.filter(({ theme }) =>
+      theme.startsWith('Quadriquizz')
+    )
+
+    expect(riddles.length).toBeGreaterThan(A_RUBRIC)
+    expect(riddles.every(({ choiceOnly }) => choiceOnly)).toBe(true)
+
+    const chained = bank.questions.filter(({ prompt }) =>
+      /il faut .+,.+ et /u.test(prompt)
+    )
+
+    expect(chained.map(({ id }) => id)).toEqual([])
+  })
+
   it('[bank] holds no question whose own decoy would be graded right', () => {
     const winnable = bank.questions.filter((question) =>
       question.decoys.some(

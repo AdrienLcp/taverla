@@ -77,18 +77,25 @@ const repairs: Record<string, QuestionRepair> = JSON.parse(
 )
 
 /**
- * Rows that are only a question because their own three decoys are under them.
+ * Rows that are only a question because their own three decoys are under them,
+ * where the source did not already say so of the whole rubric they come from.
  * *Which country drives on the left side of the road?* answers Japan, and so
  * does India, and seventy others: nothing in the wording is wrong, the answer is
  * simply picked out of a set the sentence never names. A room typing into a
  * field cannot win one.
  *
- * It is a column rather than a rule because no rule finds it. The regex that
- * used to stand in for this caught the three quarters that say *which of these*
- * out loud and missed *what country is not a part of Scandinavia?*, which is the
- * same question with no marker at all — and it excluded 154 rows that are
+ * It is a column rather than a rule because no rule finds it *here*. The regex
+ * that used to stand in for this caught the three quarters that say *which of
+ * these* out loud and missed *what country is not a part of Scandinavia?*, which
+ * is the same question with no marker at all — and it excluded 154 rows that are
  * perfectly answerable. Reading all 6 286 is what produced the list, and the
  * list is the artefact worth keeping.
+ *
+ * One rubric is the exception, and it is a rubric rather than a row: every
+ * QUADRIQUIZZ question is the same riddle shape, so the source says so for all
+ * of them at once. That is what `choiceOnly` on the ingested row carries, and
+ * the two are read together — a rule where one exists, a reading everywhere
+ * else.
  */
 const choiceOnlyIds = new Set<string>(
   (
@@ -98,12 +105,10 @@ const choiceOnlyIds = new Set<string>(
   ).map(({ id }) => id)
 )
 
-/** What the bank holds, which is the ingested row plus this repository's own judgement of it. */
-type BankRow = BankedQuestion & { choiceOnly: boolean }
-
-const banked = (question: BankedQuestion): BankRow => ({
+/** The ingested row with this repository's own reading laid over the source's. */
+const banked = (question: BankedQuestion): BankedQuestion => ({
   ...question,
-  choiceOnly: choiceOnlyIds.has(question.id)
+  choiceOnly: question.choiceOnly || choiceOnlyIds.has(question.id)
 })
 
 /**

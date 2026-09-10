@@ -43,6 +43,10 @@
     "prompt": "Qui est la partenaire de Jack Nicholson dans « Le facteur sonne toujours deux fois » ?",
     "why": "dangling « sa », the actor is never named"
   },
+  "oqdb-98-1": {
+    "isAdult": true,
+    "why": "the rubric is not the adult one but this row is — the clue asks for a sex position and the banked answer is one"
+  },
   "oqdb-104-1": {
     "note": null,
     "why": "the note lost its superscript ordinals to « le IX ? et le XI ? siècle »"
@@ -99,6 +103,10 @@
     "prompt": "Au rugby, quelle action sanctionne des remises en jeu incorrectes ?",
     "why": "sport never named"
   },
+  "oqdb-170-2": {
+    "isAdult": true,
+    "why": "the rubric is not the adult one but this row is — the clue asks for an intimate part and the banked answer is the vulgar word for it"
+  },
   "oqdb-171-2": {
     "drop": true,
     "why": "a decoy answers the prompt too — a public blockchain's defining property is that every transaction is permanently traceable, so the decoy \"Tracabilite\" answers the prompt at least as well as \"Anonymat\", which is only pseudonymity"
@@ -126,6 +134,10 @@
   "oqdb-211-3": {
     "note": null,
     "why": "the note carries a scraped encyclopedia title, « Le Opera (gateau) »"
+  },
+  "oqdb-218-3": {
+    "drop": true,
+    "why": "the first clue does not name its own answer — a balai is not a loup, and the three clues cut away are the ones whose words fit, so the row was only ever a question as a chain"
   },
   "oqdb-222-1": {
     "drop": true,

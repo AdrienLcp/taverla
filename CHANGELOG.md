@@ -1462,6 +1462,33 @@ one part.
 
 ### Internal
 
+- `[Server]` **The riddle rubric OpenQuizzDB ships is banked at last**, and it
+  is the one place a *rule* finds `choiceOnly` rather than a reading.
+  QUADRIQUIZZ chains four clues under one letter — *Avec un G, il faut un
+  alcool, un lieu de départ, un engin et une couleur* — and carries a single
+  answer for the four, which is why it was refused: four questions over one
+  answer is a question no room can win. That answer is the **first** clue's on
+  all 120 rows, and the other three clues are answered by the propositions
+  standing beside it, so cutting the enumeration after the first clue leaves a
+  whole question with its three decoys already written. **114 rows**, after one
+  drop and five prompts the dedup pass had already seen — *Avec un S, il faut un
+  pays* is banked once.
+
+  They are `choiceOnly` as a rubric rather than as a census: *un pays* with an S
+  is Suisse, and Sénégal, and Suède, so only the four candidates make it one
+  answer. The column is now read from two places at once — the source says so
+  where a whole rubric is one shape, `choice-only-questions.json` stays the
+  row-by-row reading everywhere else — which is why `choiceOnly` moved onto the
+  ingested row. That confines them to a quiz in `choice` mode: Le Fake already
+  refuses a row whose candidates it never shows.
+
+  French `choiceOnly` goes from 41 rows to 155, which is **3.8% of the French
+  bank against the English half's 14.7%** — the objection that this would change
+  the character of a bank playable typed, measured. Two rows are marked adult by
+  repair because the rubric is not the adult one and they are, and one is
+  dropped: a *balai* is not a *loup*, and the three clues cut away were the ones
+  whose words fitted.
+
 - `[Server]` **Every banked question says whether the room has heard of what it
   asks about.** `isWellKnown`, on all 8 355 rows, and each source reaches it its
   own way: Open Trivia DB rates its own questions and `hard` is the one that

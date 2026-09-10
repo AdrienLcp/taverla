@@ -14,6 +14,13 @@ export type BankedQuestion = {
   accepted: string[]
   answer: string
   category: QuestionCategory
+  /**
+   * Whether the row is only a question while its own three decoys are beside
+   * it. A source sets it where a whole rubric says so and the rubric *is* the
+   * rule; `choice-only-questions.json` is the census for everywhere else,
+   * which is most of the bank, because no rule finds those one at a time.
+   */
+  choiceOnly: boolean
   decoys: [string, string, string]
   id: string
   /** Drawn only for a room whose host asked for it. */

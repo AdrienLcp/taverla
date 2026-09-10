@@ -151,7 +151,9 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   from nothing is not recognising it among four. A banked question that is only
   a question beside its own decoys — *which country drives on the left?* answers
   Japan, and seventy others — carries `choiceOnly` and is dealt to a `choice`
-  room alone; the column is a census read row by row, because no rule finds one.
+  room alone; the column is a census read row by row, because no rule finds
+  one — save the one rubric that *is* a single riddle shape, where the source
+  says so for all 114 of its rows at once.
   **The clock never pays more
   than the answer did** — its amplitude is the lower of the two, so being fast
   doubles a score at most, and the big screen prints the two halves apart

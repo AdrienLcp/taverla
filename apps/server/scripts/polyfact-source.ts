@@ -480,6 +480,7 @@ const toBankedQuestion = ({
   accepted: [],
   answer,
   category,
+  choiceOnly: false,
   decoys,
   id: `polyfact-${row.fact_id.replaceAll('|', '-')}`,
   isAdult: false,
