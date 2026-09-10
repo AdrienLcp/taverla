@@ -345,6 +345,16 @@ describe('drawQuestion', () => {
    * floor at fifty-three rows, and that is where the two-thousand-view threshold
    * was set: eight thousand would have left thirty-two, and a twenty-round
    * evening takes about three questions from every category.
+   *
+   * Under that floor is the bank's own. French history holds **64 rows in all**,
+   * sport 123, geography 156 and science 170, against 2 258 for arts and 1 261
+   * for everyday life — 87% of the French half in two subjects, where the
+   * English half spreads over six. So a host who ticks one thin subject runs it
+   * out in an evening whatever this setting says, and the graded picker the
+   * blind test offers waits on a **fourth source** rather than on a better rule:
+   * three bands over French history would deal twenty-one questions each. The
+   * blind test can afford its three levels because Deezer has no bottom; this
+   * bank ships with the server.
    */
   it('[bank] leaves every subject an evening of well-known questions', () => {
     const ENOUGH_FOR_AN_EVENING = 40
