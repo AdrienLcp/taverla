@@ -1,5 +1,6 @@
 import type { QuestionCategory } from '@taverla/protocol/question'
 
+import { frenchViewsOfTitles, isWellKnownInFrench } from './frwiki-notability'
 import {
   type Attribution,
   type BankedQuestion,
@@ -78,6 +79,7 @@ type UpstreamQuestion = {
   propositions: string[]
   question: string
   réponse: string
+  wikipédia?: string
 }
 
 type UpstreamPack = {
@@ -216,6 +218,42 @@ const noteIn = (question: UpstreamQuestion): string | null => {
   return anecdote.length < SHORTEST_NOTE ? null : anecdote
 }
 
+/**
+ * A row with everything but the one field that costs a network round trip. The
+ * whole listing is walked before a single article is looked up, so the four
+ * thousand titles go out in eighty batched requests rather than one per pack.
+ */
+type Unrated = Omit<BankedQuestion, 'isWellKnown'> & { article: string | null }
+
+const ARTICLE_URL = 'https://fr.wikipedia.org/wiki/'
+
+/**
+ * The French Wikipedia article this question is about, which upstream names on
+ * every row it has one for and fills with `-` on the rest. It is what stands in
+ * for a Wikidata identifier here: the pack knows its subject by title and by
+ * nothing else, so the traffic lookup starts a hop further along than PolyFact's.
+ *
+ * The title is trusted no further than the encyclopedia will honour it — three
+ * hundred of them name an article that does not exist, and what comes back for
+ * those is a zero that `isWellKnownInFrench` refuses. That is the safe way
+ * round: a question whose subject could not be measured is left out of a room
+ * asking for well-known ones rather than let into it.
+ */
+const articleOf = (question: UpstreamQuestion): string | null => {
+  const url = question.wikipédia ?? ''
+
+  if (!url.startsWith(ARTICLE_URL)) {
+    return null
+  }
+
+  const title = decodeURIComponent(url.slice(ARTICLE_URL.length)).replaceAll(
+    '_',
+    ' '
+  )
+
+  return title.length === 0 ? null : title
+}
+
 const toBankedQuestion = ({
   category,
   isAdult,
@@ -228,7 +266,7 @@ const toBankedQuestion = ({
   packId: number
   question: UpstreamQuestion
   theme: string
-}): BankedQuestion | null => {
+}): Unrated | null => {
   const decoys = decoysOf({
     answer: question.réponse,
     candidates: question.propositions
@@ -241,6 +279,7 @@ const toBankedQuestion = ({
   return {
     accepted: [],
     answer: question.réponse,
+    article: articleOf(question),
     category,
     decoys,
     id: `oqdb-${packId}-${question.id}`,
@@ -260,7 +299,7 @@ export const ingestOpenQuizzDb = async (): Promise<IngestedQuestions> => {
   })
 
   const byRubric = packIdsByRubric(listing)
-  const questions: BankedQuestion[] = []
+  const unrated: Unrated[] = []
   const rejections: string[] = []
 
   for (const [rubric, packIds] of [...byRubric].sort()) {
@@ -303,7 +342,7 @@ export const ingestOpenQuizzDb = async (): Promise<IngestedQuestions> => {
           continue
         }
 
-        questions.push(banked)
+        unrated.push(banked)
       }
     }
 
@@ -311,6 +350,23 @@ export const ingestOpenQuizzDb = async (): Promise<IngestedQuestions> => {
       `  ${rubric} → ${category}${isAdult ? ' (adult)' : ''}: ${packIds.length} packs`
     )
   }
+
+  const views = await frenchViewsOfTitles({
+    label: 'articles',
+    titles: unrated.flatMap(({ article }) =>
+      article === null ? [] : [article]
+    )
+  })
+
+  const questions = unrated.map(({ article, ...banked }) => ({
+    ...banked,
+    isWellKnown:
+      article !== null && isWellKnownInFrench(views.get(article) ?? 0)
+  }))
+
+  console.info(
+    `  ${questions.filter(({ isWellKnown }) => isWellKnown).length} of ${questions.length} are about a subject the room has heard of`
+  )
 
   return { attribution: ATTRIBUTION, questions, rejections }
 }

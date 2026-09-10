@@ -18,6 +18,13 @@ export type BankedQuestion = {
   id: string
   /** Drawn only for a room whose host asked for it. */
   isAdult: boolean
+  /**
+   * Whether the room can be expected to have heard of what this asks about.
+   * Each source decides it its own way and neither is the other's measure —
+   * Open Trivia DB says so itself, and the French half is read off the traffic
+   * its subject's Wikipedia article takes. See `docs/plans/21-…`.
+   */
+  isWellKnown: boolean
   language: QuestionLanguage
   /** What the host reads out once the answer is public, where the source writes one. */
   note: string | null

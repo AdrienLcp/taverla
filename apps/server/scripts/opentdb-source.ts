@@ -58,8 +58,18 @@ const CATEGORY_OF_RUBRIC: Record<string, QuestionCategory> = {
   Vehicles: 'science'
 }
 
+/**
+ * Upstream rates every question itself, and the rating is the only thing on
+ * either half of the bank that its own author wrote down. `hard` is what a room
+ * asking for well-known subjects does not want; the three bands themselves are
+ * not banked, because nothing would read them — they stay in `.cache/`, one
+ * rebuild away, for the day a hard mode has somewhere to work.
+ */
+type UpstreamDifficulty = 'easy' | 'hard' | 'medium'
+
 type UpstreamQuestion = {
   correct_answer: string
+  difficulty: UpstreamDifficulty
   incorrect_answers: string[]
   question: string
 }
@@ -204,6 +214,7 @@ const toBankedQuestion = ({
     decoys,
     id: idOf(prompt),
     isAdult: false,
+    isWellKnown: question.difficulty !== 'hard',
     language: 'en',
     note: null,
     prompt,

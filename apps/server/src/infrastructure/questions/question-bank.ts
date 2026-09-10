@@ -31,6 +31,13 @@ const bankedQuestionSchema = hostQuestionSchema.extend({
   choiceOnly: z.boolean(),
   /** Drawn only for a room whose host asked for it — see `allowsAdultContent`. */
   isAdult: z.boolean(),
+  /**
+   * Whether the room can be expected to have heard of what this asks about.
+   * The two halves reach it their own way — Open Trivia DB rates its own rows,
+   * and a French row is read off the traffic its subject's Wikipedia article
+   * takes — and the field says only what the room is promised.
+   */
+  isWellKnown: z.boolean(),
   language: questionLanguageSchema,
   /** The upstream pack, so a question that turns out to be wrong is traceable. */
   theme: z.string()

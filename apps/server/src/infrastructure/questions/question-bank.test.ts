@@ -291,4 +291,52 @@ describe('drawQuestion', () => {
       )
     }
   })
+
+  /**
+   * A rating every row passes is a switch that does nothing, and that is the
+   * shape a broken ingestion takes: a source that stopped reading its own
+   * difficulty, or a French lookup that answered for every article at once.
+   * Both halves reach the rating their own way, so both are asked.
+   */
+  it('[bank] rates some questions as beyond the room and some within it', () => {
+    for (const language of questionLanguages) {
+      const rows = bank.questions.filter(
+        (question) => question.language === language
+      )
+
+      expect(rows.some((question) => question.isWellKnown)).toBe(true)
+      expect(rows.some((question) => !question.isWellKnown)).toBe(true)
+    }
+  })
+
+  /**
+   * Holding the room to subjects it has heard of takes away three French rows in
+   * five, and the draw picks a category before it picks a question — so the
+   * setting is only as good as the category it thins most. French history is the
+   * floor at fifty-three rows, and that is where the two-thousand-view threshold
+   * was set: eight thousand would have left thirty-two, and a twenty-round
+   * evening takes about three questions from every category.
+   */
+  it('[bank] leaves every subject an evening of well-known questions', () => {
+    const ENOUGH_FOR_AN_EVENING = 40
+
+    const thin: string[] = []
+
+    for (const language of questionLanguages) {
+      for (const category of questionCategories) {
+        const rows = bank.questions.filter(
+          (question) =>
+            question.category === category &&
+            question.isWellKnown &&
+            question.language === language
+        )
+
+        if (rows.length < ENOUGH_FOR_AN_EVENING) {
+          thin.push(`${language}/${category}: ${rows.length}`)
+        }
+      }
+    }
+
+    expect(thin).toEqual([])
+  })
 })

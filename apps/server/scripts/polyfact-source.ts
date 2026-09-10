@@ -4,7 +4,7 @@ import type { QuestionCategory } from '@taverla/protocol/question'
 
 import { gradeQuizGuess } from '@taverla/core/quiz/question-answer'
 
-import { frenchViewsOf } from './frwiki-notability'
+import { frenchViewsOf, isWellKnownInFrench } from './frwiki-notability'
 import {
   type Attribution,
   type BankedQuestion,
@@ -136,6 +136,7 @@ type Candidate = {
   answer: string
   category: QuestionCategory
   decoys: [string, string, string]
+  isWellKnown: boolean
   row: UpstreamRow
 }
 
@@ -194,7 +195,13 @@ const optionsOf = (row: UpstreamRow): string[] => [
 const withTheMissingInterrogative = (prompt: string): string =>
   prompt.replace(/ par \?$/u, ' par qui ?')
 
-const toCandidate = (row: UpstreamRow): Candidate | null => {
+const toCandidate = ({
+  isWellKnown,
+  row
+}: {
+  isWellKnown: boolean
+  row: UpstreamRow
+}): Candidate | null => {
   const category = CATEGORY_OF_RELATION[row.relation]
   const decoys = decoysOf({
     answer: row.answer_text,
@@ -205,7 +212,7 @@ const toCandidate = (row: UpstreamRow): Candidate | null => {
     return null
   }
 
-  return { answer: row.answer_text, category, decoys, row }
+  return { answer: row.answer_text, category, decoys, isWellKnown, row }
 }
 
 /**
@@ -350,6 +357,7 @@ const toBankedQuestion = ({
   answer,
   category,
   decoys,
+  isWellKnown,
   row
 }: Candidate): BankedQuestion => ({
   accepted: [],
@@ -358,6 +366,7 @@ const toBankedQuestion = ({
   decoys,
   id: `polyfact-${row.fact_id.replaceAll('|', '-')}`,
   isAdult: false,
+  isWellKnown,
   language: 'fr',
   note: null,
   prompt: withTheMissingInterrogative(row.question),
@@ -415,7 +424,10 @@ export const ingestPolyFact = async (): Promise<IngestedQuestions> => {
   const candidates: Candidate[] = []
 
   for (const row of guessable) {
-    const candidate = toCandidate(row)
+    const candidate = toCandidate({
+      isWellKnown: isWellKnownInFrench(subjectViews.get(subjectOf(row)) ?? 0),
+      row
+    })
 
     if (candidate === null) {
       rejections.push(`${row.fact_id}: ${optionsOf(row).join(' / ')}`)

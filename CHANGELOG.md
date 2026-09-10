@@ -1409,6 +1409,27 @@ one part.
 
 ### Internal
 
+- `[Server]` **Every banked question says whether the room has heard of what it
+  asks about.** `isWellKnown`, on all 8 355 rows, and each source reaches it its
+  own way: Open Trivia DB rates its own questions and `hard` is the one that
+  fails, while a French row is read off the sixty-day traffic its subject's
+  Wikipedia article takes. OpenQuizzDB names that article on every row it has
+  one for, which is what let the French half be rated whole rather than only on
+  the 1 900 PolyFact rows that carried a Wikidata identifier —
+  `frenchViewsOfTitles` is the same lookup with the Wikidata hop removed. It
+  leaves **1 652 French rows and 3 443 English ones**.
+
+  The threshold is two thousand views, and it was measured rather than chosen.
+  The draw takes a category before it takes a question, so a level is only as
+  good as the category it thins most: cut the French bank into thirds by traffic
+  and *difficile* holds five history questions, which a twenty-round evening
+  draws three of. One threshold at two thousand leaves the smallest category
+  fifty-three. Zero views is read as *not measured* rather than as obscurity —
+  three hundred OpenQuizzDB rows name an article that does not exist, *Noeud
+  double* for what is filed under *Nœud*, and a rule reading that as a low score
+  put *who directed Apocalypse Now* in the hardest bucket. See
+  [`docs/plans/21-well-known-questions.md`](docs/plans/21-well-known-questions.md).
+
 - `[Game]` **Every component carries `React.FC<Props>`.** The shape was already
   in `code-style.md`, as an example rather than as a sentence, and forty-one
   components had drifted off it — twenty-five of them in files that carried no

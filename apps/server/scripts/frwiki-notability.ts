@@ -21,6 +21,24 @@ const USER_AGENT =
 /** Their documented ceiling on `prop=pageviews`, and the widest window it serves. */
 const PAGEVIEW_DAYS = 60
 
+/**
+ * The traffic at which a subject counts as one the room has heard of, picked by
+ * measuring what each cut leaves rather than by taste. The draw takes a category
+ * first and a question inside it, so a threshold is only as good as the category
+ * it thins most: at two thousand views the French bank keeps 1 649 of 3 918 rows
+ * and its smallest category still holds 53. Ten thousand would leave history
+ * under thirty, which is a category a twenty-round evening exhausts.
+ */
+const WELL_KNOWN_VIEWS = 2_000
+
+/**
+ * Whether a French room can be expected to have heard of a subject that drew
+ * this many readers. One threshold shared by both French sources, because a
+ * question is no easier for having come from one of them.
+ */
+export const isWellKnownInFrench = (views: number): boolean =>
+  views >= WELL_KNOWN_VIEWS
+
 /** Titles per action-API request, which is the anonymous limit. */
 const TITLES_PER_REQUEST = 50
 
@@ -204,9 +222,50 @@ const viewsOf = async (
 }
 
 /**
- * How many French readers each of these entities drew over the window. Zero
- * stands both for an entity French Wikipedia has no article on and for one whose
- * article nobody opens — a distinction no rule downstream cares about.
+ * How many French readers each of these articles drew over the window, for a
+ * source that already knows the title it is asking about. OpenQuizzDB names one
+ * per question and has no Wikidata identifier to offer, so the hop this skips is
+ * a hop it could not have made.
+ *
+ * Zero stands for three things — no such article, an article nobody opens, and a
+ * title upstream got wrong, *Noeud double* for what is filed under *Nœud*. A
+ * rule reading zero as obscurity would call the fourth most-read film director
+ * obscure, so what reads it must treat zero as *not measured* rather than as a
+ * low score.
+ */
+export const frenchViewsOfTitles = async ({
+  label,
+  titles
+}: {
+  label: string
+  titles: readonly string[]
+}): Promise<Map<string, number>> => {
+  const views = await readCachedEntries<number>(VIEWS_CACHE)
+
+  const asked = [...new Set(titles)]
+  const wanted = asked.filter((title) => !(title in views))
+  const batches = chunked({ items: wanted, size: TITLES_PER_REQUEST })
+
+  console.info(`  ${label}: ${wanted.length} articles left to measure`)
+
+  for (const [index, batch] of batches.entries()) {
+    for (const [title, total] of await viewsOf(batch)) {
+      views[title] = total
+    }
+
+    if (index % SAVE_EVERY === SAVE_EVERY - 1 || index === batches.length - 1) {
+      await writeCachedEntries({ entries: views, name: VIEWS_CACHE })
+      console.info(`    views ${index + 1}/${batches.length} batches`)
+    }
+  }
+
+  return new Map(asked.map((title) => [title, views[title] ?? 0]))
+}
+
+/**
+ * The same figure for an entity named by its Wikidata identifier, which is what
+ * PolyFact rows carry. One hop more than `frenchViewsOfTitles`: the sitelink is
+ * the only thing that knows an entity's French title is not its French name.
  *
  * Both hops accumulate, so asking again over a wider set costs only what was not
  * already known, and a run that dies at minute fifty resumes. That is what makes
@@ -222,7 +281,6 @@ export const frenchViewsOf = async ({
   label: string
 }): Promise<Map<string, number>> => {
   const titles = await readCachedEntries<string | null>(TITLES_CACHE)
-  const views = await readCachedEntries<number>(VIEWS_CACHE)
 
   const asked = [...new Set(entityIds)]
   const unresolved = asked.filter((entityId) => !(entityId in titles))
@@ -247,35 +305,20 @@ export const frenchViewsOf = async ({
 
   const titleOf = (entityId: string): string | null => titles[entityId] ?? null
 
-  const wanted = [
-    ...new Set(
-      asked.flatMap((entityId) => {
-        const title = titleOf(entityId)
+  const views = await frenchViewsOfTitles({
+    label,
+    titles: asked.flatMap((entityId) => {
+      const title = titleOf(entityId)
 
-        return title === null ? [] : [title]
-      })
-    )
-  ].filter((title) => !(title in views))
-  const batches = chunked({ items: wanted, size: TITLES_PER_REQUEST })
-
-  console.info(`  ${label}: ${wanted.length} articles left to measure`)
-
-  for (const [index, batch] of batches.entries()) {
-    for (const [title, total] of await viewsOf(batch)) {
-      views[title] = total
-    }
-
-    if (index % SAVE_EVERY === SAVE_EVERY - 1 || index === batches.length - 1) {
-      await writeCachedEntries({ entries: views, name: VIEWS_CACHE })
-      console.info(`    views ${index + 1}/${batches.length} batches`)
-    }
-  }
+      return title === null ? [] : [title]
+    })
+  })
 
   return new Map(
     asked.map((entityId) => {
       const title = titleOf(entityId)
 
-      return [entityId, title === null ? 0 : (views[title] ?? 0)]
+      return [entityId, title === null ? 0 : (views.get(title) ?? 0)]
     })
   )
 }
