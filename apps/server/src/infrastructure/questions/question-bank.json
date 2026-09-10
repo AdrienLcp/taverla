@@ -72612,9 +72612,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
-        "Robert Francis Kennedy",
-        "George H. W. Bush",
-        "Tom Brady"
+        "Xi Jinping",
+        "Lénine",
+        "Saddam Hussein"
       ],
       "id": "mintaka-fe541d01",
       "isAdult": false,
@@ -72876,24 +72876,6 @@
       "theme": "sports/intersection"
     },
     {
-      "accepted": [],
-      "answer": "Magic Johnson",
-      "category": "sport",
-      "choiceOnly": false,
-      "decoys": [
-        "Kareem Abdul-Jabbar",
-        "James Harden",
-        "Giánnis Antetokoúnmpo"
-      ],
-      "id": "mintaka-8e7f878c",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quelle légende du basketball a le SIDA ?",
-      "theme": "sports/intersection"
-    },
-    {
       "accepted": [
         "Chicago Bulls"
       ],
@@ -73095,24 +73077,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Quel membre de l’équipe olympique féminine de gymnastique des États-Unis a remporté trois médailles d’or individuelles et n’a pas participé à la finale des équipes de 2021 ?",
-      "theme": "sports/intersection"
-    },
-    {
-      "accepted": [],
-      "answer": "Moyen-Orient",
-      "category": "sport",
-      "choiceOnly": false,
-      "decoys": [
-        "Égypte antique",
-        "Polynésie",
-        "Mésopotamie"
-      ],
-      "id": "mintaka-7f2ffe2e",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quel pays ne permet pas aux femmes de participer aux arts martiaux et autres sports organisés ?",
       "theme": "sports/intersection"
     },
     {
@@ -73339,24 +73303,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Quelle équipe joue à Dallas et avait Emmitt Smith dans ses rangs ?",
-      "theme": "sports/intersection"
-    },
-    {
-      "accepted": [],
-      "answer": "Kobe Bryant",
-      "category": "sport",
-      "choiceOnly": false,
-      "decoys": [
-        "Shaquille O'Neal",
-        "Stephen Curry",
-        "Russell Westbrook"
-      ],
-      "id": "mintaka-2af2f393",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quel athlète était également chanteur ?",
       "theme": "sports/intersection"
     },
     {
@@ -74481,24 +74427,6 @@
     },
     {
       "accepted": [],
-      "answer": "Yao Ming",
-      "category": "sport",
-      "choiceOnly": false,
-      "decoys": [
-        "Wilt Chamberlain",
-        "Manny Pacquiao",
-        "Joel Embiid"
-      ],
-      "id": "mintaka-2401350a",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Qui est le joueur NBA le plus grand de taille de tous les temps ?",
-      "theme": "sports/superlative"
-    },
-    {
-      "accepted": [],
       "answer": "Gregg Popovich",
       "category": "sport",
       "choiceOnly": false,
@@ -74744,26 +74672,6 @@
       "theme": "sports/superlative"
     },
     {
-      "accepted": [
-        "Serena Jamika Williams"
-      ],
-      "answer": "Serena Williams",
-      "category": "sport",
-      "choiceOnly": false,
-      "decoys": [
-        "Paolo Maldini",
-        "Cori Gauff",
-        "Roger Federer"
-      ],
-      "id": "mintaka-b463903d",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quelle joueuse de tennis a remporté le plus de Grand Chelem chez les femmes ?",
-      "theme": "sports/superlative"
-    },
-    {
       "accepted": [],
       "answer": "Bill Russell",
       "category": "sport",
@@ -74974,26 +74882,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Quel État est le deuxième plus grand par sa superficie et celui où réside le 43e président des États-Unis ?",
-      "theme": "geography/intersection"
-    },
-    {
-      "accepted": [
-        "Kangchendzönga"
-      ],
-      "answer": "Kangchenjunga",
-      "category": "geography",
-      "choiceOnly": false,
-      "decoys": [
-        "Puncak Jaya",
-        "mont Rainier",
-        "Zugspitze"
-      ],
-      "id": "mintaka-ba9c5ff1",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quelle montagne tibétaine est la deuxième plus haute ?",
       "theme": "geography/intersection"
     },
     {
@@ -75656,24 +75544,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Quel pays possède le plus grand musée d’art et abrite la Tour Eiffel ?",
-      "theme": "geography/intersection"
-    },
-    {
-      "accepted": [],
-      "answer": "Moscou",
-      "category": "geography",
-      "choiceOnly": false,
-      "decoys": [
-        "Mexico",
-        "Rio de Janeiro",
-        "Dublin"
-      ],
-      "id": "mintaka-15d5441a",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Dans quel pays est enterré Youri Gagarine et où se trouve le Kremlin ?",
       "theme": "geography/intersection"
     },
     {
@@ -79062,27 +78932,6 @@
     },
     {
       "accepted": [
-        "Shirley Jane Temple",
-        "Shirley Temple Black"
-      ],
-      "answer": "Shirley Temple",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "Michelle Obama",
-        "Kamala Harris",
-        "Hillary Clinton"
-      ],
-      "id": "mintaka-663eae85",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quel enfant d’une célèbre actrice a été ambassadeur des États-Unis en Tchécoslovaquie et au Ghana ?",
-      "theme": "history/intersection"
-    },
-    {
-      "accepted": [
         "Jacques london",
         "John Griffith Chaney",
         "John Griffith Chaney London"
@@ -79285,9 +79134,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
-        "George H. W. Bush",
-        "Joe Biden",
-        "Tom Brady"
+        "Ivanka Trump",
+        "Malcolm X",
+        "Mikhaïl Gorbatchev"
       ],
       "id": "mintaka-c27755e6",
       "isAdult": false,
@@ -79458,9 +79307,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
+        "Pelé",
         "François Hollande",
-        "Vladimir Poutine",
-        "Charles III"
+        "Vladimir Poutine"
       ],
       "id": "mintaka-e0f15b32",
       "isAdult": false,
@@ -79509,24 +79358,6 @@
       "theme": "history/intersection"
     },
     {
-      "accepted": [],
-      "answer": "Néron",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "Caligula",
-        "Auguste",
-        "Hadrien"
-      ],
-      "id": "mintaka-2499d2e7",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Qui était le premier mari de Livie et le père biologique de Tiberius, deuxième empereur romain ?",
-      "theme": "history/intersection"
-    },
-    {
       "accepted": [
         "Drusus",
         "Drusus l'ancien",
@@ -79546,24 +79377,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Qui était le fils de Livia Drusilla et le beau-fils légal de l’empereur Auguste ?",
-      "theme": "history/intersection"
-    },
-    {
-      "accepted": [],
-      "answer": "John Wilkes Booth",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "Harriet Tubman",
-        "Jawaharlal Nehru",
-        "Grover Cleveland"
-      ],
-      "id": "mintaka-041f0175",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Qui a été un acteur de théâtre et aussi un président américain assassiné ?",
       "theme": "history/intersection"
     },
     {
@@ -79883,8 +79696,8 @@
       "choiceOnly": false,
       "decoys": [
         "Harry S. Truman",
-        "Bill Clinton",
-        "Ivanka Trump"
+        "George H. W. Bush",
+        "Bill Clinton"
       ],
       "id": "mintaka-f26d771b",
       "isAdult": false,
@@ -79960,9 +79773,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
-        "Tom Brady",
-        "Edward Moore Kennedy",
-        "Robert Francis Kennedy"
+        "Boris Johnson",
+        "James Abram Garfield",
+        "Hô Chi Minh"
       ],
       "id": "mintaka-4da39379",
       "isAdult": false,
@@ -79970,29 +79783,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Quel président des États-Unis a été président et aussi vice-président sans être élu ?",
-      "theme": "history/intersection"
-    },
-    {
-      "accepted": [
-        "Président Wilson",
-        "Thomas Woodrow Wilson",
-        "Wilson, Thomas Woodrow",
-        "Wilson, Woodrow"
-      ],
-      "answer": "Woodrow Wilson",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "Shirley Temple",
-        "Guillaume Ier",
-        "Hillary Clinton"
-      ],
-      "id": "mintaka-ad694863",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quel président des États-Unis était en fonction pendant la grande Dépression et la 1ère Guerre mondiale ?",
       "theme": "history/intersection"
     },
     {
@@ -80076,24 +79866,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Qui était le Premier ministre de Grande Bretagne pendant la guerre des Malouines et aussi l’ami personnel du président Américain, Ronald Reagan ?",
-      "theme": "history/intersection"
-    },
-    {
-      "accepted": [],
-      "answer": "Winston Churchill",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "Arnold Schwarzenegger",
-        "François Mitterrand",
-        "Nicolas Sarkozy"
-      ],
-      "id": "mintaka-b3f6d899",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Qui était le Premier ministre britannique lors du Blocus de Berlin et ami très proche du président américain Franklin D. Roosevelt ?",
       "theme": "history/intersection"
     },
     {
@@ -80431,9 +80203,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
+        "Barack Obama",
         "Benito Mussolini",
-        "Dwight David Eisenhower",
-        "John Fitzgerald Kennedy"
+        "Édouard VII"
       ],
       "id": "mintaka-97d738cb",
       "isAdult": false,
@@ -80474,9 +80246,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
+        "Charles III",
         "William de Galles",
-        "Wallis Simpson",
-        "Hirohito"
+        "Wallis Simpson"
       ],
       "id": "mintaka-fe117edf",
       "isAdult": false,
@@ -80731,7 +80503,7 @@
       "decoys": [
         "Benito Mussolini",
         "Arnold Schwarzenegger",
-        "Winston Churchill"
+        "Joseph Staline"
       ],
       "id": "mintaka-7ff91dd1",
       "isAdult": false,
@@ -80833,7 +80605,7 @@
       "decoys": [
         "Mao Zedong",
         "Karl Marx",
-        "Lénine"
+        "Dwight David Eisenhower"
       ],
       "id": "mintaka-8cc54224",
       "isAdult": false,
@@ -80910,7 +80682,7 @@
       "decoys": [
         "Winston Churchill",
         "Adolf Hitler",
-        "Catherine II de Russie"
+        "Louis XVI"
       ],
       "id": "mintaka-1c1f0e61",
       "isAdult": false,
@@ -81066,9 +80838,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
+        "Benito Mussolini",
         "Arnold Schwarzenegger",
-        "Winston Churchill",
-        "François Mitterrand"
+        "Winston Churchill"
       ],
       "id": "mintaka-d7aaa764",
       "isAdult": false,
@@ -81096,24 +80868,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Qui était le premier tsar de toute la Russie ?",
-      "theme": "history/ordinal"
-    },
-    {
-      "accepted": [],
-      "answer": "Henri VII",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "Édouard VI d'Angleterre",
-        "Richard III",
-        "Édouard IV"
-      ],
-      "id": "mintaka-77a9cf19",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Comment s’appelait le premier roi d’Angleterre ?",
       "theme": "history/ordinal"
     },
     {
@@ -81285,9 +81039,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
+        "Arnold Schwarzenegger",
         "Winston Churchill",
-        "Nicolas Sarkozy",
-        "Kim Jong-un"
+        "Dwight David Eisenhower"
       ],
       "id": "mintaka-1d44888a",
       "isAdult": false,
@@ -81328,9 +81082,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
+        "Édouard le Confesseur",
         "Tibère",
-        "Titus",
-        "Marc Antoine"
+        "Titus"
       ],
       "id": "mintaka-0ab42878",
       "isAdult": false,
@@ -81530,9 +81284,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
+        "Gerald Ford",
         "Kim Il-sung",
-        "Thomas Jefferson",
-        "Louis de France"
+        "Thomas Jefferson"
       ],
       "id": "mintaka-c1f6cc96",
       "isAdult": false,
@@ -81756,56 +81510,6 @@
       "theme": "history/ordinal"
     },
     {
-      "accepted": [
-        "Jacques Ier Stuart",
-        "Jacques VI",
-        "Jacques VI Stuart",
-        "Jacques VI d'Ecosse",
-        "Jacques VI d'Écosse",
-        "James I d'Angleterre"
-      ],
-      "answer": "Jacques Ier d'Angleterre",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "William Shakespeare",
-        "Pocahontas",
-        "Walter Raleigh"
-      ],
-      "id": "mintaka-effe50ba",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Qui était le premier roi d’Écosse ?",
-      "theme": "history/ordinal"
-    },
-    {
-      "accepted": [
-        "César Auguste",
-        "Empereur Romain Auguste",
-        "Gaius Julius Caesar Augustus",
-        "Octave",
-        "Octavien",
-        "Octavius Caesar"
-      ],
-      "answer": "Auguste",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "Néron",
-        "Jules César",
-        "Marc Antoine"
-      ],
-      "id": "mintaka-75c8f656",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Sous quel nom était connu le premier empereur de Rome avant sa prise de fonction ?",
-      "theme": "history/ordinal"
-    },
-    {
       "accepted": [],
       "answer": "Titus",
       "category": "history",
@@ -82010,7 +81714,7 @@
       "decoys": [
         "Winston Churchill",
         "Adolf Hitler",
-        "Catherine II de Russie"
+        "George III"
       ],
       "id": "mintaka-3d277e5a",
       "isAdult": false,
@@ -82157,26 +81861,6 @@
       "theme": "history/ordinal"
     },
     {
-      "accepted": [
-        "le Roi-Sergent"
-      ],
-      "answer": "Frédéric-Guillaume Ier",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "Shâh Jahân",
-        "George II",
-        "Pierre III"
-      ],
-      "id": "mintaka-a48b6e9a",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Comment s’appelait le premier dirigeant de l’empire allemand ?",
-      "theme": "history/ordinal"
-    },
-    {
       "accepted": [],
       "answer": "William Henry Harrison",
       "category": "history",
@@ -82203,9 +81887,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
+        "Nicolas Sarkozy",
         "Ronald Reagan",
-        "Margaret Thatcher",
-        "Abraham Lincoln"
+        "Margaret Thatcher"
       ],
       "id": "mintaka-53fb363c",
       "isAdult": false,
@@ -82252,7 +81936,7 @@
       "decoys": [
         "Ronald Reagan",
         "Margaret Thatcher",
-        "Xi Jinping"
+        "Abraham Lincoln"
       ],
       "id": "mintaka-4476a398",
       "isAdult": false,
@@ -82278,26 +81962,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Quel secrétaire général de l’ONU était le plus âgé lors de son départ en retraite ?",
-      "theme": "history/superlative"
-    },
-    {
-      "accepted": [
-        "Guerre civile américaine"
-      ],
-      "answer": "guerre de Sécession",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "Première Guerre mondiale",
-        "Vikings",
-        "Seconde Guerre mondiale"
-      ],
-      "id": "mintaka-1d664f53",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quelle est la guerre américaine au cours de laquelle il y a eu beaucoup de morts ?",
       "theme": "history/superlative"
     },
     {
@@ -82489,7 +82153,7 @@
       ],
       "answer": "Auguste",
       "category": "history",
-      "choiceOnly": false,
+      "choiceOnly": true,
       "decoys": [
         "Néron",
         "Jules César",
@@ -82562,7 +82226,7 @@
       "decoys": [
         "Vladimir Poutine",
         "Adolf Hitler",
-        "Nicolas Sarkozy"
+        "François Hollande"
       ],
       "id": "mintaka-0240a461",
       "isAdult": false,
@@ -82584,31 +82248,8 @@
       "choiceOnly": false,
       "decoys": [
         "Marie Stuart",
-        "George Washington",
-        "George Ier"
-      ],
-      "id": "mintaka-269e0ca7",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quel monarque britannique a-t-il eu le plus long règne ?",
-      "theme": "history/superlative"
-    },
-    {
-      "accepted": [
-        "Louis Dieudonné",
-        "Louis XIV de France",
-        "Louis le Grand",
-        "le Roi-Soleil"
-      ],
-      "answer": "Louis XIV",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "Marie Stuart",
-        "George Washington",
-        "John Adams"
+        "Catherine II de Russie",
+        "George Washington"
       ],
       "id": "mintaka-dbac1884",
       "isAdult": false,
@@ -82629,9 +82270,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
-        "George Washington",
-        "John Adams",
-        "Anne d'Autriche"
+        "Marie Stuart",
+        "Catherine II de Russie",
+        "George Washington"
       ],
       "id": "mintaka-02d0fa18",
       "isAdult": false,
@@ -82647,9 +82288,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
-        "Tom Brady",
-        "Dwayne Johnson",
-        "Gerald Ford"
+        "Xi Jinping",
+        "Lénine",
+        "Saddam Hussein"
       ],
       "id": "mintaka-a9c40061",
       "isAdult": false,
@@ -82714,9 +82355,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
+        "John Adams",
         "Ferdinand de Lesseps",
-        "James Madison",
-        "John Quincy Adams"
+        "James Madison"
       ],
       "id": "mintaka-36d9402c",
       "isAdult": false,
@@ -82732,9 +82373,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
+        "Mao Zedong",
         "Karl Marx",
-        "Lénine",
-        "Harry S. Truman"
+        "Lénine"
       ],
       "id": "mintaka-f59ffaa0",
       "isAdult": false,
@@ -82943,9 +82584,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
-        "John Adams",
-        "Anne d'Autriche",
-        "Alexis Petrovitch de Russie"
+        "George Washington",
+        "Benjamin Franklin",
+        "Anne de Grande-Bretagne"
       ],
       "id": "mintaka-72a0974d",
       "isAdult": false,
@@ -83102,7 +82743,7 @@
       "decoys": [
         "Nicolas II de Russie",
         "Pierre III",
-        "Guillaume Ier"
+        "Hirohito"
       ],
       "id": "mintaka-9c3f7d38",
       "isAdult": false,
@@ -83434,24 +83075,6 @@
       "theme": "history/superlative"
     },
     {
-      "accepted": [],
-      "answer": "bataille de Gettysburg",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "bataille d'Okinawa",
-        "bataille de la Somme",
-        "bataille d'Antietam"
-      ],
-      "id": "mintaka-e7541ff5",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quelle bataille de la Guerre de Sécession fut la plus longue ?",
-      "theme": "history/superlative"
-    },
-    {
       "accepted": [
         "Empereur Hirohito",
         "Empereur Showa",
@@ -83549,9 +83172,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
-        "Martina Hingis",
-        "Boris Becker",
-        "Margaret Smith Court"
+        "John Wilkes Booth",
+        "Grover Cleveland",
+        "Andrew Carnegie"
       ],
       "id": "mintaka-5816f3f6",
       "isAdult": false,
@@ -83622,8 +83245,8 @@
       "choiceOnly": false,
       "decoys": [
         "Malcolm X",
-        "Fidel Castro",
-        "Martin Luther King"
+        "Guillaume IV",
+        "Robert Francis Kennedy"
       ],
       "id": "mintaka-a6fe8ecd",
       "isAdult": false,
@@ -83737,7 +83360,7 @@
       "decoys": [
         "Nicolas Sarkozy",
         "Adolf Hitler",
-        "Charles III"
+        "Winston Churchill"
       ],
       "id": "mintaka-d95279e1",
       "isAdult": false,
@@ -83880,9 +83503,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
+        "François-Joseph Ier d'Autriche",
         "Theodore Roosevelt",
-        "François-Ferdinand d'Autriche",
-        "Karl Marx"
+        "François-Ferdinand d'Autriche"
       ],
       "id": "mintaka-7487d160",
       "isAdult": false,
@@ -83890,26 +83513,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Quelle était la personne la plus âgée au début de son règne au Royaume Uni ?",
-      "theme": "history/superlative"
-    },
-    {
-      "accepted": [
-        "Truman, Harry"
-      ],
-      "answer": "Harry S. Truman",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "Richard Nixon",
-        "Bill Clinton",
-        "Ivanka Trump"
-      ],
-      "id": "mintaka-367a8678",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quel président était le plus apprécié ?",
       "theme": "history/superlative"
     },
     {
@@ -84057,9 +83660,9 @@
       "category": "sport",
       "choiceOnly": false,
       "decoys": [
-        "George VI",
         "Novak Djoković",
-        "Roger Federer"
+        "Roger Federer",
+        "Paolo Maldini"
       ],
       "id": "mintaka-0cfebac3",
       "isAdult": false,
@@ -84470,24 +84073,6 @@
       "theme": "sports/superlative"
     },
     {
-      "accepted": [],
-      "answer": "Christian Benteke",
-      "category": "sport",
-      "choiceOnly": false,
-      "decoys": [
-        "Sergiño Dest",
-        "Alan Shearer",
-        "Jürgen Klinsmann"
-      ],
-      "id": "mintaka-add98af6",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Qui a marqué le but le plus rapide de l’histoire de la Coupe du monde de football ?",
-      "theme": "sports/superlative"
-    },
-    {
       "accepted": [
         "Norv.",
         "Royaume de Norvège",
@@ -84769,7 +84354,7 @@
       "accepted": [],
       "answer": "Alabama",
       "category": "geography",
-      "choiceOnly": false,
+      "choiceOnly": true,
       "decoys": [
         "Indiana",
         "Rhode Island",
@@ -85202,24 +84787,6 @@
     },
     {
       "accepted": [],
-      "answer": "rivière Missouri",
-      "category": "geography",
-      "choiceOnly": false,
-      "decoys": [
-        "Ob",
-        "fleuve Jaune",
-        "Dniepr"
-      ],
-      "id": "mintaka-1496a37f",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quel est la cinquième plus longue rivière des États-Unis ?",
-      "theme": "geography/ordinal"
-    },
-    {
-      "accepted": [],
       "answer": "Canada",
       "category": "geography",
       "choiceOnly": false,
@@ -85593,26 +85160,6 @@
     },
     {
       "accepted": [
-        "Serena Jamika Williams"
-      ],
-      "answer": "Serena Williams",
-      "category": "sport",
-      "choiceOnly": false,
-      "decoys": [
-        "Paolo Maldini",
-        "Cori Gauff",
-        "Roger Federer"
-      ],
-      "id": "mintaka-01149327",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quel joueur de tennis a gagné le plus de Grands Chelems ?",
-      "theme": "sports/superlative"
-    },
-    {
-      "accepted": [
         "Amérique",
         "Oncle Sam",
         "Pays de l'Oncle Sam",
@@ -85795,24 +85342,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Quelle est la cinquième montagne la plus haute des États-Unis ?",
-      "theme": "geography/ordinal"
-    },
-    {
-      "accepted": [],
-      "answer": "Hawaï",
-      "category": "geography",
-      "choiceOnly": false,
-      "decoys": [
-        "Californie",
-        "Maine",
-        "Montana"
-      ],
-      "id": "mintaka-46899748",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quel est le premier État américain situé au nord de l’équateur ?",
       "theme": "geography/ordinal"
     },
     {
@@ -86595,8 +86124,8 @@
       "choiceOnly": false,
       "decoys": [
         "Peyton Manning",
-        "Jim Brown",
-        "Jackie Robinson"
+        "Steve McNair",
+        "Patrick Mahomes"
       ],
       "id": "mintaka-52b4648c",
       "isAdult": false,
@@ -86698,24 +86227,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Qui est le recordman des lancers francs de l’histoire de la NBA ?",
-      "theme": "sports/generic"
-    },
-    {
-      "accepted": [],
-      "answer": "Patrick Mahomes",
-      "category": "sport",
-      "choiceOnly": false,
-      "decoys": [
-        "Aaron Rodgers",
-        "Shawn Michaels",
-        "Joe Flacco"
-      ],
-      "id": "mintaka-8569cc2e",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Qui est le quart-arrière le plus jeune à avoir remporté le Super Bowl ?",
       "theme": "sports/generic"
     },
     {
@@ -88178,24 +87689,6 @@
       "theme": "geography/generic"
     },
     {
-      "accepted": [],
-      "answer": "Atlanta",
-      "category": "geography",
-      "choiceOnly": false,
-      "decoys": [
-        "Détroit",
-        "São Paulo",
-        "Las Vegas"
-      ],
-      "id": "mintaka-aacb6d4b",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quelle est la deuxième ville la plus peuplée en Géorgie ?",
-      "theme": "geography/generic"
-    },
-    {
       "accepted": [
         "normands"
       ],
@@ -88385,26 +87878,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Quelle est la plus grande ville du Brésil ?",
-      "theme": "geography/generic"
-    },
-    {
-      "accepted": [
-        "Beantown"
-      ],
-      "answer": "Boston",
-      "category": "geography",
-      "choiceOnly": false,
-      "decoys": [
-        "La Nouvelle-Orléans",
-        "Bangkok",
-        "Dallas"
-      ],
-      "id": "mintaka-d5685645",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quel est le surnom de la ville de Boston ?",
       "theme": "geography/generic"
     },
     {
@@ -88900,27 +88373,6 @@
     },
     {
       "accepted": [
-        "New Orleans",
-        "Paroisse d'Orléans"
-      ],
-      "answer": "La Nouvelle-Orléans",
-      "category": "geography",
-      "choiceOnly": false,
-      "decoys": [
-        "Boston",
-        "Hiroshima",
-        "Vancouver"
-      ],
-      "id": "mintaka-56b1e4c8",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quel est le surnom de La Nouvelle-Orléans ?",
-      "theme": "geography/generic"
-    },
-    {
-      "accepted": [
         "République tunisienne",
         "Tun."
       ],
@@ -89110,7 +88562,7 @@
       ],
       "answer": "Tigre",
       "category": "history",
-      "choiceOnly": false,
+      "choiceOnly": true,
       "decoys": [
         "Tamise",
         "Colorado",
@@ -89154,27 +88606,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Quelle dynastie chinoise est connue comme l’âge d’or de la poésie ?",
-      "theme": "history/generic"
-    },
-    {
-      "accepted": [
-        "Macédoine",
-        "Macédoine antique"
-      ],
-      "answer": "royaume de Macédoine",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "Empire russe",
-        "Empire mongol",
-        "Rome antique"
-      ],
-      "id": "mintaka-31d4f1d6",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "À quelle dynastie appartenait Cléopâtre ?",
       "theme": "history/generic"
     },
     {
@@ -89334,7 +88765,7 @@
       "decoys": [
         "Richard Nixon",
         "Bill Clinton",
-        "Ivanka Trump"
+        "Robert Francis Kennedy"
       ],
       "id": "mintaka-4767cbd1",
       "isAdult": false,
@@ -89412,8 +88843,8 @@
       "choiceOnly": false,
       "decoys": [
         "Louis de France",
-        "James Abram Garfield",
-        "Otto von Bismarck"
+        "George Ier",
+        "James Abram Garfield"
       ],
       "id": "mintaka-8dfebfdb",
       "isAdult": false,
@@ -89495,7 +88926,7 @@
       "decoys": [
         "James Madison",
         "Andrew Carnegie",
-        "Grover Cleveland"
+        "John Wilkes Booth"
       ],
       "id": "mintaka-76cdecb0",
       "isAdult": false,
@@ -89845,9 +89276,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
+        "Vladimir Poutine",
         "Charles III",
-        "John Fitzgerald Kennedy",
-        "Donald Trump"
+        "Nicolas Sarkozy"
       ],
       "id": "mintaka-947dbed3",
       "isAdult": false,
@@ -89886,9 +89317,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
+        "Marc Antoine",
         "Claude",
-        "Titus",
-        "Auguste"
+        "Titus"
       ],
       "id": "mintaka-7f0814b1",
       "isAdult": false,
@@ -89896,29 +89327,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Qui était l’Empereur romain à l’époque de la mort du Christ ?",
-      "theme": "history/generic"
-    },
-    {
-      "accepted": [
-        "Dinastía Qing o Ts'ing",
-        "Grand Qing",
-        "Tai-tsing",
-        "empire du Grand Qing"
-      ],
-      "answer": "dynastie Qing",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "Rome antique",
-        "Empire mongol",
-        "Empire russe"
-      ],
-      "id": "mintaka-f966a8b2",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Dans quelle dynastie l’Armée de la terre cuite a-t-elle été créée ?",
       "theme": "history/generic"
     },
     {
@@ -90029,9 +89437,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
-        "Jim Brown",
-        "Steve McNair",
-        "Peyton Manning"
+        "William Tecumseh Sherman",
+        "Rutherford Birchard Hayes",
+        "Benjamin Harrison"
       ],
       "id": "mintaka-27fc203f",
       "isAdult": false,
@@ -90148,24 +89556,6 @@
       "theme": "history/generic"
     },
     {
-      "accepted": [],
-      "answer": "Harriet Tubman",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "John Wilkes Booth",
-        "Andrew Carnegie",
-        "Percy Bysshe Shelley"
-      ],
-      "id": "mintaka-f34ca3e4",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quel est le véritable nom de Harriet Tubman ?",
-      "theme": "history/generic"
-    },
-    {
       "accepted": [
         "République du Pérou"
       ],
@@ -90247,28 +89637,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Qui était le président pendant la Première Guerre Mondiale ?",
-      "theme": "history/generic"
-    },
-    {
-      "accepted": [
-        "Hadrianus",
-        "Hadrianus Imperator",
-        "Imperator Caesar Traianus Hadrianus Augustus"
-      ],
-      "answer": "Hadrien",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "Claude",
-        "Titus",
-        "Nerva"
-      ],
-      "id": "mintaka-dc2e80b8",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quel Empereur romain a érigé un mur traversant la Grande-Bretagne au deuxième siècle avant notre ère ?",
       "theme": "history/generic"
     },
     {
@@ -90428,26 +89796,6 @@
       "theme": "history/generic"
     },
     {
-      "accepted": [
-        "l’État plurinational de Bolivie"
-      ],
-      "answer": "Bolivie",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "Maldives",
-        "Équateur",
-        "Pérou"
-      ],
-      "id": "mintaka-2de637c1",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quand est mort Che Guevara ?",
-      "theme": "history/generic"
-    },
-    {
       "accepted": [],
       "answer": "Mexico-Tenochtitlan",
       "category": "history",
@@ -90517,7 +89865,7 @@
       "decoys": [
         "Kim Jong-un",
         "Ronald Reagan",
-        "Abraham Lincoln"
+        "Margaret Thatcher"
       ],
       "id": "mintaka-c540a2ca",
       "isAdult": false,
@@ -90620,9 +89968,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
+        "Guillaume Ier",
         "Alexander Hamilton",
-        "James Abram Garfield",
-        "Jefferson Davis"
+        "James Abram Garfield"
       ],
       "id": "mintaka-96377948",
       "isAdult": false,
@@ -90640,9 +89988,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
+        "Guillaume Ier",
         "Alexander Hamilton",
-        "Jefferson Davis",
-        "Andrew Johnson"
+        "Jefferson Davis"
       ],
       "id": "mintaka-b9150f60",
       "isAdult": false,
@@ -90710,9 +90058,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
-        "George W. Bush",
-        "Pol Pot",
-        "François"
+        "Ronald Reagan",
+        "Kim Jong-un",
+        "George W. Bush"
       ],
       "id": "mintaka-f6674a12",
       "isAdult": false,
@@ -90795,8 +90143,8 @@
       "choiceOnly": false,
       "decoys": [
         "Auguste",
-        "Tibère",
-        "Galba"
+        "Marc Antoine",
+        "Tibère"
       ],
       "id": "mintaka-1df48fb7",
       "isAdult": false,
@@ -90838,8 +90186,8 @@
       "choiceOnly": false,
       "decoys": [
         "Shirley Temple",
-        "Edward Moore Kennedy",
-        "Kim Il-sung"
+        "Hillary Clinton",
+        "Edward Moore Kennedy"
       ],
       "id": "mintaka-8d01bac5",
       "isAdult": false,
@@ -90961,9 +90309,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
-        "Boris Johnson",
         "Al Gore",
-        "Jack London"
+        "Jack London",
+        "Fidel Castro"
       ],
       "id": "mintaka-215b8b3e",
       "isAdult": false,
@@ -91019,9 +90367,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
-        "John Fitzgerald Kennedy",
-        "Abraham Lincoln",
-        "George W. Bush"
+        "François Mitterrand",
+        "Nicolas Sarkozy",
+        "John Fitzgerald Kennedy"
       ],
       "id": "mintaka-e5b27973",
       "isAdult": false,
@@ -91328,8 +90676,8 @@
       "choiceOnly": false,
       "decoys": [
         "Auguste",
-        "Tibère",
-        "Galba"
+        "Marc Antoine",
+        "Tibère"
       ],
       "id": "mintaka-b5a3eb32",
       "isAdult": false,
@@ -91348,8 +90696,8 @@
       "choiceOnly": false,
       "decoys": [
         "Auguste",
-        "Galba",
-        "Livie"
+        "Tibère",
+        "Claude"
       ],
       "id": "mintaka-2624d8ee",
       "isAdult": false,
@@ -91358,30 +90706,6 @@
       "note": null,
       "prompt": "Qui a dirigé la deuxième invasion romaine en Grande-Bretagne ?",
       "theme": "history/ordinal"
-    },
-    {
-      "accepted": [
-        "Cleveland Rams",
-        "Los Angeles Rams",
-        "Rams de Cleveland",
-        "Rams de Saint-Louis",
-        "Saint-Louis Rams"
-      ],
-      "answer": "Rams de Los Angeles",
-      "category": "sport",
-      "choiceOnly": false,
-      "decoys": [
-        "Seahawks de Seattle",
-        "Packers de Green Bay",
-        "Raiders de Las Vegas"
-      ],
-      "id": "mintaka-4f2c00ef",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quelle franchise NFL se trouve à la fois à Saint-Louis et à San Francisco ?",
-      "theme": "sports/intersection"
     },
     {
       "accepted": [
@@ -91430,7 +90754,7 @@
       "accepted": [],
       "answer": "Lionel Messi",
       "category": "sport",
-      "choiceOnly": false,
+      "choiceOnly": true,
       "decoys": [
         "Cristiano Ronaldo",
         "Harry Kane",
@@ -91462,24 +90786,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Qui est la plus jeune personne à avoir remporté un trophée de Most Valuable Player de la NBA ?",
-      "theme": "sports/superlative"
-    },
-    {
-      "accepted": [],
-      "answer": "Giánnis Antetokoúnmpo",
-      "category": "sport",
-      "choiceOnly": false,
-      "decoys": [
-        "Dennis Rodman",
-        "Kevin Durant",
-        "Magic Johnson"
-      ],
-      "id": "mintaka-433585d8",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Qui est la plus jeune personne à avoir remporté un trophée de Finals Most Valuable Player de la NBA ?",
       "theme": "sports/superlative"
     },
     {
@@ -92078,7 +91384,7 @@
       "decoys": [
         "Donald Trump",
         "Charles de Gaulle",
-        "Pol Pot"
+        "Charles III"
       ],
       "id": "mintaka-bdcc4955",
       "isAdult": false,
@@ -92163,7 +91469,7 @@
       "decoys": [
         "William Henry Harrison",
         "John Tyler",
-        "Zachary Taylor"
+        "James Buchanan"
       ],
       "id": "mintaka-5ccdf371",
       "isAdult": false,
@@ -92239,9 +91545,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
-        "Pol Pot",
-        "François",
-        "Xi Jinping"
+        "John Fitzgerald Kennedy",
+        "Kim Jong-un",
+        "Winston Churchill"
       ],
       "id": "mintaka-4cadaf7f",
       "isAdult": false,
@@ -92344,9 +91650,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
+        "Thomas Jefferson",
         "Otto von Bismarck",
-        "François-Ferdinand d'Autriche",
-        "Theodore Roosevelt"
+        "François-Ferdinand d'Autriche"
       ],
       "id": "mintaka-a0561dea",
       "isAdult": false,
@@ -92403,8 +91709,8 @@
       "choiceOnly": false,
       "decoys": [
         "Albert Einstein",
-        "Saddam Hussein",
-        "Martin Luther King"
+        "François",
+        "Joe Biden"
       ],
       "id": "mintaka-2e9bedc2",
       "isAdult": false,
@@ -92603,26 +91909,6 @@
     },
     {
       "accepted": [
-        "Fleuve Volga"
-      ],
-      "answer": "Volga",
-      "category": "geography",
-      "choiceOnly": false,
-      "decoys": [
-        "Mississippi",
-        "Hudson",
-        "Nil"
-      ],
-      "id": "mintaka-b85a6e14",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quel est la plus petite rivière en Europe ?",
-      "theme": "geography/superlative"
-    },
-    {
-      "accepted": [
         "Hornets de La Nouvelle-Orléans"
       ],
       "answer": "Pelicans de La Nouvelle-Orléans",
@@ -92640,24 +91926,6 @@
       "note": null,
       "prompt": "Quelle a été la deuxième équipe pour laquelle Lonzo Ball a joué ?",
       "theme": "sports/ordinal"
-    },
-    {
-      "accepted": [],
-      "answer": "Delaware",
-      "category": "geography",
-      "choiceOnly": false,
-      "decoys": [
-        "Alabama",
-        "Rhode Island",
-        "Caroline du Sud"
-      ],
-      "id": "mintaka-944ee534",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quel a été le premier État à rejoindre les États-Unis après les treize États d’origine ?",
-      "theme": "geography/ordinal"
     },
     {
       "accepted": [
@@ -92756,24 +92024,6 @@
     },
     {
       "accepted": [],
-      "answer": "Peyton Manning",
-      "category": "sport",
-      "choiceOnly": false,
-      "decoys": [
-        "Russell Wilson",
-        "Jackie Robinson",
-        "Steve McNair"
-      ],
-      "id": "mintaka-25c387e0",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Qui est le seul quart-arrière titulaire à avoir remporté un titre de Super Bowl avec deux équipes différentes ?",
-      "theme": "sports/generic"
-    },
-    {
-      "accepted": [],
       "answer": "Phil Jackson",
       "category": "sport",
       "choiceOnly": false,
@@ -92794,7 +92044,7 @@
       "accepted": [],
       "answer": "Phil Jackson",
       "category": "sport",
-      "choiceOnly": false,
+      "choiceOnly": true,
       "decoys": [
         "Edrice Adebayo",
         "Devin Booker",
@@ -92899,28 +92149,6 @@
       "theme": "geography/generic"
     },
     {
-      "accepted": [
-        "Capitale du jeu",
-        "Sin City",
-        "ville du péché"
-      ],
-      "answer": "Las Vegas",
-      "category": "geography",
-      "choiceOnly": false,
-      "decoys": [
-        "São Paulo",
-        "San Francisco",
-        "Seattle"
-      ],
-      "id": "mintaka-f973eaab",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quel est le surnom de Las Vegas dans le Nevada ?",
-      "theme": "geography/generic"
-    },
-    {
       "accepted": [],
       "answer": "Quito",
       "category": "geography",
@@ -93004,7 +92232,7 @@
       ],
       "answer": "île de Pâques",
       "category": "geography",
-      "choiceOnly": false,
+      "choiceOnly": true,
       "decoys": [
         "Nouvelle-Guinée",
         "Crète",
@@ -93082,26 +92310,6 @@
     },
     {
       "accepted": [
-        "Etat de Babylone"
-      ],
-      "answer": "Babylone",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "Carthage",
-        "Machu Picchu",
-        "Memphis"
-      ],
-      "id": "mintaka-285218ca",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quelle est la célèbre capitale de Babylone ?",
-      "theme": "history/generic"
-    },
-    {
-      "accepted": [
         "État de Caroline du Sud",
         "État de la Caroline du Sud"
       ],
@@ -93131,8 +92339,8 @@
       "choiceOnly": false,
       "decoys": [
         "François",
-        "Xi Jinping",
-        "Joe Biden"
+        "George W. Bush",
+        "Xi Jinping"
       ],
       "id": "mintaka-9487497b",
       "isAdult": false,
@@ -93151,8 +92359,8 @@
       "choiceOnly": false,
       "decoys": [
         "Hadrien",
-        "Titus",
-        "Nerva"
+        "Auguste",
+        "Titus"
       ],
       "id": "mintaka-56e6bf59",
       "isAdult": false,
@@ -93189,13 +92397,13 @@
         "Thomas J. Jackson",
         "Thomas Jackson"
       ],
-      "answer": "Thomas Jonathan Jackson",
+      "answer": "Stonewall Jackson",
       "category": "history",
       "choiceOnly": false,
       "decoys": [
         "Franklin Pierce",
         "William Tecumseh Sherman",
-        "William Henry Harrison"
+        "Zachary Taylor"
       ],
       "id": "mintaka-bfaa3b41",
       "isAdult": false,
@@ -93211,7 +92419,7 @@
       ],
       "answer": "Rome antique",
       "category": "history",
-      "choiceOnly": false,
+      "choiceOnly": true,
       "decoys": [
         "dynastie Qing",
         "Empire mongol",
@@ -93251,9 +92459,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
-        "Pol Pot",
-        "François",
-        "Xi Jinping"
+        "George W. Bush",
+        "Karl Marx",
+        "Pol Pot"
       ],
       "id": "mintaka-76221741",
       "isAdult": false,
@@ -93321,8 +92529,8 @@
       "choiceOnly": false,
       "decoys": [
         "Titus",
-        "Othon",
-        "Jules César"
+        "Hadrien",
+        "Nerva"
       ],
       "id": "mintaka-4a35af8b",
       "isAdult": false,
@@ -93671,8 +92879,8 @@
       "choiceOnly": false,
       "decoys": [
         "Martina Hingis",
-        "Rama IX",
-        "Pete Sampras"
+        "Pete Sampras",
+        "Andy Murray"
       ],
       "id": "mintaka-d7efcef0",
       "isAdult": false,
@@ -94314,28 +93522,6 @@
     },
     {
       "accepted": [
-        "La Grosse Pomme",
-        "Ville de New York",
-        "Ville de New-York"
-      ],
-      "answer": "New York",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "Hong Kong",
-        "Bruxelles",
-        "Washington"
-      ],
-      "id": "mintaka-b52644e1",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quelle est la première capitale des États-Unis et aussi l’État le plus peuplé aux États-Unis ?",
-      "theme": "history/intersection"
-    },
-    {
-      "accepted": [
         "Clinton",
         "Hillary Diane Rodham",
         "Hillary Rodham Clinton"
@@ -94371,7 +93557,7 @@
       "decoys": [
         "Malcolm X",
         "Ivanka Trump",
-        "Fidel Castro"
+        "Bill Clinton"
       ],
       "id": "mintaka-695e3f04",
       "isAdult": false,
@@ -94432,9 +93618,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
+        "Karl Marx",
         "Pol Pot",
-        "Joe Biden",
-        "Lénine"
+        "François"
       ],
       "id": "mintaka-d6cf214d",
       "isAdult": false,
@@ -94456,9 +93642,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
-        "Tom Brady",
-        "Joe Biden",
-        "Edward Moore Kennedy"
+        "Harry S. Truman",
+        "Richard Nixon",
+        "Ivanka Trump"
       ],
       "id": "mintaka-1b659978",
       "isAdult": false,
@@ -94466,6 +93652,26 @@
       "language": "fr",
       "note": null,
       "prompt": "Quel président américain est né au Massachusetts et était républicain ?",
+      "theme": "history/intersection"
+    },
+    {
+      "accepted": [
+        "Ivan Le Terrible"
+      ],
+      "answer": "Ivan IV",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Moctezuma II",
+        "Anne d'Autriche",
+        "Walter Raleigh"
+      ],
+      "id": "mintaka-a5ab3ea8",
+      "isAdult": false,
+      "isWellKnown": true,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui a été tsar de Russie et le premier dirigeant après l’indépendance de Moscou ?",
       "theme": "history/intersection"
     },
     {
@@ -94519,9 +93725,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
+        "John Fitzgerald Kennedy",
         "Abraham Lincoln",
-        "Lénine",
-        "Saddam Hussein"
+        "Pol Pot"
       ],
       "id": "mintaka-b67b5c09",
       "isAdult": false,
@@ -94533,26 +93739,6 @@
     },
     {
       "accepted": [
-        "Richard Milhous Nixon"
-      ],
-      "answer": "Richard Nixon",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "Harry S. Truman",
-        "Ivanka Trump",
-        "Malcolm X"
-      ],
-      "id": "mintaka-93350bc9",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quel président Américain était en fonction pendant la Seconde Guerre mondiale et a été destitué ?",
-      "theme": "history/intersection"
-    },
-    {
-      "accepted": [
         "Stephen Grover Cleveland"
       ],
       "answer": "Grover Cleveland",
@@ -94560,8 +93746,8 @@
       "choiceOnly": false,
       "decoys": [
         "Jawaharlal Nehru",
-        "Nancy Reagan",
-        "Andrew Johnson"
+        "Calvin Coolidge",
+        "Nancy Reagan"
       ],
       "id": "mintaka-d22c9d5c",
       "isAdult": false,
@@ -94603,7 +93789,7 @@
       "decoys": [
         "Albert Einstein",
         "Melania Trump",
-        "Jimmy Carter"
+        "Donald Trump"
       ],
       "id": "mintaka-6fb9cc67",
       "isAdult": false,
@@ -94664,9 +93850,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
-        "Hô Chi Minh",
-        "Lyndon B. Johnson",
-        "Woodrow Wilson"
+        "Kim Il-sung",
+        "Louis de France",
+        "Shirley Temple"
       ],
       "id": "mintaka-2975921e",
       "isAdult": false,
@@ -94801,8 +93987,8 @@
       "choiceOnly": false,
       "decoys": [
         "Titus",
-        "Othon",
-        "Nero Claudius Drusus"
+        "Auguste",
+        "Nerva"
       ],
       "id": "mintaka-d827cca6",
       "isAdult": false,
@@ -94863,7 +94049,7 @@
       "decoys": [
         "Henri VI",
         "Ivan IV",
-        "Walter Raleigh"
+        "Anne d'Autriche"
       ],
       "id": "mintaka-8e24b459",
       "isAdult": false,
@@ -94899,9 +94085,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
-        "Grover Cleveland",
-        "William Henry Harrison",
-        "James Monroe"
+        "John Quincy Adams",
+        "Andrew Johnson",
+        "Martin Van Buren"
       ],
       "id": "mintaka-0912c640",
       "isAdult": false,
@@ -94979,9 +94165,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
+        "John Quincy Adams",
         "Boutros Boutros-Ghali",
-        "Warren Gamaliel Harding",
-        "Hideki Tōjō"
+        "Warren Gamaliel Harding"
       ],
       "id": "mintaka-d36aa81d",
       "isAdult": false,
@@ -95020,9 +94206,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
-        "John Adams",
-        "James Madison",
-        "William Henry Harrison"
+        "Louis de France",
+        "George Ier",
+        "John Adams"
       ],
       "id": "mintaka-63761486",
       "isAdult": false,
@@ -95060,39 +94246,14 @@
       "theme": "history/superlative"
     },
     {
-      "accepted": [
-        "Marie 1ère d'écosse",
-        "Marie Ire d'Ecosse",
-        "Marie Ire d'Écosse",
-        "Marie Ière d'Écosse",
-        "Marie d'Écosse",
-        "Mary"
-      ],
-      "answer": "Marie Stuart",
-      "category": "history",
-      "choiceOnly": false,
-      "decoys": [
-        "Marie Ire d'Angleterre",
-        "Louis XIV",
-        "Ivan IV"
-      ],
-      "id": "mintaka-aa1e4548",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Qui a été le monarque le plus jeune de l’Angleterre au début de son règne ?",
-      "theme": "history/superlative"
-    },
-    {
       "accepted": [],
       "answer": "Joe Biden",
       "category": "history",
       "choiceOnly": false,
       "decoys": [
-        "Tom Brady",
-        "Dwayne Johnson",
-        "Joe Flacco"
+        "Xi Jinping",
+        "Lénine",
+        "Saddam Hussein"
       ],
       "id": "mintaka-cff146f1",
       "isAdult": false,
@@ -95112,7 +94273,7 @@
       "decoys": [
         "Boris Eltsine",
         "Angela Merkel",
-        "Jimmy Carter"
+        "François-Ferdinand d'Autriche"
       ],
       "id": "mintaka-49e07de1",
       "isAdult": false,
@@ -95218,26 +94379,6 @@
       "theme": "sports/superlative"
     },
     {
-      "accepted": [
-        "la République d’Ouzbékistan"
-      ],
-      "answer": "Ouzbékistan",
-      "category": "sport",
-      "choiceOnly": false,
-      "decoys": [
-        "Serbie",
-        "Maurice",
-        "République dominicaine"
-      ],
-      "id": "mintaka-75c44b6a",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quel pays a remporté le moins de médailles pour les Jeux olympiques d’été de 2019 ?",
-      "theme": "sports/superlative"
-    },
-    {
       "accepted": [],
       "answer": "Pete Sampras",
       "category": "sport",
@@ -95262,8 +94403,8 @@
       "choiceOnly": false,
       "decoys": [
         "Martina Hingis",
-        "Pete Sampras",
-        "Andy Murray"
+        "Andy Murray",
+        "Margaret Smith Court"
       ],
       "id": "mintaka-8b803f1f",
       "isAdult": false,
@@ -95281,9 +94422,9 @@
       "category": "sport",
       "choiceOnly": false,
       "decoys": [
-        "Venus Williams",
         "Serena Williams",
-        "Andy Murray"
+        "Andy Murray",
+        "Novak Djoković"
       ],
       "id": "mintaka-9c98b2aa",
       "isAdult": false,
@@ -95291,26 +94432,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Qui est la plus jeune joueuse de tennis à s’être qualifiée pour le tournoi principal de Wimbledon ?",
-      "theme": "sports/superlative"
-    },
-    {
-      "accepted": [
-        "Dallas Cowboys"
-      ],
-      "answer": "Cowboys de Dallas",
-      "category": "sport",
-      "choiceOnly": false,
-      "decoys": [
-        "Patriots de la Nouvelle-Angleterre",
-        "Giants de New York",
-        "Jets de New York"
-      ],
-      "id": "mintaka-984408f9",
-      "isAdult": false,
-      "isWellKnown": true,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quelle équipe de NFL a le plus de victoires en Super Bowl ?",
       "theme": "sports/superlative"
     },
     {
@@ -95659,7 +94780,7 @@
       "decoys": [
         "Shawn Michaels",
         "Joe Flacco",
-        "Patrick Mahomes"
+        "Steve McNair"
       ],
       "id": "mintaka-44f94e20",
       "isAdult": false,
@@ -95697,8 +94818,8 @@
       "choiceOnly": false,
       "decoys": [
         "Draymond Green",
-        "Rajon Rondo",
-        "Zion Williamson"
+        "Jim Brown",
+        "Rajon Rondo"
       ],
       "id": "mintaka-4b041796",
       "isAdult": false,
@@ -95755,7 +94876,7 @@
       "decoys": [
         "Peyton Manning",
         "Steve McNair",
-        "Patrick Mahomes"
+        "Aaron Rodgers"
       ],
       "id": "mintaka-33f37e25",
       "isAdult": false,
@@ -95772,8 +94893,8 @@
       "choiceOnly": false,
       "decoys": [
         "Peyton Manning",
-        "Steve McNair",
-        "Patrick Mahomes"
+        "Aaron Rodgers",
+        "Joe Flacco"
       ],
       "id": "mintaka-4b3c60bb",
       "isAdult": false,
@@ -95876,8 +94997,8 @@
       "choiceOnly": false,
       "decoys": [
         "Aaron Rodgers",
-        "Shawn Michaels",
-        "Joe Flacco"
+        "Joe Flacco",
+        "Peyton Manning"
       ],
       "id": "mintaka-5c4e304f",
       "isAdult": false,
@@ -96606,6 +95727,24 @@
       "theme": "history/generic"
     },
     {
+      "accepted": [],
+      "answer": "Néron",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Titus",
+        "Nerva",
+        "Galba"
+      ],
+      "id": "mintaka-c4511174",
+      "isAdult": false,
+      "isWellKnown": true,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui était le cinquième empereur des Romains ?",
+      "theme": "history/generic"
+    },
+    {
       "accepted": [
         "Civilisation sumérienne",
         "Sumeriens",
@@ -96660,7 +95799,7 @@
       "decoys": [
         "Angela Merkel",
         "Boris Eltsine",
-        "Youri Gagarine"
+        "Jimmy Carter"
       ],
       "id": "mintaka-b37a7c87",
       "isAdult": false,
@@ -96680,7 +95819,7 @@
       "decoys": [
         "Boris Eltsine",
         "Angela Merkel",
-        "Richard Nixon"
+        "Jimmy Carter"
       ],
       "id": "mintaka-d98d7f45",
       "isAdult": false,
@@ -96871,9 +96010,9 @@
       "category": "geography",
       "choiceOnly": false,
       "decoys": [
-        "James Madison",
-        "William Henry Harrison",
-        "John Tyler"
+        "Alexander Hamilton",
+        "Jefferson Davis",
+        "Andrew Johnson"
       ],
       "id": "mintaka-71881fb2",
       "isAdult": false,
@@ -96956,9 +96095,9 @@
       "category": "history",
       "choiceOnly": false,
       "decoys": [
+        "Abraham Lincoln",
         "Louis XIV",
-        "Napoléon Ier",
-        "Grover Cleveland"
+        "Otto von Bismarck"
       ],
       "id": "mintaka-3a92007b",
       "isAdult": false,

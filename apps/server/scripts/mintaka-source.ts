@@ -411,17 +411,39 @@ const poolsByKind = ({
  * discipline holds more entities than the class *basketball team* does, so the
  * larger of the two is the wrong one — the rung says which question is being
  * asked, and only then does the count say which answer to it is best served.
+ *
+ * **Which rung is asked first is the subject's to say**, and reading the
+ * discipline first everywhere is what stood *Tom Brady* beside Joe Biden.
+ * Wikidata records a sport for anybody who ever played one: Biden and Gerald
+ * Ford played college football, RFK ran cross-country and Rama IX won a
+ * sailing medal, so a rung order fixed at discipline-first dealt athletes to
+ * **seven of the eight history rows** it reached. A sport question is about
+ * the discipline and asks for it first; every other subject wants the trade.
+ *
+ * The eighth row is what the trade costs, and it is one row: *Jackie Robinson*
+ * really was a baseball player, and his widest occupation is **military
+ * officer**, so the first black man in the major leagues is now dealt three
+ * Union generals. That is the incidental-kind fault one rung down rather than
+ * a reason to go back — the widest bucket within a rung is measured and
+ * settled, and seven rows for one is the trade it makes here.
  */
 const poolFor = ({
   answerId,
+  category,
   kinds,
   pools
 }: {
   answerId: string
+  category: QuestionCategory
   kinds: ReadonlyMap<string, string[]>
   pools: ReadonlyMap<string, PoolEntry[]>
 }): PoolEntry[] | null => {
-  for (const rung of ['sport', 'occupation', 'class']) {
+  const rungs =
+    category === 'sport'
+      ? ['sport', 'occupation', 'class']
+      : ['occupation', 'sport', 'class']
+
+  for (const rung of rungs) {
     const held = (kinds.get(answerId) ?? [])
       .filter((kind) => kind.startsWith(`${rung}:`))
       .flatMap((kind) => {
@@ -631,7 +653,12 @@ export const ingestMintaka = async (): Promise<IngestedQuestions> => {
 
   const dressed = candidates.map((candidate) => ({
     candidate,
-    pool: poolFor({ answerId: candidate.answerId, kinds, pools })
+    pool: poolFor({
+      answerId: candidate.answerId,
+      category: candidate.category,
+      kinds,
+      pools
+    })
   }))
   const caps = decoyCaps(dressed)
 

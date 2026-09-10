@@ -4168,5 +4168,47 @@
     "language": "en",
     "prompt": "Which of following is rude and dishonorable by Klingon standards?",
     "why": "many acts are dishonorable to Klingons; only the four narrow it"
+  },
+  {
+    "id": "mintaka-f00451f5",
+    "language": "fr",
+    "prompt": "L’ancienne Mésopotamie était connue pour être située le long de deux rivières. Laquelle des suivantes était l’une d’entre elles ?",
+    "why": "the prompt says \"one of the following\", and Mesopotamia has two rivers — a typed room writing Euphrate is as right as one writing Tigre and is marked wrong"
+  },
+  {
+    "id": "mintaka-1ee0fa7b",
+    "language": "fr",
+    "prompt": "Comment s’appelle l’empereur romain qui est resté au pouvoir pendant longtemps ?",
+    "why": "\"a long time\" names no superlative — Tiberius, Constantine and Theodosius all reigned for decades, so only the four on screen make one of them the answer"
+  },
+  {
+    "id": "mintaka-bac7691e",
+    "language": "fr",
+    "prompt": "Quels États sont limitrophes avec la Géorgie et le Tennessee ?",
+    "why": "North Carolina borders both as squarely as Alabama does, and the row banks one member of a set the sentence never closes"
+  },
+  {
+    "id": "mintaka-6b5f02bf",
+    "language": "fr",
+    "prompt": "Quel footballeur appartient à la Ligue européenne, mais est Argentin ?",
+    "why": "dozens of Argentinians play in a European league, and only the four on screen make Messi the answer"
+  },
+  {
+    "id": "mintaka-8b8ab017",
+    "language": "fr",
+    "prompt": "Qui était entraîneur lorsque Michael Jordan jouait pour les Bulls de Chicago ?",
+    "why": "Doug Collins and Kevin Loughery coached him at Chicago too; the row is a question because the other three candidates are players"
+  },
+  {
+    "id": "mintaka-b0f7b2ba",
+    "language": "fr",
+    "prompt": "Quelle civilisation antique a créé des aqueducs pour transférer de l’eau vers la ville ?",
+    "why": "the Greeks, the Assyrians and the Persians all built aqueducts, so the sentence names no one civilisation"
+  },
+  {
+    "id": "mintaka-ec193c1c",
+    "language": "fr",
+    "prompt": "Où peut-on aller voir des têtes de pierre géantes ?",
+    "why": "the Olmec heads of Veracruz answer it as squarely as the moai do, and the prompt names neither"
   }
 ]

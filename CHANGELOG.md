@@ -58,8 +58,8 @@ one part.
 - `[Server]` **Three of the four thin French subjects now hold an evening of
   their own.** Mintaka is the bank's fourth source and its second built on
   Wikidata: 20 000 crowdsourced questions translated into eight languages, CC BY
-  4.0. French history goes from **64 rows to 519**, geography from 156 to 650
-  and sport from 123 to 368 — past the 300 the English half sits at, which is
+  4.0. French history goes from **64 rows to 499**, geography from 156 to 640
+  and sport from 123 to 355 — past the 300 the English half sits at, which is
   what makes the graded difficulty picker buildable for the quiz at last. Three
   bands over French history now deal a hundred and seventy questions each where
   they would have dealt twenty-one. **Science does not move**: Mintaka has none
@@ -85,8 +85,10 @@ one part.
   comes up more than five times in a subject**, against 34 rows answering *New
   York* and 31 answering *Roosevelt* upstream.
 
-  Of the 20 000 rows, 1 194 are banked. The build reports 20 unwinnable and 68
-  repeated prompts across the whole bank, which now holds **9 663 questions**.
+  Of the 20 000 rows, 1 151 are banked — 1 194 read, 45 dropped by the census
+  below and 2 recovered by the decoy rung. The build reports 20 unwinnable and
+  68 repeated prompts across the whole bank, which now holds **9 620
+  questions**.
   See [`docs/plans/22-thin-french-subjects.md`](docs/plans/22-thin-french-subjects.md)
 
 - `[Game]` **The front door offers the rooms this device can walk back into.**
@@ -493,6 +495,44 @@ one part.
   and the rest would be somebody's evening quietly rearranged between two rounds
 
 ### Improvements
+
+- `[Server]` **Every Mintaka row has been read once, and forty-five of them were
+  wrong.** The census the source owed found almost no `choiceOnly` — seven rows
+  out of 1 194, where the two French banks before it gave 695 — because a
+  Wikidata-backed row answers one entity by construction and a sentence naming
+  a set is the exception. What it found instead was **falsehood**: Woodrow
+  Wilson in office during the Depression, John Wilkes Booth as an assassinated
+  president, Churchill as prime minister through the Berlin blockade, the
+  Terracotta Army under the Qing, medals at a Summer Olympics of 2019 that
+  never took place, and *Quel est le surnom de Boston ?* answering *Boston*.
+  Each is a `drop` in `question-repairs.json` carrying the sentence that says
+  why. One is repaired rather than dropped: Thomas Jonathan Jackson's nickname
+  is *Stonewall Jackson*, and his three wrong answers are Civil War figures, so
+  naming it leaves a question that works picked as well as typed.
+
+  **That is the census's real yield here and it was not what the plan
+  expected.** A source translated from English crowdwork does not fail by being
+  unanswerable, it fails by being false — so the artefact it fills is the
+  repairs file rather than the choice-only list. Read by eight subagents over
+  the banked rows, every verdict a proposal with a reason, and every one of them
+  checked against the row before it reached a file.
+
+- `[Server]` **A president who played college football is no longer dealt three
+  athletes.** `poolFor` read the discipline rung before the trade for every
+  subject, and Wikidata records a sport for anybody who ever played one: Joe
+  Biden and Gerald Ford played college football, RFK ran cross-country, Rama IX
+  won a sailing medal — so *Quel président américain a obtenu le plus de voix ?*
+  stood Tom Brady beside Joe Biden, and seven of the eight history rows the
+  sport rung reached were dealt athletes. The rung order follows the subject
+  now: a sport question asks the discipline first, everything else asks the
+  trade. Biden stands beside Xi Jinping, Lenin and Saddam Hussein.
+
+  The eighth row is what it costs, and it is one: *Jackie Robinson* really was a
+  baseball player, and his widest occupation is **military officer**, so the
+  first black man in the major leagues is now dealt three Union generals. That
+  is the incidental-kind fault one rung down rather than a reason to go back —
+  widest-bucket-within-a-rung is measured and settled, and seven rows for one is
+  the trade.
 
 - `[Server]` **A room that shouts *Lakers* at a screen holding *Lakers de Los
   Angeles* is now right.** Mintaka files an answer under the label Wikidata

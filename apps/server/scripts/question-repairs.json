@@ -1,4 +1,188 @@
 {
+  "mintaka-1d664f53": {
+    "drop": true,
+    "why": "it asks which American war had many dead, which the two world wars printed beside it answer as well as the Civil War does"
+  },
+  "mintaka-2af2f393": {
+    "drop": true,
+    "why": "plenty of athletes have recorded music, and Shaquille O’Neal — printed as a wrong answer — released four rap albums, so the row is unwinnable typed and unwinnable picked"
+  },
+  "mintaka-2de637c1": {
+    "drop": true,
+    "why": "it asks when Che Guevara died and answers a country"
+  },
+  "mintaka-4f2c00ef": {
+    "drop": true,
+    "why": "the Rams played in Cleveland, Los Angeles and St Louis and never in San Francisco, which is the second half of what the prompt asks"
+  },
+  "mintaka-7f2ffe2e": {
+    "drop": true,
+    "why": "it asks which country and answers the Middle East; the three wrong answers are two civilisations and an island group"
+  },
+  "mintaka-8e7f878c": {
+    "drop": true,
+    "why": "Magic Johnson is HIV-positive and has never had AIDS, which is the whole of what the prompt asks"
+  },
+  "mintaka-15d5441a": {
+    "drop": true,
+    "why": "it asks which country and answers Moscow; all three wrong answers are cities too"
+  },
+  "mintaka-25c387e0": {
+    "drop": true,
+    "why": "Tom Brady won with the Patriots and the Buccaneers, so Manning is not the only one"
+  },
+  "mintaka-31d4f1d6": {
+    "drop": true,
+    "why": "Cleopatra belonged to the Ptolemaic dynasty; the kingdom of Macedon it answers had been dissolved for a century and a half"
+  },
+  "mintaka-56b1e4c8": {
+    "drop": true,
+    "why": "it asks for the nickname of New Orleans and answers New Orleans"
+  },
+  "mintaka-75c8f656": {
+    "drop": true,
+    "why": "the prompt asks what the first Roman emperor was called *before* he took office, which is Octavian — Augustus is the name he took after"
+  },
+  "mintaka-75c44b6a": {
+    "drop": true,
+    "why": "there were no Summer Olympics in 2019, so the row asks about a games that never took place"
+  },
+  "mintaka-77a9cf19": {
+    "drop": true,
+    "why": "Henry VII took the throne in 1485, six centuries after Æthelstan, so \"the first king of England\" is not him"
+  },
+  "mintaka-041f0175": {
+    "drop": true,
+    "why": "John Wilkes Booth assassinated a president and never was one, so the prompt describes nobody"
+  },
+  "mintaka-269e0ca7": {
+    "drop": true,
+    "why": "it asks for a British monarch and answers Louis XIV"
+  },
+  "mintaka-367a8678": {
+    "drop": true,
+    "why": "the most liked president is not a fact, and no candidate can be the answer to it"
+  },
+  "mintaka-663eae85": {
+    "drop": true,
+    "why": "Shirley Temple was the famous actress herself, not her child, so the prompt describes nobody"
+  },
+  "mintaka-944ee534": {
+    "drop": true,
+    "why": "Delaware was the first of the thirteen original states to ratify, so it cannot be the first to join after them — that is Vermont"
+  },
+  "mintaka-1496a37f": {
+    "drop": true,
+    "why": "the Missouri is the longest river in the United States, not the fifth, and the three wrong answers are the Ob, the Yellow River and the Dnieper — none of them American"
+  },
+  "mintaka-2499d2e7": {
+    "drop": true,
+    "why": "Livia's first husband was Tiberius Claudius Nero, and the answer names the emperor Nero, who was born thirty years after Tiberius took the throne"
+  },
+  "mintaka-8569cc2e": {
+    "drop": true,
+    "why": "Ben Roethlisberger won Super Bowl XL at 23, younger than Mahomes at 24, so the superlative belongs to a name the row calls wrong"
+  },
+  "mintaka-93350bc9": {
+    "drop": true,
+    "why": "Nixon held no office during the Second World War and resigned rather than being removed, so neither half of the prompt fits him"
+  },
+  "mintaka-285218ca": {
+    "drop": true,
+    "why": "Babylon was a city rather than a country, and the row answers the prompt with the word the prompt uses"
+  },
+  "mintaka-433585d8": {
+    "drop": true,
+    "why": "Magic Johnson was Finals MVP at twenty and is printed beside Antetokounmpo as a wrong answer"
+  },
+  "mintaka-984408f9": {
+    "drop": true,
+    "why": "the Cowboys hold five Super Bowl wins, behind the Steelers and the Patriots on six each"
+  },
+  "mintaka-2401350a": {
+    "drop": true,
+    "why": "Manute Bol and Gheorghe Mureșan were both measured at 2.31 m, taller than Yao Ming"
+  },
+  "mintaka-01149327": {
+    "drop": true,
+    "why": "the prompt asks it of tennis players at large, where Djokovic — printed as a decoy — passed Serena Williams in 2023"
+  },
+  "mintaka-46899748": {
+    "drop": true,
+    "why": "every American state but one sits north of the equator, so \"the first\" names no ordinal a room could hold, and the answer is the one state that is furthest south"
+  },
+  "mintaka-a48b6e9a": {
+    "drop": true,
+    "why": "Frederick William I was king of Prussia a century and a half before the German Empire; its first leader was Wilhelm I, which another row in this source answers correctly"
+  },
+  "mintaka-aa1e4548": {
+    "drop": true,
+    "why": "Mary Stuart was queen of Scotland and never a monarch of England, which is what the prompt asks for"
+  },
+  "mintaka-aacb6d4b": {
+    "drop": true,
+    "why": "Atlanta is the largest city in Georgia rather than the second, and the state shares its French name with the country"
+  },
+  "mintaka-ad694863": {
+    "drop": true,
+    "why": "Wilson left office in 1921, eight years before the Depression began"
+  },
+  "mintaka-add98af6": {
+    "drop": true,
+    "why": "the fastest goal in a World Cup is Hakan Şükür’s at eleven seconds; Benteke’s record is a qualifier"
+  },
+  "mintaka-b3f6d899": {
+    "drop": true,
+    "why": "Clement Attlee was prime minister through the Berlin blockade, not Churchill, who was out of office from 1945 to 1951"
+  },
+  "mintaka-b85a6e14": {
+    "drop": true,
+    "why": "it asks for the smallest river in Europe and answers the longest one"
+  },
+  "mintaka-b52644e1": {
+    "drop": true,
+    "why": "New York has not been the most populous American state since California passed it in 1962, and the second half of the prompt is what decides the answer"
+  },
+  "mintaka-b463903d": {
+    "drop": true,
+    "why": "Margaret Court holds twenty-four women’s singles majors against Serena Williams’ twenty-three, and two of the three wrong answers are men"
+  },
+  "mintaka-ba9c5ff1": {
+    "drop": true,
+    "why": "Kangchenjunga is the third-highest mountain on Earth and stands on the Nepal-India border rather than in Tibet, so both halves of the prompt are wrong"
+  },
+  "mintaka-bfaa3b41": {
+    "answer": "Stonewall Jackson",
+    "why": "it asks for the nickname and answered with the name — unlike the Las Vegas row, the three wrong answers here are Civil War figures, so naming the nickname leaves a question that works picked as well as typed"
+  },
+  "mintaka-d5685645": {
+    "drop": true,
+    "why": "it asks for the nickname of Boston and answers Boston"
+  },
+  "mintaka-dc2e80b8": {
+    "drop": true,
+    "why": "Hadrian's Wall was built in the second century AD, and the prompt says before our era"
+  },
+  "mintaka-e7541ff5": {
+    "drop": true,
+    "why": "Gettysburg lasted three days, where the siege of Petersburg ran nine months"
+  },
+  "mintaka-effe50ba": {
+    "drop": true,
+    "why": "James I of England was Scotland’s king six hundred years after Kenneth MacAlpin, and the question asks for the first"
+  },
+  "mintaka-f34ca3e4": {
+    "drop": true,
+    "why": "it asks for Harriet Tubman’s real name — Araminta Ross — and answers Harriet Tubman"
+  },
+  "mintaka-f966a8b2": {
+    "drop": true,
+    "why": "the Terracotta Army was buried under the Qin, fifteen centuries before the Qing the row answers"
+  },
+  "mintaka-f973eaab": {
+    "drop": true,
+    "why": "it asks for the nickname of Las Vegas and answers Las Vegas; the three wrong answers are cities rather than nicknames, so repairing the answer would leave the pick incoherent"
+  },
   "oqdb-4-2": {
     "drop": true,
     "why": "a decoy answers the prompt too — Akhénaton was born and reigned as Amenhotep IV before renaming himself, so the decoys \"Amenhotep\" and \"Aménophis\" (the Greek form of the same name) both name Néfertiti's husband"

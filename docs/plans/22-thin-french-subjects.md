@@ -199,13 +199,7 @@ the Vikidia session repeats one of them:
 
 ### What session A did not do
 
-- **The census.** No banked Mintaka row has been read one by one, so
-  `choice-only-questions.json` gained nothing. It is still owed.
-- **The short-name spellings.** Done on 11 September 2026 — see below.
-- **One decoy defect measured and left standing**: about one sport row in
-  thirteen falls back from its discipline to a trade, and *Gerald Ford* is filed
-  as an American football player. `SAME_ERA_YEARS` at 100 does not separate him
-  from Tom Brady.
+All three were done on 11 September 2026 — see below.
 
 ## What the spellings session found, 11 September 2026
 
@@ -217,7 +211,28 @@ second name, 2 119 spellings, every one of them refused by the grader before**;
 carried — 170 rows — counted rows whose label *could* be shortened, and 140 is
 how many Wikidata actually holds the short form for.
 
-Two things the session found that the plan did not name:
+**The census found almost no `choiceOnly` and a great deal of falsehood.** Seven
+rows out of 1 194, where the two French banks before Mintaka gave 695 — a
+Wikidata-backed row answers one entity by construction, so the sentence naming a
+set is the exception rather than the rule. **Forty-five rows are wrong** instead:
+Wilson in office during the Depression, Booth as an assassinated president,
+Churchill through the Berlin blockade, the Terracotta Army under the Qing, a
+Summer Olympics of 2019. They are `drop` entries in `question-repairs.json`, one
+repaired rather than dropped. **A source translated from English crowdwork fails
+by being false, not by being unanswerable** — so the artefact it fills is the
+repairs file, and a later source should be read expecting that.
+
+**The decoy rung is the subject's to choose.** `poolFor` read the discipline
+before the trade everywhere, and Wikidata records a sport for anybody who ever
+played one, so seven of the eight history rows the sport rung reached were dealt
+athletes — Tom Brady beside Joe Biden. A sport question asks the discipline
+first and every other subject asks the trade. It costs one row: Jackie Robinson's
+widest occupation is *military officer*. The measured shape of the defect was
+narrower than the handoff's note: **sport rows falling back to a trade are not a
+defect at all** — Simone Biles, Tiger Woods and Max Verstappen fall to *gymnast*,
+*golfer* and *racing driver*, which is the right bucket.
+
+Two things the earlier session found that the plan did not name:
 
 - **An alias can be the name of the row's own decoy, under a spelling the
   labels do not share.** Wikidata files Augustus as *Gaius Julius Caesar*, and
@@ -311,6 +326,8 @@ open across the deploy keeps playing.
 
 - Each of French history, geography, science and sport holds **at least 300
   rows**, or the plan says which ones did not and what the source ran out of.
+  **History 499, geography 640, sport 355 — science stays at 170 and Vikidia is
+  what it is waiting on.**
 - Every banked row from the new source has been read once, and the ones a typed
   room cannot win are in the census with a reason each.
 - `pnpm validate` is green, the credits name the new author, and the changelog
