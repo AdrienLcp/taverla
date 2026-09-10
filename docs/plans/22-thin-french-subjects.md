@@ -218,11 +218,16 @@ open across the deploy keeps playing.
 
 ## Decisions left open for the session
 
-- **How much of Mintaka's American half to keep.** Sport is 48% NFL, NBA and
-  MLB, and a French table does not answer those. Dropping them is what takes
-  sport from 1 312 rows to 432 — the difference between a subject filled and a
-  subject dented. The filter is a judgement about the room, so it is Adrien's,
-  and it is the one question in this stage worth interrupting for.
+- **Settled on 10 September 2026 — do not re-open.** How much of Mintaka's
+  American half to keep: **the NBA stays**, because basketball is followed in
+  France, and the rest of the US-marked sport goes with the NFL and MLB. The
+  trade was put with its number — dropping all of it takes sport from 1 312 rows
+  to 432 — and taken knowingly: a French table that cannot answer the question is
+  worse than a thinner subject. How many the NBA puts back is the session's to
+  measure. **Sport stays the thin subject, and that is accepted.**
+- **Both sources are taken.** Mintaka and Vikidia, in that order, adapted rather
+  than ingested raw. That was the call on the same day, so the plan's scope is no
+  longer a question.
 - **Whether MMMLU's exam register is acceptable at all.** It is the only real
   depth in French science — ~1 600 rows, MIT, decoys shipped — and it reads like
   a paper rather than a party. Ingesting it and throwing most of it away is a
