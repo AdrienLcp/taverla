@@ -1971,6 +1971,24 @@ one part.
 
 ### Internal
 
+- **Dependencies up to latest, and not a major among them.** **React and
+  `react-dom` 19.2.8 → 19.3.0**, with `@types/react` and `@types/react-dom`
+  moving to 19.3.0 beside them; **Vite 8.2.2 → 8.3.0**; **Zod 4.5.4 → 4.6.1**
+  across protocol, server and game at once, which is the only way a schema the
+  three of them share can move; `@types/node` 26.4.1 → 26.5.1; and **Biome
+  2.5.12 → 2.5.13**, which moves its own `$schema` pin again and is the only
+  file the upgrade touched outside a manifest and the lockfile. 539 unit tests,
+  four journeys, and the client, SSR and prerender builds: nothing changed.
+
+  `@babel/core` stays on **7.29.7** with 8.0.1 out, which is what
+  `vite.config.ts` has thrown on since the pin was written — see
+  `docs/component-shape.md`.
+
+  The install's one peer warning is **older than this upgrade and untouched by
+  it**: `@hono/node-ws@1.3.1` asks for `@hono/node-server@^1.19.11` and the
+  server runs 2.1.1. Both are already at their latest, so the range closes when
+  node-ws catches up and not before; the socket upgrade works.
+
 - `[Game]` **Playwright launches Chromium with `--mute-audio`.** The journeys
   reach a round, a room plays its clip at a stored volume defaulting to 80%, and
   a run started headed plays it out loud. Muted at the process rather than
