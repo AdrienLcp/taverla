@@ -331,8 +331,10 @@ arts rows moved the miss rate from 4.3% to 5.4%, which is what surfaced it.
   *quelle est la température à la surface du soleil*.
 - **MMMLU `FR_FR`**, still unargued: ~1 600 French science rows, MIT, decoys
   shipped, exam register. It is the only remaining depth for the subject.
-- **`frenchAliasesOf` for PolyFact**, unchanged from the spellings session and
-  still worth half a session.
+- ~~**`frenchAliasesOf` for PolyFact**~~ — **done**, 11 September 2026, and it
+  turned out to be the smaller half of its own question. See
+  [`23-the-name-a-room-shouts.md`](23-the-name-a-room-shouts.md) for the three
+  sources it does *not* reach and what each would cost.
 
 ## The order this ships in
 

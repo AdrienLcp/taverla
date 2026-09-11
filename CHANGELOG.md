@@ -547,6 +547,45 @@ one part.
 
 ### Improvements
 
+- `[Server]` **PolyFact pays for the name a room shouts too**, which doubles the
+  reach of a fix that had only ever run on one source. 864 of its 1 900 rows now
+  hold a second name and 2 248 spellings, so the bank goes from 744 rows with an
+  alternate spelling to **1 608**, and from 2 057 spellings to 4 305. Its answers
+  are people — *André Téchiné* typed as *Téchiné*, *Marcel Pagnol* as *Pagnol*,
+  *Robert Zemeckis* as *Zemeckis*, *Takeshi Kitano* as *Kitano* — and every one
+  of those was graded wrong before, because `gradeQuizGuess` measures the whole
+  of what was typed and `matchesAnswer` forgives a slipped finger rather than a
+  dropped surname. 139 rows accept a strict shortening of their own label, and
+  beside them stand the names a room actually uses: *royaume de Saxe* answered
+  *Saxe*, *Royaume des Pays-Bas* answered *Pays-Bas*, *Russie* answered
+  *Fédération de Russie*.
+
+  Nothing new was built for it. `wikidata-aliases.ts` and `acceptedOf` were
+  already there and already tested; what was missing was the entity id, and
+  **PolyFact had it all along** — `fact_id` is `subjectQID|propertyID|objectQID`
+  and its third segment is the answer. Reading it there rather than through the
+  labels is the one decision in the change: *Athènes* is two entities in this
+  pack, and it is the one label in 1 322 a label-keyed lookup would have
+  answered with a coin toss. The decoys are reached the other way, through the
+  positional alignment of `option_ids` with `option_a`–`option_d` that
+  `birthYearsOfLabels` already exploits, because `withDecoysSpread` moves a decoy
+  to a row whose own `option_ids` never held it. A label two entities answer to
+  is a coin toss this can afford there: those ids are read to collect the names
+  a decoy goes by, and a wrong one widens what the bank refuses rather than what
+  it pays for.
+
+  Wikidata offered 3 084 aliases and the bank took 2 248. **Every one of the 836
+  refusals is `acceptedOf` doing its job** — *Eric Rohmer*, *Andre Techine*,
+  *Benoit Jacquot*, *Ryusuke Hamaguchi*: spellings the matcher already forgives,
+  which buy nothing. The refusal that matters never fired here and is kept
+  anyway, so a corpus test now states it over the shipped bank rather than over
+  the ingestion: **no accepted spelling of a row may grade one of that row's own
+  decoys right.** Wikidata files Augustus as *Gaius Julius Caesar* and the bank
+  prints *Jules César* beside him as a wrong answer, and that is the only way a
+  second spelling can cost a room instead of paying it. It sweeps both sources
+  that fill `accepted` and costs nothing to leave in place for the three that do
+  not yet
+
 - `[Server]` **Every Mintaka row has been read once, and forty-five of them were
   wrong.** The census the source owed found almost no `choiceOnly` — seven rows
   out of 1 194, where the two French banks before it gave 695 — because a

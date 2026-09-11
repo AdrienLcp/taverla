@@ -7,11 +7,13 @@ import { gradeQuizGuess } from '@taverla/core/quiz/question-answer'
 import { frenchViewsOf, isWellKnownInFrench } from './frwiki-notability'
 import {
   type Attribution,
+  acceptedOf,
   type BankedQuestion,
   cachedFile,
   decoysOf,
   type IngestedQuestions
 } from './question-source'
+import { frenchAliasesOf } from './wikidata-aliases'
 import { birthYearsOf } from './wikidata-years'
 
 /**
@@ -200,6 +202,14 @@ const upstreamRows = async (): Promise<UpstreamRow[]> => {
 /** `subjectQID|propertyID|objectQID`, which is the only place the subject's id appears. */
 const subjectOf = (row: UpstreamRow): string => row.fact_id.split('|')[0] ?? ''
 
+/**
+ * The entity the row answers, read from the `fact_id` rather than through the
+ * labels: *Athènes* is two entities in this pack, and it is the one label in
+ * 1 322 that a label-keyed lookup would have answered with a coin toss.
+ */
+const answeredEntityOf = (row: UpstreamRow): string =>
+  row.fact_id.split('|')[2] ?? ''
+
 const optionsOf = (row: UpstreamRow): string[] => [
   row.option_a,
   row.option_b,
@@ -383,6 +393,34 @@ const birthYearsOfLabels = async (
 }
 
 /**
+ * The entity behind each printed label, over the same positional alignment, and
+ * the only way to reach a decoy's id once `withDecoysSpread` has moved it to a
+ * row whose own `option_ids` never held it.
+ *
+ * A label two entities answer to resolves to whichever row was read last, which
+ * is a coin toss this can afford: the ids are read to collect the names a decoy
+ * goes by, and a wrong one widens what the bank refuses rather than what it
+ * pays for. The answer's id is not read here for exactly that reason.
+ */
+const entityIdsOfLabels = (
+  candidates: readonly Candidate[]
+): Map<string, string> => {
+  const byLabel = new Map<string, string>()
+
+  for (const { row } of candidates) {
+    optionsOf(row).forEach((label, index) => {
+      const entityId = row.option_ids[index]
+
+      if (entityId !== undefined) {
+        byLabel.set(label, entityId)
+      }
+    })
+  }
+
+  return byLabel
+}
+
+/**
  * The same candidates with no entity carrying more of a relation than the cap
  * allows, and no decoy an era away from the answer it stands beside. Greedy and
  * in order: a decoy already at the cap when the row is reached is the one
@@ -471,13 +509,22 @@ export const withDecoysSpread = ({
 }
 
 const toBankedQuestion = ({
-  answer,
-  category,
-  decoys,
-  isWellKnown,
-  row
-}: Candidate): BankedQuestion => ({
-  accepted: [],
+  aliases,
+  candidate: { answer, category, decoys, isWellKnown, row },
+  entityIds
+}: {
+  aliases: ReadonlyMap<string, string[]>
+  candidate: Candidate
+  entityIds: ReadonlyMap<string, string>
+}): BankedQuestion => ({
+  accepted: acceptedOf({
+    answer,
+    decoys,
+    spellings: aliases.get(answeredEntityOf(row)) ?? [],
+    wrongSpellings: decoys.flatMap(
+      (label) => aliases.get(entityIds.get(label) ?? '') ?? []
+    )
+  }),
   answer,
   category,
   choiceOnly: false,
@@ -561,12 +608,23 @@ export const ingestPolyFact = async (): Promise<IngestedQuestions> => {
     `  ${spread.length} of those do not answer what the last one answered`
   )
 
+  const banked = withDecoysSpread({
+    candidates: spread,
+    years: await birthYearsOfLabels(spread)
+  })
+  const entityIds = entityIdsOfLabels(spread)
+  const aliases = await frenchAliasesOf({
+    entityIds: [
+      ...spread.map(({ row }) => answeredEntityOf(row)),
+      ...entityIds.values()
+    ]
+  })
+
   return {
     attribution: ATTRIBUTION,
-    questions: withDecoysSpread({
-      candidates: spread,
-      years: await birthYearsOfLabels(spread)
-    }).map(toBankedQuestion),
+    questions: banked.map((candidate) =>
+      toBankedQuestion({ aliases, candidate, entityIds })
+    ),
     rejections
   }
 }

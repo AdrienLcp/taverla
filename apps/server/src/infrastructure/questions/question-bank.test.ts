@@ -393,6 +393,44 @@ describe('drawQuestion', () => {
   })
 
   /**
+   * The one way a second spelling can cost a room rather than pay it: a name
+   * the row's own wrong answer also goes by. Wikidata files Augustus as *Gaius
+   * Julius Caesar* and the bank prints *Jules César* beside him as a decoy, so
+   * the two sides of a row can name the same person under spellings that share
+   * no letters. `acceptedOf` refuses those at ingestion by resolving the decoys
+   * to entities and reading every name *they* answer to; this is the same claim
+   * read off the shipped bank, where a source that skipped the refusal shows.
+   *
+   * It sweeps both sources that fill `accepted` — Mintaka and PolyFact — and
+   * costs nothing to leave in place for the ones that do not yet.
+   */
+  it('[bank] never accepts a spelling one of the row’s own decoys answers to', () => {
+    const paying: string[] = []
+
+    for (const question of bank.questions) {
+      for (const spelling of question.accepted) {
+        const wrong = question.decoys.find(
+          (decoy) =>
+            gradeQuizGuess({
+              guess: spelling,
+              question: {
+                accepted: [],
+                answer: decoy,
+                decoys: [question.answer]
+              }
+            }).isCorrect
+        )
+
+        if (wrong !== undefined) {
+          paying.push(`${question.id}: “${spelling}” also names ${wrong}`)
+        }
+      }
+    }
+
+    expect(paying).toEqual([])
+  })
+
+  /**
    * The four subjects the French half was thin in, held to the depth the
    * English half already had. Three hundred is where English sits and what lets
    * three difficulty bands deal a hundred questions each rather than twenty-one
