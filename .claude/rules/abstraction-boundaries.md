@@ -28,8 +28,9 @@ paid on every read of the code.
 | `hono/ws` (server) | `apps/server/src/infrastructure/messaging/` |
 | `localStorage` | `apps/game/src/infrastructure/storage/session-storage.ts` (seats) and `preferences-storage.ts` (locale, theme) |
 | `navigator`, `location` | `apps/game/src/infrastructure/browser.ts`, plus `location.origin` in `router/navigation.ts` |
-| the clipboard | `env.ts` again — `navigator.clipboard` needs a secure context and a host served from a LAN address over plain HTTP has none, so the `execCommand` fallback lives behind `copyToClipboard` and nowhere else |
-| the screen wake lock | `env.ts` again — `keepScreenAwake` owns the sentinel *and* the `visibilitychange` that re-takes it, because a user agent releases the lock every time the tab goes away and never gives it back. A hook holding only the request would be holding one that is already gone |
+| the clipboard | `browser.ts` again — `navigator.clipboard` needs a secure context and a host served from a LAN address over plain HTTP has none, so the `execCommand` fallback lives behind `copyToClipboard` and nowhere else |
+| the screen wake lock | `browser.ts` again — `keepScreenAwake` owns the sentinel *and* the `visibilitychange` that re-takes it, because a user agent releases the lock every time the tab goes away and never gives it back. A hook holding only the request would be holding one that is already gone |
+| `AudioContext`, `Audio` | `apps/game/src/features/host/round-audio.ts` for the clip's element, `apps/game/src/presentation/audio/buzz-cue.ts` for the synthesised buzz cue — two capabilities rather than one library, armed by the same press and refused the same way outside a gesture |
 | `fetch` (browser) | `apps/game/src/infrastructure/api/taverla-api.ts` |
 | `react-router` | `apps/game/src/infrastructure/router/`, plus `useNavigate` in `presentation/app-shell.tsx` — which hands it to react-aria's `RouterProvider`, so components navigate through the design system's `Link` and never import react-router themselves |
 | `react-aria-components` | `apps/game/src/presentation/components/`, `presentation/i18n/i18n-provider.tsx` for `I18nProvider`, and a feature that genuinely needs a primitive the design system has not wrapped yet |

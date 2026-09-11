@@ -54,6 +54,7 @@ import {
   writeHostToken,
   writeSeatNickname
 } from '@/infrastructure/storage/session-storage'
+import { unlockBuzzCue, useBuzzCue } from '@/presentation/audio/buzz-cue'
 import { useVolume } from '@/presentation/audio/volume-provider'
 import { AskedQuestion } from '@/presentation/components/asked-question'
 import { Button } from '@/presentation/components/button'
@@ -127,6 +128,17 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   usePhaseField(view?.phase ?? null)
   useScreenAwake(status !== 'refused' && view?.phase !== 'finished')
   const { canPlay, refusal, unlock } = useRoundAudio({ clock, view, volume })
+
+  useBuzzCue(view?.round?.activeBuzz?.atServerTime ?? null)
+
+  // One press, two permissions: the clip's element and the cue's audio context
+  // are both granted only from a real gesture, and neither can be asked for
+  // later — so the console arms them together or not at all.
+  const armAudio = () => {
+    unlock()
+    unlockBuzzCue()
+  }
+
   const isLive = status === 'open'
 
   // Every way the console has of changing a setting comes through here, so what
@@ -297,7 +309,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
         onRemovePlayer={removePlayer}
         onSettingsChange={changeSettings}
         onTakeSeat={takeSeat}
-        onUnlockAudio={unlock}
+        onUnlockAudio={armAudio}
         preferences={preferences}
         refusal={refusal}
         roomCode={roomCode}
@@ -317,9 +329,9 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
               isLive={isLive}
               onOpenRound={() => {
                 // Inside the press, never in an effect: the autoplay policy
-                // grants permission to the element only from a real gesture,
-                // and it cannot be asked for later when the track arrives.
-                unlock()
+                // grants permission only from a real gesture, and it cannot be
+                // asked for later when the track arrives.
+                armAudio()
 
                 // What the picker is showing is what the host chose, and a
                 // round about to be drawn is the moment that means something —

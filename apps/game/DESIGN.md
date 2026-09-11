@@ -351,6 +351,38 @@ three duration tokens at `0ms`).
 `--timing` is an exponential ease-out: things arrive fast and settle, the way a
 card flips rather than the way a panel slides.
 
+## Sound
+
+One cue, on one screen. `presentation/audio/buzz-cue.ts` starts two square
+oscillators a perfect fifth apart — 294 and 441 Hz — through a 2.4 kHz lowpass
+and a 200 ms envelope that reaches its peak in 4 ms and decays from there. That
+is the plateau buzzer this page's lineage asks for, and the fifth is what
+separates an interruption from a note.
+
+It is **synthesised**, because the repository holds no audio asset and a buzzer
+was not worth the first one: the icons are already authored rather than
+installed, and an oscillator with an envelope costs no binary, no licence and no
+byte to serve. It is armed by the same press that blesses the clip's element —
+one gesture, both permissions, neither askable afterwards.
+
+**Its amplitude is the machine's own volume times 0.3**, which is what makes it
+checkable without a room: a console at 5% honks at an envelope peak of 0.015 and
+one at the stored default of 80% at 0.24. Zero plays nothing at all rather than
+playing quietly, so a muted console is silent by the same path a browser under
+test is.
+
+**It sounds on the console and nowhere else**, the rule the clip already has.
+Eight screens at unknown volumes, staggered by Wi-Fi, is noise rather than a cue.
+
+**Nothing sounds on the reflex race's flip**, and that is the silence worth
+writing down. Each device flips against its own estimate of `flipsAt` and its
+false start is measured against the same clock, so a honk leaving the console
+would have the room pressing to a sound that arrives on one machine's schedule —
+and the devices slightly ahead of it would be scored as having gone early. The
+flip is a colour and has to stay one. The cue is keyed on a buzz's
+`atServerTime`, which a reflex round never has: it is the one game that never
+reaches `buzzed`, so the silence is structural rather than remembered.
+
 ## Layout
 
 `layout.stage` for the host, `layout.screen` for the phone (620px, widening to
