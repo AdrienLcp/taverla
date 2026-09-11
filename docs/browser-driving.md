@@ -192,6 +192,49 @@ sort pas d'ici.* and a press on screen whenever no gesture has blessed an audio
 element on this screen. **Reload the console mid-round and look for that block**;
 its absence during a round the console opened is the other half of the check.
 
+## A cue that cannot be heard can still be counted
+
+A muted browser is the rule, so a synthesised sound has to be read rather than
+listened to. **Patch the Web Audio prototypes in the init script** and the whole
+of what a cue did comes back as data:
+
+```ts
+await page.addInitScript(() => {
+  const w = globalThis
+  w.__tones = []
+  w.__ramps = []
+  const start = OscillatorNode.prototype.start
+  OscillatorNode.prototype.start = function (when) {
+    w.__tones.push({ hz: this.frequency.value, type: this.type, when })
+    return start.call(this, when)
+  }
+  const ramp = AudioParam.prototype.linearRampToValueAtTime
+  AudioParam.prototype.linearRampToValueAtTime = function (value, when) {
+    w.__ramps.push(value)
+    return ramp.call(this, value, when)
+  }
+})
+```
+
+`start` rather than `createOscillator`: frequency and type are set *after* the
+node exists, so a patch on the factory reports a bare oscillator every time. The
+ramp is what proves the volume was honoured — `buzz-cue.ts` peaks at the
+machine's volume times 0.3, so a console at 5% must report `0.015` and one at 0
+must report nothing at all.
+
+It answers three questions a screenshot cannot. **Whether a cue fired**, by the
+tone count. **Whether it fired once**, which is the whole risk with a snapshot
+the server re-delivers on every roster change: nudge the volume mid-buzz and
+reload a player mid-buzz, then read the count again. And **whether silence is
+real** — a game that must stay silent, like the reflex race, is proved by a
+complete heat leaving the count where it was.
+
+**A press that arms audio has to be trusted.** `AudioContext` is created inside
+the gesture that opens a round, so `element.click()` from `evaluate` arms
+nothing and every later cue is silent with no error. Drive it with Playwright's
+own `click`, and check it took by patching `AudioContext.prototype.resume` the
+same way — it reports `running` when the context was born inside a real gesture.
+
 ## What a pass covers
 
 At 414 px and 1920 px:
