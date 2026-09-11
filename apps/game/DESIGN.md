@@ -578,6 +578,48 @@ dictionary. It is what two of the *narrowest single* column need — a 320px
 screen gives this board 288px — so two of those plus the gap between them is
 624px, and below it the board is one column and the page scrolls.
 
+**And the container has to be the box the table is drawn in, which the board
+stopped being the day the name moved beside it.** The board is 1216px wide on a
+1280 console whether it splits or not, so measured against the board a room of
+nine was dealt into two 220px sub-columns inside a 500px track — the exact
+truncation the 624px threshold exists to prevent, one composition on. The
+container is `.standings`, and then one query answers all four arms: 500px
+beside the name, 1216 with the board to itself, 860 on a stacked 899px window,
+358 on a phone.
+
+**`finished` was the one phase with no height budget, and nothing said so.**
+Every other stage on the console divides what is left of `100dvh`; this one kept
+the row a lobby draws — a 32px numeral on 24px of fixed padding, 72px a row,
+nine of them — and ran 269px off a 1280×800 with *Rejouer* half under the fold
+and the way back entirely below it. Three things were wrong at once and only
+the third is arithmetic. **The footer was running a game that had ended**: the
+auto-advance delay and the setup fold act on a round in flight, they cost 158px
+of a 302px footer, and both sit behind the button next to them — *back to the
+table* lands on the lobby, whose stage is the picker, the roster and the seat.
+**The board was the last wide stage still stacking**, so the table divided
+whatever the name had not already spent — 237px, nine players, 18px rows —
+where beside the name it divides the whole 464 and reads at 46. And the rows'
+furniture was fixed padding again, which is the lie board's lesson met a third
+time.
+
+**A split needs something to put in both halves.** The same board with nobody
+scored draws no name and no scoreline, and in two columns it left a 13px label
+alone in 676px of field beside a list of names. `:has(.winners)` is the one
+predicate: it decides the composition, the header the table subtracts, and
+which container the sub-columns are measured in. Which is the same shape the
+board already had — `hasAnybodyScored` deciding whether there is a ranking at
+all — read one level up.
+
+**The winner's name was a viewport term in a column that had stopped being the
+viewport**, and the split is what made that visible: `ZOÉ` was drawn at 104px in
+a 676px track it could have filled, while `Wolfgangamadeusmozart` was broken
+mid-word at the same size. It is
+`min(22vmin, 106cqi / --longest-word-width)` now — the height it may not eat
+and the width its longest unbreakable run needs — which is the revealed title's
+own pair, on its third surface and with the same constant, because it is the
+same face. 22vmin rather than the 13 it had: stacked, every pixel the name
+spends is one the rows lose, and beside them the two no longer trade.
+
 **The split is a width question and the budget is a height one**, and for a
 while one media query was answering both. Every height formula on the console
 sat behind `layout.wide`, so below it a phone and an 899px window got identical

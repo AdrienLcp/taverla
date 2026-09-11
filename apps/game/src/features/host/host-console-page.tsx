@@ -357,20 +357,37 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
               send={send}
               view={view}
             />
-            <AutoAdvanceChoice
-              isLive={isLive}
-              onSettingsChange={changeSettings}
-              settings={view.settings}
-            />
-            <SetupFold
-              draftSource={draftSource}
-              isLive={isLive}
-              onDraftSource={setDraftSource}
-              onSettingsChange={changeSettings}
-              onTakeSeat={takeSeat}
-              preferences={preferences}
-              view={view}
-            />
+            {/*
+              `finished` is not a phase of a game, it is the result of one, and
+              both of these act on a game in flight: how long a reveal is held
+              before the room is moved on, and the settings the next round is
+              built from. Neither has anything on this screen to act on, and
+              both are behind the button beside them — *back to the table* lands
+              on the lobby, whose stage is the picker, the roster and the seat,
+              with the rest folded under it.
+
+              They cost 158px of a 302px footer, which is what the final board
+              was overflowing by: nine players on a 1280×800 put the replay
+              half under the fold and the way back entirely below it.
+            */}
+            {view.phase !== 'finished' && (
+              <>
+                <AutoAdvanceChoice
+                  isLive={isLive}
+                  onSettingsChange={changeSettings}
+                  settings={view.settings}
+                />
+                <SetupFold
+                  draftSource={draftSource}
+                  isLive={isLive}
+                  onDraftSource={setDraftSource}
+                  onSettingsChange={changeSettings}
+                  onTakeSeat={takeSeat}
+                  preferences={preferences}
+                  view={view}
+                />
+              </>
+            )}
           </>
         )}
       </footer>
@@ -653,7 +670,7 @@ const Stage: React.FC<StageProps> = ({
 
   if (view.phase === 'finished') {
     return (
-      <div className='stage'>
+      <div className='stage finished'>
         <FinalBoard players={view.players} />
       </div>
     )

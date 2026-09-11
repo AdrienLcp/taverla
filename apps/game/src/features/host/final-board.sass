@@ -1,11 +1,20 @@
+@use '../../presentation/styles/layout'
 @use '../../presentation/styles/typography'
 
 @layer components
   .final-board
-    // The board splits on how many players there are, so it has to be able to
-    // ask how much room that split would have. The stage is not the answer:
-    // this column is the stage on the console and half of it nowhere else.
-    container-type: inline-size
+    // How much height the name may take. Stacked it sits above the table and
+    // every pixel it spends is one the rows lose; beside it the two no longer
+    // trade, so it takes the register the room code holds one screen earlier
+    // rather than half of it.
+    --winner-height-limit: 13vmin
+
+    // What the table gives up to whatever is above it: the label, the name at
+    // whatever the limit allowed it, the scoreline, the rule and the gap under
+    // the block. 7rem is the fixed part of that, measured twice rather than
+    // guessed — 163px against 164 at 390×844, and 216px against 214 at 899×800.
+    --final-header: calc(var(--winner-height-limit) + 7rem)
+
     display: flex
     flex: 1
     flex-direction: column
@@ -14,7 +23,42 @@
     min-height: 0
     width: 100%
 
+    // A game nobody scored in draws no name and no scoreline, so the label, the
+    // rule and the gap are the whole of it.
+    &:not(:has(.winners))
+      --final-header: 6rem
+
+    // The name is what the room is reading and the ranking is what each player
+    // checks for themselves, on a screen they are already holding — the lobby's
+    // two audiences, one stage on. Stacked, the table divided whatever the name
+    // had not already spent: nine players on a 1280×800 left it 237px and the
+    // rows read at 18px. Beside it the table divides the whole budget and reads
+    // at 46px, and the name gives up nothing to buy that.
+    //
+    // The wider track is the name, for the same reason it is the invitation in
+    // the lobby: it is the half the room is looking at.
+    //
+    // **It splits only where there is a name to put in one half.** A game
+    // nobody scored in has no second audience and no second object, and drawn
+    // in two columns it left a 13px label alone in 676px of field beside a list
+    // of names. One fact decides the composition, the subtraction above it and
+    // the sub-columns below, and it is the one the component already carries.
+    &:has(.winners)
+      @include layout.wide
+        --final-header: 0px
+        --winner-height-limit: 22vmin
+
+        align-items: center
+        display: grid
+        gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
+        grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr)
+
     > header
+      // The box the name is actually drawn in, which stops being the board the
+      // moment the table moves beside it: measured against the board, a 676px
+      // column would be sized as though it were 1216 and the name broken
+      // mid-word to fit a width it never had.
+      container-type: inline-size
       display: flex
       flex-direction: column
       gap: var(--space-2xs)
@@ -49,7 +93,14 @@
     .winners
       @include typography.monument
 
-      font-size: clamp(3rem, 13vmin, 11rem)
+      // A viewport term alone is what this was, and the column stopped being the
+      // viewport the day the table moved beside it: `ZOÉ` was drawn at 104px in
+      // a 676px track it could have filled, and `Wolfgangamadeusmozart` was
+      // broken mid-word at that same size. What the name's longest unbreakable
+      // run needs is the other half, published by `answer-fitting.ts` the way a
+      // revealed title publishes it — and the constant is the same 106, because
+      // it is the same face.
+      font-size: clamp(2rem, min(var(--winner-height-limit, 13vmin), calc(106cqi / var(--longest-word-width, 6))), 11rem)
       max-width: 100%
       // Twenty characters is a legal nickname and `Wolfgangamadeusmozart` has
       // nowhere to break, so at this size it left the screen and gave the page
@@ -72,11 +123,19 @@
 
       color: var(--ink-muted)
 
+    // The box the table is drawn in, and the only honest container for the
+    // split below: the board is 1216px wide on a 1280 console whether or not
+    // the name sits beside the table, and the track the table actually gets is
+    // 500. Measured against the board, nine players were dealt into two 220px
+    // sub-columns inside it — the very truncation the threshold exists to
+    // prevent, one composition on.
+    .standings
+      container-type: inline-size
+      min-width: 0
+
     // Two columns past eight players rather than a scroll: nobody walks over to
     // the television to swipe, and a board that runs off the bottom has simply
-    // lost the people at the end of it. It is this board's alone — the reveal
-    // has a board beside it and only half the width, so it buys its height by
-    // dividing its own box instead.
+    // lost the people at the end of it.
     //
     // **The count says two columns are wanted; the container says whether there
     // is room for them**, and for a while the count was answering both. A room
@@ -84,15 +143,15 @@
     // cut five of the nine names to three letters — `Adr…`, `Jea…`, `Mar…` — on
     // the one screen whose whole job is to say who won. The threshold is what
     // two of the *narrowest* single column need: a 320px screen gives this board
-    // 288px, so two of those plus the gap between them is 624px. Below it the
-    // board is one column and the page scrolls, which is the bargain a console
-    // held in a hand has already struck everywhere else.
+    // 288px, so two of those plus the gap between them is 624px.
     //
     // `column` flow, not the default: a grid filled by rows puts second place
     // beside first and third under it, so reading a column top to bottom gives
     // 1, 3, 5. A ranking is read downwards or it is not a ranking.
     @container (min-width: 624px)
       .scoreboard.in-columns
+        --board-rows: var(--scoreboard-rows, 5)
+
         column-gap: var(--space-xl)
         display: grid
         grid-auto-flow: column
@@ -111,6 +170,29 @@
     // sharing first both wear it and the row under them is third. Ties are
     // named rather than broken here too.
     .scoreboard
+      // How many rows tall this board is, which stops being how many players
+      // there are the moment it deals into two — and only the container it is
+      // drawn in knows which of the two it did.
+      --board-rows: var(--scoreboard-count, 8)
+
+      // `finished` had no height budget where every other phase has one, so the
+      // rows kept the size they take in a lobby: a 32px numeral on 24px of fixed
+      // padding, 72px a row, nine of them. The furniture goes into `em` first —
+      // fixed padding is the part a formula that only shrinks type can never
+      // reach — and then a row is one multiple of its own size and the divisor
+      // means something. 2.8 is the tallest row's: the winner's numeral is
+      // 1.9em, with 0.9em of padding under it.
+      li
+        font-size: clamp(0.95rem, calc((var(--final-budget, 100rem) - var(--final-header, 0px)) / var(--board-rows, 8) / 2.8), 1.75rem)
+        padding: 0.4em 0
+
+        .nickname
+          font-size: 1em
+
+        .score
+          font-size: 1.6em
+          line-height: 1
+
       // Wider than the shared board's, because the numerals below step up and a
       // 2ch column would clip the first of them.
       &.ranked li
@@ -123,6 +205,10 @@
           color: var(--ink)
           font-stretch: 125%
           font-weight: 900
+          // The steps are read off the baseline they share with the names, so
+          // the half-leading over a 1.9em numeral is a row of nothing the
+          // budget would otherwise have to pay for.
+          line-height: 1
 
       // The steps, and the whole podium: the rows are baseline-aligned, so a
       // taller numeral grows upward off the line the names sit on rather than

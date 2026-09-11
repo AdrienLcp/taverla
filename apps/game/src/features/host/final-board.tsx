@@ -7,6 +7,7 @@ import {
   hasAnybodyScored
 } from '@taverla/core/scoring/scoreboard'
 
+import { answerFitting } from '@/helpers/answer-fitting'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
@@ -34,6 +35,7 @@ export const FinalBoard: React.FC<FinalBoardProps> = ({ players }) => {
   const winners = ranked.filter((entry) => entry.rank === 1)
   const topScore = winners[0]?.player.score ?? 0
   const isWon = hasAnybodyScored(players)
+  const named = winners.map((entry) => entry.player.nickname).join(' · ')
 
   return (
     <section className='final-board'>
@@ -49,8 +51,8 @@ export const FinalBoard: React.FC<FinalBoardProps> = ({ players }) => {
         </p>
         {isWon && (
           <>
-            <h1 className='winners'>
-              {winners.map((entry) => entry.player.nickname).join(' · ')}
+            <h1 className='winners' style={answerFitting(named)}>
+              {named}
             </h1>
             <p className='with'>
               {translate('host.final.score', { points: topScore })}
@@ -59,17 +61,18 @@ export const FinalBoard: React.FC<FinalBoardProps> = ({ players }) => {
         )}
       </header>
 
-      {players.length > PLAYERS_PER_COLUMN ? (
+      <div className='standings'>
         <Scoreboard
-          className='in-columns'
+          className={
+            players.length > PLAYERS_PER_COLUMN ? 'in-columns' : undefined
+          }
           players={players}
           style={{
+            '--scoreboard-count': players.length,
             '--scoreboard-rows': Math.ceil(players.length / 2)
           }}
         />
-      ) : (
-        <Scoreboard players={players} />
-      )}
+      </div>
     </section>
   )
 }

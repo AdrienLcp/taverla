@@ -1205,6 +1205,56 @@ one part.
 
 ### Fixes
 
+- `[Game]` **The console's final board ran 269px off a 1280×800**, with
+  *Rejouer* half under the fold and *Retour à la table* entirely below it — on
+  the one screen whose whole job is to say who won and let the room decide
+  whether to play another. `finished` was the phase with no height budget where
+  every other stage on this console divides what is left of `100dvh`, so the
+  board kept the row a lobby draws: a 32px numeral on 24px of fixed padding,
+  72px a row, nine of them.
+
+  Three things were wrong and only the last is arithmetic. **The footer was
+  still running a game that had ended** — the auto-advance delay and the setup
+  fold act on a round in flight, and both are behind the button beside them,
+  since *Retour à la table* lands on the lobby whose stage is the picker, the
+  roster and the seat. They cost 158px of a 302px footer. **The board was the
+  last wide stage still stacking**, so the table divided whatever the name had
+  not already spent — 237px for nine players, 18px rows — where beside the name
+  it divides the whole 464 and reads at 46. And **the rows' furniture was fixed
+  padding**, the part a formula that only shrinks type can never reach, which is
+  the lie board's lesson met a third time.
+
+  Two things fell out of the split. The container the sub-columns are measured
+  in **has to be the box the table is drawn in**: the board is 1216px wide
+  whether it splits or not, so measured against it a room of nine was dealt into
+  two 220px sub-columns inside a 500px track — the truncation the 624px
+  threshold exists to prevent. And **the split needs something to put in both
+  halves**: with nobody scored there is no name, and two columns left a 13px
+  label alone in 676px of field. `:has(.winners)` decides the composition, the
+  header the table subtracts and which box the query reads, all three off the
+  one fact the component already carried.
+
+  Measured after, nine players: no overflow and both exits above the fold at
+  390×844, 430×932, 768×1024, 899×800, 900×800, 1280×800, 1440×900 and
+  1920×1080. A 360×740 console still scrolls 68px — down from 353 — with the
+  rows already on their legibility floor.
+
+- `[Game]` **The winner's name was sized against the viewport in a column that
+  had stopped being one.** `clamp(3rem, 13vmin, 11rem)` knew nothing about the
+  track it is set in, so `ZOÉ` was drawn at 104px in a 676px column it could
+  have filled and `Wolfgangamadeusmozart` was broken mid-word at that same size.
+  It is `min(22vmin, 106cqi / --longest-word-width)` now — the height it may not
+  eat, and the width its longest unbreakable run needs — which is the revealed
+  title's own pair on a third surface, with the same constant because it is the
+  same face. `container-type` goes on the header rather than the board, one
+  level further down than the sentence goes, because the board is twice the box
+  the name is drawn in.
+
+  Measured at 1280×800: `Zoé` 176px on one line where it was 104, and
+  `Wolfgangamadeusmozart` whole at 34px where it was broken at 104.
+  `Anne-Charlotte` sets at 80 over two lines, breaking at its hyphen, which is
+  what the guard is for.
+
 - `[Game]` **`WONDERWALL` came down as `WONDERWAL / L` on a 1440px console, at
   the size the formula had picked to hold it whole.** The term that promises a
   whole word divides a constant by the word's character count, and the constant

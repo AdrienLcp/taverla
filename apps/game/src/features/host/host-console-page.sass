@@ -263,6 +263,23 @@
           align-self: center
           width: min(900px, 100%)
 
+      // The result of a game rather than a phase of one, and the only stage
+      // whose footer is the two exits alone — so the chrome here is smaller
+      // than anywhere else on this screen. Measured the way the reveal's
+      // `31rem` was: the page padding, the header, the two gaps and those two
+      // buttons came to 336px, and it is the same number at every height
+      // because every term in it is.
+      &.finished
+        --final-budget: calc(100dvh - 21rem)
+
+        // Stacked, the board pays for its own header out of this, and the page
+        // padding it sits in is fluid: the same chrome measured 284px at
+        // 390×844 and 316px at 899×800. A budget takes the widest of a band it
+        // spans or it under-budgets at one end — which here is the end where
+        // the table has the most rows.
+        @include layout.narrow
+          --final-budget: calc(100dvh - 20rem)
+
       &.lobby
         display: grid
         gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
@@ -456,22 +473,6 @@
         color: var(--ink-muted)
         margin-top: calc(var(--space-m) * -1 + var(--space-2xs))
 
-      // A size container cannot be shrink-to-fit. `container-type: inline-size`
-      // implies `contain: inline-size`, so the box lays out as though it held
-      // nothing — and this footer is a centred column, where an item with no
-      // imposed width is as wide as its content. The two together resolve to
-      // **zero**: every container query this strip owns fired at once, its four
-      // segments stacked, and `Temps avant la tournée suivante` came down a
-      // 100px column in five lines on a 1440px screen. It is the inline twin of
-      // the height trap the reveal's budget already carries, and it fails the
-      // same silent way — a strip that has always been a column reads as one
-      // somebody meant to draw.
-      //
-      // `.setup-fold` under it was never caught because it already carried a
-      // width for its own composition. 24rem is this one's: the French row at
-      // the label's ceiling is 296px, so it clears `stacks-below`'s 19rem with
-      // room to spare and sits under the action it belongs to rather than
-      // across the screen.
       // A size container cannot be shrink-to-fit. `container-type: inline-size`
       // implies `contain: inline-size`, so the box lays out as though it held
       // nothing — and this footer is a centred column, where an item with no
