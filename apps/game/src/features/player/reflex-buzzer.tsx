@@ -102,7 +102,7 @@ export const ReflexBuzzer: React.FC<ReflexBuzzerProps> = ({
         className={`buzzer ${hasFlipped ? '' : 'armed'} ${isClaimed ? 'claimed' : ''}`}
         onPressStart={() => {
           setClaimedRoundId(round.id)
-          buzzFeedback()
+          buzzFeedback('press')
           onBuzz(round.id)
         }}
       >

@@ -102,7 +102,7 @@ export const ReflexStage: React.FC<ReflexStageProps> = ({
           aria-label={translate('buzz.action')}
           className='tap'
           onPressStart={() => {
-            buzzFeedback()
+            buzzFeedback('press')
             setClaimedRoundId(onTap(round.id) ? round.id : null)
           }}
         />

@@ -16,12 +16,28 @@ export const preferredLocales = (): readonly string[] => navigator.languages
  */
 export const servedPath = (): string => location.pathname
 
+/** The thumb landing, and the server's answer to it one round trip later. */
+export type BuzzMoment = 'lost' | 'press' | 'won'
+
+/**
+ * Written as a set because what tells a thumb which of these it is holding is
+ * the contrast between them, never the length of any one: an acknowledging
+ * tick, one firm thud at three times its length for the floor, and two shorter
+ * knocks for a refusal — a shape no single pulse can be mistaken for, on a
+ * motor this coarse.
+ */
+const BUZZ_PATTERNS: Record<BuzzMoment, VibratePattern> = {
+  lost: [45, 65, 45],
+  press: 30,
+  won: 100
+}
+
 /**
  * Absent on iOS Safari, and silently so. Nothing may be built on top of it —
  * it confirms a buzz that the screen already confirmed.
  */
-export const buzzFeedback = (): void => {
-  navigator.vibrate?.(30)
+export const buzzFeedback = (moment: BuzzMoment): void => {
+  navigator.vibrate?.(BUZZ_PATTERNS[moment])
 }
 
 /**

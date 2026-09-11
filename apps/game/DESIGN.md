@@ -383,6 +383,44 @@ flip is a colour and has to stay one. The cue is keyed on a buzz's
 `atServerTime`, which a reflex round never has: it is the one game that never
 reaches `buzzed`, so the silence is structural rather than remembered.
 
+## Touch
+
+Three patterns, and what tells a thumb which one it is holding is the contrast
+between them rather than the length of any one: a 30 ms tick acknowledges the
+press, a single 100 ms thud says the floor is yours, and two shorter knocks
+(45–65–45) say it went to somebody else. They live together in
+`infrastructure/browser.ts` for that reason — a pattern chosen alone is a
+pattern chosen against nothing.
+
+**The acknowledgement was already there; the answer is the new half.** A press
+is the one thing this product asks of a body and then settles somewhere else:
+the race is decided in the fifty milliseconds after the thumb lands, on a
+machine that is not this one, and until now the only witness was the screen.
+Closing that loop in the channel the press was made in is what the two outcome
+patterns are for.
+
+**A refusal is felt only by a screen that entered the race.** Taking the floor
+is felt by whoever took it; being beaten, by whoever pressed and was not. A
+screen that never pressed is told nothing, because eight of them knocking at
+once is the noise the product already refuses to make with sound — and a phone
+face-down on a table is audible.
+
+**It reads from the page, not from the screen that took the press.** A reflex
+heat ends on its last tap, so the snapshot carrying a slow player's own reaction
+is already the reveal and the buzzer they pressed is unmounted — which is
+exactly the player the answer was for. `useBuzzOutcome` therefore hangs off
+`PlayerRound` and the host console page, beside `useBuzzCue`, and not off the
+buzzer. The floor is the one case that could have stayed where it is pressed, a
+buzz landing the room on `buzzed` and the buzzer being drawn there; it stays
+there because that is also where the press state lives.
+
+**Nothing is built on top of it.** `navigator.vibrate` is absent on every iOS
+Safari in the room, and silently so, so every one of these says something the
+screen says too. A false start is worth the same knock as losing the race, which
+is the honest reading: in this game a lockout has exactly one cause, and outside
+it a lockout means something else entirely — which is why the outcome checks the
+game before it reads the lockout.
+
 ## Layout
 
 `layout.stage` for the host, `layout.screen` for the phone (620px, widening to

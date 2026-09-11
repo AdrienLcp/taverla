@@ -235,6 +235,54 @@ nothing and every later cue is silent with no error. Drive it with Playwright's
 own `click`, and check it took by patching `AudioContext.prototype.resume` the
 same way — it reports `running` when the context was born inside a real gesture.
 
+## A vibration nobody can feel can be counted the same way
+
+Desktop Chromium answers `navigator.vibrate` and does nothing with it, so the
+haptic half of a buzz is invisible on the machine a pass runs on. Replace it in
+the init script and every pattern the page asked for comes back as data:
+
+```ts
+await page.addInitScript(() => {
+  const w = globalThis
+  w.__vibes = []
+  Object.defineProperty(Navigator.prototype, 'vibrate', {
+    configurable: true,
+    writable: true,
+    value: function (pattern) {
+      w.__vibes.push(pattern)
+
+      return true
+    }
+  })
+})
+```
+
+The prototype rather than `navigator.vibrate = …`: the property is inherited, so
+an own assignment works on Chromium and silently loses to a user agent that
+defines it as a getter. What comes back is a readable sentence — `[30, 100]` is
+a press that took the floor, `[30, [45, 65, 45]]` a press that lost it, and `[]`
+a screen that was told nothing. **A screen that never pressed must read `[]`**,
+and that assertion is the one the code cannot make about itself.
+
+**Three seats, in three contexts.** A losing press only exists if both presses
+land before either snapshot does, which no sequence of `click` calls can
+guarantee at a 20–80 ms round trip: issue the two `evaluate`s through one
+`Promise.all` and let the server decide who won. Whichever it picks, the other
+is the one under test.
+
+**Reset the log rather than reloading to clear it.** A reload re-runs the init
+script *and* rejoins the room, so an outcome already on the wire is delivered to
+a page whose de-duplication ref is empty and fires again — which is a real
+behaviour, not a test artifact, and reads as a leak if it is mistaken for one.
+`page.evaluate(() => { globalThis.__vibes = [] })` between rounds keeps the two
+apart.
+
+**A reflex heat ends on its last tap**, so the loser's own reaction arrives in
+the same snapshot as the reveal. Anything hanging off the buzzer they pressed is
+unmounted by then and observes nothing — which is how the outcome was found to
+belong on the page. Read the slow player, never only the fast one: the fast one
+passes either way.
+
 ## What a pass covers
 
 At 414 px and 1920 px:

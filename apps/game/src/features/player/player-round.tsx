@@ -41,6 +41,11 @@ import { ReactionBoard } from '@/presentation/components/reaction-board'
 import { RevealedLieBoard } from '@/presentation/components/revealed-lie-board'
 import { RoomInvitation } from '@/presentation/components/room-invitation'
 import { Scoreboard } from '@/presentation/components/scoreboard'
+import {
+  floorOutcome,
+  reflexOutcome,
+  useBuzzOutcome
+} from '@/presentation/haptics/buzz-outcome'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import {
   buzzBlockerKey,
@@ -88,6 +93,8 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
   const translate = useTranslate()
   const roomCode = useRoomCodeParam()
   const round = view.round
+
+  useBuzzOutcome(reflexOutcome({ round, youId: view.youId }))
 
   // Ahead of every mode, because the server has frozen the round and none of
   // the three screens below would say why. The buzzer carries its own reason
@@ -407,7 +414,12 @@ const Buzzer: React.FC<{
   // feels broken, so the press is believed until the next snapshot either
   // confirms it or takes it back.
   const isClaimed = claimedRoundId === roundId && roundId !== null
-  const isWon = view.round?.activeBuzz?.playerId === view.youId
+  const buzz = view.round?.activeBuzz ?? null
+  const isWon = buzz?.playerId === view.youId
+
+  useBuzzOutcome(
+    floorOutcome({ buzz, hasPressed: isClaimed, youId: view.youId })
+  )
 
   return (
     <section className='player-round buzzer-area'>
@@ -427,7 +439,7 @@ const Buzzer: React.FC<{
           }
 
           setClaimedRoundId(roundId)
-          buzzFeedback()
+          buzzFeedback('press')
           setHasFailed(!onBuzz(roundId))
         }}
       >

@@ -66,6 +66,10 @@ import {
 } from '@/presentation/components/round-progress'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
+import {
+  reflexOutcome,
+  useBuzzOutcome
+} from '@/presentation/haptics/buzz-outcome'
 import { useRoomDocumentTitle } from '@/presentation/head/use-room-document-title'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import {
@@ -130,6 +134,9 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   const { canPlay, refusal, unlock } = useRoundAudio({ clock, view, volume })
 
   useBuzzCue(view?.round?.activeBuzz?.atServerTime ?? null)
+  useBuzzOutcome(
+    reflexOutcome({ round: view?.round ?? null, youId: view?.youId ?? null })
+  )
 
   // One press, two permissions: the clip's element and the cue's audio context
   // are both granted only from a real gesture, and neither can be asked for

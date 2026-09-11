@@ -55,6 +55,31 @@ one part.
 
 ### Features
 
+- `[Game]` **A press now answers back.** Taking the floor is one firm 100 ms thud
+  on the screen that took it; losing the race is two shorter knocks (45–65–45)
+  on every screen that entered it and was beaten — the false start a reflex
+  round charges for included, because a lockout has exactly one cause there. The
+  30 ms acknowledgement a press already had is unchanged, and the three now sit
+  together in `infrastructure/browser.ts`: what tells a thumb which one it is
+  holding is the contrast between them, never the length of any one.
+
+  It is the one thing about a buzz a screen cannot show in advance — the race is
+  decided in the fifty milliseconds after the thumb lands, on a machine that is
+  not this one — so it is answered in the channel the press was made in. A
+  screen that never pressed is told nothing: eight of them knocking at once is
+  the noise the product already refuses to make with sound, and a phone
+  face-down on a table is audible. A seated console gets the same, because the
+  rule is the capability and never the role.
+
+  Keyed on the stamp the server kept for the press, the way the buzz cue is, so
+  a roster change landing the whole view again under a held floor knocks
+  nothing. And read from the page rather than from the screen that took the
+  press: **a reflex heat ends on its last tap**, so the snapshot carrying a slow
+  player's own reaction is already the reveal and the buzzer they pressed is
+  gone — which is exactly the player the answer was for. Absent on every iOS
+  Safari in the room, and silently so, which is why nothing is built on top of
+  it.
+
 - `[Game]` **The console honks when a buzz takes the floor.** Two square
   oscillators a perfect fifth apart — 294 and 441 Hz — through a 2.4 kHz lowpass
   and a 200 ms envelope, synthesised in `presentation/audio/buzz-cue.ts` because
