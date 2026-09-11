@@ -52,3 +52,12 @@ other session's lines out of the working tree for the length of the commit
 **Check after every partial commit**: `git show --stat HEAD` against what
 `git diff --cached --stat` said before. Different numbers mean the hook widened
 it.
+
+## It leaves the pre-format version staged in the real index
+
+Biome rewrites the file in the **working tree**, and the hook's `git add` lands
+in the temporary index `git commit -- <paths>` built for it — so the commit
+carries the formatted version while the real index keeps the one from before.
+`git status` then reports `MM` on a file whose working tree matches `HEAD`
+exactly, and the next commit in *either* session would carry that stale copy.
+`git reset -- <file>` clears the entry without touching the working tree.
