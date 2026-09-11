@@ -58,20 +58,20 @@ export const ReflexBuzzer: React.FC<ReflexBuzzerProps> = ({
     )
   }
 
-  const yourTap = content?.taps.find((tap) => tap.playerId === youId)
+  const yourPress = content?.presses.find((press) => press.playerId === youId)
 
   // Their own race, over. The number is the server's two halves subtracted here
   // rather than a third field carried down the wire, and it is the payout of a
   // game that has no answer to reveal.
-  if (yourTap !== undefined && content?.flipsAt != null) {
+  if (yourPress !== undefined && content?.flipsAt != null) {
     return (
       <section className='player-round reflex-buzzer centred'>
-        <p className='framing'>{translate('reflex.tapped')}</p>
+        <p className='framing'>{translate('reflex.pressed')}</p>
         <p className='your-reaction'>
           {translate('reflex.reaction', {
             milliseconds: reactionMsOf({
               flipsAt: content.flipsAt,
-              tappedAt: yourTap.atServerTime
+              pressedAt: yourPress.atServerTime
             })
           })}
         </p>
@@ -83,7 +83,7 @@ export const ReflexBuzzer: React.FC<ReflexBuzzerProps> = ({
           counts the flip out loud.
         */}
         <p className='landed' role='status'>
-          {translate('reflex.landed', { count: content.taps.length })}
+          {translate('reflex.landed', { count: content.presses.length })}
         </p>
       </section>
     )

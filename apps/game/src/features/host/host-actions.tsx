@@ -37,7 +37,7 @@ export const HostActions: React.FC<HostActionsProps> = (props) => {
     // no clock would have nothing to end it.
     case 'voting':
       // The one round that ends without being ended: a heat closes when
-      // everyone expected in it has acted, and the tap window closes it when
+      // everyone expected in it has acted, and the press window closes it when
       // somebody never does. There is no answer to give and no field to
       // reopen, so there is nothing here to press — which is also what leaves
       // the screen the room is staring at with nothing on it that moves.

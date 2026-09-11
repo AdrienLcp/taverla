@@ -545,11 +545,11 @@ export const FR_DICTIONARY: Dictionary = {
     }),
     name: 'Réflexe',
     nobody: 'Personne n’a bougé',
+    pressed: 'C’est pris.',
     reaction: '{milliseconds:number} ms',
     scoring:
       'L’écran change, et le plus rapide prend le point. Pars avant qu’il change et tu passes la tournée sur le banc.',
     tagline: 'L’écran change. Le plus rapide gagne.',
-    tapped: 'C’est pris.',
     tooEarly: 'parti trop tôt',
     waiting: 'Guette l’écran.'
   },

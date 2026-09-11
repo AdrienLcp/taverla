@@ -18,7 +18,7 @@ import './reflex-stage.sass'
 type ReflexStageProps = {
   clock: ClockEstimate | null
   /** `false` from the socket means the frame was never written. */
-  onTap: (roundId: string) => boolean
+  onBuzz: (roundId: string) => boolean
   round: RoundView
   /** The seat this console holds, and `null` when it is only running the room. */
   youId: PlayerId | null
@@ -41,7 +41,7 @@ type ReflexStageProps = {
  */
 export const ReflexStage: React.FC<ReflexStageProps> = ({
   clock,
-  onTap,
+  onBuzz,
   round,
   youId
 }) => {
@@ -51,12 +51,13 @@ export const ReflexStage: React.FC<ReflexStageProps> = ({
   const content = reflexContent(round)
   const hasFlipped = useFlipField({ clock, flipsAt: content?.flipsAt ?? null })
 
-  const yourTap =
+  const yourPress =
     youId === null
       ? undefined
-      : content?.taps.find((tap) => tap.playerId === youId)
+      : content?.presses.find((press) => press.playerId === youId)
   const isOut = youId !== null && round.lockedOutPlayerIds.includes(youId)
-  const hasActed = isOut || yourTap !== undefined || claimedRoundId === round.id
+  const hasActed =
+    isOut || yourPress !== undefined || claimedRoundId === round.id
 
   return (
     <div className='reflex-stage'>
@@ -64,7 +65,9 @@ export const ReflexStage: React.FC<ReflexStageProps> = ({
         <>
           <p className='signal'>{translate('reflex.flip')}</p>
           <p className='landed' role='status'>
-            {translate('reflex.landed', { count: content?.taps.length ?? 0 })}
+            {translate('reflex.landed', {
+              count: content?.presses.length ?? 0
+            })}
           </p>
         </>
       ) : (
@@ -79,15 +82,15 @@ export const ReflexStage: React.FC<ReflexStageProps> = ({
             <span className='false-start'>
               {translate('reflex.falseStart.title')}
             </span>
-          ) : yourTap !== undefined && content?.flipsAt != null ? (
+          ) : yourPress !== undefined && content?.flipsAt != null ? (
             translate('reflex.reaction', {
               milliseconds: reactionMsOf({
                 flipsAt: content.flipsAt,
-                tappedAt: yourTap.atServerTime
+                pressedAt: yourPress.atServerTime
               })
             })
           ) : (
-            claimedRoundId === round.id && translate('reflex.tapped')
+            claimedRoundId === round.id && translate('reflex.pressed')
           )}
         </p>
       )}
@@ -100,10 +103,10 @@ export const ReflexStage: React.FC<ReflexStageProps> = ({
       {youId !== null && !hasActed && (
         <ReactAriaButton
           aria-label={translate('buzz.action')}
-          className='tap'
+          className='press'
           onPressStart={() => {
             buzzFeedback('press')
-            setClaimedRoundId(onTap(round.id) ? round.id : null)
+            setClaimedRoundId(onBuzz(round.id) ? round.id : null)
           }}
         />
       )}

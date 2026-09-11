@@ -484,7 +484,7 @@ const Stage: React.FC<StageProps> = ({
       <div className='stage solo'>
         <ReflexStage
           clock={clock}
-          onTap={(roundId) => send({ roundId, type: 'player.buzz' })}
+          onBuzz={(roundId) => send({ roundId, type: 'player.buzz' })}
           round={round}
           youId={view.youId}
         />

@@ -113,7 +113,7 @@ export type PlayerAttempts = {
  * whole of a reflex answer is that it happened, and the reaction it is worth is
  * the gap to the flip.
  */
-export type ReflexTap = {
+export type ReflexPress = {
   atServerTime: number
   playerId: PlayerId
 }
@@ -189,7 +189,7 @@ export type Round = {
         flipDelayMs: number
         kind: 'reflex'
         /** In arrival order, which is the only ordering anyone can trust. */
-        taps: ReflexTap[]
+        presses: ReflexPress[]
       }
   /**
    * The round's own clock, and the pair that makes a miss resumable: a buzz

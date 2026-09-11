@@ -34,7 +34,7 @@ Schedule against that, not against a raw `Date.now()` comparison. Two traps:
 **Judging** (`features/host/verdict-panel.tsx`). When someone buzzes, the track
 pauses and this is the whole screen: who buzzed, how fast, and two independent
 toggles for title and artist. The host is reading a name off a screen while
-someone shouts an answer at them — one glance, two taps, no scrolling.
+someone shouts an answer at them — one glance, two presses, no scrolling.
 
 **Round chrome.** Round 3 of 10, a timer that runs down, the scoreboard in the
 periphery.
@@ -45,7 +45,7 @@ periphery.
   cannot face the room. Either say so in the UI, or add a "presenting" mode that
   hides the title until the reveal and shows it only in a corner panel.
 - **Does the host need a keyboard path?** Judging with number keys is much
-  faster than tapping, and this is the one surface where a shortcut earns its
+  faster than pressing, and this is the one surface where a shortcut earns its
   place. react-aria gives it for free through focus management.
 
 ## Done when
@@ -53,7 +53,7 @@ periphery.
 - A round plays audio that starts within ~100 ms of the players' countdown
   hitting zero, measured across two real devices rather than two tabs
 - A buzz pauses the track immediately
-- Judging takes two taps and the score moves on every screen at once
+- Judging takes two presses and the score moves on every screen at once
 - The picker's chosen source is what actually plays
 - A host reload mid-round resumes with the audio at the right offset, or states
   plainly that it cannot — silently restarting the clip is worse than either

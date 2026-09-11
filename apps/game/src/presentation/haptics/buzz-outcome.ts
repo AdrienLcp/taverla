@@ -50,8 +50,8 @@ export const floorOutcome = ({
  * The race's answer, read off two fields rather than one because it has no
  * floor to take.
  *
- * A tap that landed wins if it is first, and the array already holds that
- * verdict: arrival order *is* reaction order, so a player's own tap appearing
+ * A press that landed wins if it is first, and the array already holds that
+ * verdict: arrival order *is* reaction order, so a player's own press appearing
  * in it settles the question for good rather than provisionally.
  *
  * A false start has no stamp — the server refused the frame, so it kept no time
@@ -79,12 +79,15 @@ export const reflexOutcome = ({
     return { hasWon: false, id: `jumped:${round.id}` }
   }
 
-  const taps = content.taps
-  const yourTap = taps.find((tap) => tap.playerId === youId)
+  const presses = content.presses
+  const yourPress = presses.find((press) => press.playerId === youId)
 
-  return yourTap === undefined
+  return yourPress === undefined
     ? null
-    : { hasWon: taps[0]?.playerId === youId, id: String(yourTap.atServerTime) }
+    : {
+        hasWon: presses[0]?.playerId === youId,
+        id: String(yourPress.atServerTime)
+      }
 }
 
 /**
@@ -94,7 +97,7 @@ export const reflexOutcome = ({
  * not this one, and until now the only witness was the screen.
  *
  * **Called from the page, never from the screen that took the press**, wherever
- * the outcome can outlive that screen. A reflex heat ends on its last tap, so
+ * the outcome can outlive that screen. A reflex heat ends on its last press, so
  * the snapshot carrying a slow player's own reaction is already the reveal and
  * the buzzer they pressed is gone — which is exactly the player the answer was
  * for. The floor is the one case that can stay where it is pressed: a buzz

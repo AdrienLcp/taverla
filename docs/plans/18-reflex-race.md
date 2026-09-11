@@ -62,12 +62,12 @@ Answer mode: `buzzer` and nothing else, the same narrowing the bare buzzer does.
 >
 > That needed a backstop the plan had no room for, because one screen face down
 > on the table would otherwise hold the heat open with nothing to end it.
-> `TAP_WINDOW_MS` is it: the heat closes that long after the flip whatever else
-> happens. So `roundDurationMsOf` **is** `null` for this game and the round runs
-> on a clock anyway — the wait is drawn per round, so the settings could never
-> have said how long a heat lasts, and `openPhaseDurationMs` assembles it off the
-> round instead. Both are true at once, and that seam is the first thing to read
-> if this ever looks wrong.
+> `PRESS_WINDOW_MS` is it: the heat closes that long after the flip whatever
+> else happens. So `roundDurationMsOf` **is** `null` for this game and the round
+> runs on a clock anyway — the wait is drawn per round, so the settings could
+> never have said how long a heat lasts, and `openPhaseDurationMs` assembles it
+> off the round instead. Both are true at once, and that seam is the first thing
+> to read if this ever looks wrong.
 
 ## The checklist
 
@@ -170,7 +170,7 @@ closes 3 048 ms after that, and the board reads `Marc 990 ms` over
 the player's screen, and lands at the foot of the board as *parti trop tôt*.
 
 **One thing a single-player room hides**: a solo false start closes the heat on
-the spot — `everyoneHasTapped` counts a jumper as having acted — so the stamp
+the spot — `everyoneHasPressed` counts a jumper as having acted — so the stamp
 never gets a frame. It is correct, and it is why the player's own refusal has to
 be checked with two seats.
 

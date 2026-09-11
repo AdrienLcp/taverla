@@ -8,6 +8,23 @@ one part.
 
 ### Breaking Changes
 
+- `[Shared]` **A press in the reflex race is called a press**, and
+  `PROTOCOL_VERSION` goes to 15. A tap is what a thumb does to glass, and this
+  room has never been only phones — the pass that took the device out of the
+  prose left it standing in the identifiers, which is where a name outlives a
+  comment. The round's reflex content carries `presses` rather than `taps`, and
+  with it go `ReflexPress`, `ReflexPressRecord`, `registerReflexPress`,
+  `everyoneHasPressed`, `PRESS_WINDOW_MS` and `ReactionMoment.pressedAt`. The
+  version moves because that field is read straight off the snapshot by every
+  screen in the room, so a tab left open across a redeploy would find
+  `content.taps` undefined and throw on the first heat.
+
+  The screens moved with it: the console's stage button is `.press`, the
+  player's line is `reflex.pressed`, and `ReflexStage`'s `onTap` is `onBuzz` —
+  which is what the player's twin has called the same callback since it was
+  written. The e2e specs hold `screen` where they held `phone`, the word the
+  product already uses for whatever a player brought.
+
 - `[Shared]` **A host can hold the questions to what the room has heard of**,
   and `PROTOCOL_VERSION` goes to 14. `wellKnownOnly` joins `QuestionDrawSettings`
   beside `allowsAdultContent`, so it reaches the quiz and Le Fake at once — both
@@ -1723,6 +1740,11 @@ one part.
   in turn
 
 ### Internal
+
+- `[Game]` **Playwright launches Chromium with `--mute-audio`.** The journeys
+  reach a round, a room plays its clip at a stored volume defaulting to 80%, and
+  a run started headed plays it out loud. Muted at the process rather than
+  through `taverla:volume`, so no journey has to remember.
 
 - `[Server]` **The riddle rubric OpenQuizzDB ships is banked at last**, and it
   is the one place a *rule* finds `choiceOnly` rather than a reading.

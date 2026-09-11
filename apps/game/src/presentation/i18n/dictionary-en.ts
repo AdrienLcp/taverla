@@ -595,11 +595,11 @@ export const EN_DICTIONARY = defineDictionary({
     }),
     name: 'Reflex',
     nobody: 'Nobody moved',
+    pressed: 'In.',
     reaction: '{milliseconds:number} ms',
     scoring:
       'The screen changes, and the first in takes the point. Go before it changes and you sit the round out.',
     tagline: 'The screen changes. First in wins.',
-    tapped: 'In.',
     tooEarly: 'too early',
     waiting: 'Watch the screen.'
   },

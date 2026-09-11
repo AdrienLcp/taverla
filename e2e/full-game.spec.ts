@@ -17,10 +17,10 @@ test('[e2e] a room, a scan, a buzz, a verdict and a point', async ({
   browser
 }) => {
   const bigScreen = await browser.newPage()
-  const phone = await (await browser.newContext()).newPage()
+  const screen = await (await browser.newContext()).newPage()
 
   const host = hostConsole(bigScreen)
-  const player = playerScreen(phone)
+  const player = playerScreen(screen)
 
   await bigScreen.goto('/')
   // The one journey that arrives at the front door, so the negotiation that
@@ -36,7 +36,7 @@ test('[e2e] a room, a scan, a buzz, a verdict and a point', async ({
 
   await host.openSettings.click()
   await host.buzzerMode.click()
-  await phone.goto(await host.joinUrl.innerText())
+  await screen.goto(await host.joinUrl.innerText())
   await player.nickname.fill(NICKNAME)
   await player.join.click()
 
@@ -55,7 +55,7 @@ test('[e2e] a room, a scan, a buzz, a verdict and a point', async ({
 
   await host.verdictBoth.click()
 
-  await expect(phone.getByText(answer)).toBeVisible()
+  await expect(screen.getByText(answer)).toBeVisible()
   await expect(player.scored(2)).toBeVisible()
   await expect(host.rowFor(NICKNAME)).toContainText('+2')
 })

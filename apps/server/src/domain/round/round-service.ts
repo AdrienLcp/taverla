@@ -788,7 +788,7 @@ export const settleLieBoard = (room: Room, now: number): void => {
 export const reflexContent = (): Round['content'] => ({
   flipDelayMs: drawFlipDelayMs(),
   kind: 'reflex',
-  taps: []
+  presses: []
 })
 
 /** When this round's screen flips, or `null` for a round that is not one. */
@@ -798,14 +798,14 @@ export const flipsAtOf = (round: Round): number | null =>
     : round.startsAt + round.content.flipDelayMs
 
 /**
- * A tap arrives, or arrives too soon to have been a reaction. The false start
+ * A press arrives, or arrives too soon to have been a reaction. The false start
  * is a *success* here on purpose: it is refused to the player and it changes
  * the round, so the caller has to send the error and broadcast, where every
  * other rejection only sends.
  */
-export type ReflexTapOutcome = 'false_start' | 'tapped'
+export type ReflexPressOutcome = 'false_start' | 'pressed'
 
-export const registerReflexTap = ({
+export const registerReflexPress = ({
   now,
   playerId,
   room,
@@ -815,7 +815,7 @@ export const registerReflexTap = ({
   playerId: PlayerId
   room: Room
   roundId: RoundId
-}): Result<ReflexTapOutcome, BuzzRejection> => {
+}): Result<ReflexPressOutcome, BuzzRejection> => {
   const round = room.round
   const content = round?.content
 
@@ -828,7 +828,7 @@ export const registerReflexTap = ({
     currentRoundId: round.id,
     // Nobody takes a floor in this game, so the buzz that blocks a buzz is the
     // player's own: one press, one heat.
-    hasActiveBuzz: content.taps.some((tap) => tap.playerId === playerId),
+    hasActiveBuzz: content.presses.some((press) => press.playerId === playerId),
     isLockedOut: round.lockedOutPlayerIds.has(playerId),
     phase: room.phase
   })
@@ -852,17 +852,17 @@ export const registerReflexTap = ({
     return Result.failure('wrong_phase')
   }
 
-  if (isFalseStart({ flipsAt, tappedAt: now })) {
+  if (isFalseStart({ flipsAt, pressedAt: now })) {
     round.lockedOutPlayerIds.add(playerId)
     touch(room, now)
 
     return Result.success('false_start')
   }
 
-  content.taps.push({ atServerTime: now, playerId })
+  content.presses.push({ atServerTime: now, playerId })
   touch(room, now)
 
-  return Result.success('tapped')
+  return Result.success('pressed')
 }
 
 /**
@@ -870,7 +870,7 @@ export const registerReflexTap = ({
  * acted: that press has spent itself, and holding the round open for it is the
  * opposite of what the lockout means.
  */
-export const everyoneHasTapped = (room: Room, now: number): boolean => {
+export const everyoneHasPressed = (room: Room, now: number): boolean => {
   const round = room.round
   const content = round?.content
 
@@ -890,11 +890,12 @@ export const everyoneHasTapped = (room: Room, now: number): boolean => {
     return false
   }
 
-  const tapped = new Set(content.taps.map((tap) => tap.playerId))
+  const pressed = new Set(content.presses.map((press) => press.playerId))
 
   return expected.every(
     (participant) =>
-      tapped.has(participant.id) || round.lockedOutPlayerIds.has(participant.id)
+      pressed.has(participant.id) ||
+      round.lockedOutPlayerIds.has(participant.id)
   )
 }
 
@@ -911,7 +912,7 @@ export const settleReflexRound = (room: Room, now: number): void => {
     return
   }
 
-  const [first] = content.taps
+  const [first] = content.presses
 
   if (first !== undefined) {
     const verdict = { isCorrect: true, kind: 'single' } as const
@@ -923,7 +924,7 @@ export const settleReflexRound = (room: Room, now: number): void => {
     }
 
     // No speed bonus, and this is the game where that reads oddest: the race is
-    // the entire round, and it is already paid by being the tap that took it.
+    // the entire round, and it is already paid by being the press that took it.
     round.awards.push({
       playerId: first.playerId,
       points,

@@ -4,8 +4,8 @@ import {
   drawFlipDelayMs,
   MAX_FLIP_DELAY_MS,
   MIN_FLIP_DELAY_MS,
-  reflexRoundDurationMs,
-  TAP_WINDOW_MS
+  PRESS_WINDOW_MS,
+  reflexRoundDurationMs
 } from './flip-schedule'
 
 describe('drawing the wait before the flip', () => {
@@ -24,9 +24,9 @@ describe('drawing the wait before the flip', () => {
 })
 
 describe('how long a reflex round runs', () => {
-  it('[reflex] gives the room the tap window on top of its own wait', () => {
+  it('[reflex] gives the room the press window on top of its own wait', () => {
     expect(reflexRoundDurationMs(MIN_FLIP_DELAY_MS)).toBe(
-      MIN_FLIP_DELAY_MS + TAP_WINDOW_MS
+      MIN_FLIP_DELAY_MS + PRESS_WINDOW_MS
     )
   })
 })

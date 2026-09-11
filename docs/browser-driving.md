@@ -78,9 +78,9 @@ Twelve more that cost time to learn:
   on the system theme with nothing to say it refused.
 - **A press that fires on `onPressStart` needs a real `pointerdown`.**
   `element.click()` drives an ordinary button fine and does nothing at all to a
-  buzzer, a reflex tap or anything else react-aria arms on the press rather than
-  the release. Dispatch `PointerEvent('pointerdown')` and `('pointerup')` with
-  `pointerId`, `pointerType` and `isPrimary` set.
+  buzzer, a reflex press or anything else react-aria arms on the press rather
+  than the release. Dispatch `PointerEvent('pointerdown')` and `('pointerup')`
+  with `pointerId`, `pointerType` and `isPrimary` set.
 
 - **One invalid entry costs the device the whole store.** `taverla:seats` and
   `taverla:host-tokens` are re-parsed as a single Zod array, and a failure
@@ -139,23 +139,24 @@ than it needs to be; a 1px sweep buys nothing but seconds.
 
 **Batch the whole timed sequence into one `browser_evaluate`.** A round trip is
 a few hundred milliseconds and several states here are shorter than the tools
-are: a reflex tap window is 3 s from the flip, the flip itself lands 2–6 s after
-the countdown, and a 60 s clip reveals while a stepped-through check is still
-walking. Poll inside the page, act inside the page, and return the reading.
+are: a reflex press window is 3 s from the flip, the flip itself lands 2–6 s
+after the countdown, and a 60 s clip reveals while a stepped-through check is
+still walking. Poll inside the page, act inside the page, and return the
+reading.
 
-**A tap on the frame the field flips is a false start, every time.** Polling
+**A press on the frame the field flips is a false start, every time.** Polling
 `data-flipped` and dispatching `pointerdown` on the next line reproduces the
 one refusal the game has, not the reaction it was meant to measure — the
 server floors a press at `FALSE_START_FLOOR_MS` after `flipsAt`, which no hand
 ever beats and a script always does. Wait past the floor before the press, and
-read the player's screen straight after it: the heat has `TAP_WINDOW_MS` left
+read the player's screen straight after it: the heat has `PRESS_WINDOW_MS` left
 at most, and less than that once the other seats are out.
 
 Two states cannot be reached at all with a single seat in the room, because the
 round settles the instant that seat acts and the screen is already the reveal
 when the next call lands:
 
-- a reflex heat after the console's own tap, or after its false start;
+- a reflex heat after the console's own press, or after its false start;
 - anything a heat shows *while* waiting for somebody else.
 
 Both need a second screen in the room, by the `taverla:seats` deletion above.
@@ -277,7 +278,7 @@ behaviour, not a test artifact, and reads as a leak if it is mistaken for one.
 `page.evaluate(() => { globalThis.__vibes = [] })` between rounds keeps the two
 apart.
 
-**A reflex heat ends on its last tap**, so the loser's own reaction arrives in
+**A reflex heat ends on its last press**, so the loser's own reaction arrives in
 the same snapshot as the reveal. Anything hanging off the buzzer they pressed is
 unmounted by then and observes nothing — which is how the outcome was found to
 belong on the page. Read the slow player, never only the fast one: the fast one

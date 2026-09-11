@@ -13,7 +13,7 @@ describe('the board a heat leaves behind', () => {
     const board = buildReactionBoard({
       flipsAt: FLIPS_AT,
       jumpedPlayerIds: [],
-      taps: [
+      presses: [
         { atServerTime: FLIPS_AT + 248, playerId: playerId('lea') },
         { atServerTime: FLIPS_AT + 301, playerId: playerId('marc') },
         { atServerTime: FLIPS_AT + 517, playerId: playerId('sam') }
@@ -31,7 +31,7 @@ describe('the board a heat leaves behind', () => {
     const board = buildReactionBoard({
       flipsAt: FLIPS_AT,
       jumpedPlayerIds: [playerId('zoe')],
-      taps: [{ atServerTime: FLIPS_AT + 190, playerId: playerId('lea') }]
+      presses: [{ atServerTime: FLIPS_AT + 190, playerId: playerId('lea') }]
     })
 
     expect(board).toEqual([
@@ -40,9 +40,13 @@ describe('the board a heat leaves behind', () => {
     ])
   })
 
-  it('[reflex] lists nobody who neither tapped nor jumped', () => {
+  it('[reflex] lists nobody who neither pressed nor jumped', () => {
     expect(
-      buildReactionBoard({ flipsAt: FLIPS_AT, jumpedPlayerIds: [], taps: [] })
+      buildReactionBoard({
+        flipsAt: FLIPS_AT,
+        jumpedPlayerIds: [],
+        presses: []
+      })
     ).toEqual([])
   })
 
@@ -51,7 +55,7 @@ describe('the board a heat leaves behind', () => {
       buildReactionBoard({
         flipsAt: null,
         jumpedPlayerIds: [playerId('zoe')],
-        taps: [{ atServerTime: FLIPS_AT + 190, playerId: playerId('lea') }]
+        presses: [{ atServerTime: FLIPS_AT + 190, playerId: playerId('lea') }]
       })
     ).toEqual([{ kind: 'jumped', playerId: 'zoe' }])
   })

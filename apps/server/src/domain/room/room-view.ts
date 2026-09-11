@@ -232,14 +232,14 @@ const toContentView = ({
     }
   }
 
-  // Nothing is withheld until the reveal, which is this game alone: the taps are
-  // the tension of the round rather than a leak, and the moment the screen flips
-  // is public by design.
+  // Nothing is withheld until the reveal, which is this game alone: the presses
+  // are the tension of the round rather than a leak, and the moment the screen
+  // flips is public by design.
   if (content.kind === 'reflex') {
     return {
       flipsAt: flipsAtOf(round),
       kind: 'reflex',
-      taps: [...content.taps]
+      presses: [...content.presses]
     }
   }
 

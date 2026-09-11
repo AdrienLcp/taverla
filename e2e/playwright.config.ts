@@ -25,8 +25,15 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      // Pinned: the locators read accessible names, and those are translated.
-      use: { ...devices['Desktop Chrome'], locale: 'en-US' }
+      use: {
+        ...devices['Desktop Chrome'],
+        // The room plays a clip at a stored volume defaulting to 80%, and a run
+        // started headed would play it out loud. Muted at the process rather
+        // than through the store, so no journey can forget.
+        launchOptions: { args: ['--mute-audio'] },
+        // Pinned: the locators read accessible names, and those are translated.
+        locale: 'en-US'
+      }
     }
   ],
   reporter: 'list',

@@ -284,7 +284,7 @@ export const roundContentSchema = z.discriminatedUnion('kind', [
      * A false start is not one of these. It is refused, and puts the player in
      * `lockedOutPlayerIds` — which in this game has no other cause.
      */
-    taps: z.array(roundAnswerSchema)
+    presses: z.array(roundAnswerSchema)
   })
 ])
 

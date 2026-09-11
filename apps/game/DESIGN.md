@@ -406,9 +406,9 @@ once is the noise the product already refuses to make with sound — and a phone
 face-down on a table is audible.
 
 **It reads from the page, not from the screen that took the press.** A reflex
-heat ends on its last tap, so the snapshot carrying a slow player's own reaction
-is already the reveal and the buzzer they pressed is unmounted — which is
-exactly the player the answer was for. `useBuzzOutcome` therefore hangs off
+heat ends on its last press, so the snapshot carrying a slow player's own
+reaction is already the reveal and the buzzer they pressed is unmounted — which
+is exactly the player the answer was for. `useBuzzOutcome` therefore hangs off
 `PlayerRound` and the host console page, beside `useBuzzCue`, and not off the
 buzzer. The floor is the one case that could have stayed where it is pressed, a
 buzz landing the room on `buzzed` and the buzzer being drawn there; it stays

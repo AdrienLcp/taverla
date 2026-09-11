@@ -15,8 +15,8 @@ test('[e2e] two players type over the same clip, and the reveal says what they s
   browser
 }) => {
   const bigScreen = await browser.newPage()
-  const firstPhone = await (await browser.newContext()).newPage()
-  const secondPhone = await (await browser.newContext()).newPage()
+  const firstScreen = await (await browser.newContext()).newPage()
+  const secondScreen = await (await browser.newContext()).newPage()
 
   const host = hostConsole(bigScreen)
 
@@ -30,13 +30,13 @@ test('[e2e] two players type over the same clip, and the reveal says what they s
 
   const joinUrl = await host.joinUrl.innerText()
 
-  for (const [phone, nickname] of [
-    [firstPhone, 'Zoe'],
-    [secondPhone, 'Max']
+  for (const [screen, nickname] of [
+    [firstScreen, 'Zoe'],
+    [secondScreen, 'Max']
   ] as const) {
-    const player = playerScreen(phone)
+    const player = playerScreen(screen)
 
-    await phone.goto(joinUrl)
+    await screen.goto(joinUrl)
     await player.nickname.fill(nickname)
     await player.join.click()
     await expect(host.rowFor(nickname)).toBeVisible()
@@ -45,8 +45,8 @@ test('[e2e] two players type over the same clip, and the reveal says what they s
   await host.startGame.click()
 
   // Typing is the default, so the forms are what a round opens on.
-  const zoe = playerScreen(firstPhone)
-  const max = playerScreen(secondPhone)
+  const zoe = playerScreen(firstScreen)
+  const max = playerScreen(secondScreen)
 
   await zoe.answerGuess.fill('a wild guess')
   await zoe.sendAnswer.click()
@@ -71,5 +71,5 @@ test('[e2e] two players type over the same clip, and the reveal says what they s
   // beside it reads as a bug rather than as a player who tried.
   await expect(host.revealedAnswer('and another')).toBeVisible()
   await expect(host.revealedAnswer('another one')).toBeVisible()
-  await expect(firstPhone.getByText('It was')).toBeVisible()
+  await expect(firstScreen.getByText('It was')).toBeVisible()
 })

@@ -37,7 +37,7 @@ describe('offersAnswerMode', () => {
 })
 
 describe('isJudgedByHost', () => {
-  it('[game-modes] leaves the reflex race to settle on its own taps', () => {
+  it('[game-modes] leaves the reflex race to settle on its own presses', () => {
     expect(isJudgedByHost({ game: 'reflex', mode: 'buzzer' })).toBe(false)
   })
 

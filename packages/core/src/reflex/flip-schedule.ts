@@ -13,11 +13,11 @@ export const drawFlipDelayMs = (): number =>
 
 /**
  * How long the room has to answer the flip. The round closes the moment
- * everybody has tapped, so this is what covers the one player looking at their
+ * everybody has pressed, so this is what covers the one player looking at their
  * drink — a reaction is a third of a second, and three of them is already
  * somebody who did not see it.
  */
-export const TAP_WINDOW_MS = 3_000
+export const PRESS_WINDOW_MS = 3_000
 
 /**
  * How long the whole round runs, which only the round can say: the wait is
@@ -25,4 +25,4 @@ export const TAP_WINDOW_MS = 3_000
  * clock is assembled here instead.
  */
 export const reflexRoundDurationMs = (flipDelayMs: number): number =>
-  flipDelayMs + TAP_WINDOW_MS
+  flipDelayMs + PRESS_WINDOW_MS

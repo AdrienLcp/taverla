@@ -68,9 +68,9 @@ export const offersAnswerMode = ({
  * is not one.
  *
  * `buzzer` is the mode that asks for one, and the reflex race is the exception
- * that shares that mode without needing it — being first *is* being right there,
- * so the heat settles on the taps and nobody reads anything out. Keying on the
- * mode alone caught it by accident of what it narrows to.
+ * that shares that mode without needing it — being first *is* being right
+ * there, so the heat settles on the presses and nobody reads anything out.
+ * Keying on the mode alone caught it by accident of what it narrows to.
  *
  * A room with no game yet answers `true` under `buzzer`, because the seat is
  * withheld until something says otherwise rather than the other way round.

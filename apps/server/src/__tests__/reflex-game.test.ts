@@ -88,7 +88,7 @@ const openPlayingRound = async (settings: RoomSettings = REFLEX_GAME) => {
   }
 }
 
-/** Sleeps until a tap would land on the honest side of the false-start floor. */
+/** Sleeps until a press would land on the honest side of the false-start floor. */
 const untilTheFlipIsFair = async (
   host: Awaited<ReturnType<RoomHarness['openRoom']>>['host']
 ): Promise<void> => {
@@ -120,7 +120,7 @@ describe('a heat nobody has to judge', () => {
     const view = hostView(host)
 
     expect(view?.currentContent).toEqual({ kind: 'reflex' })
-    expect(reflexRound(view)?.taps).toEqual([])
+    expect(reflexRound(view)?.presses).toEqual([])
     expect(view?.remainingPoolSize).toBe(0)
   })
 
@@ -142,8 +142,8 @@ describe('a heat nobody has to judge', () => {
     await untilTheFlipIsFair(host)
     alice.send({ roundId: round.id, type: 'player.buzz' })
     await waitFor(
-      () => (reflexRound(hostView(host))?.taps.length ?? 0) === 1,
-      "Alice's tap"
+      () => (reflexRound(hostView(host))?.presses.length ?? 0) === 1,
+      "Alice's press"
     )
     bob.send({ roundId: round.id, type: 'player.buzz' })
     await waitFor(() => hostView(host)?.phase === 'revealed', 'the reveal')
@@ -171,20 +171,20 @@ describe('a heat nobody has to judge', () => {
     })
   })
 
-  it('[reflex] records every tap in the order the server heard them', async () => {
+  it('[reflex] records every press in the order the server heard them', async () => {
     const { alice, aliceId, bob, bobId, host, round } = await openPlayingRound()
 
     await untilTheFlipIsFair(host)
     alice.send({ roundId: round.id, type: 'player.buzz' })
     await waitFor(
-      () => (reflexRound(hostView(host))?.taps.length ?? 0) === 1,
-      "Alice's tap"
+      () => (reflexRound(hostView(host))?.presses.length ?? 0) === 1,
+      "Alice's press"
     )
     bob.send({ roundId: round.id, type: 'player.buzz' })
     await waitFor(() => hostView(host)?.phase === 'revealed', 'the reveal')
 
     expect(
-      reflexRound(hostView(host))?.taps.map((tap) => tap.playerId)
+      reflexRound(hostView(host))?.presses.map((press) => press.playerId)
     ).toEqual([aliceId, bobId])
   })
 
@@ -207,33 +207,33 @@ describe('a heat nobody has to judge', () => {
     expect(hostView(host)?.round?.activeBuzz).toBeNull()
   })
 
-  it('[reflex] refuses a second tap from the same player', async () => {
+  it('[reflex] refuses a second press from the same player', async () => {
     const { alice, host, round } = await openPlayingRound()
 
     await untilTheFlipIsFair(host)
     alice.send({ roundId: round.id, type: 'player.buzz' })
     await waitFor(
-      () => (reflexRound(hostView(host))?.taps.length ?? 0) === 1,
-      "Alice's tap"
+      () => (reflexRound(hostView(host))?.presses.length ?? 0) === 1,
+      "Alice's press"
     )
     alice.send({ roundId: round.id, type: 'player.buzz' })
     await waitFor(() => errorsIn(alice).length > 0, 'the refusal')
 
     expect(errorsIn(alice)[0]?.code).toBe('already_buzzed')
-    expect(reflexRound(hostView(host))?.taps).toHaveLength(1)
+    expect(reflexRound(hostView(host))?.presses).toHaveLength(1)
   })
 
   // The heat has no other way to end when one player's screen is face down on
   // the table, and the host pressing a button between every round is not a
   // reflex game.
-  it('[reflex] closes the heat on its own when somebody never taps', async () => {
+  it('[reflex] closes the heat on its own when somebody never presses', async () => {
     const { alice, host, round } = await openPlayingRound()
 
     await untilTheFlipIsFair(host)
     alice.send({ roundId: round.id, type: 'player.buzz' })
     await waitFor(
       () => hostView(host)?.phase === 'revealed',
-      'the tap window to run out',
+      'the press window to run out',
       3_000
     )
 
@@ -243,7 +243,7 @@ describe('a heat nobody has to judge', () => {
 })
 
 describe('a player who went too early', () => {
-  it('[reflex] refuses a tap that beat the screen', async () => {
+  it('[reflex] refuses a press that beat the screen', async () => {
     const { alice, aliceId, host, round } = await openPlayingRound()
 
     alice.send({ roundId: round.id, type: 'player.buzz' })
@@ -251,7 +251,7 @@ describe('a player who went too early', () => {
 
     expect(errorsIn(alice)[0]?.code).toBe('false_start')
     expect(hostView(host)?.round?.lockedOutPlayerIds).toEqual([aliceId])
-    expect(reflexRound(hostView(host))?.taps).toEqual([])
+    expect(reflexRound(hostView(host))?.presses).toEqual([])
   })
 
   // A false start takes one player out of the heat, not the heat away from the
@@ -268,7 +268,7 @@ describe('a player who went too early', () => {
     await untilTheFlipIsFair(host)
     bob.send({ roundId: round.id, type: 'player.buzz' })
 
-    // Shorter than the tap window on purpose: the heat has to close on Bob's
+    // Shorter than the press window on purpose: the heat has to close on Bob's
     // press rather than on the clock, or a false start costs the whole room the
     // rest of the window every time.
     await waitFor(() => hostView(host)?.phase === 'revealed', 'the reveal', 300)

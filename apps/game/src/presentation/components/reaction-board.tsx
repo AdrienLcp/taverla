@@ -10,7 +10,7 @@ import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import './reaction-board.sass'
 
 type ReactionBoardProps = {
-  /** Needed to turn the taps' player ids into names. */
+  /** Needed to turn the presses' player ids into names. */
   players: readonly PublicPlayer[]
   round: RoundView
 }
@@ -30,7 +30,7 @@ export const ReactionBoard: React.FC<ReactionBoardProps> = ({
   const rows = buildReactionBoard({
     flipsAt: content?.flipsAt ?? null,
     jumpedPlayerIds: round.lockedOutPlayerIds,
-    taps: content?.taps ?? []
+    presses: content?.presses ?? []
   })
 
   if (rows.length === 0) {

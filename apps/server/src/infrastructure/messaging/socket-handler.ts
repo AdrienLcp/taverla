@@ -40,14 +40,14 @@ import {
   clearLockouts,
   closeRound,
   everyoneHasActed,
-  everyoneHasTapped,
+  everyoneHasPressed,
   everyoneIsDone,
   finishGame,
   isFinalRound,
   registerAnswer,
   registerBuzz,
   registerLie,
-  registerReflexTap,
+  registerReflexPress,
   registerVote,
   releaseBuzz,
   restartGame,
@@ -456,10 +456,10 @@ export const createRoomSocketEvents = (
       return
     }
 
-    // The same frame, a different race: a reflex tap takes no floor and waits
-    // for no judge, so it settles on the taps rather than on a verdict.
+    // The same frame, a different race: a reflex press takes no floor and waits
+    // for no judge, so it settles on the presses rather than on a verdict.
     if (room.round?.content.kind === 'reflex') {
-      tap({ outbound, playerId: active.playerId, room, roundId })
+      press({ outbound, playerId: active.playerId, room, roundId })
 
       return
     }
@@ -486,7 +486,7 @@ export const createRoomSocketEvents = (
     broadcastRoom(room)
   }
 
-  const tap = ({
+  const press = ({
     outbound,
     playerId,
     room,
@@ -497,7 +497,7 @@ export const createRoomSocketEvents = (
     room: Room
     roundId: RoundId
   }): void => {
-    const registered = registerReflexTap({
+    const registered = registerReflexPress({
       now: Date.now(),
       playerId,
       room,
@@ -508,7 +508,7 @@ export const createRoomSocketEvents = (
       sendError(outbound, {
         code: registered.error,
         fatal: false,
-        message: 'That tap was not accepted'
+        message: 'That press was not accepted'
       })
 
       return
@@ -521,11 +521,11 @@ export const createRoomSocketEvents = (
       sendError(outbound, {
         code: 'false_start',
         fatal: false,
-        message: 'That tap came in before the screen flipped'
+        message: 'That press came in before the screen flipped'
       })
     }
 
-    if (everyoneHasTapped(room, Date.now())) {
+    if (everyoneHasPressed(room, Date.now())) {
       abandonRound(room.code)
       closeRound(room, Date.now())
       broadcastRoom(room)

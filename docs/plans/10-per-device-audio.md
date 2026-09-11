@@ -60,7 +60,7 @@ Two traps that carry over:
 
 - **The autoplay unlock.** The host is blessed inside the press on "start". A
   player has no equivalent gesture at the right moment, so the element must be
-  unlocked when they tap "join" — long before there is anything to play.
+  unlocked when they press "join" — long before there is anything to play.
 - **A phone that arrives mid-clip** should seek, not restart. The host uses
   `playbackElapsedMs`; the player view would need it too.
 
