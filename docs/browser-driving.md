@@ -49,6 +49,30 @@ Twelve more that cost time to learn:
   second join; the first player's socket is open and never re-reads it. It is
   what lets a latecomer be driven against a round somebody else is already in.
 
+- **Two players with different *names* need a context each, and the seat trick
+  is not enough.** `taverla:nickname` is one key per origin and the page writes
+  back the name the room **accepted**, so a tab that joins overwrites whatever
+  the next tab was seeded with: three tabs seeded `Alice`, `Bertrand`,
+  `Anne-Charlotte` all arrive asking for the first accepted name, and the last
+  two are refused with *Ce pseudo est déjà pris*. `browser.newContext()` per
+  player gives each its own `localStorage` and needs no seat surgery at all —
+  and the mute `addInitScript` goes on **every** context, not just the first.
+
+- **`globalThis` does not survive between `browser_run_code_unsafe` calls**, so
+  page handles cannot be stashed across them. Re-enumerate instead:
+  `page.context().browser().contexts()`, then `c.pages()`, and pick the players
+  off `p.url().includes('/play/')`.
+
+- **A room can be opened without walking the front door.** `POST /api/rooms`
+  from a page already on the app's origin answers `{ code, hostToken }`; write
+  `taverla:host-tokens` with it — `[{ at: Date.now(), hostToken, roomCode }]` —
+  and navigate to `/host/:code`. It saves three clicks and picks the game in the
+  request body.
+
+- **Screenshots and any other file the tool writes must land under the
+  repository root** — `C:/git/taverla/.playwright-mcp/` is the one directory to
+  use, and a path in the session scratchpad is refused outright.
+
 - **Two consoles in one room need the same hand, one store further.** A second
   tab shares `taverla:host-tokens` as well as `taverla:seats`, so it is already
   the room's owner and displaces nothing. Delete that room's `role: 'host'`
@@ -163,6 +187,25 @@ when the next call lands:
 - anything a heat shows *while* waiting for somebody else.
 
 Both need a second screen in the room, by the `taverla:seats` deletion above.
+
+## Measuring a face, not guessing at it
+
+Several sizes here are `Kcqi` divided by a character count, and `K` is `100`
+divided by how wide a character of that face actually is. Measure it off the
+rendered node with a `Range` per character rather than a probe:
+
+```ts
+const range = document.createRange()
+range.setStart(node, i); range.setEnd(node, i + 1)
+widths.push(range.getBoundingClientRect().width / fontSize)
+```
+
+A hidden `<span>` carrying the computed `font` shorthand **under-reports**, and
+silently: `monument` measured 0.743 that way against 0.898 from the range, and
+the whole point of the constant is that it is right. The shorthand resets the
+variable font's width axis, and re-applying `font-stretch` after it does not put
+it back. `range.getClientRects().length` is the same tool answering how many
+lines a wrap actually produced, which `height / lineHeight` rounds wrong.
 
 ## Two things a browser can be asked that no test can
 
