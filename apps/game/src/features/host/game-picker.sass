@@ -2,9 +2,16 @@
 
 @layer components
   // Five is prime, so no wrap of two, three or four columns divides it and the
-  // strip's only orphan-free shapes are one row and one column. `28rem` is
+  // strip's only orphan-free shapes are one row and one column. `30rem` is
   // where the French row — `Blind test · Buzzer · Le Fake · Quiz · Réflexe`,
-  // the longer of the two locales — stops fitting: 433px of label, padding,
+  // the longer of the two locales — stops fitting: 476px of label, padding,
   // gap and rule, measured on the page.
+  //
+  // Measured with the strip's own label at its **ceiling**, which is the widest
+  // it is ever drawn. A label is sized against the viewport and this threshold
+  // against the container, so the two are free to disagree — the console's
+  // lobby hands this picker 369px at a 1000px viewport, where the type is full
+  // size. Taking the narrow reading would fit the row on a phone and wrap it
+  // there.
   .game-picker
-    @include strip.stacks-below(28rem)
+    @include strip.stacks-below(30rem)

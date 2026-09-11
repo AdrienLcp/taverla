@@ -32,6 +32,11 @@
     // can break — one long word, or a phrase set at row size — pushes the list
     // wider than the screen and takes the whole page sideways with it.
     ul
+      // What the rows are sized against. The column this list is in is capped
+      // at 620px and then at 900, so a viewport unit goes on growing after the
+      // list has stopped: `4.2vw` reached this row's ceiling at a 476px
+      // viewport and said nothing about the width it was actually drawn in.
+      container-type: inline-size
       display: flex
       flex-direction: column
       gap: var(--space-s)
@@ -57,10 +62,13 @@
     // Ten of these are read in a column on a player's screen, where a control
     // label is read one at a time — so this row steps below `title`'s floor
     // rather than shouting each candidate at the size of a button that acts.
+    // Now measured against that list: a phone's 358px holds the floor it always
+    // had, and the row reaches its ceiling at a 556px list rather than at a
+    // 476px viewport.
     .title
       @include typography.title
 
-      font-size: clamp(1rem, 4.2vw, 1.25rem)
+      font-size: clamp(1rem, 3.6cqi, 1.25rem)
       overflow-wrap: anywhere
       text-wrap: pretty
 

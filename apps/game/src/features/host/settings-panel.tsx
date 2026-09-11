@@ -326,6 +326,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       )}
 
       <NumberChoice
+        className='round-count'
         isDisabled={isDisabled}
         label={translate('host.rounds')}
         onChange={(count) => {
@@ -413,6 +414,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       */}
       {mode.kind === 'buzzer' && game?.kind !== 'reflex' && (
         <NumberChoice
+          className='answer-window'
           isDisabled={isDisabled}
           label={translate('host.answerWindow.label')}
           onChange={(chosen) => {

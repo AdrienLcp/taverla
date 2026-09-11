@@ -6,6 +6,8 @@ import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import { NO_LIMIT, NumberChoice, useDurationLabels } from './number-choice'
 
+import './auto-advance-choice.sass'
+
 /**
  * `NO_LIMIT` is the default and means the reveal waits for the host, which is
  * the only option that cannot be too short. The rest are read against what the
@@ -39,6 +41,7 @@ export const AutoAdvanceChoice: React.FC<AutoAdvanceChoiceProps> = ({
 
   return (
     <NumberChoice
+      className='auto-advance'
       isDisabled={!isLive}
       label={translate('host.autoAdvance')}
       onChange={(chosen) => {

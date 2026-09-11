@@ -235,6 +235,11 @@ lines a wrap actually produced, which `height / lineHeight` rounds wrong.
   `#root[__reactContainer…].current`, following `child` and `sibling`, for a
   `memoizedProps.view.round.content` — it carries the answer the screens are
   withholding.
+
+  The round's own id is `memoizedProps.view.round.id` on the same walk, and it
+  is `id` rather than `roundId`: the field is named for the object it is on, and
+  only the *client* frames that reference a round spell it `roundId`. Guessing
+  the second name finds nothing and reads exactly like a fiber walk that failed.
 - **What an autoplay refusal looks like.** Replace
   `HTMLMediaElement.prototype.play` with one returning a promise that rejects
   with a chosen `DOMException` name. That is how all three refusal messages on
@@ -349,6 +354,23 @@ the same snapshot as the reveal. Anything hanging off the buzzer they pressed is
 unmounted by then and observes nothing — which is how the outcome was found to
 belong on the page. Read the slow player, never only the fast one: the fast one
 passes either way.
+
+## Reaching Le Fake's vote board costs one launch and a wait
+
+Nobody has to write anything. The lie window closes on its own and the round
+goes to `voting` with zero submissions — the board draws the truth beside the
+bank's own decoys, four rows of it, and the screen is fully formed. Three seats
+were in the room and not one of them typed. So the vote screen is the cheapest
+of Le Fake's phases to reach, not the most expensive, and the lie-writing
+plumbing below is only needed when the *lies* are the subject.
+
+**A raw socket's snapshot arrives on the join and on each change, and never on
+request.** A listener attached after the launch sees nothing until the room next
+moves, and a `time.ping` buys a pong rather than a fresh view — so a script that
+needs the round's id off a socket has to arm the listener *before* the frame
+that starts the round. Attaching afterwards and waiting reports an empty log,
+which reads as a socket that was never seated rather than a room that simply did
+not change.
 
 ## What a pass covers
 

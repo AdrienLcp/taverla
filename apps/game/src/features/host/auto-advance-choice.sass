@@ -1,0 +1,11 @@
+@use '../../presentation/styles/strip'
+
+@layer components
+  // A stylesheet of its own because this strip is drawn in two places — inside
+  // the setup fold and on the stage under a reveal — and a threshold under
+  // `.settings-panel` would reach one of them.
+  //
+  // 296px is the French row at the label's ceiling, which is what it carries in
+  // the fold on a wide screen.
+  .auto-advance
+    @include strip.stacks-below(19rem)

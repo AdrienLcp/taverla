@@ -138,6 +138,19 @@ is for a screen read up close. There is no third register.
 Sized in `vmin`, not `vw`: the same page is read at forty centimetres on a
 laptop and at four metres on a television, and `vw` alone breaks one of them.
 
+**And all six are sized at all**, which three of them were not. `body`, `caption`
+and `label` were flat `rem`, so a player's lobby on a 1440×900 laptop drew
+`Blind test` at 72px over a `TU VAS JOUER À` still at 12 — a ratio of 2.9 on a
+phone and 6 on the laptop, in a column that had itself gone from 343px to 828.
+That is the phone screenshot enlarged the `screen` mixin refuses one level up,
+met from the other side: the column grew and the prose in it did not. Their
+floors are the phone's own values, so a viewport whose shorter side is under
+750px renders exactly as it did — measured, and not a pixel moves. Their
+ceilings are 18, 16 and 14px, reached between vmin 875 and 900, which is where
+the column stops widening: the two grow together, and then both stop. What it
+costs is 43px of scroll on a lobby already scrolling 167, and nothing at all on
+a phone or at 1920.
+
 ## Material
 
 Hard edges. `--radius-full` exists for exactly one element — the buzzer, because
@@ -460,6 +473,14 @@ Three things follow from that ceiling, and each is a rule of its own:
   the container stops being the viewport.** The room code broke onto two lines
   the moment the cap landed — 302px of type in a 928px column — and is `21cqi`
   now, which is what "as large as its column allows" actually says.
+
+  **The failure runs the other way too, and that one reads as deliberate: a
+  viewport unit that has stopped saying anything.** The lie board's candidate
+  rows were `clamp(1rem, 4.2vw, 1.25rem)` inside a column capped at 620px and
+  then at 900 — so the clamp governed between a 381px and a 476px viewport and
+  sat on its ceiling at every width above, whatever the list was actually drawn
+  in. A constant with two extra terms. The list declares the container and the
+  row is `3.6cqi`: the same 16px on a phone, its ceiling at a 556px list.
 
   **And the container has to be the box the text sits in**, which is one level
   further than that sentence goes. The poster page splits the same invitation

@@ -11,24 +11,35 @@
 
     // Each strip stacks below the width its own labels need on one row,
     // measured on the page in the locale that binds — which is **not** always
-    // French: the difficulty needs 444px there and 464 in English. Rounded up
-    // to the next `rem` for headroom, the way the game picker's 433 became 28.
+    // French: the answer mode needs 536px there and 496 in English, and the
+    // difficulty goes the other way. Rounded up to the next `rem` for headroom,
+    // the way the game picker's 476 became 30.
     //
-    //   answer mode 480 · difficulty 464 · subjects 704 · write and vote 280
+    //   answer mode 536 · difficulty 520 · subjects 952 · write and vote 304
+    //   rounds 276 · auto-advance and answer window 296
     //
-    // The strips left alone are the ones that hold one row down to 273px, which
-    // is what a 320px screen gives them — the narrowest there is.
+    // All of them measured with the labels at their **ceiling**: a label is
+    // sized against the viewport and these against the container, so a strip in
+    // a narrow box on a wide screen carries the widest type it ever gets. The
+    // three at the bottom used to hold one row down to 273px — what a 320px
+    // screen gives them — and no longer do.
     .answer-mode
-      @include strip.stacks-below(31rem)
+      @include strip.stacks-below(34rem)
 
     .track-difficulty
-      @include strip.stacks-below(30rem)
+      @include strip.stacks-below(33rem)
 
     .question-subjects
-      @include strip.stacks-below(55rem)
+      @include strip.stacks-below(60rem)
 
     .write-duration,
     .vote-duration
+      @include strip.stacks-below(20rem)
+
+    .answer-window
+      @include strip.stacks-below(19rem)
+
+    .round-count
       @include strip.stacks-below(18rem)
 
     .hint
