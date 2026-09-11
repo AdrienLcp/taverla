@@ -1,5 +1,5 @@
 import type React from 'react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import {
   Dialog,
   DialogTrigger,
@@ -55,6 +55,7 @@ import { SegmentedControl } from './segmented-control'
 import { Slider } from './slider'
 import { TextField } from './text-field'
 import { TextLink } from './text-link'
+import { useMenuWidth } from './use-menu-width'
 
 import './app-menu.sass'
 
@@ -296,6 +297,9 @@ export const AppMenu: React.FC = () => {
   const { closeRoom } = useRoomActions()
   const { setVolume, volume } = useVolume()
   const [build, setBuild] = useState<string | null>(null)
+  const trigger = useRef<HTMLButtonElement>(null)
+
+  useMenuWidth(trigger)
 
   const alert =
     connection === null || connection.status === 'open'
@@ -328,7 +332,7 @@ export const AppMenu: React.FC = () => {
           }
         }}
       >
-        <ReactAriaButton className='trigger'>
+        <ReactAriaButton className='trigger' ref={trigger}>
           {connection !== null && <ConnectionDot status={connection.status} />}
           {translate('menu.label')}
         </ReactAriaButton>

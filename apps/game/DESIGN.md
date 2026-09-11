@@ -485,6 +485,18 @@ Three things follow from that ceiling, and each is a rule of its own:
   the column.** The front doors collided with the menu from the narrowest
   viewport up to about 1 200px, so they start *below* it: giving up the width
   instead would cost a narrow column's headline a third of its measure.
+- **The corner is one object wide, and what hangs off it hangs downwards.** Two
+  headers reserve against that box, so anything laid out *beside* the trigger is
+  width taken off the room's own code: the connection alert took the corner from
+  97px to 245 and left a 390px header 97px for the code and the round, which is
+  not a reservation a header can pay — it drew the two over each other instead.
+  A sentence under the trigger costs height the chrome already owns and nothing
+  sideways. **And the trigger is measured rather than guessed**, into
+  `--menu-width`: its word is translated, and the connection dot inside it is
+  present in a room and absent at a front door, so 97px, 77px and a literal are
+  three different answers to the same question. It is the same publication a
+  reveal panel makes of its own header, one screen up — a `ResizeObserver`
+  because the fact is a rendered box rather than a token.
 
 **The page is laid out under the housing, so it pays for its own edges.**
 `viewport-fit=cover` is what lets the field bleed into the corners, which is the
@@ -533,6 +545,17 @@ Above `$wide-screen` the board takes the wide column and the standings take the
 place the question had, each sized by dividing the screen rather than by the sum
 of its own type. Below it they stack and the page scrolls, which is what a
 narrow screen does anyway.
+
+**A count says a split is wanted; a container says whether there is room for
+it.** The final board goes to two columns past eight players, and for a while
+that was the whole test — no query of any kind on it. Nine players on a 375px
+console split a 328px board into two 140px columns and cut five of the nine
+names to three letters, on the one screen whose job is to say who won. The
+threshold is **not** read off the room's own names the way a strip's is read off
+its labels: a nickname is up to twenty characters and none of them is in a
+dictionary. It is what two of the *narrowest single* column need — a 320px
+screen gives this board 288px — so two of those plus the gap between them is
+624px, and below it the board is one column and the page scrolls.
 
 **The split is a width question and the budget is a height one**, and for a
 while one media query was answering both. Every height formula on the console

@@ -40,7 +40,27 @@ writing `taverla:volume` there, and navigating afterwards. An init script that
 *clears* storage on the way is worse than none either way: it wipes the key
 under test on every real navigation and on every second tab of the same context.
 
-Twelve more that cost time to learn:
+More that cost time to learn:
+
+- **A room fills up from one page, not from one browser context per player.**
+  Nine seats in a single `browser_evaluate`: open nine `WebSocket`s to
+  `ws://localhost:5273/ws/rooms/:code` from a page already on the app, and send
+  each a `hello` carrying `role: 'player'`, its own `sessionId` and its own
+  nickname. A raw socket reads neither `taverla:seats` nor `taverla:nickname` —
+  those are the client's stores — so the two traps above simply do not apply and
+  nine distinct names cost nine lines. Keep the sockets on `window`; the page
+  owns them, and a navigation closes all nine at once and turns the roster
+  *away*. It is what makes a nine-player final board or a full lobby reachable
+  at all.
+
+- **A buzz and the verdict that pays it are one call.** The floor closes after
+  `answerWindowMs` and a tool round trip spends a good part of it, so a buzz sent
+  in one call and judged in the next arrives at a round that has already locked
+  that player out and gone back to `playing` — with a *Remettre la tablée en jeu*
+  button as the only trace. Send the press and click the verdict inside one
+  `browser_run_code_unsafe`. And **poll for `playing` inside the page before
+  pressing**: a press during the countdown is refused, and the next call reads an
+  untouched board with nothing on it to say why.
 
 - **Two players in one room need a hand.** `taverla:seats` is a single
   `localStorage` array shared by every tab of the context, keyed by room *and

@@ -1180,6 +1180,44 @@ one part.
 
 ### Fixes
 
+- `[Game]` **A room of nine cut five of its names to three letters, on the one
+  screen that exists to say who won.** The final board goes to two columns past
+  eight players and that was the whole test: `final-board.sass` carried no media
+  query and no container query at all. On a 375px console a 328px board was split
+  into two 140px columns each holding `4ch 1fr auto`, which leaves 59px for a
+  nickname — `Adr…`, `Jea…`, `Clé…`, `Mar…`, `Ann…`. Swept across board widths
+  with nine real names, the split stops truncating at 540px.
+
+  **The count says two columns are wanted; the container says whether there is
+  room for them**, and one of the two was answering both. The threshold is not
+  read off that 540px, because a nickname is up to twenty characters and no
+  room's names are in a dictionary the way a strip's labels are. It is what two
+  of the *narrowest single* column need: a 320px screen gives this board 288px,
+  so two of those plus the `--space-xl` between them is **624px**. Below it the
+  board is one column and the page scrolls, which is the bargain a console held
+  in a hand already strikes one screen over.
+
+  Measured after: every name whole at 375px, two columns and nothing truncated
+  from a 629px board up, and the 1280×800 console unchanged.
+
+- `[Game]` **A socket that blinked drew `Reconnexion…` across the room's own
+  code.** The shell reserved `calc(var(--layout-padding) + 116px)` for the fixed
+  corner menu — a hard-coded guess at a trigger that measures 97px inside a room
+  and 77px at a front door. It was 18px too much with the connection alert empty,
+  which on its own broke `TOURNÉE 1 SUR 10` onto two lines at 390px, and 129px
+  too little the moment the alert filled: the live region renders *beside* the
+  trigger and takes the box to 245px, against a header that had 242px for two
+  facts. Nothing warned; the two were simply drawn over each other.
+
+  Two edits, and the second is what keeps the first true. **The corner is one
+  object wide and the sentence hangs below it** — the alert was the only thing
+  in that box whose width the header could not afford, and downwards it costs
+  height the chrome already owns, at every width. And **the menu measures its own
+  trigger into `--menu-width`**, the way a reveal panel publishes its own header:
+  the word is translated and the dot beside it is present in a room and absent at
+  the door, so that number was never a constant to begin with. The literal
+  survives as the fallback for the frame before the observer runs.
+
 - `[Game]` **A square screen broke the reveal's answer into pieces and ran the
   console 502px off the bottom.** The cover was `34vmin` — an axis of the
   *screen* — inside a panel that is `1.6fr` of a split stage, so at 900×900 the

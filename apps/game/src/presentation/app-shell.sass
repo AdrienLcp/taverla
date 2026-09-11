@@ -8,7 +8,14 @@
     // set on a `> header` *inside* the page: the container has already paid the
     // inset once, and the menu is anchored to that same edge, so the gap
     // between the two is the padding at every inset.
-    --menu-inset: calc(var(--layout-padding) + 116px)
+    //
+    // **What the menu costs is not a constant, so the menu is what says it.**
+    // `--menu-width` is its trigger measured — 98px in a room, narrower at a
+    // front door where there is no connection dot in it, and a translated word
+    // either way. The 116px this used to guess was 18px too much, which is what
+    // broke `TOURNÉE 1 SUR 10` onto two lines at 390. The literal survives as
+    // the fallback for the frame before the observer runs.
+    --menu-inset: calc(var(--layout-padding) + var(--menu-width, 116px))
 
     // The same corner measured downwards, for a screen that leads with display
     // type across the full column and so cannot sit beside the menu. Giving up

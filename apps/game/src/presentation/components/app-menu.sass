@@ -3,8 +3,18 @@
 
 @layer components
   .app-menu
-    align-items: center
+    align-items: flex-end
     display: flex
+    // **The corner is one object wide and the sentence hangs below it.** The
+    // two top-anchored headers reserve against this box, so anything laid out
+    // beside the trigger is width taken off the room's own code: `Reconnexion…`
+    // in the row took the corner from 98px to 245 and left a 390px header 97 —
+    // which is not a reservation that header can pay, so it drew the round and
+    // the code over each other. Downwards the sentence costs height the corner
+    // already owns and nothing at all sideways, at every width. The alert is
+    // the first child, so reversing is what puts the trigger back on top: it is
+    // what the corner is anchored to and the sentence is not.
+    flex-direction: column-reverse
     inset-block-start: var(--layout-padding-block-start)
     // Fixed to the viewport, but never further out than the field it belongs
     // to. Past `--stage-max-width` the host's surface stops widening, and a
@@ -34,11 +44,12 @@
       @include typography.label
 
       color: var(--ink)
+      text-align: end
 
       // The node stays mounted while it is empty, so the gap has to come off
-      // the text rather than off the row.
+      // the text rather than off the column.
       &:not(:empty)
-        margin-inline-end: var(--space-xs)
+        margin-block-start: var(--space-2xs)
 
     .trigger
       @include focus.ring
