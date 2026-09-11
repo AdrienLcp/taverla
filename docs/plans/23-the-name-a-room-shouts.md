@@ -53,29 +53,55 @@ that skips it shows up in `pnpm test` rather than in a room.
 The blocker is never the aliases. It is **an entity id for the answer**, and the
 three remaining sources fail to have one in three different ways.
 
-### OpenQuizzDB — 2 132 rows, a title for the *subject*
+### OpenQuizzDB — measured 11 September 2026, and the answer is **no**
 
 It holds `wikipédia`, a French Wikipedia article URL, and stage 21 already
 parses it to `article`. But the comment at `openquizzdb-source.ts:257` is
 explicit that the title names **the question's subject, not its answer**: the
 row about Clara Morgane's birthplace is filed under *Clara Morgane* and answers
-*Marseille*. The answer is a bare string and nothing else.
+*Marseille*. So the answer has to be entity-linked from its bare label, and the
+obvious hop is the label's own French Wikipedia article.
 
-Reaching an id means entity-linking a French label with no context but the
-prompt — *Marseille* is a city, a football club and a soap. The honest version
-of this is a `wbsearchentities` hop per distinct answer with the row's category
-as a weak filter, and a census over what it returns. **Not obviously worth a
-session**, and the first of the three to be measured rather than argued: count
-the distinct answers first, then see how many resolve unambiguously.
+**It resolves, and resolving is not the problem.** 2 132 rows, 1 956 distinct
+answers, 1 327 of them landing on a real entity — 68%, which reads like a green
+light and is not one. Two findings kill it:
+
+- **15% of the resolutions change the concept.** 204 of the 1 327 land on a
+  title that is not the answer, through a redirect nothing warns about:
+  *Double coeur* → **Microprocesseur multi-cœur**, *Mensuelle* → **Mois**,
+  *Urologue* → **Urologie**, *Abdominaux* → **Muscles abdominaux
+  antérolatéraux**. `acceptedOf` cannot catch one: its guard refuses a spelling
+  that names the row's own *decoy*, not one that names an unrelated thing. Those
+  would be banked and paid.
+- **Where the entity is right, a common noun's aliases are its neighbours, not
+  its other names.** *Bleu* offers *pervenche*, *turquoise*, *marine*, *azur*;
+  *Concombre* offers *concombre hollandais* and *concombre libanais*. Banking
+  those pays a room that typed **turquoise** for a question answering **Bleu** —
+  which is the exact failure this whole column exists to prevent, inverted.
+
+**The safe sliver is 120 rows of 2 132.** Gate on the answer being a human
+(`P31 = Q5`) *and* the article title being the answer itself, and 213 answers
+survive, 113 of them carrying a usable alias — *Sergio Leone* as *Bob
+Robertson*, *France Gall* as *Babou*, *Michel Berger* as *Michel Hamburger*.
+Real, and 5.6% of the source. Not a session.
+
+**The rule this bought, which is bigger than the source:** the alias pass
+transfers to a source exactly when its answers are **named entities**. A person
+has one identity and several spellings of it; a common noun has one spelling and
+several neighbouring concepts, and `skos:altLabel` does not distinguish the two.
+Mintaka and PolyFact are Wikidata-derived and answer entities by construction,
+which is why it worked there and nowhere else so far.
 
 ### Vikidia — 566 rows, a title for the *page*
 
 Worse than OpenQuizzDB, for the same reason one step further out: `subject` is
 hand-written per quiz page in `QUIZ_SUBJECTS`, so roughly 170 subjects cover
-~800 rows. It says what the page is about, never what a row answers. And the
+~800 rows. It says what the page is about, never what a row answers.
+
+**The rule OpenQuizzDB bought settles this one without a measurement.** Vikidia's
 answers are the least entity-shaped in the bank — *À environ 400 km*, *des
-milliards de milliards*. **The yield here is small enough that it should be the
-last one tried, if ever.**
+milliards de milliards*, *On ne sait pas*, *elles explosent*. Almost none is a
+named entity, so almost none has another name. **Drop it.**
 
 ### Open Trivia DB — 4 437 rows, nothing at all, and in English
 
@@ -93,18 +119,30 @@ one:
 It is also where the payoff is largest, because the English half is 44% of the
 bank and takes none of this today.
 
-## The order this would ship in
+## What is actually left
 
-1. **Measure OpenQuizzDB before writing anything.** Distinct answers, and how
-   many `wbsearchentities` resolves to a single entity whose kind matches the
-   category. A number under a third means the whole approach is wrong for a
-   source that only knows its subject, and that is worth knowing before the
-   English half is attempted the same way.
-2. **The language seam in `wikidata-aliases.ts`**, only once something needs it.
-   Renaming a working French function to serve an English caller that does not
-   exist yet is the abstraction anti-pattern this repo keeps refusing.
-3. **Open Trivia DB last and on its own**, because entity linking 4 437 English
-   labels is a census, not a script.
+Two of the three are now closed, and by one rule rather than by three
+measurements. **What remains is Open Trivia DB, and the question to ask it is
+not the one this file opened with.** It is not *can an English label be
+entity-linked* — it is **how many of its 4 437 answers are named entities at
+all**, because that is what decides whether the pass transfers. *Trees*, *Spoon*
+and *Yellow* are not; its history, geography and arts rows largely are.
+
+So, in order:
+
+1. **Count OTDB's named-entity answers first**, the cheap way: the share of
+   distinct answers whose English Wikipedia article title is the answer itself
+   and whose entity is not a common noun. Under a third and the source goes the
+   way of OpenQuizzDB, for nothing but a script.
+2. **Only then, the language seam in `wikidata-aliases.ts`.** The filter is
+   literal in the SPARQL (`FILTER(lang(?alias) = "fr")`) with no language
+   parameter anywhere, so threading one through `frenchAliasesOf`,
+   `aliasesOfBatch` and the cache key is the mechanical half; naming it is the
+   other, since the function stops being *French* anything. Doing this before
+   step 1 would be renaming a working function to serve a caller that may never
+   exist.
+3. **The English half is where the payoff is**, if the count allows it: 4 437
+   rows, 44% of the bank, taking none of this today.
 
 ## Protocol
 
