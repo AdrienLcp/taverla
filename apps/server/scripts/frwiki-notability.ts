@@ -1,4 +1,8 @@
-import { readCachedEntries, writeCachedEntries } from './question-source'
+import {
+  chunked,
+  readCachedEntries,
+  writeCachedEntries
+} from './question-source'
 
 /**
  * How well known a Wikidata entity is to a French-speaking room, measured as the
@@ -107,22 +111,6 @@ const withRetries = async <TBody>(
 
     await wait(RETRY_BACKOFF_MS * attempt)
   }
-}
-
-const chunked = <TItem>({
-  items,
-  size
-}: {
-  items: readonly TItem[]
-  size: number
-}): TItem[][] => {
-  const chunks: TItem[][] = []
-
-  for (let start = 0; start < items.length; start += size) {
-    chunks.push(items.slice(start, start + size))
-  }
-
-  return chunks
 }
 
 /**

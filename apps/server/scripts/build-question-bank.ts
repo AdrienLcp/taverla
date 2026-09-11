@@ -11,6 +11,7 @@ import { ingestOpenQuizzDb } from './openquizzdb-source'
 import { ingestOpenTdb } from './opentdb-source'
 import { ingestPolyFact } from './polyfact-source'
 import type { BankedQuestion, IngestedQuestions } from './question-source'
+import { ingestVikidia } from './vikidia-source'
 
 /**
  * Rebuilds the question bank from the three sources it is written in, all under
@@ -215,6 +216,9 @@ const run = async (): Promise<void> => {
   console.info('\nMintaka (fr)')
   const mintaka = await ingestMintaka()
 
+  console.info('\nVikidia (fr)')
+  const vikidia = await ingestVikidia()
+
   console.info('\nOpen Trivia DB (en)')
   const english = await ingestOpenTdb()
 
@@ -222,6 +226,7 @@ const run = async (): Promise<void> => {
     ...french.questions,
     ...wikidata.questions,
     ...mintaka.questions,
+    ...vikidia.questions,
     ...english.questions
   ]
   const offered = sourced
@@ -235,6 +240,7 @@ const run = async (): Promise<void> => {
       french.attribution,
       wikidata.attribution,
       mintaka.attribution,
+      vikidia.attribution,
       english.attribution
     ],
     questions: questions.map(banked)
@@ -245,6 +251,7 @@ const run = async (): Promise<void> => {
   report(french)
   report(wikidata)
   report(mintaka)
+  report(vikidia)
   report(english)
 
   console.info(`\n${bank.questions.length} questions → ${BANK_PATH}`)
@@ -265,6 +272,7 @@ const run = async (): Promise<void> => {
     ...french.rejections,
     ...wikidata.rejections,
     ...mintaka.rejections,
+    ...vikidia.rejections,
     ...english.rejections
   ]) {
     console.info(`  rejected ${rejection}`)

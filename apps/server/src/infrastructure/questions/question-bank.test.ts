@@ -36,23 +36,37 @@ describe('drawQuestion', () => {
   /**
    * The rating is off unless a host turns it on, and they are the only one who
    * knows who is in the room — the code is read aloud and anyone present can
-   * scan the QR. Four hundred draws over a bank where one question in twenty is
-   * adult would surface one within the first few if the filter were absent.
+   * scan the QR.
+   *
+   * **Both halves are counted rather than sampled at four hundred**, which is
+   * what these two used to do and what made the pair flaky. The category is
+   * drawn before the question, so an adult row's chance is its share of *its
+   * own* category divided by six: 104 of the 2 510 French arts rows and 3 of
+   * the 1 309 everyday ones come to 0.73% a draw. Four hundred draws miss every
+   * one of them about one run in twenty — a red that says nothing about the
+   * filter, and a green that would have missed a broken one just as often.
+   * Two thousand puts both at one in two million, and the number has to be
+   * revisited whenever a source widens a category the adult rows sit in:
+   * Vikidia's 252 French arts rows alone moved the miss rate from 4.3% to 5.4%.
    */
+  const ENOUGH_TO_MEET_A_RARE_RATING = 2_000
+
   it('[bank] never draws an adult question unless the host asked for it', () => {
     expect(DEFAULT_QUIZ_SETTINGS.allowsAdultContent).toBe(false)
 
-    const drawn = drawMany(DEFAULT_QUIZ_SETTINGS)
+    const drawn = drawMany(DEFAULT_QUIZ_SETTINGS, {
+      times: ENOUGH_TO_MEET_A_RARE_RATING
+    })
 
-    expect(drawn.length).toBe(400)
+    expect(drawn.length).toBe(ENOUGH_TO_MEET_A_RARE_RATING)
     expect(drawn.some((question) => question.isAdult)).toBe(false)
   })
 
   it('[bank] draws them once the host has', () => {
-    const drawn = drawMany({
-      ...DEFAULT_QUIZ_SETTINGS,
-      allowsAdultContent: true
-    })
+    const drawn = drawMany(
+      { ...DEFAULT_QUIZ_SETTINGS, allowsAdultContent: true },
+      { times: ENOUGH_TO_MEET_A_RARE_RATING }
+    )
 
     expect(drawn.some((question) => question.isAdult)).toBe(true)
   })
@@ -384,16 +398,16 @@ describe('drawQuestion', () => {
    * three difficulty bands deal a hundred questions each rather than twenty-one
    * — it is the target stage 22 was scoped to, not a round number.
    *
-   * **Science is named as the shortfall rather than left to fail**, because a
-   * floor that is red for a reason already written down teaches nobody
-   * anything. Mintaka carries no science at all: its answer is a Wikidata
-   * entity, and a science question's answer is usually not one. Stage 22's
-   * second source is what moves it, and this exception comes out the day it
-   * does.
+   * **Science was the last of the four and carried an exception until Vikidia**,
+   * because Mintaka has no science at all: its answer is a Wikidata entity, and
+   * a science question's answer is usually not one. Vikidia is the French
+   * encyclopedia written for children, its quizzes are written in French rather
+   * than translated into it, and the animals, arithmetic and astronomy a
+   * ten-year-old is asked about are what the subject was missing. The exception
+   * is gone and all four subjects are held to the same floor.
    */
   it('[bank] gives the four thin French subjects an evening of their own', () => {
     const ENOUGH_FOR_A_SUBJECT = 300
-    const AWAITING_A_SOURCE_OF_ITS_OWN = 'science'
 
     const short: string[] = []
 
@@ -403,10 +417,7 @@ describe('drawQuestion', () => {
           question.category === category && question.language === 'fr'
       )
 
-      if (
-        rows.length < ENOUGH_FOR_A_SUBJECT &&
-        category !== AWAITING_A_SOURCE_OF_ITS_OWN
-      ) {
+      if (rows.length < ENOUGH_FOR_A_SUBJECT) {
         short.push(`fr/${category}: ${rows.length}`)
       }
     }

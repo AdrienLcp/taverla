@@ -63,6 +63,27 @@ export type IngestedQuestions = {
   rejections: string[]
 }
 
+/**
+ * The items in runs of at most `size`, which is how both wikis' action API is
+ * asked for anything: fifty titles a request is the anonymous ceiling, and a
+ * SPARQL query takes six hundred entities before it starts meeting a timeout.
+ */
+export const chunked = <TItem>({
+  items,
+  size
+}: {
+  items: readonly TItem[]
+  size: number
+}): TItem[][] => {
+  const chunks: TItem[][] = []
+
+  for (let start = 0; start < items.length; start += size) {
+    chunks.push(items.slice(start, start + size))
+  }
+
+  return chunks
+}
+
 export const cached = async (
   name: string,
   fetchIt: () => Promise<string>

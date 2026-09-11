@@ -1153,5 +1153,961 @@
   "polyfact-Q113835296-P178-Q752317": {
     "decoys": ["Sunsoft", "Konami", "Ubisoft Toronto"],
     "why": "a decoy answers the prompt too — EA Vancouver is Electronic Arts' own studio"
+  },
+  "vikidia-5-mondes-1": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-5-mondes-4": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-abyssin-29": {
+    "prompt": "De combien de chatons la femelle abyssine accouche-t-elle en moyenne ?",
+    "why": "\"la femelle\" names no animal once the row is dealt alone"
+  },
+  "vikidia-ace-attorney-2": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-aile-de-pluie-1": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-aile-de-pluie-4": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-aldebert-2": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-aldebert-4": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-amel-bent-1": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-amel-bent-2": {
+    "drop": true,
+    "why": "she was born in Paris, which the row prints as a wrong answer"
+  },
+  "vikidia-amel-bent-3": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-amel-bent-4": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-amel-bent-5": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-amel-bent-6": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-amel-bent-7": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-amel-bent-8": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-amel-bent-9": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-amel-bent-10": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-anatomie-1": {
+    "prompt": "Combien avons-nous de doigts, en comptant ceux des pieds ?",
+    "why": "as written the answer is ten, which is printed beside it as a wrong one"
+  },
+  "vikidia-anatomie-4": {
+    "prompt": "De quelle protéine sont composés les ongles et les cheveux ?",
+    "why": "keratin is a protein, so the decoy \"de protéine\" is right as the question stood"
+  },
+  "vikidia-animaux-2-5": {
+    "drop": true,
+    "why": "a red fox litter reaches twelve or thirteen kits, so the decoys ten and twelve beat the maximum it banks"
+  },
+  "vikidia-animaux-33": {
+    "drop": true,
+    "why": "the millipede leg record is 1 306 and the row banks 752, which its own decoy of 1 024 already crowds"
+  },
+  "vikidia-annie-au-milieu-1": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-annie-au-milieu-2": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-annie-au-milieu-3": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-annie-au-milieu-4": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-annie-au-milieu-5": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-antonio-vivaldi-4": {
+    "drop": true,
+    "why": "Vivaldi died on 28 July 1741, and the decoy names the true month"
+  },
+  "vikidia-antonio-vivaldi-10": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-blob-2": {
+    "answer": "Avoine",
+    "why": "a laboratory blob is fed oat flakes, which the row printed as a wrong answer"
+  },
+  "vikidia-blue-les-royaumes-de-feu-1": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-boeing-737-3": {
+    "prompt": "Quel est le principal concurrent du Boeing 737 ?",
+    "why": "\"son\" names no aircraft once the row is dealt alone"
+  },
+  "vikidia-botanique-4": {
+    "answer": "l'actinidia",
+    "why": "the genus is misspelled, which is what a typed room is graded against"
+  },
+  "vikidia-bravelands-6": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-bravelands-9": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-bus-24-de-strasbourg-4": {
+    "drop": true,
+    "why": "the opening date of one city's bus line, with the city never named"
+  },
+  "vikidia-bus-24-de-strasbourg-5": {
+    "drop": true,
+    "why": "the answer is a list of nine bus lines and five trams"
+  },
+  "vikidia-bus-24-de-strasbourg-6": {
+    "drop": true,
+    "why": "it asks who runs one city's bus line without naming the city, beside joke decoys"
+  },
+  "vikidia-canada-2": {
+    "drop": true,
+    "why": "it asks who currently leads Canada, which went stale in March 2025 and goes stale at every election"
+  },
+  "vikidia-canada-5": {
+    "prompt": "Quels sont les sports nationaux du Canada ?",
+    "why": "the row named no country"
+  },
+  "vikidia-celine-dion-2": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-celine-dion-8": {
+    "drop": true,
+    "why": "it banks an age, which goes stale every birthday"
+  },
+  "vikidia-centre-val-de-loire-2": {
+    "drop": true,
+    "why": "the region has no attested demonym and the three decoys are homophones of the answer, so picking is a spelling lottery"
+  },
+  "vikidia-chat-4": {
+    "prompt": "Pourquoi le chat mange-t-il de l'herbe ?",
+    "why": "it answered a yes-or-no question standing above it on the quiz page"
+  },
+  "vikidia-chateau-de-versailles-6": {
+    "prompt": "Combien de pièces comprend l'appartement de la reine au château de Versailles ?",
+    "why": "it named neither the queen nor the palace"
+  },
+  "vikidia-chateau-de-versailles-8": {
+    "drop": true,
+    "why": "Louis XV had ten children with Marie Leszczynska, and all four candidates sit below that"
+  },
+  "vikidia-colomiers-5": {
+    "drop": true,
+    "why": "\"de l'ouest à l'ouest\" is nonsense and two candidates describe the same road"
+  },
+  "vikidia-coupe-du-monde-de-rugby-1": {
+    "answer": "L'Afrique du Sud",
+    "why": "South Africa leads alone on four titles since 2023, against New Zealand's three"
+  },
+  "vikidia-coupe-du-monde-de-rugby-2": {
+    "prompt": "Quelle équipe a perdu trois finales de Coupe du monde de rugby sans jamais en gagner ?",
+    "why": "France is not the most frequent finalist — New Zealand has five — and three finals lost is its actual record"
+  },
+  "vikidia-coupe-du-monde-de-rugby-6": {
+    "prompt": "Quels pays ont accueilli la première Coupe du monde de rugby ?",
+    "why": "\"a reçu la Coupe du monde\" reads as winning it, which was New Zealand alone rather than the two hosts"
+  },
+  "vikidia-coupe-du-monde-de-rugby-8": {
+    "prompt": "Quelle équipe n'a pas participé à la Coupe du monde de rugby 2019 après avoir disputé toutes les éditions précédentes ?",
+    "why": "the row named no competition, so its year pointed at nothing"
+  },
+  "vikidia-coupe-du-monde-de-rugby-9": {
+    "prompt": "Quelle équipe a été éliminée dès la phase de poules de la Coupe du monde de rugby qu'elle organisait ?",
+    "why": "the row named no competition, and football has hosts eliminated in the group stage too"
+  },
+  "vikidia-detective-conan-5": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-detective-conan-7": {
+    "drop": true,
+    "why": "a fragment whose four candidates are one title respelled"
+  },
+  "vikidia-detective-conan-8": {
+    "drop": true,
+    "why": "a bare first name identifies nobody, beside nonsense decoys"
+  },
+  "vikidia-dinosaures-1": {
+    "drop": true,
+    "why": "the prompt is \"vrai ou faux\" and states nothing — the candidates carry the claims"
+  },
+  "vikidia-dinosaures-15": {
+    "drop": true,
+    "why": "the largest known dinosaur is Argentinosaurus, Titanosaurus is a dubious genus, and Amphicoelias is printed as a wrong answer"
+  },
+  "vikidia-ecologie-5": {
+    "drop": true,
+    "why": "current policies put the century's warming near three degrees, so the decoy is closer than the four-to-five it banks"
+  },
+  "vikidia-europa-park-1": {
+    "drop": true,
+    "why": "\"la nouvelle attraction\" rots with every opening, and the park is never named"
+  },
+  "vikidia-europa-park-2": {
+    "drop": true,
+    "why": "the row names no park"
+  },
+  "vikidia-europa-park-3": {
+    "drop": true,
+    "why": "\"son\" names no park once the row is dealt alone"
+  },
+  "vikidia-european-shorthair-5": {
+    "drop": true,
+    "why": "the answer is \"ça dépend des sources\", which is no answer in either mode"
+  },
+  "vikidia-european-shorthair-25": {
+    "drop": true,
+    "why": "a decoy is the French translation of the answer"
+  },
+  "vikidia-european-shorthair-34": {
+    "prompt": "À quelle fréquence faut-il brosser le poil de l'european shorthair ?",
+    "why": "\"son\" names no animal once the row is dealt alone"
+  },
+  "vikidia-fairy-tail-1": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-films-disney-5": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-films-disney-6": {
+    "drop": true,
+    "why": "three animated films but four counting the live-action remake, so the decoy is defensible"
+  },
+  "vikidia-francois-ier-de-france-3": {
+    "drop": true,
+    "why": "the decoy names the very branch he was born into"
+  },
+  "vikidia-geographie-de-la-france-1": {
+    "answer": "En Europe",
+    "why": "the answer and every decoy carried a trailing semicolon out of the source's list markup"
+  },
+  "vikidia-girondins-de-bordeaux-2": {
+    "answer": "le Nouveau Stade de Bordeaux",
+    "prompt": "Comment s'appelle le grand stade des Girondins de Bordeaux, inauguré en 2015 ?",
+    "why": "\"actuellement\" rots, and the club left the stadium after the 2024 relegation"
+  },
+  "vikidia-girondins-de-bordeaux-4": {
+    "prompt": "En quelle année les Girondins de Bordeaux sont-ils devenus professionnels ?",
+    "why": "\"le club\" names nobody once the row is dealt alone"
+  },
+  "vikidia-girondins-de-bordeaux-5": {
+    "prompt": "Quand les Girondins de Bordeaux ont-ils remporté pour la première fois la Division 1 ?",
+    "why": "\"le club\" names nobody once the row is dealt alone"
+  },
+  "vikidia-girondins-de-bordeaux-8": {
+    "prompt": "Qui a pris la présidence des Girondins de Bordeaux en 1978 ?",
+    "why": "\"le club\" names nobody once the row is dealt alone"
+  },
+  "vikidia-girondins-de-bordeaux-10": {
+    "drop": true,
+    "why": "the job title of one football club's physiotherapist"
+  },
+  "vikidia-girondins-de-bordeaux-11": {
+    "answer": "Willy Sagnol",
+    "prompt": "Qui a entraîné les Girondins de Bordeaux de 2014 à 2016 ?",
+    "why": "\"l'entraîneur actuel du club\" is both unbound and stale — Sagnol left in 2016"
+  },
+  "vikidia-gloria-les-royaumes-de-feu-2": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-gloria-les-royaumes-de-feu-3": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-gloria-les-royaumes-de-feu-4": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-gloria-les-royaumes-de-feu-5": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-gloria-les-royaumes-de-feu-6": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-groupe-d-intervention-de-la-gendarmerie-nationale-2": {
+    "drop": true,
+    "why": "garbled past reading, and it carries no question mark"
+  },
+  "vikidia-groupe-d-intervention-de-la-gendarmerie-nationale-3": {
+    "drop": true,
+    "why": "the answer contradicts itself"
+  },
+  "vikidia-gymnastique-1": {
+    "answer": "Un appareil de gymnastique (poutre, barres, sol…)",
+    "why": "the banked answer defined an agrès as a school subject"
+  },
+  "vikidia-halloween-6": {
+    "drop": true,
+    "why": "Halloween is a Scots contraction of All Hallows' Even, and the decoy naming British English is nearer the truth"
+  },
+  "vikidia-halloween-8": {
+    "drop": true,
+    "why": "a citrouille is a courge, which is printed as a wrong answer"
+  },
+  "vikidia-halloween-9": {
+    "drop": true,
+    "why": "it opens on \"mais\" and only worked after the question above it on the quiz page"
+  },
+  "vikidia-halloween-10": {
+    "drop": true,
+    "why": "it opens on \"mais\", and the answer is wrapped in scraped guillemets"
+  },
+  "vikidia-harry-potter-1": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-harry-potter-2-1": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-harry-potter-2-5": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-harry-potter-2-7": {
+    "drop": true,
+    "why": "many things wounded Harry Potter, and narrowed to the scar it repeats another row"
+  },
+  "vikidia-harry-potter-4": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-heros-de-l-olympe-8": {
+    "drop": true,
+    "why": "the decoy is also correct — the book appeared in 2012 in English and 2013 in French"
+  },
+  "vikidia-hommes-prehistoriques-3": {
+    "answer": "il y a environ 300 000 ans",
+    "why": "Homo sapiens has been dated to roughly three hundred thousand years since Jebel Irhoud"
+  },
+  "vikidia-hoopa-2": {
+    "drop": true,
+    "why": "it opens on \"mais\" and answers with a garbled list of media"
+  },
+  "vikidia-hoopa-4": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-hunger-games-1": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-hunger-games-3": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-hunger-games-9": {
+    "drop": true,
+    "why": "the decoy is a synonym of the answer, and the row back-references an unnamed volume"
+  },
+  "vikidia-hunger-games-10": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-imagine-dragons-2": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-imagine-dragons-3": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-imagine-dragons-4": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-jeu-video-4": {
+    "drop": true,
+    "why": "no single year covers both versions — Jaune reached France in 2000, and the decoys are true for Japan and the United States"
+  },
+  "vikidia-juline-dizznee-2": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-juline-dizznee-5": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-koh-lanta-1": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-koh-lanta-3": {
+    "drop": true,
+    "why": "hundreds of people have played, and the answer is a bare first name"
+  },
+  "vikidia-la-grande-sophie-2": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-la-grande-sophie-3": {
+    "drop": true,
+    "why": "\"son dernier album\" rots with every release"
+  },
+  "vikidia-la-grande-sophie-5": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-la-guerre-des-clans-1": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-la-guerre-des-clans-2": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-la-guerre-des-clans-3": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-la-guerre-des-clans-9": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-la-guerre-des-clans-10": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-la-guerre-des-clans-11": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-la-guerre-des-clans-14": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-la-guerre-des-clans-15": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-la-pat-patrouille-1": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-la-pat-patrouille-2": {
+    "drop": true,
+    "why": "the pups grew season by season, so three candidates are defensible"
+  },
+  "vikidia-la-pat-patrouille-3": {
+    "drop": true,
+    "why": "vehicles belonging to nothing, on an uncheckable figure"
+  },
+  "vikidia-la-pat-patrouille-5": {
+    "drop": true,
+    "why": "the row names no work, and the decoy kittens are villains too"
+  },
+  "vikidia-langue-neerlandaise-8": {
+    "drop": true,
+    "why": "a sentence about being a wiki user, which means nothing to a room"
+  },
+  "vikidia-les-aventures-de-tintin-26": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-les-chroniques-de-kane-2": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-les-chroniques-de-kane-10": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-les-royaumes-de-feu-1": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-les-royaumes-de-feu-2": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-les-royaumes-de-feu-3": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-les-royaumes-de-feu-4": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-les-royaumes-de-feu-6": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-les-royaumes-de-feu-14": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-licorne-1": {
+    "drop": true,
+    "why": "the plural in brackets gives the answer away, and the verb is spelled as a preposition"
+  },
+  "vikidia-licorne-3": {
+    "drop": true,
+    "why": "the unicorn legend predates the narwhal-tusk trade by centuries — the tusks were sold as horns afterwards, not the source of the myth"
+  },
+  "vikidia-licorne-6": {
+    "drop": true,
+    "why": "a yes-or-no padded with three garbled refusals, over a claim nothing supports"
+  },
+  "vikidia-licorne-8": {
+    "drop": true,
+    "why": "a malformed definition whose \"poney avec une corne\" decoy is not meaningfully wrong"
+  },
+  "vikidia-lille-4": {
+    "drop": true,
+    "why": "the Métropole Européenne de Lille is an intercommunalité, which is printed as a wrong answer"
+  },
+  "vikidia-loutre-6": {
+    "prompt": "Comment s'appellent les poils de couverture de la loutre ?",
+    "why": "the subject lived in the quiz page's title"
+  },
+  "vikidia-loutre-7": {
+    "prompt": "Comment s'appelle le sous-poil de la loutre ?",
+    "why": "the subject lived in the quiz page's title"
+  },
+  "vikidia-loutre-9": {
+    "drop": true,
+    "why": "sea otters famously live in rafts, which is printed as a wrong answer"
+  },
+  "vikidia-loutre-cendree-2": {
+    "drop": true,
+    "why": "Aonyx cinereus weighs two to five kilos, which is printed as a wrong answer"
+  },
+  "vikidia-lune-claire-2": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-lune-claire-3": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-lune-claire-4": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-lune-claire-5": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-lune-claire-6": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-lune-claire-7": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-lune-claire-9": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-lune-claire-10": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-lynx-1": {
+    "drop": true,
+    "why": "the Latin genus is Lynx, which the row prints as a wrong answer; lyncis is only its genitive"
+  },
+  "vikidia-lynx-2": {
+    "prompt": "Combien y a-t-il d'espèces de lynx dans le monde ?",
+    "why": "the sentence was garbled and its noun left singular"
+  },
+  "vikidia-lyon-3": {
+    "drop": true,
+    "why": "English writes the city Lyon, which the row prints as a wrong answer; Lyons is archaic"
+  },
+  "vikidia-lyon-4": {
+    "answer": "7",
+    "prompt": "Combien de fois de suite l'Olympique lyonnais a-t-il été champion de France de football ?",
+    "why": "the stem had no blank to fill and read as a flat statement"
+  },
+  "vikidia-mario-12": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-mario-17": {
+    "drop": true,
+    "why": "it states no criterion, so five or six are as defensible as the four it banks"
+  },
+  "vikidia-mario-18": {
+    "drop": true,
+    "why": "there are seven Koopalings, which the row prints as a wrong answer"
+  },
+  "vikidia-marvel-1": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-marvel-4": {
+    "drop": true,
+    "why": "Loki is Thor's adopted brother, so the decoy \"son frère\" is as defensible"
+  },
+  "vikidia-marvel-15": {
+    "drop": true,
+    "why": "\"la série\" names nothing once the row is dealt alone"
+  },
+  "vikidia-minecraft-2": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-miraculous-3": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-miraculous-4": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-miraculous-5": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-miraculous-6": {
+    "drop": true,
+    "why": "Adrien's best friend is Nino, who is printed as a wrong answer"
+  },
+  "vikidia-miraculous-7": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-miraculous-8": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-miraculous-9": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-mortelle-adele-2": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-mortelle-adele-3": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-mortelle-adele-4": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-mythologie-greco-romaine-3": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-mythologie-greco-romaine-4": {
+    "drop": true,
+    "why": "the decoy Mars is the Roman name of the god it answers"
+  },
+  "vikidia-mythologie-greco-romaine-5": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-mythologie-greco-romaine-6": {
+    "drop": true,
+    "why": "Dionysus is god of festivity as well as wine, which is printed as a wrong answer"
+  },
+  "vikidia-napoleon-3": {
+    "prompt": "Où est mort Napoléon ?",
+    "why": "\"il\" names nobody once the row is dealt alone"
+  },
+  "vikidia-napoleon-6": {
+    "prompt": "Quel monument très connu Napoléon a-t-il fait construire ?",
+    "why": "the row named nobody once dealt alone"
+  },
+  "vikidia-nicolas-boileau-4": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-nicolas-boileau-5": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-nicolas-boileau-8": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-nicolas-boileau-9": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-nintendo-64-12": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-nintendo-64-14": {
+    "drop": true,
+    "why": "the prompt is the bare word \"pourquoi\" and points at the row above it"
+  },
+  "vikidia-nintendo-64-16": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-nombre-negatif-7": {
+    "answer": "Tous les entiers relatifs pairs",
+    "why": "the answer carried a trailing semicolon out of the source's list markup"
+  },
+  "vikidia-panda-geant-6": {
+    "prompt": "Combien de temps le panda géant passe-t-il à manger ?",
+    "why": "\"il\" names no animal once the row is dealt alone"
+  },
+  "vikidia-panda-geant-9": {
+    "answer": "6 doigts",
+    "why": "the answer was left singular, which a typed plural has to be forgiven into"
+  },
+  "vikidia-panda-geant-10": {
+    "answer": "14 heures",
+    "prompt": "Le panda géant dort environ :",
+    "why": "both the stem and the answer were misspelled and showed on the big screen"
+  },
+  "vikidia-paris-1": {
+    "prompt": "Comment Paris s'appelait-il du temps de la Gaule romaine ?",
+    "why": "the province was spelled like the general's name"
+  },
+  "vikidia-paris-3": {
+    "answer": "La Seine",
+    "why": "the answer carried a trailing semicolon out of the source's list markup"
+  },
+  "vikidia-paris-7": {
+    "prompt": "Depuis quand y a-t-il un maire à Paris ?",
+    "why": "\"depuis\" was split in two and showed that way on the big screen"
+  },
+  "vikidia-pays-de-la-loire-2": {
+    "prompt": "Combien la région Pays de la Loire compte-t-elle d'habitants ?",
+    "why": "the row named no region"
+  },
+  "vikidia-pays-de-la-loire-3": {
+    "prompt": "Combien la région Pays de la Loire compte-t-elle de départements ?",
+    "why": "the row named no region"
+  },
+  "vikidia-peloton-de-surveillance-et-d-intervention-de-la-gendarmerie-4": {
+    "drop": true,
+    "why": "the stem has no subject and both it and the answer are ungrammatical"
+  },
+  "vikidia-percussions-1": {
+    "drop": true,
+    "why": "the xylophone is standard symphonic percussion while both decoys sit outside the orchestra"
+  },
+  "vikidia-percy-jackson-1": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-percy-jackson-2": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-percy-jackson-4": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-percy-jackson-5": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-percy-jackson-7": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-pierre-bottero-3": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-pierre-bottero-8": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-pirates-des-caraibes-13": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-pirates-des-caraibes-14": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-pirates-des-caraibes-17": {
+    "drop": true,
+    "why": "a bare first name, answered by a paragraph"
+  },
+  "vikidia-pirates-des-caraibes-19": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-pokemon-partie-2-3": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-pokemon-partie-2-7": {
+    "drop": true,
+    "why": "the best trainer is an opinion, and the decoy is at least as defensible"
+  },
+  "vikidia-psp-3": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-psp-6": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-python-difficile-2": {
+    "prompt": "Soit la liste wikis = [\"Vikidia\", \"Wikipédia\", \"Wiktionnaire\", \"Dico des Ados\"]. Quelle est la valeur de wikis[-1] ?",
+    "why": "the list was defined by the row above it on the quiz page"
+  },
+  "vikidia-python-difficile-3": {
+    "prompt": "Soit la liste wikis = [\"Vikidia\", \"Wikipédia\", \"Wiktionnaire\", \"Dico des Ados\"]. Quel est le type de la variable wikis ?",
+    "why": "the list was defined by the row above it on the quiz page"
+  },
+  "vikidia-python-difficile-4": {
+    "prompt": "Soit la liste wikis = [\"Vikidia\", \"Wikipédia\", \"Wiktionnaire\", \"Dico des Ados\"]. Quel est le type de la variable wikis[0] ?",
+    "why": "the list was defined by the row above it on the quiz page"
+  },
+  "vikidia-rainbow-friends-2": {
+    "drop": true,
+    "why": "the game reached Roblox in 2022, which the row prints as a wrong answer"
+  },
+  "vikidia-rainbow-friends-3": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-rainbow-friends-4": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-rainbow-friends-5": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-rouletabille-2": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-rouletabille-8": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-rouletabille-9": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-saint-zacharie-var-3": {
+    "drop": true,
+    "why": "the mayor of a village of five thousand, which goes stale at every municipal election"
+  },
+  "vikidia-saint-zacharie-var-5": {
+    "drop": true,
+    "why": "it asks for a kind of shop and answers with an economic sector"
+  },
+  "vikidia-saint-zacharie-var-7": {
+    "drop": true,
+    "why": "\"du village\" names no village, and three candidates are paraphrases of one another"
+  },
+  "vikidia-soleil-5": {
+    "prompt": "Combien faudrait-il de temps pour atteindre le Soleil à une vitesse de 11,2 km/s ?",
+    "why": "at eight kilometres a second the hundred and fifty million kilometres take about two hundred and seventeen days, not the hundred and fifty-four it banks"
+  },
+  "vikidia-sonic-3": {
+    "drop": true,
+    "why": "both names are legitimate, so two decoys are correct"
+  },
+  "vikidia-sonic-10": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-sonic-the-hedgehog-6": {
+    "drop": true,
+    "why": "Sonic Lost World took the Yoshi's Island content too, so the decoy is correct"
+  },
+  "vikidia-spy-x-family-2": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-spy-x-family-3": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-spy-x-family-4": {
+    "drop": true,
+    "why": "the decoy is the same character under her maiden name"
+  },
+  "vikidia-spy-x-family-5": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-spy-x-family-6": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-the-mandalorian-4": {
+    "drop": true,
+    "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
+  },
+  "vikidia-vienne-isere-1": {
+    "prompt": "Par qui fut fondée Vienne, en Isère ?",
+    "why": "the Latin spelling reads as the Austrian capital"
+  },
+  "vikidia-vienne-isere-2": {
+    "prompt": "Quel événement historique s'est déroulé à Vienne, en Isère ?",
+    "why": "unqualified, it invites the Congress of Vienna rather than the council of 1312"
+  },
+  "vikidia-vienne-isere-8": {
+    "drop": true,
+    "why": "\"elle stagne\" and \"elle augmente très légèrement\" cannot be told apart, and both go stale at every census"
+  },
+  "vikidia-vitry-sur-seine-2": {
+    "drop": true,
+    "why": "\"la ville\" names no town, and the mayor it banks left office in 2020"
+  },
+  "vikidia-vitry-sur-seine-4": {
+    "drop": true,
+    "why": "\"dans la ville\" names no town, and one candidate is vandalism"
   }
 }

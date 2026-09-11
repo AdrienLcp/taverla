@@ -202,6 +202,8 @@ export const EN_DICTIONARY = defineDictionary({
     shareAlike:
       'The assembled bank is shared under the same licence, and the code that assembles it is open.',
     title: 'Credits',
+    vikidia:
+      'Its quizzes are written in wikitext and were parsed line by line into a question, an answer and three wrong answers. Each of its pages was mapped by hand onto one of the six subjects used here, the wiki having no rubrics to fold; the ones about the wiki itself were left out. Questions carrying fewer than four candidates, questions with several right answers, and questions whose whole point is a mathematical formula, a piece of code or a picture were left behind. Templates carrying a unit or a quotation were replaced by what they print. Every question kept was read once: the false ones were removed, the ones whose wording no longer named its own subject were completed, and the ones that can only be won by picking were marked.',
     whatChanged: 'What we changed'
   },
   error: {

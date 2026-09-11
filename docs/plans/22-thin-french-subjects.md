@@ -252,6 +252,88 @@ as *Godard* is graded wrong the same way. It banks arts and everyday, which is
 neither of the subjects stage 22 exists for, so the seam is named here rather
 than opened.
 
+## What the Vikidia session found, 11 September 2026
+
+**Science is at 339 and the stage's four subjects are all past 300.** Vikidia is
+the bank's fifth source and its only French-native one with science in it: 265
+quiz pages in namespace 104, seven requests, CC BY-SA 3.0. **566 rows banked out
+of 765 ingested**, and the bank is 10 186.
+
+| Subject | Before | After |
+|---|---|---|
+| Science | 170 | **339** |
+| Geography | 640 | 685 |
+| History | 499 | 516 |
+| Sport | 355 | 390 |
+
+**The corpus is worse than any other this bank has taken, and the number is the
+finding**: 373 of the 566 banked rows were flagged by the census — 194 dropped,
+135 marked choice-only, 44 repaired. Mintaka's census flagged 52 rows in 1 194.
+Three things account for it, and each is what a wiki written by children for
+children produces:
+
+- **A quiz page is read in order, so its rows use pronouns.** *Où est-elle
+  née ?* names nobody once a room is dealt one row. This is the single largest
+  defect — about a hundred and sixty rows — and it is the same one OpenQuizzDB
+  had, at forty times the rate.
+- **Eighteen per cent of what survived parsing is choice-only**, against seven
+  rows in 1 194 for Mintaka. A row asking a panda's tail length in centimetres
+  is a question only beside its own four candidates.
+- **Falsehood, as Mintaka had**, though less of it: the Latin genus of the lynx
+  printed as a wrong answer, seven Koopalings banked as eight, a red fox litter
+  capped below two of its own decoys, Vivaldi dead in June.
+
+**The unbound pronouns were dropped rather than repaired outside the four thin
+subjects.** Rewriting a hundred and sixty French sentences to rescue questions
+about *Lune Claire* is writing questions rather than ingesting them, which stage
+12 put out of scope — and they sit in `arts`, which holds 2 510 French rows and
+needed none of them. Inside science, geography, history and sport the subject
+was put back by hand, which is 44 repairs, every one of them re-read against its
+row. **Every answer correction was verified individually**, because those are
+the only repairs that can pay a player for a wrong answer.
+
+### What the parser had to learn
+
+- **A template is content, not decoration.** `{{unité|-63|°C}}` deleted leaves
+  *la température moyenne sur Mars est à peu près de…* with three empty
+  candidates. Ten templates are unwrapped to what they print and **a row still
+  holding one is refused**, because a sentence with a hole in it is worse than a
+  row the bank does not have.
+- **The `type` marker lies.** `type="()"`, `types="()"`, `type={}` and
+  `type="{}"` all appear over single-answer rows, and the same marker sits over
+  fill-in-the-blanks. Counting the `+` lines is the only rule that holds.
+- **Four candidates is where the corpus is thin.** 401 rows carry three and 131
+  carry two; the bank's shape asks for exactly three decoys, and inventing a
+  fourth is writing the question. They are the largest thing left on the table —
+  101 of them are science.
+- **The page title is the whole of the subject signal.** Vikidia's own
+  categories say `Quiz` on 561 rows out of 827, so `QUIZ_SUBJECTS` maps all 180
+  pages by hand. Ten are about the wiki itself and map to nothing.
+- **Redirects have to be followed before the rating**, and locally rather than
+  in `frenchViewsOfTitles`: *Animaux* redirects to *Animal* and scores three
+  hundred readers on its own, which would have rated the source's largest
+  science block as one nobody has heard of. Following them in the shared rule
+  would move every row the other sources already banked.
+
+### One test was flaky before this stage and is fixed
+
+`[bank] draws them once the host has` sampled 400 draws for a rating carried by
+107 rows. The category is drawn before the question, so an adult row's chance is
+0.73% a draw and four hundred of them miss every one about **one run in
+twenty** — a red that says nothing, and a green that would have missed a broken
+filter just as often. Both halves now draw two thousand. Vikidia's 252 French
+arts rows moved the miss rate from 4.3% to 5.4%, which is what surfaced it.
+
+### What is left, and what it would buy
+
+- **The 3-candidate rows.** 401 of them, 101 science. Banking them needs a
+  fourth candidate from somewhere, and nothing in this repo can produce one for
+  *quelle est la température à la surface du soleil*.
+- **MMMLU `FR_FR`**, still unargued: ~1 600 French science rows, MIT, decoys
+  shipped, exam register. It is the only remaining depth for the subject.
+- **`frenchAliasesOf` for PolyFact**, unchanged from the spellings session and
+  still worth half a session.
+
 ## The order this ships in
 
 1. **Mintaka first**, because it is the only candidate that reaches four figures
@@ -326,8 +408,8 @@ open across the deploy keeps playing.
 
 - Each of French history, geography, science and sport holds **at least 300
   rows**, or the plan says which ones did not and what the source ran out of.
-  **History 499, geography 640, sport 355 — science stays at 170 and Vikidia is
-  what it is waiting on.**
+  **Done: history 516, geography 685, sport 390, science 339.** The corpus floor
+  in `question-bank.test.ts` no longer carries an exception.
 - Every banked row from the new source has been read once, and the ones a typed
   room cannot win are in the census with a reason each.
 - `pnpm validate` is green, the credits name the new author, and the changelog
@@ -354,7 +436,11 @@ alone:
   `label.fr` and the row refused where there is none, decoys built on the QIDs
   through PolyFact's existing generator. History, geography and sport move.
 - **Session B, Vikidia.** Seven API requests, a wikitext `<quiz>` parser, the
-  noise filtered. Science moves, and nothing else has to. **Still to do.**
+  noise filtered. Science moves, and nothing else has to. **Done on 11 September
+  2026**, and it cost the session it was given — but the parser was the small
+  half. Reading 566 banked rows and finding 373 of them defective is what the
+  estimate missed, and *the noise filtered* was carrying a corpus-wide unbound
+  pronoun that no filter can see.
 
 The short-name spellings took a session of their own between the two, which the
 cost table did not foresee because the plan did not know the defect was there.

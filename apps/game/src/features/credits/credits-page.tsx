@@ -7,10 +7,29 @@ import type { PlainTranslationKey } from '@/presentation/i18n/translation'
 
 import './credits-page.sass'
 
-const LICENCE = {
-  name: 'CC BY-SA 4.0',
-  url: 'https://creativecommons.org/licenses/by-sa/4.0/'
-}
+/**
+ * The licences the bundled banks are published under, which are not all the
+ * same one — Mintaka asks for attribution and nothing more, and Vikidia is a
+ * wiki that never moved off 3.0. Naming one for all of them would state the
+ * wrong terms for two of the five, which is the one thing a credits page must
+ * not do.
+ */
+const LICENCES = {
+  ccBy4: {
+    name: 'CC BY 4.0',
+    url: 'https://creativecommons.org/licenses/by/4.0/'
+  },
+  ccBySa3: {
+    name: 'CC BY-SA 3.0',
+    url: 'https://creativecommons.org/licenses/by-sa/3.0/'
+  },
+  ccBySa4: {
+    name: 'CC BY-SA 4.0',
+    url: 'https://creativecommons.org/licenses/by-sa/4.0/'
+  }
+} as const
+
+type Licence = (typeof LICENCES)[keyof typeof LICENCES]
 
 const REPOSITORY_URL = 'https://github.com/AdrienLcp/taverla'
 
@@ -24,6 +43,7 @@ type QuestionCredit = {
    * a sentence because it travels in this table.
    */
   changes: PlainTranslationKey
+  licence: Licence
   source: string
   sourceUrl: string
 }
@@ -49,24 +69,35 @@ const QUESTION_CREDITS: QuestionCredit[] = [
   {
     author: 'Philippe Bresoux',
     changes: 'credits.openquizzdb',
+    licence: LICENCES.ccBySa4,
     source: 'OpenQuizzDB',
     sourceUrl: 'https://www.openquizzdb.org'
   },
   {
     author: 'jvonrad',
     changes: 'credits.polyfact',
+    licence: LICENCES.ccBySa4,
     source: 'PolyFact',
     sourceUrl: 'https://huggingface.co/datasets/jvonrad/PolyFact'
   },
   {
     author: 'Amazon Science',
     changes: 'credits.mintaka',
+    licence: LICENCES.ccBy4,
     source: 'Mintaka',
     sourceUrl: 'https://github.com/amazon-science/mintaka'
   },
   {
+    author: 'Vikidia contributors',
+    changes: 'credits.vikidia',
+    licence: LICENCES.ccBySa3,
+    source: 'Vikidia',
+    sourceUrl: 'https://fr.vikidia.org/wiki/Vikidia:Quiz'
+  },
+  {
     author: 'PIXELTAIL GAMES LLC',
     changes: 'credits.opentdb',
+    licence: LICENCES.ccBySa4,
     source: 'Open Trivia DB',
     sourceUrl: 'https://opentdb.com'
   }
@@ -95,8 +126,8 @@ export const CreditsPage: React.FC = () => {
             </p>
             <p className='author'>{credit.author}</p>
             <p className='licence'>
-              <TextLink href={LICENCE.url} target='_blank'>
-                {LICENCE.name}
+              <TextLink href={credit.licence.url} target='_blank'>
+                {credit.licence.name}
               </TextLink>
             </p>
 

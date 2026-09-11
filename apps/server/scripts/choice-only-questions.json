@@ -1,9 +1,45 @@
 [
   {
-    "id": "oqdb-20-2",
+    "id": "mintaka-1ee0fa7b",
     "language": "fr",
-    "prompt": "Quel pourcentage de françaises trouvent les films pornos excitants ?",
-    "why": "an unsourced survey percentage nobody can produce in a text field, and every option is a percentage built for a pick"
+    "prompt": "Comment s’appelle l’empereur romain qui est resté au pouvoir pendant longtemps ?",
+    "why": "\"a long time\" names no superlative — Tiberius, Constantine and Theodosius all reigned for decades, so only the four on screen make one of them the answer"
+  },
+  {
+    "id": "mintaka-6b5f02bf",
+    "language": "fr",
+    "prompt": "Quel footballeur appartient à la Ligue européenne, mais est Argentin ?",
+    "why": "dozens of Argentinians play in a European league, and only the four on screen make Messi the answer"
+  },
+  {
+    "id": "mintaka-8b8ab017",
+    "language": "fr",
+    "prompt": "Qui était entraîneur lorsque Michael Jordan jouait pour les Bulls de Chicago ?",
+    "why": "Doug Collins and Kevin Loughery coached him at Chicago too; the row is a question because the other three candidates are players"
+  },
+  {
+    "id": "mintaka-b0f7b2ba",
+    "language": "fr",
+    "prompt": "Quelle civilisation antique a créé des aqueducs pour transférer de l’eau vers la ville ?",
+    "why": "the Greeks, the Assyrians and the Persians all built aqueducts, so the sentence names no one civilisation"
+  },
+  {
+    "id": "mintaka-bac7691e",
+    "language": "fr",
+    "prompt": "Quels États sont limitrophes avec la Géorgie et le Tennessee ?",
+    "why": "North Carolina borders both as squarely as Alabama does, and the row banks one member of a set the sentence never closes"
+  },
+  {
+    "id": "mintaka-ec193c1c",
+    "language": "fr",
+    "prompt": "Où peut-on aller voir des têtes de pierre géantes ?",
+    "why": "the Olmec heads of Veracruz answer it as squarely as the moai do, and the prompt names neither"
+  },
+  {
+    "id": "mintaka-f00451f5",
+    "language": "fr",
+    "prompt": "L’ancienne Mésopotamie était connue pour être située le long de deux rivières. Laquelle des suivantes était l’une d’entre elles ?",
+    "why": "the prompt says \"one of the following\", and Mesopotamia has two rivers — a typed room writing Euphrate is as right as one writing Tigre and is marked wrong"
   },
   {
     "id": "oqdb-111-2",
@@ -34,6 +70,12 @@
     "language": "fr",
     "prompt": "Quelle était la profession de Barack Obama avant de devenir président ?",
     "why": "\"la profession avant de devenir président\" fits avocat, professeur de droit and sénateur just as well as the banked \"consultant financier\", and a room typing any of those is marked wrong"
+  },
+  {
+    "id": "oqdb-20-2",
+    "language": "fr",
+    "prompt": "Quel pourcentage de françaises trouvent les films pornos excitants ?",
+    "why": "an unsourced survey percentage nobody can produce in a text field, and every option is a percentage built for a pick"
   },
   {
     "id": "oqdb-201-3",
@@ -156,12 +198,6 @@
     "why": "Bronson's co-star in « Le Passager de la pluie » is Marlène Jobert, whose character the note itself describes; Annie Cordy plays her mother"
   },
   {
-    "id": "oqdb-91-4",
-    "language": "fr",
-    "prompt": "Le lac Titicaca sert entre autres de frontière à quels pays ?",
-    "why": "the answer is a two-item list whose order and conjunction a player cannot guess: \"Perou et Bolivie\" is the same answer and would not match"
-  },
-  {
     "id": "oqdb-521-4",
     "language": "fr",
     "prompt": "Lequel de ces acteurs n'apparaît pas dans « Le gendarme se marie » ?",
@@ -244,6 +280,12 @@
     "language": "fr",
     "prompt": "À quelle vitesse avance le lapin mécanique dans une course de lévriers ?",
     "why": "the unit formatting of \"70 km/h\" cannot be guessed, and all four options are speeds built for a pick"
+  },
+  {
+    "id": "oqdb-91-4",
+    "language": "fr",
+    "prompt": "Le lac Titicaca sert entre autres de frontière à quels pays ?",
+    "why": "the answer is a two-item list whose order and conjunction a player cannot guess: \"Perou et Bolivie\" is the same answer and would not match"
   },
   {
     "id": "otdb-00f65b763bd4",
@@ -4170,45 +4212,813 @@
     "why": "many acts are dishonorable to Klingons; only the four narrow it"
   },
   {
-    "id": "mintaka-f00451f5",
+    "id": "vikidia-abyssin-24",
     "language": "fr",
-    "prompt": "L’ancienne Mésopotamie était connue pour être située le long de deux rivières. Laquelle des suivantes était l’une d’entre elles ?",
-    "why": "the prompt says \"one of the following\", and Mesopotamia has two rivers — a typed room writing Euphrate is as right as one writing Tigre and is marked wrong"
+    "prompt": "En Amérique du Nord, l'abyssin est présent dans le top 10 des races de chats les plus populaires. Mais quelle est sa position exacte ?",
+    "why": "an exact rank inside a popularity top ten"
   },
   {
-    "id": "mintaka-1ee0fa7b",
+    "id": "vikidia-abyssin-6",
     "language": "fr",
-    "prompt": "Comment s’appelle l’empereur romain qui est resté au pouvoir pendant longtemps ?",
-    "why": "\"a long time\" names no superlative — Tiberius, Constantine and Theodosius all reigned for decades, so only the four on screen make one of them the answer"
+    "prompt": "Jusqu'à combien peut peser l'abyssin, en moyenne ?",
+    "why": "a breed's average weight in kilos, beside a decoy that is the meta-answer \"ça dépend des sources\""
   },
   {
-    "id": "mintaka-bac7691e",
+    "id": "vikidia-aile-de-pluie-3",
     "language": "fr",
-    "prompt": "Quels États sont limitrophes avec la Géorgie et le Tennessee ?",
-    "why": "North Carolina borders both as squarely as Alabama does, and the row banks one member of a set the sentence never closes"
+    "prompt": "Comment les Ailes de Pluie appellent-ils l'heure de repos qu'ils ont après le repas ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
   },
   {
-    "id": "mintaka-6b5f02bf",
+    "id": "vikidia-anatomie-6",
     "language": "fr",
-    "prompt": "Quel footballeur appartient à la Ligue européenne, mais est Argentin ?",
-    "why": "dozens of Argentinians play in a European league, and only the four on screen make Messi the answer"
+    "prompt": "Les neuronnes servent :",
+    "why": "a stem ending in a colon whose answer is a whole sentence"
   },
   {
-    "id": "mintaka-8b8ab017",
+    "id": "vikidia-angle-1",
     "language": "fr",
-    "prompt": "Qui était entraîneur lorsque Michael Jordan jouait pour les Bulls de Chicago ?",
-    "why": "Doug Collins and Kevin Loughery coached him at Chicago too; the row is a question because the other three candidates are players"
+    "prompt": "Un angle droit, c'est un angle dont la mesure vaut :",
+    "why": "a typed room answers ninety degrees, which is right and is not the expected hundred grades"
   },
   {
-    "id": "mintaka-b0f7b2ba",
+    "id": "vikidia-animaux-15",
     "language": "fr",
-    "prompt": "Quelle civilisation antique a créé des aqueducs pour transférer de l’eau vers la ville ?",
-    "why": "the Greeks, the Assyrians and the Persians all built aqueducts, so the sentence names no one civilisation"
+    "prompt": "Quel est le cri du cerf ?",
+    "why": "the canonical answer is neither banked nor printed, so a typed room is graded wrong for being right"
   },
   {
-    "id": "mintaka-ec193c1c",
+    "id": "vikidia-animaux-24",
     "language": "fr",
-    "prompt": "Où peut-on aller voir des têtes de pierre géantes ?",
-    "why": "the Olmec heads of Veracruz answer it as squarely as the moai do, and the prompt names neither"
+    "prompt": "Comment s'appelle le petit du bœuf musqué?",
+    "why": "the answer is the only real word beside three invented ones"
+  },
+  {
+    "id": "vikidia-animaux-25",
+    "language": "fr",
+    "prompt": "Quel est l'animal le plus vieux connu sur Terre?",
+    "why": "the answer is a category the sentence never narrows"
+  },
+  {
+    "id": "vikidia-animaux-28",
+    "language": "fr",
+    "prompt": "Lequel de ces animaux n'existe pas?",
+    "why": "a which-of-these about an animal that does not exist"
+  },
+  {
+    "id": "vikidia-animaux-29",
+    "language": "fr",
+    "prompt": "D'où vient le nom de la galathée yéti, ou « crabe yéti »?",
+    "why": "the answer is a whole sentence"
+  },
+  {
+    "id": "vikidia-animaux-40",
+    "language": "fr",
+    "prompt": "Lequel de ces poissons n'existe pas?",
+    "why": "a which-of-these about a fish that does not exist"
+  },
+  {
+    "id": "vikidia-animaux-41",
+    "language": "fr",
+    "prompt": "Lequel de ces singes n'existe pas?",
+    "why": "a which-of-these about a monkey that does not exist"
+  },
+  {
+    "id": "vikidia-antonio-vivaldi-5",
+    "language": "fr",
+    "prompt": "Parmi ces quatre œuvres serais-tu capable de trouver celle que Vivaldi n'a pas composée?",
+    "why": "a which-of-these that is nothing without its own four candidates"
+  },
+  {
+    "id": "vikidia-atome-6",
+    "language": "fr",
+    "prompt": "Quel est le symbole du numéro atomique ?",
+    "why": "the answer is a single letter"
+  },
+  {
+    "id": "vikidia-atome-7",
+    "language": "fr",
+    "prompt": "Quel est le symbole du nombre de charge ?",
+    "why": "the answer is a single letter, and it repeats the atomic-number row"
+  },
+  {
+    "id": "vikidia-botanique-5",
+    "language": "fr",
+    "prompt": "Combien y-a-t-il d'espèces connues dans la famille des Astéracées (la famille de la marguerite) ?",
+    "why": "the answer is a band no typed count can match"
+  },
+  {
+    "id": "vikidia-bravelands-10",
+    "language": "fr",
+    "prompt": "Qu'arrive t-il à Grand Cœur à la fin du cycle 1 ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-bravelands-11",
+    "language": "fr",
+    "prompt": "Quel est le pouvoir d'Épine en tant que Père Vénérable ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-bravelands-12",
+    "language": "fr",
+    "prompt": "Pourquoi Grand Cœur a-t-il quitté sa tribu ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-bravelands-13",
+    "language": "fr",
+    "prompt": "Qu'ont fait Rocher et Céleste à la mare sacré où l'a emmené Rocher ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-bus-24-de-strasbourg-3",
+    "language": "fr",
+    "prompt": "Le bus 24 dessert quelle ville?",
+    "why": "every city has a line 24 and the sentence names no city"
+  },
+  {
+    "id": "vikidia-canada-3",
+    "language": "fr",
+    "prompt": "Parle-t-on une ou deux langues au Canada ?",
+    "why": "the answer spells the two languages out, so a typed \"deux\" fails"
+  },
+  {
+    "id": "vikidia-canada-4",
+    "language": "fr",
+    "prompt": "Que peut-on observer en Alberta ?",
+    "why": "plenty of things are visible in Alberta; only the candidates narrow it to the Rockies"
+  },
+  {
+    "id": "vikidia-carre-5",
+    "language": "fr",
+    "prompt": "Le pâtissier a préparé un gâteau carré. La serveuse coupe le gâteau et donne des parts carrées, de même taille. Parmi les réponses suivantes, combien de parts peut-elle préparer ?",
+    "why": "any perfect square answers it; only the four candidates single out twenty-five"
+  },
+  {
+    "id": "vikidia-carre-6",
+    "language": "fr",
+    "prompt": "Le côté d'un carré a pour longueur 5 mètres. Quelle est son aire ?",
+    "why": "the answer is in square decametres, which nobody types for twenty-five square metres"
+  },
+  {
+    "id": "vikidia-centre-val-de-loire-1",
+    "language": "fr",
+    "prompt": "Combiens d'habitants il y a-t-il dans le Centre-Val de Loire ?",
+    "why": "a population to the nearest thousand"
+  },
+  {
+    "id": "vikidia-cercle-2",
+    "language": "fr",
+    "prompt": "Quelle est la bonne formule pour calculer le périmètre d'un cercle ?",
+    "why": "the answer is a formula carrying its own legend"
+  },
+  {
+    "id": "vikidia-chat-difficile-2",
+    "language": "fr",
+    "prompt": "Combien de temps dure la gestation du chat ?",
+    "why": "a range, which a typed exact figure cannot match"
+  },
+  {
+    "id": "vikidia-chat-difficile-3",
+    "language": "fr",
+    "prompt": "Combien de chatons peut avoir la chatte en une portée ?",
+    "why": "a range, and litters outside it are ordinary"
+  },
+  {
+    "id": "vikidia-chat-difficile-4",
+    "language": "fr",
+    "prompt": "À combien de % les chats blancs aux yeux bleus naissent sourds ?",
+    "why": "a percentage band nobody produces from nothing"
+  },
+  {
+    "id": "vikidia-chat-difficile-5",
+    "language": "fr",
+    "prompt": "Le chat a une vision de :",
+    "why": "a figure in degrees whose accepted value is nearer the decoy"
+  },
+  {
+    "id": "vikidia-chat-difficile-6",
+    "language": "fr",
+    "prompt": "À combien de fois mieux le chat a l'odorat plus développé que l'homme ?",
+    "why": "a range, which a typed exact figure cannot match"
+  },
+  {
+    "id": "vikidia-chat-difficile-8",
+    "language": "fr",
+    "prompt": "Le transit digestif du chat dure:",
+    "why": "a range, which a typed exact figure cannot match"
+  },
+  {
+    "id": "vikidia-chateau-de-versailles-7",
+    "language": "fr",
+    "prompt": "Lequel de ces artistes à participer à des fêtes à Versailles ?",
+    "why": "a which-of-these among artists"
+  },
+  {
+    "id": "vikidia-cheval-et-equitation-1",
+    "language": "fr",
+    "prompt": "Quelle est la robe de cheval qui n'existe pas?",
+    "why": "a which-of-these about a coat that does not exist"
+  },
+  {
+    "id": "vikidia-cheval-et-equitation-2",
+    "language": "fr",
+    "prompt": "Quel est le concours qui n'existe pas?",
+    "why": "a which-of-these about a contest that does not exist"
+  },
+  {
+    "id": "vikidia-cheval-et-equitation-5",
+    "language": "fr",
+    "prompt": "Quelle est la race qui n'existe pas?",
+    "why": "a which-of-these about a breed that does not exist"
+  },
+  {
+    "id": "vikidia-cheval-et-equitation-difficile-4",
+    "language": "fr",
+    "prompt": "Quelle est la bonne aptitude à avoir devant un saut ?",
+    "why": "the answer is a five-adjective sentence"
+  },
+  {
+    "id": "vikidia-cheval-et-equitation-difficile-5",
+    "language": "fr",
+    "prompt": "Que signifie incurver ?",
+    "why": "a definition-length answer"
+  },
+  {
+    "id": "vikidia-cheval-et-equitation-difficile-6",
+    "language": "fr",
+    "prompt": "Qui était Hickstead ?",
+    "why": "typed, the question answers \"un cheval\"; only the candidates reveal a discipline is asked"
+  },
+  {
+    "id": "vikidia-coupe-du-monde-de-rugby-3",
+    "language": "fr",
+    "prompt": "Quelle équipe a éliminer la Nouvelle-Zélande,en demi-finale,puis en quart de finale ?",
+    "why": "the answer appends the two years, so a typed country fails"
+  },
+  {
+    "id": "vikidia-coupe-du-monde-de-rugby-5",
+    "language": "fr",
+    "prompt": "Quelle équipe a été exclu en 1987 et en 1991?",
+    "why": "the answer appends its reason, so a typed country fails"
+  },
+  {
+    "id": "vikidia-ecologie-3",
+    "language": "fr",
+    "prompt": "Parmi les quatre sources d'énergies ci-dessous, laquelle est renouvelable",
+    "why": "it points at the four candidates out loud"
+  },
+  {
+    "id": "vikidia-ecologie-4",
+    "language": "fr",
+    "prompt": "Quelle bouteille devez vous choisir pour être le moins polluant ?",
+    "why": "it picks among the candidates and the answer is a whole sentence"
+  },
+  {
+    "id": "vikidia-european-shorthair-13",
+    "language": "fr",
+    "prompt": "Combien de pedigrees sont édités par le LOOF chaque année pour l'european shorthair, en moyenne ?",
+    "why": "a yearly pedigree count nobody produces from nothing"
+  },
+  {
+    "id": "vikidia-european-shorthair-16",
+    "language": "fr",
+    "prompt": "Une seule des associations félines ci-dessous reconnaît l'european shorthair. Laquelle ?",
+    "why": "it points at the four candidates out loud"
+  },
+  {
+    "id": "vikidia-european-shorthair-31",
+    "language": "fr",
+    "prompt": "En quelle année a été créé le Cercle des amis de la race european shorthair ?",
+    "why": "the founding year of a breed club"
+  },
+  {
+    "id": "vikidia-films-disney-1",
+    "language": "fr",
+    "prompt": "Quel acteur ne joue pas dans le film Pirates des Caraïbes : Jusqu'au bout du monde ?",
+    "why": "a which-of-these that is nothing without its own four candidates"
+  },
+  {
+    "id": "vikidia-films-disney-3",
+    "language": "fr",
+    "prompt": "Kuzco, l'empereur mégalo est le long-métrage n°:",
+    "why": "a which-of-these that is nothing without its own four candidates"
+  },
+  {
+    "id": "vikidia-girondins-de-bordeaux-12",
+    "language": "fr",
+    "prompt": "Lequel de ces joueurs a joué au club dans les années 1940 ?",
+    "why": "a which-of-these among players, and the club was never named"
+  },
+  {
+    "id": "vikidia-girondins-de-bordeaux-3",
+    "language": "fr",
+    "prompt": "Parmi ces stades, lequel a accueilli l'Euro 2016 qui se déroulera en France ?",
+    "why": "a which-of-these among stadiums, on a future tense ten years stale"
+  },
+  {
+    "id": "vikidia-groupe-d-intervention-de-la-gendarmerie-nationale-1",
+    "language": "fr",
+    "prompt": "Est-ce que le GIGN peut faire ce qu'il veut ?",
+    "why": "a yes-or-no whose answer is a whole sentence"
+  },
+  {
+    "id": "vikidia-halloween-1",
+    "language": "fr",
+    "prompt": "Halloween est ... (une seule réponse juste)",
+    "why": "the answer is a descriptive sentence"
+  },
+  {
+    "id": "vikidia-halloween-5",
+    "language": "fr",
+    "prompt": "Quelle créatures appartient plus à Halloween? (une réponse juste)",
+    "why": "witch, ghost and zombie all answer it"
+  },
+  {
+    "id": "vikidia-halloween-7",
+    "language": "fr",
+    "prompt": "Quelles couleurs pourront ressortir avec Halloween? (une seule réponse juste)",
+    "why": "the answer is a four-colour list, and which colours suit Halloween is a matter of taste"
+  },
+  {
+    "id": "vikidia-heros-de-l-olympe-1",
+    "language": "fr",
+    "prompt": "Quand Percy arrive à l'entrée du Camp Jupiter, une personne lui demande quelque chose. Que doit il faire et qui est cette personne ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-heros-de-l-olympe-7",
+    "language": "fr",
+    "prompt": "Comment les héros rentrent-ils à la Colonie lorsque les géants sont vaincus ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-histoire-de-les-royaumes-de-feu-1",
+    "language": "fr",
+    "prompt": "Le Grand Incendie s'est déroulé il y a combien de temps ?",
+    "why": "a figure the sentence never narrows, which nobody produces from nothing"
+  },
+  {
+    "id": "vikidia-histoire-de-les-royaumes-de-feu-3",
+    "language": "fr",
+    "prompt": "À cause de qui le Grand Incendie s'est déclenché ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-histoire-de-les-royaumes-de-feu-5",
+    "language": "fr",
+    "prompt": "Qui a mis en lumière la véritable histoire du Grand Incendie ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-hunger-games-8",
+    "language": "fr",
+    "prompt": "Dans quoi Peeta excelle-t-il ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-jeu-video-1",
+    "language": "fr",
+    "prompt": "Quelle est la console qui n'existe pas?",
+    "why": "a which-of-these about a console that does not exist"
+  },
+  {
+    "id": "vikidia-jeu-video-2",
+    "language": "fr",
+    "prompt": "Quel est le type de matériau n'existant pas dans Fortnite?",
+    "why": "a which-of-these about a material absent from a game"
+  },
+  {
+    "id": "vikidia-jeu-video-3",
+    "language": "fr",
+    "prompt": "Quel est le jeu Mario qui n'existe pas?",
+    "why": "a which-of-these about a game that does not exist"
+  },
+  {
+    "id": "vikidia-la-grande-sophie-4",
+    "language": "fr",
+    "prompt": "Pourquoi son nom de scène est-il La Grande Sophie ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-la-grande-sophie-6",
+    "language": "fr",
+    "prompt": "La Grande Sophie est-elle toujours en vie ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-la-guerre-des-clans-moyen-4",
+    "language": "fr",
+    "prompt": "Quel début de nom d'apprenti(e) est possible dans La Guerre des Clans ?",
+    "why": "a which-of-these that is nothing without its own four candidates"
+  },
+  {
+    "id": "vikidia-la-guerre-des-clans-moyen-5",
+    "language": "fr",
+    "prompt": "Le personnage principal du Cycle I est il devenu Chef de son Clan dans La Guerre des Clans ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-la-pat-patrouille-4",
+    "language": "fr",
+    "prompt": "Quelle est l'activité préférée de Ruben ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-langue-neerlandaise-1",
+    "language": "fr",
+    "prompt": "Que signifie \"bonjour\" en néerlandais ?",
+    "why": "goedendag and dag translate bonjour as well as hallo does"
+  },
+  {
+    "id": "vikidia-langue-neerlandaise-2",
+    "language": "fr",
+    "prompt": "Que signifie \"merci\" en néerlandais ?",
+    "why": "dank je and dankjewel are as right as bedankt"
+  },
+  {
+    "id": "vikidia-langue-neerlandaise-3",
+    "language": "fr",
+    "prompt": "Que signifie \"pardon\" en néerlandais ?",
+    "why": "pardon and excuseer are Dutch too"
+  },
+  {
+    "id": "vikidia-langue-neerlandaise-5",
+    "language": "fr",
+    "prompt": "Que signifie \"je m'appelle ...\" en néerlandais ?",
+    "why": "the ellipsis makes typed grading impossible, and mijn naam is answers equally"
+  },
+  {
+    "id": "vikidia-langue-neerlandaise-6",
+    "language": "fr",
+    "prompt": "Que signifie \"cordialement\" en néerlandais ?",
+    "why": "a closing formula with several valid variants"
+  },
+  {
+    "id": "vikidia-langue-neerlandaise-7",
+    "language": "fr",
+    "prompt": "Que signifie \"je ne parle pas le néerlandais\" en néerlandais ?",
+    "why": "a whole sentence no typed room reproduces word for word"
+  },
+  {
+    "id": "vikidia-langue-neerlandaise-9",
+    "language": "fr",
+    "prompt": "Que signifie \"comment allez-vous ?\" en néerlandais ?",
+    "why": "the polite form takes met u, and bare hoe gaat het answers too"
+  },
+  {
+    "id": "vikidia-les-aventures-de-tintin-10",
+    "language": "fr",
+    "prompt": "Parmi ces jurons, lequel n'est pas du capitaine ?",
+    "why": "a which-of-these that is nothing without its own four candidates"
+  },
+  {
+    "id": "vikidia-les-aventures-de-tintin-16",
+    "language": "fr",
+    "prompt": "Quelle est la seule différence physique entre les Dupondt ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-les-aventures-de-tintin-23",
+    "language": "fr",
+    "prompt": "Quels furent les effets de la venue d'Abdallah à Moulinsart chez Nestor ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-les-aventures-de-tintin-24",
+    "language": "fr",
+    "prompt": "Parmi ces qualités, laquelle ne peut-on pas accorder à Nestor ?",
+    "why": "a which-of-these that is nothing without its own four candidates"
+  },
+  {
+    "id": "vikidia-les-aventures-de-tintin-29",
+    "language": "fr",
+    "prompt": "Comment finit Rastapopoulos dans Vol 714 pour Sydney ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-les-aventures-de-tintin-3",
+    "language": "fr",
+    "prompt": "Parmi ces personnages, lequel n'est pas un ami de Tintin ?",
+    "why": "a which-of-these that is nothing without its own four candidates"
+  },
+  {
+    "id": "vikidia-les-aventures-de-tintin-30",
+    "language": "fr",
+    "prompt": "D'où vient le pseudonyme d'Hergé ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-les-aventures-de-tintin-31",
+    "language": "fr",
+    "prompt": "Comment Hergé a-t-il qualifié ses premières œuvres ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-les-aventures-de-tintin-33",
+    "language": "fr",
+    "prompt": "Pourquoi Hergé interrompt-il la publication des aventures de Tintin en 1940 ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-les-aventures-de-tintin-36",
+    "language": "fr",
+    "prompt": "Quelle est la grande nouveauté de Tintin ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-les-royaumes-de-feu-12",
+    "language": "fr",
+    "prompt": "Où se trouve la Cité Perdue de la Nuit ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-les-royaumes-de-feu-5",
+    "language": "fr",
+    "prompt": "Qui sont les filles de la reine Oasis ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-licorne-2",
+    "language": "fr",
+    "prompt": "Que symbolise la licorne ?",
+    "why": "the unicorn's classical symbol is purity, so the banked answer is contestable"
+  },
+  {
+    "id": "vikidia-licorne-7",
+    "language": "fr",
+    "prompt": "Sous quelle forme est représentée une licorne ?",
+    "why": "the answer is a descriptive phrase"
+  },
+  {
+    "id": "vikidia-lune-claire-8",
+    "language": "fr",
+    "prompt": "Quels sont les autres membres de son équipaile ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-lynx-3",
+    "language": "fr",
+    "prompt": "Quelle est la particularité du lynx ?",
+    "why": "several traits answer it equally — tufted ears, short tail, ruff"
+  },
+  {
+    "id": "vikidia-lynx-4",
+    "language": "fr",
+    "prompt": "Quel est la longueur de sa queue ?",
+    "why": "a measurement range, and \"sa\" names no animal"
+  },
+  {
+    "id": "vikidia-lynx-5",
+    "language": "fr",
+    "prompt": "Quel est la taille au garrot du lynx boréal ?",
+    "why": "a measurement range nobody produces from nothing"
+  },
+  {
+    "id": "vikidia-mario-13",
+    "language": "fr",
+    "prompt": "Dans lequel de ces jeux apparait pour la première fois Wario ?",
+    "why": "a which-of-these that is nothing without its own four candidates"
+  },
+  {
+    "id": "vikidia-mario-15",
+    "language": "fr",
+    "prompt": "Dans lequel de ces jeux apparait Waluigi ?",
+    "why": "a which-of-these that is nothing without its own four candidates"
+  },
+  {
+    "id": "vikidia-mario-16",
+    "language": "fr",
+    "prompt": "Dans lequel de ces jeux la Princesse Peach se fait enlever par les Xhampis ?",
+    "why": "a which-of-these that is nothing without its own four candidates"
+  },
+  {
+    "id": "vikidia-mars-planete-6",
+    "language": "fr",
+    "prompt": "Le diamètre de Mars mesure…",
+    "why": "an exact diameter in kilometres"
+  },
+  {
+    "id": "vikidia-marvel-12",
+    "language": "fr",
+    "prompt": "Dans deux de ses films, Spider-Man est épaulé par un Avengers. Qui sont-ils ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-marvel-13",
+    "language": "fr",
+    "prompt": "Wanda, la Sorcière Rouge est amoureuse de Vision. Mais pourquoi ne se marient-ils pas ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-marvel-9",
+    "language": "fr",
+    "prompt": "Qui sont les Gardiens de la Galaxie ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-minecraft-3",
+    "language": "fr",
+    "prompt": "Le golem est...",
+    "why": "a figure the sentence never narrows, which nobody produces from nothing"
+  },
+  {
+    "id": "vikidia-minecraft-4",
+    "language": "fr",
+    "prompt": "Pour construire un portail de Nether, on a besoin de :",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-minecraft-5",
+    "language": "fr",
+    "prompt": "Le creeper est...",
+    "why": "a figure the sentence never narrows, which nobody produces from nothing"
+  },
+  {
+    "id": "vikidia-minecraft-7",
+    "language": "fr",
+    "prompt": "Le wither est...",
+    "why": "a figure the sentence never narrows, which nobody produces from nothing"
+  },
+  {
+    "id": "vikidia-nicolas-boileau-2",
+    "language": "fr",
+    "prompt": "Quand est né Nicolas Boileau ?",
+    "why": "a figure the sentence never narrows, which nobody produces from nothing"
+  },
+  {
+    "id": "vikidia-nintendo-64-2",
+    "language": "fr",
+    "prompt": "Quand est sorti la Nintendo 64 en Europe ?",
+    "why": "a figure the sentence never narrows, which nobody produces from nothing"
+  },
+  {
+    "id": "vikidia-nintendo-64-3",
+    "language": "fr",
+    "prompt": "Pourquoi est-elle appelée la \"Nintendo 64\" ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-nintendo-64-5",
+    "language": "fr",
+    "prompt": "Lequel de ces jeux n'est pas sorti sur la Nintendo 64 ?",
+    "why": "a which-of-these that is nothing without its own four candidates"
+  },
+  {
+    "id": "vikidia-nintendo-64-6",
+    "language": "fr",
+    "prompt": "Combien de ventes a fait la Nintendo 64 ?",
+    "why": "a figure the sentence never narrows, which nobody produces from nothing"
+  },
+  {
+    "id": "vikidia-panda-geant-2",
+    "language": "fr",
+    "prompt": "sa queue mesure:",
+    "why": "a tail in centimetres, and \"sa\" names no animal"
+  },
+  {
+    "id": "vikidia-peloton-de-surveillance-et-d-intervention-de-la-gendarmerie-5",
+    "language": "fr",
+    "prompt": "Est ce que les hommes du PSIG sont armer ?",
+    "why": "a yes-or-no whose answer is a qualified phrase, so a typed \"oui\" loses"
+  },
+  {
+    "id": "vikidia-peloton-de-surveillance-et-d-intervention-de-la-gendarmerie-7",
+    "language": "fr",
+    "prompt": "Est-ce que les hommes du PSIG sont protéger ?",
+    "why": "a yes-or-no whose answer is a qualified phrase, so a typed \"oui\" loses"
+  },
+  {
+    "id": "vikidia-peloton-de-surveillance-et-d-intervention-de-la-gendarmerie-8",
+    "language": "fr",
+    "prompt": "Est ce que juste les hommes peuvent être dans le PSIG ?",
+    "why": "a yes-or-no whose answer is a qualified phrase, so a typed \"non\" loses"
+  },
+  {
+    "id": "vikidia-percy-jackson-3",
+    "language": "fr",
+    "prompt": "Qui aide Percy, Annabeth et Tyson à monter à bord du bateau de Luke, et comment s'appelle ce bateau ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-percy-jackson-6",
+    "language": "fr",
+    "prompt": "Qu'a offert Dédale à Percy et à Annabeth ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-pirates-des-caraibes-3",
+    "language": "fr",
+    "prompt": "Quel acteur ne joue pas dans la saga ?",
+    "why": "a which-of-these that is nothing without its own four candidates"
+  },
+  {
+    "id": "vikidia-pirates-des-caraibes-8",
+    "language": "fr",
+    "prompt": "À quoi ressemble l' antre de Davy Jones ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-pokemon-1",
+    "language": "fr",
+    "prompt": "quelle est le poids de zamazenta",
+    "why": "a figure the sentence never narrows, which nobody produces from nothing"
+  },
+  {
+    "id": "vikidia-pokemon-3",
+    "language": "fr",
+    "prompt": "a quelle altitude peut voler dracaufeu",
+    "why": "a figure the sentence never narrows, which nobody produces from nothing"
+  },
+  {
+    "id": "vikidia-pokemon-partie-2-1",
+    "language": "fr",
+    "prompt": "Quelle est la taille de duralugon gigamax ?",
+    "why": "a figure the sentence never narrows, which nobody produces from nothing"
+  },
+  {
+    "id": "vikidia-pokemon-partie-2-2",
+    "language": "fr",
+    "prompt": "Combien pèse Éthernatos ?",
+    "why": "a figure the sentence never narrows, which nobody produces from nothing"
+  },
+  {
+    "id": "vikidia-protection-du-littoral-1",
+    "language": "fr",
+    "prompt": "La protection du littoral est ?",
+    "why": "an opinion whose answer is a whole sentence, working only beside three joke decoys"
+  },
+  {
+    "id": "vikidia-psp-4",
+    "language": "fr",
+    "prompt": "Quel jeu est sorti que au Japon sur PSP?",
+    "why": "a figure the sentence never narrows, which nobody produces from nothing"
+  },
+  {
+    "id": "vikidia-saint-zacharie-var-1",
+    "language": "fr",
+    "prompt": "Combien (environs) d'habitants Saint-Zacharie compte t-il ?",
+    "why": "a village population whose four candidates sit within four hundred of each other"
+  },
+  {
+    "id": "vikidia-serdaigle-3",
+    "language": "fr",
+    "prompt": "Lequel de ces personnages n'a pas été à Serdaigle ?",
+    "why": "a which-of-these that is nothing without its own four candidates"
+  },
+  {
+    "id": "vikidia-soleil-7",
+    "language": "fr",
+    "prompt": "L'énergie du noyau traverse la zone convective en :",
+    "why": "a transit time through the convective zone, under a stem ending in a colon"
+  },
+  {
+    "id": "vikidia-sonic-5",
+    "language": "fr",
+    "prompt": "Quel personnage n'existe pas dans Sonic ?",
+    "why": "a which-of-these that is nothing without its own four candidates"
+  },
+  {
+    "id": "vikidia-sonic-8",
+    "language": "fr",
+    "prompt": "Dans Sonic 1 on ne peut pas ?",
+    "why": "the answer is a whole sentence no typed room reproduces"
+  },
+  {
+    "id": "vikidia-spy-x-family-8",
+    "language": "fr",
+    "prompt": "Pour finir, quelle est l’adresse de la famille Forger ?",
+    "why": "a figure the sentence never narrows, which nobody produces from nothing"
+  },
+  {
+    "id": "vikidia-stray-kids-4",
+    "language": "fr",
+    "prompt": "Laquelle de ces chansons n'est pas de Stray Kids ?",
+    "why": "a which-of-these that is nothing without its own four candidates"
+  },
+  {
+    "id": "vikidia-union-europeenne-6",
+    "language": "fr",
+    "prompt": "Combien de pays frontalier à l'Union européenne ?",
+    "why": "the count turns entirely on whether microstates are counted"
+  },
+  {
+    "id": "vikidia-union-europeenne-7",
+    "language": "fr",
+    "prompt": "Combien de pays frontalier à l'Union européenne en outre mer ?",
+    "why": "an ill-defined count of overseas land neighbours"
+  },
+  {
+    "id": "vikidia-union-europeenne-9",
+    "language": "fr",
+    "prompt": "Quelles sont les villes où se trouves les institutions européenne ?",
+    "why": "the answer is a four-city list whole-line grading will never match"
+  },
+  {
+    "id": "vikidia-vienne-isere-7",
+    "language": "fr",
+    "prompt": "Les travaux de restauration du Temple d'Auguste et de Livie ont durés environ ?",
+    "why": "the length of one monument's restoration, in decades"
   }
 ]

@@ -55,6 +55,57 @@ one part.
 
 ### Features
 
+- `[Server]` **French science holds an evening of its own at last, and all four
+  thin subjects are past 300.** Vikidia is the bank's fifth source and the only
+  open French-native one with any science in it — the French encyclopedia
+  written for eight-to-thirteens, CC BY-SA 3.0, 265 quiz pages read out of
+  namespace 104 in seven requests. French science goes from **170 rows to 339**,
+  geography to 685, history to 516 and sport to 390. The corpus floor in
+  `question-bank.test.ts` carried an exception for science since Mintaka landed;
+  it is gone, and the graded difficulty picker the stage exists to unblock is
+  buildable over every French subject rather than three of them. Bank: 10 186.
+
+  **566 rows banked out of 765 ingested, and the ratio is the entry's point.**
+  The census flagged **373 of them** — 194 dropped, 135 marked choice-only, 44
+  repaired — where Mintaka's census flagged 52 rows in 1 194. A wiki written by
+  children for children fails in a way none of the four earlier sources did: **a
+  quiz page is read top to bottom, so its rows use pronouns**, and *Où est-elle
+  née ?* names nobody once a room is dealt one row on its own. That is about a
+  hundred and sixty rows. Eighteen per cent of what survived parsing is
+  choice-only — a panda's tail in centimetres is a question only beside its own
+  four candidates — against seven rows in 1 194 for Mintaka. And there is
+  falsehood, as Mintaka had: the lynx's Latin genus printed as a *wrong* answer,
+  seven Koopalings banked as eight, a red fox litter capped below two of its own
+  decoys, Vivaldi dead in June.
+
+  **The unbound pronouns were dropped rather than repaired outside the four thin
+  subjects.** Rewriting a hundred and sixty French sentences to rescue questions
+  about a children's book series is writing questions rather than ingesting
+  them, and they sit in `arts`, which holds 2 510 French rows and needed none of
+  them. Inside science, geography, history and sport the subject was put back by
+  hand — 44 repairs, each re-read against its row, and every answer correction
+  verified individually because those are the only ones that can pay a player
+  for a wrong answer.
+
+  Four rules carry the parsing, each measured. **A template is content**:
+  `{{unité|-63|°C}}` deleted leaves *la température moyenne sur Mars est à peu
+  près de…* with three empty candidates, so ten templates are unwrapped to what
+  they print and **a row still holding one is refused** — a sentence with a hole
+  in it is worse than a row the bank does not have. **The `type` marker lies**,
+  appearing as `()`, `types="()"`, `{}` and `"{}"` over the same single-answer
+  shape and over fill-in-the-blanks too, so counting the `+` lines is the only
+  rule that holds. **The page title is the whole of the subject signal** —
+  Vikidia's own categories say `Quiz` on 561 rows out of 827 — so `QUIZ_SUBJECTS`
+  maps all 180 pages by hand, and the ten about the wiki itself map to nothing.
+  **Redirects are followed before the rating and locally**: *Animaux* redirects
+  to *Animal* and scores three hundred readers on its own, which would have
+  rated the source's largest science block as one nobody has heard of — and
+  following them inside `frenchViewsOfTitles` would have moved every row the
+  other four sources already banked. Left on the table: **401 rows carrying only
+  three candidates**, 101 of them science, because the bank asks for exactly
+  three decoys and inventing a fourth is writing the question. See
+  [`docs/plans/22-thin-french-subjects.md`](docs/plans/22-thin-french-subjects.md)
+
 - `[Server]` **Three of the four thin French subjects now hold an evening of
   their own.** Mintaka is the bank's fourth source and its second built on
   Wikidata: 20 000 crowdsourced questions translated into eight languages, CC BY
@@ -983,6 +1034,22 @@ one part.
   and the extra width is only void
 
 ### Fixes
+
+- `[Game]` **The credits page named the wrong licence for two of its five
+  banks.** It printed one shared `CC BY-SA 4.0` under every source, where the
+  `attributions` header of `question-bank.json` has always carried one per
+  source — Mintaka is CC BY 4.0 and Vikidia is CC BY-SA 3.0. The licence moves
+  onto the credit entry, which is the one thing a credits page must not get
+  wrong.
+
+- `[Server]` **The adult-content draw test was flaky, about one run in twenty.**
+  It sampled 400 draws for a rating carried by 107 rows; the category is drawn
+  before the question, so an adult row's chance is 0.73% a draw and four hundred
+  of them miss every one 5% of the time — a red that says nothing about the
+  filter, and a green that would have missed a broken one just as often. Both
+  halves now draw two thousand, which puts it at one in two million. Vikidia's
+  252 French arts rows moved the miss rate from 4.3% to 5.4%, which is what
+  surfaced it.
 
 - `[Server]` **Drawing a question cost twelve milliseconds and now costs two
   tenths of one.** `drawQuestion` grouped its eligible rows by category by
