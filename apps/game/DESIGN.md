@@ -124,7 +124,7 @@ connection dot and the "wrong" verdict are told apart by **shape**, not hue.
 
 **Archivo**, self-hosted, one variable file, two subsets (latin, latin-ext),
 `font-display: swap`, preloaded. Width 125 is the title-card voice; width 100
-is for the phone in a hand. There is no third register.
+is for a screen read up close. There is no third register.
 
 | Mixin | Used for |
 |---|---|
@@ -205,7 +205,7 @@ page's dividers, so it read as a third divider — and taking focus drew a box
 around a line.
 
 Three sizes: `small` (40px) for an action that sits *beside* something, `medium`
-(52px) for the ordinary control, `large` (72px) for a thumb or a room. Before
+(52px) for the ordinary control, `large` (72px) for a press or a room. Before
 `small` existed every secondary action was a 52px block, so every one of them
 read as a second primary action. The heights belong to the box, so on
 `underlined` a size sets the type and nothing else.
@@ -252,7 +252,7 @@ almost always has one of the top three:
 3. **Reserve the box** and let the content arrive. The cover art does this.
 4. **A `Loader`** — a turning square and a named line — which earns its place
    only where the other three have nothing to offer. Today that is one screen:
-   the cold load of a route, which is the phone that scanned the QR code
+   the cold load of a route, which is the screen that scanned the QR code
    downloading the app on a party's Wi-Fi.
 
 It holds off 250 ms before appearing, because a good connection settles most
@@ -280,8 +280,8 @@ region would say the same thing twice.
 **A verdict line above a field reserves its height, and mounts empty.** The two
 are one edit and they fix two faults. A row that appears when the server answers
 spends a `gap` it had nothing to fill, and everything under it — the field, its
-description, the button a thumb is already aiming at — moves; the typed answer
-form shifted 20px on the first judged guess with nothing drawn to explain it.
+description, the button already being aimed at — moves; the typed answer form
+shifted 20px on the first judged guess with nothing drawn to explain it.
 And a `role='status'` that arrives already holding its text is a change no
 screen reader watched happen, which is the same reason `Loader` mounts empty
 above. Reserve against the tallest member: `.banked` holds 1.75em of `caption`
@@ -315,18 +315,18 @@ three duration tokens at `0ms`).
   tick.
 - **Buzz** — the buzzer scales down on press, optimistically, before the server
   answers.
-- **Reveal** — `card-strike`, shared by the host panel and the phone, so the
-  same moment reads the same on both surfaces.
+- **Reveal** — `card-strike`, shared by the host panel and the player's screen,
+  so the same moment reads the same on both surfaces.
 - **The round's clock** is a CSS animation whose duration is the server's
-  remaining time, on the big screen and on every phone. No React timer, and it
-  is the one thing that moves during a round — a bar draining is what the phase
-  colour cannot say, which is *how long*.
+  remaining time, on the console and on every player's screen. No React timer,
+  and it is the one thing that moves during a round — a bar draining is what
+  the phase colour cannot say, which is *how long*.
 
   It is the exception the rule above allows, and only because it never resettles.
   It drains from the fraction still standing rather than from full, and re-keys
   on every snapshot: a running animation cannot be re-aimed — moving its duration
   rebases what it has already played — so it is restarted from the server's own
-  count instead, which is where it had drained to anyway. A phone back from a
+  count instead, which is where it had drained to anyway. A player back from a
   locked screen joins the bar where the room is. It is absent while the host is
   away, because the server has the round frozen and a bar draining then would be
   timing nobody.
@@ -334,7 +334,7 @@ three duration tokens at `0ms`).
   **The same bar counts the reveal's hold**, where the wait reaches it as a
   deadline rather than as time already spent and `RevealHold` is where the two
   become the numbers it draws with. One object in one place on each surface —
-  the phone's sits under the scoreline in both phases, the console's runs the
+  the player's sits under the scoreline in both phases, the console's runs the
   full width of the stage under both its columns — because a measure that moved
   when the phase turned would read as a second object arriving. At eight seconds
   nobody needed it; at twenty-five, silence with no clock is a table wondering
@@ -359,10 +359,10 @@ card flips rather than the way a panel slides.
 screen or taller than a short one.
 
 **900px is one number with three jobs**, and they are the same moment: the
-viewport at which a column stops being a phone's, the ceiling that column widens
-to, and where the lobby splits in two. `layout.$wide-screen` is the source and
-`--column-wide-max-width` is derived from it, because a media query cannot read
-a custom property and two literals drift.
+viewport at which a column stops being a narrow one, the ceiling that column
+widens to, and where the lobby splits in two. `layout.$wide-screen` is the
+source and `--column-wide-max-width` is derived from it, because a media query
+cannot read a custom property and two literals drift.
 
 **A front door becomes a poster at `$poster-screen`** — the name and the promise
 down one side, everything you can act on down the other, on the lobby's own
@@ -401,9 +401,9 @@ Three things follow from that ceiling, and each is a rule of its own:
 - **The fixed menu belongs to the field, not to the corner.** It is pinned to the
   same band, or it sits hundreds of pixels clear of everything it is chrome for.
 - **A centred column only clears that corner when the viewport is far wider than
-  the column.** The front doors collided with the menu from a phone up to about
-  1 200px, so they start *below* it: giving up the width instead would cost a
-  phone's headline a third of its measure.
+  the column.** The front doors collided with the menu from the narrowest
+  viewport up to about 1 200px, so they start *below* it: giving up the width
+  instead would cost a narrow column's headline a third of its measure.
 
 **The page is laid out under the housing, so it pays for its own edges.**
 `viewport-fit=cover` is what lets the field bleed into the corners, which is the
@@ -450,8 +450,8 @@ writing ten lies measured 2 377px against a 1080px screen, and the standings —
 the half the room actually asks for — ended eight hundred pixels below the fold.
 Above `$wide-screen` the board takes the wide column and the standings take the
 place the question had, each sized by dividing the screen rather than by the sum
-of its own type. Below it they stack and the page scrolls, which is what a phone
-does anyway.
+of its own type. Below it they stack and the page scrolls, which is what a
+narrow screen does anyway.
 
 **The player's reveal splits at that same width, for the same reason one screen
 down.** Not every player is on a phone, and a laptop is the one screen here with
@@ -478,7 +478,7 @@ Two things follow, and both fail *silently* rather than loudly:
 invitation is the plainest case and the one with four stages: `RoomInvitation`
 owns the stack, the square, the address and its own container, and every stage
 answers `--invitation-code-size` and `--invitation-qr-max-width`. The console
-reads its code from four metres, the phone's lobby from forty centimetres, the
+reads its code from four metres, the player's lobby from forty centimetres, the
 menu's popover is a box 280px wide holding a square scanned off the screen it is
 drawn on, and the poster has a wall. One object, four registers, and not one of
 them is a variant of the component. The two
@@ -543,14 +543,14 @@ and who it caught are one row.
   `max-width` so the longest one cannot swallow the payload in turn. The gap
   then goes in `em`: with the payload filling the row it is the only thing left
   holding the two apart.
-- **A phone gets the room's round as one list, never the console's two blocks.**
-  This rule used to read *a receipt, never the board*, and it rested on the
-  room's ranking being on the wall — which is often somebody else's phone. So
-  the reveal now carries what the round paid everybody and where it leaves them,
-  as `RoundBoard`: one row per player, ranked by the round's own outcome, with
-  what they said under their own name and what it paid beside it. The console
-  draws those as two blocks side by side because it is read across a room;
-  folding them into one list is what the same two facts cost at forty
+- **A player gets the room's round as one list, never the console's two
+  blocks.** This rule used to read *a receipt, never the board*, and it rested
+  on the room's ranking being on the wall — which is often somebody else's
+  screen. So the reveal now carries what the round paid everybody and where it
+  leaves them, as `RoundBoard`: one row per player, ranked by the round's own
+  outcome, with what they said under their own name and what it paid beside it.
+  The console draws those as two blocks side by side because it is read across
+  a room; folding them into one list is what the same two facts cost at forty
   centimetres. Three asks were declined before this one and every one of them
   was right about the **composition** — what they refused was the room's board
   printed under the answer, and that is still refused. The payout keeps a line
@@ -568,7 +568,7 @@ and who it caught are one row.
   point every player is first on nothing, and a lobby roster printing `1` and
   `0` beside every name says so out loud — while spending on it the width the
   nicknames need. `hasAnybodyScored` is the one predicate: under it the rank and
-  score columns are absent rather than empty, the phone is told no placing, and
+  score columns are absent rather than empty, the player is told no placing, and
   the final board names nobody. The columns come back at the first point.
 - **A state a row carries is a word, and the ink only seconds it.** A seat
   whose screen has gone was `opacity: 0.45` on the whole row, which is the
@@ -584,7 +584,7 @@ and who it caught are one row.
   somebody.
 - **One window, one clock, drawn for everyone waiting it out.** The buzz floor
   is the room's and not the buzzing player's, so `FloorClock` is on every
-  phone: the same component read from either end, counting down where the host
+  screen: the same component read from either end, counting down where the host
   set a limit and up where they judge it themselves. It follows the lines that
   say whose window it is, because a number arriving before the name is a
   countdown to nothing — and it is centred, under the one round object in the

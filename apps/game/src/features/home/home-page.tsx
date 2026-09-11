@@ -19,7 +19,7 @@ import './home-page.sass'
 
 /**
  * The product's front door, and the one screen that belongs to no game. The
- * room comes first: the code goes up, the phones arrive, and the table decides
+ * room comes first: the code goes up, the players arrive, and the table decides
  * what to play while they do — which is why creating one asks nothing here and
  * the shelf below is *content* rather than the only way through.
  *
@@ -80,7 +80,7 @@ export const HomePage: React.FC = () => {
           Under the two doors rather than over them, and the reason is a
           measurement: the section is drawn only once the server has said which
           of the remembered rooms still resolve, so it *arrives*, and above the
-          doors it moved the one a thumb aims at by 221px. It costs a first-time
+          doors it moved the one a press aims at by 221px. It costs a first-time
           visitor nothing either way — with no key there is no section at all —
           so the only screen that pays is the one it was built for, and what it
           pays is a shelf pushed down.
@@ -107,9 +107,9 @@ export const HomePage: React.FC = () => {
 
               {/*
                 Under the card that was pressed, and it costs the cards below it
-                a row: a phone reading the shelf sees five of them, so one
+                a row: a player reading the shelf sees five of them, so one
                 message at the end of the list is a message half a screen from
-                the thumb that earned it.
+                the press that earned it.
               */}
               {refusal?.door === game && (
                 <p className='error' role='alert'>

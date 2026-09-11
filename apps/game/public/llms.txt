@@ -20,7 +20,7 @@ it plays the audio and shows the score.
   subject.
 - **Le Fake** — everyone writes a lie about a real question, the screen shows
   them all beside the truth, and the room votes.
-- **Reflex** — the screen changes colour and the first thumb wins. Going before
+- **Reflex** — the screen changes colour and the first in wins. Going before
   it changes costs the round.
 
 ## Pages

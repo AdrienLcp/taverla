@@ -99,7 +99,7 @@ describe('the wait between a reveal and the round after it', () => {
     )
 
     // The server cancelled the timer on the way out, so a deadline left standing
-    // would have every phone drain a bar against nothing.
+    // would have every player's screen drain a bar against nothing.
     expect(playerView(player)?.round?.advancesAt).toBeNull()
   })
 

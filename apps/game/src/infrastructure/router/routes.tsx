@@ -28,7 +28,7 @@ type RoutedPath = Exclude<(typeof paths)[keyof typeof paths], typeof paths.root>
  * a compile error, and a repeated one has nowhere to go.
  *
  * The host console and the player screen are lazily loaded, which is the whole
- * reason one app can serve both: a phone joining a game downloads the buzzer,
+ * reason one app can serve both: a player joining a game downloads the buzzer,
  * not the QR code renderer and the audio player it will never run.
  */
 type LazyPage = {

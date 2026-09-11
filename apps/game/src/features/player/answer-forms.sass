@@ -33,8 +33,8 @@
       gap: var(--space-s)
       list-style: none
 
-    // Sized by the thumb rather than by the words: four of these are the whole
-    // screen during a round, and they are hit while looking at the big screen.
+    // Sized by the press rather than by the words: four of these are the whole
+    // screen during a round, and they are hit while looking at the console.
     // `touch-action` is the buzzer's, for the same reason: it keeps WebKit from
     // waiting on a second tap, which is the gesture that leaves a stray
     // `pointerenter` behind.
@@ -82,7 +82,7 @@
     //
     // The height is held from the first paint: this row is above the field, so
     // anything it grows by pushes the field and the send button down, and it
-    // would grow at exactly the moment a thumb is aiming at them.
+    // would grow at exactly the moment a press is aiming at them.
     //
     // 1.75em of `caption` is 24.5px against a stamp's 24.2 — `label` at 0.75rem
     // over this row's own 1.35 line-height, plus its two `--space-2xs`. Both

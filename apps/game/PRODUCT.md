@@ -25,29 +25,29 @@ contract**, and nothing user-facing may name the device.
 There are two distinct jobs:
 
 - **The host** sets the game up, starts each round, and judges answers. They are
-  standing, holding nothing, and looking up at the room as often as at the
+  on their feet as often as not, and looking up at the room as often as at the
   screen.
-- **The players** wait, recognise a track, and answer. Their phone is a second
-  screen rather than a remote control for the big one — they read it as much as
-  they press it, and it is often the only screen they can see. They read it
-  standing, in glances, with a drink in the other hand.
+- **The players** wait, recognise a track, and answer. Their own screen is a
+  second screen rather than a remote control for the console — they read it as
+  much as they press it, and it is often the only screen they can see. They
+  read it standing, in glances, between a conversation and a drink.
 
 ## Product Purpose
 
-Turn a room full of phones into a party game with no setup, no install and no
+Turn a room full of screens into a party game with no setup, no install and no
 accounts. Success is the moment the room is playing rather than administering —
 nobody is typing an address, nobody is asking what the score is, and nobody is
 waiting on a screen they cannot see.
 
-**The big screen cannot be assumed visible.** It is across the room, angled
-away, or — when the host runs the room from a phone, and more so when that host
-has taken a seat — in one person's hand and nobody else's. The phone is the one
-screen every player is sure to have, so it carries enough to follow the game
-without looking up: the score, the round, the clock and what just happened. It
-carries it the way a phone should, a few things at a time and large enough to
-read in the dark, and never as a copy of the console. The one thing it is never
-sent is the answer while that answer can still be typed — anti-cheat, and
-permanent.
+**The console cannot be assumed visible.** It is across the room, angled away,
+or — when the host runs the room from a screen of their own, and more so when
+that host has taken a seat — visible to one person and nobody else. A player's
+own screen is the one they are sure to have, so it carries enough to follow the
+game without looking up: the score, the round, the clock and what just
+happened. It carries it the way a screen read in glances should, a few things
+at a time and large enough to read in the dark, and never as a copy of the
+console. The one thing it is never sent is the answer while that answer can
+still be typed — anti-cheat, and permanent.
 
 The blind test is the first game, not the product. The product is the room: a
 code read aloud, a QR code scanned, seats that survive a locked screen, and a
@@ -56,8 +56,8 @@ scoreboard everyone can see.
 ## Positioning
 
 The whole game runs on one origin with no install, no account and no app store.
-A phone that scans the QR code is playing four seconds later, and a phone that
-locks its screen comes back to the same seat with the same score.
+A player who scans the QR code is playing four seconds later, and one whose
+screen locks comes back to the same seat with the same score.
 
 The order of a buzz is decided by the server on frame arrival, never by a
 timestamp the client sends. That is what makes the race honest, and it is the
@@ -71,12 +71,11 @@ mechanism the whole catalogue of future games inherits.
   and the layout has to hold at every width from a phone to a television.
 - **The room is often dark.** Living-room lighting, evening, sometimes only the
   screen itself.
-- **The phone is read as much as it is pressed, and read in glances.** Held
-  one-handed, in the dark, at arm's length, between two answers. So what is
-  drawn around the buzzer matters — a screen showing only a button sends its
-  player looking up at a screen that may not be there — and *how much* of it
-  there is matters exactly as much, because a screen showing everything is read
-  by nobody.
+- **A player's screen is read as much as it is pressed, and read in glances.**
+  In the dark, at reading distance, between two answers. So what is drawn around
+  the buzzer matters — a screen showing only a button sends its player looking
+  up at a screen that may not be there — and *how much* of it there is matters
+  exactly as much, because a screen showing everything is read by nobody.
 - **Party Wi-Fi is bad Wi-Fi.** Anything that blocks first paint costs a player
   the first round.
 - **The cover art is the only real image in the product,** and it arrives from
@@ -158,16 +157,16 @@ mechanism the whole catalogue of future games inherits.
 
 ## Product Principles
 
-1. **The phone is enough on its own, and stays quiet doing it.** A player who
-   never sees the big screen still knows the score, the round, the clock and
-   what just happened — a floor, because that screen is often somebody else's.
-   It is not a licence to draw the console at 414 px: the phone is read at 40 cm
-   by one person in glances, so anything added to it has to earn its place
-   against the one thing the player is there to do. The only thing it is never
-   sent is the answer while that answer can still be typed — which is
-   anti-cheat, and permanent.
-2. **The big screen is read by a group, from an unknown distance.** It must
-   carry one idea at a time, at a size that survives four metres, and still be
+1. **A player's screen is enough on its own, and stays quiet doing it.** A
+   player who never sees the console still knows the score, the round, the clock
+   and what just happened — a floor, because that screen is often somebody
+   else's. It is not a licence to draw the console at 414 px: a player's screen
+   is read at 40 cm by one person in glances, so anything added to it has to
+   earn its place against the one thing the player is there to do. The only
+   thing it is never sent is the answer while that answer can still be typed —
+   which is anti-cheat, and permanent.
+2. **The console is read by a group, from an unknown distance.** It must carry
+   one idea at a time, at a size that survives four metres, and still be
    coherent on a laptop.
 3. **The server decides anything that decides a winner.** Order, time and score
    are never the client's opinion.

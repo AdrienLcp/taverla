@@ -14,9 +14,9 @@ type AskedQuestionProps = {
 
 /**
  * What the room is trying to answer, on the screen everyone is looking at and
- * on every phone at once — the quiz's stimulus the way the clip is the blind
- * test's. It sizes off the viewport rather than off which surface renders it,
- * so the same component reads at four metres and in a hand.
+ * on every player's screen at once — the quiz's stimulus the way the clip is
+ * the blind test's. It sizes off the viewport rather than off which surface
+ * renders it, so the same component reads at four metres and in a hand.
  */
 export const AskedQuestion: React.FC<AskedQuestionProps> = ({ prompt }) => {
   const translate = useTranslate()

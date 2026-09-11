@@ -31,7 +31,7 @@ export const PAGE_HEADS: Record<Locale, Record<IndexedPage, PageHead>> = {
   en: {
     blindtest: {
       description:
-        'One screen plays the track and everyone else buzzes from their own phone. First to name the title and the artist takes the points. Scan the QR code and play — no install, no account.',
+        'One screen plays the track and everyone else buzzes from whatever screen they have to hand. First to name the title and the artist takes the points. Scan the QR code and play — no install, no account.',
       title: 'Blind test — Taverla'
     },
     buzzer: {
@@ -61,14 +61,14 @@ export const PAGE_HEADS: Record<Locale, Record<IndexedPage, PageHead>> = {
     },
     reflex: {
       description:
-        "The screen changes colour and the first thumb wins. Every device times the flip on its own clock, so the race measures a reflex and not the room's Wi-Fi. Going early costs the round.",
+        "The screen changes colour and the first in wins. Every device times the flip on its own clock, so the race measures a reflex and not the room's Wi-Fi. Going early costs the round.",
       title: 'Reflex — Taverla'
     }
   },
   fr: {
     blindtest: {
       description:
-        "Un écran joue le morceau, tout le monde buzze depuis son propre téléphone. Le premier à donner le titre et l'artiste marque. Scannez le QR code et jouez — sans installation, sans compte.",
+        "Un écran joue le morceau, tout le monde buzze depuis l'écran qu'il a sous la main. Le premier à donner le titre et l'artiste marque. Scannez le QR code et jouez — sans installation, sans compte.",
       title: 'Blind test — Taverla'
     },
     buzzer: {
@@ -98,7 +98,7 @@ export const PAGE_HEADS: Record<Locale, Record<IndexedPage, PageHead>> = {
     },
     reflex: {
       description:
-        "L'écran change de couleur, le premier pouce gagne. Chaque appareil programme le basculement sur sa propre horloge : la course mesure un réflexe, pas le Wi-Fi de la salle. Partir trop tôt coûte la manche.",
+        "L'écran change de couleur, le plus rapide gagne. Chaque appareil programme le basculement sur sa propre horloge : la course mesure un réflexe, pas le Wi-Fi de la salle. Partir trop tôt coûte la manche.",
       title: 'Réflexe — Taverla'
     }
   }

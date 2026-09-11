@@ -1,7 +1,7 @@
 # The catalogue beyond the blind test
 
 The blind test is the first game, not the product. The product is a room full
-of phones pointed at one screen, and the blind test is what that room does
+of screens pointed at one of them, and the blind test is what that room does
 first. This file was written so the decisions taken while finishing it would not
 have to be undone when the second game arrived.
 
@@ -17,7 +17,7 @@ reads as a generic party-game platform:
 | Piece | What it is, generically |
 |---|---|
 | Room + 4-character code | A joinable session with a code humans can read aloud |
-| Host / player socket roles | One big screen, N phones |
+| Host / player socket roles | One screen running the room, N players |
 | Session id in `localStorage` | A seat that survives a screen lock |
 | Role-scoped message unions | **Hidden information, enforced by the compiler** |
 | `encodeChecked` | The runtime half of that: Zod strips what leaked |
@@ -37,11 +37,11 @@ order** is the mechanism behind every race.
 Almost every party game worth building is one of these. The shape, not the
 theme, is what costs work.
 
-**1. Buzz-first.** A stimulus on the big screen, the first thumb wins, the host
+**1. Buzz-first.** A stimulus on the console, the first press wins, the host
 judges. *This is the shape the current engine already implements.* A second game
 of this shape is close to free.
 
-**2. Submit-then-vote.** Every phone types something, the screen reveals the
+**2. Submit-then-vote.** Every player types something, the screen reveals the
 answers, everyone votes. Needs a collection phase with a deadline, a reveal that
 does not leak authorship, and a vote tally. **This was the biggest reusable thing
 missing, and stage 16 built it** — six of the games left below still want it,
@@ -60,7 +60,7 @@ shared shape, and it is the one that will show which half was Le Fake's alone.
 vote. Needs per-player private state (the role-scoped views are half of it) and
 a phase machine with day/night.
 
-**4. Continuous stream.** A phone streams strokes or motion to the screen at
+**4. Continuous stream.** A player streams strokes or motion to the screen at
 30–60 Hz. **The only shape that breaks "state travels as a whole snapshot"** —
 see the warning below.
 
@@ -75,7 +75,7 @@ team on the player model and a turn owner.
 | **Buzzer** — the room brings its own content | Buzz-first | — | **shipped** ([stage 11](plans/11-buzzer.md)) |
 | **Quiz / trivia** | Buzz-first | — | **shipped** ([12](plans/12-trivia.md), [14](plans/14-question-languages.md)) |
 | **Lyrics blackout** — the line is missing, sing it | Buzz-first | Same as the blind test, different reveal | a session |
-| **Reflex race** — first to tap when the screen flips | Buzz-first | It needed one thing after all: a fair stimulus | **shipped** ([stage 18](plans/18-reflex-race.md)) |
+| **Reflex race** — first to press when the screen flips | Buzz-first | It needed one thing after all: a fair stimulus | **shipped** ([stage 18](plans/18-reflex-race.md)) |
 | **Le Fake** (Fibbage) — write a fake answer, fool the others | Submit-then-vote | — | **shipped** ([stage 16](plans/16-le-fake.md)) |
 | **Petit Bac** — a letter, six categories, type fast | Submit-then-vote | Scoring by uniqueness | a session |
 | **Just One** — everyone writes one clue, duplicates cancel | Submit-then-vote | A clue-collision pass | a session |
@@ -87,7 +87,7 @@ team on the player model and a turn owner.
 | **Qui est le plus susceptible de…** | Submit-then-vote | Voting for a *player* rather than an answer | an evening |
 | **Dessine** (Skribbl) — one draws, the others guess | Continuous stream | A stroke channel, a canvas, a word list | two sessions, and read the warning |
 | **Time's Up** — three rounds, same cards, less and less speech | Team relay | Teams, turn owner, per-turn timer | two sessions |
-| **Bingo de soirée** — a grid of things that will happen tonight | Submit-then-vote | Almost nothing; grids and taps | an evening |
+| **Bingo de soirée** — a grid of things that will happen tonight | Submit-then-vote | Almost nothing; grids and presses | an evening |
 
 Le Fake was the one that unlocked the most, and it shipped. Six games of that
 shape are left and each is now a session rather than two plus an engine, which
@@ -159,7 +159,7 @@ So `QuestionSource: hosted | bank | api`, and each arm is a separate size:
 
 **1. `hosted` — the host asks out loud. An evening.** The server serves a round
 with *no content at all*: a countdown, the buzzers open, the host reads a
-question from a book, a website or their own head, the first thumb wins and the
+question from a book, a website or their own head, the first press wins and the
 host judges it. This is the existing buzzer round minus the track, and it is
 mostly deletions — an optional round content, a host panel that says who buzzed
 instead of what the track was, and a verdict that is one right/wrong rather than
@@ -227,7 +227,7 @@ acts, when the round ends and who decides differ. They live behind
 
 The distinction is worth holding. *Reflex race* and *Quiz* really are separate
 games of the same shape, because they have no track. A blind test answered by
-tapping one of four covers is still a blind test.
+pressing one of four covers is still a blind test.
 
 What they do change is an assumption everything shipped so far rests on:
 **exactly one player acts at a time**. That is the expensive part, not the UI.

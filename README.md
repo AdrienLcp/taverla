@@ -33,7 +33,7 @@ that player out and the round picks up where the buzz stopped it, then a running
 scoreboard and a final board that keeps everyone for another game. English and
 French, light and dark, on a phone or a laptop.
 
-Three ways to answer, and the game narrows them: the first thumb on the buzzer,
+Three ways to answer, and the game narrows them: the first press on the buzzer,
 four choices on screen, or everyone typing at once against the same clock — the
 last two decided by the server and scored by speed on top of being right.
 
@@ -66,7 +66,7 @@ packages/core       Pure domain rules — scoring, clock, room codes.
 timestamp is both clock-skewed and trivially edited. The server stamps arrival;
 `player.buzz` carries no timestamp at all.
 
-**One app, two routes.** The QR code encodes `location.origin`, so the phone
+**One app, two routes.** The QR code encodes `location.origin`, so a player
 lands on the same origin the host is served from — one deployment, no CORS, no
 second domain. The bundles stay apart because the routes are lazy: the player
 chunk is 5 kB, the host chunk 19 kB.
@@ -110,7 +110,7 @@ it.
 Pushes to `main` redeploy from then on.
 
 The instance count is pinned to one deliberately: rooms live in a `Map` in the
-process, so a second instance would hold half of them and a phone would reach
+process, so a second instance would hold half of them and a player would reach
 the wrong one. The free tier sleeps when idle, which costs a cold start on the
 first request and drops whatever rooms were open — fine for a party, not for a
 demo you are about to give.

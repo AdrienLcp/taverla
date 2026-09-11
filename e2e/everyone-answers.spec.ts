@@ -4,14 +4,14 @@ import { homePage, hostConsole, playerScreen } from './support/locators'
 
 /**
  * The buzzer journey covers one player taking the floor. This one covers the
- * opposite shape — two phones guessing over the same clip, each of them free to
+ * opposite shape — two players guessing over the same clip, each of them free to
  * keep firing, and the reveal saying what each of them last wrote.
  *
  * It earns its place against a socket suite because none of that is a rule: it
  * is two browsers, two forms and a screen that has to end up showing both
  * answers. The rules are tested where they live.
  */
-test('[e2e] two phones type over the same clip, and the reveal says what they said', async ({
+test('[e2e] two players type over the same clip, and the reveal says what they said', async ({
   browser
 }) => {
   const bigScreen = await browser.newPage()
@@ -60,7 +60,7 @@ test('[e2e] two phones type over the same clip, and the reveal says what they sa
   await zoe.sendAnswer.click()
   await expect(zoe.answerGuess).toHaveValue('')
 
-  // One phone guessing does not take the floor: the other can still write.
+  // One player guessing does not take the floor: the other can still write.
   await max.answerGuess.fill('another one')
   await max.sendAnswer.click()
 

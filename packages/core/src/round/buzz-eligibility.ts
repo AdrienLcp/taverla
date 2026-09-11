@@ -10,7 +10,7 @@ export type BuzzBlocker =
   | 'someone_else_buzzed'
 
 /**
- * Why this phone's buzzer is dead, or `null` when it is armed. It returns the
+ * Why this player's buzzer is dead, or `null` when it is armed. It returns the
  * reason rather than a boolean because a disabled button with no explanation is
  * the single most frustrating thing a party game can show someone — the caller
  * turns this into the label under the buzzer.
@@ -65,9 +65,9 @@ export type BuzzRejection = Extract<
 
 /**
  * The server's answer to the question `findBuzzBlocker` answers for the client,
- * and deliberately a different one: the phone asks "is my button dead, and what
- * do I write under it", the server asks "do I accept this frame, and with which
- * code". They sit in one file so the two cannot drift apart unnoticed.
+ * and deliberately a different one: the client asks "is my button dead, and
+ * what do I write under it", the server asks "do I accept this frame, and with
+ * which code". They sit in one file so the two cannot drift apart unnoticed.
  */
 export const findBuzzRejection = ({
   claimedRoundId,
@@ -86,7 +86,7 @@ export const findBuzzRejection = ({
     return 'wrong_phase'
   }
 
-  // Ahead of the phase check: a thumb that landed as the round turned over is a
+  // Ahead of the phase check: a press that landed as the round turned over is a
   // late click on a round that moved on, and saying so is more use than saying
   // the phase is wrong.
   if (claimedRoundId !== currentRoundId) {
@@ -110,7 +110,7 @@ export type BuzzCandidate = {
 }
 
 /**
- * Whether a miss leaves the round alive. A phone that dropped off Wi-Fi does
+ * Whether a miss leaves the round alive. A player who dropped off Wi-Fi does
  * not count as someone who could still answer — otherwise one player walking
  * out of the room holds the clip open to its full length every time.
  */

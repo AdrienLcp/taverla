@@ -1,6 +1,6 @@
 import type { Locale } from '@taverla/protocol/locale'
 
-import { preferredLocales, servedPath } from '@/infrastructure/env'
+import { preferredLocales, servedPath } from '@/infrastructure/browser'
 import { localeInPath } from '@/infrastructure/router/navigation'
 import {
   readStoredLocale,
@@ -29,10 +29,11 @@ export const applyInitialLocale = (): Locale => {
   const locale =
     inUrl ?? readStoredLocale() ?? i18n.negotiate(preferredLocales())
 
-  // Remembered only when the URL named it, because a room's URL cannot: a phone
-  // that reached one from a link shared in English would otherwise come back in
-  // French on the first reload. The negotiated fallback is deliberately *not*
-  // written — "never chosen" is what keeps following the operating system.
+  // Remembered only when the URL named it, because a room's URL cannot: a
+  // screen that reached one from a link shared in English would otherwise come
+  // back in French on the first reload. The negotiated fallback is deliberately
+  // *not* written — "never chosen" is what keeps following the operating
+  // system.
   if (inUrl !== null) {
     writeStoredLocale(inUrl)
   }

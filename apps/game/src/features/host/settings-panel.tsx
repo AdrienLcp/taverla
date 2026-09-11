@@ -43,7 +43,7 @@ const COUNTDOWN_DURATIONS_MS = [3_000, 5_000, 10_000] as const
 
 /**
  * Longer than a clip at both ends: a question has to be read before it can be
- * answered, and a typed answer has to be spelled out where a pick is a tap.
+ * answered, and a typed answer has to be spelled out where a pick is a press.
  */
 const QUESTION_DURATIONS_MS = [15_000, 30_000, 60_000] as const
 
@@ -88,7 +88,7 @@ const QuestionBankSettings: React.FC<{
       {/*
         The host's alone, and never the reader's: the interface locale is stored
         per device, so two players in one room can hold different ones and
-        drawing from them would deal each phone its own question. It opens on
+        drawing from them would deal each player their own question. It opens on
         whatever the host was reading and moves independently after that — a
         room can play in French on an English console.
       */}

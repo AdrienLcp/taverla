@@ -32,7 +32,7 @@ import {
   quizContent,
   reflexContent
 } from '@/helpers/round-content'
-import { buzzFeedback } from '@/infrastructure/env'
+import { buzzFeedback } from '@/infrastructure/browser'
 import { useRoomCodeParam } from '@/infrastructure/router/navigation'
 import { AskedQuestion } from '@/presentation/components/asked-question'
 import { Countdown } from '@/presentation/components/countdown'
@@ -101,16 +101,17 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
     )
   }
 
-  // The room fills up while the table decides, so this is where a phone waits
-  // longest — and the only moment nobody is against a clock, which is why it is
-  // where what the evening pays is explained and where the room the player
-  // walked into is drawn. Nobody has scored yet, so the board is a column of
-  // names: no rank, no score, and the one screen with the space to spend on it.
+  // The room fills up while the table decides, so this is where a player's
+  // screen waits longest — and the only moment nobody is against a clock, which
+  // is why it is where what the evening pays is explained and where the room
+  // the player walked into is drawn. Nobody has scored yet, so the board is a
+  // column of names: no rank, no score, and the one screen with the space to
+  // spend on it.
   //
   // The host being away replaces the pitch rather than the screen. A lobby has
   // nothing to block — who is at the table stays true while the console is
   // gone — but *the innkeeper is choosing a game* would be a lie about the one
-  // thing the phone is waiting on.
+  // thing the player is waiting on.
   if (view.phase === 'lobby') {
     return (
       <section className='player-round centred'>
@@ -121,10 +122,10 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
         )}
         {/*
           The way in, on the screen of somebody who is already through it. The
-          room's code is on the big screen — which is allowed to be a phone in
-          one person's hand, and is exactly the evening where nobody else can
-          read it. Between the pitch and the roster rather than under them: it
-          is the action this phase is for, and a roster grows.
+          room's code is on the console — which is allowed to be a phone in one
+          person's hand, and is exactly the evening where nobody else can read
+          it. Between the pitch and the roster rather than under them: it is the
+          action this phase is for, and a roster grows.
         */}
         {roomCode !== null && <RoomInvitation roomCode={roomCode} />}
 
@@ -170,7 +171,7 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
   }
 
   // Below the reveal and the final board on purpose: those are what the round
-  // turned out to be, and a phone that walked in on it is in the room for them.
+  // turned out to be, and a player who walked in on it is in the room for them.
   // What it must not be shown is the form, because the server refuses every
   // frame it could send — a field that cannot be submitted is worse than a wait.
   if (round?.joinedAfterStart === true) {
@@ -254,8 +255,8 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
         <section className='player-round'>
           <AskedQuestion prompt={prompt} />
           <TypedAnswer
-            // The phone is never sent the track, so the settings are the only
-            // place it can read what the round is asking for.
+            // The player is never sent the track, so the settings are the
+            // only place it can read what the round is asking for.
             asksForAFilm={
               view.settings.game?.kind === 'blindtest' &&
               view.settings.game.source.kind === 'film'
@@ -270,8 +271,8 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
     }
   }
 
-  // A phone between two rounds in a typed or choice game used to be shown a
-  // dead buzzer, which is a promise the round will not keep.
+  // A player's screen between two rounds in a typed or choice game used to be
+  // shown a dead buzzer, which is a promise the round will not keep.
   if (view.settings.mode.kind !== 'buzzer') {
     return (
       <section className='player-round centred'>
@@ -284,10 +285,11 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
 }
 
 /**
- * What this phone is about to play, which is the honest answer to a lobby: the
- * room is opened before the table decides, so "the host is choosing" is a state
- * and not a gap. Once they have, the game names itself and says what it pays —
- * the same pitch the shelf shows, on the screen the player is holding.
+ * What this player's screen is about to play, which is the honest answer to a
+ * lobby: the room is opened before the table decides, so "the host is choosing"
+ * is a state and not a gap. Once they have, the game names itself and says what
+ * it pays — the same pitch the shelf shows, on the screen the player is
+ * holding.
  */
 const UpNext: React.FC<{ view: PlayerRoomView }> = ({ view }) => {
   const translate = useTranslate()
@@ -359,9 +361,9 @@ const YourRound: React.FC<{
 }
 
 /**
- * Where this phone finished, which the big screen only ever says for the
- * winner. Ties share a place, the way the board itself ranks them — a room of
- * two on the same score reads "1st" on both phones, and `host.final.tie` is
+ * Where this player finished, which the console only ever says for the winner.
+ * Ties share a place, the way the board itself ranks them — a room of two on
+ * the same score reads "1st" on both players' screens, and `host.final.tie` is
  * already saying so across the room.
  */
 const YourPlacing: React.FC<{ view: PlayerRoomView }> = ({ view }) => {
@@ -477,10 +479,10 @@ const fitting = (answer: string): React.CSSProperties => ({
 })
 
 /**
- * What the round turned out to be, on the phone — and `null` for a game whose
- * question the room owns, because a charade has no answer to print. What that
- * game's reveal is instead lands under this: the scoreline, which is what a
- * reveal *is* where the room owns the question.
+ * What the round turned out to be, on the player's screen — and `null` for a
+ * game whose question the room owns, because a charade has no answer to print.
+ * What that game's reveal is instead lands under this: the scoreline, which is
+ * what a reveal *is* where the room owns the question.
  *
  * The cover is the product's only real image and this is the one moment in the
  * loop when nobody is racing, so it goes where the eye lands first. It is drawn
@@ -501,7 +503,7 @@ const Revealed: React.FC<{
     return <RevealedLieBoard board={lieBoard} players={view.players} />
   }
 
-  // The times, which the phone reads for the same reason the room does: this is
+  // The times, which a player reads for the same reason the room does: this is
   // the one game whose reveal is not an answer, so the finishing order is what
   // there is to know — and everyone's own number is on it.
   if (reflexContent(round) !== null) {

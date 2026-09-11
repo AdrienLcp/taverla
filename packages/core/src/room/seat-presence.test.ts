@@ -17,7 +17,7 @@ const away = (forMs: number) => ({
 const here = { disconnectedAt: null, isConnected: true }
 
 describe('seat presence', () => {
-  it('[seat] waits for a phone whose network blinked mid-round', () => {
+  it('[seat] waits for a seat whose network blinked mid-round', () => {
     expect(isStillExpected(away(3_000), NOW)).toBe(true)
   })
 

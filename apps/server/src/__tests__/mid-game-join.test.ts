@@ -61,7 +61,7 @@ const BUZZER_GAME: RoomSettings = {
 
 const WRONG = { isCorrect: false, kind: 'single' } as const
 
-describe('a phone that arrives mid-game', () => {
+describe('a player who arrives mid-game', () => {
   let harness: RoomHarness
 
   beforeEach(async () => {
@@ -95,7 +95,7 @@ describe('a phone that arrives mid-game', () => {
 
   /**
    * The symptom that is actually felt at a table: without the round's own
-   * roster, one phone arriving holds a finished round open to its full
+   * roster, one player arriving holds a finished round open to its full
    * deadline, and everybody sits there watching a bar run down.
    */
   it('[latecomer] closes the round on the players it opened on', async () => {
@@ -137,7 +137,7 @@ describe('a phone that arrives mid-game', () => {
     expect(playerView(zoe)?.round?.answers).toHaveLength(0)
   })
 
-  it('[latecomer] tells that phone, and only that phone, that it is waiting', async () => {
+  it('[latecomer] tells that player, and only that player, that they are waiting', async () => {
     const { nina, zoe } = await roundUnderWay(CHOICE_GAME)
 
     expect(playerView(nina)?.round?.joinedAfterStart).toBe(true)

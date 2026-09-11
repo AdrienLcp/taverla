@@ -14,7 +14,7 @@ type ConnectionRefusedProps = {
   /**
    * What this screen can still do about it, between the reason and the way out.
    * A console that holds the room's own token is not at the same dead end as a
-   * phone whose room has closed, and only the console's own page knows that.
+   * player whose room has closed, and only the console's own page knows that.
    */
   children?: React.ReactNode
   /** `null` when the socket died without the server naming a reason. */

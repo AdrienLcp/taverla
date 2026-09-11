@@ -30,7 +30,7 @@
 
     // A flex item's minimum is its content, so without this a candidate nobody
     // can break — one long word, or a phrase set at row size — pushes the list
-    // wider than the phone and takes the whole page sideways with it.
+    // wider than the screen and takes the whole page sideways with it.
     ul
       display: flex
       flex-direction: column
@@ -42,7 +42,7 @@
         min-width: 0
 
     // A board runs longer than the four candidates a choice round offers, so a
-    // line wraps rather than being sized by the thumb alone. The height is a
+    // line wraps rather than being sized by the press alone. The height is a
     // floor and never a ceiling: the row grows to hold what somebody wrote.
     .button
       align-items: flex-start
@@ -54,9 +54,9 @@
       text-align: left
       width: 100%
 
-    // Ten of these are read in a column on a phone, where a control label is
-    // read one at a time — so this row steps below `title`'s floor rather than
-    // shouting each candidate at the size of a button that acts.
+    // Ten of these are read in a column on a player's screen, where a control
+    // label is read one at a time — so this row steps below `title`'s floor
+    // rather than shouting each candidate at the size of a button that acts.
     .title
       @include typography.title
 

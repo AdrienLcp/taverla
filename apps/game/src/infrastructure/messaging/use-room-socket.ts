@@ -21,7 +21,7 @@ import {
   estimateClockOffset
 } from '@taverla/core/time/clock-sync'
 
-import { socketOrigin } from '@/infrastructure/env'
+import { socketOrigin } from '@/infrastructure/browser'
 import {
   ensureSessionId,
   forgetSessionId,
@@ -205,9 +205,10 @@ export const useRoomSocket = ({
         setError(control.message)
 
         // The end of the line is what the frame says, not what the socket does
-        // next. Waiting for a close left a phone on a stale scoreboard when the
-        // host closed the room: it is the one fatal refusal a socket can carry
-        // while staying open, since the server is answering a *third* party.
+        // next. Waiting for a close left a player on a stale scoreboard when
+        // the host closed the room: it is the one fatal refusal a socket can
+        // carry while staying open, since the server is answering a *third*
+        // party.
         if (control.message.fatal) {
           giveUp = true
           setSocketStatus('refused')

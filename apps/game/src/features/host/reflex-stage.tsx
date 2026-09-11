@@ -9,7 +9,7 @@ import { reactionMsOf } from '@taverla/core/reflex/reaction'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
 import { reflexContent } from '@/helpers/round-content'
-import { buzzFeedback } from '@/infrastructure/env'
+import { buzzFeedback } from '@/infrastructure/browser'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { useFlipField } from '@/presentation/theme/use-flip-field'
 
@@ -74,7 +74,8 @@ export const ReflexStage: React.FC<ReflexStageProps> = ({
         <p className='yours' role='status'>
           {isOut ? (
             // The one cause a lockout has here, said on the screen that caused
-            // it. The detail line the phone carries is the room's to read aloud.
+            // it. The detail line a player's screen carries is the room's to
+            // read aloud.
             <span className='false-start'>
               {translate('reflex.falseStart.title')}
             </span>
@@ -91,8 +92,8 @@ export const ReflexStage: React.FC<ReflexStageProps> = ({
         </p>
       )}
       {/*
-        Live through the wait for the same reason the phone's buzzer is: going
-        early is a move this game allows and then charges for, so a thumb that
+        Live through the wait for the same reason the player's buzzer is: going
+        early is a move this game allows and then charges for, so a player who
         jumps has to land on a press the server refuses. It carries no chrome of
         its own — the stage under it is what was pressed.
       */}

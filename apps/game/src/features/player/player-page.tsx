@@ -113,7 +113,7 @@ const PlayerScreen: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   // A refused join is non-fatal, so the socket stays open and the form comes
   // back with the reason rather than stranding the player on a dead screen.
   // Once a seat is held the same code answers a rename instead, and the menu is
-  // where it belongs — a phone bounced back to the join form mid-round would
+  // where it belongs — a player bounced back to the join form mid-round would
   // have lost the game to a name clash.
   const rejection =
     seatNickname === null &&
@@ -220,8 +220,8 @@ const Lobby: React.FC<{
         <p className='room'>{translate('player.room', { code: roomCode })}</p>
 
         {/* In the chrome rather than inside the round, because it is true at
-            every phase — and the phone that needs it is the one whose owner
-            cannot see the screen that has been carrying it all evening. */}
+            every phase — and the player who needs it is the one who cannot
+            see the screen that has been carrying it all evening. */}
         {view?.round != null && view.phase !== 'finished' && (
           <p className='round-index'>
             {view.settings.roundCount === null
@@ -262,10 +262,10 @@ const Lobby: React.FC<{
 }
 
 /**
- * The clock the big screen is showing, on the phone that is answering against
- * it — and then the wait until the next round, which is the same question one
- * phase later. One bar in one place rather than two: a measure that moved when
- * the phase turned would read as a second object arriving.
+ * The clock the console is showing, on the player's screen that is answering
+ * against it — and then the wait until the next round, which is the same
+ * question one phase later. One bar in one place rather than two: a measure
+ * that moved when the phase turned would read as a second object arriving.
  *
  * Absent whenever nothing is counting. For the round that is the host being
  * away, because the server has it frozen and a bar still draining would be

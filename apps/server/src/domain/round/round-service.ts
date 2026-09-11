@@ -191,9 +191,9 @@ export const registerBuzz = ({
     return Result.failure('wrong_phase')
   }
 
-  // A socket is whatever its owner makes it, and a phone showing four choices
-  // can still send a buzz by hand. Narrowing here is also what produces the
-  // window below: it exists on no other mode.
+  // A socket is whatever its owner makes it, and a player's screen showing
+  // four choices can still send a buzz by hand. Narrowing here is also what
+  // produces the window below: it exists on no other mode.
   const mode = room.settings.mode
 
   if (mode.kind !== 'buzzer') {
@@ -239,7 +239,7 @@ export const registerBuzz = ({
 /**
  * The floor ran out. It is the same outcome as answering wrong on purpose:
  * taking the floor and saying nothing is what it cost everyone else, and a pass
- * with no lockout would let the same thumb take it straight back.
+ * with no lockout would let the same player take it straight back.
  */
 export const timeOutBuzz = ({
   now,
@@ -274,7 +274,7 @@ export const timeOutBuzz = ({
 /**
  * Everyone who was sat out is back in. The blind test never needs it — its
  * round is a clip that runs out — but a host running a charade has no such
- * clock, and a table where the quickest thumbs have all missed is a round
+ * clock, and a table where the quickest players have all missed is a round
  * nobody left can win.
  */
 export const clearLockouts = ({
@@ -427,7 +427,7 @@ const bank = ({
 }
 
 /**
- * Whether the round has nothing left to wait for. A phone that dropped off
+ * Whether the round has nothing left to wait for. A player who dropped off
  * Wi-Fi holds it for `RECONNECT_GRACE_MS` and no longer, for the same reason a
  * disconnected player does not hold the clip open in buzzer mode — but the
  * blink has to be absorbed first, or a network stutter in the second the last
@@ -716,9 +716,9 @@ export const registerVote = ({
 }
 
 /**
- * Whether the phase the room is in has nothing left to wait for. A phone that
- * dropped off Wi-Fi holds it only for `RECONNECT_GRACE_MS`, the same way it
- * does not hold a clip open — and a player who was there for the writing and
+ * Whether the phase the room is in has nothing left to wait for. A player who
+ * dropped off Wi-Fi holds it only for `RECONNECT_GRACE_MS`, the same way they
+ * do not hold a clip open — and a player who was there for the writing and
  * wrote nothing still votes, which is what keeps somebody stuck for a lie in
  * the round.
  */
@@ -827,7 +827,7 @@ export const registerReflexTap = ({
     claimedRoundId: roundId,
     currentRoundId: round.id,
     // Nobody takes a floor in this game, so the buzz that blocks a buzz is the
-    // player's own: one thumb, one heat.
+    // player's own: one press, one heat.
     hasActiveBuzz: content.taps.some((tap) => tap.playerId === playerId),
     isLockedOut: round.lockedOutPlayerIds.has(playerId),
     phase: room.phase
@@ -867,7 +867,7 @@ export const registerReflexTap = ({
 
 /**
  * Whether the heat has nothing left to wait for. A false start counts as having
- * acted: that thumb has spent itself, and holding the round open for it is the
+ * acted: that press has spent itself, and holding the round open for it is the
  * opposite of what the lockout means.
  */
 export const everyoneHasTapped = (room: Room, now: number): boolean => {
@@ -1088,7 +1088,7 @@ export const applyVerdict = ({
 }
 
 /**
- * The buzzer holder vanished — a locked phone, a closed tab, a host removing
+ * The buzzer holder vanished — a locked screen, a closed tab, a host removing
  * them. Their claim is dropped without a verdict and without a lockout, and the
  * round carries on for everyone else rather than hanging on someone who is no
  * longer in the room.
@@ -1126,7 +1126,8 @@ export const holdRoundClock = (room: Room, now: number): void => {
   freezeAnswerWindow(room.round, now)
   pauseRoundClock(room.round, now)
   // Nothing is counting the reveal down any more, and a deadline left standing
-  // would have every phone drain a bar against a timer that was just cancelled.
+  // would have every player's screen drain a bar against a timer that was just
+  // cancelled.
   room.round.advancesAt = null
   touch(room, now)
 }
@@ -1248,9 +1249,9 @@ export const finishGame = (room: Room, now: number): void => {
 }
 
 /**
- * The same phones in the same seats, scores at zero. `playedContentIds` survives
- * on purpose: a second game in the same room should not replay the tracks the
- * first one just burnt through.
+ * The same players in the same seats, scores at zero. `playedContentIds`
+ * survives on purpose: a second game in the same room should not replay the
+ * tracks the first one just burnt through.
  */
 export const restartGame = (room: Room, now: number): void => {
   for (const participant of room.players.values()) {

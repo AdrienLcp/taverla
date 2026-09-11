@@ -16,7 +16,7 @@ export type ControlAppearance = {
    * Physical size (default: `'medium'`):
    * - `'small'` — an action beside something, never under it
    * - `'medium'` — the default control size
-   * - `'large'` — meant to be hit with a thumb, or read across a room
+   * - `'large'` — sized for a press, or to be read across a room
    *
    * It sets a height and a padding on the two variants that have a box, and
    * the type alone on `'underlined'`, which has none.

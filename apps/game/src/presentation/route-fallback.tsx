@@ -14,8 +14,8 @@ export const ROUTE_FALLBACK_CLASS = 'route-fallback'
 
 /**
  * Only ever seen on a cold load: a client-side navigation holds the current
- * screen up while the next chunk arrives, so what reaches this is the phone
- * that scanned the QR code and is downloading the app on a party's Wi-Fi.
+ * screen up while the next chunk arrives, so what reaches this is the player
+ * who scanned the QR code and is downloading the app on a party's Wi-Fi.
  *
  * It replaces the shell for the same reason `ErrorScreen` does — the menu reads
  * a connection no page has reported yet.

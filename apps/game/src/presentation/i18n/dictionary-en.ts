@@ -41,7 +41,7 @@ export const EN_DICTIONARY = defineDictionary({
        * `blocked` names the site's sound permission rather than saying "try
        * again", because the press behind it is always a real gesture — both
        * `unlock()` call sites are synchronous inside `onPress` — so a
-       * `NotAllowedError` here is a setting rather than a mistimed tap, and
+       * `NotAllowedError` here is a setting rather than a mistimed press, and
        * pressing again answers it identically for the rest of the evening.
        *
        * All three end on the same way out, so a console that cannot be fixed
@@ -168,13 +168,13 @@ export const EN_DICTIONARY = defineDictionary({
     clearLockouts: 'Let the table back in',
     home: {
       description:
-        'You bring the questions — a charade, a quiz off a sheet of paper, a lesson, whatever the table is up for. Only one thing gets settled here: who put their thumb down first. And that is never in doubt.'
+        'You bring the questions — a charade, a quiz off a sheet of paper, a lesson, whatever the table is up for. Only one thing gets settled here: who was in first. And that is never in doubt.'
     },
     lockout: 'A wrong answer sits you out',
     name: 'Buzzer',
     running: 'Ask away',
     scoring:
-      'First thumb answers out loud, and the innkeeper says right or wrong. A point for right — and a wrong answer sits you out until they let you back in.',
+      'First in answers out loud, and the innkeeper says right or wrong. A point for right — and a wrong answer sits you out until they let you back in.',
     tagline: 'Your questions, and a race to the buzzer.'
   },
   connection: {
@@ -588,17 +588,17 @@ export const EN_DICTIONARY = defineDictionary({
     hold: 'Press before it changes and you sit the round out.',
     home: {
       description:
-        'Nothing to know and nothing to say. The screen holds still, then it changes — and the first thumb down takes the round. Go before it changes and you watch that one from the bench.'
+        'Nothing to know and nothing to say. The screen holds still, then it changes — and the first in takes the round. Go before it changes and you watch that one from the bench.'
     },
     landed: defineTranslation('{count:plural}', {
-      plural: { count: { one: '{?} thumb in', other: '{?} thumbs in' } }
+      plural: { count: { one: '{?} player in', other: '{?} players in' } }
     }),
     name: 'Reflex',
     nobody: 'Nobody moved',
     reaction: '{milliseconds:number} ms',
     scoring:
-      'The screen changes, and the first thumb takes the point. Go before it changes and you sit the round out.',
-    tagline: 'The screen changes. First thumb wins.',
+      'The screen changes, and the first in takes the point. Go before it changes and you sit the round out.',
+    tagline: 'The screen changes. First in wins.',
     tapped: 'In.',
     tooEarly: 'too early',
     waiting: 'Watch the screen.'
@@ -637,10 +637,11 @@ export const EN_DICTIONARY = defineDictionary({
     index: 'Round {index:number} of {total:number}',
     indexOpen: 'Round {index:number}',
     /**
-     * The zero arm of `scored`, and the reason the reveal draws a block on every
-     * phone rather than only on the ones that gained: a round that paid you
-     * nothing is a result, and a screen that says nothing about it leaves its
-     * owner to work out from an absence whether it was even scored.
+     * The zero arm of `scored`, and the reason the reveal draws a block on
+     * every player's screen rather than only on the ones that gained: a round
+     * that paid you nothing is a result, and a screen that says nothing about
+     * it leaves its owner to work out from an absence whether it was even
+     * scored.
      */
     missed: 'Nothing this time.',
     nobody: 'Nobody got it',

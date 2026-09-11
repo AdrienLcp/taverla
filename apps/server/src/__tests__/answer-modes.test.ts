@@ -61,9 +61,9 @@ describe('answering all at once', () => {
   }
 
   /**
-   * One phone in the room, so it is that phone finishing that closes the round
-   * rather than the clip running out. A second seat nobody answers from costs
-   * every assertion the full clip.
+   * One player in the room, so it is that player finishing that closes the
+   * round rather than the clip running out. A second seat nobody answers from
+   * costs every assertion the full clip.
    */
   const soloRoundInPlay = async (settings: RoomSettings) => {
     const { code, host } = await harness.openRoom(settings)
@@ -78,7 +78,7 @@ describe('answering all at once', () => {
     return { code, host, zoe }
   }
 
-  it('[choice] hands every phone the same candidates and never which is right', async () => {
+  it('[choice] hands every player the same candidates and never which is right', async () => {
     const { host, zoe } = await roundInPlay(CHOICE_GAME)
 
     const choices = blindtestRound(playerView(zoe))?.choices ?? []
@@ -124,7 +124,7 @@ describe('answering all at once', () => {
     )
   })
 
-  it('[choice] refuses a second answer from the same phone', async () => {
+  it('[choice] refuses a second answer from the same player', async () => {
     const { zoe } = await roundInPlay(CHOICE_GAME)
 
     const roundId = playerView(zoe)?.round?.id ?? ''
@@ -141,7 +141,7 @@ describe('answering all at once', () => {
     expect(errorsIn(zoe)[0]).toMatchObject({ code: 'already_buzzed' })
   })
 
-  it('[choice] refuses a buzz, whatever the phone sends by hand', async () => {
+  it('[choice] refuses a buzz, whatever the client sends by hand', async () => {
     const { zoe } = await roundInPlay(CHOICE_GAME)
 
     zoe.send({
@@ -250,7 +250,7 @@ describe('answering all at once', () => {
     expect(hostView(host)?.youId).toBeNull()
   })
 
-  it('[seat] answers from the host seat like any other phone', async () => {
+  it('[seat] answers from the host seat like any other player', async () => {
     const { host } = await harness.openRoom(TYPED_GAME, 'Adrien')
 
     host.send({ type: 'host.startRound' })

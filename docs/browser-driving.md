@@ -100,7 +100,7 @@ Twelve more that cost time to learn:
 - **The first paint is the page with its bundles aborted.**
   `page.route('**/assets/*.js', (route) => route.abort())` leaves exactly what
   the served document can draw on its own, and it can be screenshotted and
-  queried like any other page. It is the only way to see what a phone sees for
+  queried like any other page. It is the only way to see what a player sees for
   the first second, and `typeof window.React === 'undefined'` is how the shot
   proves it ran no script.
 
@@ -146,10 +146,10 @@ walking. Poll inside the page, act inside the page, and return the reading.
 **A tap on the frame the field flips is a false start, every time.** Polling
 `data-flipped` and dispatching `pointerdown` on the next line reproduces the
 one refusal the game has, not the reaction it was meant to measure — the
-server floors a tap at `FALSE_START_FLOOR_MS` after `flipsAt`, which no thumb
+server floors a press at `FALSE_START_FLOOR_MS` after `flipsAt`, which no hand
 ever beats and a script always does. Wait past the floor before the press, and
-read the phone straight after it: the heat has `TAP_WINDOW_MS` left at most,
-and less than that once the other seats are out.
+read the player's screen straight after it: the heat has `TAP_WINDOW_MS` left
+at most, and less than that once the other seats are out.
 
 Two states cannot be reached at all with a single seat in the room, because the
 round settles the instant that seat acts and the screen is already the reveal
@@ -158,7 +158,7 @@ when the next call lands:
 - a reflex heat after the console's own tap, or after its false start;
 - anything a heat shows *while* waiting for somebody else.
 
-Both need a second phone in the room, by the `taverla:seats` deletion above.
+Both need a second screen in the room, by the `taverla:seats` deletion above.
 
 ## Two things a browser can be asked that no test can
 

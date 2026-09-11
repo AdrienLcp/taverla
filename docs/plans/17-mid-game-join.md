@@ -1,6 +1,6 @@
 # Stage 17 — a round remembers who was in it
 
-A phone that arrives mid-game keeps its seat and starts playing at the **next**
+A screen that arrives mid-game keeps its seat and starts playing at the **next**
 round. That is the wanted behaviour, and it is not the one the code has: joining
 is unguarded in all seven phases, and every predicate that decides whether a
 phase can close reads the **live roster**. So a latecomer does not join the

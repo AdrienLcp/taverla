@@ -78,11 +78,11 @@ export const modeSettingsSchema = z.discriminatedUnion('kind', [
      * How long the floor is held after a buzz before the server takes it back,
      * or `null` when the host decides by hand and the screens count up instead.
      *
-     * Buzzing costs nothing on its own, so without this a thumb that was fast
+     * Buzzing costs nothing on its own, so without this a press that was fast
      * and a mouth that has nothing to say can hold a whole room. Running out is
      * the same outcome as answering wrong — no points, locked out, the round
      * resumes — because taking the floor and saying nothing is what it cost
-     * everyone else, and because a pass with no lockout lets the same thumb
+     * everyone else, and because a pass with no lockout lets the same player
      * take it again immediately.
      */
     answerWindowMs: z.number().int().min(3_000).max(60_000).nullable(),
@@ -107,10 +107,10 @@ export const roomSettingsSchema = z.object({
    * room keeps what every game needs and hands the rest here — see `game.ts`.
    *
    * `null` until somebody chooses, because a room is opened before a game is
-   * picked: the code goes up, the phones arrive, and the table decides while
+   * picked: the code goes up, the players arrive, and the table decides while
    * they do. That is the whole reason this is nullable rather than opening on a
-   * default — a default would have the lobby and every phone name a game nobody
-   * chose, and there would be no way to say "still deciding" at all.
+   * default — a default would have the lobby and every player name a game
+   * nobody chose, and there would be no way to say "still deciding" at all.
    *
    * It is also what makes the rest type-check: the guard on `host.startRound`
    * *is* the narrowing every downstream call needs, the same way
@@ -253,7 +253,7 @@ export const roundContentSchema = z.discriminatedUnion('kind', [
      * `yourVerdict` is, and inside the game's arm because no other game has the
      * concept — `null` for the host, and for a player who wrote nothing.
      *
-     * It survives a reload, which is the point: a phone that locked its screen
+     * It survives a reload, which is the point: a device that locked its screen
      * comes back knowing which one it must not pick.
      */
     yourCandidateId: z.string().nullable()
@@ -276,9 +276,9 @@ export const roundContentSchema = z.discriminatedUnion('kind', [
     flipsAt: serverTimeSchema.nullable(),
     kind: z.literal('reflex'),
     /**
-     * Every tap that landed, in arrival order — the first one takes the round.
-     * A reaction is `atServerTime` minus `flipsAt`, worked out where it is
-     * shown rather than carried: both halves of the subtraction are already
+     * Every press that landed, in arrival order — the first one takes the
+     * round. A reaction is `atServerTime` minus `flipsAt`, worked out where it
+     * is shown rather than carried: both halves of the subtraction are already
      * here, and a third field could disagree with them.
      *
      * A false start is not one of these. It is refused, and puts the player in
@@ -346,7 +346,7 @@ const baseRoomViewSchema = z.object({
    * Round time already consumed, buzz pauses excluded. It is what lets a host
    * who reloaded mid-round seek back to where the room actually is, rather than
    * restarting the track under everyone — and what every screen arms the round
-   * clock from, so a phone that locked itself comes back to the bar where the
+   * clock from, so a device that locked itself comes back to the bar where the
    * room is rather than to a full one.
    */
   roundElapsedMs: z.number().int().nonnegative(),
@@ -399,8 +399,8 @@ export const hostRoundContentSchema = z.discriminatedUnion('kind', [
    * own. The bare buzzer has nothing because the room owns the question; Le Fake
    * has nothing because the host screen is *in* the room — anything it renders
    * during the writing is read by everyone sitting in front of it, so the answer
-   * must not be there. The truth reaches that screen the way it reaches a phone:
-   * unlabelled on the board, then marked at the tally.
+   * must not be there. The truth reaches that screen the way it reaches a
+   * player: unlabelled on the board, then marked at the tally.
    */
   z.object({ kind: z.literal('lefake') }),
   z.object({
@@ -410,7 +410,7 @@ export const hostRoundContentSchema = z.discriminatedUnion('kind', [
   /**
    * The third arm with nothing, and the only one where nothing is not a
    * withholding: there is no answer anywhere in this game. The console reads
-   * `flipsAt` off the round like every phone does, because it is flipping the
+   * `flipsAt` off the round like every player does, because it is flipping the
    * same screen at the same moment.
    */
   z.object({ kind: z.literal('reflex') })

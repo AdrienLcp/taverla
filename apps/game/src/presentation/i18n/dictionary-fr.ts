@@ -148,13 +148,13 @@ export const FR_DICTIONARY: Dictionary = {
     clearLockouts: 'Remettre la tablée en jeu',
     home: {
       description:
-        'Les questions, c’est toi qui les apportes — une charade, un quiz sur une feuille, une leçon, ce que la tablée veut. Ici on ne tranche qu’une chose : qui a posé le pouce en premier. Et là-dessus, jamais de discussion.'
+        'Les questions, c’est toi qui les apportes — une charade, un quiz sur une feuille, une leçon, ce que la tablée veut. Ici on ne tranche qu’une chose : qui a été le plus rapide. Et là-dessus, jamais de discussion.'
     },
     lockout: 'Une mauvaise réponse met hors-jeu',
     name: 'Buzzer',
     running: 'Pose ta question',
     scoring:
-      'Le premier pouce répond à voix haute, et l’aubergiste dit si c’est bon. 1 point si c’est juste — et une mauvaise réponse te met hors-jeu jusqu’à ce qu’il te remette en jeu.',
+      'Le plus rapide répond à voix haute, et l’aubergiste dit si c’est bon. 1 point si c’est juste — et une mauvaise réponse te met hors-jeu jusqu’à ce qu’il te remette en jeu.',
     tagline: 'Tes questions, et une course au buzz.'
   },
   connection: {
@@ -536,17 +536,19 @@ export const FR_DICTIONARY: Dictionary = {
     hold: 'Appuie avant qu’il change et tu passes la tournée.',
     home: {
       description:
-        'Rien à savoir, rien à dire. L’écran reste immobile, puis il change — et le premier pouce posé rafle la tournée. Pars avant qu’il change et celle-là, tu la regardes depuis le banc.'
+        'Rien à savoir, rien à dire. L’écran reste immobile, puis il change — et le plus rapide rafle la tournée. Pars avant qu’il change et celle-là, tu la regardes depuis le banc.'
     },
     landed: defineTranslation('{count:plural}', {
-      plural: { count: { one: '{?} pouce posé', other: '{?} pouces posés' } }
+      plural: {
+        count: { one: '{?} joueur a appuyé', other: '{?} joueurs ont appuyé' }
+      }
     }),
     name: 'Réflexe',
     nobody: 'Personne n’a bougé',
     reaction: '{milliseconds:number} ms',
     scoring:
-      'L’écran change, et le premier pouce prend le point. Pars avant qu’il change et tu passes la tournée sur le banc.',
-    tagline: 'L’écran change. Le premier pouce gagne.',
+      'L’écran change, et le plus rapide prend le point. Pars avant qu’il change et tu passes la tournée sur le banc.',
+    tagline: 'L’écran change. Le plus rapide gagne.',
     tapped: 'C’est pris.',
     tooEarly: 'parti trop tôt',
     waiting: 'Guette l’écran.'

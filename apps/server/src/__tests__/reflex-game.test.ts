@@ -136,7 +136,7 @@ describe('a heat nobody has to judge', () => {
     )
   })
 
-  it('[reflex] pays the first thumb, and nobody else', async () => {
+  it('[reflex] pays the first player, and nobody else', async () => {
     const { alice, bob, host, round } = await openPlayingRound()
 
     await untilTheFlipIsFair(host)
@@ -207,7 +207,7 @@ describe('a heat nobody has to judge', () => {
     expect(hostView(host)?.round?.activeBuzz).toBeNull()
   })
 
-  it('[reflex] refuses a second thumb from the same phone', async () => {
+  it('[reflex] refuses a second tap from the same player', async () => {
     const { alice, host, round } = await openPlayingRound()
 
     await untilTheFlipIsFair(host)
@@ -223,8 +223,9 @@ describe('a heat nobody has to judge', () => {
     expect(reflexRound(hostView(host))?.taps).toHaveLength(1)
   })
 
-  // The heat has no other way to end when one phone is face down on the table,
-  // and the host pressing a button between every round is not a reflex game.
+  // The heat has no other way to end when one player's screen is face down on
+  // the table, and the host pressing a button between every round is not a
+  // reflex game.
   it('[reflex] closes the heat on its own when somebody never taps', async () => {
     const { alice, host, round } = await openPlayingRound()
 
@@ -241,7 +242,7 @@ describe('a heat nobody has to judge', () => {
   })
 })
 
-describe('a thumb that went too early', () => {
+describe('a player who went too early', () => {
   it('[reflex] refuses a tap that beat the screen', async () => {
     const { alice, aliceId, host, round } = await openPlayingRound()
 
@@ -254,7 +255,7 @@ describe('a thumb that went too early', () => {
   })
 
   // A false start takes one player out of the heat, not the heat away from the
-  // room — and the thumb that went early has spent itself, so nothing waits for
+  // room — and the press that went early has spent itself, so nothing waits for
   // it either.
   it('[reflex] carries the heat on, and hands it to whoever waited', async () => {
     const { alice, bob, bobId, host, round } = await openPlayingRound()
@@ -268,7 +269,7 @@ describe('a thumb that went too early', () => {
     bob.send({ roundId: round.id, type: 'player.buzz' })
 
     // Shorter than the tap window on purpose: the heat has to close on Bob's
-    // thumb rather than on the clock, or a false start costs the whole room the
+    // press rather than on the clock, or a false start costs the whole room the
     // rest of the window every time.
     await waitFor(() => hostView(host)?.phase === 'revealed', 'the reveal', 300)
 
@@ -276,7 +277,7 @@ describe('a thumb that went too early', () => {
     expect(scoreOf(host, 'Alice')).toBe(0)
   })
 
-  it('[reflex] refuses the thumb that already went early a second go', async () => {
+  it('[reflex] refuses the player who already went early a second go', async () => {
     const { alice, host, round } = await openPlayingRound()
 
     alice.send({ roundId: round.id, type: 'player.buzz' })

@@ -201,7 +201,7 @@ export const createRoomSocketEvents = (
     // `isHostConnected` already true, so no socket sees a frame saying the room
     // is running and the host is gone. And only when the room had no console at
     // all — a second tab is not a host coming back, and resuming a round nothing
-    // ever held rewinds its clock and restarts the countdown on every phone.
+    // ever held rewinds its clock and restarts the countdown on every screen.
     if (seated.role === 'host' && !hostWasConnected) {
       resumeRoundForHost(room)
     }
@@ -280,7 +280,7 @@ export const createRoomSocketEvents = (
   /**
    * A refused join is deliberately non-fatal: the socket stays open so the join
    * form can send another `hello` with a different nickname, instead of making
-   * the phone reconnect to be told the same thing.
+   * the player reconnect to be told the same thing.
    */
   const seatPlayer = ({
     message,
@@ -358,8 +358,8 @@ export const createRoomSocketEvents = (
     // `holdRoundWhileHostIsAway` stops every timer, and until this gate existed
     // that was the whole freeze: the floor could still answer its way to the end
     // of a round nobody was there to hear, which armed the next clip for an
-    // empty console. The phone draws the pause on its own; a client refusing is
-    // not the server deciding.
+    // empty console. The player's screen draws the pause on its own; a client
+    // refusing is not the server deciding.
     if (FLOOR_MESSAGE_TYPES.has(message.type) && !isHostConnected(room.code)) {
       sendError(outbound, {
         code: 'host_away',
@@ -828,7 +828,7 @@ export const createRoomSocketEvents = (
    * The host going home, which no other exit does: the ten-minute grace exists
    * so a reload keeps the game, and a host who says they are done should not
    * have to wait it out. Every socket is told before the room goes, because a
-   * phone left on a stale scoreboard has no other way to learn the evening is
+   * player left on a stale scoreboard has no other way to learn the evening is
    * over — the error is fatal, so it stops reconnecting to a code that no
    * longer resolves.
    */
@@ -895,16 +895,16 @@ export const createRoomSocketEvents = (
   }
 
   /**
-   * The one exit a phone does not choose, and therefore the only one that has to
-   * be said out loud: a socket left holding a `youId` the roster no longer has
-   * goes on being sent the room, and a screen that stops counting reads as the
-   * game having broken. Fatal frame, and the close is the client's — the same
-   * shape as `disband`, because a `Connection` carries a `send` and never its
-   * own socket.
+   * The one exit a player does not choose, and therefore the only one that has
+   * to be said out loud: a socket left holding a `youId` the roster no longer
+   * has goes on being sent the room, and a screen that stops counting reads as
+   * the game having broken. Fatal frame, and the close is the client's — the
+   * same shape as `disband`, because a `Connection` carries a `send` and never
+   * its own socket.
    *
    * Unregistered here rather than on the close that follows it, since `unseat`
-   * broadcasts and the room is still standing to be broadcast: a phone told it
-   * is out should not be handed one more view of what it is out of.
+   * broadcasts and the room is still standing to be broadcast: a player told
+   * they are out should not be handed one more view of what they are out of.
    *
    * A console that took a seat is unseated without a word. It is losing the
    * seat, not the room it is running, and there is no frame that says so — the
@@ -930,7 +930,7 @@ export const createRoomSocketEvents = (
 
   /**
    * Leaving on purpose, which is the one thing a closing socket cannot say: a
-   * locked phone closes one too, and that seat has to come back. So the seat
+   * locked screen closes one too, and that seat has to come back. So the seat
    * goes now rather than in ten minutes.
    *
    * The socket closing a beat later is harmless — `markPlayerDisconnected`
@@ -1108,15 +1108,15 @@ export const createRoomSocketEvents = (
       // timer `settle` arms, and re-arming one on a frozen round would spend a
       // clip on a room with no screen.
       //
-      // A phone whose socket was merely replaced still has somebody behind it.
+      // A screen whose socket was merely replaced still has somebody behind it.
       // Marking the seat away on the dead one greys the name for the rest of the
       // game — and stamps `disconnectedAt` on a player the sweeper would then
       // drop ten minutes later, mid-game, score and all.
       if (playerId !== null && !isSeatConnected(roomCode, playerId)) {
         markPlayerDisconnected(room, playerId, Date.now())
 
-        // A phone that locks its screen while holding the buzzer would otherwise
-        // hang the round on a player who cannot answer.
+        // A player who locks their screen while holding the buzzer would
+        // otherwise hang the round on somebody who cannot answer.
         settle(releaseBuzz({ now: Date.now(), playerId, room }), room)
       }
 

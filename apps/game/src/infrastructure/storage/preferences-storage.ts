@@ -75,8 +75,9 @@ export const writeStoredThemePreference = (
 
 /**
  * Not the seat — that is `session-storage.ts`, keyed per room, and it is what
- * brings a reloaded phone back to its score. This is only what the player likes
- * being called, so the join form on the *next* room arrives filled in.
+ * brings a player who reloaded back to their score. This is only what the
+ * player likes being called, so the join form on the *next* room arrives
+ * filled in.
  */
 export const readStoredNickname = (): Nickname | null => {
   const parsed = nicknameSchema.safeParse(read(NICKNAME_KEY))

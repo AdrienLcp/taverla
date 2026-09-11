@@ -26,7 +26,7 @@ type PrerenderedDocument = z.infer<typeof prerenderManifestSchema>[number]
  * A name carrying its own content hash can be kept forever, because changing
  * the file changes the name. Everything else is revalidated: `index.html` is
  * the one file that must never be stale — it is what names the hashed bundle,
- * so a cached copy pins a phone to the previous deployment's JavaScript — and
+ * so a cached copy pins a screen to the previous deployment's JavaScript — and
  * the fonts and icons beside it are served under fixed names a build replaces
  * in place.
  *
@@ -143,9 +143,9 @@ const registerSitemap = ({
 
 /**
  * Both surfaces from one origin, which is not a deployment convenience but the
- * thing the QR code depends on: it encodes `location.origin`, so the phone that
- * scans it must land on the host's own host. Two deployments would mean CORS, a
- * second domain and an environment variable pointing one at the other.
+ * thing the QR code depends on: it encodes `location.origin`, so the player
+ * who scans it must land on the host's own host. Two deployments would mean
+ * CORS, a second domain and an environment variable pointing one at the other.
  *
  * Registered last, after the API and the socket upgrade, because the SPA
  * fallback answers everything and would otherwise swallow them.
@@ -159,7 +159,7 @@ export const registerStaticSite = (app: Hono): void => {
 
   // Here rather than on the whole app, so the socket upgrade and the API keep
   // the frames they already send. Uncompressed, the bundle is 370 KiB of text
-  // over the phone network of whichever flat the party is in.
+  // over the network of whichever flat the party is in.
   app.use('*', compress())
 
   registerSitemap({

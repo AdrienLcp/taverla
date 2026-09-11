@@ -33,7 +33,7 @@
         text-align: start
         width: 100%
 
-    // The lobby is the only phase that draws it, and the register is a phone's
+    // The lobby is the only phase that draws it, and the register is a player's
     // rather than a console's: this screen is held at forty centimetres and the
     // code shares it with the pitch above and the roster below. `vmin` is what
     // keeps it from swallowing a short screen in landscape, and the container
@@ -84,8 +84,8 @@
       object-fit: cover
       width: clamp(140px, 26vmin, 180px)
 
-    // Bigger than the shared billboard step: this is the payoff, and on a phone
-    // held at arm's length the shared size lands at twenty-eight pixels.
+    // Bigger than the shared billboard step: this is the payoff, and on a
+    // screen held at arm's length the shared size lands at twenty-eight pixels.
     //
     // Two facts the viewport cannot answer, so the component publishes both,
     // and once this screen splits in two the column is what has to answer them
@@ -105,8 +105,8 @@
 
       color: var(--ink-muted)
 
-    // What this phone is about to play, and when: the lobby names the game, and
-    // a phone that walked in on a round names the round it gets instead.
+    // What this player is about to play, and when: the lobby names the game,
+    // and a player who walked in on a round names the round they get instead.
     .next-round,
     .up-next
       @include typography.billboard
@@ -118,8 +118,8 @@
 
       color: var(--ink-muted)
 
-    // What the room is told once the answer is public. Prose on a phone, so it
-    // is the one thing on this screen set at reading size.
+    // What the room is told once the answer is public. Prose on a player's
+    // screen, so it is the one thing here set at reading size.
     .note
       @include typography.body
 
@@ -136,7 +136,7 @@
       flex-direction: column
       gap: var(--space-2xs)
 
-    // A step down from the size it held while it was the whole of what a phone
+    // A step down from the size it held while it was the whole of what a player
     // was told: the board under it now says this number again, in the row that
     // is this player's, so it stays the loudest thing on the screen without
     // being the only thing on it.
@@ -194,8 +194,8 @@
     justify-content: center
 
     // The one round object in the product, because it is the one thing that is
-    // a physical button. Hit with a thumb by someone watching the television,
-    // so it is sized by the hand and not by the layout.
+    // a physical button. Pressed by someone watching the television, so it is
+    // sized by the hand and not by the layout.
     .buzzer
       @include focus.ring
       @include typography.monument

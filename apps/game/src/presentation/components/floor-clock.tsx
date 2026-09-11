@@ -26,7 +26,7 @@ type FloorClockProps = {
  *
  * Counted against the server's clock rather than a local timer started when the
  * frame arrived, for the same reason the countdown is — otherwise the host's
- * screen and the buzzing phone disagree about how long someone has been quiet.
+ * screen and the buzzing player disagree about how long someone has been quiet.
  */
 export const FloorClock: React.FC<FloorClockProps> = ({ buzz, clock }) => {
   const seconds = useFloorSeconds(buzz, clock)

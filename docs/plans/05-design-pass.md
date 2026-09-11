@@ -17,7 +17,7 @@ Suggested sequence:
 1. **`/impeccable init`** — writes `PRODUCT.md`. The context it needs: a party
    game, played in a living room, half-drunk, in the dark. Two surfaces with
    opposite constraints — a TV read from four metres away by a group, and a
-   phone held one-handed by someone not looking at it.
+   player's screen held one-handed by someone not looking at it.
 2. **`/impeccable shape`** on the host console, then the player screen. Decide
    the visual world before touching CSS.
 3. **`/impeccable animate`** — motion is most of what makes a game feel alive,
@@ -52,7 +52,7 @@ Three things must survive whatever happens:
   type scale.
 - **A dark room.** Pure white surfaces are painful. The dark ground is not a
   style choice.
-- **One thumb, not looking.** The buzzer is hit by someone watching the TV. Size
+- **One press, not looking.** The buzzer is hit by someone watching the TV. Size
   and position matter more than anything drawn on it.
 - **The cover art is the only real image.** It arrives at 250 px from Deezer.
   Design around that, do not fight it.

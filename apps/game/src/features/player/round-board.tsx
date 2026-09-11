@@ -20,12 +20,13 @@ type RoundBoardProps = {
 }
 
 /**
- * The room's round on a phone: one row per player, ranked by where the round
- * left them, carrying what they said and what it paid. The console draws those
- * as two blocks side by side — the answers beside the reveal, the standings
- * beside that — because it is read across four metres by a group. This is the
- * same two things folded into the one list a screen read at forty centimetres
- * can hold, and it exists because the big screen is often somebody else's.
+ * The room's round on a player's screen: one row per player, ranked by where
+ * the round left them, carrying what they said and what it paid. The console
+ * draws those as two blocks side by side — the answers beside the reveal, the
+ * standings beside that — because it is read across four metres by a group.
+ * This is the same two things folded into the one list a screen read at forty
+ * centimetres can hold, and it exists because the console is often somebody
+ * else's.
  *
  * Your own row is stamped rather than repeated: the receipt above is the
  * moment, this is the room, and the two say the same number once each.

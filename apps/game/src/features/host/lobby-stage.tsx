@@ -93,7 +93,7 @@ export const LobbyStage: React.FC<LobbyStageProps> = ({
  * opened from the shelf's front page arrives with nothing chosen, and this is
  * where the host reads what each of them is before deciding.
  *
- * The pitch alone was half of it. Every phone in the room is told what the
+ * The pitch alone was half of it. Every player in the room is told what the
  * round pays — `UpNext` prints it while the table fills up — and the one screen
  * that never was is the one whose job is to explain the game out loud: the
  * sentence was in the setup fold, which is collapsed at every width. So it is

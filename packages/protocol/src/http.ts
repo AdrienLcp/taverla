@@ -19,7 +19,7 @@ import {
  * and it keeps `apps/game` from depending on `apps/server`.
  */
 /**
- * The room comes first and the game second: a code goes up, the phones arrive,
+ * The room comes first and the game second: a code goes up, the players arrive,
  * and the table decides while they do. So the game is **optional** — omitted by
  * the front door, and carried by a game's own page, which is a shortcut for a
  * host who already knows what they came to play.
@@ -97,7 +97,7 @@ export const trackListResponseSchema = z.object({
 
 /**
  * `build` answers "is my fix live?" and nothing else. It is the deployment's,
- * not the tab's: a phone holding a cached bundle still reads what the server
+ * not the tab's: a client holding a cached bundle still reads what the server
  * was built from, which is the question being asked.
  */
 export const healthResponseSchema = z.object({

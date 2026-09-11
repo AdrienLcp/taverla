@@ -9,7 +9,7 @@ const CATALOGUE_TITLES = ['Around the World', 'Genesis', 'Sexy Boy']
 
 /**
  * Through the front door, which is the ordinary way in: the room is opened with
- * nothing chosen and the game is picked on the console while the phone arrives.
+ * nothing chosen and the game is picked on the console while the player arrives.
  * A game's own page is the shortcut, and `everyone-answers.spec.ts` goes that
  * way — one journey per door.
  */

@@ -58,7 +58,7 @@ export const MAX_REMEMBERED_SEATS = 8
  * would never reach the count.
  *
  * A day rather than the ten minutes a room outlives its host, because a claim is
- * stamped when the socket opened: a phone that has sat locked since the first
+ * stamped when the socket opened: a device that has sat locked since the first
  * round is exactly the one this exists for, and a party runs longer than a room's
  * own grace.
  */
@@ -103,8 +103,8 @@ export const forgetSeat = ({
  * The claim, at the head, with everything that no longer earns a place dropped
  * behind it. Pruning happens *here* rather than on the paths that end a room
  * because most claims die with nobody pressing anything: a room disbanded from
- * the console leaves every phone in it holding a code that has stopped
- * resolving, and no phone runs any code to find that out.
+ * the console leaves every client in it holding a code that has stopped
+ * resolving, and no client runs any code to find that out.
  *
  * Prepending rather than sorting is deliberate. A clock that steps backwards —
  * an NTP correction, a device whose date was wrong — would otherwise file the

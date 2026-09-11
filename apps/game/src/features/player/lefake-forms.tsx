@@ -122,9 +122,9 @@ type VoteBoardProps = LefakeFormProps & {
 }
 
 /**
- * The board, on a phone. A player's own line is shown rather than hidden — it is
- * half the fun of the round to watch it sit there — but it cannot be pressed,
- * and the server refuses it anyway.
+ * The board, on a player's screen. A player's own line is shown rather than
+ * hidden — it is half the fun of the round to watch it sit there — but it
+ * cannot be pressed, and the server refuses it anyway.
  */
 export const VoteBoard: React.FC<VoteBoardProps> = ({
   error,

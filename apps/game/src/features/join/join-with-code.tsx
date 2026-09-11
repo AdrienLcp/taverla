@@ -30,8 +30,8 @@ type FieldError =
 
 /**
  * The half of joining that is not a QR code, and shell rather than blind test:
- * a code is a room, and the room knows which game it is running. Someone handed
- * four characters over the phone types them here whatever is being played.
+ * a code is a room, and the room knows which game it is running. Someone told
+ * four characters across the room types them here whatever is being played.
  */
 export const JoinWithCode: React.FC = () => {
   const navigate = useNavigate()

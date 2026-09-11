@@ -1,7 +1,7 @@
 import type React from 'react'
 import { useEffect, useState } from 'react'
 
-import { copyToClipboard } from '@/infrastructure/env'
+import { copyToClipboard } from '@/infrastructure/browser'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import type { PlainTranslationKey } from '@/presentation/i18n/translation'
 

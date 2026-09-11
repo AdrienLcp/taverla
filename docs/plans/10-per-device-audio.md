@@ -1,4 +1,4 @@
-# Stage 10 — Everyone hears it on their own phone
+# Stage 10 — Everyone hears it on their own device
 
 > **Dropped, deliberately.** Audio stays on the host screen. Everything below is
 > kept because the reasoning is still the reasoning — but it is a record, not a

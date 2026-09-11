@@ -1,11 +1,11 @@
 /**
- * A phone that locks its screen closes its socket, so "not connected" is not
+ * A device that locks its screen closes its socket, so "not connected" is not
  * the same claim as "gone" — and the two thresholds below are what separates
  * them. They nest: a seat is expected, then merely held, then released.
  */
 
 /**
- * How long a dropped phone still holds the room up.
+ * How long a dropped player still holds the room up.
  *
  * The window exists for one race, and it is not hypothetical: the room advances
  * the moment everybody has acted, so a player whose Wi-Fi blinks in the second
@@ -20,7 +20,7 @@ export const RECONNECT_GRACE_MS = 15_000
 /**
  * How long a seat survives with nobody behind it. Past this the player is
  * removed outright rather than left greyed out: a *room* outlives a game and
- * chains several, so a phone that closed its browser in the first one would
+ * chains several, so a player who closed their browser in the first one would
  * otherwise sit on the scoreboard through every game after it.
  *
  * Deliberately the same ten minutes the server gives a room with nobody

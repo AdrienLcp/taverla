@@ -15,8 +15,8 @@ export const RoundActions: React.FC<RoundActionsProps> = ({
   const translate = useTranslate()
 
   // A blind test round ends when its clip does, so a lockout expires on its
-  // own. A charade has no such clock: once the quickest thumbs have all missed,
-  // only the host can give the round back to the room.
+  // own. A charade has no such clock: once the quickest players have all
+  // missed, only the host can give the round back to the room.
   const isFieldClosed =
     view.round?.content.kind === 'buzzer' &&
     view.round.lockedOutPlayerIds.length > 0

@@ -11,13 +11,13 @@ type RoundParticipant = {
 /**
  * Who a round opened on, stamped when its clip starts rather than when it is
  * created: the countdown is three seconds of a screen saying "get ready", and a
- * phone that lands inside it is in the round. `null` until then, which is what
+ * player who lands inside it is in the round. `null` until then, which is what
  * makes nobody a latecomer before there is anything to be late for.
  */
 export type RoundRoster = ReadonlySet<PlayerId> | null
 
 /**
- * Whether this phone arrived after the round was under way. It keeps its seat
+ * Whether this client arrived after the round was under way. It keeps its seat
  * and plays from the next round; what it must not do is act in this one, or be
  * waited for by it.
  */

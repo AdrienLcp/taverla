@@ -39,7 +39,7 @@ const WON_IT = halves(true, true)
 /** Long enough to read a view while the countdown is still on screen. */
 const SLOW_COUNTDOWN = { ...FAST_GAME, countdownMs: 600 }
 
-/** A phone left on the wrong time zone offset, four seconds ahead of the server. */
+/** A device on the wrong time zone offset, four seconds ahead of the server. */
 const DEVICE_SKEW_MS = 4_000
 const deviceNow = () => Date.now() + DEVICE_SKEW_MS
 
@@ -175,7 +175,7 @@ describe('the rules every socket obeys', () => {
   /**
    * The mirror of the test above, and the reason both exist: a closed socket
    * means "hold this seat", so giving it up has to be something the player
-   * *says*. Nothing else can tell a locked phone from somebody who has left.
+   * *says*. Nothing else can tell a locked screen from somebody who has left.
    */
   it('[seat] drops a player who says they are leaving, at once', async () => {
     const { code, host } = await room.openRoom()
@@ -197,9 +197,10 @@ describe('the rules every socket obeys', () => {
   })
 
   /**
-   * A phone whose Wi-Fi blinks in the second its table-mate answers used to end
-   * the round on everybody else: it stopped being counted the instant its socket
-   * closed, so the room had "nothing left to wait for" while it was still there.
+   * A player whose Wi-Fi blinks in the second their table-mate answers used to
+   * end the round on everybody else: they stopped being counted the instant
+   * their socket closed, so the room had "nothing left to wait for" while they
+   * were still there.
    */
   it('[seat] still waits for a player whose socket just dropped', async () => {
     const { code, host } = await room.openRoom({
@@ -333,7 +334,7 @@ describe('the rules every socket obeys', () => {
 
   // `estimateClockOffset` is unit-tested against invented samples; this is the
   // handshake that produces them, over a real socket, on a device that is four
-  // seconds out. Without the correction the phone starts the clip early — the
+  // seconds out. Without the correction the device starts the clip early — the
   // last assertion is what that failure looks like.
   it('[clock] lands the countdown on a device four seconds ahead of the server', async () => {
     const { code, host } = await room.openRoom(SLOW_COUNTDOWN)

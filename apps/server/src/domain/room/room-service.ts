@@ -21,10 +21,11 @@ export const touch = (room: Room, now: number): void => {
 }
 
 /**
- * A phone that reloads, locks its screen or drops off Wi-Fi comes back with the
- * `sessionId` it stored, and reclaims the same seat and score. Only when no
- * seat matches is a new participant created — which is why the nickname clash
- * check runs against *other* participants, never against the returning one.
+ * A player who reloads, locks their screen or drops off Wi-Fi comes back with
+ * the `sessionId` they stored, and reclaims the same seat and score. Only when
+ * no seat matches is a new participant created — which is why the nickname
+ * clash check runs against *other* participants, never against the returning
+ * one.
  *
  * **A returning seat keeps the name it holds**, whatever the `hello` says.
  * Renaming is `player.rename`'s job, and a screen that renamed itself carries
@@ -225,7 +226,7 @@ export const removePlayer = (
 /**
  * Gives up the seats nobody has been behind for long enough that they are not
  * coming back. A greyed row costs nothing for a minute; a game runs half an
- * hour, and a phone whose battery died in the first round should not be on the
+ * hour, and a player whose screen died in the first round should not be on the
  * scoreboard at the end of it.
  *
  * Returns who went, because the caller has to release whatever they were

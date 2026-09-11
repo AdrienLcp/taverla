@@ -28,7 +28,7 @@ describe('gradeQuizGuess', () => {
     expect(isRight('cate winslet')).toBe(true)
   })
 
-  it('[quiz] folds the accents a phone keyboard makes hard', () => {
+  it('[quiz] takes an answer typed without its accents', () => {
     const question: Answerable = {
       accepted: [],
       answer: 'Léonard de Vinci',

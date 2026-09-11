@@ -198,8 +198,8 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
 
   // A frame, and the store — never `setSeatNickname`, which is what the socket
   // is keyed on: reopening it to change a label would freeze the round on every
-  // phone in the room. The stored name is what a reload re-seats under if the
-  // seat itself has since expired.
+  // player's screen in the room. The stored name is what a reload re-seats
+  // under if the seat itself has since expired.
   const renameSeat = useCallback(
     (nickname: string) => {
       clearError()
@@ -533,8 +533,8 @@ const Stage: React.FC<StageProps> = ({
         )}
         {isSeated && view.settings.mode.kind === 'typed' && (
           <TypedAnswer
-            // A seated console is withheld the answer the same way a phone is,
-            // so it reads what the round asks for off the settings too.
+            // A seated console is withheld the answer the same way a player
+            // is, so it reads what the round asks for off the settings too.
             asksForAFilm={
               view.settings.game?.kind === 'blindtest' &&
               view.settings.game.source.kind === 'film'
@@ -551,8 +551,8 @@ const Stage: React.FC<StageProps> = ({
     )
   }
 
-  // The board on the big screen, which is where this game is actually played:
-  // the room reads it, argues about it, and votes on their phones.
+  // The board on the console, which is where this game is actually played:
+  // the room reads it, argues about it, and votes on their own screens.
   if (view.phase === 'voting' && round != null) {
     const board = lefakeContent(round)?.board ?? []
 

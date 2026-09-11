@@ -17,7 +17,7 @@ import type { RoundRoster } from '@taverla/core/round/round-roster'
 
 /**
  * The server's own model, deliberately richer than either wire view: it holds
- * the session ids that let a reloaded phone reclaim its seat, and the track
+ * the session ids that let a reloaded player reclaim their seat, and the track
  * identity nobody may see yet. `room-view.ts` is the only place it is projected
  * onto the wire.
  */
@@ -59,7 +59,7 @@ export type Room = {
 export type Participant = {
   /**
    * When the socket closed, and `null` while it is open. It is what tells a
-   * phone that locked its screen apart from a player who has gone: see
+   * player who locked their screen apart from one who has gone: see
    * `@taverla/core/room/seat-presence` for the two windows it feeds.
    */
   disconnectedAt: number | null
@@ -109,7 +109,7 @@ export type PlayerAttempts = {
 }
 
 /**
- * One thumb, and when the server heard it. There is nothing else to record: the
+ * One press, and when the server heard it. There is nothing else to record: the
  * whole of a reflex answer is that it happened, and the reaction it is worth is
  * the gap to the flip.
  */

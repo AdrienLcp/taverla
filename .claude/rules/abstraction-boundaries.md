@@ -27,7 +27,7 @@ paid on every read of the code.
 | `WebSocket` (browser) | `apps/game/src/infrastructure/messaging/use-room-socket.ts` |
 | `hono/ws` (server) | `apps/server/src/infrastructure/messaging/` |
 | `localStorage` | `apps/game/src/infrastructure/storage/session-storage.ts` (seats) and `preferences-storage.ts` (locale, theme) |
-| `navigator`, `location` | `apps/game/src/infrastructure/env.ts`, plus `location.origin` in `router/navigation.ts` |
+| `navigator`, `location` | `apps/game/src/infrastructure/browser.ts`, plus `location.origin` in `router/navigation.ts` |
 | the clipboard | `env.ts` again — `navigator.clipboard` needs a secure context and a host served from a LAN address over plain HTTP has none, so the `execCommand` fallback lives behind `copyToClipboard` and nowhere else |
 | the screen wake lock | `env.ts` again — `keepScreenAwake` owns the sentinel *and* the `visibilitychange` that re-takes it, because a user agent releases the lock every time the tab goes away and never gives it back. A hook holding only the request would be holding one that is already gone |
 | `fetch` (browser) | `apps/game/src/infrastructure/api/taverla-api.ts` |

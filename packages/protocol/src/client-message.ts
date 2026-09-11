@@ -54,9 +54,9 @@ export const buzzMessageSchema = z.object({
 
 /**
  * Giving the seat up on purpose, which a closed socket cannot say on its own: a
- * phone that locks its screen closes one too, and that seat has to survive.
+ * device that locks its screen closes one too, and that seat has to survive.
  * Leaving is therefore something a player *says*, and it is what makes the
- * roster on the big screen true rather than eventually true.
+ * roster on the console true rather than eventually true.
  */
 export const leaveMessageSchema = z.object({
   type: z.literal('player.leave')
@@ -151,7 +151,7 @@ export const revealMessageSchema = z.object({
 /**
  * Everyone who was sat out is back in, mid-round. A blind test round is a clip
  * that runs out, so a lockout there expires on its own; a host running a charade
- * has no such clock, and a table where the three quickest thumbs have already
+ * has no such clock, and a table where the three quickest players have already
  * missed is a round nobody can win.
  */
 export const clearLockoutsMessageSchema = z.object({
@@ -168,7 +168,7 @@ export const endGameMessageSchema = z.object({
 })
 
 /**
- * Back to the lobby with the same phones in the same seats and the scores at
+ * Back to the lobby with the same players in the same seats and the scores at
  * zero. Distinct from `host.endGame` because keeping the room is the entire
  * point: making everyone re-scan is what ends an evening after one game.
  */
@@ -183,8 +183,8 @@ export const removePlayerMessageSchema = z.object({
 
 /**
  * The room is gone and everyone is out, which is the one exit `host.endGame`
- * deliberately is not. Irreversible: the code stops resolving, so the phones
- * that scanned it cannot come back to it even by reloading.
+ * deliberately is not. Irreversible: the code stops resolving, so the players
+ * who scanned it cannot come back to it even by reloading.
  */
 export const closeRoomMessageSchema = z.object({
   type: z.literal('host.closeRoom')
@@ -273,7 +273,7 @@ export const HOST_ONLY_MESSAGE_TYPES = new Set<ClientMessageType>([
  * one gate that has to refuse all four at once: a room whose console is gone is
  * frozen, and a freeze the floor can still fill in is not one. The seat frames
  * — `player.leave`, `player.rename` — are deliberately not here, because
- * leaving a room nobody is running is exactly what a phone should still be
+ * leaving a room nobody is running is exactly what a player should still be
  * allowed to do.
  */
 export const FLOOR_MESSAGE_TYPES = new Set<ClientMessageType>([

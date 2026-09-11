@@ -6,9 +6,9 @@ export const protocolErrorCodes = [
   'room_closed',
   /**
    * The host taking a seat back. Fatal like `room_closed`, and the one exit a
-   * phone does not choose — so it is the one that has to be said out loud, or a
-   * screen holding a `youId` the roster no longer has simply stops counting. It
-   * voids the seat too: the room is still there, and a claim replayed on the
+   * player does not choose — so it is the one that has to be said out loud, or
+   * a screen holding a `youId` the roster no longer has simply stops counting.
+   * It voids the seat too: the room is still there, and a claim replayed on the
    * next reload would walk straight back in.
    */
   'removed_by_host',
@@ -30,8 +30,9 @@ export const protocolErrorCodes = [
    * the speaker and the judge, so their leaving freezes every timer — but a
    * frozen round the floor can still fill in is not frozen: everyone answering
    * satisfies `everyoneIsDone`, closes the round and arms the next clip for a
-   * screen that is not there to play it. The phone already draws the pause;
-   * this is the server saying the same thing, which is the half that decides.
+   * screen that is not there to play it. The player's screen already draws
+   * the pause; this is the server saying the same thing, which is the half
+   * that decides.
    */
   'host_away',
   'wrong_phase',
@@ -39,15 +40,15 @@ export const protocolErrorCodes = [
   'already_buzzed',
   'player_locked_out',
   /**
-   * A tap that beat the screen it was reacting to, or landed inside the hundred
-   * milliseconds after it that no human reaction fits into. Its own code rather
-   * than `player_locked_out`, even though the lockout is exactly what it causes:
-   * the phone has to be able to say *too early* rather than *you already
+   * A press that beat the screen it was reacting to, or landed inside the
+   * hundred milliseconds after it that no human reaction fits into. Its own code
+   * rather than `player_locked_out`, even though the lockout is exactly what it
+   * causes: the player has to be told *too early* rather than *you already
    * missed*, or a player who jumped the gun reads it as the game being broken.
    */
   'false_start',
   /**
-   * A frame from a phone that took its seat after the round was under way. It
+   * A frame from a client that took its seat after the round was under way. It
    * keeps the seat and plays from the next round; the screen is what stops it
    * acting in this one, and this is the backstop behind that — a socket is
    * whatever its owner makes it.

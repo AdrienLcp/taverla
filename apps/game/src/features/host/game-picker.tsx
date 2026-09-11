@@ -27,7 +27,7 @@ type GamePickerProps = {
 
 /**
  * Which game the room is playing, and nothing is selected until somebody says.
- * A room is opened before the table decides — the code goes up, the phones
+ * A room is opened before the table decides — the code goes up, the players
  * arrive, and this is the decision they are waiting on, which is why the lobby
  * shows it on the stage and every later phase keeps it with the settings.
  */

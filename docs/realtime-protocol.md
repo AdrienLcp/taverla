@@ -187,7 +187,7 @@ The host view adds what only the host may see:
 the first and gets `null` for the second: that screen still has to play the
 clip, and must not be handed the answer.
 
-That is the whole of the seated host. One phone is the speaker and a player at
+That is the whole of the seated host. One screen is the speaker and a player at
 once — the seat is taken by putting a nickname on the host's `hello` — and the
 moment it is taken, `toHostView` nulls the answer inside `currentContent`,
 because a payload that screen could read in a console is not a guarantee. The
@@ -221,9 +221,9 @@ cancels every timer releasing a buzz would arm.
 
 `roundElapsedMs` is shared rather than the host's, because it is the room's
 clock and not the speaker's: the host seeks the track back to it after a reload,
-and every screen arms the round bar from it — a phone that locked itself comes
-back to where the room is rather than to a full one. It says how long a round
-has been open, which the big screen is already showing to everybody.
+and every screen arms the round bar from it — a player whose screen locked
+comes back to where the room is rather than to a full one. It says how long a
+round has been open, which the console is already showing to everybody.
 
 The player view adds instead:
 
@@ -239,7 +239,7 @@ until the reveal, like `revealedAnswers`.
 
 `round.joinedAfterStart` is scoped the same way, and is the round's answer to
 "what is this one to **you**". A round stamps who it opened on when its clip
-starts — the countdown is still *get ready*, so a phone that lands inside it is
+starts — the countdown is still *get ready*, so a player who lands inside it is
 in the round — and waits for those players and nobody else before closing a
 phase. A latecomer keeps its seat and plays from the next round; everything it
 could send in this one is refused with `joined_mid_round`, which is the backstop
@@ -264,9 +264,9 @@ The fifth guarantee, and the first one the shelf grew rather than opened with.
 Buzz order is stamped on arrival, which is what makes *who was first*
 unforgeable. That measures **arrival**, and a game whose whole subject is
 reaction needs arrival *minus the moment the stimulus happened*. Broadcasting
-the stimulus gets that wrong in the one way that matters: every phone would flip
-when the frame lands, so a player on a slow link reacts late by exactly their
-latency and the race is won by the best Wi-Fi in the room.
+the stimulus gets that wrong in the one way that matters: every screen would
+flip when the frame lands, so a player on a slow link reacts late by exactly
+their latency and the race is won by the best Wi-Fi in the room.
 
 So the moment travels **ahead of itself**. `round.content.flipsAt` is a server
 timestamp on both views, and every device schedules against its own estimated
@@ -275,14 +275,14 @@ offset — the same mechanism the countdown already runs on, and the reason
 
 That hands a scripted client the moment in advance, and the answer is not to
 hide it. Hiding buys nothing — the countdown gives it away — and costs the
-mechanism. **A tap arriving less than `FALSE_START_FLOOR_MS` after `flipsAt` is
-a false start**: refused with `false_start`, and the player sits out the rest of
-the round. Human simple reaction to a visual stimulus does not go below about
-150 ms, so the floor costs an honest player nothing and makes scheduling a tap
-self-defeating — the scheduled tap lands too early to be accepted, and only
+mechanism. **A press arriving less than `FALSE_START_FLOOR_MS` after `flipsAt`
+is a false start**: refused with `false_start`, and the player sits out the rest
+of the round. Human simple reaction to a visual stimulus does not go below about
+150 ms, so the floor costs an honest player nothing and makes scheduling a press
+self-defeating — the scheduled press lands too early to be accepted, and only
 jitter could save it.
 
-One rule covers both halves of the problem, because a tap that beat the flip
+One rule covers both halves of the problem, because a press that beat the flip
 measures negative and a negative is under the floor. `packages/core/src/reflex/`
 holds it, with no I/O and a test of its own; the next reflex-shaped game
 inherits it rather than re-deciding it.
@@ -305,13 +305,13 @@ Fatal, followed by close code 1008: `room_not_found`,
 on the socket closing after it, and the difference was invisible while every
 fatal refusal came from `reject`, which sends and then closes. `host.closeRoom`
 broke the tie: the server is answering a *third party*, so the error lands on
-two dozen player sockets nobody is closing, and every phone sat on a stale
+two dozen player sockets nobody is closing, and every screen sat on a stale
 scoreboard — live and lying — while the room no longer existed. A fatal code may
 therefore be sent to a socket the server keeps open, and that is not a loose end
 to tidy up by closing it too. It is the guarantee the client owes.
 
 `removed_by_host` is the same shape one scope down, and it was the whole of what
-`host.removePlayer` was missing: the seat came off the roster and the phone was
+`host.removePlayer` was missing: the seat came off the roster and the screen was
 told nothing, so it kept receiving `room.updated` with a `youId` no longer in
 `players` and quietly fell back to *You* and `0` — a screen that had stopped
 counting and did not say so. The frame goes to that player's connections only,

@@ -60,7 +60,7 @@ const rememberedHostTokensSchema = z.array(
  * it down and opens another, and the server can still be holding the first when
  * the second says hello. A client-supplied id makes the second connection a
  * *reclaim* of the same seat instead of a stranger fighting for it — the same
- * path a phone takes when it reconnects after a screen lock.
+ * path a player takes when they reconnect after a screen lock.
  *
  * Every claim is re-stamped on the way through, minted or not, because this runs
  * when a socket opens: that is the only moment the device can say which of the
@@ -184,7 +184,7 @@ export const readHeldRooms = (): HeldRoom[] =>
 
 /**
  * The code has stopped resolving, so nothing this device holds for it opens
- * anything: the token, the console's seat and the phone's all go together. It
+ * anything: the token, the console's seat and the player's all go together. It
  * keeps the eight slots each store has for rooms that still exist, which is what
  * stops a device that plays often pushing a live room out with dead ones.
  */

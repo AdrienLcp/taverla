@@ -28,7 +28,7 @@ export const RevealedLieBoard: React.FC<RevealedLieBoardProps> = ({
   return (
     // How many lines there are, for a host stage that divides its own height by
     // them rather than letting ten of them run off the bottom of the room's
-    // screen. The phone reads it at a fixed size and ignores this.
+    // screen. A player's screen reads it at a fixed size and ignores this.
     <ul
       className='revealed-lie-board'
       style={{ '--board-lines': board.length }}

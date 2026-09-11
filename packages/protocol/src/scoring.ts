@@ -7,8 +7,8 @@ export const POINTS_PER_ARTIST = 1
 
 /**
  * Typed mode only, and deliberately more generous than the buzzer's flat pair:
- * typing both against a clock on a phone is harder than saying them out loud,
- * so holding the whole answer is worth more than the sum of its halves.
+ * typing both against a clock is harder than saying them out loud, so holding
+ * the whole answer is worth more than the sum of its halves.
  */
 export const POINTS_FOR_TITLE_AND_ARTIST = 1
 

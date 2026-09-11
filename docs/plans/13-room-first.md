@@ -1,7 +1,7 @@
 # Stage 13 — The room comes first
 
-**Goal.** Open a room before deciding what to play. The code goes up, the phones
-arrive, and the table picks the game while they do.
+**Goal.** Open a room before deciding what to play. The code goes up, the
+players arrive, and the table picks the game while they do.
 
 **Depends on** stage 12 only in its ordering: every screen this touches reads
 `settings.game`, and doing it with three games on the shelf meant sweeping all

@@ -165,10 +165,10 @@ const SeatName: React.FC = () => {
  * The ways out of a room, in the one piece of chrome that is on every screen at
  * every phase. A stage carries the action the room is waiting on and nothing
  * else, so an exit that must be reachable mid-round lives here instead — behind
- * a popover, where it cannot be pressed by a thumb aiming at the game.
+ * a popover, where it cannot be pressed by a player aiming at the game.
  *
  * Closing asks twice, because it is the only one that cannot be undone: the
- * code stops resolving, so a phone cannot reload its way back in.
+ * code stops resolving, so a player cannot reload their way back in.
  */
 const RoomExit: React.FC<{ onDone: () => void }> = ({ onDone }) => {
   const { locale } = useI18n()
@@ -182,9 +182,10 @@ const RoomExit: React.FC<{ onDone: () => void }> = ({ onDone }) => {
   const isLive = connection?.status === 'open'
 
   // Leaving the room is what pressing this *means* on a screen that holds a
-  // seat, and saying so is the only way the roster on the big screen can be
-  // true rather than true in ten minutes. A closing socket cannot carry it: a
-  // phone that locks its screen closes one too, and that seat has to come back.
+  // seat, and saying so is the only way the roster on the console can be true
+  // rather than true in ten minutes. A closing socket cannot carry it: a
+  // player who locks their screen closes one too, and that seat has to come
+  // back.
   if (closeRoom === null) {
     return (
       <div className='exits'>
@@ -274,7 +275,7 @@ const THEME_KEYS: Record<ThemePreference, PlainTranslationKey> = {
 }
 
 /**
- * The one piece of chrome on every screen, including the ones a phone reaches
+ * The one piece of chrome on every screen, including the ones a player reaches
  * straight from a QR code: a player who never passes through the home page
  * still needs to switch language, and everyone needs a way out of a room.
  *
@@ -299,8 +300,8 @@ export const AppMenu: React.FC = () => {
       : translate(connectionStatusKey(connection.status))
 
   // Asked for on the first open rather than at mount: nobody needs it during a
-  // game, and a phone waking a sleeping instance would spend its first request
-  // on this instead of on joining.
+  // game, and a player waking a sleeping instance would spend their first
+  // request on this instead of on joining.
   const loadBuild = async (): Promise<void> => {
     const health = await fetchHealth()
 
@@ -344,9 +345,9 @@ export const AppMenu: React.FC = () => {
                   The way in, on every screen at every phase — which is the one
                   thing the console's lobby could not offer, because it stops
                   being on screen the moment the first round starts and it was
-                  never on a player's screen at all. Behind the popover no thumb
-                  aiming at the game can hit, which is the placement this menu
-                  already exists to give.
+                  never on a player's screen at all. Behind the popover no
+                  player aiming at the game can hit, which is the placement this
+                  menu already exists to give.
 
                   Above the preferences rather than beside the exits: it is the
                   only thing here somebody opens the menu *during* a game to
@@ -421,8 +422,9 @@ export const AppMenu: React.FC = () => {
                   A front-door concern, and offered only there: following it out
                   of a room unmounts the page and closes its socket, which the
                   server reads as a screen that dropped off — a host would leave
-                  the round frozen on every phone to go and read a licence. The
-                  route stays, so a shared link and a reload still resolve.
+                  the round frozen on every player's screen to go and read a
+                  licence. The route stays, so a shared link and a reload still
+                  resolve.
                 */}
                 {!isInsideRoom && (
                   <p className='credit'>

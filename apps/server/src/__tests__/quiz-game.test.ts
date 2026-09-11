@@ -80,8 +80,8 @@ describe('a quiz through the seam', () => {
 
   /**
    * A second seat nobody answers from, for the assertions that need the round
-   * to stay open: one phone finishing is what closes a simultaneous round, so a
-   * solo player's first pick reveals the answer before anything else can be
+   * to stay open: one player finishing is what closes a simultaneous round, so
+   * a solo player's first pick reveals the answer before anything else can be
    * sent.
    */
   const contestedRoundInPlay = async (settings: RoomSettings) => {

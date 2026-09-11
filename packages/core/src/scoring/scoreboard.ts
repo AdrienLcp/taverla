@@ -10,7 +10,7 @@ export type ScoreboardEntry = {
 /**
  * Whether a board has anything to rank. Before the first point every player is
  * first on nothing, so the screens that would say so drop the claim instead:
- * the roster loses its rank and score columns, the phone is told no placing,
+ * the roster loses its rank and score columns, the player is told no placing,
  * and the final board names nobody.
  */
 export const hasAnybodyScored = (players: readonly PublicPlayer[]): boolean =>
@@ -48,9 +48,9 @@ export type Standing = {
 
 /**
  * Where one player stands, in the two facts that are true at *every* phase — a
- * place and the size of the room. That is what the persistent strip on a phone
- * carries, and it is why the strip rather than the reveal is where a place
- * belongs: a board is only true once a round has revealed.
+ * place and the size of the room. That is what the persistent strip on a
+ * player's screen carries, and it is why the strip rather than the reveal is
+ * where a place belongs: a board is only true once a round has revealed.
  *
  * `null` wherever the board has nothing to say — the same threshold every other
  * ranked surface uses, so a lobby does not announce a first place on nought.

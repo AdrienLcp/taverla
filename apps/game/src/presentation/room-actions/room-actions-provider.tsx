@@ -18,7 +18,7 @@ export type RoomActions = {
   closeRoom: (() => void) | null
   /** Ends the game and puts the final board up. `null` while no game is in play. */
   endGame: (() => void) | null
-  /** Gives the seat up, so the roster on the big screen is true at once. */
+  /** Gives the seat up, so the roster on the console is true at once. */
   leaveSeat: (() => void) | null
   /**
    * The name the last rename was refused for, so the menu can hold its field
@@ -72,7 +72,7 @@ export const useRoomActions = (): RoomActions => useChannel().actions
  * Whether the screen below is inside a room at all, which is what the menu asks
  * before offering a plain link out. Navigating away closes the socket, and the
  * server cannot tell that from a closed tab: a host who followed one would leave
- * the round frozen on every phone with their own screen saying nothing.
+ * the round frozen on every player with their own screen saying nothing.
  *
  * Any one of the three exits answers it — a console always offers to close the
  * room, and a seated player always offers to leave.

@@ -4,7 +4,7 @@
 @use './typography'
 
 /// The box a control is *stamped* as: the edge that reserves the same room in
-/// every material, the height a thumb aims at, and the padding that holds the
+/// every material, the height a press aims at, and the padding that holds the
 /// label off it.
 ///
 /// A mixin the variants opt into rather than a rule the root applies, because
@@ -68,13 +68,14 @@
     font-size: clamp(1.25rem, 2.6vmin, 2rem)
 
   // A press paints whatever a hover paints, always. A variant that changed
-  // colour only on hover left every thumb with the 2px nudge below as its
+  // colour only on hover left every press with the 2px nudge below as its
   // entire feedback, under a finger that covers the control.
   //
   // Every state is guarded on `:not([data-disabled])` because a variant selector
   // outranks the bare `[data-disabled]` below: without it, a state left painted
   // at the moment the control was disabled stays painted, and the four choice
-  // buttons found it on a phone — one of them stood white for a whole round.
+  // buttons found it on a player's screen — one of them stood white for a
+  // whole round.
   &.filled
     @include box
 
@@ -104,7 +105,7 @@
   // every other line of the panel starts at.
   //
   // The block padding stays and does not scale, because it is not the box
-  // coming back: it is the room a thumb needs. A `title` line is 1.05em tall
+  // coming back: it is the room a press needs. A `title` line is 1.05em tall
   // and the pending spinner is 1.1em, so with none at all the smallest one is
   // under the 24px a target owes and the spinner sits a hair proud of it.
   &.underlined
@@ -124,7 +125,7 @@
   // a hover at all. iOS fires a second `pointerenter` as `pointerType: 'mouse'`
   // and react-aria guards it with a 500 ms window armed on a touch `pointerup`
   // — miss that window and `isHovered` latches with nothing to lower it. The
-  // press stays unconditional, because it is the whole of a thumb's feedback.
+  // press stays unconditional, because it is the whole of a touch's feedback.
   @media (hover: hover) and (pointer: fine)
     &.filled:not([data-disabled])[data-hovered]
       background: var(--ink-muted)

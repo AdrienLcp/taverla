@@ -186,7 +186,7 @@ export const beginRound = async (room: Room): Promise<void> => {
  *
  * A game with no clock cancels instead, and the bare buzzer is the only one:
  * it serves nothing, so there is nothing for the room to run out of and the
- * round waits for a thumb. The reflex race looks like it should be the second
+ * round waits for a press. The reflex race looks like it should be the second
  * and is not — its clock is the round's rather than the settings', which is
  * what `remainingRoundMs` reconciles.
  */
@@ -415,7 +415,8 @@ const SEAT_SWEEP_INTERVAL_MS = 60 * 1_000
  * the roster is something every screen has to be told about.
  *
  * The floor is released with them. A room whose answer window is the host's own
- * word can otherwise hold a buzz forever on behalf of a phone that is long gone.
+ * word can otherwise hold a buzz forever on behalf of a player who is long
+ * gone.
  */
 export const startSeatSweeper = (): (() => void) => {
   const timer = setInterval(() => {

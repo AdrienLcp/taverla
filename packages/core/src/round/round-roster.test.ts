@@ -25,7 +25,7 @@ const away = (id: PlayerId, forMs: number) => ({
 })
 
 describe('round roster', () => {
-  it('[roster] counts a phone that arrived after the clip started as late', () => {
+  it('[roster] counts a player who arrived after the clip started as late', () => {
     expect(
       hasJoinedAfterStart({
         openedWithPlayerIds: opened,
@@ -68,7 +68,7 @@ describe('round roster', () => {
    * the roster check would still look right on a table where nobody's Wi-Fi
    * blinked.
    */
-  it('[roster] stops waiting for a player of its own whose phone has gone', () => {
+  it('[roster] stops waiting for a player of its own whose socket has gone', () => {
     expect(
       isExpectedInRound({
         now: NOW,

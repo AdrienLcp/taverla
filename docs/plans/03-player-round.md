@@ -1,8 +1,8 @@
 # Stage 03 — The player's round
 
-**Goal.** The phone becomes worth holding: a countdown that matches everyone
-else's, a buzzer that fires the instant a thumb lands, and honest feedback about
-what just happened.
+**Goal.** The player's screen becomes worth holding: a countdown that matches
+everyone else's, a buzzer that fires the instant a thumb lands, and honest
+feedback about what just happened.
 
 **Depends on** stage 01. Can run in parallel with 02.
 

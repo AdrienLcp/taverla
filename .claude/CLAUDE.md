@@ -120,7 +120,7 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
 - **Player** — anyone who joined, by scanning the QR code or by typing the room
   code. Holds a seat and a score
 - **Game** — what the room is playing, and **`null` until somebody says**: the
-  code goes up and the phones arrive before the table decides, and the picker
+  code goes up and the screens arrive before the table decides, and the picker
   sits on the lobby stage beside the QR code. The guard on `host.startRound`
   narrows it for everything downstream, and a round already on screen is asked
   `round.content` rather than `settings.game`, because that is the game it was
@@ -140,7 +140,7 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   A
   round **stamps who it opened on** when its clip starts, and waits for those
   players and nobody else — one stamp for the whole round, Le Fake's vote
-  included. A phone that arrives after keeps its seat, is refused everything it
+  included. A screen that arrives after keeps its seat, is refused everything it
   could send with `joined_mid_round`, and plays from the next round
 - **Answer mode** — `typed` (one field, the default), `choice` (four candidates)
   or `buzzer` (one player, judged by the host). The first two are everyone at
@@ -156,7 +156,7 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   says so for all 114 of its rows at once.
   **The clock never pays more
   than the answer did** — its amplitude is the lower of the two, so being fast
-  doubles a score at most, and the big screen prints the two halves apart
+  doubles a score at most, and the console prints the two halves apart
   (`2 +2`) rather than their total. It stays a *room* setting the
   game narrows — the bare buzzer and the reflex race offer only `buzzer`, and a
   frame setting anything else is refused
@@ -190,7 +190,7 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   has no such clock, so its host chooses (`locksOutOnMiss`) and can reopen the
   field with `host.clearLockouts`. In the reflex race a lockout has exactly one
   cause — a **false start** — which is what lets the reveal read it as one
-- **False start** — a tap less than `FALSE_START_FLOOR_MS` after `flipsAt`, or
+- **False start** — a press less than `FALSE_START_FLOOR_MS` after `flipsAt`, or
   before it at all. Refused with its own code and it costs the round, which is
   what lets `flipsAt` be published in advance: every device has to flip on its
   own clock or the race measures the room's Wi-Fi. It is the **fifth
@@ -205,14 +205,14 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   `host.closeRoom` disbands the **room**: everyone is sent a fatal `room_closed`
   and the code stops resolving. The stage carries the exit the moment asks for
   and nothing else, so the ones that must be reachable mid-round live in
-  `AppMenu`, on every screen at every phase behind a popover no thumb aiming at
+  `AppMenu`, on every screen at every phase behind a popover no press aiming at
   the game can hit. A seated host is the only screen offering all three, and the
   server frees the seat on the frame rather than on the reconnect after it,
   because a judge waiting on that would read no answer until it landed. A room
   outlives its host by ten minutes so a reload keeps the game; closing is what
   says otherwise. `host.removePlayer` is the fourth and the only one nobody
   chooses, so it is the one that has to be **said**: a fatal `removed_by_host`
-  to that phone alone, before the seat goes, and it voids the seat because the
+  to that screen alone, before the seat goes, and it voids the seat because the
   room still answers. **A plain navigation is never an exit** — the server cannot
   tell it from a closed tab, so the menu offers a link out of a room only where
   there is no room, which is why the credits are a front-door concern

@@ -133,7 +133,7 @@ describe('findBuzzRejection', () => {
     ).toBe<BuzzRejection>('wrong_phase')
   })
 
-  it('[buzz] calls a thumb that landed after the round turned over stale, not misphased', () => {
+  it('[buzz] calls a buzz that landed after the round turned over stale, not misphased', () => {
     expect(
       findBuzzRejection({
         ...arrivingBuzz,
@@ -154,7 +154,7 @@ describe('findBuzzRejection', () => {
     ).toBe<BuzzRejection>('player_locked_out')
   })
 
-  it('[buzz] refuses the second thumb on the same round', () => {
+  it('[buzz] refuses the second buzz on the same round', () => {
     expect(
       findBuzzRejection({
         ...arrivingBuzz,
@@ -193,7 +193,7 @@ describe('hasEligibleBuzzer', () => {
     ).toBe(false)
   })
 
-  it('[buzz] does not hold the round open for a phone that dropped off', () => {
+  it('[buzz] does not hold the round open for a player who dropped off', () => {
     expect(
       hasEligibleBuzzer({
         candidates: [alice, { ...bob, isConnected: false }],

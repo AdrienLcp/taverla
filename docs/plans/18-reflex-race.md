@@ -4,7 +4,7 @@
 > the shelf. What follows is the plan as written, with the places reality
 > diverged marked inline and what each session settled gathered at the foot.
 
-The screen flips, the first thumb wins. No content, no question, no judging —
+The screen flips, the first press wins. No content, no question, no judging —
 `docs/game-catalogue.md` costs it at *an evening* and calls it the cheapest thing
 left on the shelf, because it is the buzz already built with a colour change
 instead of a clip.
@@ -19,9 +19,9 @@ first" unforgeable. That measures *arrival*, and a reflex game needs
 **reaction** — arrival minus the moment the screen flipped. Two ways to have
 one, and only one of them is fair:
 
-- **Broadcast the flip.** Every phone flips when the frame lands, so a player on
-  a slow link sees it late and their reaction time carries their latency. The
-  race is won by the best Wi-Fi in the room.
+- **Broadcast the flip.** Every screen flips when the frame lands, so a player
+  on a slow link sees it late and their reaction time carries their latency.
+  The race is won by the best Wi-Fi in the room.
 - **Send `flipsAt` as a server timestamp** and let each device flip locally
   against its own estimated offset — exactly what `countdown` already does, and
   the reason `clock-sync.ts` exists. Latency drops out of the measurement.
@@ -30,7 +30,7 @@ The second is right, and it hands a scripted client the flip time in advance.
 The answer is not to hide it: **a buzz that arrives less than 100 ms after
 `flipsAt` is a false start.** Human simple reaction to a visual stimulus does
 not go below about 150 ms, so the floor costs an honest player nothing and makes
-scheduling a tap self-defeating — the scheduled buzz lands too early and is
+scheduling a press self-defeating — the scheduled buzz lands too early and is
 refused as a false start, and jitter is the only thing that could save it.
 
 Write that in `docs/realtime-protocol.md` when it lands: it is a fifth guarantee
@@ -52,15 +52,15 @@ verdict, and `applyVerdict` is not on its path at all.
 Answer mode: `buzzer` and nothing else, the same narrowing the bare buzzer does.
 `roundDurationMs` is `null` — the round ends when somebody wins it.
 
-> **Diverged — the heat does not end on the first thumb.** The plan said so
-> twice, and its own acceptance test contradicted it: *three phones, and the
+> **Diverged — the heat does not end on the first press.** The plan said so
+> twice, and its own acceptance test contradicted it: *three players, and the
 > reaction times ordered the way the room saw it happen* is a board, and a heat
 > that closes on the winner only ever holds one number. Adrien took the call.
-> **The first legal tap takes the point; the heat closes when everyone expected
-> in it has acted** — tapped or false-started — exactly the way a simultaneous
-> round does, and everybody gets their own time.
+> **The first legal press takes the point; the heat closes when everyone
+> expected in it has acted** — pressed or false-started — exactly the way a
+> simultaneous round does, and everybody gets their own time.
 >
-> That needed a backstop the plan had no room for, because one phone face down
+> That needed a backstop the plan had no room for, because one screen face down
 > on the table would otherwise hold the heat open with nothing to end it.
 > `TAP_WINDOW_MS` is it: the heat closes that long after the flip whatever else
 > happens. So `roundDurationMsOf` **is** `null` for this game and the round runs
@@ -114,14 +114,15 @@ either. Add one only if the flow turns out to be new.
 - **The reaction time is not a field.** It is `atServerTime` minus `flipsAt`,
   and both halves are already on the round — a third number could only disagree
   with them. So `Award` is untouched, and the shell gained nothing for one game.
-- **The taps live in the game's own arm**, not in `round.answers`. `answers` is
-  projected from the attempts a graded round accumulates, and a tap is graded by
-  nobody. Le Fake had already made the same move with `votedPlayerIds`.
+- **The presses live in the game's own arm**, not in `round.answers`. `answers`
+  is projected from the attempts a graded round accumulates, and a press is
+  graded by nobody. Le Fake had already made the same move with
+  `votedPlayerIds`.
 - **A false start is `lockedOutPlayerIds` and nothing else.** In this game the
   lockout has exactly one cause, so the reveal can read the two lists as *who
   reacted* and *who jumped*. `false_start` is its own error code, deliberately
   outside `BuzzRejection` — the refusal changes the round, where every other one
-  only answers the phone.
+  only answers the player.
 - **`flipsAt` is derived, not stored.** The model holds `flipDelayMs`; the view
   adds it to `round.startsAt`. One answer to when a round starts.
 - **`closeRound` moved into `round-service.ts`** and routes on the content
@@ -148,11 +149,11 @@ either. Add one only if the flow turns out to be new.
   end says the flip is three seconds before it. `HostActions` returns nothing
   during a heat for the same reason, and because *give the answer* is a lie in a
   game that has none.
-- **A false start is a state the phone holds**, a `--danger` stamp where the
-  buzzer was, and it is **silent on the big screen** until the reveal names it
-  at the foot of the board. A name printing itself mid-wait is motion, and
-  motion during the wait is a cue.
-- **The buzzer stays the buzzer**, in its place and at its size, because a thumb
+- **A false start is a state the player's screen holds**, a `--danger` stamp
+  where the buzzer was, and it is **silent on the console** until the reveal
+  names it at the foot of the board. A name printing itself mid-wait is motion,
+  and motion during the wait is a cue.
+- **The buzzer stays the buzzer**, in its place and at its size, because a hand
   is already resting on it — it gives up its ground until the flip and fills on
   the frame the field inverts. Live throughout: going early has to be reachable
   or the floor under `flipsAt` protects nothing.
@@ -165,12 +166,12 @@ either. Add one only if the flow turns out to be new.
 Verified in a muted browser at 414 px and 1600 px: the countdown hands over to a
 still teal screen, the field inverts to `#eafbf6` five seconds later, the heat
 closes 3 048 ms after that, and the board reads `Marc 990 ms` over
-`Lea 2 273 ms` beside the standings. A tap before the flip is refused, stamps
-the phone, and lands at the foot of the board as *parti trop tôt*.
+`Lea 2 273 ms` beside the standings. A press before the flip is refused, stamps
+the player's screen, and lands at the foot of the board as *parti trop tôt*.
 
 **One thing a single-player room hides**: a solo false start closes the heat on
 the spot — `everyoneHasTapped` counts a jumper as having acted — so the stamp
-never gets a frame. It is correct, and it is why the phone's own refusal has to
+never gets a frame. It is correct, and it is why the player's own refusal has to
 be checked with two seats.
 
 ## How to tell it is done
@@ -180,10 +181,10 @@ at the protocol level; what session B owes is the same list seen on a screen.
 
 All of it is green, and the last two were seen rather than asserted.
 
-- A room opens on `/reflex`, phones join, the screen flips and the first thumb
+- A room opens on `/reflex`, players join, the screen flips and the first press
   takes the round — with the reaction times ordered the way the room saw it
   happen.
-- A tap before the flip locks that player out and does not end the round.
-- A scheduled tap at `flipsAt` is refused as a false start.
+- A press before the flip locks that player out and does not end the round.
+- A scheduled press at `flipsAt` is refused as a false start.
 - Two devices on the same round see the flip at the same wall-clock moment.
 - A browser pass, muted, at phone width and on the host's screen.

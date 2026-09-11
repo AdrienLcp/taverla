@@ -116,7 +116,7 @@ describe('a whole game over real sockets', () => {
     expect(scores).toEqual({ Alice: 4, Bob: 2 })
   })
 
-  it('[buzz] gives the round to one thumb when two land together', async () => {
+  it('[buzz] gives the round to one player when two land together', async () => {
     const { code, host } = await room.openRoom()
     const alice = await room.seat({ code, nickname: 'Alice' })
     const bob = await room.seat({ code, nickname: 'Bob' })
@@ -138,10 +138,10 @@ describe('a whole game over real sockets', () => {
     expect(errorsIn(alice)).toHaveLength(0)
   })
 
-  // Buzzing costs nothing on its own, so without a clock a fast thumb and an
+  // Buzzing costs nothing on its own, so without a clock a fast press and an
   // empty head hold the room until the host intervenes. Running out is the same
   // outcome as answering wrong, and the lockout is the load-bearing half: a pass
-  // would let that thumb take the floor straight back.
+  // would let that player take the floor straight back.
   it('[buzz] takes the floor back from a player who says nothing, and locks them out', async () => {
     const { code, host } = await room.openRoom({
       ...FAST_GAME,
@@ -282,7 +282,7 @@ describe('a whole game over real sockets', () => {
   })
 
   // The highest-value assertion in the repo: it runs over every byte the two
-  // phones were sent across a whole round, not one hand-picked frame.
+  // players were sent across a whole round, not one hand-picked frame.
   it('[anti-cheat] never sends a player the answer before the reveal', async () => {
     const { code, host } = await room.openRoom()
     const alice = await room.seat({ code, nickname: 'Alice' })

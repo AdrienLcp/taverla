@@ -29,8 +29,8 @@ export const LobbyActions: React.FC<HostActionsProps> = ({
       </Button>
       {/*
         The game first when both are missing: it is the decision on the stage
-        the host is already looking at, where the roster fills itself as phones
-        arrive. The server refuses either way — see `no_game_chosen`.
+        the host is already looking at, where the roster fills itself as
+        players arrive. The server refuses either way — see `no_game_chosen`.
       */}
       {hasNoGame ? (
         <p className='reason'>{translate('host.needsGame')}</p>

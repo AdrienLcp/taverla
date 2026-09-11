@@ -18,8 +18,8 @@ type CountdownProps = {
 
 /**
  * Counts against the server's clock rather than a local timer started when the
- * message arrived — that difference is the whole point of the handshake. A phone
- * four seconds fast still hits zero with everyone else.
+ * message arrived — that difference is the whole point of the handshake. A
+ * screen four seconds fast still hits zero with everyone else.
  */
 export const Countdown: React.FC<CountdownProps> = ({
   clock,

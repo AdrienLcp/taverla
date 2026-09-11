@@ -42,7 +42,7 @@ export const encodeMessage = (message: unknown): string =>
  * Encodes *through* the schema instead of around it. TypeScript's excess
  * property check only fires on object literals, so a host-shaped view assigned
  * into a player-shaped variable type-checks and would ship the title, the
- * artist and the audio URL to every phone. Zod drops unknown keys on parse, so
+ * artist and the audio URL to every player. Zod drops unknown keys on parse, so
  * routing player frames through here physically removes them.
  *
  * Throws on a message that does not satisfy its own schema — that is a bug in

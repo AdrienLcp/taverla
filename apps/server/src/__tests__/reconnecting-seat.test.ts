@@ -14,7 +14,7 @@ vi.mock('@/infrastructure/music/deezer-client', async () => {
   return deezerClientStub()
 })
 
-describe('a phone whose socket was replaced', () => {
+describe('a seat whose socket was replaced', () => {
   let harness: RoomHarness
 
   beforeEach(async () => {
@@ -72,7 +72,7 @@ describe('a phone whose socket was replaced', () => {
     expect(zoe?.isConnected).toBe(true)
   })
 
-  it('[reconnect] leaves the floor with the phone that took it', async () => {
+  it('[reconnect] leaves the floor with the player who took it', async () => {
     const { code, host } = await harness.openRoom()
     const { returned, zombie } = await reconnect(code)
 

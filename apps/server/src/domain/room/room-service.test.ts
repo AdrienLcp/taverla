@@ -41,8 +41,8 @@ describe('joinAsPlayer', () => {
     expect(room.players.size).toBe(1)
   })
 
-  // The seat is the session's, not the socket's. This is what a phone relies on
-  // after a screen lock, and what makes StrictMode's double mount harmless.
+  // The seat is the session's, not the socket's. This is what a player relies
+  // on after a screen lock, and what makes StrictMode's double mount harmless.
   it('[room] returns the same seat and score to a returning session', () => {
     const first = join('Alice', 'session-alice')
 

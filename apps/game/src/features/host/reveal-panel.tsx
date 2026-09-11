@@ -126,7 +126,7 @@ const Outcome: React.FC<RevealPanelProps> = ({ players, round }) => {
     players.find((player) => player.id === playerId)?.nickname ?? '—'
 
   // How many rows the room has to read, for a host stage that divides its own
-  // height by them. It is not the player count: a phone that never answered is
+  // height by them. It is not the player count: a player who never answered is
   // in neither list, and only the ones drawn here pay for the space.
   if (round.revealedAnswers.length > 0) {
     return (

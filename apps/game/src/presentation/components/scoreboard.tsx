@@ -18,22 +18,22 @@ type ScoreboardProps = {
   className?: string
   /**
    * Names the list where the screen around it does not. The lobby roster on a
-   * phone is a column of nicknames under a pitch, and a reader who cannot see
-   * it is told only "list, six items".
+   * player's screen is a column of nicknames under a pitch, and a reader who
+   * cannot see it is told only "list, six items".
    */
   label?: string
   /**
    * Gives each row a way to drop that player. Omitted everywhere the board is
-   * something to *read* — the room's screen mid-round, the phone, the final
-   * board — and passed only by the host's own roster, which is the one surface
-   * where who is in the room is being managed rather than shown.
+   * something to *read* — the room's screen mid-round, a player's screen, the
+   * final board — and passed only by the host's own roster, which is the one
+   * surface where who is in the room is being managed rather than shown.
    */
   onRemove?: (playerId: string) => void
   /** Ranked here, not by the caller — ties share a rank and the order is stable. */
   players: readonly PublicPlayer[]
   /** Only ever CSS custom properties a layout needs at runtime. */
   style?: React.CSSProperties
-  /** Highlights one row; the phone passes its own id, the host passes none. */
+  /** Highlights one row; a player passes their own id, the host passes none. */
   youId?: string
 }
 

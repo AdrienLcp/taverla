@@ -23,7 +23,7 @@ type RoundProgressProps = {
  * would only add work.
  *
  * It starts at the fraction still standing rather than at full, which is what
- * lets a screen arriving mid-round — a phone back from a lock, a host who
+ * lets a screen arriving mid-round — a player back from a lock, a host who
  * reloaded — show where the room is instead of promising a whole clip.
  */
 export const RoundProgress: React.FC<RoundProgressProps> = ({

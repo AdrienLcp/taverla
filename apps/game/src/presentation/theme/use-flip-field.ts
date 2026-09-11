@@ -11,7 +11,7 @@ import {
  *
  * Scheduled against this device's own estimate of the server clock rather than
  * on a frame landing: the flip is the stimulus the race is measured from, and a
- * broadcast one would time the room's Wi-Fi instead of the thumb. On the root
+ * broadcast one would time the room's Wi-Fi instead of the press. On the root
  * element for the same reason `usePhaseField` is — an overscroll bounce shows
  * the document's background and not any component's.
  *

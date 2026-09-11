@@ -26,9 +26,9 @@ type VerdictChoice = {
 }
 
 /**
- * One tap per outcome rather than two toggles and a confirm. The host is reading
- * a name off a screen while someone shouts an answer across the room, and every
- * extra tap is time the other players spend watching them fiddle.
+ * One press per outcome rather than two toggles and a confirm. The host is
+ * reading a name off a screen while someone shouts an answer across the room,
+ * and every extra press is time the other players spend watching them fiddle.
  */
 const HALVES_CHOICES: readonly VerdictChoice[] = [
   {

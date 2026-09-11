@@ -27,12 +27,12 @@ through the rest.
 
 The question a blind test has to answer is *who was first*, and only a machine
 that sees both frames arrive can answer it. A client timestamp is wrong twice
-over: clocks drift by seconds between phones, and the number is one console line
-away from being edited. So `player.buzz` carries no timestamp, and the server
-stamps arrival.
+over: clocks drift by seconds between devices, and the number is one console
+line away from being edited. So `player.buzz` carries no timestamp, and the
+server stamps arrival.
 
-The server also holds the answer. Sending the title to a phone and asking it not
-to look would make the game unplayable for anyone curious enough to open
+The server also holds the answer. Sending the title to a player and asking them
+not to look would make the game unplayable for anyone curious enough to open
 DevTools.
 
 ## Why a raw WebSocket rather than Socket.IO
@@ -58,7 +58,7 @@ preflight, no environment variable pointing one deployment at another, and
 nothing to reconfigure when the game runs off a laptop on someone's Wi-Fi.
 
 The usual argument for splitting is bundle size, and lazy routes settle it: the
-player chunk is 5 kB, the host chunk 19 kB, and a phone never downloads the QR
+player chunk is 5 kB, the host chunk 19 kB, and a player never downloads the QR
 renderer. The routes are lazy for that reason — keep them that way.
 
 ## State lives in memory, on purpose
@@ -137,7 +137,7 @@ has the string.
 
 ## This is the first game, not the product
 
-The shell — a room with a readable code, a host screen, phones that hold a seat
+The shell — a room with a readable code, a host screen, players that hold a seat
 through a screen lock, an unforgeable arrival order, role-scoped views that make
 hidden information a compile error — is not specific to a blind test. A second
 game reuses all of it.

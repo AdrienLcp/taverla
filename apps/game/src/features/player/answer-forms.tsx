@@ -99,7 +99,7 @@ export const ChoiceAnswer: React.FC<ChoiceAnswerProps> = ({
 
   // The server's answer is what survives a reload; the local half is only there
   // because the round trip is 20–80 ms and a grid that stays live that long
-  // takes a second tap the server then refuses in silence.
+  // takes a second press the server then refuses in silence.
   const hasAnswered =
     hasSent || round.answers.some((answer) => answer.playerId === youId)
 
@@ -111,7 +111,7 @@ export const ChoiceAnswer: React.FC<ChoiceAnswerProps> = ({
         to guess — four buttons look like a thing you can try. It is also the
         mode the quiz now opens on, so it is the first form most players meet.
 
-        Above the grid rather than under it: it changes which button a thumb
+        Above the grid rather than under it: it changes which button a press
         commits to, so it is read before the choosing and not after.
       */}
       <p className='hint'>{translate('round.answer.oneShot')}</p>
@@ -146,7 +146,7 @@ type TypedAnswerProps = AnswerFormProps & {
   /**
    * Whether this round's two halves are a film and its composer rather than a
    * title and its artist. Read off the room's settings, never off the track:
-   * the phone is not sent the track while the answer can still be typed.
+   * the player is not sent the track while the answer can still be typed.
    */
   asksForAFilm: boolean
   /**
@@ -240,7 +240,7 @@ export const TypedAnswer: React.FC<TypedAnswerProps> = ({
  *
  * It mounts on every round and stays: an element that appeared with the first
  * verdict spent a `gap` it had nothing to fill, shifting the field and its
- * button down under a thumb already aiming at them, and a live region that
+ * button down under a player already aiming at them, and a live region that
  * arrives already holding its text is a change no screen reader watched happen.
  */
 const GuessFeedback: React.FC<{
