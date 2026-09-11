@@ -44,7 +44,7 @@ const parquetUrl = (split: string): string =>
 
 /**
  * The seven templates a French room can be asked, and where each lands among the
- * six categories a host picks from.
+ * eight categories a host picks from.
  *
  * The whitelist is what carries the quality here, not the popularity thresholds
  * below — every relation left out fails for a reason of its own. `country`,
@@ -57,9 +57,17 @@ const parquetUrl = (split: string): string =>
  * le nom ou le terme de Ciemniewski ?*. `manufacturer` is a long tail of
  * equipment.
  *
- * `developer` sits in `arts` beside the films and the books because in practice
- * it is a video-game question — fifteen of the sixteen that survived the rule on
- * the audited split — which is where the English half puts them too. The two
+ * `developer` carries `videogames` because in practice that is what it asks —
+ * fifteen of the sixteen that survived the rule on the audited split were a game
+ * rather than any other product, and the English half files them there too. It
+ * is *which studio made X* and nothing else, which is worth knowing: it is 56%
+ * of the French half of that category, so what deepens it is a second source
+ * rather than a wider fold. `creator` stays in `arts` even though a
+ * quarter of its questions name a series: the relation says who made a thing and
+ * never what kind of thing it is, so one sentence shape asks about Chandler Bing,
+ * Solid Snake and the Sistine Madonna, and a fold reading the prompt for a medium
+ * would file two of those three wrong. `director` has no such problem — it is
+ * asked of a film and nothing else, which is what lets it carry `cinema`. The two
  * relations about a person rather than a work go to `everyday`: *de quelle
  * nationalité est X* and *où X est-il mort* answer with a country and a city,
  * but a host who ticked geography is asking about the world, not about who died
@@ -69,8 +77,8 @@ const CATEGORY_OF_RELATION: Record<string, QuestionCategory> = {
   author: 'arts',
   'country of citizenship': 'everyday',
   creator: 'arts',
-  developer: 'arts',
-  director: 'arts',
+  developer: 'videogames',
+  director: 'cinema',
   'discoverer or inventor': 'science',
   'place of death': 'everyday'
 }

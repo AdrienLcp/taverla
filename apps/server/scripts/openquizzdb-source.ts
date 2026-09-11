@@ -22,8 +22,8 @@ const ATTRIBUTION: Attribution = {
 }
 
 /**
- * Their rubrics folded onto the six a host can actually pick from. The fold is
- * coarse on purpose: six chips fit a phone, and a room choosing between
+ * Their rubrics folded onto the eight a host can actually pick from. The fold is
+ * coarse on purpose: a handful of chips fit a phone, and a room choosing between
  * twenty-eight is a room reading a menu instead of playing.
  */
 const CATEGORY_OF_RUBRIC: Record<string, QuestionCategory> = {
@@ -33,7 +33,7 @@ const CATEGORY_OF_RUBRIC: Record<string, QuestionCategory> = {
   ARTS: 'arts',
   BD: 'arts',
   CELEBRITES: 'arts',
-  CINEMA: 'arts',
+  CINEMA: 'cinema',
   CULTURE: 'everyday',
   DEFI: 'everyday',
   GASTRONOMIE: 'everyday',
@@ -51,7 +51,7 @@ const CATEGORY_OF_RUBRIC: Record<string, QuestionCategory> = {
   QUOTIDIEN: 'everyday',
   SCIENCES: 'science',
   SPORTS: 'sport',
-  TELEVISION: 'arts',
+  TELEVISION: 'cinema',
   TOURISME: 'geography',
   WEB: 'science'
 }

@@ -41,13 +41,15 @@ describe('drawQuestion', () => {
    * **Both halves are counted rather than sampled at four hundred**, which is
    * what these two used to do and what made the pair flaky. The category is
    * drawn before the question, so an adult row's chance is its share of *its
-   * own* category divided by six: 104 of the 2 510 French arts rows and 3 of
-   * the 1 309 everyday ones come to 0.73% a draw. Four hundred draws miss every
-   * one of them about one run in twenty — a red that says nothing about the
+   * own* category divided by eight: 104 of the 1 253 French arts rows and 3 of
+   * the 1 303 everyday ones come to 1.07% a draw. Four hundred draws miss every
+   * one of them about one run in seventy — a red that says nothing about the
    * filter, and a green that would have missed a broken one just as often.
-   * Two thousand puts both at one in two million, and the number has to be
+   * Two thousand puts both at one in two billion, and the number has to be
    * revisited whenever a source widens a category the adult rows sit in:
-   * Vikidia's 252 French arts rows alone moved the miss rate from 4.3% to 5.4%.
+   * Vikidia's French arts rows alone once moved it from 4.3% to 5.4%, and
+   * splitting `cinema` and `videogames` off `arts` moved it back the other way
+   * twice over.
    */
   const ENOUGH_TO_MEET_A_RARE_RATING = 2_000
 
@@ -125,11 +127,12 @@ describe('drawQuestion', () => {
    */
   /**
    * The mix, and the whole reason the category is drawn before the question.
-   * Over twelve hundred draws with nothing ticked each of the six subjects is
-   * expected about two hundred times; drawing uniformly over questions instead
-   * gave French history — 52 rows of 1 708 — about thirty-five, which is what
-   * this floor catches. It is far enough below the expected count that chance
-   * cannot reach it and far enough above the old behaviour to fail on it.
+   * Over twelve hundred draws with nothing ticked each of the eight subjects is
+   * expected about a hundred and fifty times; drawing uniformly over
+   * questions instead gave French history — 52 rows of 1 708 — about
+   * thirty-five, which is what this floor catches. It is far enough below the
+   * expected count that chance cannot reach it and far enough above the old
+   * behaviour to fail on it.
    *
    * Which is why this one buys a budget where the language test below cut its
    * sample instead: a language either groups or it does not, and fifty draws

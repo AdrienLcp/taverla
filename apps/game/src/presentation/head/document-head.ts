@@ -56,7 +56,7 @@ export const PAGE_HEADS: Record<Locale, Record<IndexedPage, PageHead>> = {
     },
     quiz: {
       description:
-        'Thousands of questions across six subjects, in French and in English, answered by the whole room at once on their own screens. Scan the QR code and play — no install, no account.',
+        'Thousands of questions across eight subjects, in French and in English, answered by the whole room at once on their own screens. Scan the QR code and play — no install, no account.',
       title: 'Quiz — Taverla'
     },
     reflex: {

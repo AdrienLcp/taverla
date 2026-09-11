@@ -8,6 +8,52 @@ one part.
 
 ### Breaking Changes
 
+- `[Shared]` **A room can ask for cinema, and for video games**, and
+  `PROTOCOL_VERSION` goes to 16. `arts` was not a subject, it was the
+  leftovers — films, television, animation, video games, music, books, comics,
+  celebrities and OpenQuizzDB's adult rubric forced in on top — and at 4 960 of
+  10 186 rows it was the one chip whose name did not say what ticking it would
+  give. `cinema` and `videogames` are split off it, which makes eight
+  categories. The version moves because `questionPromptSchema.category` travels
+  all the way to a player, so a tab left open across a redeploy would meet a
+  `z.enum` value it cannot parse.
+
+  **Splitting a subject is five fold tables to rewrite, not questions to find**:
+  every row already carried the rubric it arrived under. `creator` is the one
+  that did not move, and it is the hard case: the relation says *who made a
+  thing* and never *what kind of thing*, so one sentence shape asks about
+  Chandler Bing, Solid Snake and the Sistine Madonna, and reading the prompt for
+  a medium files two of those three wrong. `director` and `developer` each ask
+  after one kind of work and nothing else, which is what lets them carry a
+  category.
+
+  The windfall is **Mintaka's `movies` and `videogames`**, both banked for the
+  first time — they had been left out on the written grounds that they *would
+  deepen the two subjects that need nothing*, a reason that was `arts` being fat
+  and that retires for exactly two of its four unused categories. **They yield
+  very differently for the same 2 500 raw rows, and the gap is French Wikipedia
+  traffic rather than the fold**: 619 banked for `movies` against 287 for
+  `videogames`, a studio being read about far less than a film. The bank goes
+  10 186 → **11 097**, leaving `cinema` at 1 361 French rows and 704 English,
+  `videogames` at 808 and 1 006, and `arts` at 1 253 and 740; every corpus floor
+  still clears. `developer` is 56% of the French half of `videogames`, so what
+  deepens it is a second source rather than a wider fold.
+
+  **Refused, measured rather than assumed**: `music` (84 French rows against 431
+  English, and music already has a game) and `books` (109 English against 366
+  French). Mintaka holds 2 500 raw rows of each, so neither is foreclosed.
+
+  A chip is also the **draw's odds dial**, because a category is drawn before a
+  question: screen subjects go from one round in six to three in eight, and
+  history, geography and science from three in six to three in eight. The
+  console's fold gives the subject strip **900px**, so eight labels have an
+  882px budget the old ones overran by 78 — and keeping both long labels while
+  cutting only *Cinéma et séries* came to **883, over by a single pixel**. So
+  `cinema` reads **Cinéma** and `everyday` reads **Quotidien**, picked on what
+  the short form costs rather than on what it saves, and the container query
+  stays at 55rem. See
+  [`docs/plans/24-the-chip-that-says-what-it-gives.md`](docs/plans/24-the-chip-that-says-what-it-gives.md).
+
 - `[Shared]` **A press in the reflex race is called a press**, and
   `PROTOCOL_VERSION` goes to 15. A tap is what a thumb does to glass, and this
   room has never been only phones — the pass that took the device out of the

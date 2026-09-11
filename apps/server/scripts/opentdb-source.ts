@@ -23,13 +23,16 @@ const ATTRIBUTION: Attribution = {
 }
 
 /**
- * Their twenty-four rubrics folded onto the six a host picks from, keyed by name
+ * Their twenty-four rubrics folded onto the eight a host picks from, keyed by name
  * rather than by the numeric id the API filters on: a record of bare integers
  * says nothing to a reader, and the names are what upstream actually publishes.
  *
- * Nine of the twenty-four are Entertainment, which is why `arts` ends up holding
- * over half of this half of the bank — a property of the source, not of the
- * fold. Video games alone outnumber every category but arts.
+ * Nine of the twenty-four are Entertainment, which is why this half of the bank
+ * leans on entertainment whatever the fold — a property of the source. The fold
+ * is what decides where that weight lands: four of the nine are `cinema`, one is
+ * `videogames` and at 1 006 rows it outnumbers every other rubric of this half
+ * on its own, and the four left in `arts` are the music, books, comics and
+ * theatre the word was always meant to carry.
  */
 const CATEGORY_OF_RUBRIC: Record<string, QuestionCategory> = {
   Animals: 'science',
@@ -37,14 +40,14 @@ const CATEGORY_OF_RUBRIC: Record<string, QuestionCategory> = {
   Celebrities: 'arts',
   'Entertainment: Board Games': 'everyday',
   'Entertainment: Books': 'arts',
-  'Entertainment: Cartoon & Animations': 'arts',
+  'Entertainment: Cartoon & Animations': 'cinema',
   'Entertainment: Comics': 'arts',
-  'Entertainment: Film': 'arts',
-  'Entertainment: Japanese Anime & Manga': 'arts',
+  'Entertainment: Film': 'cinema',
+  'Entertainment: Japanese Anime & Manga': 'cinema',
   'Entertainment: Music': 'arts',
   'Entertainment: Musicals & Theatres': 'arts',
-  'Entertainment: Television': 'arts',
-  'Entertainment: Video Games': 'arts',
+  'Entertainment: Television': 'cinema',
+  'Entertainment: Video Games': 'videogames',
   'General Knowledge': 'everyday',
   Geography: 'geography',
   History: 'history',

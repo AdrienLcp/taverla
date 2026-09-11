@@ -55,10 +55,6 @@
     "drop": true,
     "why": "John Wilkes Booth assassinated a president and never was one, so the prompt describes nobody"
   },
-  "mintaka-269e0ca7": {
-    "drop": true,
-    "why": "it asks for a British monarch and answers Louis XIV"
-  },
   "mintaka-367a8678": {
     "drop": true,
     "why": "the most liked president is not a fact, and no candidate can be the answer to it"

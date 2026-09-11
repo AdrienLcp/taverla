@@ -192,18 +192,18 @@ export const EN_DICTIONARY = defineDictionary({
    */
   credits: {
     mintaka:
-      'It supplies questions and no wrong answers at all, so the three candidates beside each right one were built here, out of entities Wikidata files under the same kind as the answer and that are read about roughly as much in French. Three of its eight rubrics were kept and mapped onto the six subjects used here, along with four of its nine question shapes — the others name their own candidates in the question, accept more answers than they record, or ask in two hops. Questions that name the present were left behind, the corpus being fixed at October 2021. Of what remained, only the ones whose answer and whose subject have a French Wikipedia article people actually read were banked, and no answer comes up more than five times in one subject.',
+      'It supplies questions and no wrong answers at all, so the three candidates beside each right one were built here, out of entities Wikidata files under the same kind as the answer and that are read about roughly as much in French. Five of its eight rubrics were kept and mapped onto the eight subjects used here, along with four of its nine question shapes — the others name their own candidates in the question, accept more answers than they record, or ask in two hops. Questions that name the present were left behind, the corpus being fixed at October 2021. Of what remained, only the ones whose answer and whose subject have a French Wikipedia article people actually read were banked, and no answer comes up more than five times in one subject.',
     openquizzdb:
-      'Its rubrics were mapped onto the six subjects used here, its anecdotes kept as the line shown once an answer is public, and its adult-rated questions marked so an innkeeper can leave them out. Questions that did not carry exactly three wrong answers were left behind, as were the ones whose wrong answers cannot be told from the right one once written down. One answer spelled against its own anecdote was corrected.',
+      'Its rubrics were mapped onto the eight subjects used here, its anecdotes kept as the line shown once an answer is public, and its adult-rated questions marked so an innkeeper can leave them out. Questions that did not carry exactly three wrong answers were left behind, as were the ones whose wrong answers cannot be told from the right one once written down. One answer spelled against its own anecdote was corrected.',
     opentdb:
-      'Its text arrives HTML-encoded and was decoded, its categories were mapped onto the six subjects used here, and questions that did not carry exactly three wrong answers were left behind, as were the ones whose wrong answers cannot be told from the right one once written down.',
+      'Its text arrives HTML-encoded and was decoded, its categories were mapped onto the eight subjects used here, and questions that did not carry exactly three wrong answers were left behind, as were the ones whose wrong answers cannot be told from the right one once written down.',
     polyfact:
-      'It is built from Wikidata in fourteen question shapes, and seven of them were kept and mapped onto the six subjects used here — the others ask about hamlets nobody has heard of, or give the answer away in the question. Of what remained, only the questions whose subject and whose four candidates all have a French Wikipedia article people actually read were banked. A wrong answer the source leaned on far too often was swapped for one it had barely used, and questions whose wrong answers cannot be told from the right one once written down were left behind.',
+      'It is built from Wikidata in fourteen question shapes, and seven of them were kept and mapped onto the eight subjects used here — the others ask about hamlets nobody has heard of, or give the answer away in the question. Of what remained, only the questions whose subject and whose four candidates all have a French Wikipedia article people actually read were banked. A wrong answer the source leaned on far too often was swapped for one it had barely used, and questions whose wrong answers cannot be told from the right one once written down were left behind.',
     shareAlike:
       'The assembled bank is shared under the same licence, and the code that assembles it is open.',
     title: 'Credits',
     vikidia:
-      'Its quizzes are written in wikitext and were parsed line by line into a question, an answer and three wrong answers. Each of its pages was mapped by hand onto one of the six subjects used here, the wiki having no rubrics to fold; the ones about the wiki itself were left out. Questions carrying fewer than four candidates, questions with several right answers, and questions whose whole point is a mathematical formula, a piece of code or a picture were left behind. Templates carrying a unit or a quotation were replaced by what they print. Every question kept was read once: the false ones were removed, the ones whose wording no longer named its own subject were completed, and the ones that can only be won by picking were marked.',
+      'Its quizzes are written in wikitext and were parsed line by line into a question, an answer and three wrong answers. Each of its pages was mapped by hand onto one of the eight subjects used here, the wiki having no rubrics to fold; the ones about the wiki itself were left out. Questions carrying fewer than four candidates, questions with several right answers, and questions whose whole point is a mathematical formula, a piece of code or a picture were left behind. Templates carrying a unit or a quotation were replaced by what they print. Every question kept was read once: the false ones were removed, the ones whose wording no longer named its own subject were completed, and the ones that can only be won by picking were marked.',
     whatChanged: 'What we changed'
   },
   error: {
@@ -547,13 +547,15 @@ export const EN_DICTIONARY = defineDictionary({
     },
     category: {
       arts: 'Arts and culture',
-      everyday: 'Everyday life',
+      cinema: 'Cinema',
+      everyday: 'Everyday',
       geography: 'Geography',
       history: 'History',
       label: 'Which subjects',
       none: 'Pick none and you get every subject.',
       science: 'Science',
-      sport: 'Sport'
+      sport: 'Sport',
+      videogames: 'Video games'
     },
     duration: 'Time per question',
     home: {

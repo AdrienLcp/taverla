@@ -1,10 +1,25 @@
 import { z } from 'zod'
 
+/**
+ * The subjects a host ticks. The fold from a source's own rubrics onto these is
+ * coarse on purpose: a handful of chips fit a phone, and a room choosing between
+ * twenty-eight is a room reading a menu instead of playing.
+ *
+ * The list is also the draw's odds dial, because a category is drawn before a
+ * question is — so splitting one in two doubles what it is drawn for. `cinema`
+ * left `arts` for exactly that reason: it was the only chip whose name did not
+ * say what ticking it would give, holding films, television, animation and
+ * video games beside music, books and painting, and half the bank with them.
+ * `videogames` left on the same argument and took the single biggest block in
+ * the bank with it.
+ */
 export const questionCategories = [
   'history',
   'geography',
   'science',
   'arts',
+  'cinema',
+  'videogames',
   'sport',
   'everyday'
 ] as const
@@ -78,7 +93,7 @@ export const questionLanguageSchema = z.enum(questionLanguages)
 export const questionDrawSettingsSchema = z.object({
   /**
    * Whether the bank's adult themes are drawn from. Its own field rather than a
-   * seventh category, because the six are *subjects* and this is a rating: a
+   * ninth category, because the eight are *subjects* and this is a rating: a
    * question about a porn actress's first album is a celebrities question that
    * happens to be adult, and putting the two axes in one row is what makes such
    * a control read as a mistake.

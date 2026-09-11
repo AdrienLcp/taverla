@@ -39,18 +39,27 @@ const jsonUrl = (split: string): string =>
   `https://raw.githubusercontent.com/amazon-science/mintaka/main/data/mintaka_${split}.json`
 
 /**
- * Three of Mintaka's eight categories, and the three are the point: this bank's
- * French half holds 2 258 rows of arts and 1 261 of everyday against 64 of
- * history, so `movies`, `music`, `books` and `videogames` would deepen the two
- * subjects that need nothing. `politics` is left out for a reason of its own —
- * it is American politics almost throughout, it dates faster than anything else
- * in the corpus, and filing a question about a sitting governor under *history*
- * would be wrong twice over.
+ * Five of Mintaka's eight categories. Three were taken when this bank's French
+ * half held 2 258 rows of arts and 1 261 of everyday against 64 of history,
+ * which is why `movies`, `music`, `books` and `videogames` were left out
+ * together: all four would have deepened the two subjects that needed nothing.
+ * Splitting `cinema` and `videogames` off `arts` is what brings two of them
+ * back — each now feeds a subject of its own, and `music` and `books` still
+ * do not. The two yield very differently for the same 2 500 rows, and the gap
+ * is French Wikipedia traffic rather than the fold: 619 banked for `movies`
+ * against 287 for `videogames`, a studio being read about far less than a film.
+ *
+ * `politics` is left out for a reason of its own — it is American politics
+ * almost throughout, it dates faster than anything else in the corpus, and
+ * filing a question about a sitting governor under *history* would be wrong
+ * twice over.
  */
 const CATEGORY_OF_MINTAKA: Record<string, QuestionCategory> = {
   geography: 'geography',
   history: 'history',
-  sports: 'sport'
+  movies: 'cinema',
+  sports: 'sport',
+  videogames: 'videogames'
 }
 
 /**
