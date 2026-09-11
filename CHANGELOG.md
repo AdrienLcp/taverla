@@ -55,6 +55,24 @@ one part.
 
 ### Features
 
+- `[Game]` **The console honks when a buzz takes the floor.** Two square
+  oscillators a perfect fifth apart — 294 and 441 Hz — through a 2.4 kHz lowpass
+  and a 200 ms envelope, synthesised in `presentation/audio/buzz-cue.ts` because
+  the repository holds no audio asset and a board buzzer was not worth the first
+  one. Its amplitude is the machine's own volume times 0.3, so a console muted in
+  the menu plays nothing rather than playing quietly, and it is armed by the same
+  press that blesses the clip's element — both permissions are granted only
+  inside a gesture, and neither can be asked for afterwards.
+
+  It is keyed on the buzz's `atServerTime` and nothing else, which is what keeps
+  it to one honk per press: the `buzzed` snapshot is re-delivered on every roster
+  change, every settings frame and every reconnection, and `expiresAt` is
+  rewritten when a host comes back. **Nothing sounds on the reflex race's flip**
+  and nothing can — each device flips against its own estimate of `flipsAt`, so a
+  honk arriving on one machine's schedule would score the devices slightly ahead
+  of it as having gone early. That silence is structural rather than remembered:
+  the race is the one game that never reaches `buzzed`.
+
 - `[Server]` **French science holds an evening of its own at last, and all four
   thin subjects are past 300.** Vikidia is the bank's fifth source and the only
   open French-native one with any science in it — the French encyclopedia
