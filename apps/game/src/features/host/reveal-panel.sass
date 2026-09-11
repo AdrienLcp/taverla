@@ -14,7 +14,11 @@
 
     // Only the blind test has anything to print beside its words. A quiz
     // answers in text and the bare buzzer answers in nothing at all.
+    //
+    // It declares the container the cover is measured from, because this is the
+    // box the two of them share: what the block takes is what the words lose.
     &.with-cover
+      container-type: inline-size
       grid-template-columns: auto minmax(0, 1fr)
 
       // The product's one breakpoint, where this read `860px` — a hand-written
@@ -27,12 +31,22 @@
     // Deezer serves covers at 250 px and nothing larger, so the frame is built
     // around that rather than discovering the ceiling at the end. It is die-cut
     // on the field with a hard border — printed on the card, not floating.
+    //
+    // Three ceilings, and only the last one is the asset's. `vmin` is the height
+    // it may not eat. `cqi` is the share of the panel it may not take from the
+    // answer beside it, and it is the one the split made necessary: a panel is a
+    // fraction of the stage rather than the screen, so on a square viewport
+    // `34vmin` came to 306px of a 472px panel and left the answer 121 — where
+    // `Pocahontas` broke into eight pieces 680px tall and the stage ran 502px
+    // past the bottom of a 900×900 screen. The floor went with it: it was the
+    // one term that could never fire above the split, and the arm below has its
+    // own.
     .cover
       background: var(--cut)
       border: 6px solid var(--cut)
-      height: clamp(180px, 34vmin, 320px)
+      height: min(34vmin, 32cqi, 320px)
       object-fit: cover
-      width: clamp(180px, 34vmin, 320px)
+      width: min(34vmin, 32cqi, 320px)
 
       // `vmin` is the *width* on a portrait screen, so the floor written to
       // keep this from vanishing on a wide one is the only thing that ever
@@ -47,7 +61,10 @@
       &.placeholder
         opacity: 0.25
 
+    // It declares a container of its own because the title is measured against
+    // this column and not against the one the cover shares with it.
     .identity
+      container-type: inline-size
       min-width: 0
 
       // A catalogue writes these, not the product, so their length is nobody's
@@ -63,17 +80,35 @@
       // narrower of the two columns, the one with a cover beside it: the median
       // of 9 characters and the 90th percentile of 17 both still clamp to the
       // full size, and only the last five per cent read smaller.
+      //
+      // And the longest *word* is the fact the length cannot stand in for, now
+      // that the column can be 276px wide: `9vmin` is the screen's shorter axis
+      // and this column stopped being it the day the reveal split, so a
+      // ten-letter answer was set at 81px in 276px and came down as
+      // `POC / AHO / NTAS`. `111cqi` is measured by the method the room code's
+      // `20cqi` was — a capital in `monument` averages 0.898 times its own font
+      // size, so `n` of them hold one line up to `100 / 0.898 = 111cqi` divided
+      // by `n`. It is the player's `120cqi` one register up, the same rule
+      // against the wider face.
+      --answer-size: clamp(2rem, min(9vmin, calc(128rem / var(--answer-length, 10)), calc(111cqi / var(--longest-word, 10))), 7rem)
+
       .title
         @include typography.monument
 
-        font-size: clamp(2rem, min(9vmin, calc(128rem / var(--answer-length, 10))), 7rem)
+        font-size: var(--answer-size)
         overflow-wrap: anywhere
 
+      // Off the answer's own size rather than the screen's, because the two are
+      // one line read together and only one of them knows how much room the
+      // answer needed: `4vmin` alone put `PLK` at 36px over a `POCAHONTAS` the
+      // column had already pushed to 32. `0.6` is looser than the ratio the two
+      // hold anywhere the column is not the binding term — 0.41 at 1920 — so it
+      // is a floor on the hierarchy and never a resize of it.
       .artist
         @include typography.billboard
 
         color: var(--ink-muted)
-        font-size: clamp(1.25rem, 4vmin, 2.5rem)
+        font-size: min(clamp(1.25rem, 4vmin, 2.5rem), calc(var(--answer-size) * 0.6))
         margin-top: var(--space-xs)
         overflow-wrap: anywhere
 

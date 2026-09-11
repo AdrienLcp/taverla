@@ -468,6 +468,17 @@ Three things follow from that ceiling, and each is a rule of its own:
   the next — the identical failure, one composition on. `container-type` goes on
   `.code` there. The tell is that both versions *look* deliberate: nothing warns,
   and the type is the right size for a box that is not the one it is in.
+
+  **It is not only type, and a square viewport is where it shows.** The reveal's
+  cover was `34vmin` — 306px at 900×900 — inside a panel that is `1.6fr` of a
+  split stage and 472px wide there, so the block took two thirds of the row and
+  left the answer 121px: eight broken lines, 680px of title, and the stage 502px
+  past the bottom of the screen. `vmin` is an axis of the *screen*, and the
+  panel stopped being the screen the day the reveal split in two. It is
+  `min(34vmin, 32cqi, 320px)` now — the height it may not eat, the share of the
+  panel it may not take from the words beside it, and the size the asset
+  actually is. The floor went with it: `180px` could never fire above the split,
+  and the arm below has one of its own.
 - **The fixed menu belongs to the field, not to the corner.** It is pinned to the
   same band, or it sits hundreds of pixels clear of everything it is chrome for.
 - **A centred column only clears that corner when the viewport is far wider than
@@ -595,6 +606,27 @@ writes `--answer-length` and the clamp divides by it, the same way a board
 writes its line count. The median of nine characters and the 90th percentile of
 seventeen both still clamp to the full size: only the last five per cent read
 smaller, and they are the ones that could not have been read at all.
+
+**And the longest word is the fact the length cannot stand in for.** `Maison-
+Blanche` is fourteen characters and seven wide, because a hyphen and a space are
+break opportunities where a letter is not — so `--answer-length` sizes a
+paragraph and `--longest-word` is the only thing that holds a *word* whole.
+`overflow-wrap: anywhere` is the guard against a word leaving its column, and a
+guard that fires reads `POC / AHO / NTAS`. Both surfaces reveal the same string
+in a column neither of them owns the width of, so the pair travels with the
+answer — `helpers/answer-fitting.ts` — rather than being taken twice. The
+coefficient is measured per face by the method the room code's `20cqi` was: a
+capital in `monument` averages 0.898 times its own font size, so `n` of them
+hold one line up to `111cqi / n`, where `billboard` on the player's screen holds
+`120cqi / n`.
+
+**A second line takes its size from the first, not from the screen.** The artist
+under a revealed title is read as one object with it, and only the title knows
+how much room its own word needed: sized on `4vmin` alone, `PLK` was drawn at
+36px over a `POCAHONTAS` the column had already pushed to 32. It is capped at
+0.6 of the answer's size — looser than the 0.41 the two hold wherever the column
+is not the binding term, so it is a floor on the hierarchy and never a resize of
+it.
 
 **Vertical space is spent on furniture before it is spent on type.** Ten rows of
 fixed 12px gap and padding came to 240px of a 548px board, more than the type

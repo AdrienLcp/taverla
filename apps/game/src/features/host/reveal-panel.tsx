@@ -4,6 +4,7 @@ import type { PublicPlayer, RoundView } from '@taverla/protocol/room'
 
 import { cueOf, whatTheRoomNames } from '@taverla/core/blindtest/typed-answer'
 
+import { answerFitting } from '@/helpers/answer-fitting'
 import {
   blindtestContent,
   lefakeContent,
@@ -60,14 +61,12 @@ export const RevealPanel: React.FC<RevealPanelProps> = ({ players, round }) => {
           />
         )}
 
-        <div className='identity'>
+        <div
+          className='identity'
+          style={answerFitting(whatTheRoomNames(track))}
+        >
           <p className='framing'>{translate('blindtest.reveal.title')}</p>
-          <p
-            className='title'
-            style={{ '--answer-length': whatTheRoomNames(track).length }}
-          >
-            {whatTheRoomNames(track)}
-          </p>
+          <p className='title'>{whatTheRoomNames(track)}</p>
           <p className='artist'>{track.artist}</p>
           {cueOf(track) !== null && <p className='note'>{cueOf(track)}</p>}
 
@@ -80,14 +79,9 @@ export const RevealPanel: React.FC<RevealPanelProps> = ({ players, round }) => {
   if (question !== null) {
     return (
       <section className='reveal-panel'>
-        <div className='identity'>
+        <div className='identity' style={answerFitting(question.answer)}>
           <p className='framing'>{translate('quiz.reveal.title')}</p>
-          <p
-            className='title'
-            style={{ '--answer-length': question.answer.length }}
-          >
-            {question.answer}
-          </p>
+          <p className='title'>{question.answer}</p>
           {question.note !== null && <p className='note'>{question.note}</p>}
 
           <Outcome players={players} round={round} />

@@ -1180,6 +1180,35 @@ one part.
 
 ### Fixes
 
+- `[Game]` **A square screen broke the reveal's answer into pieces and ran the
+  console 502px off the bottom.** The cover was `34vmin` — an axis of the
+  *screen* — inside a panel that is `1.6fr` of a split stage, so at 900×900 the
+  block took 306px of a 472px row and left the answer 121: `Pocahontas` came
+  down as `POC / AHO / NTAS`, 680px of title, and the page scrolled past the
+  launch. Measured across the range, the defect tracks the width of the text
+  column and not the height of the screen — 647px of column at 1920×1080 and no
+  overflow, 260px at 1024×768 and 87, 121px at 900×900 and 502.
+
+  The cover is `min(34vmin, 32cqi, 320px)` now: the height it may not eat, the
+  share of the panel it may not take from the words beside it, and the size the
+  asset actually is. That alone took 900×900 from 502px of overflow to 94 and
+  touched nothing at 1920×1080 or 2560×800, where `vmin` still binds.
+
+  **The answer itself was sized against the screen too**, and had been broken
+  mid-word at every width — `POCAHON / TAS` even at 1920. The player's screen
+  already publishes `--longest-word` beside `--answer-length` and holds every
+  answer to a whole word; the console never got the fact. Both now read it from
+  `helpers/answer-fitting.ts`, and `111cqi` is measured by the method the room
+  code's `20cqi` was: a capital in `monument` averages 0.898 times its own font
+  size. Every screen above the split fits, and the answer is one word on one
+  line everywhere but 900×900, where the readability floor is four pixels wider
+  than the column.
+
+  **And the artist under it was the third `vmin` in the same column**, which the
+  other two had been hiding: with the answer pushed to 32px by its column, `PLK`
+  was drawn at 36 over it. It takes 0.6 of the answer's own size at most —
+  looser than the 0.41 the two hold wherever the column is not the binding term.
+
 - `[Game]` **A console run from a phone lost its next round under the
   scoreboard.** Every height formula on that screen lived behind
   `@include layout.wide`, so below 900px there was no budget at all and a 320px

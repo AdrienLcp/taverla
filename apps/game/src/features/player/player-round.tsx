@@ -26,6 +26,7 @@ import {
 import { LieForm, VoteBoard } from '@/features/player/lefake-forms'
 import { ReflexBuzzer } from '@/features/player/reflex-buzzer'
 import { RoundBoard } from '@/features/player/round-board'
+import { answerFitting } from '@/helpers/answer-fitting'
 import {
   blindtestContent,
   lefakeContent,
@@ -475,22 +476,6 @@ const Buzzer: React.FC<{
 }
 
 /**
- * The two measurements a stylesheet cannot take of a string it never sees, and
- * both decide whether the answer fits the column it is set in: how much there
- * is of it, and how long its longest *unbreakable* run is. A hyphen and a space
- * are break opportunities, so `Maison-Blanche` is seven characters wide rather
- * than fourteen, and an answer of short words is long without holding any
- * single line hostage.
- */
-const fitting = (answer: string): React.CSSProperties => ({
-  '--answer-length': answer.length,
-  '--longest-word': Math.max(
-    1,
-    ...answer.split(/[\s-]+/u).map((run) => run.length)
-  )
-})
-
-/**
  * What the round turned out to be, on the player's screen — and `null` for a
  * game whose question the room owns, because a charade has no answer to print.
  * What that game's reveal is instead lands under this: the scoreline, which is
@@ -535,7 +520,10 @@ const Revealed: React.FC<{
           />
         )}
         <p className='framing'>{translate('blindtest.reveal.title')}</p>
-        <p className='revealed-title' style={fitting(whatTheRoomNames(track))}>
+        <p
+          className='revealed-title'
+          style={answerFitting(whatTheRoomNames(track))}
+        >
           {whatTheRoomNames(track)}
         </p>
         <p className='revealed-artist'>{track.artist}</p>
@@ -548,7 +536,7 @@ const Revealed: React.FC<{
     return (
       <>
         <p className='framing'>{translate('quiz.reveal.title')}</p>
-        <p className='revealed-title' style={fitting(question.answer)}>
+        <p className='revealed-title' style={answerFitting(question.answer)}>
           {question.answer}
         </p>
         {question.note !== null && <p className='note'>{question.note}</p>}
