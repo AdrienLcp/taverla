@@ -122,12 +122,17 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
   // thing the player is waiting on.
   if (view.phase === 'lobby') {
     return (
-      <section className='player-round centred'>
-        {view.isHostConnected ? (
-          <UpNext view={view} />
-        ) : (
-          <p className='paused'>{translate('buzz.blocked.host_away')}</p>
-        )}
+      <section className='player-round centred lobby'>
+        {/* Grouped here for the reason the reveal below groups its own half,
+            and for one more: above the split the pitch shares a column with the
+            roster, and three loose paragraphs would be three grid items. */}
+        <div className='pitch'>
+          {view.isHostConnected ? (
+            <UpNext view={view} />
+          ) : (
+            <p className='paused'>{translate('buzz.blocked.host_away')}</p>
+          )}
+        </div>
         {/*
           The way in, on the screen of somebody who is already through it. The
           room's code is on the console — which is allowed to be a phone in one

@@ -640,6 +640,40 @@ Two things follow, and both fail *silently* rather than loudly:
   Dividing `100dvh` minus the measured chrome is the less precise instrument and
   the right one: its worst case is a scroll, not a collision.
 
+**The player's lobby splits there too, and it is the same two audiences the
+console's lobby has.** What this player is waiting on is the pitch and the
+roster; the invitation is the way in for the person beside them, who has no
+screen in the room yet. Stacked on a laptop that came to 1 219px of content in
+900px of screen — the QR square and every name under the fold — while 570px of
+the column sat unused beside a 256px square. The ratio is the console's
+inverted, and deliberately: there the invitation takes the *wider* track because
+it is what the room reads from four metres, and here nobody reads this screen
+but the hand holding it. What it costs is bounded — a square and four characters
+— so it takes the narrow track.
+
+Two things that only show once a bounded object is put in a column of its own:
+
+- **A container unit can be dead, and a dead one is a wrong number nobody has
+  met yet.** The player's code was `min(clamp(2.5rem, 12vmin, 5rem), 24cqi)`, and
+  the container term never fired at any width — measured at seven from 320 to
+  1920, the clamp binds at every one. So `24` was never checked against the face,
+  where the console had measured `20` and written down why: four `W` in
+  `monument` come to 4.78 times their font size, so one line holds `20.9cqi`.
+  The split is what made the term live, and it would have made it live *wrong* —
+  a 293px column asking for 70px of type and drawing `WW / WW`. This is the
+  twin of the viewport unit that has stopped saying anything, one step further
+  on: that one was a constant with extra terms, this one is a **guarantee** that
+  had never been asked to hold.
+- **A spanning item hands its surplus to every row it spans.** The invitation is
+  the taller half at any table under nine, and on implicit `auto auto` rows the
+  408px it had over the column beside it were shared equally between them — so a
+  lobby nobody has joined yet, with a host still choosing, drew one line of pitch
+  and then two hundred pixels of nothing before the roster. Declaring
+  `auto 1fr` is what names where the surplus goes. It reads as a deliberate
+  space, which is what puts it in the same family as the strip that measured
+  zero: the grid is doing exactly what it was told, and what it was told was
+  nothing.
+
 **A component says what it costs; a stage says how much there is.** The
 invitation is the plainest case and the one with four stages: `RoomInvitation`
 owns the stack, the square, the address and its own container, and every stage

@@ -653,6 +653,31 @@ one part.
 
 ### Improvements
 
+- `[Game]` **The player's lobby is two columns on a laptop**, for the reason the
+  console's lobby is: the pitch and the roster are what this player is waiting
+  on, and the invitation is the way in for whoever is beside them with no screen
+  in the room yet. Stacked it came to 1 219px of content in a 900px laptop — the
+  QR square and every name under the fold — with 570px of the column unused
+  beside a 256px square. Split, the whole phase fits at every width from the
+  breakpoint up, and a table of nine hangs 152px under it where it used to hang
+  five hundred and sixty.
+
+  The ratio is the console's inverted: there the invitation takes the wider
+  track because it is what the room reads from four metres, and here nobody
+  reads this screen but the hand holding it. What the invitation costs is
+  bounded, so it takes the narrow one.
+
+  Two defects the column of its own exposed, both silent. **The code's container
+  term was dead** — `24cqi` never fired at any of seven widths from 320 to 1920,
+  so the number had never been checked against the face, where the console had
+  measured `20` and written down why. The split is what would have made it live,
+  and live wrong: a 293px column asking for 70px of type draws a code of four
+  `W` as `WW / WW`. And **a spanning item hands its surplus to every row it
+  spans**, so a lobby nobody had joined yet drew one line of pitch and then two
+  hundred pixels of nothing before the roster, the invitation's spare height
+  having been split evenly between the two rows it crossed. Declaring
+  `auto 1fr` names where it goes instead.
+
 - `[Server]` **PolyFact pays for the name a room shouts too**, which doubles the
   reach of a fix that had only ever run on one source. 864 of its 1 900 rows now
   hold a second name and 2 248 spellings, so the bank goes from 744 rows with an

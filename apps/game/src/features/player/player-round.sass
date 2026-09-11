@@ -37,9 +37,77 @@
     // rather than a console's: this screen is held at forty centimetres and the
     // code shares it with the pitch above and the roster below. `vmin` is what
     // keeps it from swallowing a short screen in landscape, and the container
-    // unit is what keeps it honest on the laptop this column also serves.
+    // unit is what keeps it honest in the column the split below gives it.
+    //
+    // It is `20cqi` and not the `24` it carried, which is the console's own
+    // measurement and for the console's own reason: four `W` — the widest glyph
+    // the room alphabet holds — set in `monument` come to 4.78 times their font
+    // size, so one line holds `100 / 4.78 = 20.9cqi`. The wrong number never
+    // showed because it never fired: measured at seven widths from 320 to 1920,
+    // the clamp binds at every one of them and `24cqi` is 65px where the clamp
+    // says 40. The split is what makes the term live — a 293px column at the
+    // breakpoint, where `24cqi` asks for 70px of type in 293px of room and a
+    // code of four `W` lands as `WW / WW`.
     .room-invitation
-      --invitation-code-size: min(clamp(2.5rem, 12vmin, 5rem), 24cqi)
+      --invitation-code-size: min(clamp(2.5rem, 12vmin, 5rem), 20cqi)
+
+    // One object above the split, where it shares a column with the roster —
+    // and one that will not be shrink-wrapped below it, because `.centred`
+    // takes every child to its min-content and a paragraph's is its longest
+    // word.
+    .pitch
+      display: flex
+      flex-direction: column
+      gap: var(--space-m)
+      width: 100%
+
+    // Two audiences, a column each — the console's own lobby, one screen down.
+    // What this player is waiting on is the pitch and the roster; the
+    // invitation is the way in for the person beside them, who has no screen in
+    // the room yet. Stacked on a laptop that is 1219px of content in 900px of
+    // screen, with the QR square and the whole roster under the fold and 570px
+    // of the column unused beside a 256px square.
+    //
+    // The ratio is the console's inverted, and deliberately: there the
+    // invitation takes the *wider* track because it is what the room reads from
+    // four metres, and here nobody reads this screen but the hand holding it.
+    // What the invitation costs is bounded — a 256px square and four characters
+    // — so it takes the narrow track and the player's own two texts take what
+    // is left.
+    //
+    // Areas rather than a span, because naming a row is what declares it:
+    // `grid-row: 1 / -1` over rows nobody declared resolves back to row one,
+    // which is the poster mixin's trap and the reveal's below. And read off the
+    // markup rather than the width alone, for the reveal's other reason — a
+    // room whose code the address bar could not answer would split two items
+    // across two columns and leave one of them empty.
+    //
+    // **The rows are declared for a second reason: a spanning item hands its
+    // surplus to every row it spans.** The invitation is the taller half at any
+    // table under nine, and on `auto auto` the 408px it had over the column
+    // beside it were shared equally — so a lobby nobody has joined yet, with a
+    // host still choosing, drew one line of pitch and then two hundred pixels
+    // of nothing before the roster. `1fr` is what names where the surplus goes:
+    // the roster keeps its place under the pitch, and the void falls below it.
+    @include layout.wide
+      &.lobby:has(.room-invitation)
+        align-content: center
+        align-items: start
+        column-gap: var(--space-xl)
+        display: grid
+        grid-template-areas: 'pitch invitation' 'table invitation'
+        grid-template-columns: minmax(0, 1fr) minmax(0, 0.62fr)
+        grid-template-rows: auto 1fr
+        row-gap: var(--space-l)
+
+        .pitch
+          grid-area: pitch
+
+        .room-invitation
+          grid-area: invitation
+
+        .scoreboard
+          grid-area: table
 
     // What the round was and what it paid this player: one half of the reveal,
     // and one child, so the other half can sit beside it.
