@@ -17,7 +17,10 @@
     &.with-cover
       grid-template-columns: auto minmax(0, 1fr)
 
-      @media (width < 860px)
+      // The product's one breakpoint, where this read `860px` — a hand-written
+      // pixel forty short of it, which left a forty-pixel band drawing the
+      // panel in two columns inside a stage that had already stacked.
+      @include layout.narrow
         align-items: start
         grid-template-columns: minmax(0, 1fr)
 
@@ -30,6 +33,16 @@
       height: clamp(180px, 34vmin, 320px)
       object-fit: cover
       width: clamp(180px, 34vmin, 320px)
+
+      // `vmin` is the *width* on a portrait screen, so the floor written to
+      // keep this from vanishing on a wide one is the only thing that ever
+      // fires on a phone: 34vmin of 390 is 133px and the cover is drawn at
+      // 180 — a fifth of an 844px screen, spent on a 250px thumbnail, in the
+      // one composition where height is the axis under pressure. Stacked it
+      // answers the height instead, which is the axis it is competing for.
+      @include layout.narrow
+        height: clamp(96px, 16dvh, 180px)
+        width: clamp(96px, 16dvh, 180px)
 
       &.placeholder
         opacity: 0.25
@@ -213,6 +226,20 @@
           font-size: clamp(1rem, calc(var(--outcome-budget, 100rem) / var(--outcome-rows, 5) / 1.75), 1.75rem)
           padding: 0.28em 0
 
+      // The same rule against a budget that is not the same size. Above the
+      // split this list has a column of its own and takes a row of it each;
+      // stacked it is the third thing down a single column, under the cover
+      // and the answer and above the standings, so the share it can ask for
+      // is a third of what it divides rather than all of it — which is the
+      // whole of the difference between the two divisors. The ceiling is
+      // where `typography.title` already sits at this width, so a table of
+      // three reads exactly as it did and only a full one reads smaller.
+      @include layout.narrow
+        .said li,
+        .scorers li
+          font-size: clamp(0.9rem, calc(var(--outcome-budget, 100rem) / var(--outcome-rows, 5) / 5), 1.25rem)
+          padding: 0.28em 0
+
     // A game whose question the room owns reveals nothing, so the scoreline is
     // the whole panel rather than the line under an answer.
     //
@@ -237,3 +264,11 @@
         @include layout.wide
           .reaction-board li
             font-size: clamp(1rem, calc(var(--outcome-budget, 100rem) / var(--outcome-rows, 5) / 1.75), 3rem)
+
+        // Stacked this board is the whole reveal rather than the third thing
+        // down the column, so it keeps the divisor the wide arm has and gives
+        // up only its ceiling — a finishing order read from a hand does not
+        // need the 48px a room four metres away does.
+        @include layout.narrow
+          .reaction-board li
+            font-size: clamp(1rem, calc(var(--outcome-budget, 100rem) / var(--outcome-rows, 5) / 1.75), 1.75rem)

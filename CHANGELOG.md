@@ -1180,6 +1180,46 @@ one part.
 
 ### Fixes
 
+- `[Game]` **A console run from a phone lost its next round under the
+  scoreboard.** Every height formula on that screen lived behind
+  `@include layout.wide`, so below 900px there was no budget at all and a 320px
+  phone received the same CSS as an 899px window. Measured at 390×844 with three
+  players: the reveal came to 1 068px and the launch sat at 758–830, a table of
+  eight would have put it at about 1 228, and each extra player cost 94px — 47
+  for their answer and 47 for their standing, neither of which any formula could
+  reach.
+
+  **The split is a width question and the budget is a height one**, and the one
+  block was answering both. Above 900px the two halves sit side by side and each
+  divides the whole screen; stacked they share one column and the screen pays for
+  both, which is a different arithmetic rather than a smaller one. It is written
+  as its own arm now, against `27rem` of chrome measured the way `31rem` was —
+  the header, the footer, the page padding and two gaps came to 434px.
+
+  Two things were spending that budget without being asked to divide it. **The
+  cover was sized in `vmin`, which is the *width* on a portrait screen**, so the
+  floor written to stop it vanishing on a wide one was the only thing that ever
+  fired on a phone: 180px of an 844px screen for a 250px thumbnail, in the one
+  composition where height is the axis under pressure. It answers the height
+  there instead — 135px at 844, 107px on a 667px screen. And **both lists carried
+  12px of fixed padding**, which is 24px a formula that only shrinks type can
+  never reach; they divide the budget and put their furniture in `em`, the same
+  bargain the lie board struck above the split. A row goes 47px → 34 and 37 at
+  three players, and 47px → 25 and 34 at eight.
+
+  Together: 1 068px → **955**, and the launch from 758–830 to **644–716**. It
+  still does not fit, and it is not asked to — 410px of budget against a cover,
+  an answer, one line per player who spoke and one per player in the room is
+  content that wants more than twice it. What the budget buys is that the type
+  stops growing once the page is already scrolling, which is the right bargain on
+  a console held in a hand rather than read across a room, and where the
+  standings are the one thing every player already has on their own screen.
+
+  The panel's own stack threshold was the last of it: a hand-written `860px`,
+  forty short of the product's single breakpoint, so between 860 and 900 the
+  reveal drew two columns inside a stage that had already stacked. It is
+  `layout.narrow` like everything else.
+
 - `[Game]` **A player on a laptop met round one half-drawn.** The reveal splits
   in two above 900px, and the board that fills its second half withholds itself
   where a round paid nobody and nobody typed — which is every round before the

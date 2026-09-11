@@ -121,8 +121,50 @@
         &.holding
           --hold-bar: calc(28px + var(--reveal-gap))
 
+        // Above the split each half divides the whole screen, because they sit
+        // side by side. Stacked they share one column and the screen pays for
+        // both — a cover, an answer, one row per player who spoke and one per
+        // player in the room — which at 390×844 is 410px of budget against
+        // content that wants more than twice it. So this arithmetic is not
+        // asked for a fit and cannot deliver one: what it buys is that the type
+        // stops growing once the page is already scrolling, which is what keeps
+        // the answer and the next round above the fold at a full table.
+        //
+        // That is the right bargain here and not above the split. A console
+        // this narrow is held in a hand rather than read across a room, so
+        // scrolling is a gesture it has — and the standings, the half that
+        // would otherwise bury the launch, are the one thing every player
+        // already has on their own screen.
+        //
+        // `27rem` is the chrome, measured the way `31rem` was: at 390×844 the
+        // header, the footer, the page padding and two gaps came to 434px.
         @include layout.narrow
+          --stacked-budget: calc(100dvh - 27rem - var(--hold-bar))
+
           justify-content: center
+
+          // Both lists divide the same budget by their own rows rather than
+          // splitting it between them. They are the same length — one row per
+          // player either way — so a ratio would only be a number to defend,
+          // and at the table sizes where it would bite both clamps are already
+          // on their floor.
+          .reveal-panel
+            --outcome-budget: var(--stacked-budget)
+
+          // The furniture before the type, the same bargain the lie board
+          // struck above: 12px of fixed padding is 24px a formula can never
+          // reach, where an `em` makes a row one multiple of its own size and
+          // the divisor mean something. The score goes with it or it is the
+          // tallest thing in a row it was supposed to be sized by.
+          .scoreboard li
+            font-size: clamp(0.9rem, calc(var(--stacked-budget) / var(--standings-rows, 8) / 2.8), 1.25rem)
+            padding: 0.35em 0
+
+            .nickname
+              font-size: 1em
+
+            .score
+              font-size: 1.5em
 
         // Both halves divide the screen rather than a box of their own, which
         // the vote's board does too once it is stacked. A container query is

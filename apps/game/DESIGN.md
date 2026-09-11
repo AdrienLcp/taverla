@@ -523,6 +523,32 @@ place the question had, each sized by dividing the screen rather than by the sum
 of its own type. Below it they stack and the page scrolls, which is what a
 narrow screen does anyway.
 
+**The split is a width question and the budget is a height one**, and for a
+while one media query was answering both. Every height formula on the console
+sat behind `layout.wide`, so below it a phone and an 899px window got identical
+CSS and the reveal grew 94px per player — 47 for their answer and 47 for their
+standing — until the launch was under the scoreboard. Stacked is not the same
+arithmetic made smaller: above the split the two halves sit side by side and
+each divides the whole screen, and stacked they share one column and the screen
+pays for both. So the narrow arm has its own chrome (`27rem`, measured at
+390×844 the way `31rem` was at 1080) and its own divisors.
+
+It does not make the reveal fit, and it is not asked to: 410px of budget against
+a cover, an answer and two lists is content that wants more than twice it. What
+it buys is that the type stops growing once the page is already scrolling, which
+is the right bargain on a console held in a hand — and the standings, the half
+that would otherwise bury the launch, are the one thing every player already has
+on their own screen.
+
+Two habits that only fail on the narrow side, and both silently. **A `vmin` is
+the width on a portrait screen**, so a `clamp()` whose floor exists to stop
+something vanishing on a wide display is the only term that ever fires on a
+phone: the cover was drawn at its 180px floor on an 844px screen, for a 250px
+thumbnail, in the one composition where height is the axis under pressure. And
+**fixed padding is furniture a formula cannot reach** — 12px top and bottom is
+24px of a row whatever the type does, which is the lie board's lesson met again
+one screen over.
+
 **The player's reveal splits at that same width, for the same reason one screen
 down.** Not every player is on a phone, and a laptop is the one screen here with
 width to spare and none of the height: the cover, the answer and the payout
