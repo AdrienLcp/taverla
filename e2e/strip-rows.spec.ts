@@ -56,6 +56,13 @@ type Fault = {
  * The width every strip's box is handed on the narrowest screen there is. It is
  * the floor of what the layout can actually produce, and the reason the sweep
  * below does not report strips that only break at widths no room can reach.
+ *
+ * It is also the one reading that can catch a **collapsed** container, which the
+ * sweep cannot: the sweep writes a width onto that box, so a strip the page
+ * gives nothing is measured at every width but its own. Zero is what
+ * `container-type: inline-size` resolves to wherever the box is shrink-to-fit —
+ * the containment lays it out as though it held nothing — and a strip whose
+ * container reads zero has every query it owns already firing.
  */
 const readFloors = () => {
   const floors: Record<string, number> = {}
@@ -150,6 +157,7 @@ const sweepShapes = ({
 test('[layout] no strip on the console ever holds rows of two different lengths', async ({
   page
 }) => {
+  const collapsed: string[] = []
   const faults: string[] = []
   const measured = new Set<string>()
 
@@ -204,6 +212,12 @@ test('[layout] no strip on the console ever holds rows of two different lengths'
 
       const floors = await page.evaluate(readFloors)
 
+      for (const [label, floor] of Object.entries(floors)) {
+        if (floor === 0) {
+          collapsed.push(`${locale} · ${label}`)
+        }
+      }
+
       await page.setViewportSize({ height: 900, width: WIDEST_PX })
 
       const { faults: found, seen } = await page.evaluate(sweepShapes, {
@@ -224,6 +238,7 @@ test('[layout] no strip on the console ever holds rows of two different lengths'
     }
   }
 
+  expect(collapsed).toEqual([])
   expect(faults).toEqual([])
   expect(measured.size).toBeGreaterThanOrEqual(STRIPS_EXPECTED)
 })

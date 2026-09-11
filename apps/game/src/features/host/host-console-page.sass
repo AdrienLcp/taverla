@@ -456,6 +456,41 @@
         color: var(--ink-muted)
         margin-top: calc(var(--space-m) * -1 + var(--space-2xs))
 
+      // A size container cannot be shrink-to-fit. `container-type: inline-size`
+      // implies `contain: inline-size`, so the box lays out as though it held
+      // nothing — and this footer is a centred column, where an item with no
+      // imposed width is as wide as its content. The two together resolve to
+      // **zero**: every container query this strip owns fired at once, its four
+      // segments stacked, and `Temps avant la tournée suivante` came down a
+      // 100px column in five lines on a 1440px screen. It is the inline twin of
+      // the height trap the reveal's budget already carries, and it fails the
+      // same silent way — a strip that has always been a column reads as one
+      // somebody meant to draw.
+      //
+      // `.setup-fold` under it was never caught because it already carried a
+      // width for its own composition. 24rem is this one's: the French row at
+      // the label's ceiling is 296px, so it clears `stacks-below`'s 19rem with
+      // room to spare and sits under the action it belongs to rather than
+      // across the screen.
+      // A size container cannot be shrink-to-fit. `container-type: inline-size`
+      // implies `contain: inline-size`, so the box lays out as though it held
+      // nothing — and this footer is a centred column, where an item with no
+      // imposed width is as wide as its content. The two together resolve to
+      // **zero**: every container query this strip owns fired at once, its four
+      // segments stacked, and `Temps avant la tournée suivante` came down a
+      // 100px column in five lines on a 1440px screen. It is the inline twin of
+      // the height trap the reveal's budget already carries, and it fails the
+      // same silent way — a strip that has always been a column reads as one
+      // somebody meant to draw.
+      //
+      // `.setup-fold` under it was never caught because it already carried a
+      // width for its own composition. 24rem is this one's: the French row at
+      // the label's ceiling is 296px, so it clears `stacks-below`'s 19rem with
+      // room to spare and sits under the action it belongs to rather than
+      // across the screen.
+      .auto-advance
+        width: min(24rem, 100%)
+
       .setup-fold
         width: min(900px, 100%)
 

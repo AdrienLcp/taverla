@@ -614,11 +614,26 @@ one — the poster mixin's trap, met a second time and answered the same way.
 
 Two things follow, and both fail *silently* rather than loudly:
 
-- **A size container needs a height imposed from outside.** A grid item under
-  `align-items: center` takes its own height, and a stage that gets its height
-  from a chain of `flex: 1` under `min-height` settles too late to be queried.
-  Either way `100cqh` resolves to nothing, every `clamp()` lands on its floor,
-  and the screen merely looks a little small. Nothing warns.
+- **A size container needs its size imposed from outside, on whichever axis it
+  contains.** A grid item under `align-items: center` takes its own height, and
+  a stage that gets its height from a chain of `flex: 1` under `min-height`
+  settles too late to be queried. Either way `100cqh` resolves to nothing, every
+  `clamp()` lands on its floor, and the screen merely looks a little small.
+  Nothing warns.
+
+  **The inline axis fails the same way, and that one reads as a decision.** A
+  `container-type: inline-size` box is laid out as though it held nothing, so
+  wherever it is shrink-to-fit — a flex item in the console footer's centred
+  column — its width resolves to **zero** and every query it owns fires at once.
+  The auto-advance strip stacked its four segments down a 100px column with
+  `Temps avant la tournée suivante` broken over five lines, on a 1440px screen,
+  and had been doing it at every width: a strip that has always been a column
+  reads as one somebody drew that way. `.setup-fold` beside it escaped only
+  because it already carried a width for its own composition. Every
+  `strip.stacks-below` caller needs one, and `e2e/strip-rows.spec.ts` now
+  refuses a strip whose container measures zero on the narrowest screen — its
+  sweep cannot catch it, because the sweep writes a width onto that box before
+  it reads anything.
 - **`contain: size` contains the overflow too**, so where the content does not
   fit at any legible size it is drawn *through* whatever is under it rather than
   pushing it down — the launch button ran straight across the board at 768px.
@@ -658,11 +673,28 @@ paragraph and `--longest-word` is the only thing that holds a *word* whole.
 `overflow-wrap: anywhere` is the guard against a word leaving its column, and a
 guard that fires reads `POC / AHO / NTAS`. Both surfaces reveal the same string
 in a column neither of them owns the width of, so the pair travels with the
-answer — `helpers/answer-fitting.ts` — rather than being taken twice. The
-coefficient is measured per face by the method the room code's `20cqi` was: a
-capital in `monument` averages 0.898 times its own font size, so `n` of them
-hold one line up to `111cqi / n`, where `billboard` on the player's screen holds
-`120cqi / n`.
+answer — `helpers/answer-fitting.ts` — rather than being taken twice.
+
+**And the two are counted in different units, because an average is the right
+measure of a paragraph and a coin flip on one word.** Fifty letters settle on
+the face's mean; eight do not. `monument` averages 0.898 of its own font size
+per capital, so the term read `111cqi / n` — and over a fifty-title sample
+`ILLINOIS` came in at 0.67 of that mean and `MAMMA` at a fifth over it, which
+left the one term that *promises* a whole word keeping the promise fifty-eight
+per cent of the time. `WONDERWALL` was drawn as `WONDERWAL / L` in a 509px
+column, at the size the formula had picked for it.
+
+So the run is published as a **width** and not a count. `M` and `W` are the two
+letters that break the average — every word above the mean in that sample holds
+one and every word under two thirds of it holds none — so the pair counts 1.3
+and everything else 1. That is what lets the constant stay near the mean while
+being the worst case rather than the middle of one: `106cqi` divided by that
+width holds every word in the sample on one line, where a flat count would have
+needed `91` and cost the answer eighteen per cent of its size instead of four.
+`billboard` on the player's screen holds `116cqi`, measured on its own sample,
+because that register draws the catalogue's own casing where the console's is
+uppercased — a different face of the same family, and `Mamma` at 1.009 is the
+word that sets it.
 
 **A second line takes its size from the first, not from the screen.** The artist
 under a revealed title is read as one object with it, and only the title knows

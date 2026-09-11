@@ -97,14 +97,21 @@
     // Two facts the viewport cannot answer, so the component publishes both,
     // and once this screen splits in two the column is what has to answer them
     // rather than the screen behind it. How much there is to say holds the
-    // answer to about two lines — the bank runs to 83 characters. How long its
-    // longest unbreakable run is holds every one of them to a *whole word*:
+    // answer to about two lines — the bank runs to 83 characters. How *wide*
+    // its longest unbreakable run is holds every one of them to a whole word:
     // `anywhere` is the guard against a word leaving the column, and a guard
     // that fires reads `Maiso / n- / Blanch / e`.
+    //
+    // A width rather than a count, and `116cqi` rather than `120`, for the
+    // reason the console's `106cqi` carries in full: the constant is a
+    // guarantee, so it is taken off the widest word of a measured sample and
+    // not off the face's mean. This register reads the catalogue's own casing
+    // where the console's is uppercased, which is a face of its own and a
+    // sample of its own — `Mamma` at 1.009 is the word that sets it.
     .revealed-title
       @include typography.billboard
 
-      font-size: clamp(2.5rem, min(11vmin, calc(240cqi / var(--answer-length, 10)), calc(120cqi / var(--longest-word, 10))), 6rem)
+      font-size: clamp(2.5rem, min(11vmin, calc(240cqi / var(--answer-length, 10)), calc(116cqi / var(--longest-word-width, 10))), 6rem)
       overflow-wrap: anywhere
 
     .revealed-artist

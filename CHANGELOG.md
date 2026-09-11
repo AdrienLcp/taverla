@@ -1180,6 +1180,46 @@ one part.
 
 ### Fixes
 
+- `[Game]` **`WONDERWALL` came down as `WONDERWAL / L` on a 1440px console, at
+  the size the formula had picked to hold it whole.** The term that promises a
+  whole word divides a constant by the word's character count, and the constant
+  was the face's *mean*: `monument` averages 0.898 of its own font size per
+  capital, so `n` of them were handed `111cqi / n`. Measured on the rendered
+  node over a fifty-title sample, that promise was kept fifty-eight per cent of
+  the time — `ILLINOIS` sets at 0.67 of the mean and `MAMMA` at 1.053, and a
+  word above it breaks in half with `overflow-wrap: anywhere` doing exactly what
+  a guard of last resort does.
+
+  **An average is the right measure of a paragraph and a coin flip on one
+  word**, so the length stays a count and the run is now published as a width.
+  `M` and `W` are the only two letters that need it: every word above the mean
+  in that sample holds one, and every word under two thirds of it holds none. So
+  the pair counts 1.3 in `answer-fitting.ts` and everything else counts 1, which
+  is what keeps the constant near the mean while making it the worst case rather
+  than the middle of one — `106cqi` on the console and `116cqi` on the player's
+  screen, which reads the catalogue's own casing and takes a sample of its own.
+  A flat character count would have needed `91`, and cost the answer eighteen
+  per cent of its size instead of four.
+
+  Measured after, in a 532px column at 1440×900: `Wonderwall`, `Pocahontas` and
+  `Mamma` each on one line, and `Illinois` still at the size it always had.
+
+- `[Game]` **The reveal's auto-advance strip had never once been a row.** It
+  stacked its four segments down a 100px column, with `Temps avant la tournée
+  suivante` broken over five lines on a 1440px screen — and at every other width
+  too. `strip.stacks-below` puts `container-type: inline-size` on the strip's
+  root, which implies `contain: inline-size`, so the box lays out as though it
+  held nothing; the console footer is a centred column, so the strip was
+  shrink-to-fit. The two together resolve to **zero**, and every container query
+  it owns was firing at once. `.setup-fold` beside it escaped only because it
+  already carried a width for its own composition.
+
+  It is the inline twin of the height trap the reveal's budget already carries,
+  and it fails the same silent way — a strip that has always been a column reads
+  as one somebody drew that way. `e2e/strip-rows.spec.ts` now refuses a strip
+  whose container measures zero on the narrowest screen; its sweep could not,
+  because the sweep writes a width onto that box before it reads anything.
+
 - `[Game]` **A room of nine cut five of its names to three letters, on the one
   screen that exists to say who won.** The final board goes to two columns past
   eight players and that was the whole test: `final-board.sass` carried no media

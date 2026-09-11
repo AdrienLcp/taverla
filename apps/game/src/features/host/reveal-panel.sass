@@ -85,12 +85,20 @@
       // that the column can be 276px wide: `9vmin` is the screen's shorter axis
       // and this column stopped being it the day the reveal split, so a
       // ten-letter answer was set at 81px in 276px and came down as
-      // `POC / AHO / NTAS`. `111cqi` is measured by the method the room code's
-      // `20cqi` was — a capital in `monument` averages 0.898 times its own font
-      // size, so `n` of them hold one line up to `100 / 0.898 = 111cqi` divided
-      // by `n`. It is the player's `120cqi` one register up, the same rule
-      // against the wider face.
-      --answer-size: clamp(2rem, min(9vmin, calc(128rem / var(--answer-length, 10)), calc(111cqi / var(--longest-word, 10))), 7rem)
+      // `POC / AHO / NTAS`.
+      //
+      // `106cqi` is measured by the method the room code's `20cqi` was, and
+      // against the same worst case rather than an average: the widest word of
+      // a fifty-title sample takes 0.943 of its own font size per unit of
+      // width, so `100 / 0.943 = 106cqi` divided by that width holds any of
+      // them on one line. The width is what `answer-fitting.ts` publishes in
+      // place of a character count, and it is the half of this that changed.
+      // The constant read `111` off the face's *mean* of 0.898, which is the
+      // number a paragraph is sized by and a coin flip on a single word: it
+      // held on fifty-eight per cent of that sample and drew `WONDERWALL` as
+      // `WONDERWAL / L` in a 509px column. It is the player's `116cqi` one
+      // register up, the same rule against the wider face.
+      --answer-size: clamp(2rem, min(9vmin, calc(128rem / var(--answer-length, 10)), calc(106cqi / var(--longest-word-width, 10))), 7rem)
 
       .title
         @include typography.monument

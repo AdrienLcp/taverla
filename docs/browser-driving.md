@@ -227,6 +227,20 @@ variable font's width axis, and re-applying `font-stretch` after it does not put
 it back. `range.getClientRects().length` is the same tool answering how many
 lines a wrap actually produced, which `height / lineHeight` rounds wrong.
 
+**A `cloneNode` of the real element fails the same way, for a different
+reason.** The rules that style it are descendant selectors —
+`.reveal-panel .identity .title` — so a clone appended to `<body>` to be handed
+a width of its own matches none of them, and comes back at 0.724 against the
+same 0.898. It looks like the careful version of the measurement, which is what
+makes it expensive. **Measure the rendered node itself**: write the sample into
+its `textContent`, read the range, and restore `getAttribute('style')` after.
+
+And **force one line while you do it**, with `white-space: nowrap` and
+`overflow-wrap: normal` set inline. Summing the rects of a word that wrapped
+does not give its unwrapped width back — `WONDERWALL` read 0.983 broken in two
+and 0.927 whole, on one node at one size — so a sample taken in a column narrow
+enough to break it describes a face that does not exist.
+
 ## Two things a browser can be asked that no test can
 
 - **What the answer is, mid-round.** The console does not render a blind test's
