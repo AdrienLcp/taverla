@@ -315,8 +315,7 @@ export const FR_DICTIONARY: Dictionary = {
     verdict: {
       right: 'Bonne réponse',
       wrong: 'Raté'
-    },
-    volume: 'Volume'
+    }
   },
   invite: {
     copied: 'Copié',
@@ -486,7 +485,8 @@ export const FR_DICTIONARY: Dictionary = {
       label: 'Thème',
       light: 'Clair',
       system: 'Système'
-    }
+    },
+    volume: 'Volume'
   },
   quiz: {
     adult: {

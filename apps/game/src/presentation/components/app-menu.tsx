@@ -28,6 +28,7 @@ import {
   useRoomCodeParam
 } from '@/infrastructure/router/navigation'
 import { readHostToken } from '@/infrastructure/storage/session-storage'
+import { useVolume } from '@/presentation/audio/volume-provider'
 import { useConnection } from '@/presentation/connection/connection-provider'
 import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
 import { LANGUAGE_NAMES } from '@/presentation/i18n/language-names'
@@ -51,6 +52,7 @@ import { Disclosure } from './disclosure'
 import { Link } from './link'
 import { RoomInvitation } from './room-invitation'
 import { SegmentedControl } from './segmented-control'
+import { Slider } from './slider'
 import { TextField } from './text-field'
 import { TextLink } from './text-link'
 
@@ -292,6 +294,7 @@ export const AppMenu: React.FC = () => {
   // The console is the screen that can send the invitation somewhere else, and
   // `closeRoom` is what says a screen is one — the same test `RoomExit` makes.
   const { closeRoom } = useRoomActions()
+  const { setVolume, volume } = useVolume()
   const [build, setBuild] = useState<string | null>(null)
 
   const alert =
@@ -377,6 +380,27 @@ export const AppMenu: React.FC = () => {
                       </Link>
                     )}
                   </div>
+                )}
+
+                {/*
+                  The room's one speaker is the console, and `closeRoom` is what
+                  says a screen is one — the same test the invitation above
+                  makes. It heads the preferences because it is the only one of
+                  them somebody opens this menu mid-round to reach, and it is in
+                  the menu at all because the console strip it used to live in
+                  is drawn under the one game that carries a track, while a buzz
+                  sounds under all of them.
+                */}
+                {closeRoom !== null && (
+                  <Slider
+                    formatOptions={{ style: 'percent' }}
+                    label={translate('preferences.volume')}
+                    maxValue={1}
+                    minValue={0}
+                    onChange={setVolume}
+                    step={0.05}
+                    value={volume}
+                  />
                 )}
 
                 <SegmentedControl

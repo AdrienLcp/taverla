@@ -139,20 +139,6 @@ export const voteDurationMsOf = (game: GameSettings | null): number | null =>
 export const locksOutOnMissIn = (game: GameSettings | null): boolean =>
   game?.kind === 'buzzer' ? game.locksOutOnMiss : true
 
-/**
- * Whether anything reaches the host machine's speaker. Only the blind test
- * carries an `audioUrl`, so its volume is the only one of the console's controls
- * that commands nothing at all under the other games — and a room that has not
- * chosen yet has nothing to play either.
- *
- * A predicate rather than a comparison at the call site, because the day a
- * second game plays something is the day this is the one line to change. That
- * is also why the volume string stays in the shell's namespace: it presupposes
- * audio, not this game.
- */
-export const playsAudioIn = (game: GameSettings | null): boolean =>
-  game?.kind === 'blindtest'
-
 export const DEFAULT_BLINDTEST_SETTINGS: BlindtestSettings = {
   difficulty: 'wellKnown',
   kind: 'blindtest',

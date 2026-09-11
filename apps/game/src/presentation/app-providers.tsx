@@ -2,6 +2,7 @@ import type React from 'react'
 
 import type { Locale } from '@taverla/protocol/locale'
 
+import { VolumeProvider } from '@/presentation/audio/volume-provider'
 import { I18nProvider } from '@/presentation/i18n/i18n-provider'
 import { ThemeProvider } from '@/presentation/theme/theme-provider'
 
@@ -25,6 +26,8 @@ export const AppProviders: React.FC<AppProvidersProps> = ({
   locale
 }) => (
   <ThemeProvider>
-    <I18nProvider locale={locale}>{children}</I18nProvider>
+    <VolumeProvider>
+      <I18nProvider locale={locale}>{children}</I18nProvider>
+    </VolumeProvider>
   </ThemeProvider>
 )

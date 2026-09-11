@@ -37,10 +37,12 @@ type SetupFoldProps = {
 }
 
 /**
- * How the evening is played, beside the volume rather than inside the lobby:
- * the countdown, the round count, the answer window and the playlist all land
- * on the round after the one on screen, and a host who has to end the game to
- * reach them is a host who does not change them.
+ * How the evening is played, rather than inside the lobby: the countdown, the
+ * round count, the answer window and the playlist all land on the round after
+ * the one on screen, and a host who has to end the game to reach them is a
+ * host who does not change them. That is the line the one strip left outside
+ * holds — auto-advance acts on the reveal being watched, so it is reached
+ * without opening anything.
  *
  * The game and the seat are here for every phase but the lobby, where each of
  * them is the decision the room is waiting on and the stage draws it instead. A

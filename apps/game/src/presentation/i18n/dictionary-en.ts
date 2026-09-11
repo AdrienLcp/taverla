@@ -349,8 +349,7 @@ export const EN_DICTIONARY = defineDictionary({
     verdict: {
       right: 'Right',
       wrong: 'Wrong'
-    },
-    volume: 'Volume'
+    }
   },
   invite: {
     copied: 'Copied',
@@ -538,7 +537,8 @@ export const EN_DICTIONARY = defineDictionary({
       label: 'Theme',
       light: 'Light',
       system: 'System'
-    }
+    },
+    volume: 'Volume'
   },
   quiz: {
     adult: {

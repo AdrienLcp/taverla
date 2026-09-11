@@ -43,10 +43,8 @@ import { useHostConnection } from '@/infrastructure/messaging/use-host-connectio
 import { useRoomCodeParam } from '@/infrastructure/router/navigation'
 import {
   readStoredHostPreferences,
-  readStoredVolume,
   writeStoredHostPreferences,
-  writeStoredNickname,
-  writeStoredVolume
+  writeStoredNickname
 } from '@/infrastructure/storage/preferences-storage'
 import {
   forgetHostToken,
@@ -56,6 +54,7 @@ import {
   writeHostToken,
   writeSeatNickname
 } from '@/infrastructure/storage/session-storage'
+import { useVolume } from '@/presentation/audio/volume-provider'
 import { AskedQuestion } from '@/presentation/components/asked-question'
 import { Button } from '@/presentation/components/button'
 import { Countdown } from '@/presentation/components/countdown'
@@ -76,9 +75,9 @@ import { useReportRoomActions } from '@/presentation/room-actions/room-actions-p
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
 import { useScreenAwake } from '@/presentation/use-screen-awake'
 
+import { AutoAdvanceChoice } from './auto-advance-choice'
 import { FinalBoard } from './final-board'
 import { HostActions } from './host-actions'
-import { HostControls } from './host-controls'
 import { HostRefused } from './host-refused'
 import { JoinReminder } from './join-reminder'
 import { LobbyStage } from './lobby-stage'
@@ -119,7 +118,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
     null
   )
   const [hasOfferedToken, setHasOfferedToken] = useState(false)
-  const [volume, setVolume] = useState(readStoredVolume)
+  const { volume } = useVolume()
   const [draftSource, setDraftSource] = useState<TrackSource | null>(null)
   const [preferences, setPreferences] = useState(readStoredHostPreferences)
 
@@ -339,15 +338,10 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
               send={send}
               view={view}
             />
-            <HostControls
+            <AutoAdvanceChoice
               isLive={isLive}
               onSettingsChange={changeSettings}
-              onVolumeChange={(next) => {
-                setVolume(next)
-                writeStoredVolume(next)
-              }}
               settings={view.settings}
-              volume={volume}
             />
             <SetupFold
               draftSource={draftSource}
