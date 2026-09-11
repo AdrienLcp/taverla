@@ -1180,6 +1180,18 @@ one part.
 
 ### Fixes
 
+- `[Game]` **A player on a laptop met round one half-drawn.** The reveal splits
+  in two above 900px, and the board that fills its second half withholds itself
+  where a round paid nobody and nobody typed — which is every round before the
+  first point, and so always round one. Nothing reconciled the two: the answer
+  was drawn in the 433px `1fr` track with 347 pixels of nothing beside it, and
+  the whole reveal two hundred pixels left of the screen it looks centred on.
+  The split now reads the board off the markup with `:has(.round-board)`, the
+  way the console's own reveal panel already reads its reaction board, so a
+  reveal with nothing to put beside it takes the column whole and the answer is
+  sized against all of it. Only a wide screen could see it — a phone stacks the
+  two halves and never declared the empty track.
+
 - `[Game]` **The credits page named the wrong licence for two of its five
   banks.** It printed one shared `CC BY-SA 4.0` under every source, where the
   `attributions` header of `question-bank.json` has always carried one per

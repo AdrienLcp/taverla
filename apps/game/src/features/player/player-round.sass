@@ -65,8 +65,15 @@
     // unbreakable word at ninety-six pixels — claimed the whole row and left
     // the board on its 15rem floor at every desktop width, which is a phone's
     // width carrying a laptop's type. `Adrien 2` was drawn as `Adr…`.
+    //
+    // `RoundBoard` withholds itself where a round paid nobody and nobody typed,
+    // which is every round before the first point, so the split is read off the
+    // markup rather than off the width alone. Left on the width, round one drew
+    // the answer in the `1fr` track with three hundred and forty-seven pixels of
+    // nothing beside it, and the whole reveal two hundred pixels left of the
+    // screen it looks centred on.
     @include layout.wide
-      &.revealed
+      &.revealed:has(.round-board)
         align-items: center
         column-gap: var(--space-xl)
         display: grid
