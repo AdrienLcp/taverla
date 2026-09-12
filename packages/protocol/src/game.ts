@@ -23,13 +23,17 @@ export const gameKindSchema = z.enum(gameKinds)
  * not collapse into it: the next game will be served before it has screens, and
  * this is where it waits — `reflex` spent a stage in exactly that window, and
  * every game before it did too.
+ *
+ * **The order is the shelf's**, not the alphabet's: it is the order the front
+ * door draws its cards in and the order the lobby's picker offers, so the two
+ * games a table reaches for first come first. Sorting it is a product change.
  */
 export const shelvedGames = [
   'blindtest',
-  'buzzer',
-  'lefake',
   'quiz',
-  'reflex'
+  'reflex',
+  'lefake',
+  'buzzer'
 ] as const satisfies readonly GameKind[]
 
 export const shelvedGameSchema = z.enum(shelvedGames)

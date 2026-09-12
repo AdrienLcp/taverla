@@ -329,7 +329,16 @@ three duration tokens at `0ms`).
 - **Buzz** — the buzzer scales down on press, optimistically, before the server
   answers.
 - **Reveal** — `card-strike`, shared by the host panel and the player's screen,
-  so the same moment reads the same on both surfaces.
+  so the same moment reads the same on both surfaces. **It is on the card and
+  never on the screen holding it.** On the player's side it sat on
+  `.player-round.centred` — the lobby, the countdown, the reveal, the final
+  board and two notices — so a 1.06 scale settling over `slow` moved the whole
+  column on every one of them, 877px down to 827 over 450ms, and on the reveal
+  it landed under the press that had just answered. A scale is only a strike
+  where the thing scaling is an object; on a screen it is a reflow, and it was
+  read as one. It belongs to `.outcome`, the block a round pays out, with the
+  board beside it still. The other five phases have the field's own colour
+  change, which is the authored moment a phase change already has.
 - **The round's clock** is a CSS animation whose duration is the server's
   remaining time, on the console and on every player's screen. No React timer,
   and it is the one thing that moves during a round — a bar draining is what

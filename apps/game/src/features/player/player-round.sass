@@ -14,9 +14,6 @@
       justify-content: center
       text-align: center
 
-      @media (prefers-reduced-motion: no-preference)
-        animation: card-strike var(--transition-slow, 0) var(--timing, ease) both
-
       // Everything else on this screen is one centred thing; a board is rows,
       // and rows want the column. `align-items: center` shrink-wraps a child to
       // its min-content, and a nickname's is *zero* — `overflow: hidden` is what
@@ -119,8 +116,23 @@
 
     // What the round was and what it paid this player: one half of the reveal,
     // and one child, so the other half can sit beside it.
+    //
+    // **The card is struck, and the screen it arrived on is not.** This
+    // animation was on `.centred` — every phase but `playing`, which is the
+    // lobby, the countdown, the reveal, the final board and two notices — so a
+    // 1.06 scale settling over `slow` moved *the whole screen* on each of them:
+    // 877px down to 827 over 450ms on a laptop, right under a press that had
+    // just landed, which is a reflow rather than a payoff. It reads as a bug
+    // and it was reported as one. The strike belongs to the thing the round
+    // pays out, which is this card; the board under it is a reading, and the
+    // other five phases have the field's own colour change as their moment —
+    // the one authored motion per event this world allows.
     &.revealed .outcome
       align-items: center
+
+      @media (prefers-reduced-motion: no-preference)
+        animation: card-strike var(--transition-slow, 0) var(--timing, ease) both
+
       // What the answer is sized against: on a laptop this is a column of a
       // fixed share, and `vmin` there is the size of a screen this half of it
       // never gets.

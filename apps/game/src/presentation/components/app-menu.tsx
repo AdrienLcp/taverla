@@ -24,6 +24,7 @@ import {
   creditsPathFor,
   homePathFor,
   inviteUrlFor,
+  useIsCurrentPath,
   useNavigateToLocale,
   useRoomCodeParam
 } from '@/infrastructure/router/navigation'
@@ -180,9 +181,17 @@ const RoomExit: React.FC<{ onDone: () => void }> = ({ onDone }) => {
   const connection = useConnection()
   const roomCode = useRoomCodeParam()
   const translate = useTranslate()
+  const isOnHome = useIsCurrentPath(homePathFor(locale))
   // Every exit here but the plain navigation sends a frame, and a frame written
   // to a socket that is not open is dropped with nothing to show for it.
   const isLive = connection?.status === 'open'
+
+  // The front door is not somewhere you leave for the front door, and no room
+  // path is the home path — so the ladder has no rung here at all rather than a
+  // rung that does nothing when it is pressed.
+  if (isOnHome) {
+    return null
+  }
 
   // Leaving the room is what pressing this *means* on a screen that holds a
   // seat, and saying so is the only way the roster on the console can be true
@@ -295,6 +304,7 @@ export const AppMenu: React.FC = () => {
   // The console is the screen that can send the invitation somewhere else, and
   // `closeRoom` is what says a screen is one — the same test `RoomExit` makes.
   const { closeRoom } = useRoomActions()
+  const isOnCredits = useIsCurrentPath(creditsPathFor(locale))
   const { setVolume, volume } = useVolume()
   const [build, setBuild] = useState<string | null>(null)
   const trigger = useRef<HTMLButtonElement>(null)
@@ -453,8 +463,12 @@ export const AppMenu: React.FC = () => {
                   the round frozen on every player's screen to go and read a
                   licence. The route stays, so a shared link and a reload still
                   resolve.
+
+                  And not on the page it points at, for the reason the exit
+                  above is absent on the front door: a link to the screen it is
+                  drawn on is pressed and nothing happens.
                 */}
-                {!isInsideRoom && (
+                {!isInsideRoom && !isOnCredits && (
                   <p className='credit'>
                     <TextLink href={creditsPathFor(locale)} onPress={close}>
                       {translate('credits.title')}

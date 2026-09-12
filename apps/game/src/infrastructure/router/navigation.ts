@@ -166,6 +166,21 @@ export const useNavigateToLocale = (): ((locale: Locale) => void) => {
 }
 
 /**
+ * Whether the page being drawn is already the one a link points at. The menu is
+ * chrome on every screen, including the two pages it offers a way to, and a
+ * link to the page it is drawn on is not a way anywhere — it is pressed, and
+ * nothing happens.
+ */
+export const useIsCurrentPath = (path: string): boolean => {
+  const { pathname } = useLocation()
+
+  return withoutTrailingSlash(pathname) === withoutTrailingSlash(path)
+}
+
+const withoutTrailingSlash = (path: string): string =>
+  path.length > 1 && path.endsWith('/') ? path.slice(0, -1) : path
+
+/**
  * `null` when the URL carries something that cannot be a room code, which a
  * page renders as "no such room" rather than opening a socket that would be
  * refused anyway.

@@ -653,6 +653,13 @@ one part.
 
 ### Improvements
 
+- `[Game]` **The shelf is ordered by what a table reaches for**, not by the
+  alphabet: the blind test and the quiz first, then the reflex race, Le Fake
+  and the bare buzzer. `shelvedGames` is the one list — the front door's cards
+  and the lobby's picker both read it — so the order is a product decision
+  sitting in the protocol, and the comment above it says so before somebody
+  sorts it back.
+
 - `[Server]` **The English half now pays for the name a room shouts too**, on
   1 048 of its 4 506 rows and 3 681 spellings — more rows than the French half's
   largest source and more spellings than all of PolyFact. Typed mode is the
@@ -1278,6 +1285,25 @@ one part.
   and the extra width is only void
 
 ### Fixes
+
+- `[Game]` **The reveal struck the screen instead of the card.** `card-strike`
+  sat on `.player-round.centred`, which is every phase but `playing` — the
+  lobby, the countdown, the reveal, the final board and two notices — so a 1.06
+  scale settling over `slow` moved the *whole* screen on each of them: measured
+  at 877px down to 827 over 450ms on a 978px window, landing right under the
+  press that had just answered. It read as a reflow and was reported as one
+  ("un petit saut de UI, les boutons s'élargissent"). It goes on `.outcome`,
+  which is the card the round pays out; the board beside it does not move at
+  all, and the five other phases keep the field's own colour change as their
+  moment. The console's `.reveal-panel` is untouched — that one is still a
+  panel.
+
+- `[Game]` **Two links in the menu pointed at the page they were drawn on.**
+  *Accueil* on the front door and *Crédits* on the credits page were pressed
+  and nothing happened. `useIsCurrentPath` is the predicate, and each one is
+  absent rather than disabled: a way out that goes nowhere is not a way out,
+  and on the front door the exits have no other rung, so the group goes with
+  it.
 
 - `[Game]` **The floor's dial stepped instead of running.** `floor-drain` took
   its start from `calc(1 - var(--drain-from))`, and a `calc()` holding a
