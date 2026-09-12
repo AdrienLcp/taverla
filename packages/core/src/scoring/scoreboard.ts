@@ -23,7 +23,7 @@ export const hasAnybodyScored = (players: readonly PublicPlayer[]): boolean =>
 export const buildScoreboard = (
   players: readonly PublicPlayer[]
 ): ScoreboardEntry[] => {
-  const ordered = [...players].sort(
+  const ordered = players.toSorted(
     (left, right) =>
       right.score - left.score || left.nickname.localeCompare(right.nickname)
   )

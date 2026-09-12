@@ -610,7 +610,7 @@ export const ingestVikidia = async (): Promise<IngestedQuestions> => {
   const rejections: string[] = []
   const unmapped: string[] = []
 
-  for (const [title, wikitext] of Object.entries(pages).sort()) {
+  for (const [title, wikitext] of Object.entries(pages).toSorted()) {
     const blocks = [...wikitext.matchAll(/<quiz>([\s\S]*?)(?:<\/quiz>|$)/giu)]
 
     if (blocks.length === 0) {

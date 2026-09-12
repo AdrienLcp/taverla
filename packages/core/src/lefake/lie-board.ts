@@ -134,7 +134,7 @@ const dropSurplusLies = (byText: Map<string, BoardEntry>): void => {
   }
 
   const dropped = shuffled([...byText].filter(([, entry]) => !entry.isTruth))
-    .sort(byFewestAuthors)
+    .toSorted(byFewestAuthors)
     .slice(0, surplus)
 
   for (const [text] of dropped) {

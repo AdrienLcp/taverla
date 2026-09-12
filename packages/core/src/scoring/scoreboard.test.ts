@@ -41,7 +41,7 @@ describe('buildScoreboard', () => {
     const oneWay = [playerOn('Bob', 5), playerOn('Alice', 5)]
 
     expect(nicknames(oneWay)).toEqual(['Alice', 'Bob'])
-    expect(nicknames([...oneWay].reverse())).toEqual(['Alice', 'Bob'])
+    expect(nicknames(oneWay.toReversed())).toEqual(['Alice', 'Bob'])
   })
 
   it('[scoring] handles an empty room', () => {

@@ -80,7 +80,7 @@ export const tallyLieBoard = ({
         kind: 'single' as const
       }
     }))
-    .sort(byPointsThenId)
+    .toSorted(byPointsThenId)
 }
 
 /**

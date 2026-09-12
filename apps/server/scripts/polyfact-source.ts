@@ -324,7 +324,7 @@ const leastUsedFit = ({
           question: { accepted: [], answer, decoys: [...beside] }
         }).isCorrect
     )
-    .sort((left, right) => (uses.get(left) ?? 0) - (uses.get(right) ?? 0))
+    .toSorted((left, right) => (uses.get(left) ?? 0) - (uses.get(right) ?? 0))
 
   const ofTheEra = fits.filter((label) =>
     isOfTheEra({ answerYear, label, years })
@@ -558,7 +558,7 @@ export const ingestPolyFact = async (): Promise<IngestedQuestions> => {
     }
   }
 
-  for (const [relation, count] of [...refused].sort(
+  for (const [relation, count] of [...refused].toSorted(
     ([, left], [, right]) => right - left
   )) {
     console.info(`  skip ${relation}: ${count} rows — not asked here`)

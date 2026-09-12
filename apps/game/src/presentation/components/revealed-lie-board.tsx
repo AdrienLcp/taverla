@@ -33,7 +33,7 @@ export const RevealedLieBoard: React.FC<RevealedLieBoardProps> = ({
       className='revealed-lie-board'
       style={{ '--board-lines': board.length }}
     >
-      {[...board].sort(truthFirst).map((candidate) => (
+      {board.toSorted(truthFirst).map((candidate) => (
         <li className={candidate.isTruth ? 'truth' : ''} key={candidate.id}>
           {/*
             Above the line it names, the way every other reveal on the shelf

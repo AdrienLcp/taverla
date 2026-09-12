@@ -490,7 +490,7 @@ export const settleSimultaneousRound = ({
 
   const roundDurationMs = roundDurationMsOf(room.settings.game)
 
-  for (const attempts of [...round.attempts].sort(byFirstScored)) {
+  for (const attempts of round.attempts.toSorted(byFirstScored)) {
     const earned = pointsForSimultaneousAnswer({
       mode,
       verdict: attempts.verdict

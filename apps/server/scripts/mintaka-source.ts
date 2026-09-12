@@ -322,7 +322,7 @@ const decoysFor = ({
           question: { accepted: [], answer: candidate.answer, decoys: [] }
         }).isCorrect
     )
-    .sort(
+    .toSorted(
       (left, right) =>
         notabilityDistance({ from: candidate.views, to: left.views }) -
         notabilityDistance({ from: candidate.views, to: right.views })
@@ -460,7 +460,7 @@ const poolFor = ({
 
         return pool === undefined ? [] : [pool]
       })
-      .sort((left, right) => right.length - left.length)
+      .toSorted((left, right) => right.length - left.length)
 
     if (held[0] !== undefined) {
       return held[0]

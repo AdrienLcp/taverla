@@ -164,7 +164,7 @@ describe('le fake', () => {
     // truth is on that board on purpose — finding it is the game — so what has
     // to stay off it is which one that is, and who wrote the rest.
     for (const entry of boardOf(ana)) {
-      expect(Object.keys(entry).sort()).toEqual(['id', 'text'])
+      expect(Object.keys(entry).toSorted()).toEqual(['id', 'text'])
     }
 
     const beforeTheReveal = ana.frames.filter(

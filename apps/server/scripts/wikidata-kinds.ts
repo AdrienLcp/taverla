@@ -128,7 +128,7 @@ const prefixed = ({
 
       return entityId === undefined || entityId === '' ? [] : [entityId]
     })
-    .sort()
+    .toSorted()
     .map((entityId) => `${prefix}:${entityId}`)
 
 const kindsOfBatch = async (

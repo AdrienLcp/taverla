@@ -189,7 +189,7 @@ const report = (ingested: IngestedQuestions): void => {
     `\n${ingested.questions.length} questions from ${source} (${language}):`
   )
 
-  for (const [category, count] of [...byCategory].sort(
+  for (const [category, count] of [...byCategory].toSorted(
     ([, left], [, right]) => right - left
   )) {
     const share = count / ingested.questions.length

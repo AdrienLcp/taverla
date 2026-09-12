@@ -2270,6 +2270,20 @@ one part.
 
 ### Internal
 
+- `[Shared]` **`toSorted` and `toReversed`, rather than copying an array to
+  sort it.** 22 sites over 17 files, and a `code-style` rule so the next one
+  is written that way instead of found later: `[...items].sort(…)` is the same
+  array written twice, and a bare `items.sort(…)` mutates what the caller
+  handed over, which is how a render-order tweak reorders somebody’s state.
+
+  Nothing here was mutating shared state — every site already spread, or
+  closed a `filter`/`map` chain on an array of its own — so this buys the
+  shape rather than a fix. The exception the rule keeps is an array built
+  inside the function that never escapes it, which is why a `Map` or a `Set`
+  still spreads before it sorts: `HOST_ONLY_MESSAGE_TYPES` is a `Set`, and
+  `toSorted` is not on one. `i18n/vendor/` keeps its four sites — it is a
+  verbatim copy of another repository, changed there or not at all.
+
 - `[Server]` **`frenchAliasesOf` is `aliasesOf({ entityIds, language })`.** The
   language was literal in the SPARQL (`FILTER(lang(?alias) = "fr")`) with no
   parameter anywhere in the module, which is what made the English half

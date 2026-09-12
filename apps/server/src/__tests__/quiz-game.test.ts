@@ -152,8 +152,8 @@ describe('a quiz through the seam', () => {
     const choices = quizRound(playerView(zoe))?.choices ?? []
 
     expect(choices).toHaveLength(4)
-    expect([...choices].sort()).toEqual(
-      [QUESTIONS[0]?.answer, ...(QUESTIONS[0]?.decoys ?? [])].sort()
+    expect(choices.toSorted()).toEqual(
+      [QUESTIONS[0]?.answer, ...(QUESTIONS[0]?.decoys ?? [])].toSorted()
     )
     expect(transcriptOf(zoe)).not.toContain('correctChoiceIndex')
   })

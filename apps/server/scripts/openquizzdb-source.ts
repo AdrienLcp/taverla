@@ -334,7 +334,7 @@ export const ingestOpenQuizzDb = async (): Promise<IngestedQuestions> => {
   const unrated: Unrated[] = []
   const rejections: string[] = []
 
-  for (const [rubric, packIds] of [...byRubric].sort()) {
+  for (const [rubric, packIds] of [...byRubric].toSorted()) {
     const isAdult = rubric === ADULT_RUBRIC
     const isRiddle = rubric === RIDDLE_RUBRIC
     const category = isAdult ? 'arts' : CATEGORY_OF_RUBRIC[rubric]

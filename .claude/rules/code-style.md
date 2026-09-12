@@ -83,3 +83,14 @@ name for what you are adding, name the neighbours that are now inconsistent, and
 and the improvement is obvious on first read. A rename across dozens of call
 sites is still worth raising, as its own commit rather than a blocker on this
 one.
+
+## `toSorted`, not a copy then `sort`
+
+`array.toSorted(…)` wherever it is available, which is everywhere here — Node
+and every browser this ships to. `[...items].sort(…)` is the same thing written
+twice, and a bare `items.sort(…)` mutates what the caller handed over, which is
+how a render-order tweak reorders somebody's state. The same goes for
+`toReversed` and `with`.
+
+An in-place `sort` survives only where the array was built inside the function
+and never escapes it.

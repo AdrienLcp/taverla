@@ -205,6 +205,6 @@ export const heldRooms = ({
     .map(({ at, roomCode }) => ({ at, role: 'player' as const, roomCode }))
 
   return [...hosted, ...seated]
-    .sort((older, newer) => newer.at - older.at)
+    .toSorted((older, newer) => newer.at - older.at)
     .slice(0, MOST_ROOMS_OFFERED)
 }

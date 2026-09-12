@@ -20,7 +20,9 @@ describe('HOST_ONLY_MESSAGE_TYPES', () => {
       type.startsWith('host.')
     )
 
-    expect([...HOST_ONLY_MESSAGE_TYPES].sort()).toEqual(hostPrefixed.sort())
+    expect([...HOST_ONLY_MESSAGE_TYPES].toSorted()).toEqual(
+      hostPrefixed.toSorted()
+    )
   })
 })
 
@@ -57,7 +59,7 @@ describe('buzz', () => {
     )
 
     expect(buzzSchema).toBeDefined()
-    expect(Object.keys(buzzSchema?.shape ?? {}).sort()).toEqual([
+    expect(Object.keys(buzzSchema?.shape ?? {}).toSorted()).toEqual([
       'roundId',
       'type'
     ])

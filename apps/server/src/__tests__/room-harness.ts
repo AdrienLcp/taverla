@@ -216,7 +216,7 @@ export const waitFor = async (
 }
 
 export const hostView = (host: Peer<HostServerMessage>) => {
-  for (const { message } of [...host.frames].reverse()) {
+  for (const { message } of host.frames.toReversed()) {
     if (message.type === 'room.updated' || message.type === 'welcome') {
       return message.view
     }
@@ -242,7 +242,7 @@ export const sessionIdOf = (
 }
 
 export const playerView = (player: Peer<PlayerServerMessage>) => {
-  for (const { message } of [...player.frames].reverse()) {
+  for (const { message } of player.frames.toReversed()) {
     if (message.type === 'room.updated' || message.type === 'welcome') {
       return message.view
     }
