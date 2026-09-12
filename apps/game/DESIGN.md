@@ -910,6 +910,40 @@ makes the divisor mean something. The same arithmetic is why a line carrying
 three short things stacked at full width is the expensive shape: who wrote a lie
 and who it caught are one row.
 
+## What is out of budget, and stays there
+
+Measured during the pass that assumed the host may be on a phone and the
+players on laptops, kept here so nobody measures them a second time. Each one
+is content that wants more than the screen at any size a grandparent can read,
+which is the bargain every stage on the console already makes.
+
+- **A player's `revealed`** runs 57px off a 1440×700, 82 off a 390×844, 149 at
+  the blind test on the same phone, 315 off a 360×640 and 225 off a 899×800
+  window. The row is on its hard floor in all of them: a payout, nine names and
+  nine sentences do not fit at a legible size.
+- **`playing` and `buzzed` on a phone held sideways** (812×375) overflow 137px
+  and cannot be closed — a banner, a question, a circle and a line do not fit
+  in 375px of height at any size worth drawing.
+- **The player's countdown is a viewport term in a column capped at 900px** —
+  `clamp(8rem, 42vmin, 32rem)`. At 1600×1300 the `10` is 976px of ink in a
+  section of 796, on one line and still on screen. It only fires above 1219px
+  of short side, which is why it has not been paid for.
+- **The floor's clock with no limit counts up and prints `300`** after five
+  minutes, with no unit. The real case is one or two digits, and inside the
+  dial three of them fit.
+- **The buzzer drops 35px at the moment of the press.** It is a phase change —
+  the field turns oxblood on the same frame.
+- **The vote list still scrolls 261px on a 390×844** at ten candidates, and the
+  vote leaves 38px and 15px over at 1024×768 and 1280×800 — 33 and 14 on the
+  final board.
+- **The console at `finished` scrolls on the narrow arm** — 16px at 899×800, 37
+  at 390×844, 268 at 360×640, and 19 more where the settings line under
+  *Rejouer* wraps. The rows are on their hard floor, so the budget has nothing
+  left to take.
+- **The player's lobby overflows 152px on a 1440×900** at nine players.
+- **At 1440 the reconnection alert overlaps the `JoinReminder`'s box** by 5px
+  with no ink touching.
+
 ## What must not be broken
 
 - **Both palettes, always.** A hex in a component breaks one theme silently;

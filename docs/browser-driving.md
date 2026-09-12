@@ -241,6 +241,80 @@ when the next call lands:
 
 Both need a second screen in the room, by the `taverla:seats` deletion above.
 
+## A room with no console, driven by raw sockets
+
+The cheapest way to reach a phase is to skip the console entirely. `POST
+/api/rooms` from a page already on the origin answers `{ code, hostToken }`,
+and **a bare `WebSocket` in `role: 'host'` carrying that token is a host** —
+enough for `isHostConnected`, and enough to send `host.updateSettings`,
+`host.startRound`, `host.reveal`, `host.judge` and `host.nextRound`. Seats are
+the same socket with `nickname` instead, and the `hello` wants
+`protocolVersion: 16`. One page can hold the host and every seat at once, so
+the only real browser in the pass is the screen actually under test.
+
+**Never navigate the page carrying the sockets.** A navigation closes all of
+them and the room loses its host mid-measurement, which reads as a refusal
+rather than as a page that moved.
+
+Seven things that cost time before they were written down:
+
+- **The server frame is `{ type: 'room.updated', view }`**, and `view.phase`
+  sits beside `view.round` at the top level. Filter the log by type: an
+  `error` pushed into the same array makes `.at(-1).view` throw.
+- **Poll the frame log, never a fixed sleep.** A lockout from the previous
+  round, a window that expired while a viewport sweep ran, a `wrong_phase`
+  answered silently — all of them leave the next step acting on a phase that
+  is not there. Wait for `view().phase === 'buzzed'`, and try the next seat
+  when the first is refused.
+- **`host.startRound` on a room already at `revealed` is refused**
+  (`wrong_phase`); that one is `host.nextRound`.
+- **`host.judge` takes `verdict: { isCorrect, kind: 'single' }`**, not
+  `correct`.
+- **A quiz round closes on its own `roundDurationMs`** — 120 s at most — even
+  with `answerWindowMs: null`.
+- **`settings.game` for the quiz wants `wellKnownOnly`**, not
+  `isWellKnownOnly`. The refusal is a non-fatal `error` frame and nothing on
+  the page says so.
+- **The tool's JS sandbox does not survive between calls.** A page handle
+  stored on `globalThis` is gone next call; the browser's contexts are not.
+  Re-find what you need with
+  `page.context().browser().contexts().flatMap((c) => c.pages())` and match on
+  the URL.
+
+## Measuring the chrome a budget has to subtract
+
+Every stage here divides `100dvh` minus a constant, and the constant is the
+chrome around the thing being sized. **It cannot be read off the rendered
+page**, because the page is a flex column that fills the viewport: the object
+takes exactly what the budget allows and `scrollHeight` comes back as the
+viewport height whatever the real chrome is. Measuring the page with the object
+removed answers the same number for the same reason.
+
+Take the reading from the other side — let the object grow until it overflows,
+and subtract:
+
+```ts
+area.style.setProperty('--the-budget', '9999px')   // the budget's own property
+const unbounded = object.offsetWidth
+const over = Math.max(0, document.documentElement.scrollHeight - innerHeight)
+area.style.removeProperty('--the-budget')
+const largestThatFits = unbounded - over           // height == width here
+const chromeRem = (viewportHeight - largestThatFits) / 16
+```
+
+It works because the object is `aspect-ratio: 1` sized on its width, so a pixel
+off the width is a pixel off the page. Read it at both ends of the band the
+budget spans and take the widest, the way every other one here is taken.
+
+**And the reading moves with the content**, which is what makes the band worth
+sweeping: a question is a different question every round and the type around it
+is fluid, so the same composition measured 28.25rem of chrome at 360×640 and
+37.31rem at 430×932. Force the worst case rather than waiting for it — write
+the bank's longest string into the node **and** the length the component
+publishes beside it (`--prompt-length`, `--answer-length`), or the fitting
+formula sizes the long string as though it were the short one and the overflow
+you measure is one nobody will ever see.
+
 ## Measuring a face, not guessing at it
 
 Several sizes here are `Kcqi` divided by a character count, and `K` is `100`
