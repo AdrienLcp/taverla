@@ -898,6 +898,24 @@ and who it caught are one row.
   product. It had sat flush left for as long as it was one player's own clock
   on a screen nobody else read, which is what a fact reaching a second surface
   costs: nothing about it was wrong until somebody else could see it.
+
+  **And the order was right long before the weight was.** That clock is
+  `billboard`; the two lines it was told to follow were `caption` in
+  `--ink-muted`, so the fact a player does not need was drawn three times the
+  size of the one they do — *it is yours, speak* at 16px under a 378px circle,
+  on the screen of the person the room is waiting on. A slot that holds a
+  control's **reasons** must not also hold the **phase's own line**: three of
+  the four messages under the buzzer say why it is dead, which is what muted
+  caption is for, and the floor's line is not one of them. It takes the clock's
+  register, which is the one the console bills the same fact at.
+
+  Folding it into that slot rather than adding a line is what stopped the room
+  being told twice — *someone was faster* and *Bertrand buzzed* were one fact
+  twenty pixels apart — and the anonymous half survives exactly where it is not
+  a duplicate, which is a buzz whose seat has gone and leaves no nickname to
+  name. The height came from the object that had stopped needing it: a buzzer
+  nobody can press for the length of the window is no longer sized by the hand,
+  the same move `.counting-in` makes one screen up.
 - **Duration references fall back to `0`,** never to a literal, or someone who
   asked for no motion gets motion when a token disappears.
 

@@ -1205,6 +1205,30 @@ one part.
 
 ### Fixes
 
+- `[Game]` **A player's screen buried the one line the buzzed phase is about.**
+  `Bertrand a buzzé` and `C'est à toi. Annonce !` were drawn at 16px in
+  `--ink-muted` under a 378px circle nobody can press — the ink reserved for
+  *what you cannot do*, spent on the sentence a player has to act on now, in a
+  noisy room. The console bills the same fact as an `h2` in `billboard` and
+  says why: the size a host reads while looking up at the room. So does this
+  screen now, and it is the register the floor's clock under it already had —
+  which made the number a player does not need three times the size of the
+  name they do.
+
+  Two things paid for it. The floor's line **took the status slot** rather than
+  standing under it, because `Quelqu'un a été plus rapide` and `Bertrand a
+  buzzé` were one fact twenty pixels apart at one size; the anonymous half
+  survives exactly where it is not a duplicate, which is a buzzer whose seat has
+  gone and leaves no nickname. And the dead buzzer **stopped being sized by the
+  hand** for the length of the window — the move the console already makes for
+  the countdown it draws over a reveal, where the object gives up the screen
+  because what the room is reading is underneath it.
+
+  300px is measured, not picked: a 1440×700 laptop scrolled 7px before this and
+  a 360×640 phone 20 — both were already scrolling, both land on 0 — and 260,
+  220 and everything below them buy nothing at any width that is not a phone on
+  its side. The other five sizes never scrolled and still do not.
+
 - `[Game]` **A player's vote board and final board both ran off a laptop**, and
   the two are one mistake a phase apart: a column capped at 900px holding a list
   of short rows, with five hundred pixels of viewport beside it doing nothing.

@@ -11,7 +11,10 @@ import type {
 
 import { cueOf, whatTheRoomNames } from '@taverla/core/blindtest/typed-answer'
 import { isShelvedGame } from '@taverla/core/room/shelved-game'
-import { findBuzzBlocker } from '@taverla/core/round/buzz-eligibility'
+import {
+  type BuzzBlocker,
+  findBuzzBlocker
+} from '@taverla/core/round/buzz-eligibility'
 import {
   buildScoreboard,
   hasAnybodyScored
@@ -51,7 +54,8 @@ import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import {
   buzzBlockerKey,
   gameNameKey,
-  scoringKey
+  scoringKey,
+  type Translate
 } from '@/presentation/i18n/translation'
 
 import './player-round.sass'
@@ -427,6 +431,8 @@ const Buzzer: React.FC<{
     floorOutcome({ buzz, hasPressed: isClaimed, youId: view.youId })
   )
 
+  const line = statusLine({ blocker, hasFailed, isWon, translate, view })
+
   return (
     <section className='player-round buzzer-area'>
       <AskedQuestion prompt={quizContent(view.round)?.prompt ?? null} />
@@ -437,7 +443,7 @@ const Buzzer: React.FC<{
         touch, mouse and keyboard, so the keyboard player is not penalised.
       */}
       <ReactAriaButton
-        className={`buzzer ${isClaimed || isWon ? 'claimed' : ''}`}
+        className={`buzzer ${isClaimed || isWon ? 'claimed' : ''} ${line.isFloor ? 'taken' : ''}`}
         isDisabled={blocker !== null || roundId === null}
         onPressStart={() => {
           if (roundId === null) {
@@ -452,23 +458,15 @@ const Buzzer: React.FC<{
         {translate('buzz.action')}
       </ReactAriaButton>
 
-      <p className='blocker' role='status'>
-        {hasFailed
-          ? translate('buzz.sendFailed')
-          : isWon
-            ? translate('buzz.won')
-            : blocker === null
-              ? translate('buzz.ready')
-              : translate(buzzBlockerKey(blocker))}
+      <p className={`blocker ${line.isFloor ? 'floor' : ''}`} role='status'>
+        {line.text}
       </p>
-
-      {view.phase === 'buzzed' && !isWon && <TheirName view={view} />}
 
       {/*
         Last, and drawn for the whole room rather than only for the player
         holding the floor: everybody else is waiting out the same window and had
         a name and a dead buzzer to look at, which is a silence with no end in
-        sight. It follows the two lines that say whose window it is, because a
+        sight. It follows the line that says whose window it is, because a
         number that arrives before the name is a countdown to nothing — and it
         counts down where the host set a limit and up where they judge it
         themselves, which is the same component read from either end.
@@ -552,13 +550,59 @@ const Revealed: React.FC<{
   return null
 }
 
-const TheirName: React.FC<{ view: PlayerRoomView }> = ({ view }) => {
-  const translate = useTranslate()
+/**
+ * The one line under the buzzer, and which of two things it is. Most of what it
+ * says is a *reason the control is dead* — that is what `--ink-muted` at
+ * `caption` is for, and three of these are exactly that. The floor's own line
+ * is not: *it is yours* and *who took it* are what the phase **is**, on the
+ * screen the player is sure to have and the one they must act on now. The
+ * console bills the same fact as an `h2` in `billboard` and says why — the size
+ * a host reads while looking up at the room; this screen drew it at 16px in the
+ * ink reserved for what you cannot do.
+ *
+ * Folding the name into this slot is also what stops the room being told twice:
+ * *Quelqu'un a été plus rapide* and *Bertrand a buzzé* are one fact twenty
+ * pixels apart at one size, and the named one is strictly the better of them.
+ * The anonymous one survives where it is not a duplicate — a buzzer whose seat
+ * has gone leaves no nickname to name.
+ */
+const statusLine = ({
+  blocker,
+  hasFailed,
+  isWon,
+  translate,
+  view
+}: {
+  blocker: BuzzBlocker | null
+  hasFailed: boolean
+  isWon: boolean
+  translate: Translate
+  view: PlayerRoomView
+}): { isFloor: boolean; text: string } => {
+  if (hasFailed) {
+    return { isFloor: false, text: translate('buzz.sendFailed') }
+  }
+
+  if (isWon) {
+    return { isFloor: true, text: translate('buzz.won') }
+  }
+
   const nickname = view.players.find(
     (player) => player.id === view.round?.activeBuzz?.playerId
   )?.nickname
 
-  return nickname === undefined ? null : (
-    <p className='their-name'>{translate('buzz.theyBuzzed', { nickname })}</p>
-  )
+  if (view.phase === 'buzzed' && nickname !== undefined) {
+    return {
+      isFloor: true,
+      text: translate('buzz.theyBuzzed', { nickname })
+    }
+  }
+
+  return {
+    isFloor: false,
+    text:
+      blocker === null
+        ? translate('buzz.ready')
+        : translate(buzzBlockerKey(blocker))
+  }
 }

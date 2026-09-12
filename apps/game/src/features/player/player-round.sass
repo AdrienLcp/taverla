@@ -274,12 +274,6 @@
       max-width: 34ch
       text-wrap: balance
 
-    .their-name
-      @include typography.caption
-
-      color: var(--ink-muted)
-      text-align: center
-
   .buzzer-area
     justify-content: center
 
@@ -311,6 +305,19 @@
       &.claimed
         transform: scale(0.92)
 
+      // The floor is taken, so this stops being sized by the hand: nobody can
+      // press it for the length of the window, and the height it was holding is
+      // what the line under it needs. The console made the same move for the
+      // countdown it draws over a reveal — the object gives up the screen it
+      // had, because what the room is reading is underneath it.
+      //
+      // 300px is where the short-screen scroll closes, measured rather than
+      // picked: a 1440x700 laptop scrolled 7px and a 360x640 phone 20 before
+      // it, both land on 0 after, and none of 260, 220 or anything below buys a
+      // pixel more at any width that is not a phone on its side.
+      &.taken
+        width: min(60vw, 30vh, 300px)
+
       &[data-disabled]
         background: transparent
         border: 4px solid var(--rule)
@@ -329,3 +336,19 @@
       min-height: 2.5em
       text-align: center
       text-wrap: balance
+
+      // Not a reason the buzzer is dead — the floor's own line, which is what
+      // this phase is. It takes the register the clock under it already has,
+      // and it is the one the console bills the same fact at: the size a host
+      // reads while looking up at the room. A nickname sets it, so it carries
+      // the guard every surface that sets one above `title` carries.
+      //
+      // No reserve of its own: the two-line one above exists so a blocker that
+      // wraps does not move the buzzer mid-round, and the same 2.5em at this
+      // size is 135px of held-open field.
+      &.floor
+        @include typography.billboard
+
+        color: var(--ink)
+        min-height: 0
+        overflow-wrap: anywhere
