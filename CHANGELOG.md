@@ -1205,6 +1205,39 @@ one part.
 
 ### Fixes
 
+- `[Game]` **A player's vote board and final board both ran off a laptop**, and
+  the two are one mistake a phase apart: a column capped at 900px holding a list
+  of short rows, with five hundred pixels of viewport beside it doing nothing.
+  Le Fake's board of ten candidates was 305px past a 1440×900 — on the one phase
+  carrying a clock a player cannot pause — and nine players at `finished` were
+  270px past it, with six of the nine above the fold on the screen that says
+  where the evening left everybody.
+
+  **Both deal into two columns now**, gated the way the console's own board
+  already was: the count asks for the split and the container grants it. The
+  vote list splits past six candidates and at a 720px list, which is where the
+  second column stops paying — measured, the list bottoms out at 315px there and
+  the longest candidate settles at three lines, where a 600px list draws that
+  same candidate in five. The final board takes the console's 624px threshold
+  unchanged, because it is two of the narrowest single column and a player's
+  board is narrow in the same places. The rule moved into `Scoreboard` with it:
+  both callers ask the same question of the same rows, and a roster opts out
+  because it is read while it is still growing.
+
+  **A `@container` rule on the element that declares the container never
+  fires**, which is how the first attempt at the vote list did nothing at all:
+  an element is never its own query container, and the `ul` had been carrying
+  `container-type` for its rows since the day a viewport unit came off them. A
+  query that *cannot* match reads exactly like a threshold nobody reached. The
+  container moves up to the section and the rows take one of their own — which
+  they owed anyway, because a candidate drawn in a 408px column was being sized
+  for 828.
+
+  Ten candidates: 358 / 335 / 262px of overflow at 1024×768, 1280×800 and
+  1440×900, now 38 / 15 / 0. Nine players at `finished`: 317 / 306 / 270, now
+  33 / 14 / 0, and 0 at 768×1024. A 390×844 phone scrolls either list as it
+  always did; neither is a list a phone was ever going to hold whole.
+
 - `[Game]` **The console's final board ran 269px off a 1280×800**, with
   *Rejouer* half under the fold and *Retour à la table* entirely below it — on
   the one screen whose whole job is to say who won and let the room decide

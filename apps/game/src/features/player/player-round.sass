@@ -33,6 +33,14 @@
         text-align: start
         width: 100%
 
+    // The box the final board is dealt in, and this section is it: nothing
+    // stands beside the board at this phase, where the console has the winner's
+    // name in the track next to it and so measures `.standings` instead. Nine
+    // players ran 270px off a 1440×900 in one column, with only six of them
+    // above the fold on the screen that says where the evening left everybody.
+    &.finished
+      container-type: inline-size
+
     // The lobby is the only phase that draws it, and the register is a player's
     // rather than a console's: this screen is held at forty centimetres and the
     // code shares it with the pitch above and the roster below. `vmin` is what

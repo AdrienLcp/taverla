@@ -176,9 +176,9 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
 
   if (view.phase === 'finished') {
     return (
-      <section className='player-round centred'>
+      <section className='player-round centred finished'>
         <YourPlacing view={view} />
-        <Scoreboard players={view.players} youId={view.youId} />
+        <Scoreboard isResult players={view.players} youId={view.youId} />
       </section>
     )
   }

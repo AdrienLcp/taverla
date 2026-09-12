@@ -716,6 +716,33 @@ Two things that only show once a bounded object is put in a column of its own:
   zero: the grid is doing exactly what it was told, and what it was told was
   nothing.
 
+**A list that carries a container cannot be asked about its own width.** The
+vote board's `ul` had declared `container-type` since the day its rows stopped
+being sized against the viewport, so the `@container` rule written to split it
+in two never fired at any width — and a query that *cannot* match reads exactly
+like a threshold nobody reached. The container goes up to the section and the
+row takes one of its own, which it owed anyway: split in two, a `cqi` read off
+the list measures twice the box the candidate is drawn in. That is the poster's
+`.code` and the final board's sub-columns met a third time.
+
+**A player's screen is the console's `finished` one storey down.** Nine players
+ran 270px off a 1440×900 there for the reason they ran 269 off a 1280×800 on the
+console: a board of short rows kept a single column while the width it needed
+sat unused beside it. Which is what moved the split into `Scoreboard` rather
+than leaving a copy on each surface — the two callers ask the same question of
+the same rows, and only the box differs: `.standings` on the console, the
+phase's own section on a player's. A roster does not opt in, because it is read
+while it is still growing and nobody reads one downwards.
+
+**Two columns is a height argument until it becomes a line-count one.** The vote
+list is shorter in two columns at every width — ten rows at 628px against 366 in
+two 254px columns — so height alone would say split always. The row says
+otherwise: at 254px seven of the ten candidates wrap and the longest runs to
+five lines, where at 354px it settles at three and the list bottoms out at 315.
+That knee is the threshold, and it is a different question from the one 624px
+answers for the final board, where a row cannot wrap at all and truncation is
+the whole risk.
+
 **A component says what it costs; a stage says how much there is.** The
 invitation is the plainest case and the one with four stages: `RoomInvitation`
 owns the stack, the square, the address and its own container, and every stage

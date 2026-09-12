@@ -13,9 +13,22 @@ import { Button } from './button'
 
 import './scoreboard.sass'
 
+/** Past this a ranking is read as a block rather than one row at a time. */
+const PLAYERS_PER_COLUMN = 8
+
 type ScoreboardProps = {
   /** For a caller that lays the rows out differently — the final board does. */
   className?: string
+  /**
+   * The board is the game's result rather than who is in the room, which is
+   * two things at once: it publishes how tall it is, so a stage with a height
+   * budget can divide by it, and it deals into two columns past eight players
+   * where the box it is drawn in has room for them. A roster does neither — it
+   * is read while it is still growing, and nobody reads it downwards.
+   *
+   * The caller still owes the container the columns are measured against.
+   */
+  isResult?: boolean
   /**
    * Names the list where the screen around it does not. The lobby roster on a
    * player's screen is a column of nicknames under a pitch, and a reader who
@@ -39,6 +52,7 @@ type ScoreboardProps = {
 
 export const Scoreboard: React.FC<ScoreboardProps> = ({
   className,
+  isResult,
   label,
   onRemove,
   players,
@@ -54,12 +68,23 @@ export const Scoreboard: React.FC<ScoreboardProps> = ({
       className={[
         'scoreboard',
         isRanked && 'ranked',
+        isResult === true &&
+          players.length > PLAYERS_PER_COLUMN &&
+          'in-columns',
         onRemove !== undefined && 'removable',
         className
       ]
         .filter(Boolean)
         .join(' ')}
-      style={style}
+      style={
+        isResult === true
+          ? {
+              ...style,
+              '--scoreboard-count': players.length,
+              '--scoreboard-rows': Math.ceil(players.length / 2)
+            }
+          : style
+      }
     >
       {buildScoreboard(players).map(({ player, rank }) => (
         <li

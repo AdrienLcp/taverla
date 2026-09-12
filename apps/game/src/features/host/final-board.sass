@@ -133,37 +133,6 @@
       container-type: inline-size
       min-width: 0
 
-    // Two columns past eight players rather than a scroll: nobody walks over to
-    // the television to swipe, and a board that runs off the bottom has simply
-    // lost the people at the end of it.
-    //
-    // **The count says two columns are wanted; the container says whether there
-    // is room for them**, and for a while the count was answering both. A room
-    // of nine on a 375px console split a 328px board into two 140px columns and
-    // cut five of the nine names to three letters — `Adr…`, `Jea…`, `Mar…` — on
-    // the one screen whose whole job is to say who won. The threshold is what
-    // two of the *narrowest* single column need: a 320px screen gives this board
-    // 288px, so two of those plus the gap between them is 624px.
-    //
-    // `column` flow, not the default: a grid filled by rows puts second place
-    // beside first and third under it, so reading a column top to bottom gives
-    // 1, 3, 5. A ranking is read downwards or it is not a ranking.
-    @container (min-width: 624px)
-      .scoreboard.in-columns
-        --board-rows: var(--scoreboard-rows, 5)
-
-        column-gap: var(--space-xl)
-        display: grid
-        grid-auto-flow: column
-        grid-template-rows: repeat(var(--scoreboard-rows), auto)
-
-        // Each cell carries its own rule: with two columns the last row of the
-        // left one is not `:last-child`, so the bottom edge would go missing on
-        // one side only.
-        li
-          border-bottom: 2px solid var(--rule)
-          border-top: none
-
     // The podium, made of type rather than of blocks. Three rows that differed
     // only by a muted numeral now say which three they are — keyed on the rank
     // the server ranked and never on the row's position, because two players

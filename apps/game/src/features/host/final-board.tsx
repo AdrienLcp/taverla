@@ -13,9 +13,6 @@ import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import './final-board.sass'
 
-/** Past this the rows are read as a block rather than one at a time. */
-const PLAYERS_PER_COLUMN = 8
-
 type FinalBoardProps = {
   players: readonly PublicPlayer[]
 }
@@ -62,16 +59,7 @@ export const FinalBoard: React.FC<FinalBoardProps> = ({ players }) => {
       </header>
 
       <div className='standings'>
-        <Scoreboard
-          className={
-            players.length > PLAYERS_PER_COLUMN ? 'in-columns' : undefined
-          }
-          players={players}
-          style={{
-            '--scoreboard-count': players.length,
-            '--scoreboard-rows': Math.ceil(players.length / 2)
-          }}
-        />
+        <Scoreboard isResult players={players} />
       </div>
     </section>
   )

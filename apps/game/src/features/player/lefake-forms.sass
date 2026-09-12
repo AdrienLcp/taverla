@@ -22,6 +22,13 @@
       text-wrap: balance
 
   .vote
+    // What the split below is measured against, and it cannot be the list
+    // itself: an element is never its own query container, so a `@container`
+    // rule on the `ul` that declares one never fires at any width — which
+    // reads exactly like a threshold nobody reached rather than a query that
+    // could never have matched.
+    container-type: inline-size
+
     .vote-title
       @include typography.label
 
@@ -32,11 +39,6 @@
     // can break — one long word, or a phrase set at row size — pushes the list
     // wider than the screen and takes the whole page sideways with it.
     ul
-      // What the rows are sized against. The column this list is in is capped
-      // at 620px and then at 900, so a viewport unit goes on growing after the
-      // list has stopped: `4.2vw` reached this row's ceiling at a 476px
-      // viewport and said nothing about the width it was actually drawn in.
-      container-type: inline-size
       display: flex
       flex-direction: column
       gap: var(--space-s)
@@ -44,7 +46,28 @@
       min-width: 0
 
       li
+        // What the rows are sized against. The column this list is in is
+        // capped at 620px and then at 900, so a viewport unit goes on growing
+        // after the list has stopped: `4.2vw` reached this row's ceiling at a
+        // 476px viewport and said nothing about the width it was actually
+        // drawn in. It is the row and not the list because the two stop being
+        // the same box the moment the board splits: read off the list, a
+        // candidate drawn in a 408px column would be sized for 828.
+        container-type: inline-size
         min-width: 0
+
+    // A board past six candidates does not fit a screen in one column — ten of
+    // them ran 262px off a 1440×900 laptop, on the one phase carrying a clock
+    // the player cannot pause. Two gates and both are measured. Seven, because
+    // six rows are the last that fit. And a 720px list, because that is where
+    // the second column stops paying: the list bottoms out at 315px there and
+    // the longest candidate settles at three lines, where a 600px list draws
+    // that same candidate in five.
+    @container (min-width: 720px)
+      ul:has(> li:nth-child(7))
+        align-items: start
+        display: grid
+        grid-template-columns: 1fr 1fr
 
     // A board runs longer than the four candidates a choice round offers, so a
     // line wraps rather than being sized by the press alone. The height is a
@@ -59,12 +82,13 @@
       text-align: left
       width: 100%
 
-    // Ten of these are read in a column on a player's screen, where a control
+    // Ten of these are read at once on a player's screen, where a control
     // label is read one at a time — so this row steps below `title`'s floor
     // rather than shouting each candidate at the size of a button that acts.
-    // Now measured against that list: a phone's 358px holds the floor it always
-    // had, and the row reaches its ceiling at a 556px list rather than at a
-    // 476px viewport.
+    // Measured against the row it is drawn in: a phone's 358px holds the floor
+    // it always had, and the ceiling arrives at a 556px row rather than at a
+    // 476px viewport. A split board sits on that floor at every width, because
+    // no column of a pair is ever wide enough to leave it.
     .title
       @include typography.title
 
