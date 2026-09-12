@@ -17,6 +17,13 @@ type AskedQuestionProps = {
  * on every player's screen at once — the quiz's stimulus the way the clip is
  * the blind test's. It sizes off the viewport rather than off which surface
  * renders it, so the same component reads at four metres and in a hand.
+ *
+ * And off **how long the question is**, which no viewport can answer: the bank
+ * runs from nine characters to a hundred and ninety-two, so a size picked by
+ * the screen alone draws the long ones as eleven lines of a phone. The count
+ * is the whole of what the stylesheet needs — a paragraph settles on the face's
+ * mean, where `answerFitting` has to measure a single word's width because one
+ * word is a coin flip, and a question's longest is fourteen characters.
  */
 export const AskedQuestion: React.FC<AskedQuestionProps> = ({ prompt }) => {
   const translate = useTranslate()
@@ -26,7 +33,10 @@ export const AskedQuestion: React.FC<AskedQuestionProps> = ({ prompt }) => {
   }
 
   return (
-    <div className='asked-question'>
+    <div
+      className='asked-question'
+      style={{ '--prompt-length': prompt.prompt.length }}
+    >
       <p className='prompt'>{prompt.prompt}</p>
       {/* Below what it frames: it names the question rather than opening it. */}
       <p className='category'>

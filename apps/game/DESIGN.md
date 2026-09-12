@@ -734,6 +734,36 @@ the same rows, and only the box differs: `.standings` on the console, the
 phase's own section on a player's. A roster does not opt in, because it is read
 while it is still growing and nobody reads one downwards.
 
+**A buzzer with a question over it splits at the same width, and it is the one
+composition where two objects were each sized as though alone.** A clip is the
+blind test's stimulus and takes no room; a quiz's is on the screen, so the
+circle — `min(78vw, 42vh, 420px)`, sized by the hand — shared 564px with a
+question that answered to the viewport alone. Stacked they came to 535 of it and
+the page scrolled at every width but one. Above `$wide-screen` the question goes
+beside the circle on the reveal's own shares: what you read takes the wide
+track, and an object bounded at 420px takes the narrow one. Two things follow
+and both are rules this world already holds. The circle takes a `max-width` of
+its track, because above the split it sits in a column narrower than `42vh` and
+the aspect ratio is what turns that cap back into a height. And stacked, the
+circle takes a **fourth** limit the stage publishes — 296px is what the page
+keeps for itself at 360×640 and 390×844 alike — because a component says what it
+costs and only the stage knows how much there is. It publishes nothing where
+there is no question, so the blind test's buzzer is unmoved at every width.
+
+**And the word in a round control is measured against the control.** `BUZZ` is
+set in the field's own colour, so a word wider than the ink does not overflow,
+it *disappears* — and it was sized against the screen, which had stopped
+deciding how big the circle is. It was wrong before the split existed: the dead
+buzzer is `30vh` wide, so any screen under 800px tall drew a 226px word in a
+210px circle, measured on heights while the lettering in them was not. The
+circle declares the container and **the word takes a box of its own, because a
+container cannot be asked about its own width** — the vote list's lesson, on an
+object rather than a list. `16.9cqi` is the widest share of the diameter this
+product already draws, which is the 0.598 a 378px circle at the clamp's own
+ceiling gives. That box carries the type mixin again rather than inheriting it,
+for the reason a caption under a `monument` number does: `letter-spacing`
+inherits as a computed length.
+
 **Two columns is a height argument until it becomes a line-count one.** The vote
 list is shorter in two columns at every width — ten rows at 628px against 366 in
 two 254px columns — so height alone would say split always. The row says
@@ -768,6 +798,21 @@ writes `--answer-length` and the clamp divides by it, the same way a board
 writes its line count. The median of nine characters and the 90th percentile of
 seventeen both still clamp to the full size: only the last five per cent read
 smaller, and they are the ones that could not have been read at all.
+
+**The question is the second case, and the one where the floor was the bug.** It
+runs from nine characters to a hundred and ninety-two — more than twice the
+answer's range — and it was sized at a flat `clamp(1.5rem, 4.5vmin, 3.25rem)`,
+so the longest one drew eleven lines and 307px of a 360×640 phone whose whole
+budget for a question *and* a buzzer is 344. Archivo at width 125 sets 0.607 of
+its font size per character, measured with a `Range` on the rendered node, so
+one line holds `164.75cqi` and the three-line term is `494`. What makes this one
+different from the answer is which term bound: **on a phone the clamp's floor is
+the only term that ever fires** — 4.5vmin of a 360px screen is 16px, so a floor
+of 24 drew every question at 24 whatever its length. The length is a `min()`
+over the clamp, so it only ever takes size away, and the floor drops to `1rem`
+for the questions that reach it. And a count is the whole measurement here where
+an answer needs its longest word measured too: a question's longest word is
+fourteen characters, and a paragraph of sixty settles on the face's mean.
 
 **And the longest word is the fact the length cannot stand in for.** `Maison-
 Blanche` is fourteen characters and seven wide, because a hyphen and a space are

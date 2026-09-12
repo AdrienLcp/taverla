@@ -277,6 +277,56 @@
   .buzzer-area
     justify-content: center
 
+    // The quiz's stimulus is the clip's equal and it is *on the screen*, where
+    // a clip is not — and this is the one composition where the circle was
+    // still sized as though nothing else were. Stacked, the two came to 535px
+    // of a 564px budget and the page scrolled at every width but one: 54px off
+    // a 1440x900, 82 off a 1440x700, 44 and 55 off a 1280x800 and a 1024x768,
+    // 155 off a 360x640. The bank's longest question takes all six past 138.
+    //
+    // A laptop is the screen with width to spare and none of the height, so
+    // this is the split the reveal, the vote and both lobbies already make, on
+    // the same shares: what you read takes the wide track, and the circle is
+    // bounded at 420px so it takes the narrow one.
+    //
+    // Read off the markup rather than off the width alone, for the reveal's
+    // reason: a blind test's screen carries no question, and a split there
+    // would draw the circle in one column against an empty one.
+    @include layout.wide
+      &:has(.asked-question)
+        align-items: center
+        column-gap: var(--space-xl)
+        display: grid
+        grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr)
+
+    // Stacked, the question and the circle share one column and the screen
+    // pays for both, so what is left of the screen is the circle's ceiling.
+    // What the page keeps for itself measures 296px at 360x640 and at 390x844
+    // alike — the header, the clip's bar, the scoreline and the three gaps
+    // between them — and the rest of the subtraction is what stands between
+    // the question and the circle. The taken floor takes a number of its own,
+    // because it sets a nickname at billboard and a clock under it where a
+    // running round draws one caption line.
+    //
+    // The floor is what a phone on its side gets, where nothing fits at any
+    // legible size: a circle too small to press still beats a negative width
+    // drawn through the line under it.
+    @include layout.narrow
+      &:has(.asked-question)
+        --buzzer-headroom: max(7rem, calc(100dvh - 32.5rem))
+
+        &:has(.taken)
+          --buzzer-headroom: max(7rem, calc(100dvh - 40rem))
+
+    // The circle and the two lines that answer to it, one child so the split
+    // above has two. No alignment of its own: centring would shrink-wrap the
+    // status line to its longest word, and that line is balanced across the
+    // column it is given.
+    .press
+      display: flex
+      flex-direction: column
+      gap: var(--space-m)
+
     // The one round object in the product, because it is the one thing that is
     // a physical button. Pressed by someone watching the television, so it is
     // sized by the hand and not by the layout.
@@ -290,16 +340,49 @@
       border: none
       border-radius: var(--radius-full)
       color: var(--field)
+      // What the word below is measured against, which is the whole reason
+      // it has a box of its own: a container cannot be asked about its own
+      // width.
+      container-type: inline-size
       display: flex
       font-size: clamp(2rem, 11vmin, 4rem)
       justify-content: center
       margin: 0 auto
+      // Bounded by its own column as well as by the screen. Above the split
+      // the circle sits in a track narrower than 42vh, and a viewport term in
+      // a box that has stopped being the viewport is the fault this product
+      // keeps meeting — the aspect ratio is what turns the cap back into a
+      // height.
+      max-width: 100%
       touch-action: manipulation
       transition: transform var(--transition-fast, 0) var(--timing, ease)
-      // Three limits rather than one, because this is hit on a phone held in a
-      // hand and on a laptop across a table. `vw` alone leaves it tiny on a
-      // wide screen; `vh` alone leaves it taller than a short one.
-      width: min(78vw, 42vh, 420px)
+      // Four limits rather than three, because this is hit on a phone held in
+      // a hand and on a laptop across a table, and it now shares the screen
+      // with a question. `vw` alone leaves it tiny on a wide screen, `vh`
+      // alone taller than a short one, and neither of them knows what the
+      // stimulus above it took: that one is the stage's to say, and it says
+      // nothing where there is nothing above.
+      width: min(78vw, 42vh, 420px, var(--buzzer-headroom, 100dvh))
+
+      // Capped by the circle rather than by the screen, which is what the
+      // screen cannot answer: a word wider than the ink is drawn in the
+      // field's own colour on the field and simply vanishes. `BUZZ` sets at
+      // 0.8833 of its own font size per character — measured with a `Range`
+      // on the rendered node, letter-spacing included — so the word comes to
+      // 3.533 times the size, and `16.9cqi` is the widest share of the
+      // diameter this product already draws: the 0.598 a 378px circle at the
+      // clamp's own ceiling gives. `1em` is the circle's own term, so
+      // wherever the circle is large enough to hold the word the screen still
+      // decides the size and nothing moves.
+      //
+      // It carries the mixin again rather than inheriting the tracking,
+      // because **`letter-spacing` inherits as a computed length**: -0.035em
+      // of a 64px circle reaches a 20px word as -0.112em and folds it onto
+      // itself.
+      .word
+        @include typography.monument
+
+        font-size: min(1em, 16.9cqi)
 
       &[data-pressed],
       &.claimed
@@ -316,7 +399,7 @@
       // it, both land on 0 after, and none of 260, 220 or anything below buys a
       // pixel more at any width that is not a phone on its side.
       &.taken
-        width: min(60vw, 30vh, 300px)
+        width: min(60vw, 30vh, 300px, var(--buzzer-headroom, 100dvh))
 
       &[data-disabled]
         background: transparent

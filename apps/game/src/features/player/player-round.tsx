@@ -437,43 +437,62 @@ const Buzzer: React.FC<{
     <section className='player-round buzzer-area'>
       <AskedQuestion prompt={quizContent(view.round)?.prompt ?? null} />
       {/*
-        `onPressStart`, not `onPress`: a buzzer has to fire the instant the
-        thumb lands, and waiting for the release costs tens of milliseconds in a
-        race that is decided by exactly that. react-aria normalises it across
-        touch, mouse and keyboard, so the keyboard player is not penalised.
+        The circle and the two lines that belong to it, grouped so a wide screen
+        can set them beside the question instead of under it — the reveal's own
+        move, for the reveal's own reason: a grid item told to span rows nobody
+        declared resolves back to the first one, so the grouping has to be in
+        the markup. Below the split it is one child of a column and nothing
+        about the spacing changes.
       */}
-      <ReactAriaButton
-        className={`buzzer ${isClaimed || isWon ? 'claimed' : ''} ${line.isFloor ? 'taken' : ''}`}
-        isDisabled={blocker !== null || roundId === null}
-        onPressStart={() => {
-          if (roundId === null) {
-            return
-          }
+      <div className='press'>
+        {/*
+          `onPressStart`, not `onPress`: a buzzer has to fire the instant the
+          thumb lands, and waiting for the release costs tens of milliseconds in
+          a race that is decided by exactly that. react-aria normalises it
+          across touch, mouse and keyboard, so the keyboard player is not
+          penalised.
+        */}
+        <ReactAriaButton
+          className={`buzzer ${isClaimed || isWon ? 'claimed' : ''} ${line.isFloor ? 'taken' : ''}`}
+          isDisabled={blocker !== null || roundId === null}
+          onPressStart={() => {
+            if (roundId === null) {
+              return
+            }
 
-          setClaimedRoundId(roundId)
-          buzzFeedback('press')
-          setHasFailed(!onBuzz(roundId))
-        }}
-      >
-        {translate('buzz.action')}
-      </ReactAriaButton>
+            setClaimedRoundId(roundId)
+            buzzFeedback('press')
+            setHasFailed(!onBuzz(roundId))
+          }}
+        >
+          {/*
+            A box of its own, because the circle has to be the container the
+            word is measured against and a container cannot be asked about its
+            own width. It is what keeps `BUZZ` inside the ink now that a
+            question can take height from the circle — and it is what the dead
+            buzzer needed already, at any screen under 800px tall.
+          */}
+          <span className='word'>{translate('buzz.action')}</span>
+        </ReactAriaButton>
 
-      <p className={`blocker ${line.isFloor ? 'floor' : ''}`} role='status'>
-        {line.text}
-      </p>
+        <p className={`blocker ${line.isFloor ? 'floor' : ''}`} role='status'>
+          {line.text}
+        </p>
 
-      {/*
-        Last, and drawn for the whole room rather than only for the player
-        holding the floor: everybody else is waiting out the same window and had
-        a name and a dead buzzer to look at, which is a silence with no end in
-        sight. It follows the line that says whose window it is, because a
-        number that arrives before the name is a countdown to nothing — and it
-        counts down where the host set a limit and up where they judge it
-        themselves, which is the same component read from either end.
-      */}
-      {view.phase === 'buzzed' && view.round?.activeBuzz != null && (
-        <FloorClock buzz={view.round.activeBuzz} clock={clock} />
-      )}
+        {/*
+          Last, and drawn for the whole room rather than only for the player
+          holding the floor: everybody else is waiting out the same window and
+          had a name and a dead buzzer to look at, which is a silence with no
+          end in sight. It follows the line that says whose window it is,
+          because a number that arrives before the name is a countdown to
+          nothing — and it counts down where the host set a limit and up where
+          they judge it themselves, which is the same component read from either
+          end.
+        */}
+        {view.phase === 'buzzed' && view.round?.activeBuzz != null && (
+          <FloorClock buzz={view.round.activeBuzz} clock={clock} />
+        )}
+      </div>
     </section>
   )
 }

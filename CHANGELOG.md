@@ -1205,6 +1205,73 @@ one part.
 
 ### Fixes
 
+- `[Game]` **A quiz answered at the buzzer ran off every screen but one.** Two
+  objects on a player's screen, each sized as though it were alone: the question
+  is the quiz's stimulus the way the clip is the blind test's, and the difference
+  is that a clip takes no room. Stacked they came to 535px of a 564px budget, so
+  the page scrolled 54px off a 1440×900, 82 off a 1440×700, 44 and 55 off a
+  1280×800 and a 1024×768, and 155 off a 360×640. The bank's longest question
+  took all six past 138, and at 307px of prompt on a 360×640 no size of circle
+  could have closed it.
+
+  **A laptop is the screen with width to spare and none of the height**, so the
+  question moves *beside* the circle above the wide-screen breakpoint — the split
+  the reveal, the vote and both lobbies already make, on the same shares: what
+  you read takes the wide track, and a circle bounded at 420px takes the narrow
+  one. Read off the markup rather than the width, because a blind test's screen
+  carries no question and a split there would draw the circle against an empty
+  column.
+
+  **Stacked, the circle takes what is left**, published by the stage as a fourth
+  limit beside the three it had: 296px is what the page keeps for itself at
+  360×640 and at 390×844 alike, and the circle never learned that the stimulus
+  above it had taken any. It says nothing where there is nothing above, so the
+  blind test's buzzer is byte-identical at all seven widths — 378, 294, 336, 323,
+  269, 304, 269.
+
+  **And the question publishes how long it is**, which is what no viewport can
+  answer and the reveal's own answer has done since it was drawn: the bank runs
+  from nine characters to a hundred and ninety-two, and at a size the screen
+  alone picks the long ones are eleven lines. Archivo at width 125 sets 0.607 of
+  its font size per character — measured with a `Range` on the rendered node — so
+  one line holds `164.75cqi` and three hold `494`. The median of 62 and the 90th
+  percentile of 91 still clamp to the full size; the tail reads smaller, and the
+  tail is what could not be read at all. The clamp's floor comes down with it,
+  because **on a phone the floor is the only term that ever fires**: 4.5vmin of a
+  360px screen is 16px, so a clamp starting at 24 drew every question at 24
+  whatever its length.
+
+  Both phases now measure 0 at 1440×900, 1440×700, 1280×800, 1024×768, 900×640,
+  390×844 and 360×640, with the real question and with the longest one the bank
+  holds. A phone on its side is still 152–218px short and cannot be made to fit —
+  a banner, a question, a circle and three lines do not go into 375px of height
+  at any legible size.
+
+- `[Game]` **`BUZZ` was drawn outside the button it names**, and it vanished
+  rather than overflowed: the word is set in the field's own colour, so the part
+  of it past the ink is field on field. The label was sized against the *screen*
+  in an object the screen had stopped deciding the size of, which is the fault
+  this product keeps meeting one surface at a time. It was already there before
+  this pass: the dead buzzer is `30vh` wide, so any screen under 800px tall drew
+  a 226px word in a 210px circle. The heights were measured when that circle was
+  drawn and the lettering in it was not.
+
+  The circle is the container and the word takes a box of its own to read it,
+  because a container cannot be asked about its own width. `BUZZ` sets at 0.8833
+  of its font size per character with letter-spacing counted, so the word is
+  3.533 times the size and `16.9cqi` is the widest share of the diameter this
+  product already draws — the 0.598 a 378px circle at the clamp's own ceiling
+  gives. Every state now holds that share or less, from a 420px circle down to a
+  112px one, where four of them were over 1.0. The box carries the type mixin
+  again rather than inheriting it, because `letter-spacing` inherits as a
+  computed *length*: -0.035em of a 64px circle reaches a 20px word as -0.112em
+  and folds it onto itself.
+
+  What it costs is the lettering on a short laptop, which stops being pinned at
+  the clamp's 64px ceiling and becomes one share of whatever circle it is in —
+  0.597 everywhere, where a 294px circle used to wear the same 64px word a 420px
+  one does.
+
 - `[Game]` **A player's screen buried the one line the buzzed phase is about.**
   `Bertrand a buzzé` and `C'est à toi. Annonce !` were drawn at 16px in
   `--ink-muted` under a 378px circle nobody can press — the ink reserved for
