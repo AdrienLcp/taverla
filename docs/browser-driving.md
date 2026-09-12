@@ -45,8 +45,17 @@ More that cost time to learn:
 - **A room fills up from one page, not from one browser context per player.**
   Nine seats in a single `browser_evaluate`: open nine `WebSocket`s to
   `ws://localhost:5273/ws/rooms/:code` from a page already on the app, and send
-  each a `hello` carrying `role: 'player'`, its own `sessionId` and its own
-  nickname. A raw socket reads neither `taverla:seats` nor `taverla:nickname` —
+  each a `hello` carrying `role: 'player'`, its own `sessionId` and a
+  **`nickname`**.
+
+  The field is `nickname` and nothing else. `helloMessageSchema` is a plain
+  `z.object`, so a frame spelling it `name` parses clean with the nickname
+  simply absent, and the server answers a **non-fatal** `invalid_message` —
+  *Choose a nickname to join* — on a socket that stays open at `readyState: 1`
+  forever after. Nothing on the console says so, `__socks` reads healthy, and
+  the roster is the only witness: eight seats asked for, one player listed. A
+  raw socket has no `onmessage` unless you give it one, which is what makes the
+  refusal invisible; attach one before the `hello` when a seat does not arrive. A raw socket reads neither `taverla:seats` nor `taverla:nickname` —
   those are the client's stores — so the two traps above simply do not apply and
   nine distinct names cost nine lines. Keep the sockets on `window`; the page
   owns them, and a navigation closes all nine at once and turns the roster
@@ -81,7 +90,25 @@ More that cost time to learn:
 - **`globalThis` does not survive between `browser_run_code_unsafe` calls**, so
   page handles cannot be stashed across them. Re-enumerate instead:
   `page.context().browser().contexts()`, then `c.pages()`, and pick the players
-  off `p.url().includes('/play/')`.
+  off the **room code** — `p.url().includes('/play/ABCD')`, never `/play/`
+  alone.
+
+  The browser outlives the session that opened it, and every context ever
+  created is still in that list: five of them, on three rooms that died with a
+  server restart hours earlier, sat in front of the one this pass had just
+  opened. `find` takes the first, so the reading came back from a page showing
+  *Aucune table sous ce code* — which is exactly what a seat that failed to join
+  looks like, and it cost a full launch-to-reveal cycle before the URL was
+  printed and read.
+
+- **A room dies whenever the dev server restarts, and a second session is
+  enough to restart it.** Rooms live in one process, so an edit landing in
+  `apps/server` — or in anything the server imports — takes every room on the
+  machine with it, and a pass driving the browser reads that as a player who was
+  refused rather than as a room that stopped existing. Two sessions in one
+  working tree is the ordinary case here: check `git status` for files this pass
+  did not touch before blaming the page, and reopen the room rather than
+  debugging the seat.
 
 - **A room can be opened without walking the front door.** `POST /api/rooms`
   from a page already on the app's origin answers `{ code, hostToken }`; write
