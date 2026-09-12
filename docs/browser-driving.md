@@ -110,6 +110,12 @@ More that cost time to learn:
   did not touch before blaming the page, and reopen the room rather than
   debugging the seat.
 
+  **Your own `pnpm build` does it too**, and that one is easy to fire without
+  thinking: it rewrites the `dist` of `packages/protocol` and `packages/core`,
+  the server watches both, and the room a nine-seat setup just paid for is gone
+  by the time the type-check comes back green. Build and validate *after* the
+  browser work, never beside it.
+
 - **A room can be opened without walking the front door.** `POST /api/rooms`
   from a page already on the app's origin answers `{ code, hostToken }`; write
   `taverla:host-tokens` with it — `[{ at: Date.now(), hostToken, roomCode }]` —
@@ -412,6 +418,28 @@ needs the round's id off a socket has to arm the listener *before* the frame
 that starts the round. Attaching afterwards and waiting reports an empty log,
 which reads as a socket that was never seated rather than a room that simply did
 not change.
+
+**It is cheap to reach and short to hold.** The window closes on its own with
+nobody voting, so a sweep spread over two tool calls reads the reveal on the
+second and reports it as the vote. Reach `voting` and measure inside **one**
+`browser_run_code_unsafe`. The lie window is the same shape and closes the
+instant the last seat has written — and a lie longer than `LIE_MAX_LENGTH` (80)
+is refused in silence, so eight sockets and one refusal leaves the room waiting
+out a timer with *8 ont écrit* as the only witness.
+
+**A full board needs the lies written, and the round id carrying them is the
+trap.** `lefake.submit` takes a `roundId`, and a log of frames scanned backwards
+for `phase === 'playing'` answers with the *previous* round's frame the instant
+it is asked — the new one has not arrived yet. Clear the log before sending the
+frame that advances the round, or all eight lies are refused as stale and the
+board draws the bank's four candidates as though nobody had written.
+
+**The player's phase is in neither the DOM nor the fiber.** `main.player-page`
+carries a static `playing` class that is a variant rather than a phase — it
+reads the same in a lobby — and a walk from `#root[__reactContainer…].current`
+came back with no `child` to follow. What answers is the raw socket: every
+`room.updated` frame carries `view.phase` and `view.round.id`, so the eight
+sockets opened for the seats are also the phase clock for the whole pass.
 
 ## What a pass covers
 
