@@ -1286,6 +1286,18 @@ one part.
 
 ### Fixes
 
+- `[Game]` **The four choice buttons drew at 52px with no block padding**, on
+  the screen whose comment says they are *sized by the press rather than by the
+  words*. `box` is included inside `&.outlined`, so a control's height and
+  padding land on `.button.outlined.medium` — three classes — and
+  `.choices .button` has two: it lost both declarations in silence, and the
+  `padding: 0 var(--space-m)` shorthand took the vertical padding with it, so a
+  candidate long enough to wrap put its second line against the edge. Measured
+  72px and 12px after, against 52 and 0 before. The rule is nested on the
+  section it modifies and names `.medium`, which is the four classes it takes
+  to win — **any component overriding a control's box needs the same count**,
+  and that is now written where the next one will read it.
+
 - `[Game]` **The reveal struck the screen instead of the card.** `card-strike`
   sat on `.player-round.centred`, which is every phase but `playing` — the
   lobby, the countdown, the reveal, the final board and two notices — so a 1.06
