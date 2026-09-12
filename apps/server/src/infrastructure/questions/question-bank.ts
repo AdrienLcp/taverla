@@ -46,8 +46,15 @@ const bankedQuestionSchema = hostQuestionSchema.extend({
  * Parsed once, at boot. A bank that no longer matches the schema is a broken
  * deploy rather than a round that fails in front of a room — and the cost is
  * paid while nobody is playing.
+ *
+ * Exported for the corpus sweep, which has to read the rows *as they boot*: the
+ * type TypeScript infers from the 5.6 MB JSON literal degraded the day the
+ * English half started carrying `accepted` spellings, and a `decoys` silently
+ * widening to `any` takes the sweep's guarantees with it.
  */
-const QUESTIONS = z.array(bankedQuestionSchema).parse(bank.questions)
+export const BANKED_QUESTIONS = z
+  .array(bankedQuestionSchema)
+  .parse(bank.questions)
 
 /**
  * A row as the bank holds it, which is more than a round needs: the rating that
@@ -55,14 +62,17 @@ const QUESTIONS = z.array(bankedQuestionSchema).parse(bank.questions)
  * to the game, so `hostQuestionOf` names the fields that do rather than
  * spreading the row into a round.
  */
-export type BankedQuestion = (typeof QUESTIONS)[number]
+export type BankedQuestion = (typeof BANKED_QUESTIONS)[number]
 
 /**
  * Split once, at boot, because a room only ever draws from one of them: the two
  * banks are separate downloads from separate sources, and scanning the other
  * four and a half thousand rows on every draw was work that could never match.
  */
-const BY_LANGUAGE = Map.groupBy(QUESTIONS, (question) => question.language)
+const BY_LANGUAGE = Map.groupBy(
+  BANKED_QUESTIONS,
+  (question) => question.language
+)
 
 export const hostQuestionOf = ({
   accepted,

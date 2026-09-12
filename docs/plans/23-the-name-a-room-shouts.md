@@ -15,9 +15,9 @@ argument for each of the three that do not.
 |---|---|---|---|
 | Mintaka | 1 151 | 744 | 2 057 |
 | PolyFact | 1 900 | **864** | **2 248** |
+| Open Trivia DB | 4 506 | **1 048** | **3 681** |
 | OpenQuizzDB | 2 132 | — | — |
 | Vikidia | 566 | — | — |
-| Open Trivia DB | 4 437 | — | — |
 
 **Mintaka**, 11 September 2026 — the session recorded in
 [`22-thin-french-subjects.md`](22-thin-french-subjects.md). It built
@@ -103,46 +103,82 @@ answers are the least entity-shaped in the bank — *À environ 400 km*, *des
 milliards de milliards*, *On ne sait pas*, *elles explosent*. Almost none is a
 named entity, so almost none has another name. **Drop it.**
 
-### Open Trivia DB — 4 437 rows, nothing at all, and in English
+### Open Trivia DB — measured, then landed, 12 September 2026
 
 The largest block in the bank and the only English one. It publishes no row id
-(the prompt is hashed for one), no article, no entity. Two problems rather than
-one:
+(the prompt is hashed for one), no article, no entity — so **the count came
+first**, and it is what decided the session. Of 3 844 askable answers:
 
-1. Entity linking from scratch, from an English label.
-2. **`frenchAliasesOf` is French-hardcoded** — the filter is literal in the
-   SPARQL (`FILTER(lang(?alias) = "fr")`), and there is no language parameter
-   anywhere in the module. Threading one through `frenchAliasesOf`,
-   `aliasesOfBatch` and the cache key is the smaller half; naming it is the
-   other, since the function stops being *French* anything.
+- **738 have no article at all.** Those are the rows whose answer is a sentence
+  rather than a name: *The inability to make decisions*, *2 722 ft*,
+  *Snivy, Tepig, Oshawott*.
+- **693 land on another concept through a redirect** — *July 4, 1776* on
+  *United States Declaration of Independence*, *Tardar Sauce* on *Grumpy Cat*,
+  *The Guggenheim* on *Solomon R. Guggenheim Museum*. This is the exact failure
+  that killed OpenQuizzDB, and here it is **refused for free**: the landing
+  title is compared against the spelling that was asked about, so a redirect
+  that changed the subject shows up as a title that is not the answer.
+- **2 413 reach an article of their own name**, and **1 338 of those name
+  something rather than describe it** — 34.8% of the askable answers, against
+  the third this file set as the bar. It passed by a point and a half.
 
-It is also where the payoff is largest, because the English half is 44% of the
-bank and takes none of this today.
+**The gate that does the work is Wikidata's own labelling convention**: a proper
+noun is capitalised, a common noun is not. *Japan*, *Madrid* and *Charlie
+Chaplin* against *spoon*, *yellow*, *philosophy* and *chocolate*. 627 of the
+2 413 are refused on it, which is the refusal OpenQuizzDB earned as a whole
+source, applied one row at a time. Two classes needed naming beyond it: 87
+answers are **classes** rather than things (`P279` — *Bulldog* is a dog breed,
+*India Pale Ale* a beer style), and 361 are **Wikimedia's own pages about a
+spelling**, whose label is capitalised and which hold no `P279`, so they clear
+every other gate — *Lift*, *Libra*, *Turkic* and *Clyde* are all disambiguation
+pages, and the aliases of one are the several unrelated things it lists.
+
+**The query service is not the database, and that is the finding that travels.**
+`rdfs:label` there is silent on Q9358 — Friedrich Nietzsche — and `wdt:P31` on
+Q54173, General Electric: 66 of 2 407 entities came back unlabelled from SPARQL
+and labelled from the action API, checked by hand on both. So the labels are
+read from `wbgetentities`, and a missing `P31` is read as *unknown* rather than
+as evidence. A gap that refuses is a gap that costs rows, and it would have cost
+them silently.
+
+**What landed: 1 048 of 4 506 rows take a second spelling, and 3 681 spellings
+between them** — more rows than PolyFact's 864 and more spellings than its
+2 248. *George H. W. Bush* answers to *Bush Senior*, *London* to *Londinium*,
+*Felidae* to *cat family*, *Hoatzin* to *Opisthocomus hoazin*.
+
+The decoys are resolved on the **loose** gate — the article being the spelling's
+own, and nothing asked of the entity — and only for the rows whose answer
+resolved, which skips three quarters of the spellings on the table. That is
+PolyFact's rule reapplied: a wrong decoy id widens what the bank refuses and can
+never widen what it pays.
+
+**The residual is the homonym, and it is 13 rows.** *Longclaw* is Jon Snow's
+sword and a genus of beetle; *Corvus* is a Black Ops antagonist and the crow
+genus; *Gopher* is a Disney character and a family of rodents. Taxa are where
+the capitalisation convention lies, because a scientific name is capitalised
+while its `skos:altLabel` holds vernacular descriptions. It is **left as
+measured rather than gated**: what a mislink yields is a spelling no room types
+(*the Longclaw genus*, *crows and ravens*), the one that would cost — a spelling
+naming the row's own decoy — is refused at ingestion and swept again over the
+shipped bank, and a taxon filter would take *Velociraptor* answering *Raptor*
+away with it.
+
+### The language seam, and what it cost
+
+`frenchAliasesOf` is now `aliasesOf({ entityIds, language })`, the filter
+interpolated rather than literal. Naming was indeed the larger half, and the
+**cache is the part this plan did not see**: one file per language rather than
+one keyed by both, because a single file would make every English miss look like
+a French entity nobody had asked for yet. The French file is moved rather than
+rebuilt — it lives in `.cache/`, so another machine pays for its own.
 
 ## What is actually left
 
-Two of the three are now closed, and by one rule rather than by three
-measurements. **What remains is Open Trivia DB, and the question to ask it is
-not the one this file opened with.** It is not *can an English label be
-entity-linked* — it is **how many of its 4 437 answers are named entities at
-all**, because that is what decides whether the pass transfers. *Trees*, *Spoon*
-and *Yellow* are not; its history, geography and arts rows largely are.
-
-So, in order:
-
-1. **Count OTDB's named-entity answers first**, the cheap way: the share of
-   distinct answers whose English Wikipedia article title is the answer itself
-   and whose entity is not a common noun. Under a third and the source goes the
-   way of OpenQuizzDB, for nothing but a script.
-2. **Only then, the language seam in `wikidata-aliases.ts`.** The filter is
-   literal in the SPARQL (`FILTER(lang(?alias) = "fr")`) with no language
-   parameter anywhere, so threading one through `frenchAliasesOf`,
-   `aliasesOfBatch` and the cache key is the mechanical half; naming it is the
-   other, since the function stops being *French* anything. Doing this before
-   step 1 would be renaming a working function to serve a caller that may never
-   exist.
-3. **The English half is where the payoff is**, if the count allows it: 4 437
-   rows, 44% of the bank, taking none of this today.
+**Nothing.** All five sources are measured. Two fill the column from a Wikidata
+identifier they were already carrying, one fills it from an entity linked
+through the article of its own name, and two are refused with the reason written
+above — on the rule this stage bought: **the pass transfers exactly where a
+source's answers are named entities.**
 
 ## Protocol
 
@@ -151,9 +187,13 @@ wherever the answer is public. `PROTOCOL_VERSION` does not move.
 
 ## Files it touches
 
-- `apps/server/scripts/wikidata-aliases.ts` — the language seam, when earned
-- `apps/server/scripts/openquizzdb-source.ts`, `vikidia-source.ts`,
-  `opentdb-source.ts` — one at a time, never together
+- `apps/server/scripts/wikidata-aliases.ts` — the language seam, earned and
+  taken: `aliasesOf({ entityIds, language })`, one cache file per language
+- `apps/server/scripts/enwiki-entities.ts` — new, and the whole of the English
+  hop: a spelling to an article to an entity, on a strict gate for the answer
+  and a loose one for the decoys
+- `apps/server/scripts/opentdb-source.ts` — the pass, over the rows that can be
+  paid for one
 - `apps/server/src/infrastructure/questions/question-bank.json` — rebuilt
 - `apps/server/src/infrastructure/questions/question-bank.test.ts` — the
   decoy-collision sweep is already there and already covers whatever is added

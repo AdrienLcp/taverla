@@ -2,13 +2,16 @@ import { createHash } from 'node:crypto'
 
 import type { QuestionCategory } from '@taverla/protocol/question'
 
+import { entitiesOfLabels, namedEntitiesOfLabels } from './enwiki-entities'
 import {
   type Attribution,
+  acceptedOf,
   type BankedQuestion,
   cached,
   decoysOf,
   type IngestedQuestions
 } from './question-source'
+import { aliasesOf } from './wikidata-aliases'
 
 const API_URL = 'https://opentdb.com/api.php'
 const CATEGORY_URL = 'https://opentdb.com/api_category.php'
@@ -226,6 +229,52 @@ const toBankedQuestion = ({
   }
 }
 
+/**
+ * The other spellings each answer may be typed as, for the rows that can be
+ * paid for one at all. Upstream publishes no identifier, so the entity is
+ * reached through the English Wikipedia article of the answer's own spelling —
+ * and the decoys of a row whose answer never resolved are not looked up, which
+ * is three quarters of the spellings on the table.
+ */
+const withAcceptedSpellings = async (
+  questions: readonly BankedQuestion[]
+): Promise<BankedQuestion[]> => {
+  const answerIds = await namedEntitiesOfLabels({
+    label: 'answers',
+    labels: questions.map(({ answer }) => answer)
+  })
+  const payable = questions.filter(({ answer }) => answerIds.has(answer))
+  const decoyIds = await entitiesOfLabels({
+    label: 'decoys',
+    labels: payable.flatMap(({ decoys }) => decoys)
+  })
+
+  const aliases = await aliasesOf({
+    entityIds: [...answerIds.values(), ...decoyIds.values()],
+    language: 'en'
+  })
+
+  const banked = questions.map((question) => ({
+    ...question,
+    accepted: acceptedOf({
+      answer: question.answer,
+      decoys: question.decoys,
+      spellings: aliases.get(answerIds.get(question.answer) ?? '') ?? [],
+      wrongSpellings: question.decoys.flatMap(
+        (decoy) => aliases.get(decoyIds.get(decoy) ?? '') ?? []
+      )
+    })
+  }))
+
+  const named = banked.filter(({ accepted }) => accepted.length > 0)
+
+  console.info(
+    `  ${named.length} of ${banked.length} rows answer to a second spelling, and now take it (${named.reduce((total, { accepted }) => total + accepted.length, 0)} spellings)`
+  )
+
+  return banked
+}
+
 export const ingestOpenTdb = async (): Promise<IngestedQuestions> => {
   const listing = await cached('opentdb-categories.json', async () => {
     const response = await fetch(CATEGORY_URL)
@@ -285,5 +334,9 @@ export const ingestOpenTdb = async (): Promise<IngestedQuestions> => {
     console.info(`  ${rubric.name} → ${category}: ${kept} questions`)
   }
 
-  return { attribution: ATTRIBUTION, questions, rejections }
+  return {
+    attribution: ATTRIBUTION,
+    questions: await withAcceptedSpellings(questions),
+    rejections
+  }
 }

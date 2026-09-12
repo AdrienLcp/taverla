@@ -653,6 +653,46 @@ one part.
 
 ### Improvements
 
+- `[Server]` **The English half now pays for the name a room shouts too**, on
+  1 048 of its 4 506 rows and 3 681 spellings — more rows than the French half's
+  largest source and more spellings than all of PolyFact. Typed mode is the
+  default answer mode and it paid only the one spelling upstream wrote down, so
+  a table that typed *Bush Senior* at a screen holding *George H. W. Bush* was
+  told it was wrong. Open Trivia DB publishes no identifier of anything, so the
+  entity behind an answer is reached through the English Wikipedia article of
+  that exact spelling, and `accepted` is filled from the names Wikidata files
+  under it.
+
+  **The count came before the code, and it is what allowed it.** Of 3 844
+  askable answers, 738 have no article at all — the rows whose answer is a
+  sentence, *The inability to make decisions* — and 693 land on another concept
+  through a silent redirect, *July 4, 1776* on *United States Declaration of
+  Independence*. That second one is the failure that disqualified OpenQuizzDB a
+  day earlier, and it is refused here for free by comparing the *landing* title
+  against the spelling asked about. Of the 2 413 that reach an article of their
+  own name, 1 338 name something rather than describe it: **34.8%**, against the
+  third that had been set as the bar for touching the source at all.
+
+  The gate is Wikidata's own labelling convention — a proper noun is
+  capitalised, a common noun is not, *Madrid* and *Charlie Chaplin* against
+  *spoon*, *yellow* and *chocolate* — which matters because a common noun's
+  `skos:altLabel` holds its *neighbours*: banking *blue*'s would pay a room that
+  typed **turquoise**. Two classes clear that gate and are named separately: 87
+  answers that are classes rather than things (*Bulldog* is a dog breed) and 361
+  that are Wikipedia's own pages about a spelling, *Lift* and *Libra* and
+  *Turkic* all being disambiguation pages.
+
+  **The query service is not the database**, which cost a measurement to learn:
+  `rdfs:label` is silent on Q9358 — Friedrich Nietzsche — and `wdt:P31` on
+  Q54173, General Electric, for 66 of 2 407 entities asked. Labels come from the
+  action API instead, and a missing `P31` is read as *unknown* rather than as
+  evidence, because a gap that refuses is a gap that quietly costs rows. The
+  decoys are resolved on a looser gate and only for the rows whose answer
+  resolved — three quarters of the work skipped — because a wrong decoy id
+  widens what the bank refuses and can never widen what it pays. `accepted` is
+  now filled by three sources of five, and the corpus sweep that refuses a
+  spelling naming the row's own decoy runs over all of them.
+
 - `[Game]` **A player's buzzer becomes the floor's dial while the floor is
   held.** A circle nobody can press is not a button, and it was still setting
   `BUZZ` in the ink reserved for what you cannot do, over a name and a number
@@ -2229,6 +2269,14 @@ one part.
   in turn
 
 ### Internal
+
+- `[Server]` **`frenchAliasesOf` is `aliasesOf({ entityIds, language })`.** The
+  language was literal in the SPARQL (`FILTER(lang(?alias) = "fr")`) with no
+  parameter anywhere in the module, which is what made the English half
+  unreachable. Naming it was the larger half of the change — the function stops
+  being *French* anything — and the cache was the part that had to move with it:
+  one file per language rather than one keyed by both, or every English miss
+  would read as a French entity nobody had asked for yet.
 
 - `[Game]` **The React Compiler runs on Oxc, and Babel leaves the repo.**
   `react({ compiler: { logDiagnostics: true } })` with `oxc-transform-react`

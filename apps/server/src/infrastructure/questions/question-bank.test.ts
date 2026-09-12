@@ -6,6 +6,7 @@ import {
 } from '@taverla/protocol/game'
 import {
   type QuestionCategory,
+  type QuestionLanguage,
   questionCategories,
   questionLanguages
 } from '@taverla/protocol/question'
@@ -14,8 +15,11 @@ import { hasAdultContent } from '@taverla/core/quiz/adult-content'
 import { gradeQuizGuess } from '@taverla/core/quiz/question-answer'
 import { normalizeAnswer } from '@taverla/core/round/answer-matching'
 
-import { type BankedQuestion, drawQuestion } from './question-bank'
-import bank from './question-bank.json' with { type: 'json' }
+import {
+  BANKED_QUESTIONS,
+  type BankedQuestion,
+  drawQuestion
+} from './question-bank'
 
 const NOTHING_PLAYED: ReadonlySet<string> = new Set()
 
@@ -203,14 +207,14 @@ describe('drawQuestion', () => {
   it('[bank] cuts a chained riddle back to the clue it answers', () => {
     const A_RUBRIC = 100
 
-    const riddles = bank.questions.filter(({ theme }) =>
+    const riddles = BANKED_QUESTIONS.filter(({ theme }) =>
       theme.startsWith('Quadriquizz')
     )
 
     expect(riddles.length).toBeGreaterThan(A_RUBRIC)
     expect(riddles.every(({ choiceOnly }) => choiceOnly)).toBe(true)
 
-    const chained = bank.questions.filter(({ prompt }) =>
+    const chained = BANKED_QUESTIONS.filter(({ prompt }) =>
       /il faut .+,.+ et /u.test(prompt)
     )
 
@@ -218,7 +222,7 @@ describe('drawQuestion', () => {
   })
 
   it('[bank] holds no question whose own decoy would be graded right', () => {
-    const winnable = bank.questions.filter((question) =>
+    const winnable = BANKED_QUESTIONS.filter((question) =>
       question.decoys.some(
         (decoy) => gradeQuizGuess({ guess: decoy, question }).isCorrect
       )
@@ -237,7 +241,7 @@ describe('drawQuestion', () => {
     const seen = new Set<string>()
     const repeated: string[] = []
 
-    for (const question of bank.questions) {
+    for (const question of BANKED_QUESTIONS) {
       const key = `${question.language}::${normalizeAnswer(question.prompt)}`
 
       if (seen.has(key)) {
@@ -268,7 +272,7 @@ describe('drawQuestion', () => {
 
     const subjects = new Map<string, string[][]>()
 
-    for (const question of bank.questions) {
+    for (const question of BANKED_QUESTIONS) {
       const subject = `${question.language}/${question.category}`
 
       subjects.set(subject, [...(subjects.get(subject) ?? []), question.decoys])
@@ -308,7 +312,7 @@ describe('drawQuestion', () => {
   it('[bank] agrees with what the console is told about adult content', () => {
     for (const language of questionLanguages) {
       expect(hasAdultContent(language)).toBe(
-        bank.questions.some(
+        BANKED_QUESTIONS.some(
           (question) => question.language === language && question.isAdult
         )
       )
@@ -346,7 +350,7 @@ describe('drawQuestion', () => {
    */
   it('[bank] rates some questions as beyond the room and some within it', () => {
     for (const language of questionLanguages) {
-      const rows = bank.questions.filter(
+      const rows = BANKED_QUESTIONS.filter(
         (question) => question.language === language
       )
 
@@ -379,7 +383,7 @@ describe('drawQuestion', () => {
 
     for (const language of questionLanguages) {
       for (const category of questionCategories) {
-        const rows = bank.questions.filter(
+        const rows = BANKED_QUESTIONS.filter(
           (question) =>
             question.category === category &&
             question.isWellKnown &&
@@ -404,13 +408,17 @@ describe('drawQuestion', () => {
    * to entities and reading every name *they* answer to; this is the same claim
    * read off the shipped bank, where a source that skipped the refusal shows.
    *
-   * It sweeps both sources that fill `accepted` — Mintaka and PolyFact — and
-   * costs nothing to leave in place for the ones that do not yet.
+   * It sweeps every source that fills `accepted` — Mintaka, PolyFact and Open
+   * Trivia DB — and costs nothing to leave in place for the ones that do not
+   * yet. The English half is where it earns the most: its answers carry no
+   * identifier, so both sides of a row are entity-linked from a bare label, and
+   * a homonym landing on the wrong concept is a real outcome rather than a
+   * theoretical one.
    */
   it('[bank] never accepts a spelling one of the row’s own decoys answers to', () => {
     const paying: string[] = []
 
-    for (const question of bank.questions) {
+    for (const question of BANKED_QUESTIONS) {
       for (const spelling of question.accepted) {
         const wrong = question.decoys.find(
           (decoy) =>
@@ -434,6 +442,31 @@ describe('drawQuestion', () => {
   })
 
   /**
+   * Both halves of the bank pay a room for a name it may shorten, which is only
+   * true while the ingestion's alias pass runs on both. A rebuild that loses the
+   * English one leaves 4 506 rows silently paying the single spelling upstream
+   * wrote down — green everywhere else, because nothing else reads `accepted`.
+   *
+   * The floor is the measured yield less a wide margin: the pass banks 1 048
+   * English rows and 1 608 French ones, and Wikidata curation moving under a
+   * rebuild is expected where a whole half going quiet is not.
+   */
+  it('[bank] pays for a second spelling in both languages', () => {
+    const paying = new Map<QuestionLanguage, number>()
+
+    for (const question of BANKED_QUESTIONS) {
+      if (question.accepted.length > 0) {
+        paying.set(question.language, (paying.get(question.language) ?? 0) + 1)
+      }
+    }
+
+    expect({
+      en: (paying.get('en') ?? 0) > 500,
+      fr: (paying.get('fr') ?? 0) > 500
+    }).toEqual({ en: true, fr: true })
+  })
+
+  /**
    * The four subjects the French half was thin in, held to the depth the
    * English half already had. Three hundred is where English sits and what lets
    * three difficulty bands deal a hundred questions each rather than twenty-one
@@ -453,7 +486,7 @@ describe('drawQuestion', () => {
     const short: string[] = []
 
     for (const category of ['geography', 'history', 'science', 'sport']) {
-      const rows = bank.questions.filter(
+      const rows = BANKED_QUESTIONS.filter(
         (question) =>
           question.category === category && question.language === 'fr'
       )

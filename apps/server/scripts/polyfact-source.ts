@@ -13,7 +13,7 @@ import {
   decoysOf,
   type IngestedQuestions
 } from './question-source'
-import { frenchAliasesOf } from './wikidata-aliases'
+import { aliasesOf } from './wikidata-aliases'
 import { birthYearsOf } from './wikidata-years'
 
 /**
@@ -621,11 +621,12 @@ export const ingestPolyFact = async (): Promise<IngestedQuestions> => {
     years: await birthYearsOfLabels(spread)
   })
   const entityIds = entityIdsOfLabels(spread)
-  const aliases = await frenchAliasesOf({
+  const aliases = await aliasesOf({
     entityIds: [
       ...spread.map(({ row }) => answeredEntityOf(row)),
       ...entityIds.values()
-    ]
+    ],
+    language: 'fr'
   })
 
   return {

@@ -10,7 +10,7 @@ import {
   cached,
   type IngestedQuestions
 } from './question-source'
-import { frenchAliasesOf } from './wikidata-aliases'
+import { aliasesOf } from './wikidata-aliases'
 import { kindsOf } from './wikidata-kinds'
 import { birthYearsOf } from './wikidata-years'
 
@@ -700,11 +700,12 @@ export const ingestMintaka = async (): Promise<IngestedQuestions> => {
     banked.push({ candidate, decoys })
   }
 
-  const aliases = await frenchAliasesOf({
+  const aliases = await aliasesOf({
     entityIds: banked.flatMap(({ candidate, decoys }) => [
       candidate.answerId,
       ...decoys.map(({ entityId }) => entityId)
-    ])
+    ]),
+    language: 'fr'
   })
 
   const questions = banked.map(({ candidate, decoys }) => {

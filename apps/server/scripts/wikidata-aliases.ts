@@ -1,8 +1,11 @@
+import type { QuestionLanguage } from '@taverla/protocol/question'
+
 import { readCachedEntries, writeCachedEntries } from './question-source'
 
 /**
- * The other names French Wikidata holds for an entity, which is what stands
- * between a room that knows the answer and a room that is told it was wrong.
+ * The other names Wikidata holds for an entity **in one language**, which is
+ * what stands between a room that knows the answer and a room that is told it
+ * was wrong.
  *
  * An answer here is **typed**, and the label a corpus files an entity under is
  * the full one: *Lakers de Los Angeles*, *Fédération de Russie*, *Guillaume le
@@ -16,6 +19,10 @@ import { readCachedEntries, writeCachedEntries } from './question-source'
  * the people who curate the label, in the same language, and a rebuild
  * reproduces them rather than re-inventing them. What the bank does with them
  * is `acceptedOf`'s business — this module only says what Wikidata knows.
+ *
+ * The language is the bank's own, never the room's: a French row is paid for
+ * French spellings and an English one for English, because the spelling a table
+ * shouts is the spelling the question was written in.
  */
 const SPARQL_URL = 'https://query.wikidata.org/sparql'
 
@@ -33,8 +40,14 @@ const RETRIES = 4
 /** How often what has been resolved is written back, in batches. */
 const SAVE_EVERY = 10
 
-/** Where the other names are remembered, an empty list meaning Wikidata holds none. */
-const ALIASES_CACHE = 'wikidata-aliases.json'
+/**
+ * Where the other names are remembered, an empty list meaning Wikidata holds
+ * none. One file per language rather than one keyed by both: the two halves are
+ * resolved in different runs, and a single file would make every English miss
+ * look like a French entity nobody had asked for yet.
+ */
+const cacheOf = (language: QuestionLanguage): string =>
+  `wikidata-aliases-${language}.json`
 
 type SparqlBindings = {
   results: {
@@ -83,16 +96,20 @@ const withRetries = async <TBody>(
  * whatever order it likes, and a bank that comes back different from a cold
  * rebuild is a bank nobody can check.
  */
-const aliasesOfBatch = async (
+const aliasesOfBatch = async ({
+  entityIds,
+  language
+}: {
   entityIds: readonly string[]
-): Promise<Map<string, string[]>> => {
+  language: QuestionLanguage
+}): Promise<Map<string, string[]>> => {
   const values = entityIds.map((entityId) => `wd:${entityId}`).join(' ')
   const query = [
     'SELECT ?item',
     '  (GROUP_CONCAT(DISTINCT ?alias; separator="\\n") AS ?aliases)',
     'WHERE {',
     `  VALUES ?item { ${values} }`,
-    '  OPTIONAL { ?item skos:altLabel ?alias FILTER(lang(?alias) = "fr") }',
+    `  OPTIONAL { ?item skos:altLabel ?alias FILTER(lang(?alias) = "${language}") }`,
     '}',
     'GROUP BY ?item'
   ].join('\n')
@@ -124,7 +141,7 @@ const aliasesOfBatch = async (
             .map((alias) => alias.trim())
             .filter((alias) => alias.length > 0)
         )
-      ].sort()
+      ].toSorted()
     )
   }
 
@@ -132,29 +149,34 @@ const aliasesOfBatch = async (
 }
 
 /**
- * Every French name each entity answers to besides its label, resumable across
- * runs the way the title, view, kind and birth-date lookups are.
+ * Every name each entity answers to besides its label, in the bank's language,
+ * resumable across runs the way the title, view, kind and birth-date lookups
+ * are.
  */
-export const frenchAliasesOf = async ({
-  entityIds
+export const aliasesOf = async ({
+  entityIds,
+  language
 }: {
   entityIds: readonly string[]
+  language: QuestionLanguage
 }): Promise<Map<string, string[]>> => {
-  const cached = await readCachedEntries<string[]>(ALIASES_CACHE)
+  const cache = cacheOf(language)
+  const cached = await readCachedEntries<string[]>(cache)
   const missing = [
     ...new Set(entityIds.filter((entityId) => !(entityId in cached)))
   ]
 
   console.info(
-    `  aliases: ${entityIds.length - missing.length} known, ${missing.length} to resolve`
+    `  ${language} aliases: ${entityIds.length - missing.length} known, ${missing.length} to resolve`
   )
 
   let batch = 0
 
   for (let start = 0; start < missing.length; start += ENTITIES_PER_QUERY) {
-    const resolved = await aliasesOfBatch(
-      missing.slice(start, start + ENTITIES_PER_QUERY)
-    )
+    const resolved = await aliasesOfBatch({
+      entityIds: missing.slice(start, start + ENTITIES_PER_QUERY),
+      language
+    })
 
     for (const [entityId, alias] of resolved) {
       cached[entityId] = alias
@@ -163,14 +185,14 @@ export const frenchAliasesOf = async ({
     batch++
 
     if (batch % SAVE_EVERY === 0) {
-      await writeCachedEntries({ entries: cached, name: ALIASES_CACHE })
+      await writeCachedEntries({ entries: cached, name: cache })
       console.info(
         `    aliases ${Math.min(start + ENTITIES_PER_QUERY, missing.length)}/${missing.length}`
       )
     }
   }
 
-  await writeCachedEntries({ entries: cached, name: ALIASES_CACHE })
+  await writeCachedEntries({ entries: cached, name: cache })
 
   return new Map(Object.entries(cached))
 }
