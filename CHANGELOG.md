@@ -2021,6 +2021,33 @@ one part.
 
 ### Internal
 
+- `[Game]` **The React Compiler runs on Oxc, and Babel leaves the repo.**
+  `react({ compiler: { logDiagnostics: true } })` with `oxc-transform-react`
+  replaces `@rolldown/plugin-babel` carrying `reactCompilerPreset()`, and takes
+  four dev dependencies out with it — `@babel/core`, `@rolldown/plugin-babel`,
+  `@types/babel__core`, `babel-plugin-react-compiler` — along with the
+  `vite.config.ts` guard that existed to hold the first of them on 7.x.
+
+  **The pin was right and stays vindicated**: Babel 8 took `AssignmentPattern`
+  out of the `LVal` alias group, `BuildHIR::lowerAssignment` keeps an object
+  pattern's property values behind `isLVal()`, and the bail is filed under
+  `Todo` and never printed — one function in 116, and the one it took was
+  `TextField`. Three fixes are open upstream and none is merged;
+  `babel-plugin-react-compiler` has published nothing stable since 1.0.0 in
+  October 2025. Oxc parses its own AST and never meets it.
+
+  **Measured before switching, both ways on the same tree: every asset identical
+  in name and in size.** A Vite asset name carries its content hash, so that is
+  a byte-identical payload — 767 521 bytes over 27 chunks — and the claim of
+  equivalence is a comparison rather than a hope. The client build went **21.3 s
+  to 3.3 s** on a loaded machine, 9.6 s to 2.3 s on a quiet one; the plugin
+  timings had put `@rolldown/plugin-babel transform` at 58% of the build.
+
+  Vite still calls the integration experimental, and `logDiagnostics` printed
+  nothing where the Babel pipeline had reported two permanent `CompileError`s —
+  a difference in what the two *report*, since the code they emit is the same.
+  `docs/component-shape.md` holds the comparison to re-run.
+
 - `[Game]` **`useEffectEvent` replaces the latest-ref pattern, in the three
   places that had written it by hand.** React has owned this since **19.2** and
   the repo was already there, so the bump is what made somebody look rather than
@@ -2028,9 +2055,10 @@ one part.
   effect with no dependency array, so a socket built once could still forward to
   whatever the current render handed it; `use-settled-status.ts` did the same
   with `statusRef` behind a `useCallback`; `round-audio.ts` did it twice, with
-  `clockRef` and `volumeRef`. Four refs and three effects become three Effect
-  Events, and the clock one gains a name — `millisecondsUntilStart`, where a
-  bare `clockRef.current` said nothing about why it was not a dependency.
+  `clockRef` and `volumeRef`. Two of the four convert — three refs and two
+  effects become two Effect Events — and the clock one gains a name,
+  `millisecondsUntilStart`, where a bare `clockRef.current` said nothing about
+  why it was not a dependency.
 
   `volumeRef` was reading over its own shoulder. `unlock` is a plain arrow
   rebuilt on every render, so `volume` was already in scope and the ref was a
@@ -2040,13 +2068,19 @@ one part.
   no longer needs a stable identity, so the `useCallback` around each decoder
   goes and the compiler owns them like everything else.
 
-  **One of the three is not textbook, and it is worth knowing which.** `reveal`
-  is returned by `useSettledStatus` and pressed by `send` when a frame could not
-  be written — an event handler, where React documents a call from inside an
-  Effect. The only thing guarded at runtime is a call during render, which this
-  is not. `react-components.md` carries both rules now, and its `paths:` grew
-  `apps/game/src/**/*.ts`, because a rule about hooks was scoped to `.tsx` and
-  every hook it talks about is a `.ts` file.
+  **The fourth stays a ref, and finding out why cost a red journey.** An Effect
+  Event is *not* a stable identity: React 19.3's `updateEvent` returns a fresh
+  closure over a stable ref on every render. `reveal` is handed *out* of
+  `useSettledStatus` and sits in `send`'s `useCallback` dependencies, so
+  converting it changed `send` every render and every screen holding `send` in a
+  dependency array with it — `Maximum update depth exceeded`, the error boundary,
+  and one Playwright journey red on a page that had simply stopped. The rule is
+  the seam rather than the shape: an Effect Event is right inside the Effect that
+  owns it, where nothing reads its identity, and wrong the moment it leaves.
+
+  `react-components.md` carries that, and its `paths:` grew
+  `apps/game/src/**/*.ts` — a rule about hooks was scoped to `.tsx` while every
+  hook it describes is a `.ts` file.
 
 - **Dependencies up to latest, and not a major among them.** **React and
   `react-dom` 19.2.8 → 19.3.0**, with `@types/react` and `@types/react-dom`

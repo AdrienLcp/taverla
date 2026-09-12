@@ -9,8 +9,8 @@ paths:
 
 ## Memoization: the compiler owns it
 
-**The React Compiler is enabled** (`babel-plugin-react-compiler` in
-`apps/game/vite.config.ts`). Inside a component the default is a plain
+**The React Compiler is enabled** (`react({ compiler })` in
+`apps/game/vite.config.ts`, running on Oxc). Inside a component the default is a plain
 `const arrow = () => …` and a plain `const value = compute()`: the compiler
 already caches every value and callback on dependencies it infers itself, so a
 hand-written `useMemo`, `useCallback` or `React.memo` only adds an array to keep
@@ -27,15 +27,18 @@ continuously, which is a correctness bug rather than a slow one.
 Where the value comes *from outside* the hook — a callback passed in as a prop,
 or something that moves on its own like the clock estimate — reach for
 **`useEffectEvent`** rather than a latest-ref, and never demand a stable identity
-from every caller. It holds one identity for the life of the component and
-always runs the latest closure, which is what `use-room-socket.ts` does with
-`onFrame`: the socket is built once and still forwards to whatever the current
-render handed it.
+from every caller. It always runs the latest closure, which is what
+`use-room-socket.ts` does with `onFrame`: the socket is built once and still
+forwards to whatever the current render handed it.
 
-Two rules come with one. It is **never a dependency** — leave it out of the
-array — and it **cannot be called during render**, which is the only thing React
-guards at runtime. Calling one from an event handler works and `useSettledStatus`
-does it, but the shape React documents is a call from inside an Effect.
+**It is not a stable identity, and that is the trap.** React 19.3's `updateEvent`
+returns a *fresh function over a stable ref* on every render. So an Effect Event
+is fine inside the Effect that owns it — where identity is never read — and
+wrong the moment it leaves: handed out of a hook, or listed in a `useCallback`'s
+dependencies, it changes every render and drags whatever holds it along.
+`useSettledStatus` keeps the latest-ref pattern for that reason, written down at
+the ref. Two more rules: an Effect Event is **never a dependency**, and it
+**cannot be called during render** — the one thing React guards at runtime.
 
 ## A function with no closure lives at module scope
 
@@ -87,4 +90,5 @@ the layout to the existing root, or to the parent.
 
 - [`design-system.md`](design-system.md) — wrapping a react-aria primitive
 - [`../../docs/component-shape.md`](../../docs/component-shape.md) — when a
-  component is worth splitting, what stays long, and the `@babel/core` pin
+  component is worth splitting, what stays long, and why the compiler runs on
+  Oxc

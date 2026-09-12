@@ -1,4 +1,4 @@
-import { useEffect, useEffectEvent, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import type { SocketStatus } from './use-room-socket'
 
@@ -32,13 +32,24 @@ export type SettledStatus = {
  */
 export const useSettledStatus = (status: SocketStatus): SettledStatus => {
   const [settled, setSettled] = useState<SocketStatus>(status)
+  // Not `useEffectEvent`, though this is exactly its shape. The hook returns a
+  // **fresh closure over a stable ref** on every render, so `reveal` would change
+  // identity, take `send`'s `useCallback` in `use-room-socket.ts` with it, and
+  // loop every screen holding `send` in a dependency array — `Maximum update
+  // depth exceeded`, measured. A callback a hook hands *out* needs the identity
+  // an Effect Event does not give.
+  const statusRef = useRef(status)
   const blinkTimerRef = useRef<number | undefined>(undefined)
 
-  const reveal = useEffectEvent(() => {
+  useEffect(() => {
+    statusRef.current = status
+  })
+
+  const reveal = useCallback(() => {
     window.clearTimeout(blinkTimerRef.current)
     blinkTimerRef.current = undefined
-    setSettled(status)
-  })
+    setSettled(statusRef.current)
+  }, [])
 
   useEffect(() => {
     // Only a fall *out of* `open` is worth holding, and only once: the retry
@@ -51,7 +62,7 @@ export const useSettledStatus = (status: SocketStatus): SettledStatus => {
     }
 
     blinkTimerRef.current ??= window.setTimeout(reveal, BLINK_CEILING_MS)
-  }, [settled, status])
+  }, [reveal, settled, status])
 
   useEffect(
     () => () => {

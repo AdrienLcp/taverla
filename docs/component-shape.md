@@ -35,42 +35,43 @@ owns the socket, and the stage that switches on the phase.
 | A flat list of sibling controls with no nesting | Splitting means opening seven files to see one panel. Remove the *repetition* instead — `NumberChoice`, not seven components |
 | A design-system wrapper | Its length is the prop documentation every prop carries |
 
-## Why `@babel/core` is pinned to 7.x
+## The React Compiler runs on Oxc, and Babel is gone
 
-The React Compiler runs through `@rolldown/plugin-babel` in
-`apps/game/vite.config.ts`, because plugin-react 6 moved to Oxc and no longer
-runs Babel itself. The compiler cannot parse Babel 8's AST for a destructured
-parameter with a default — `({ isInvalid = false }) => …` — and it bails **per
-function, silently**: the build stays green and that one function is simply not
-optimized.
+`apps/game/vite.config.ts` turns it on through the plugin itself —
+`react({ compiler: { logDiagnostics: true } })` — with `oxc-transform-react`
+installed beside it. There is no `@babel/core` in this repo any more, no
+`@rolldown/plugin-babel`, no `babel-plugin-react-compiler` and no version
+guard: every one of them existed to hold `@babel/core` on 7.x.
 
-**Per function is the whole shape of it**, and it is worth being exact about
-because the earlier wording here said *most of the app* and sent nobody looking.
-Measured on the build, Babel 8 costs **one function out of 116** — but the one
-it cost was `TextField`, the design system's field, which every form in the
-product renders. A bump does not degrade the app broadly; it takes out whichever
-components happen to carry a default, and says nothing about which.
+**What the pin was for.** Babel 8 took `AssignmentPattern` out of the `LVal`
+alias group, and the compiler's `BuildHIR::lowerAssignment` keeps an object
+pattern's property values behind `isLVal()` — so a destructured parameter with a
+default, `({ isInvalid = false }) => …`, failed a test that the
+`AssignmentPattern` case a few lines below would have handled. The bail is filed
+under `Todo` and recorded without being printed, which is what made it silent:
+one function out of 116, and the one it took was `TextField`, which every form
+in the product renders. Three fixes are open upstream, none merged, and
+`babel-plugin-react-compiler` has published no stable release since 1.0.0 in
+October 2025. Oxc parses its own AST and never meets the bug.
 
-The pin drifted to `^8.0.1` for two dependency bumps before anyone looked, which
-is what `pnpm -r up -L` does to a range: it lifts it. So `vite.config.ts` now
-throws on any `@babel/core` that is not 7.x, and the pin is a build failure
-rather than a sentence in a document.
+**Measured before switching**, because *equivalent* is not a word to take on
+trust. Built both ways back to back on the same tree: **every asset identical in
+name and in size** — and a Vite asset name carries its content hash, so the JS
+payload is byte-identical, 767 521 bytes over 27 chunks. The build went from
+**21.3 s to 3.3 s**, on a machine loaded enough for the Babel run to take 21 s at
+all; the plugin timings had put `@rolldown/plugin-babel transform` at 58% of it.
 
-### Measuring it
+Vite still calls the Oxc integration experimental. What stands behind it here is
+that byte comparison, which is the thing to re-run the day a chunk changes size
+for a reason nobody can name.
 
-`reactCompilerPreset` forwards its options to `babel-plugin-react-compiler`, so
-a `logger` is all it takes to turn the silence into a count:
+### Seeing what bailed
 
-```ts
-reactCompilerPreset({
-  logger: {
-    logEvent: (filename, event) =>
-      appendFileSync(LOG, `${event.kind} ${filename}` + NEWLINE)
-  }
-})
-```
-
-`CompileSuccess` against `CompileError` is the answer. Two errors are permanent
-and unrelated to Babel — `round-audio.ts` mutates a value the compiler will not
-let it — so the number to watch is **114 successes, 2 errors**. Anything else on
-7.x means a component stopped compiling for its own reasons.
+`logDiagnostics: true` prints the recoverable diagnostics — the bails — through
+Vite, and a fatal one fails the transform on its own. **It printed nothing** on
+the switch-over build, where the Babel pipeline had stood at 114 successes
+against two permanent `CompileError`s, both attributed to `round-audio.ts`
+mutating a value the compiler would not let it. Those two are doubly worth
+re-establishing rather than assumed: the emitted code is identical, so this is a
+difference in what the two pipelines *report*; and the `useEffectEvent` pass
+landing alongside this removed the very ref mutations they named.

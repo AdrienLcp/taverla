@@ -1,28 +1,8 @@
-import { createRequire } from 'node:module'
 import { resolve } from 'node:path'
 
 import optimizeLocales from '@react-aria/optimize-locales-plugin'
-import babel from '@rolldown/plugin-babel'
-import react, { reactCompilerPreset } from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
-
-/**
- * The React Compiler cannot parse Babel 8's AST for a destructured parameter
- * with a default — `({ isInvalid = false }) => …` — and bails on that function
- * alone, silently, with the build green. A range that drifts is what put the
- * design system's `TextField` through unoptimized for two dependency bumps, so
- * the pin refuses to be lifted quietly rather than being written down twice.
- * `docs/component-shape.md` has the measurement.
- */
-const { version: babelVersion } = createRequire(import.meta.url)(
-  '@babel/core/package.json'
-)
-
-if (!babelVersion.startsWith('7.')) {
-  throw new Error(
-    `@babel/core ${babelVersion}: the React Compiler needs 7.x here — see docs/component-shape.md`
-  )
-}
 
 const SERVER_ORIGIN = process.env.VITE_SERVER_ORIGIN ?? 'http://localhost:3100'
 
@@ -37,10 +17,7 @@ export default defineConfig({
     manifest: true
   },
   plugins: [
-    react(),
-    // The compiler rides on @rolldown/plugin-babel rather than `react({ babel })`:
-    // plugin-react 6 moved to Oxc and no longer runs Babel itself.
-    babel({ presets: [reactCompilerPreset()] }),
+    react({ compiler: { logDiagnostics: true } }),
     { ...optimizeLocales.vite({ locales: ['en-US', 'fr-FR'] }), enforce: 'pre' }
   ],
   resolve: {
