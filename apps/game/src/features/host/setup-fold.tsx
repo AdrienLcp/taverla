@@ -5,22 +5,15 @@ import type { TrackSource } from '@taverla/protocol/track'
 
 import type { HostPreferences } from '@taverla/core/room/host-preferences'
 import { isRoundInPlay } from '@taverla/core/room/room-phase'
-import {
-  type SettingsSummaryPart,
-  settingsSummary
-} from '@taverla/core/room/settings-summary'
 
 import { Disclosure } from '@/presentation/components/disclosure'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
-import {
-  answerModeLabelKey,
-  gameNameKey
-} from '@/presentation/i18n/translation'
 
 import { GamePicker } from './game-picker'
 import { HostSeat } from './host-seat'
-import { PlaylistPicker, sourceKindKey } from './playlist-picker'
+import { PlaylistPicker } from './playlist-picker'
 import { SettingsPanel } from './settings-panel'
+import { useSettingsSummary } from './use-settings-summary'
 
 type SetupFoldProps = {
   /** What the picker is showing, which the launch has not committed yet. */
@@ -62,29 +55,13 @@ export const SetupFold: React.FC<SetupFoldProps> = ({
   const game = view.settings.game
   const isInLobby = view.phase === 'lobby'
   const roundInPlay = isRoundInPlay(view.phase)
-
-  const summaryPart = (part: SettingsSummaryPart): string => {
-    switch (part.kind) {
-      case 'game':
-        return translate(gameNameKey(part.game))
-      case 'source':
-        return translate(sourceKindKey(part.source))
-      case 'answerMode':
-        return translate(answerModeLabelKey(part.mode))
-      case 'roundCount':
-        return part.count === null
-          ? translate('host.roundCount.openSummary')
-          : translate('host.roundCount.summary', { count: part.count })
-    }
-  }
+  const summary = useSettingsSummary({ draftSource, settings: view.settings })
 
   return (
     <Disclosure
       className='setup-fold'
       label={translate('host.setup.label')}
-      summary={settingsSummary({ draftSource, settings: view.settings })
-        .map(summaryPart)
-        .join(' · ')}
+      summary={summary}
     >
       {roundInPlay && (
         <p className='held'>{translate('host.setup.roundInPlay')}</p>

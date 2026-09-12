@@ -333,6 +333,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
         {view !== null && (
           <>
             <HostActions
+              draftSource={draftSource}
               isLive={isLive}
               onOpenRound={() => {
                 // Inside the press, never in an effect: the autoplay policy

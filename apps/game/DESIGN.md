@@ -602,6 +602,21 @@ where beside the name it divides the whole 464 and reads at 46. And the rows'
 furniture was fixed padding again, which is the lie board's lesson met a third
 time.
 
+**Taking that fold off the footer took the one sentence saying what *Rejouer*
+would relaunch.** Its closed summary — `Quiz · Quatre propositions · 10
+tournées` — was carrying the fact by accident, and the press it belongs to is
+the one that never stops at the lobby: it sends the room straight into a
+countdown of the same game, in the same mode, for the same number of rounds. So
+the summary is drawn under the button itself, in the register the footer
+already keeps for a control's own line, and it is what tells the two exits
+apart — anything in it the table wants changed is reached through *Retour à la
+table* under it. It costs the budget 23px above the split and 42 below, because
+the longest summary the shelf can write — a blind test on film scores, buzzed,
+with no round limit — is one line at 899px and two at 390: `21rem` → `23.25rem`
+and `20rem` → `21.5rem`. Nine players measure 0 at 1024×768, 1280×800,
+1366×768, 1440×900 and 1920×1080, where the old number was already 7 to 9px
+short of the footer it was written for.
+
 **A split needs something to put in both halves.** The same board with nobody
 scored draws no name and no scoreline, and in two columns it left a 13px label
 alone in 676px of field beside a list of names. `:has(.winners)` is the one

@@ -2,6 +2,7 @@ import type React from 'react'
 
 import type { ClientMessage } from '@taverla/protocol/client-message'
 import type { HostRoomView } from '@taverla/protocol/room'
+import type { TrackSource } from '@taverla/protocol/track'
 
 import { FinishedActions } from './finished-actions'
 import { LobbyActions } from './lobby-actions'
@@ -9,6 +10,8 @@ import { RevealActions } from './reveal-actions'
 import { RoundActions } from './round-actions'
 
 export type HostActionsProps = {
+  /** What the picker is showing, which `onOpenRound` commits — so it is what the next round will be built from. */
+  draftSource: TrackSource | null
   /** The socket is open. Every control here sends a frame, so none of them work without it. */
   isLive: boolean
   /** Commits the picker's draft and blesses the audio element — every control that opens a round calls it first. */

@@ -653,6 +653,19 @@ one part.
 
 ### Improvements
 
+- `[Game]` **The console's final board says what *Rejouer* will relaunch.**
+  Taking the setup fold off that footer — it acts on a round in flight, and
+  `finished` has none — took with it the one sentence naming the game, the mode
+  and the round count, on the screen where that press commits the room to all
+  three without stopping at the lobby. The fold's own summary is drawn under
+  the button instead, which is also what tells it apart from *Retour à la
+  table* beside it.
+
+  The board's budget is re-measured for the line it costs — 23px above the
+  split and 42 below, where the longest summary the shelf can write wraps — and
+  nine players now measure zero at every laptop height from 768 up, where
+  `21rem` was already 7 to 9px short of the footer it was written for.
+
 - `[Game]` **The player's lobby is two columns on a laptop**, for the reason the
   console's lobby is: the pitch and the roster are what this player is waiting
   on, and the invitation is the way in for whoever is beside them with no screen

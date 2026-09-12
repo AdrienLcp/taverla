@@ -264,21 +264,27 @@
           width: min(900px, 100%)
 
       // The result of a game rather than a phase of one, and the only stage
-      // whose footer is the two exits alone — so the chrome here is smaller
-      // than anywhere else on this screen. Measured the way the reveal's
-      // `31rem` was: the page padding, the header, the two gaps and those two
-      // buttons came to 336px, and it is the same number at every height
-      // because every term in it is.
+      // whose footer is the two exits alone plus the line saying what the
+      // first of them replays — so the chrome here is smaller than anywhere
+      // else on this screen. Measured the way the reveal's `31rem` was: the
+      // page padding, the header, the two gaps and that footer came to 356px
+      // at 1024×768, 359 at 1280×800 and 370 at 1440×900, because the padding
+      // is fluid and the line's own caption is. The widest of those binds.
       &.finished
-        --final-budget: calc(100dvh - 21rem)
+        --final-budget: calc(100dvh - 23.25rem)
 
         // Stacked, the board pays for its own header out of this, and the page
-        // padding it sits in is fluid: the same chrome measured 284px at
-        // 390×844 and 316px at 899×800. A budget takes the widest of a band it
+        // padding it sits in is fluid: the same chrome measured 326px at
+        // 390×844 and 339px at 899×800. A budget takes the widest of a band it
         // spans or it under-budgets at one end — which here is the end where
         // the table has the most rows.
+        //
+        // The gap between the two arms narrowed rather than held: the longest
+        // summary a shelf can write — a blind test on film scores, buzzed, with
+        // no round limit — is one line above the split and two below it, so the
+        // narrow arm's smaller chrome buys back most of what the wrap costs.
         @include layout.narrow
-          --final-budget: calc(100dvh - 20rem)
+          --final-budget: calc(100dvh - 21.5rem)
 
       &.lobby
         display: grid
@@ -464,14 +470,22 @@
         font-weight: 700
         padding: var(--space-2xs) var(--space-s)
 
-      // Why the launch is refusing, under the control that is refusing. The
-      // roster says the same thing on the other side of the screen, which is
-      // too far from a greyed button to read as its reason.
-      .reason
+      // A line that belongs to the button above it rather than to the column:
+      // the negative margin is what takes the footer's own gap back out, so the
+      // two read as one object instead of as two rows of a stack.
+      //
+      // `.reason` is why the launch is refusing — the roster says the same
+      // thing on the other side of the screen, which is too far from a greyed
+      // button to read as its reason. `.replays` is what *play again* is about
+      // to relaunch, and it is centred because it is the longer of the two and
+      // the only one that wraps on a console held in a hand.
+      .reason,
+      .replays
         @include typography.caption
 
         color: var(--ink-muted)
         margin-top: calc(var(--space-m) * -1 + var(--space-2xs))
+        text-align: center
 
       // A size container cannot be shrink-to-fit. `container-type: inline-size`
       // implies `contain: inline-size`, so the box lays out as though it held
