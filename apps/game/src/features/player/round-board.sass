@@ -13,6 +13,30 @@
     list-style: none
     width: 100%
 
+    // Every term of a row's height is a multiple of its own type, which is what
+    // makes a divisor mean anything. It was furniture no formula could reach —
+    // 8px of padding, a 4px gap and a score at a flat `1.5rem` — and nine of
+    // those rows came to 707px on a screen that had 604 to give.
+    //
+    // The size is the stage's to answer, because a component cannot: how tall a
+    // row may be is how much screen there is divided by how many players are in
+    // the room. `3.35` is what one row costs in multiples of its own size, read
+    // off the rendered row rather than added up from the stylesheet, and rounded
+    // up from the 3.33 it reaches once the sentence under the name has hit a
+    // floor the name has not. The default is large enough that the clamp lands
+    // on its ceiling, so a screen publishing no budget draws what it always drew.
+    //
+    // The budget is a `min()` over the clamp, so it only ever takes size away: a
+    // table of four reads at the size it always did — `6cqi`, the term that
+    // keeps a fourteen-character name inside a column a third of the screen wide
+    // — and only a room big enough to fill the screen goes under it.
+    //
+    // Which is why it carries a floor of its own, below the clamp's. The clamp's
+    // floor is the only term that fires on a phone — 3vmin of a 390px screen is
+    // 12px against a floor of 20 — and a 768px-tall laptop sits on the same one,
+    // so a budget that could not go below it would never fire at all. That is
+    // the shape the question's own length term met, and it dropped its floor for
+    // the same reason.
     li
       align-items: baseline
       border-top: 2px solid var(--rule)
@@ -21,9 +45,10 @@
       // number at twelve pixels, and this row is meant to be read down.
       column-gap: var(--space-m)
       display: grid
+      font-size: min(clamp(1.25rem, min(3vmin, 6cqi), 1.75rem), max(1rem, calc(var(--board-budget, 100rem) / var(--board-rows, 5) / 3.35)))
       grid-template-columns: 1fr
-      padding: var(--space-xs) 0
-      row-gap: var(--space-2xs)
+      padding: 0.35em 0
+      row-gap: 0.2em
 
       &:last-child
         border-bottom: 2px solid var(--rule)
@@ -38,6 +63,7 @@
       @include typography.numeric
 
       color: var(--ink-muted)
+      font-size: 0.8em
 
     // Twenty unbreakable characters somebody chose, in a column sized by what
     // is left: a name is atomic where an answer is not, so this is the one that
@@ -45,11 +71,10 @@
     .nickname
       @include typography.title
 
-      // The shared step, capped by the column it is actually in. A phone and a
-      // narrow window read it at the size they always did; the split reveal is
-      // where the two rulers disagree, and 6% of a 345px column is what puts a
-      // fourteen-character name back inside the row it was being cut out of.
-      font-size: clamp(1.25rem, min(3vmin, 6cqi), 1.75rem)
+      // The row's own size, because the row is what the screen budgets. The
+      // shared step and the column's own cap both live on the row now, so a
+      // phone and a narrow window still read it at the size they always did.
+      font-size: 1em
       overflow: hidden
       text-overflow: ellipsis
       white-space: nowrap
@@ -61,6 +86,11 @@
     .points
       @include typography.numeric
 
+      font-size: 0.8em
+      // A numeral takes the reset's 1.5 until it is told otherwise, and half a
+      // row of nothing above and below a figure is what set this row's height
+      // rather than the name in it.
+      line-height: 1
       min-width: 4.5ch
       text-align: end
 
@@ -70,9 +100,10 @@
     .score
       @include typography.numeric
 
-      font-size: 1.5rem
+      font-size: 1.15em
       font-stretch: 125%
       font-weight: 900
+      line-height: 1
 
     // What they typed or picked, under their own name rather than beside it.
     // The first line of a row is read down as three columns of numbers, and a
@@ -82,7 +113,20 @@
       @include typography.caption
 
       color: var(--ink-muted)
+      // A fraction of the name above it rather than the shared caption step:
+      // this line is read as the second half of that row, and a row sized by
+      // the screen cannot hold one line that answers to the screen instead.
+      //
+      // With a floor of its own, and it is the caption's. What a player typed is
+      // the only prose on this board, and prose has a floor the row it sits in
+      // does not get to argue with — a grandparent and a child are both expected
+      // to read it.
+      font-size: max(0.875rem, 0.75em)
       grid-column: 1 / -1
+      // Leading is for prose that wraps, and this line cannot: it is one
+      // ellipsised row, and the caption's 1.35 is half a line of nothing under
+      // every name on the board.
+      line-height: 1.2
       overflow: hidden
       text-overflow: ellipsis
       white-space: nowrap

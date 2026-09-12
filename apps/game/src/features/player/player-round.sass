@@ -148,12 +148,53 @@
     // the answer in the `1fr` track with three hundred and forty-seven pixels of
     // nothing beside it, and the whole reveal two hundred pixels left of the
     // screen it looks centred on.
+    //
+    // A component says what it costs and a stage says how much there is, and
+    // this phase was the one that said neither: nine rows of a board whose
+    // every term was fixed came to 707px beside an outcome of 219, so the taller
+    // half decided the screen on its own and ran 104px off a 1440x900, 174 off a
+    // 1280x800 and 198 off a 1024x768.
+    //
+    // `18.5rem` is the chrome, measured the way the console's `31rem` was: the
+    // header, the scoreline, the page padding and the two gaps came to 296px at
+    // 1440x900 and 283 at 1024x768. A budget takes the widest of the band it
+    // spans or it under-budgets at one end — and the end that matters is the one
+    // with the most rows.
     @include layout.wide
       &.revealed:has(.round-board)
+        --board-budget: calc(100dvh - 18.5rem)
+
         align-items: center
         column-gap: var(--space-xl)
         display: grid
         grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.8fr)
+
+    // Stacked is not the same arithmetic made smaller. Above the split the two
+    // halves sit side by side and the board divides the whole screen; here they
+    // share one column and the screen pays for both, so what the payout costs
+    // comes off the board's budget as well. `28rem` is that whole subtraction,
+    // measured at 390x844 the way the wide arm's `18.5rem` was at 1440x900: the
+    // page chrome came to 254px, the payout to 173 and the gap between them to
+    // 20.
+    //
+    // It is not asked to make the reveal fit and it does not: a payout, nine
+    // names and nine sentences want more than a phone has at any size a
+    // grandparent can read. What it buys is that the board stops growing once
+    // the page is already scrolling, which is the console's own bargain one
+    // storey up.
+    @include layout.narrow
+      &.revealed:has(.round-board)
+        --board-budget: calc(100dvh - 28rem)
+
+        // The one game whose payout carries a picture, read off the markup the
+        // way the console's reveal panel reads its own header: a cover and the
+        // gap over it are 147px more of the same column, measured at 390x844
+        // where the quiz's payout came to 173 and the blind test's to 320. It
+        // does its work at the middling table rather than the full one — nine
+        // rows are on the row's own floor either way, and five are what a phone
+        // can still be asked to fit.
+        &:has(.cover)
+          --board-budget: calc(100dvh - 37rem)
 
     // The product's only real image, die-cut on the field the way the QR code
     // is: a block edged in its own paper, no radius and no shadow. Well under

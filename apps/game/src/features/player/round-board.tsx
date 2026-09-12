@@ -52,6 +52,10 @@ export const RoundBoard: React.FC<RoundBoardProps> = ({ round, view }) => {
       className={['round-board', isRanked && 'ranked', isPaying && 'paying']
         .filter(Boolean)
         .join(' ')}
+      // How many rows the screen's budget is divided by. The room's size rather
+      // than the list's own length, because they are the same number here and
+      // the room is the fact the stage is budgeting for.
+      style={{ '--board-rows': view.players.length }}
     >
       {buildScoreboard(view.players).map(({ player, rank }) => {
         const answer = round.revealedAnswers.find(

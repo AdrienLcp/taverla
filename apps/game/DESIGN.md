@@ -734,6 +734,41 @@ the same rows, and only the box differs: `.standings` on the console, the
 phase's own section on a player's. A roster does not opt in, because it is read
 while it is still growing and nobody reads one downwards.
 
+**Splitting a phase in two only moves the question of which half is taller.**
+The player's reveal has divided since the day a laptop had none of the height,
+and a room of nine still ran 104px off a 1440×900 afterwards: the board came to
+707px beside a payout of 219, so the half nobody had budgeted decided the screen
+alone. Every term of its row was fixed — 8px of padding, a 4px gap, a score at a
+flat `1.5rem` — and the one clamp in it sat on its floor at every laptop height,
+which is fixed furniture met for the third time in one pass and the first where
+there was no formula at all to reach it.
+
+Three things it settled, each a rule this world now holds twice over:
+
+- **A numeral takes half a row of nothing unless it is told otherwise.** The
+  reset's 1.5 on a score at 1.5rem was the single largest term in a two-line row
+  — larger than the name beside it — and the sentence under the name was carrying
+  prose leading for a line that can never wrap. Putting the row's furniture in
+  `em` and both line-heights at their real job takes a row from 78px to 63 at the
+  same size, before any budget exists.
+- **A budget below a clamp's floor is the only one that ever fires.** On a phone
+  3vmin of a 390px screen is 12px against a floor of 20, and a 768px-tall laptop
+  above the split sits on that same floor — so the budget is a `min()` over the
+  clamp carrying a floor of its own, which is the question's length term one
+  screen over and for the identical reason. It only ever takes size away, so a
+  table of four reads exactly as it did.
+- **Stacked is not the same arithmetic made smaller, and the payout is what
+  changes.** Above the split the board divides the whole screen minus the page's
+  chrome; below it the two halves share one column, so what the payout costs
+  comes off as well — and the one game whose payout carries a picture costs 147px
+  more of it, read off the markup the way the console's reveal panel reads its
+  own header rather than asked of the component.
+
+It closes the wide screen and it is not asked to close the narrow one: nine
+players measure 0 at every laptop height from 768 up, and a 390×844 phone is
+82px short of a payout, nine names and nine sentences — which is the console's
+own bargain one storey up, taken for the same reason.
+
 **A buzzer with a question over it splits at the same width, and it is the one
 composition where two objects were each sized as though alone.** A clip is the
 blind test's stimulus and takes no room; a quiz's is on the screen, so the

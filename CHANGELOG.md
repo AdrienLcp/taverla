@@ -1205,6 +1205,44 @@ one part.
 
 ### Fixes
 
+- `[Game]` **A player's reveal was decided by a board no formula could reach.**
+  Nine rows came to 707px beside a payout of 219, so the taller half set the
+  height of the screen on its own and the page ran 104px off a 1440×900, 174 off
+  a 1280×800 and 198 off a 1024×768. Every term of a row was fixed — 8px of
+  padding, a 4px gap, a score at a flat `1.5rem` — and the one clamp in it, the
+  name's, sat on its floor at every laptop height. This is the console's
+  `finished` fault one storey down, and the third time in this pass that fixed
+  furniture turned out to be what a budget cannot spend.
+
+  **A row is one multiple of its own size now**, which is the whole precondition:
+  the padding and the gap go in `em`, the score and the payout become fractions
+  of the name, and both give up the reset's 1.5 line-height — half a row of
+  nothing above and below a numeral was the single largest term in the row. The
+  sentence under the name gives up its leading too, because it is one ellipsised
+  line and leading is for prose that wraps. That alone takes a row from 78px to
+  63 at the same size, on every table and every screen.
+
+  **And the stage publishes what the board may spend.** `RoundBoard` writes how
+  many players are in the room, the reveal writes how much screen is left, and
+  the row divides the one by the other: `18.5rem` of chrome above the split,
+  measured at 296px on a 1440×900 and 283 on a 1024×768. The budget is a `min()`
+  over the clamp, so it only ever takes size away — a table of four reads exactly
+  as it did — and it carries a floor below the clamp's own, because the clamp's
+  floor is the only term that fires on a phone and a 768px-tall laptop sits on
+  the same one. A budget that could not go under it would never fire at all,
+  which is the shape the question's length term met one commit ago.
+
+  **Stacked is not that arithmetic made smaller**: the two halves share one
+  column, so what the payout costs comes off the board's budget as well — 28rem,
+  and 37 for the one game whose payout carries a picture, read off the markup the
+  way the console's reveal panel reads its own header.
+
+  Nine players now measure 0 at 1440×900, 1280×800, 1366×768, 1024×768, 1920×1080
+  and 900×800, on the quiz and on the blind test alike. What is left is content
+  that wants more than the screen: 57px on a 1440×700, and 82 on a 390×844 where
+  a payout, nine names and nine sentences do not go into 844px at any size a
+  grandparent can read.
+
 - `[Game]` **A quiz answered at the buzzer ran off every screen but one.** Two
   objects on a player's screen, each sized as though it were alone: the question
   is the quiz's stimulus the way the clip is the blind test's, and the difference
