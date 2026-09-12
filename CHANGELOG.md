@@ -1239,6 +1239,19 @@ one part.
 
 ### Fixes
 
+- `[Game]` **The floor's dial stepped instead of running.** `floor-drain` took
+  its start from `calc(1 - var(--drain-from))`, and a `calc()` holding a
+  `var()` is never interpolated in a keyframe: `getComputedStyle` read the
+  unresolved `calc(0.3px)` back from the first frame to the last, so the ring
+  moved only when a snapshot re-keyed the circle — one jump per correction,
+  which is what a room saw as a clock ticking rather than draining. Measured
+  against the two forms it is not, on the same 10s animation at 1.5s: a bare
+  `var()` and a literal both read `0.406176px`.
+
+  The share already spent is now computed beside the duration and substituted
+  whole, which the reduced-motion reading takes too. The ring advances every
+  frame — 0.050 of the circle at 1.5s and 0.519 at 15.5s of a 30s window.
+
 - `[Game]` **A player's reveal was decided by a board no formula could reach.**
   Nine rows came to 707px beside a payout of 219, so the taller half set the
   height of the screen on its own and the page ran 104px off a 1440×900, 174 off

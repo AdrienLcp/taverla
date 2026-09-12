@@ -492,7 +492,7 @@
       @media (prefers-reduced-motion: reduce)
         .ring .left
           animation: none
-          stroke-dashoffset: calc(1 - var(--drain-from, 1))
+          stroke-dashoffset: var(--drained, 0)
 
       // One register inside the dial, where `FloorClock` carries two: muting
       // the open direction is right in a column the console reads and wrong in
@@ -537,8 +537,14 @@
         min-height: 0
         overflow-wrap: anywhere
 
+// The offset arrives as the share already spent rather than being derived from
+// the share left, because **a `calc()` holding a `var()` is never interpolated
+// in a keyframe**: Chrome held `stroke-dashoffset` on the unresolved
+// `calc(0.3px)` for the whole window, so the ring moved only when a snapshot
+// re-keyed it — a drain that stepped rather than ran. Substituted whole, it
+// interpolates.
 @keyframes floor-drain
   from
-    stroke-dashoffset: calc(1 - var(--drain-from, 1))
+    stroke-dashoffset: var(--drained, 0)
   to
     stroke-dashoffset: 1

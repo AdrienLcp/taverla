@@ -623,7 +623,7 @@ const FloorDial: React.FC<{
             r='47'
             style={{
               '--drain-duration': `${remainingMs}ms`,
-              '--drain-from': Math.min(1, remainingMs / windowMs).toFixed(3)
+              '--drained': (1 - Math.min(1, remainingMs / windowMs)).toFixed(3)
             }}
           />
         )}

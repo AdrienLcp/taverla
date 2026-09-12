@@ -125,3 +125,28 @@ primitive is the same trap one level up: `isHovered`, `isPressed` and
 `SwitchFieldRenderProps`, so those selectors go on the button. Left on the field
 they match nothing, the build stays green, and the control has stopped answering
 the pointer.
+
+## A keyframe substitutes a custom property, it does not compute with one
+
+`var()` in a keyframe is fine on its own. **Wrapped in a `calc()` it is never
+interpolated** — Chrome holds the declaration unresolved for the whole run, so
+the animation sits on its `from` value from the first frame to the last, and
+the property only appears to move when something else rewrites the element.
+
+```sass
+// Never: the animation does not run.
+@keyframes drain
+  from
+    stroke-dashoffset: calc(1 - var(--left, 1))
+
+// Do the arithmetic where the value is produced, and substitute it whole.
+@keyframes drain
+  from
+    stroke-dashoffset: var(--drained, 0)
+```
+
+Measured on three keyframes of one 10s animation, read at 1.5s:
+`calc(1 - var(--f))` came back as the string `calc(0.3px)`, while a bare
+`var()` and a literal `0.3` both read `0.406176px`. The floor dial is where it
+cost a stage — the ring looked like it stepped once a second, because a
+snapshot re-keying the circle was the only thing moving it at all.
