@@ -356,8 +356,8 @@
       &:has(.asked-question)
         --buzzer-headroom: max(7rem, calc(100dvh - 32.5rem))
 
-        &:has(.taken)
-          --buzzer-headroom: max(7rem, calc(100dvh - 40rem))
+        &:has(.floor-dial)
+          --buzzer-headroom: max(7rem, calc(100dvh - 34rem))
 
     // The circle and the two lines that answer to it, one child so the split
     // above has two. No alignment of its own: centring would shrink-wrap the
@@ -429,29 +429,89 @@
       &.claimed
         transform: scale(0.92)
 
-      // The floor is taken, so this stops being sized by the hand: nobody can
-      // press it for the length of the window, and the height it was holding is
-      // what the line under it needs. The console made the same move for the
-      // countdown it draws over a reveal — the object gives up the screen it
-      // had, because what the room is reading is underneath it.
-      //
-      // 300px is where the short-screen scroll closes, measured rather than
-      // picked: a 1440x700 laptop scrolled 7px and a 360x640 phone 20 before
-      // it, both land on 0 after, and none of 260, 220 or anything below buys a
-      // pixel more at any width that is not a phone on its side.
-      &.taken
-        width: min(60vw, 30vh, 300px, var(--buzzer-headroom, 100dvh))
-
       &[data-disabled]
         background: transparent
         border: 4px solid var(--rule)
         color: var(--ink-muted)
         cursor: not-allowed
 
-    // Under a circle, so it centres on it. It sat flush left for as long as it
-    // was one player's own clock on a screen nobody else read.
-    .floor-clock
-      text-align: center
+    // The same circle, for the length of the floor, and no longer a button:
+    // the ring it already had is the window, and the number the room is
+    // waiting on is inside it. It keeps the buzzer's own four limits because
+    // it is the same object and the hand is not what sizes it any more — what
+    // does is the question above it, which is what the headroom says.
+    //
+    // Grid rather than the flex column around it: the ring and the number are
+    // one object stacked on one cell, so neither takes height from the other
+    // and the number is centred on the dial rather than under it.
+    .floor-dial
+      aspect-ratio: 1
+      container-type: inline-size
+      display: grid
+      font-size: clamp(2rem, 11vmin, 4rem)
+      margin: 0 auto
+      max-width: 100%
+      place-items: center
+      width: min(78vw, 42vh, 420px, var(--buzzer-headroom, 100dvh))
+
+      > *
+        grid-area: 1 / 1
+
+      // Rotated so the window starts at twelve and drains clockwise back to
+      // it, which is the one place on a dial a reading is looked for.
+      .ring
+        height: 100%
+        transform: rotate(-90deg)
+        width: 100%
+
+        circle
+          fill: none
+          stroke-width: 5
+
+        // The ring is the floor, and what has been spent of it goes faint: the
+        // ink says the floor is live and the fade says the time is gone.
+        //
+        // A window nobody set spends nothing, so there is no arc to draw over
+        // the track and the track *is* the ink. Drawn faint it read as a dial
+        // already run out, which is the opposite of what an untimed floor is —
+        // the one shape would have meant a thing and its contrary. Full ink
+        // whether it moves or not is the round bar's own rule, one screen up.
+        .track
+          stroke: var(--ink)
+
+        .left
+          animation: floor-drain var(--drain-duration, 0ms) linear forwards
+          stroke: var(--ink)
+          stroke-dasharray: 1
+
+        &:has(.left) .track
+          stroke: var(--rule)
+
+      // Still the measurement, minus the moving — the round bar's bargain, for
+      // the round bar's reason.
+      @media (prefers-reduced-motion: reduce)
+        .ring .left
+          animation: none
+          stroke-dashoffset: calc(1 - var(--drain-from, 1))
+
+      // One register inside the dial, where `FloorClock` carries two: muting
+      // the open direction is right in a column the console reads and wrong in
+      // an object whose only content it is.
+      //
+      // Sized by the ring and by how much there is to read, which is the
+      // question's own pair one screen over. A digit of `billboard` sets at
+      // 0.785 of its font size — measured with a `Range` on the rendered node,
+      // and exactly three times that for three, because the figures are
+      // tabular — so the ring's 89cqi of clear diameter holds `81cqi / n`. The
+      // ceiling is what two digits look like at that division and is where the
+      // common reading stops growing: a floor of five seconds drawn at the
+      // size a hundred would need is a dial that never fills.
+      .floor-clock
+        @include typography.billboard
+
+        color: var(--ink)
+        font-size: min(40cqi, calc(81cqi / var(--reading-length, 2)))
+        line-height: 1
 
     .blocker
       @include typography.caption
@@ -476,3 +536,9 @@
         color: var(--ink)
         min-height: 0
         overflow-wrap: anywhere
+
+@keyframes floor-drain
+  from
+    stroke-dashoffset: calc(1 - var(--drain-from, 1))
+  to
+    stroke-dashoffset: 1

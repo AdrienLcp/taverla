@@ -35,6 +35,11 @@ export const FloorClock: React.FC<FloorClockProps> = ({ buzz, clock }) => {
     <p
       className={`floor-clock ${buzz.expiresAt === null ? 'open' : 'closing'}`}
       role='timer'
+      // A reading of unknown length publishes its length, the way an answer
+      // and a question do: one digit and three are the same fact, and only a
+      // surface fitting this into a box of its own can say what that costs.
+      // Ignored where the number is a line in a column.
+      style={{ '--reading-length': String(seconds).length }}
     >
       {seconds}
     </p>

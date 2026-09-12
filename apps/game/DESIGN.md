@@ -1011,6 +1011,48 @@ and who it caught are one row.
   name. The height came from the object that had stopped needing it: a buzzer
   nobody can press for the length of the window is no longer sized by the hand,
   the same move `.counting-in` makes one screen up.
+
+  **And then the object it was drawn under became the object it is drawn in.**
+  A circle nobody can press is not a button, and it was still setting `BUZZ` in
+  the ink reserved for what you cannot do — a control naming an action it
+  refuses, which is the one thing on that screen saying something untrue. So
+  for the length of the floor the player's buzzer is *swapped* for a **dial**:
+  the ring it already had is the window, the number goes in the middle of it,
+  and the name stays under it in `billboard`. Three objects become two, the
+  circle takes back the size the hand had been sizing it for, and a dead
+  control leaves the tab order rather than sitting in it disabled.
+
+  **The ring is the floor, and what is spent of it goes faint.** A window the
+  host never set spends nothing, so there is no arc to draw over the track and
+  the track *is* the ink: drawn in `--rule` it read as a dial already run out,
+  which is the exact opposite of what an untimed floor is, and one shape would
+  have meant a thing and its contrary. That is `FloorClock`'s own duality moved
+  from the ink to the ring — so the number inside takes **one** register, muting
+  being right in a column the console reads and wrong in an object whose only
+  content it is.
+
+  It is the round bar's arithmetic on a circle: a CSS animation off the
+  server's deadline, re-keyed per snapshot, and `stroke-dashoffset` on a path
+  normalised with `pathLength="1"` so the fraction is the geometry. **The ring
+  belongs to the buzzer and not to the clock**, which is what leaves the console
+  untouched — and what retires the ordering rule above *on the player's screen
+  only*. A number arriving before the name is a countdown to nothing when it is
+  a bare line in a column; the circle is the context that ordering was standing
+  in for. The console still reads it under the name, because it has no circle
+  to put it in.
+
+  **The number is sized by the ring and by how much there is to read.** A digit
+  of `billboard` sets at 0.785 of its own font size — measured with a `Range` on
+  the rendered node, and exactly three times that for three because the figures
+  are tabular — so the ring's 89cqi of clear diameter holds `81cqi / n`, and
+  `FloorClock` publishes `--reading-length` the way a question publishes its
+  own. The `40cqi` ceiling is what two digits come to at that division: without
+  it a floor of five seconds is drawn at the size a hundred needs, in a dial
+  that never fills. And the headroom the stage publishes drops from `40rem` to
+  `34rem`, because the line that used to sit under the circle is now inside it
+  — seven widths from 360 to 899 measure 0 on the bank's longest question, and
+  320×568 keeps the `7rem` floor's bargain at 48px of scroll where the stack it
+  replaced spent 98.
 - **Duration references fall back to `0`,** never to a literal, or someone who
   asked for no motion gets motion when a token disappears.
 

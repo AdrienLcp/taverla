@@ -4,6 +4,7 @@ import { Button as ReactAriaButton } from 'react-aria-components'
 
 import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
 import type {
+  ActiveBuzz,
   PlayerRoomView,
   RoomPhase,
   RoundView
@@ -19,7 +20,10 @@ import {
   buildScoreboard,
   hasAnybodyScored
 } from '@taverla/core/scoring/scoreboard'
-import type { ClockEstimate } from '@taverla/core/time/clock-sync'
+import {
+  type ClockEstimate,
+  millisecondsUntil
+} from '@taverla/core/time/clock-sync'
 
 import {
   ChoiceAnswer,
@@ -433,6 +437,11 @@ const Buzzer: React.FC<{
 
   const line = statusLine({ blocker, hasFailed, isWon, translate, view })
 
+  // The floor is the room's and not the buzzing player's, so this is read off
+  // the phase: every screen waits the same window out, the ones that never
+  // entered the race included.
+  const floorBuzz = view.phase === 'buzzed' ? buzz : null
+
   return (
     <section className='player-round buzzer-area'>
       <AskedQuestion prompt={quizContent(view.round)?.prompt ?? null} />
@@ -446,52 +455,49 @@ const Buzzer: React.FC<{
       */}
       <div className='press'>
         {/*
-          `onPressStart`, not `onPress`: a buzzer has to fire the instant the
-          thumb lands, and waiting for the release costs tens of milliseconds in
-          a race that is decided by exactly that. react-aria normalises it
-          across touch, mouse and keyboard, so the keyboard player is not
-          penalised.
+          Two objects in one place and never both at once: while the race is
+          open this is a button, and for the length of the floor it is the dial
+          timing it. Swapping rather than disabling is what takes `BUZZ` off a
+          circle nobody can press — a control still naming an action it refuses
+          was the one thing on this screen saying something untrue — and it
+          takes a dead button out of the tab order on the way.
         */}
-        <ReactAriaButton
-          className={`buzzer ${isClaimed || isWon ? 'claimed' : ''} ${line.isFloor ? 'taken' : ''}`}
-          isDisabled={blocker !== null || roundId === null}
-          onPressStart={() => {
-            if (roundId === null) {
-              return
-            }
+        {floorBuzz === null ? (
+          /*
+            `onPressStart`, not `onPress`: a buzzer has to fire the instant the
+            thumb lands, and waiting for the release costs tens of milliseconds
+            in a race that is decided by exactly that. react-aria normalises it
+            across touch, mouse and keyboard, so the keyboard player is not
+            penalised.
+          */
+          <ReactAriaButton
+            className={`buzzer ${isClaimed || isWon ? 'claimed' : ''}`}
+            isDisabled={blocker !== null || roundId === null}
+            onPressStart={() => {
+              if (roundId === null) {
+                return
+              }
 
-            setClaimedRoundId(roundId)
-            buzzFeedback('press')
-            setHasFailed(!onBuzz(roundId))
-          }}
-        >
-          {/*
-            A box of its own, because the circle has to be the container the
-            word is measured against and a container cannot be asked about its
-            own width. It is what keeps `BUZZ` inside the ink now that a
-            question can take height from the circle — and it is what the dead
-            buzzer needed already, at any screen under 800px tall.
-          */}
-          <span className='word'>{translate('buzz.action')}</span>
-        </ReactAriaButton>
+              setClaimedRoundId(roundId)
+              buzzFeedback('press')
+              setHasFailed(!onBuzz(roundId))
+            }}
+          >
+            {/*
+              A box of its own, because the circle has to be the container the
+              word is measured against and a container cannot be asked about
+              its own width. It is what keeps `BUZZ` inside the ink now that a
+              question can take height from the circle.
+            */}
+            <span className='word'>{translate('buzz.action')}</span>
+          </ReactAriaButton>
+        ) : (
+          <FloorDial buzz={floorBuzz} clock={clock} />
+        )}
 
         <p className={`blocker ${line.isFloor ? 'floor' : ''}`} role='status'>
           {line.text}
         </p>
-
-        {/*
-          Last, and drawn for the whole room rather than only for the player
-          holding the floor: everybody else is waiting out the same window and
-          had a name and a dead buzzer to look at, which is a silence with no
-          end in sight. It follows the line that says whose window it is,
-          because a number that arrives before the name is a countdown to
-          nothing — and it counts down where the host set a limit and up where
-          they judge it themselves, which is the same component read from either
-          end.
-        */}
-        {view.phase === 'buzzed' && view.round?.activeBuzz != null && (
-          <FloorClock buzz={view.round.activeBuzz} clock={clock} />
-        )}
       </div>
     </section>
   )
@@ -567,6 +573,64 @@ const Revealed: React.FC<{
   }
 
   return null
+}
+
+/**
+ * The circle for the length of the floor, when it has stopped being a button:
+ * the ring it already had becomes the window, and the number the whole room is
+ * waiting on goes inside it. Three objects were stacked here — a dead button, a
+ * name and a number — and only two of them were the phase.
+ *
+ * **The ring drains where there is a window and stands still where there is
+ * not**, which is the duality `FloorClock` already reads from either end: a
+ * host judging by hand has set no deadline, so there is no fraction to draw
+ * and the number counts up inside a ring that is only the object's own edge.
+ *
+ * Drained by a CSS animation off the server's deadline and re-keyed on each
+ * snapshot, because the round's bar settled all of that already — see
+ * `RoundProgress`. `Date.now()` in the render body is the bargain `RevealHold`
+ * makes for the same reason: the reading is taken once per snapshot and the
+ * animation carries it in between.
+ */
+const FloorDial: React.FC<{
+  buzz: ActiveBuzz
+  clock: ClockEstimate | null
+}> = ({ buzz, clock }) => {
+  const windowMs =
+    buzz.expiresAt === null ? null : buzz.expiresAt - buzz.atServerTime
+  const remainingMs =
+    buzz.expiresAt === null
+      ? null
+      : millisecondsUntil(clock, buzz.expiresAt, Date.now())
+
+  return (
+    <div className='floor-dial'>
+      {/*
+        Both arcs are one circle's geometry rather than a border and an overlay
+        that would have to be kept concentric at every diameter — and the
+        stroke is in the viewBox's own units, which makes it a constant share
+        of the dial the way a row is a multiple of its own type.
+      */}
+      <svg aria-hidden='true' className='ring' viewBox='0 0 100 100'>
+        <circle className='track' cx='50' cy='50' r='47' />
+        {remainingMs !== null && windowMs !== null && windowMs > 0 && (
+          <circle
+            className='left'
+            cx='50'
+            cy='50'
+            key={remainingMs}
+            pathLength='1'
+            r='47'
+            style={{
+              '--drain-duration': `${remainingMs}ms`,
+              '--drain-from': Math.min(1, remainingMs / windowMs).toFixed(3)
+            }}
+          />
+        )}
+      </svg>
+      <FloorClock buzz={buzz} clock={clock} />
+    </div>
+  )
 }
 
 /**

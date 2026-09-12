@@ -653,6 +653,27 @@ one part.
 
 ### Improvements
 
+- `[Game]` **A player's buzzer becomes the floor's dial while the floor is
+  held.** A circle nobody can press is not a button, and it was still setting
+  `BUZZ` in the ink reserved for what you cannot do, over a name and a number
+  stacked under it — three objects, and the only one timing anything was the
+  last. The ring is the window now, the clock is inside it, and the name stays
+  below: the circle takes back the size the hand had been sizing it for, and a
+  dead control leaves the tab order instead of sitting in it disabled.
+
+  **The ring drains where there is a window and stands in full ink where there
+  is not** — a floor the host judges by hand spends nothing, and a faint ring
+  there read as a dial already run out. It is the round bar's own arithmetic on
+  a circle, off the server's deadline and re-keyed per snapshot, so someone who
+  asked for no motion still gets where the window stands. The console is
+  untouched: the ring belongs to the buzzer, not to the clock.
+
+  The number is divided by how much there is to read — one digit and three are
+  not the same object — and the stage's headroom falls from `40rem` to `34rem`
+  now the clock is inside the circle rather than under it. Seven widths from
+  360 to 899 measure zero on the bank's longest question, and a 812×375 phone
+  on its side overflows 137px where it used to overflow 152 to 218.
+
 - `[Game]` **The console's final board says what *Rejouer* will relaunch.**
   Taking the setup fold off that footer — it acts on a round in flight, and
   `finished` has none — took with it the one sentence naming the game, the mode
