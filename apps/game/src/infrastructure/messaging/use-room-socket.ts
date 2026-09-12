@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useEffectEvent, useRef, useState } from 'react'
 import { z } from 'zod'
 
 import type {
@@ -101,14 +101,11 @@ export const useRoomSocket = ({
 
   const socketRef = useRef<WebSocket | null>(null)
   const samplesRef = useRef<ClockSample[]>([])
-  const onFrameRef = useRef(onFrame)
   const reconnectRef = useRef<(() => void) | null>(null)
 
-  // The latest-ref pattern rather than a dependency: a fresh `onFrame` on every
-  // render would tear the socket down and rebuild it on every render too.
-  useEffect(() => {
-    onFrameRef.current = onFrame
-  })
+  // An Effect Event rather than a dependency: a fresh `onFrame` on every render
+  // would tear the socket down and rebuild it on every render too.
+  const forwardFrame = useEffectEvent(onFrame)
 
   useEffect(() => {
     if (!enabled) {
@@ -187,7 +184,7 @@ export const useRoomSocket = ({
         const control = decodeMessage(controlFrameSchema, event.data)
 
         if (control.status === 'failure') {
-          onFrameRef.current(event.data)
+          forwardFrame(event.data)
 
           return
         }

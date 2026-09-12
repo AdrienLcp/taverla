@@ -2,6 +2,7 @@
 description: React components — the compiler owns memoization, functions hoist out, the style prop carries variables
 paths:
   - "**/*.tsx"
+  - "apps/game/src/**/*.ts"
 ---
 
 # React components
@@ -21,9 +22,20 @@ identity on every render re-runs the effect on every render — in
 `use-room-socket.ts` that means tearing down and reopening the WebSocket
 continuously, which is a correctness bug rather than a slow one.
 
-Where the value is a callback *passed in from outside* rather than one the hook
-owns, prefer the latest-ref pattern over demanding a stable identity from every
-caller — `use-room-socket.ts` does this with `onFrameRef`.
+## A value from outside is an Effect Event, not a ref
+
+Where the value comes *from outside* the hook — a callback passed in as a prop,
+or something that moves on its own like the clock estimate — reach for
+**`useEffectEvent`** rather than a latest-ref, and never demand a stable identity
+from every caller. It holds one identity for the life of the component and
+always runs the latest closure, which is what `use-room-socket.ts` does with
+`onFrame`: the socket is built once and still forwards to whatever the current
+render handed it.
+
+Two rules come with one. It is **never a dependency** — leave it out of the
+array — and it **cannot be called during render**, which is the only thing React
+guards at runtime. Calling one from an event handler works and `useSettledStatus`
+does it, but the shape React documents is a call from inside an Effect.
 
 ## A function with no closure lives at module scope
 

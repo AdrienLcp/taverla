@@ -2021,6 +2021,33 @@ one part.
 
 ### Internal
 
+- `[Game]` **`useEffectEvent` replaces the latest-ref pattern, in the three
+  places that had written it by hand.** React has owned this since **19.2** and
+  the repo was already there, so the bump is what made somebody look rather than
+  what unlocked it. `use-room-socket.ts` kept `onFrame` in a ref updated by an
+  effect with no dependency array, so a socket built once could still forward to
+  whatever the current render handed it; `use-settled-status.ts` did the same
+  with `statusRef` behind a `useCallback`; `round-audio.ts` did it twice, with
+  `clockRef` and `volumeRef`. Four refs and three effects become three Effect
+  Events, and the clock one gains a name — `millisecondsUntilStart`, where a
+  bare `clockRef.current` said nothing about why it was not a dependency.
+
+  `volumeRef` was reading over its own shoulder. `unlock` is a plain arrow
+  rebuilt on every render, so `volume` was already in scope and the ref was a
+  longer way of writing it.
+
+  It also lifts a requirement the two connection hooks were paying: `onFrame`
+  no longer needs a stable identity, so the `useCallback` around each decoder
+  goes and the compiler owns them like everything else.
+
+  **One of the three is not textbook, and it is worth knowing which.** `reveal`
+  is returned by `useSettledStatus` and pressed by `send` when a frame could not
+  be written — an event handler, where React documents a call from inside an
+  Effect. The only thing guarded at runtime is a call during render, which this
+  is not. `react-components.md` carries both rules now, and its `paths:` grew
+  `apps/game/src/**/*.ts`, because a rule about hooks was scoped to `.tsx` and
+  every hook it talks about is a `.ts` file.
+
 - **Dependencies up to latest, and not a major among them.** **React and
   `react-dom` 19.2.8 → 19.3.0**, with `@types/react` and `@types/react-dom`
   moving to 19.3.0 beside them; **Vite 8.2.2 → 8.3.0**; **Zod 4.5.4 → 4.6.1**

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useEffectEvent, useRef, useState } from 'react'
 
 import type { HostRoomView } from '@taverla/protocol/room'
 
@@ -87,8 +87,6 @@ export const useRoundAudio = ({
   /** 0 to 1. */
   volume: number
 }): RoundAudio => {
-  const clockRef = useRef(clock)
-  const volumeRef = useRef(volume)
   const loadedRoundRef = useRef<string | null>(null)
   /**
    * The blessed element is **state**, not a ref, and that is the whole of what
@@ -109,13 +107,13 @@ export const useRoundAudio = ({
     setRefusal(refused)
   }, [])
 
-  useEffect(() => {
-    clockRef.current = clock
-  })
+  // Every pong moves the clock estimate, and a dependency on it would re-arm
+  // the clip — restarting a running one — several times a second.
+  const millisecondsUntilStart = useEffectEvent((target: number): number =>
+    millisecondsUntil(clock, target, Date.now())
+  )
 
   useEffect(() => {
-    volumeRef.current = volume
-
     if (audio !== null) {
       audio.volume = volume
     }
@@ -185,7 +183,7 @@ export const useRoundAudio = ({
     let frame = 0
 
     const startWhenDue = (): void => {
-      if (millisecondsUntil(clockRef.current, startsAt, Date.now()) <= 0) {
+      if (millisecondsUntilStart(startsAt) <= 0) {
         play(audio, disarm)
 
         return
@@ -196,10 +194,7 @@ export const useRoundAudio = ({
 
     const timer = window.setTimeout(
       startWhenDue,
-      Math.max(
-        0,
-        millisecondsUntil(clockRef.current, startsAt, Date.now()) - SPIN_LEAD_MS
-      )
+      Math.max(0, millisecondsUntilStart(startsAt) - SPIN_LEAD_MS)
     )
 
     return () => {
@@ -222,7 +217,7 @@ export const useRoundAudio = ({
       const blessed = new Audio(SILENCE)
 
       blessed.preload = 'auto'
-      blessed.volume = volumeRef.current
+      blessed.volume = volume
 
       // Kept only once the browser has actually let it play. Storing it either
       // way is what made a refused first press permanent: the guard above then

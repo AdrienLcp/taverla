@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useEffectEvent, useRef, useState } from 'react'
 
 import type { SocketStatus } from './use-room-socket'
 
@@ -32,18 +32,13 @@ export type SettledStatus = {
  */
 export const useSettledStatus = (status: SocketStatus): SettledStatus => {
   const [settled, setSettled] = useState<SocketStatus>(status)
-  const statusRef = useRef(status)
   const blinkTimerRef = useRef<number | undefined>(undefined)
 
-  useEffect(() => {
-    statusRef.current = status
-  })
-
-  const reveal = useCallback(() => {
+  const reveal = useEffectEvent(() => {
     window.clearTimeout(blinkTimerRef.current)
     blinkTimerRef.current = undefined
-    setSettled(statusRef.current)
-  }, [])
+    setSettled(status)
+  })
 
   useEffect(() => {
     // Only a fall *out of* `open` is worth holding, and only once: the retry
@@ -56,7 +51,7 @@ export const useSettledStatus = (status: SocketStatus): SettledStatus => {
     }
 
     blinkTimerRef.current ??= window.setTimeout(reveal, BLINK_CEILING_MS)
-  }, [reveal, settled, status])
+  }, [settled, status])
 
   useEffect(
     () => () => {

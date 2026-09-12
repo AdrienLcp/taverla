@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 
 import { decodeMessage } from '@taverla/protocol/codec'
 import type { RoomCode } from '@taverla/protocol/identifiers'
@@ -24,13 +24,15 @@ export const useHostConnection = (
 ): HostConnection => {
   const [view, setView] = useState<HostRoomView | null>(null)
 
-  const onFrame = useCallback((raw: string) => {
+  // No `useCallback`: `useRoomSocket` holds this in an Effect Event, so its
+  // identity is nothing the socket reads.
+  const onFrame = (raw: string): void => {
     const decoded = decodeMessage(hostServerMessageSchema, raw)
 
     if (decoded.status === 'success' && 'view' in decoded.message) {
       setView(decoded.message.view)
     }
-  }, [])
+  }
 
   const socket = useRoomSocket({
     enabled: true,
