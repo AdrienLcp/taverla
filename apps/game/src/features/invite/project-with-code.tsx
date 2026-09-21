@@ -11,17 +11,11 @@ import { invitePathFor } from '@/infrastructure/router/navigation'
 import { Button } from '@/presentation/components/button'
 import { Disclosure } from '@/presentation/components/disclosure'
 import { TextField } from '@/presentation/components/text-field'
+import {
+  type FieldError,
+  fieldErrorMessage
+} from '@/presentation/i18n/field-error'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
-import type { PlainTranslationKey } from '@/presentation/i18n/translation'
-
-/** Held as a key rather than a rendered string, so it follows a locale switch. */
-type FieldError =
-  | { key: PlainTranslationKey }
-  | {
-      key: 'join.roomCode.unsupportedCharacters'
-      values: { characters: string }
-    }
-  | { key: 'join.roomCode.wrongLength'; values: { length: number } }
 
 /**
  * The third door to the poster, and the only one that starts from a code rather
@@ -90,13 +84,7 @@ export const ProjectWithCode: React.FC = () => {
           autoCapitalize='characters'
           autoComplete='off'
           description={translate('invite.door.description')}
-          errorMessage={
-            codeError === null
-              ? undefined
-              : 'values' in codeError
-                ? translate(codeError.key, codeError.values)
-                : translate(codeError.key)
-          }
+          errorMessage={fieldErrorMessage({ error: codeError, translate })}
           isInvalid={codeError !== null}
           label={translate('join.roomCode.label')}
           maxLength={ROOM_CODE_LENGTH + 2}

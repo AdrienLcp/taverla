@@ -1,6 +1,5 @@
 import { defineTranslation } from '@taverla/core/i18n/vendor/define-translation'
-
-import type { Dictionary } from './translation'
+import { defineDictionary } from '@taverla/core/i18n/vendor/dictionary'
 
 /**
  * French typography puts a non-breaking space before `?`, `!` and `:`. Writing
@@ -11,7 +10,7 @@ import type { Dictionary } from './translation'
  * and 1, which is the whole reason these keys carry plural forms rather than a
  * word chosen at the call site.
  */
-export const FR_DICTIONARY: Dictionary = {
+export const FR_DICTIONARY = defineDictionary({
   blindtest: {
     answer: {
       anyOrder:
@@ -581,4 +580,4 @@ export const FR_DICTIONARY: Dictionary = {
     scored: '+{points:number}',
     speedBonus: 'dont {points:number} pour la vitesse'
   }
-}
+})

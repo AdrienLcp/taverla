@@ -4,11 +4,7 @@ import type { QuestionCategory } from '@taverla/protocol/question'
 import type { AnswerMode } from '@taverla/protocol/room'
 
 import type { ClipRefusal } from '@taverla/core/blindtest/clip-audio'
-import type {
-  DictionaryFor,
-  DotPath,
-  PlainKey
-} from '@taverla/core/i18n/vendor/dictionary'
+import type { DotPath, PlainKey } from '@taverla/core/i18n/vendor/dictionary'
 import type { Translator } from '@taverla/core/i18n/vendor/translator'
 import type { BuzzBlocker } from '@taverla/core/round/buzz-eligibility'
 
@@ -24,8 +20,6 @@ export type TranslationKey = DotPath<typeof EN_DICTIONARY>
  * values cannot be translated by whoever ends up reading it back.
  */
 export type PlainTranslationKey = PlainKey<typeof EN_DICTIONARY>
-
-export type Dictionary = DictionaryFor<typeof EN_DICTIONARY>
 
 export type Translate = Translator<typeof EN_DICTIONARY>
 

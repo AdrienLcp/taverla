@@ -11,22 +11,14 @@ import { roomExists } from '@/infrastructure/api/taverla-api'
 import { playPathFor } from '@/infrastructure/router/navigation'
 import { Button } from '@/presentation/components/button'
 import { TextField } from '@/presentation/components/text-field'
-import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import {
-  apiErrorKey,
-  type PlainTranslationKey
-} from '@/presentation/i18n/translation'
+  type FieldError,
+  fieldErrorMessage
+} from '@/presentation/i18n/field-error'
+import { useTranslate } from '@/presentation/i18n/i18n-provider'
+import { apiErrorKey } from '@/presentation/i18n/translation'
 
 import './join-with-code.sass'
-
-/** Held as a key rather than a rendered string, so it follows a locale switch. */
-type FieldError =
-  | { key: PlainTranslationKey }
-  | {
-      key: 'join.roomCode.unsupportedCharacters'
-      values: { characters: string }
-    }
-  | { key: 'join.roomCode.wrongLength'; values: { length: number } }
 
 /**
  * The half of joining that is not a QR code, and shell rather than blind test:
@@ -97,13 +89,7 @@ export const JoinWithCode: React.FC = () => {
           autoCapitalize='characters'
           autoComplete='off'
           description={translate('join.roomCode.description')}
-          errorMessage={
-            codeError === null
-              ? undefined
-              : 'values' in codeError
-                ? translate(codeError.key, codeError.values)
-                : translate(codeError.key)
-          }
+          errorMessage={fieldErrorMessage({ error: codeError, translate })}
           isInvalid={codeError !== null}
           label={translate('join.roomCode.label')}
           maxLength={ROOM_CODE_LENGTH + 2}

@@ -2585,6 +2585,18 @@ one part.
   tests prove the shape a real bundler split produces rather than a promise a
   test made up.
 
+  **Which is why a dictionary is now written, never annotated.** A
+  `: DictionaryFor<typeof EN_DICTIONARY>` annotation widens every message to
+  `string`, and a widened message has nothing left for the comparison above to
+  read — `satisfies` does not save it either, since it changes the
+  excess-property check and not the widening. A `const` type parameter does,
+  and that is what `defineDictionary` is. `FR_DICTIONARY` takes it, the
+  annotation goes, and the `Dictionary` type it was written for leaves
+  `translation.ts` with nothing left to annotate.
+  `fieldErrorMessage` moves to `presentation/i18n/field-error.ts`, which is
+  where the two front doors were each keeping their own copy of the same union
+  and the same ternary.
+
 - `[Game]` **The breakpoint is a mixin now, not a comparison repeated ten
   times.** `@include layout.wide` and `layout.narrow` wrap the two media
   queries, and `$wide-screen` is left with three references: its declaration,
