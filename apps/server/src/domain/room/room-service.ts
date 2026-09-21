@@ -186,7 +186,7 @@ export const claimHost = ({
   room.hostSessionId = sessionId
   room.hostLeftAt = null
 
-  return Result.success(undefined)
+  return Result.success()
 }
 
 /**

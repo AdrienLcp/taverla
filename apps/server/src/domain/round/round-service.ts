@@ -233,7 +233,7 @@ export const registerBuzz = ({
   pauseRoundClock(round, now)
   touch(room, now)
 
-  return Result.success(undefined)
+  return Result.success()
 }
 
 /**
@@ -303,7 +303,7 @@ export const clearLockouts = ({
   round.lockedOutPlayerIds.clear()
   touch(room, now)
 
-  return Result.success(undefined)
+  return Result.success()
 }
 
 export type AnswerRejection = Extract<
@@ -378,7 +378,7 @@ export const registerAnswer = ({
   bank({ graded, held, now, playerId, round })
   touch(room, now)
 
-  return Result.success(undefined)
+  return Result.success()
 }
 
 const isDone = (attempts: PlayerAttempts): boolean =>
@@ -613,7 +613,7 @@ export const registerLie = ({
   content.lies.push({ playerId, text: lie })
   touch(room, now)
 
-  return Result.success(undefined)
+  return Result.success()
 }
 
 /**
@@ -712,7 +712,7 @@ export const registerVote = ({
   content.votes.push({ candidateId, playerId })
   touch(room, now)
 
-  return Result.success(undefined)
+  return Result.success()
 }
 
 /**

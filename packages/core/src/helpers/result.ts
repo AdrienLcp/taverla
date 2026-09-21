@@ -1,19 +1,35 @@
-export type Result<TData, TError> =
-  | { data: TData; status: 'success' }
-  | { error: TError; status: 'failure' }
+const STATUS_FAILURE = 'failure'
+const STATUS_SUCCESS = 'success'
+const UNKNOWN_ERROR = 'unknown'
 
-const success = <TData>(data: TData): Result<TData, never> => ({
-  data,
-  status: 'success'
-})
+type UnknownError = typeof UNKNOWN_ERROR
 
-const failure = <TError>(error: TError): Result<never, TError> => ({
-  error,
-  status: 'failure'
-})
+export type FailureResult<E = UnknownError> = {
+  error: E
+  status: typeof STATUS_FAILURE
+}
 
-/**
- * Both the type and its constructors under one name, so a call site needs a
- * single import to declare a `Result<T, E>` and to build one.
- */
+type SuccessResult<T = void> = T extends void
+  ? { status: typeof STATUS_SUCCESS }
+  : { data: T; status: typeof STATUS_SUCCESS }
+
+export type Result<T = void, E = UnknownError> =
+  | FailureResult<E>
+  | SuccessResult<T>
+
+function success(): SuccessResult<void>
+function success<T>(data: T): SuccessResult<T>
+function success<T>(data?: T) {
+  if (data === undefined) return { status: STATUS_SUCCESS }
+  return { data, status: STATUS_SUCCESS }
+}
+
+function failure(): FailureResult<UnknownError>
+function failure<const E>(error: E): FailureResult<E>
+function failure<const E>(error?: E) {
+  if (error === undefined)
+    return { error: UNKNOWN_ERROR, status: STATUS_FAILURE }
+  return { error, status: STATUS_FAILURE }
+}
+
 export const Result = { failure, success }

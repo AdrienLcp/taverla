@@ -129,7 +129,7 @@ const refillWhenEmpty = async ({
   settings: BlindtestSettings
 }): Promise<Result<void, MusicSourceError>> => {
   if (room.trackPool.length > 0) {
-    return Result.success(undefined)
+    return Result.success()
   }
 
   const fetched = await fetchTracksFor({
@@ -151,7 +151,7 @@ const refillWhenEmpty = async ({
 
   room.trackPool = unplayed
 
-  return Result.success(undefined)
+  return Result.success()
 }
 
 /** Four is the shape of the question: enough to be a guess, few enough to read. */
