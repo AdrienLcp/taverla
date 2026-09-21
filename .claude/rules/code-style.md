@@ -94,3 +94,19 @@ how a render-order tweak reorders somebody's state. The same goes for
 
 An in-place `sort` survives only where the array was built inside the function
 and never escapes it.
+
+## A `Result` succeeds with nothing, never with `undefined`
+
+`Result.success()` *is* the whole of a `Result<void, …>` — the success arm
+carries no `data` key at all. `Result.success(undefined)` builds the identical
+value with the absence spelled out, and `Result.failure(undefined)` is worse:
+it is typed `FailureResult<undefined>` while returning `{ error: 'unknown' }`.
+
+Neither can be made a type error — `undefined extends void`, so the two
+successes are the same type — so they are refused by
+`biome-plugins/no-undefined-argument-result.grit` instead, which runs in
+`pnpm lint`, in CI and in the pre-commit hook.
+
+`packages/core/src/helpers/result.ts` and its test are **byte-identical to
+Stargazer's copy** and are the same file heading for a shared toolkit. Change
+the shape there, not here.

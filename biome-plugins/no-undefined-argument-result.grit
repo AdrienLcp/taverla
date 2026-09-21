@@ -1,0 +1,12 @@
+language js
+
+or {
+  `Result.success($argument)` as $call where {
+    $argument <: `undefined`,
+    register_diagnostic(span=$call, message="A success that carries nothing is `Result.success()`. Passing `undefined` builds the very same value with the absence spelled out.", severity="error")
+  },
+  `Result.failure($argument)` as $call where {
+    $argument <: `undefined`,
+    register_diagnostic(span=$call, message="`Result.failure(undefined)` is typed `FailureResult<undefined>` and returns `{ error: 'unknown' }`. Write `Result.failure()` for the unknown error, or name the one you mean.", severity="error")
+  }
+}

@@ -10,6 +10,7 @@ apps/game           → One Vite SPA serving both surfaces, by route.
 packages/protocol   → The wire contract (Zod). Depends on nothing but zod.
 packages/core       → Pure domain rules. Depends on protocol for types.
 docs/plans/         → The staged build plan; each file is one session's work.
+biome-plugins/      → GritQL lint rules, where Biome ships no built-in.
 ```
 
 ```
