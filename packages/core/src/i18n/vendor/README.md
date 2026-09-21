@@ -7,7 +7,7 @@ project is the whole install.
 | File | What it holds |
 | --- | --- |
 | `define-translation.ts` | `defineTranslation`, and the options a placeholder demands |
-| `dictionary.ts` | `defineDictionary`, `DictionaryFor`, and every type read off a message |
+| `dictionary.ts` | `defineDictionary`, what one locale owes another, and every type read off a message |
 | `translator.ts` | `createTranslator` — the lookup and the substitution |
 | `negotiate-locale.ts` | `negotiateLocale` — which locale a preference list asks for |
 | `create-i18n.ts` | `createI18n` — the registry binding each locale to its dictionary |
@@ -25,22 +25,25 @@ nothing. Where the preferences come from and where the dictionaries live is the
 caller's business — which is what lets the same code serve a browser booting, a
 server rendering a mail, and a test.
 
-### Two doors
+### One door
 
-**`createI18n` is the one to use.** It takes every locale's dictionary once and
-hands back an object where a locale is all anyone passes afterwards.
+**`createI18n` is what a project calls.** It takes a table of locales and hands
+back an object where a locale is all anyone passes afterwards. A locale's entry
+is either its dictionary or a function fetching it, and the guarantees are the
+same either way — which is why how a language ships is not a second decision to
+make.
 
-`createTranslator` is underneath it, and takes a locale *and* a dictionary. Use
-it directly only when the dictionary arrives at runtime — an `import()`, a fetch
-— because nothing there can check that the two arguments go together: a
-translator built with the French dictionary and the tag `'en'` reads French and
-counts in English.
+`createTranslator` is underneath, and takes a locale *and* a dictionary. Nothing
+there can check that the two go together: a translator built with the French
+dictionary and the tag `'en'` reads French and counts in English. It is for a
+dictionary that comes from somewhere TypeScript cannot see — a server, a CMS —
+and a normal project never calls it.
 
 ## Getting started
 
 ```ts
 import { createI18n } from './create-i18n'
-import { defineDictionary, type DictionaryFor } from './dictionary'
+import { defineDictionary } from './dictionary'
 
 const EN = defineDictionary({
   greeting: 'Hello {name}',
@@ -48,11 +51,11 @@ const EN = defineDictionary({
   title: 'Dashboard'
 })
 
-const FR: DictionaryFor<typeof EN> = {
+const FR = defineDictionary({
   greeting: 'Bonjour {name}',
   room: { empty: 'Personne pour l’instant' },
   title: 'Tableau de bord'
-}
+})
 
 export const i18n = createI18n({
   defaultLocale: 'en',
@@ -70,14 +73,15 @@ translate('title') // 'Tableau de bord'
 locale implements, and the one every key and value is typed from — so the keys
 above are English even when the strings read are French.
 
-The registry exposes five things:
+The registry exposes six things:
 
 | | |
 | --- | --- |
-| `i18n.translator(locale)` | the translator for that locale |
+| `i18n.translator(locale)` | the translator for that locale, synchronously |
+| `i18n.load(locale)` | fetches a dictionary registered as a loader, and resolves with the translator that reads it |
 | `i18n.negotiate(preferred)` | which registered locale a list of BCP-47 tags asks for |
 | `i18n.compare(locale, options?)` | a comparator for `Array.sort`, so `Émile` lands between `Adrien` and `Zoé` rather than after both |
-| `i18n.locales` | every registered locale |
+| `i18n.locales` | every registered locale, loaded or not |
 | `i18n.defaultLocale` | the one `negotiate` falls back to |
 
 A translator is built once per locale and kept, so `translator('fr')` returns
@@ -174,7 +178,7 @@ translate('updated', { when: -1 }) // 'Updated yesterday'
 translate('spokenIn', { language: 'fr' }) // 'Spoken in French'
 ```
 
-Two things about `:plural` that nothing in the syntax hints at:
+Three things about `:plural` that nothing in the syntax hints at:
 
 - **The count is written `{?}` inside a branch**, not `#` and not `{count}`.
   `{?}` is replaced by the count run through `Intl.NumberFormat`, configurable
@@ -185,6 +189,28 @@ Two things about `:plural` that nothing in the syntax hints at:
   dictionary declares one. `other` is the only branch a plural map must have — a
   category the rules select but the map omits falls back to it.
   `plural.count.type` chooses between cardinal and ordinal rules.
+- **A branch may carry placeholders of its own**, and so may an enum member:
+  `other: '{?} messages from {sender}'` prints the sender, and the caller is
+  asked for one exactly as the sentence would ask. A branch is read once, like
+  the sentence — a value substituted into it is never read back as a
+  placeholder, and a branch naming the placeholder it was selected for leaves
+  that placeholder standing rather than expanding forever.
+
+```ts
+const EN = defineDictionary({
+  inbox: defineTranslation('{count:plural}', {
+    plural: {
+      count: {
+        one: '{?} message from {sender}',
+        other: '{?} messages from {sender}',
+        zero: 'Nothing from {sender}'
+      }
+    }
+  })
+})
+
+translate('inbox', { count: 4, sender: 'Ada' }) // '4 messages from Ada'
+```
 
 ## Type guarantees
 
@@ -236,48 +262,136 @@ defineDictionary({ status: 'Status: {value:enum}' })
 function. The check has to name `Dictionary` explicitly to catch them, because a
 mapped type over a primitive returns that primitive unexamined.
 
+**A second locale that does not say the same thing does not compile.** Not only
+the same keys, at every depth: the same placeholders inside each message, the
+same marked spans, the same value type behind each name. Whichever way the
+dictionary reaches the registry — written into the call, imported, or fetched by
+a loader long after the build — it is held to the reference before it can be
+registered. What that asks of the way a dictionary is written is the next
+section.
+
+```ts
+// Does not compile: Type 'string' is not assignable to type 'never'.
+createI18n({
+  defaultLocale: 'en',
+  dictionaries: {
+    en: defineDictionary({ greeting: 'Hello {name}' }),
+    fr: defineDictionary({ greeting: 'Bonjour {nom}' })
+  }
+})
+```
+
 **A locale the registry does not hold does not compile**, and neither does a
 `defaultLocale` absent from the dictionaries.
 
 ## Adding a locale
 
-Write the dictionary as an implementation of the reference one, by annotating it
-with `DictionaryFor`, then add it to the registry. The keys `translate` accepts
-do not change: they are the reference's, always.
+Write it with `defineDictionary`, like the reference one, then add it to the
+registry. The keys `translate` accepts do not change: they are the reference's,
+always.
 
-An annotation rather than a function call, so that TypeScript's excess property
-check does half the work: a missing key is a missing required property, and an
-invented one is rejected at the literal, at every depth. Plural categories may
-differ between locales — French answers `one` where English answers `other` — so
-only `other` is required of either; an enum, on the other hand, must keep the
-same members, since those are what the calling code passes.
+The registry is what holds the two together, and it compares more than the keys:
 
-There is **no key-level fallback to another locale**: the annotation makes a
-missing key fail to compile, which is a better place to find out than a screen
-showing English inside French.
+```ts
+const EN = defineDictionary({ greeting: 'Hello {name}' })
+const FR = defineDictionary({ greeting: 'Bonjour {nom}' })
+
+createI18n({ defaultLocale: 'en', dictionaries: { en: EN, fr: FR } })
+//                                                        ✗ 'string' is not assignable to 'never'
+```
+
+A missing key, an invented one at any depth, a placeholder translated along with
+the sentence, one the locale drops or invents, a `{count}` written where the
+reference formats `{count:number}`, a `<link>` span left unopened: each fails to
+compile. The placeholders a branch or an enum member carries are compared along
+with the rest, as one set across the branches: a language naming the sender in
+its plural alone still says the same thing, one dropping it from every branch
+does not. Plural categories may differ, since the languages do — French answers
+`one` where English answers `other`, so only `other` is required of either — and
+an enum keeps the same members, since those are what the calling code passes.
+Word order is free: what is compared is what a message asks of the outside, never
+where it asks for it.
+
+**`defineDictionary` is not decoration here — it is what makes that comparison
+possible.** The placeholders are read out of the message itself, so the message
+has to still be a literal type when the registry sees it, and an annotation
+widens every one of them to `string`:
+
+```ts
+const FR: DictionaryFor<typeof EN> = { … }          // ✗ every message is now `string`
+const FR = { … } satisfies DictionaryFor<typeof EN> // ✗ so is this one
+```
+
+`satisfies` is no help: its contextual type is that same `string`. A dictionary
+that arrives widened is refused rather than waved through — accepting it would
+let exactly the mistake this catches pass unexamined. `DictionaryFor` stays, for
+typing a variable that holds a dictionary; it is no longer how one is written.
+
+A dictionary written straight into the `createI18n` call needs no wrapping, since
+the call preserves its literals itself. One living in a module of its own — which
+is how a lazily loaded locale ships — does.
+
+There is **no key-level fallback to another locale**: a missing key fails to
+compile, which is a better place to find out than a screen showing English inside
+French.
+
+Whether the registry then holds that dictionary or fetches it is the next
+section, and changes nothing above.
 
 ### Loading only the dictionary in use
 
-A registry holds every dictionary, so a bundler ships every dictionary. An app
-large enough to care imports them itself and drops to the lower door:
+A dictionary written into the registry is a dictionary the bundler ships. At two
+languages that is nothing; at five it is every reader downloading four languages
+they cannot read. So a locale may register a *loader* instead, and none of the
+checking changes — the type of `import('./dictionary-de')` is known long before
+it is called:
 
 ```ts
-const DICTIONARIES = {
-  en: () => import('./dictionary-en'),
-  fr: () => import('./dictionary-fr')
-}
-
-const { default: dictionary } = await DICTIONARIES[locale]()
-const translate = createTranslator<Reference>({ dictionary, locale })
+export const i18n = createI18n({
+  defaultLocale: 'en',
+  dictionaries: {
+    en: EN,                               // the reference: in the bundle
+    de: () => import('./dictionary-de'),  // fetched when it is asked for
+    es: () => import('./dictionary-es'),
+    fr: () => import('./dictionary-fr')
+  }
+})
 ```
 
-The reference dictionary is still imported for its *type*, which costs nothing at
-runtime — `import type` is erased. What the caller owes this arrangement is an
-answer for the load failing: keep the translator already in hand, or hold the
-first paint until the dictionary lands. The library has no opinion, and no
-partial-dictionary mode to fall into. It also owes the caching `createI18n` does
-for free, since a translator rebuilt on every render is a new identity every
-time.
+A loaded module `export default`s its dictionary, written with
+`defineDictionary` like any other:
+
+```ts
+// dictionary-de.ts — its own chunk, fetched only by a reader who needs it
+export default defineDictionary({
+  greeting: 'Hallo {name}',
+  room: { empty: 'Noch niemand hier' },
+  title: 'Übersicht'
+})
+```
+
+Nothing about the checking changes: the registry compares that module's type
+against the reference before the loader is ever called, so a renamed placeholder
+in a language nobody on the team reads still fails the build.
+
+The default locale's entry is a dictionary and never a loader: it is the
+reference every key and value is typed from, so a late arrival would leave
+TypeScript knowing nothing at the moment `translate('…')` is written.
+
+**`translator(locale)` stays synchronous and never fails.** It answers with the
+locale's own translator once that dictionary is in hand, and the default locale's
+until then — so the first frame renders in a language the reader can read rather
+than behind a spinner, and swaps when the dictionary lands:
+
+```ts
+const translate = i18n.translator(locale) // English on a cold load
+await i18n.load(locale)                   // fetches once, however many callers ask
+i18n.translator(locale)                   // German, and a new identity to re-render on
+```
+
+A failed `load` rejects and forgets the attempt, so asking again retries.
+Ignoring that rejection is safe: the reader stays on the default locale, which is
+what they were already reading.
 
 ## A link or a bold word inside a sentence
 
@@ -322,7 +436,7 @@ lib/                    ← this folder, copied, never edited per project
   create-i18n.ts        …
 i18n.ts                 ← the registry: your locales, your dictionaries
 dictionary-en.ts        ← the reference
-dictionary-fr.ts        ← DictionaryFor<typeof EN_DICTIONARY>
+dictionary-fr.ts        ← defineDictionary, export default if it loads late
 i18n-provider.tsx       ← if the app is React: context, switching, persistence
 ```
 
@@ -350,8 +464,9 @@ dynamically can get there.
 reasoning, and unreachable for a dictionary written in the repo.
 
 **`createTranslator` cannot check that its dictionary matches its locale.**
-`createI18n` exists to make that pairing impossible to get wrong; reaching past
-it for a lazily loaded dictionary takes the guarantee back off the table.
+`createI18n` exists to make that pairing impossible to get wrong, whether the
+dictionary is in the bundle or fetched; reaching past it for a dictionary
+TypeScript cannot see takes the guarantee back off the table.
 
 **Intl formatters are cached per translator, keyed on the options as
 written.** Building one resolves locale data and costs far more than using one,
@@ -369,6 +484,18 @@ spans.
 before the outer function could be handed a string, and a string is all a
 function receives. `<b>very <i>very</i> bold</b>` does not work; two sibling
 spans do.
+
+**A placeholder inside a branch gets no options of its own.** What a typed
+placeholder demands — the unit `:relative` needs, the kind of name
+`:displayname` looks up, the map behind an `:enum` — is read off the message and
+never off the branches. So `other: '{?} messages, last {when:relative}'`
+compiles with no `relative.when` anywhere, and leaves `{when:relative}` standing
+on screen. Keep the typed placeholders in the sentence and let a branch carry
+the plain ones.
+
+**A span inside a branch is not cut.** `rich` splits the sentence before
+anything is substituted, so a `<b>` written into a plural form or an enum member
+reaches the screen as text. The spans a message marks have to be in the message.
 
 **Type-level rules are tested as types, not as behaviour.** Everything above
 that says "does not compile" is asserted in `translator.types.test.ts` as the

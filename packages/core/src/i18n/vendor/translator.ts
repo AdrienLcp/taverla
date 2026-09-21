@@ -201,16 +201,23 @@ const FORMATTED_COUNT = '{?}'
  * written out and never looked at again. Substituting argument by argument
  * would feed each result back to the next argument's turn.
  *
+ * The one thing read twice is the alternative a placeholder resolved to — a
+ * plural form, an enum member — which `expand` runs through a pass of its own.
+ * That is dictionary text rather than a caller's value, so the rule above is
+ * untouched.
+ *
  * A value of the wrong type, or one the message never asked for, leaves its
  * placeholder standing rather than throwing: one bad value costs one word, not
  * the whole sentence.
  */
 const substitute = ({
+  expanding = [],
   formatters,
   message,
   options,
   values
 }: {
+  expanding?: readonly string[]
   formatters: Formatters
   message: string
   options: TranslationOptions
@@ -236,10 +243,22 @@ const substitute = ({
               options: options.displayname?.[name]
             }) ?? placeholder)
           : placeholder
-      case 'enum':
-        return typeof value === 'string'
-          ? (options.enum?.[name]?.[value] ?? placeholder)
-          : placeholder
+      case 'enum': {
+        const member =
+          typeof value === 'string' ? options.enum?.[name]?.[value] : undefined
+
+        return member === undefined
+          ? placeholder
+          : expand({
+              expanding,
+              formatters,
+              message: member,
+              name,
+              options,
+              placeholder,
+              values
+            })
+      }
       case 'list':
         return Array.isArray(value)
           ? formatters.list(options.list?.[name]).format(value)
@@ -250,10 +269,18 @@ const substitute = ({
           : placeholder
       case 'plural':
         return typeof value === 'number'
-          ? pluralize({
-              count: value,
+          ? expand({
+              expanding,
               formatters,
-              forms: options.plural?.[name]
+              message: pluralize({
+                count: value,
+                formatters,
+                forms: options.plural?.[name]
+              }),
+              name,
+              options,
+              placeholder,
+              values
             })
           : placeholder
       case 'relative':
@@ -268,6 +295,48 @@ const substitute = ({
         return String(value)
     }
   })
+
+/**
+ * A plural form and an enum member are dictionary text, so a placeholder one
+ * carries is substituted like the rest of the sentence — `{?} messages from
+ * {sender}` prints the sender rather than the word. `rich` already substitutes
+ * inside the spans it cuts, and the two paths would otherwise disagree.
+ *
+ * Only the alternative the dictionary chose is read again, never a caller's
+ * value: feeding a value back through is what prints a number of seconds inside
+ * a player who named themselves `{seconds}`.
+ *
+ * `expanding` is the floor the recursion has none of otherwise. A form naming
+ * the placeholder it was selected for — `other: '{count:plural} left'` under
+ * `count` — would expand forever, so a name already being expanded leaves its
+ * placeholder standing, which is what a value of the wrong type does too.
+ */
+const expand = ({
+  expanding,
+  formatters,
+  message,
+  name,
+  options,
+  placeholder,
+  values
+}: {
+  expanding: readonly string[]
+  formatters: Formatters
+  message: string
+  name: string
+  options: TranslationOptions
+  placeholder: string
+  values: Record<string, unknown>
+}): string =>
+  expanding.includes(name)
+    ? placeholder
+    : substitute({
+        expanding: [...expanding, name],
+        formatters,
+        message,
+        options,
+        values
+      })
 
 /**
  * Neither English nor French has a CLDR `zero` category, so a `zero` form would

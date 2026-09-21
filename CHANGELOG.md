@@ -2569,6 +2569,22 @@ one part.
   The library now lives in its own repository, `C:/git/typed-i18n`, from which
   both copies are taken verbatim.
 
+  **Three fixes came back from it in one copy.** A locale may register a loader
+  rather than a dictionary — `() => import('./dictionary-de')` — and
+  `translator(locale)` stays synchronous through it, answering from the default
+  locale until the dictionary lands; `load` dedupes concurrent calls and forgets
+  a failed one, so asking again retries. Placeholders are compared *across*
+  locales rather than checked within one: a renamed, dropped, invented or
+  retyped placeholder, and a dropped `<link>` span, each fail to compile —
+  behind a loader too, before it is ever called. And a placeholder inside a
+  plural form or an enum member is substituted at last, so
+  `other: '{?} messages from {sender}'` prints the sender; only dictionary text
+  is re-read on that pass, never a caller's value, which is what keeps a player
+  named `{seconds}` from being read as a placeholder.
+  `dictionary-de.fixture.ts` is a dictionary in a module of its own, so the
+  tests prove the shape a real bundler split produces rather than a promise a
+  test made up.
+
 - `[Game]` **The breakpoint is a mixin now, not a comparison repeated ten
   times.** `@include layout.wide` and `layout.narrow` wrap the two media
   queries, and `$wide-screen` is left with three references: its declaration,

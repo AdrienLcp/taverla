@@ -6,6 +6,14 @@ import { createTranslator } from './translator'
 
 const REFERENCE = defineDictionary({
   echo: '{name}, hello {name}',
+  inbox: defineTranslation('{count:plural}', {
+    plural: {
+      count: {
+        one: '{?} message from {sender}',
+        other: '{?} messages from {sender}'
+      }
+    }
+  }),
   menu: { built: 'Build {build}' },
   posted: defineTranslation('Posted {when:relative}', {
     relative: { when: { numeric: 'auto', unit: 'day' } }
@@ -20,6 +28,9 @@ const REFERENCE = defineDictionary({
   }),
   spokenIn: defineTranslation('Spoken in {language:displayname}', {
     displayname: { language: { type: 'language' } }
+  }),
+  standing: defineTranslation('{place:enum}', {
+    enum: { place: { first: '{name} wins', second: '{name} came close' } }
   }),
   terms: 'Read the <link>terms</link> before playing',
   waiting: defineTranslation('{count:plural}', {
@@ -39,6 +50,14 @@ const REFERENCE = defineDictionary({
 
 const FRENCH: DictionaryFor<typeof REFERENCE> = {
   echo: '{name}, bonjour {name}',
+  inbox: defineTranslation('{count:plural}', {
+    plural: {
+      count: {
+        one: '{?} message de {sender}',
+        other: '{?} messages de {sender}'
+      }
+    }
+  }),
   menu: { built: 'Version {build}' },
   posted: defineTranslation('Publié {when:relative}', {
     relative: { when: { numeric: 'auto', unit: 'day' } }
@@ -53,6 +72,11 @@ const FRENCH: DictionaryFor<typeof REFERENCE> = {
   }),
   spokenIn: defineTranslation('Parlé en {language:displayname}', {
     displayname: { language: { type: 'language' } }
+  }),
+  standing: defineTranslation('{place:enum}', {
+    enum: {
+      place: { first: '{name} gagne', second: '{name} a frôlé la victoire' }
+    }
   }),
   terms: 'Lis les <link>conditions</link> avant de jouer',
   waiting: defineTranslation('{count:plural}', {
@@ -101,6 +125,17 @@ describe('plural', () => {
   it('[plural] drops the count where the form asks for it, and nowhere else', () => {
     expect(inEnglish('waiting', { count: 3 })).toBe('3 have answered')
   })
+
+  // A form is dictionary text like the sentence that selected it, so what it
+  // writes besides the count is substituted too. Only `{?}` used to be.
+  it('[plural] substitutes a placeholder the selected form carries', () => {
+    expect(inEnglish('inbox', { count: 1, sender: 'Ada' })).toBe(
+      '1 message from Ada'
+    )
+    expect(inFrench('inbox', { count: 4, sender: 'Ada' })).toBe(
+      '4 messages de Ada'
+    )
+  })
 })
 
 describe('formatting', () => {
@@ -137,6 +172,15 @@ describe('formatting', () => {
     expect(inEnglish('winner', { place: 'first' })).toBe('The winner takes it')
     expect(inFrench('winner', { place: 'second' })).toBe('C’est le deuxième')
   })
+
+  it('[enum] substitutes a placeholder the selected member carries', () => {
+    expect(inEnglish('standing', { name: 'Ada', place: 'first' })).toBe(
+      'Ada wins'
+    )
+    expect(inFrench('standing', { name: 'Ada', place: 'second' })).toBe(
+      'Ada a frôlé la victoire'
+    )
+  })
 })
 
 describe('substitution', () => {
@@ -159,6 +203,14 @@ describe('substitution', () => {
   it('[translate] writes a value out rather than reading it back as a placeholder', () => {
     expect(inEnglish('menu.built', { build: '{seconds:number}' })).toBe(
       'Build {seconds:number}'
+    )
+  })
+
+  // Only the form the dictionary selected is read again, never what the caller
+  // wrote into it: a sender who names themselves `{count:plural}` is a sender.
+  it('[translate] holds that rule inside a form it expanded', () => {
+    expect(inEnglish('inbox', { count: 2, sender: '{count:plural}' })).toBe(
+      '2 messages from {count:plural}'
     )
   })
 })
@@ -227,6 +279,27 @@ describe('a message missing the forms its placeholder needs', () => {
 
   it('[translate] falls back to the count, formatted by nobody', () => {
     expect(translate('impact', { count: 3 })).toBe('This impacts 3')
+  })
+})
+
+// A form naming the placeholder it was selected for is the one shape the
+// expansion has no floor of its own to stop on. It refuses to re-enter a name it
+// is already inside, and leaves that placeholder standing — the answer a value
+// of the wrong type gets, for the same reason: one word, not the sentence.
+describe('a plural form that names its own placeholder', () => {
+  const LOOPING = defineDictionary({
+    left: defineTranslation('{count:plural}', {
+      plural: { count: { other: '{count:plural} left' } }
+    })
+  })
+
+  const translate = createTranslator<typeof LOOPING>({
+    dictionary: LOOPING,
+    locale: 'en'
+  })
+
+  it('[plural] stops rather than expanding the same form forever', () => {
+    expect(translate('left', { count: 2 })).toBe('{count:plural} left')
   })
 })
 

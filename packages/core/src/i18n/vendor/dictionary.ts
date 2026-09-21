@@ -86,6 +86,73 @@ type LocalizedOptions<Options> = {
       : Options[K]
 }
 
+/**
+ * What a second locale owes the reference beyond its shape: the same
+ * placeholders, in the same message. `DictionaryFor` types every message as a
+ * bare `string`, so `'Willkommen {nom}'` sits opposite `'Welcome {name}'` and
+ * compiles — the keys are compared across locales, the placeholders inside them
+ * are not. At two languages that is theoretical; at five it is a matter of time.
+ *
+ * The comparison runs both ways, because a locale declaring *fewer*
+ * placeholders than the reference is as wrong as one declaring more, and a
+ * `{count}` written where the reference formats `{count:number}` asks its caller
+ * for a different value. A leaf that disagrees resolves to `never`, which no
+ * message is assignable to, so the error lands on the key that disagrees.
+ *
+ * There is only something to compare while the messages are still literal
+ * types, which is why every dictionary is written through `defineDictionary`.
+ * An annotation widens each message to `string` and takes its placeholders with
+ * it — and so does `satisfies`, whose contextual type is that same `string`.
+ */
+export type MatchingDictionary<Reference, Candidate> = {
+  [Segment in keyof Reference]: MatchingLeaf<
+    Reference[Segment],
+    Segment extends keyof Candidate ? Candidate[Segment] : never
+  >
+} & {
+  /**
+   * A key the reference does not have, demanded as `never` so that whatever
+   * was written under it is refused. TypeScript's own excess property check
+   * cannot do this here: it fires on a literal with a type of its own, and a
+   * dictionary reaches the registry as a value, from another module as often
+   * as not.
+   */
+  [Segment in Exclude<keyof Candidate, keyof Reference>]: never
+}
+
+type MatchingLeaf<Reference, Candidate> = Reference extends readonly [
+  string,
+  infer Options
+]
+  ? Matches<Reference, Candidate> extends true
+    ? readonly [string, LocalizedOptions<Options>]
+    : never
+  : Reference extends string
+    ? Matches<Reference, Candidate> extends true
+      ? string
+      : never
+    : Reference extends Dictionary
+      ? MatchingDictionary<Reference, Candidate>
+      : never
+
+/**
+ * Everything the message asks of the outside: the values a caller passes, and
+ * the spans a rich rendering marks up. A `<link>` the reference opens and a
+ * locale drops takes the link off the screen as quietly as a renamed
+ * placeholder puts the wrong word on it, so both are compared at once.
+ */
+type Matches<Reference, Candidate> = Same<
+  RichValuesFor<Reference, unknown>,
+  RichValuesFor<Candidate, unknown>
+>
+
+/** Assignable both ways, so that a difference in either is a difference. */
+type Same<Left, Right> = [Left] extends [Right]
+  ? [Right] extends [Left]
+    ? true
+    : false
+  : false
+
 type Join<Segment, Rest> = Segment extends string
   ? Rest extends string
     ? `${Segment}.${Rest}`
@@ -161,20 +228,65 @@ type ValueForParam<
           : never
 
 /**
+ * Every placeholder a message writes, left as written — `name`, `at:date`. What
+ * a caller owes is built from that union in one mapped type rather than folded
+ * together message by message, which is what lets the alternatives a `:plural`
+ * or an `:enum` chooses between be read with the same grammar as the sentence
+ * and land in the same object.
+ *
+ * `{?}` is the plural count's own marker and not a value anyone passes:
+ * `pluralize` fills it from the number it was already handed.
+ */
+type ParamsIn<Message extends string> =
+  Message extends `${string}{${infer Param}}${infer Rest}`
+    ? (Param extends '?' ? never : Param) | ParamsIn<Rest>
+    : never
+
+/**
+ * The text a translation carries besides its sentence: every plural form, every
+ * enum member. The runtime substitutes inside whichever one it selects, so a
+ * placeholder written there asks its caller for a value exactly as one in the
+ * sentence does — and the cross-locale comparison holds a locale to it too.
+ *
+ * All of them are read, not the one a count will select: which category answers
+ * is the locale's business, and unknowable from here.
+ */
+type AlternativesIn<Options> =
+  | (Options extends { enum: infer Enums } ? TextsIn<Enums> : never)
+  | (Options extends { plural: infer Plurals } ? TextsIn<Plurals> : never)
+
+/**
+ * Two levels down is every alternative and nothing else: `formatter` is an
+ * object and drops out at `& string`, and `type` is a bare word with no
+ * placeholder in it.
+ */
+type TextsIn<Groups> = {
+  [Name in keyof Groups]: Groups[Name][keyof Groups[Name]]
+}[keyof Groups] &
+  string
+
+/**
  * An untyped `{name}` is text, so it takes a string. A number never arrives
  * unformatted: it declares `:number` or `:plural` and the locale prints it.
+ *
+ * A message asking for nothing resolves to `unknown`, the neutral element of an
+ * intersection, where `{}` would survive one: `RichValuesFor` intersects this
+ * with a function per span, and a sentence carrying a `<link>` and no
+ * placeholder has to come out as exactly that function.
  */
-type ValuesIn<
-  Message extends string,
-  Enums
-> = Message extends `${string}{${infer Param}}${infer Rest}`
-  ? Param extends `${infer Name}:${infer Type}`
-    ? { [K in Name]: ValueForParam<Type, Name, Enums> } & ValuesIn<Rest, Enums>
-    : { [K in Param]: string } & ValuesIn<Rest, Enums>
-  : unknown
+type ValuesForParams<Params extends string, Enums> = [Params] extends [never]
+  ? unknown
+  : {
+      [Param in Params as Param extends `${infer Name}:${string}`
+        ? Name
+        : Param]: Param extends `${infer Name}:${infer Type}`
+        ? ValueForParam<Type, Name, Enums>
+        : string
+    }
 
-export type ValuesFor<Translation> = ValuesIn<
-  MessageOf<Translation>,
+export type ValuesFor<Translation> = ValuesForParams<
+  | ParamsIn<MessageOf<Translation>>
+  | ParamsIn<AlternativesIn<OptionsOf<Translation>>>,
   EnumsOf<OptionsOf<Translation>>
 >
 
