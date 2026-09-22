@@ -7,6 +7,11 @@ Never edit it here. Change the library in the toolkit, then run
 `pnpm toolkit:sync` from the repository root. `pnpm toolkit:check` fails when
 a copy has drifted, and `pnpm validate` runs it.
 
+The library's documentation is `C:/git/toolkit/packages/i18n/documentation.md`
+— message syntax, type guarantees, adding a locale, rich text and the known
+limitations. It sits outside `src/` on purpose, so no consumer carries a
+reworded copy of it.
+
 Everything around `src/` — this file, `package.json`, `tsconfig.json`,
 `vitest.config.ts` — is Taverla's, and is what makes the copy a workspace
 package under the name it would carry on npm.

@@ -12,11 +12,17 @@ WORKDIR /repo
 # The manifests alone, so a change to source code does not re-resolve the
 # dependency tree. `preinstall` points git at `.githooks` and there is no git
 # here, which its own `|| true` already covers.
+#
+# One line per workspace package, and a new package needs one here or
+# `--frozen-lockfile` refuses an install the lockfile says has seven projects
+# and the image has five. The list is the price of the cache layer.
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/game/package.json apps/game/
 COPY apps/server/package.json apps/server/
 COPY packages/core/package.json packages/core/
+COPY packages/i18n/package.json packages/i18n/
 COPY packages/protocol/package.json packages/protocol/
+COPY packages/result/package.json packages/result/
 
 RUN corepack enable && pnpm install --frozen-lockfile
 
@@ -26,8 +32,8 @@ RUN pnpm build
 
 # `--legacy` because the workspace does not inject its packages: pnpm v10 and
 # up refuse a plain deploy without it. The output is the server package with
-# production dependencies only — the bundle inlines `@taverla/*`, so what is
-# left is hono, zod and nanoid.
+# production dependencies only — the bundle inlines `@taverla/*` and
+# `@adrienlcp/*`, so what is left is hono, zod and nanoid.
 RUN pnpm --filter @taverla/server --prod --legacy deploy /server
 
 FROM node:24-alpine AS runtime

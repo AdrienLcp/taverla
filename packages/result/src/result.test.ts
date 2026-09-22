@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, expectTypeOf, it } from 'vitest'
 
 import { Result } from './result'
 
@@ -54,6 +54,17 @@ describe('Result.failure', () => {
       error: { code: 'forbidden', field: 'role' },
       status: 'failure'
     })
+  })
+})
+
+describe('the type of a success', () => {
+  // Signature-only: the body never applied `NonNullable`, so putting it back
+  // narrows in silence — every call site stays assignable and every runtime
+  // assertion here passes either way.
+  it('[result] keeps the nullability of what it was given', () => {
+    expectTypeOf(Result.success<string | null>(null).data).toEqualTypeOf<
+      string | null
+    >()
   })
 })
 
