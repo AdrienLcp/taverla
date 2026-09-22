@@ -1,11 +1,12 @@
+import type { DotPath, PlainKey } from '@adrienlcp/i18n/dictionary'
+import type { Translator } from '@adrienlcp/i18n/translator'
+
 import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
 import type { GameKind, ShelvedGame } from '@taverla/protocol/game'
 import type { QuestionCategory } from '@taverla/protocol/question'
 import type { AnswerMode } from '@taverla/protocol/room'
 
 import type { ClipRefusal } from '@taverla/core/blindtest/clip-audio'
-import type { DotPath, PlainKey } from '@taverla/core/i18n/vendor/dictionary'
-import type { Translator } from '@taverla/core/i18n/vendor/translator'
 import type { BuzzBlocker } from '@taverla/core/round/buzz-eligibility'
 
 import type { ApiError } from '@/infrastructure/api/taverla-api'

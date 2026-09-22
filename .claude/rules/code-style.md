@@ -99,14 +99,18 @@ and never escapes it.
 
 `Result.success()` *is* the whole of a `Result<void, …>` — the success arm
 carries no `data` key at all. `Result.success(undefined)` builds the identical
-value with the absence spelled out, and `Result.failure(undefined)` is worse:
-it is typed `FailureResult<undefined>` while returning `{ error: 'unknown' }`.
+value with the absence spelled out, and `Result.failure(undefined)` builds a
+failure whose error *is* `undefined` — never the unknown error, which is what
+writing it almost always meant.
 
 Neither can be made a type error — `undefined extends void`, so the two
 successes are the same type — so they are refused by
 `biome-plugins/no-undefined-argument-result.grit` instead, which runs in
 `pnpm lint`, in CI and in the pre-commit hook.
 
-`packages/core/src/helpers/result.ts` and its test are **byte-identical to
-Stargazer's copy** and are the same file heading for a shared toolkit. Change
-the shape there, not here.
+**`Result` is not this repository's code.** `packages/result/` is a vendored
+copy of `@adrienlcp/result` in `C:/git/toolkit`, shared with Stargazer. Change
+the shape in the toolkit, then run `pnpm toolkit:sync`; `pnpm toolkit:check`
+fails when a copy has drifted and `pnpm validate` runs it. Biome does not lint
+the vendored `src/`, so the guard above applies to this repository's own code —
+which is why the library's own test may make the call the plugin refuses.

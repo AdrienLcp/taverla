@@ -2324,6 +2324,36 @@ one part.
 
 ### Internal
 
+- `[Shared]` **`Result` and the i18n library moved to a toolkit, and are
+  vendored back.** Five repositories held a dialect of `Result` and three held
+  the i18n library; `C:/git/toolkit` now holds one of each, as
+  `@adrienlcp/result` and `@adrienlcp/i18n`, and `typed-i18n` moved into it
+  whole. Here they are `packages/result/` and `packages/i18n/`, workspace
+  packages under the names they would carry on npm, so the day the toolkit is
+  published a `package.json` changes and no import does. Eleven files import
+  them by the new name; nothing else moved.
+
+  The sync is one way and mechanical: `pnpm toolkit:sync` copies `src/` out of
+  the toolkit, `pnpm toolkit:check` fails when a copy has drifted, and
+  `pnpm validate` runs the check first. It skips when there is no toolkit
+  beside the repository, because nothing is published and CI clones this
+  repository alone. Biome no longer lints the vendored `src/` either: the copy
+  is formatted by the toolkit's Biome, and a config that drifted would have
+  this repository rewrite the copy on every `pnpm lint`.
+
+  `Result.failure(undefined)` stopped lying on the way through. It is typed
+  `FailureResult<undefined>` and used to return `{ error: 'unknown' }`, because
+  the implementation read the argument's value instead of counting the
+  arguments; it now returns the `undefined` it promised. The Biome plugin still
+  refuses the call — accidentally writing it now yields a failure with no error
+  code rather than the unknown one, which is worse, not better — and its
+  message was rewritten to say so.
+
+  `tsdown` inlines `@adrienlcp/*` alongside `@taverla/*`: the bricks ship
+  TypeScript source, so an external import would build a server that only
+  starts under a TypeScript loader. Verified on the built `dist/index.mjs`,
+  which the end-to-end journeys run.
+
 - `[Shared]` **`toSorted` and `toReversed`, rather than copying an array to
   sort it.** 22 sites over 17 files, and a `code-style` rule so the next one
   is written that way instead of found later: `[...items].sort(…)` is the same

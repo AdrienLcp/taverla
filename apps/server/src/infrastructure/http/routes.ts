@@ -1,3 +1,4 @@
+import type { Result } from '@adrienlcp/result'
 import { zValidator } from '@hono/zod-validator'
 import type { Context, Hono } from 'hono'
 import { cors } from 'hono/cors'
@@ -18,7 +19,6 @@ import {
 } from '@taverla/protocol/http'
 import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
-import type { Result } from '@taverla/core/helpers/result'
 import { normalizeRoomCode } from '@taverla/core/room/room-code'
 
 import { createRoom, findRoom } from '@/domain/room/room-store'

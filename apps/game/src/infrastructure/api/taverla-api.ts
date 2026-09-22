@@ -1,3 +1,4 @@
+import { Result } from '@adrienlcp/result'
 import type { z } from 'zod'
 
 import type { ShelvedGame } from '@taverla/protocol/game'
@@ -14,8 +15,6 @@ import {
 import type { RoomCode } from '@taverla/protocol/identifiers'
 import type { Locale } from '@taverla/protocol/locale'
 import type { TrackDecade, TrackDifficulty } from '@taverla/protocol/track'
-
-import { Result } from '@taverla/core/helpers/result'
 
 export type ApiError =
   | 'unreachable'

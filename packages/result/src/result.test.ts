@@ -42,6 +42,13 @@ describe('Result.failure', () => {
     })
   })
 
+  it('[result] carries an explicit undefined rather than swapping in unknown', () => {
+    expect(
+      Result.failure(undefined),
+      'the signature promises FailureResult<undefined>; reading the argument as absent would make that a lie'
+    ).toEqual({ error: undefined, status: 'failure' })
+  })
+
   it('[result] carries a structured error', () => {
     expect(Result.failure({ code: 'forbidden', field: 'role' })).toEqual({
       error: { code: 'forbidden', field: 'role' },

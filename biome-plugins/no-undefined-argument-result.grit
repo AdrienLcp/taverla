@@ -7,6 +7,6 @@ or {
   },
   `Result.failure($argument)` as $call where {
     $argument <: `undefined`,
-    register_diagnostic(span=$call, message="`Result.failure(undefined)` is typed `FailureResult<undefined>` and returns `{ error: 'unknown' }`. Write `Result.failure()` for the unknown error, or name the one you mean.", severity="error")
+    register_diagnostic(span=$call, message="`Result.failure(undefined)` is a failure whose error *is* `undefined`, not the unknown error. Write `Result.failure()` for that one, or name the error you mean.", severity="error")
   }
 }

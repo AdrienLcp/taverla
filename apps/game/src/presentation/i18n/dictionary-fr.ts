@@ -1,5 +1,5 @@
-import { defineTranslation } from '@taverla/core/i18n/vendor/define-translation'
-import { defineDictionary } from '@taverla/core/i18n/vendor/dictionary'
+import { defineTranslation } from '@adrienlcp/i18n/define-translation'
+import { defineDictionary } from '@adrienlcp/i18n/dictionary'
 
 /**
  * French typography puts a non-breaking space before `?`, `!` and `:`. Writing

@@ -1,3 +1,4 @@
+import { Result } from '@adrienlcp/result'
 import { z } from 'zod'
 
 import type { CatalogueTrack } from '@taverla/protocol/http'
@@ -13,7 +14,6 @@ import {
   filmNamedBy,
   isScoredByOneOf
 } from '@taverla/core/blindtest/film-score'
-import { Result } from '@taverla/core/helpers/result'
 import { shuffled } from '@taverla/core/helpers/shuffle'
 
 import { env } from '@/env'

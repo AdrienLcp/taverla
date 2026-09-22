@@ -1,11 +1,11 @@
+import { Result } from '@adrienlcp/result'
+
 import type { BlindtestSettings, GameSettings } from '@taverla/protocol/game'
 import type {
   HostTrack,
   TrackIdentity,
   TrackSource
 } from '@taverla/protocol/track'
-
-import { Result } from '@taverla/core/helpers/result'
 
 import type { Room } from '@/domain/room/room'
 import {

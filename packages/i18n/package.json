@@ -1,0 +1,19 @@
+{
+  "description": "Vendored from C:/git/toolkit — do not edit, run pnpm toolkit:sync",
+  "devDependencies": {
+    "@vitest/coverage-v8": "5.0.1",
+    "vitest": "^5.0.1"
+  },
+  "exports": {
+    "./*": "./src/*"
+  },
+  "name": "@adrienlcp/i18n",
+  "private": true,
+  "scripts": {
+    "build": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest --watch"
+  },
+  "type": "module",
+  "version": "0.1.0"
+}

@@ -2,6 +2,7 @@
   "compilerOptions": {
     "paths": {
       "@/*": ["./src/*"],
+      "@adrienlcp/result": ["../../packages/result/src/result.ts"],
       "@taverla/core/*": ["../../packages/core/src/*"],
       "@taverla/protocol/*": ["../../packages/protocol/src/*"]
     },

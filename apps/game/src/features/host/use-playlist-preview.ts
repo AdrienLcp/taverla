@@ -1,10 +1,10 @@
+import type { Result } from '@adrienlcp/result'
 import { useRef, useState } from 'react'
 
 import type { CatalogueTrack } from '@taverla/protocol/http'
 import type { TrackDifficulty, TrackSource } from '@taverla/protocol/track'
 
 import { whatTheRoomNames } from '@taverla/core/blindtest/typed-answer'
-import type { Result } from '@taverla/core/helpers/result'
 
 import {
   type ApiError,

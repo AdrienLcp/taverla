@@ -1,3 +1,4 @@
+import { Result } from '@adrienlcp/result'
 import { nanoid } from 'nanoid'
 
 import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
@@ -19,7 +20,6 @@ import {
   whatTheRoomNames,
   withGuessBanked
 } from '@taverla/core/blindtest/typed-answer'
-import { Result } from '@taverla/core/helpers/result'
 import { shuffled } from '@taverla/core/helpers/shuffle'
 import { buildLieBoard } from '@taverla/core/lefake/lie-board'
 import { tallyLieBoard } from '@taverla/core/lefake/tally'
