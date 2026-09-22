@@ -2612,8 +2612,9 @@ one part.
   wants and the return type is inferred from it. One defect surfaced while
   testing that: negotiation only walked *up* a tag, so an app shipping `fr-FR`
   and `fr-CA` and no plain `fr` answered English to a browser asking for `fr`.
-  The library now lives in its own repository, `C:/git/typed-i18n`, from which
-  both copies are taken verbatim.
+  The library then lived in a repository of its own, from which both copies
+  were taken verbatim — see the toolkit entry above, which is where it moved
+  before this release shipped.
 
   **Three fixes came back from it in one copy.** A locale may register a loader
   rather than a dictionary — `() => import('./dictionary-de')` — and
