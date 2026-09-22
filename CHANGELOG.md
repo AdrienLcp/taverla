@@ -653,6 +653,22 @@ one part.
 
 ### Improvements
 
+- `[Server]` **Zod's compiler, on the one path that pays for it.**
+  `import 'zod/compile'` is the first line of the server entry point, which
+  compiles every schema built after it — and the wire schemas are all of them,
+  since nothing constructs one before that import evaluates. Measured on
+  `encodeChecked` over a playing room view: **15.2 to 3.0 microseconds a frame
+  at twelve players, 23.3 to 7.6 at twenty-four**. That is the hottest loop the
+  server has, because `broadcastRoom` runs it once per connection on every
+  state change, so the saving scales with the table.
+
+  **The browser is deliberately left out.** The same import costs 8 381 bytes
+  gzipped on the entry chunk, which is the chunk that gates a player joining:
+  `/play/:code` is served the empty SPA fallback, so nothing on that screen
+  happens until it lands. Against it, a player's screen decodes *one* frame per
+  state change rather than one per player, which is tens of milliseconds over
+  a whole game. Paying a phone's first load for that is the wrong way round.
+
 - `[Game]` **The shelf is ordered by what a table reaches for**, not by the
   alphabet: the blind test and the quiz first, then the reflex race, Le Fake
   and the bare buzzer. `shelvedGames` is the one list — the front door's cards
