@@ -104,6 +104,7 @@ const PlayerScreen: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
     closeRoom: null,
     endGame: null,
     leaveSeat: nickname === null ? null : leave,
+    playsSound: false,
     refusedNickname:
       requestedNickname !== null && connection.error?.code === 'nickname_taken'
         ? requestedNickname

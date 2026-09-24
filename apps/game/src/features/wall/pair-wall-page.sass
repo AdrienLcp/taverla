@@ -1,0 +1,46 @@
+@use '../../presentation/styles/layout'
+@use '../../presentation/styles/typography'
+
+@layer components
+  // Read at arm's length by one person, once: a question, the table it is
+  // about, and the press that answers it.
+  .pair-wall-page
+    @include layout.arriving
+
+    align-items: center
+    display: flex
+    flex: 1
+    flex-direction: column
+    gap: var(--space-m)
+    justify-content: center
+    margin: 0 auto
+    max-width: var(--column-max-width)
+    padding-block: var(--menu-block-inset) var(--layout-padding-block-end)
+    padding-inline: var(--layout-padding-inline-start) var(--layout-padding-inline-end)
+    text-align: center
+    width: 100%
+
+    h1
+      @include typography.billboard
+
+      text-wrap: balance
+
+    p
+      @include typography.body
+
+      color: var(--ink-muted)
+      text-wrap: pretty
+
+    .tables
+      display: flex
+      flex-direction: column
+      gap: var(--space-s)
+      width: 100%
+
+    // Stamped rather than tinted, for the reason every error here is: red text
+    // on the lobby's orange is the field.
+    .error
+      background: var(--danger)
+      color: var(--danger-ink)
+      font-weight: 700
+      padding: var(--space-2xs) var(--space-s)

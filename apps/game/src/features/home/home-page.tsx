@@ -3,8 +3,8 @@ import { Button as ReactAriaButton } from 'react-aria-components'
 
 import { shelvedGames } from '@taverla/protocol/game'
 
-import { ProjectWithCode } from '@/features/invite/project-with-code'
 import { JoinWithCode } from '@/features/join/join-with-code'
+import { WallDoor } from '@/features/wall/wall-door'
 import { Button } from '@/presentation/components/button'
 import { Separator } from '@/presentation/components/separator'
 import { Spinner } from '@/presentation/components/spinner'
@@ -123,10 +123,10 @@ export const HomePage: React.FC = () => {
         {/*
           Folded and last, because it is a rare job beside the two above it and
           the shelf is what the page is otherwise spending its length on. It is
-          a door to a screen, not a way into a room — see the component for why
-          it does not collapse into the join field it sits under.
+          a door to a screen, not a way into a room: it shows a table and runs
+          nothing.
         */}
-        <ProjectWithCode />
+        <WallDoor />
       </div>
     </main>
   )

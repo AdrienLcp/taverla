@@ -1,11 +1,7 @@
 import type React from 'react'
 
 import type { ClientMessage } from '@taverla/protocol/client-message'
-import type {
-  HostRoomView,
-  PublicPlayer,
-  RoomSettings
-} from '@taverla/protocol/room'
+import type { HostRoomView, PublicPlayer } from '@taverla/protocol/room'
 import { MAX_SLATE_ITEMS, type SlateItemState } from '@taverla/protocol/slate'
 
 import { slateContent, slateHostContent } from '@/helpers/round-content'
@@ -21,6 +17,7 @@ import { Scoreboard } from '@/presentation/components/scoreboard'
 import { ToggleButton } from '@/presentation/components/toggle-button'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
+import type { StageControls } from './room-stage'
 import { SlateKeyEditor } from './slate-key-editor'
 import { SlateLabelsEditor } from './slate-labels-editor'
 import type { SlateWall } from './use-slate-wall'
@@ -48,18 +45,21 @@ const nicknamesOf = (
 const closedIndexesOf = (itemStates: readonly SlateItemState[]): number[] =>
   itemStates.flatMap((state, index) => (state === 'open' ? [] : [index]))
 
+type SlateBoardProps = {
+  /** `null` on the wall, which shows the board and moves nothing on it. */
+  controls: StageControls | null
+  view: HostRoomView
+}
+
 /**
- * The console while the sheets are open. It is the wall, so it shows how far
- * along everyone is and never a word of what they wrote: every item with how
- * many sheets have it, closed one at a time as the room is done with it.
+ * The room's screen while the sheets are open. It shows how far along everyone
+ * is and never a word of what they wrote: every item with how many sheets have
+ * it, closed one at a time as the room is done with it.
  */
-export const SlateWritingStage: React.FC<
-  SlateStageProps & {
-    /** Keeps a key typed mid-sheet for the next sheet this host opens. */
-    onRememberSlateKey: (itemIndex: number, key: string) => void
-    onSettingsChange: (settings: RoomSettings) => void
-  }
-> = ({ isLive, onRememberSlateKey, onSettingsChange, send, view }) => {
+export const SlateWritingStage: React.FC<SlateBoardProps> = ({
+  controls,
+  view
+}) => {
   const translate = useTranslate()
   const round = view.round
   const content = slateHostContent(view)
@@ -70,6 +70,7 @@ export const SlateWritingStage: React.FC<
     return null
   }
 
+  const isDisabled = controls === null || !controls.isLive
   const { itemCount, itemStates } = roundContent
   const labels = slateLabelsOf(view.settings)
   const spokenName = (itemIndex: number): string =>
@@ -84,14 +85,18 @@ export const SlateWritingStage: React.FC<
             <p className='count-label'>
               {translate('slate.items.summary', { count: itemCount })}
             </p>
-            <Button
-              isDisabled={!isLive || itemCount >= MAX_SLATE_ITEMS}
-              onPress={() => send({ roundId: round.id, type: 'host.addItem' })}
-              size='small'
-              variant='outlined'
-            >
-              {translate('slate.items.add')}
-            </Button>
+            {controls !== null && (
+              <Button
+                isDisabled={isDisabled || itemCount >= MAX_SLATE_ITEMS}
+                onPress={() =>
+                  controls.send({ roundId: round.id, type: 'host.addItem' })
+                }
+                size='small'
+                variant='outlined'
+              >
+                {translate('slate.items.add')}
+              </Button>
+            )}
           </div>
         </header>
 
@@ -126,43 +131,44 @@ export const SlateWritingStage: React.FC<
                     </>
                   )}
                 </span>
-                {state === 'open' ? (
-                  <Button
-                    aria-label={translate('slate.board.closeItem', {
-                      item: spokenName(itemIndex)
-                    })}
-                    isDisabled={!isLive}
-                    onPress={() =>
-                      send({
-                        itemIndex,
-                        roundId: round.id,
-                        type: 'host.closeItem'
-                      })
-                    }
-                    size='small'
-                    variant='outlined'
-                  >
-                    {translate('slate.board.close')}
-                  </Button>
-                ) : (
-                  <Button
-                    aria-label={translate('slate.board.markItem', {
-                      item: spokenName(itemIndex)
-                    })}
-                    isDisabled={!isLive}
-                    onPress={() =>
-                      send({
-                        itemIndex,
-                        roundId: round.id,
-                        type: 'host.showItem'
-                      })
-                    }
-                    size='small'
-                    variant='outlined'
-                  >
-                    {translate('slate.board.show')}
-                  </Button>
-                )}
+                {controls !== null &&
+                  (state === 'open' ? (
+                    <Button
+                      aria-label={translate('slate.board.closeItem', {
+                        item: spokenName(itemIndex)
+                      })}
+                      isDisabled={isDisabled}
+                      onPress={() =>
+                        controls.send({
+                          itemIndex,
+                          roundId: round.id,
+                          type: 'host.closeItem'
+                        })
+                      }
+                      size='small'
+                      variant='outlined'
+                    >
+                      {translate('slate.board.close')}
+                    </Button>
+                  ) : (
+                    <Button
+                      aria-label={translate('slate.board.markItem', {
+                        item: spokenName(itemIndex)
+                      })}
+                      isDisabled={isDisabled}
+                      onPress={() =>
+                        controls.send({
+                          itemIndex,
+                          roundId: round.id,
+                          type: 'host.showItem'
+                        })
+                      }
+                      size='small'
+                      variant='outlined'
+                    >
+                      {translate('slate.board.show')}
+                    </Button>
+                  ))}
               </li>
             )
           })}
@@ -190,24 +196,31 @@ export const SlateWritingStage: React.FC<
           })}
         </ul>
 
-        <SlateKeyEditor
-          isDisabled={!isLive}
-          itemCount={itemCount}
-          keys={content.keys}
-          labels={labels}
-          onSetKey={(itemIndex, key) => {
-            onRememberSlateKey(itemIndex, key)
-            send({ itemIndex, key, roundId: round.id, type: 'host.setItemKey' })
-          }}
-        />
+        {controls !== null && (
+          <SlateKeyEditor
+            isDisabled={isDisabled}
+            itemCount={itemCount}
+            keys={content.keys}
+            labels={labels}
+            onSetKey={(itemIndex, key) => {
+              controls.onRememberSlateKey(itemIndex, key)
+              controls.send({
+                itemIndex,
+                key,
+                roundId: round.id,
+                type: 'host.setItemKey'
+              })
+            }}
+          />
+        )}
 
-        {game?.kind === 'slate' && (
+        {controls !== null && game?.kind === 'slate' && (
           <SlateLabelsEditor
-            isDisabled={!isLive}
+            isDisabled={isDisabled}
             itemCount={itemCount}
             labels={game.labels}
             onChange={(next) => {
-              onSettingsChange({
+              controls.onSettingsChange({
                 ...view.settings,
                 game: { ...game, labels: next }
               })
@@ -220,13 +233,13 @@ export const SlateWritingStage: React.FC<
 }
 
 /**
- * The papers marked on the wall, one item at a time: its label, the key the
- * host noted if they choose to show it, every distinct answer with who wrote
- * it, and one press per answer. The standings beside it move with each press.
+ * The papers marked in front of the room, one item at a time: its label, the
+ * key the host noted if they choose to show it, every distinct answer with who
+ * wrote it, and one press per answer. The standings beside it move with each
+ * press. The wall draws the marks and not the presses.
  */
-export const SlateCorrectionStage: React.FC<SlateStageProps> = ({
-  isLive,
-  send,
+export const SlateCorrectionStage: React.FC<SlateBoardProps> = ({
+  controls,
   view
 }) => {
   const translate = useTranslate()
@@ -245,6 +258,7 @@ export const SlateCorrectionStage: React.FC<SlateStageProps> = ({
     return null
   }
 
+  const isDisabled = controls === null || !controls.isLive
   const { blankPlayerIds, groups } = content.correction
   const key = content.keys[itemIndex] ?? null
   const revealedKey = roundContent?.revealedKeys[itemIndex] ?? null
@@ -281,12 +295,13 @@ export const SlateCorrectionStage: React.FC<SlateStageProps> = ({
             <span className='key-text'>{revealedKey}</span>
           </p>
         ) : (
+          controls !== null &&
           key !== null && (
             <Button
               className='reveal-key'
-              isDisabled={!isLive}
+              isDisabled={isDisabled}
               onPress={() =>
-                send({
+                controls.send({
                   itemIndex,
                   roundId: round.id,
                   type: 'host.revealItemKey'
@@ -315,22 +330,31 @@ export const SlateCorrectionStage: React.FC<SlateStageProps> = ({
                     {nicknamesOf(view.players, group.playerIds)}
                   </span>
                 </div>
-                <ToggleButton
-                  isDisabled={!isLive}
-                  isSelected={group.isCorrect === true}
-                  onChange={(isCorrect) =>
-                    send({
-                      groupKey: group.key,
-                      itemIndex,
-                      roundId: round.id,
-                      type: 'host.judgeGroup',
-                      verdict: { isCorrect, kind: 'single' }
-                    })
-                  }
-                >
-                  <CheckIcon />
-                  {translate('slate.correct.judge')}
-                </ToggleButton>
+                {controls === null ? (
+                  group.isCorrect === true && (
+                    <span className='mark'>
+                      <CheckIcon />
+                      {translate('slate.correct.judge')}
+                    </span>
+                  )
+                ) : (
+                  <ToggleButton
+                    isDisabled={isDisabled}
+                    isSelected={group.isCorrect === true}
+                    onChange={(isCorrect) =>
+                      controls.send({
+                        groupKey: group.key,
+                        itemIndex,
+                        roundId: round.id,
+                        type: 'host.judgeGroup',
+                        verdict: { isCorrect, kind: 'single' }
+                      })
+                    }
+                  >
+                    <CheckIcon />
+                    {translate('slate.correct.judge')}
+                  </ToggleButton>
+                )}
               </li>
             ))}
           </ul>

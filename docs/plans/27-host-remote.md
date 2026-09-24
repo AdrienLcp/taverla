@@ -1,5 +1,8 @@
 # Stage 27 — The wall
 
+**Done.** Both sessions landed in one sitting; read *What the build disagreed
+with* at the end first.
+
 Asked while trying the slate: run the room from **my phone**, and let the
 computer's screen show only what the room should see.
 
@@ -43,8 +46,7 @@ surface.
   pick was a one-use QR shown by the host — it does not survive the case that
   motivates the stage, because a laptop plugged into a TV cannot scan anything.
 - **Same browser, no pairing.** The menu's *Project* link opens `/wall/:code` in
-  a new tab; the token is already in `taverla:host-tokens`. It replaces the
-  socketless `/invite` link there.
+  a new tab; the token is already in `taverla:host-tokens`.
 - **The wall is the speaker whenever it is there.** `isWallConnected` on the
   host view tells the console to keep the clip and the buzz cue to itself. The
   wall arms its audio on its own press — the pairing confirmation or a one-time
@@ -99,3 +101,43 @@ Two sessions, split like the slate.
   is folded there, and reopening the console returns the wall to being one.
 - `pnpm validate` green, and the wall anti-leak test fails when the projection is
   broken on purpose.
+
+## What the build disagreed with
+
+**The wall replaced the poster.** `/invite/:code` was a socketless page showing
+a room's invitation for a projector, reached from the home page's *show a
+table's invitation* fold and the console menu's *on its own screen* link. The
+wall's lobby is that poster, and every later phase too, so both doors now lead
+to the wall and the poster page is gone: the home fold opens `/wall`, the menu
+opens `/wall/:code` in a new tab. What the poster could do and the wall cannot
+is show a room with nobody from it in the room to pair — an event projector
+typed in by a stranger — which is a case nobody has had.
+
+**The console's stage is the wall's.** No second set of screens: `Stage` left
+`host-console-page.tsx` for `room-stage.tsx` as `RoomStage`, taking
+`controls: StageControls | null`, and the lobby, both slate boards and the
+verdict panel learnt to draw without them. The wall adapts its `WallRoomView`
+to the host's shape with every secret in the state the host view already has
+for *not held* — `asRoomScreenView` in `features/wall/wall-view.ts` — which is
+honest because the wall was never sent any of it.
+
+**The wall arms its own audio unasked, once.** A wall opened by a click in the
+same tab — the home fold, the pairing screen navigating on — already carries
+the browser's permission, so it tries on mount and offers *turn the sound on*
+in its header only if that was refused. A wall opened in a new tab from the
+menu is the case that needs the press.
+
+**The host-away notice waits five seconds** (`useAbsentFor`), so a console's
+Wi-Fi blink does not offer the room to whoever is standing at the wall.
+
+**The takeover is a navigation, not a role switch on the socket.** *Keep the
+table from here* goes to `/host/:code?from=wall`; that console folds the answer
+behind *show me the answer* and, when a token claim displaces it, goes back to
+`/wall/:code` instead of drawing the refusal. A buzz that was held when the host
+left is voided by the freeze as before, so the takeover opens on the round's
+reveal rather than on the buzz.
+
+**Verified muted in three browser contexts**: pairing by scan and by the menu's
+field, the lobby, a quiz round in choice mode and in buzzer mode (the wall
+reads *Zoé a buzzé* and a clock, the console reads the answer), the host-away
+notice, the takeover with its folded answer, and the return.

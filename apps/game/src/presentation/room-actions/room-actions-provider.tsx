@@ -26,6 +26,8 @@ export type RoomActions = {
    * `isInvalid` that outlives its reason makes the native submit a silent no-op.
    */
   refusedNickname: string | null
+  /** This screen is the room's speaker, so its volume is the room's. */
+  playsSound: boolean
   /** Changes the name the seat is held under, socket and round untouched. */
   rename: ((nickname: string) => void) | null
   /** What the room calls this screen right now. `null` where no seat is held. */
@@ -36,6 +38,7 @@ const NO_ACTIONS: RoomActions = {
   closeRoom: null,
   endGame: null,
   leaveSeat: null,
+  playsSound: false,
   refusedNickname: null,
   rename: null,
   seatNickname: null
@@ -94,6 +97,7 @@ export const useReportRoomActions = ({
   closeRoom,
   endGame,
   leaveSeat,
+  playsSound,
   refusedNickname,
   rename,
   seatNickname
@@ -105,6 +109,7 @@ export const useReportRoomActions = ({
       closeRoom,
       endGame,
       leaveSeat,
+      playsSound,
       refusedNickname,
       rename,
       seatNickname
@@ -117,6 +122,7 @@ export const useReportRoomActions = ({
     closeRoom,
     endGame,
     leaveSeat,
+    playsSound,
     refusedNickname,
     rename,
     report,

@@ -1,29 +1,26 @@
 import type React from 'react'
 
-import type { PlayerId, RoomCode } from '@taverla/protocol/identifiers'
-import type { HostRoomView, RoomSettings } from '@taverla/protocol/room'
+import type { RoomCode } from '@taverla/protocol/identifiers'
+import type { HostRoomView } from '@taverla/protocol/room'
 
-import type { HostPreferences } from '@taverla/core/room/host-preferences'
 import { isShelvedGame } from '@taverla/core/room/shelved-game'
 
 import { RoomInvitation } from '@/presentation/components/room-invitation'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
-import { gameDescriptionKey, scoringKey } from '@/presentation/i18n/translation'
+import {
+  gameDescriptionKey,
+  gameNameKey,
+  scoringKey
+} from '@/presentation/i18n/translation'
 
 import { GamePicker } from './game-picker'
 import { HostSeat } from './host-seat'
+import type { StageControls } from './room-stage'
 
 type LobbyStageProps = {
-  /** The socket is open. The picker sends a frame, so it does nothing without one. */
-  isLive: boolean
-  /** The ✕ beside a name — the console's own seat included, which is why it is not a frame. */
-  onRemovePlayer: (playerId: PlayerId) => void
-  onSettingsChange: (settings: RoomSettings) => void
-  /** Reopens the socket with a name on it, which is what takes the seat. */
-  onTakeSeat: (nickname: string) => void
-  /** What this host last left each game set to, so picking one restores it. */
-  preferences: HostPreferences | null
+  /** `null` on the wall, which shows who has arrived and what they will play. */
+  controls: StageControls | null
   roomCode: RoomCode
   view: HostRoomView
 }
@@ -34,14 +31,11 @@ type LobbyStageProps = {
  * play, which is the one decision the room is waiting on.
  *
  * The two columns are two audiences. The invitation is what the room is
- * reading; the game and the roster are the host's own.
+ * reading; the game and the roster are the host's own — and on the wall they
+ * are the room's too, read rather than set.
  */
 export const LobbyStage: React.FC<LobbyStageProps> = ({
-  isLive,
-  onRemovePlayer,
-  onSettingsChange,
-  onTakeSeat,
-  preferences,
+  controls,
   roomCode,
   view
 }) => {
@@ -49,16 +43,23 @@ export const LobbyStage: React.FC<LobbyStageProps> = ({
 
   return (
     <div className='stage lobby'>
-      <RoomInvitation roomCode={roomCode} />
+      <RoomInvitation isUnattended={controls === null} roomCode={roomCode} />
 
       <div className='host-side'>
         <section className='game-choice'>
-          <GamePicker
-            isDisabled={!isLive}
-            onChange={onSettingsChange}
-            preferences={preferences}
-            settings={view.settings}
-          />
+          {controls === null && view.settings.game !== null && (
+            <h2 className='game-name'>
+              {translate(gameNameKey(view.settings.game.kind))}
+            </h2>
+          )}
+          {controls !== null && (
+            <GamePicker
+              isDisabled={!controls.isLive}
+              onChange={controls.onSettingsChange}
+              preferences={controls.preferences}
+              settings={view.settings}
+            />
+          )}
           <GamePitch view={view} />
         </section>
 
@@ -69,7 +70,10 @@ export const LobbyStage: React.FC<LobbyStageProps> = ({
           {view.players.length === 0 ? (
             <p className='empty'>{translate('host.players.empty')}</p>
           ) : (
-            <Scoreboard onRemove={onRemovePlayer} players={view.players} />
+            <Scoreboard
+              onRemove={controls?.onRemovePlayer}
+              players={view.players}
+            />
           )}
 
           {/*
@@ -80,7 +84,9 @@ export const LobbyStage: React.FC<LobbyStageProps> = ({
             Every later phase keeps it there, where it is a setting rather than
             the way in.
           */}
-          <HostSeat onTakeSeat={onTakeSeat} view={view} />
+          {controls !== null && (
+            <HostSeat onTakeSeat={controls.onTakeSeat} view={view} />
+          )}
         </section>
       </div>
     </div>

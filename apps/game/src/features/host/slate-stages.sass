@@ -319,6 +319,19 @@
       .toggle-button
         flex-shrink: 0
 
+      // The wall's copy of a pressed toggle: the same words, stamped in the
+      // selected block's ink ground, and nothing to press.
+      .mark
+        @include typography.title
+
+        align-items: center
+        background: var(--ink)
+        color: var(--field)
+        display: inline-flex
+        flex-shrink: 0
+        gap: var(--space-xs)
+        padding: var(--space-xs) var(--space-s)
+
       // Passed without a press: wrong, and read as the lesser line.
       &.missed .text
         color: var(--ink-muted)

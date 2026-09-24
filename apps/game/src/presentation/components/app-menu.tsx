@@ -1,5 +1,5 @@
 import type React from 'react'
-import { useRef, useState } from 'react'
+import { type FormEvent, useRef, useState } from 'react'
 import {
   Dialog,
   DialogTrigger,
@@ -8,6 +8,10 @@ import {
   Button as ReactAriaButton
 } from 'react-aria-components'
 
+import {
+  WALL_PAIRING_CODE_LENGTH,
+  wallPairingCodeSchema
+} from '@taverla/protocol/http'
 import {
   NICKNAME_MAX_LENGTH,
   type RoomCode
@@ -19,14 +23,14 @@ import {
   THEME_PREFERENCES,
   type ThemePreference
 } from '@/helpers/theme'
-import { fetchHealth } from '@/infrastructure/api/taverla-api'
+import { fetchHealth, pairWall } from '@/infrastructure/api/taverla-api'
 import {
   creditsPathFor,
   homePathFor,
-  inviteUrlFor,
   useIsCurrentPath,
   useNavigateToLocale,
-  useRoomCodeParam
+  useRoomCodeParam,
+  wallUrlFor
 } from '@/infrastructure/router/navigation'
 import { readHostToken } from '@/infrastructure/storage/session-storage'
 import { useVolume } from '@/presentation/audio/volume-provider'
@@ -59,6 +63,88 @@ import { TextLink } from './text-link'
 import { useMenuWidth } from './use-menu-width'
 
 import './app-menu.sass'
+
+/**
+ * The two ways to put this table on a wall. The same machine opens it in a new
+ * tab — a plain navigation off the console would close its socket, and the
+ * server cannot tell that from a closed tab — which is also what lets the tab be
+ * dragged onto the screen wired to the projector. Any other screen shows a code
+ * of its own at `/wall`, and this console vouches for it with the token.
+ */
+const WallDoors: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
+  const translate = useTranslate()
+  const [code, setCode] = useState('')
+  const [outcome, setOutcome] = useState<'failed' | 'idle' | 'paired'>('idle')
+
+  const pair = async (event: FormEvent): Promise<void> => {
+    event.preventDefault()
+
+    const pairingCode = wallPairingCodeSchema.safeParse(
+      code.replace(/[\s-]/g, '').toUpperCase()
+    )
+    const hostToken = readHostToken(roomCode)
+
+    if (!pairingCode.success || hostToken === null) {
+      setOutcome('failed')
+
+      return
+    }
+
+    const paired = await pairWall({
+      hostToken,
+      pairingCode: pairingCode.data,
+      roomCode
+    })
+
+    setOutcome(paired.status === 'success' ? 'paired' : 'failed')
+
+    if (paired.status === 'success') {
+      setCode('')
+    }
+  }
+
+  return (
+    <div className='wall-doors'>
+      <Link
+        href={wallUrlFor(roomCode)}
+        rel='noreferrer'
+        target='_blank'
+        variant='underlined'
+      >
+        {translate('wall.menu.openHere')}
+      </Link>
+      <Form
+        onSubmit={(event) => {
+          void pair(event)
+        }}
+      >
+        <TextField
+          autoCapitalize='characters'
+          autoComplete='off'
+          description={
+            outcome === 'paired'
+              ? translate('wall.menu.paired')
+              : translate('wall.menu.description')
+          }
+          errorMessage={translate('wall.menu.failed')}
+          isInvalid={outcome === 'failed'}
+          label={translate('wall.menu.label')}
+          maxLength={WALL_PAIRING_CODE_LENGTH + 2}
+          name='wallCode'
+          onChange={(next) => {
+            setCode(next)
+            setOutcome('idle')
+          }}
+          placeholder={'•'.repeat(WALL_PAIRING_CODE_LENGTH)}
+          value={code}
+        />
+        <Button size='small' type='submit' variant='outlined'>
+          {translate('wall.menu.pair')}
+        </Button>
+      </Form>
+    </div>
+  )
+}
 
 /**
  * The room's own secret, on the one screen that holds it. Hidden until it is
@@ -303,7 +389,7 @@ export const AppMenu: React.FC = () => {
   const roomCode = useRoomCodeParam()
   // The console is the screen that can send the invitation somewhere else, and
   // `closeRoom` is what says a screen is one — the same test `RoomExit` makes.
-  const { closeRoom } = useRoomActions()
+  const { closeRoom, playsSound } = useRoomActions()
   const isOnCredits = useIsCurrentPath(creditsPathFor(locale))
   const { setVolume, volume } = useVolume()
   const [build, setBuild] = useState<string | null>(null)
@@ -374,38 +460,19 @@ export const AppMenu: React.FC = () => {
                   <div className='invitation'>
                     <RoomInvitation roomCode={roomCode} />
 
-                    {/*
-                      A new tab, and it has to be: a plain navigation off this
-                      screen closes the host socket, and the server cannot tell
-                      that from a closed tab. react-aria's router leaves a
-                      `target` alone, so this is a document request rather than
-                      a client-side navigation — which is also what makes it
-                      openable on the machine wired to the projector, by
-                      dragging the tab onto it.
-                    */}
-                    {closeRoom !== null && (
-                      <Link
-                        href={inviteUrlFor(roomCode)}
-                        rel='noreferrer'
-                        target='_blank'
-                        variant='underlined'
-                      >
-                        {translate('invite.project')}
-                      </Link>
-                    )}
+                    {closeRoom !== null && <WallDoors roomCode={roomCode} />}
                   </div>
                 )}
 
                 {/*
-                  The room's one speaker is the console, and `closeRoom` is what
-                  says a screen is one — the same test the invitation above
-                  makes. It heads the preferences because it is the only one of
-                  them somebody opens this menu mid-round to reach, and it is in
-                  the menu at all because the console strip it used to live in
-                  is drawn under the one game that carries a track, while a buzz
-                  sounds under all of them.
+                  Whichever screen is the room's speaker — the console, or the
+                  wall once one is there. It heads the preferences because it is
+                  the only one of them somebody opens this menu mid-round to
+                  reach, and it is in the menu at all because the console strip
+                  it used to live in is drawn under the one game that carries a
+                  track, while a buzz sounds under all of them.
                 */}
-                {closeRoom !== null && (
+                {playsSound && (
                   <Slider
                     formatOptions={{ style: 'percent' }}
                     label={translate('preferences.volume')}

@@ -1,4 +1,5 @@
 import type React from 'react'
+import { useState } from 'react'
 
 import type { ActiveBuzz, HostRoundContent } from '@taverla/protocol/room'
 import type { Verdict } from '@taverla/protocol/scoring'
@@ -78,21 +79,62 @@ type VerdictPanelProps = {
   clock: ClockEstimate | null
   /**
    * The round in the vocabulary of the game asking it, which decides both what
-   * is printed here and whether the verdict has halves.
+   * is printed here and whether the verdict has halves. `null` on the wall,
+   * which is never sent the answer.
    */
-  content: HostRoundContent
+  content: HostRoundContent | null
+  /**
+   * The answer behind a press rather than printed: this console is the room's
+   * own screen, taken over while the host was away, and everyone can read it.
+   */
+  isAnswerFolded: boolean
   /** Who is holding the buzzer. The host needs the name to look up at the room. */
   nickname: string
-  onJudge: (verdict: Verdict) => void
+  /** `null` on the wall, which draws who has the floor and judges nothing. */
+  onJudge: ((verdict: Verdict) => void) | null
 }
 
 export const VerdictPanel: React.FC<VerdictPanelProps> = ({
   buzz,
   clock,
   content,
+  isAnswerFolded,
   nickname,
   onJudge
 }) => {
+  const translate = useTranslate()
+  const [isAnswerShown, setIsAnswerShown] = useState(!isAnswerFolded)
+
+  return (
+    <section className='verdict-panel'>
+      <h2>{translate('buzz.theyBuzzed', { nickname })}</h2>
+      <FloorClock buzz={buzz} clock={clock} />
+
+      {content !== null &&
+        (isAnswerShown ? (
+          <Answer content={content} />
+        ) : (
+          <Button
+            className='show-answer'
+            onPress={() => setIsAnswerShown(true)}
+            size='small'
+            variant='underlined'
+          >
+            {translate('host.verdict.showAnswer')}
+          </Button>
+        ))}
+
+      {content !== null && onJudge !== null && (
+        <Choices content={content} onJudge={onJudge} />
+      )}
+    </section>
+  )
+}
+
+const Choices: React.FC<{
+  content: HostRoundContent
+  onJudge: (verdict: Verdict) => void
+}> = ({ content, onJudge }) => {
   const translate = useTranslate()
   const choices =
     verdictKindFor(content.kind) === 'halves' ? HALVES_CHOICES : SINGLE_CHOICES
@@ -100,32 +142,25 @@ export const VerdictPanel: React.FC<VerdictPanelProps> = ({
     content.kind === 'blindtest' && (content.track?.film ?? null) !== null
 
   return (
-    <section className='verdict-panel'>
-      <h2>{translate('buzz.theyBuzzed', { nickname })}</h2>
-      <FloorClock buzz={buzz} clock={clock} />
-
-      <Answer content={content} />
-
-      <div className='choices'>
-        {choices.map((choice) => (
-          <Button
-            className={`choice ${choice.tone}`}
-            key={choice.key}
-            onPress={() => {
-              onJudge(choice.verdict)
-            }}
-            size='large'
-            variant={choice.tone === 'miss' ? 'outlined' : 'filled'}
-          >
-            {translate(
-              asksForAFilm && choice.filmKey !== null
-                ? choice.filmKey
-                : choice.key
-            )}
-          </Button>
-        ))}
-      </div>
-    </section>
+    <div className='choices'>
+      {choices.map((choice) => (
+        <Button
+          className={`choice ${choice.tone}`}
+          key={choice.key}
+          onPress={() => {
+            onJudge(choice.verdict)
+          }}
+          size='large'
+          variant={choice.tone === 'miss' ? 'outlined' : 'filled'}
+        >
+          {translate(
+            asksForAFilm && choice.filmKey !== null
+              ? choice.filmKey
+              : choice.key
+          )}
+        </Button>
+      ))}
+    </div>
   )
 }
 

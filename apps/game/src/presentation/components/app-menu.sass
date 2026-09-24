@@ -116,13 +116,24 @@
     // Its gap closes to the dialog's own, because the popover already spends
     // `--space-m` between every block in it and a wider one inside would read
     // as two blocks rather than one.
-    // One group, so the door to the poster reads as belonging to the invitation
-    // above it rather than to the preferences below. The dialog spends
+    // One group, so the doors to a wall read as belonging to the invitation
+    // above them rather than to the preferences below. The dialog spends
     // `--space-m` between blocks; inside one, less.
     .invitation
       display: flex
       flex-direction: column
       gap: var(--space-s)
+
+    .wall-doors
+      display: flex
+      flex-direction: column
+      gap: var(--space-s)
+
+      form
+        align-items: start
+        display: flex
+        flex-direction: column
+        gap: var(--space-xs)
 
     .room-invitation
       --invitation-code-size: 2.5rem

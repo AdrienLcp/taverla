@@ -352,6 +352,7 @@ export const EN_DICTIONARY = defineDictionary({
     startGame: 'Gather round',
     verdict: {
       right: 'Right',
+      showAnswer: 'Show me the answer',
       wrong: 'Wrong'
     }
   },
@@ -359,22 +360,8 @@ export const EN_DICTIONARY = defineDictionary({
     copied: 'Copied',
     copyCode: 'Copy the code',
     copyFailed: 'Could not copy',
-    documentTitle: 'Invitation — Taverla',
-    door: {
-      action: 'Show it',
-      description:
-        'It grants nothing: no seat, no game, and no way to run the table. It draws what the table is already showing.',
-      label: 'Show a table’s invitation',
-      summary: 'The code and the square, on a screen of their own'
-    },
     joinLate: 'The door is open',
-    project: 'On its own screen',
-    title: 'Scan and pull up a chair',
-    unknown: {
-      description:
-        'That code opens no table. It may have been cleared, or read wrong.',
-      title: 'No table here'
-    }
+    title: 'Scan and pull up a chair'
   },
   join: {
     divider: 'or',
@@ -752,5 +739,53 @@ export const EN_DICTIONARY = defineDictionary({
     },
     yourAnswer: 'You wrote',
     yourSheet: 'Your whole sheet'
+  },
+  wall: {
+    door: {
+      action: 'Show a table here',
+      description:
+        'For the screen the whole table can see. It shows a code, whoever keeps the table confirms it, and the game appears here — with no answers and nothing to press.',
+      label: 'Show a table on this screen',
+      summary: 'The game, big, with nothing to run'
+    },
+    hostAway: {
+      takeOver: 'Keep the table from here',
+      title: 'The innkeeper stepped away. The game is waiting for them.'
+    },
+    menu: {
+      description:
+        'Open the table on another screen, then type the code it shows.',
+      failed: 'That code shows nothing. The screen may have a new one.',
+      label: 'Screen code',
+      openHere: 'Show it in a new tab',
+      pair: 'Show the table there',
+      paired: 'Done: the table is on that screen.'
+    },
+    pair: {
+      backToTable: 'Back to my table',
+      description:
+        'The screen showing {code} will display your table, with no answers and nothing to press.',
+      documentTitle: 'Show a table — Taverla',
+      done: 'Your table is on that screen.',
+      failed:
+        'That did not go through. The code may have expired — the screen shows a new one.',
+      nothingHeld: {
+        description:
+          'Only the screen keeping a table can show it somewhere else. Scan the square from that one.',
+        title: 'No table to show'
+      },
+      show: 'Show table {room}',
+      title: 'Show your table on that screen?'
+    },
+    pairAgain: 'Pair this screen',
+    pairing: {
+      caption:
+        'Scan from the screen keeping the table, or type this code in its menu',
+      documentTitle: 'Waiting for a table — Taverla',
+      failed: 'We cannot reach the tavern for a code.',
+      retry: 'Try again',
+      title: 'This screen is waiting for its table'
+    },
+    sound: 'Turn the sound on'
   }
 })

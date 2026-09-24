@@ -3,10 +3,15 @@ import {
   type PathParam,
   useLocation,
   useNavigate,
-  useParams
+  useParams,
+  useSearchParams
 } from 'react-router'
 
 import type { ShelvedGame } from '@taverla/protocol/game'
+import {
+  type WallPairingCode,
+  wallPairingCodeSchema
+} from '@taverla/protocol/http'
 import type { RoomCode } from '@taverla/protocol/identifiers'
 import { isLocale, type Locale } from '@taverla/protocol/locale'
 
@@ -42,8 +47,18 @@ export const localizedPaths = {
  */
 export const roomPaths = {
   host: '/host/:roomCode',
-  invite: '/invite/:roomCode',
-  play: '/play/:roomCode'
+  play: '/play/:roomCode',
+  wall: '/wall/:roomCode'
+} as const
+
+/**
+ * The two ends of pairing a wall, which name no room yet: the screen waiting
+ * to be told which one, and the host's device telling it. Unprefixed for the
+ * reason a room is — nobody indexes a pairing code.
+ */
+export const pairingPaths = {
+  pairWall: '/pair/:pairingCode',
+  wallPairing: '/wall'
 } as const
 
 /**
@@ -54,6 +69,7 @@ export const roomPaths = {
 export const paths = {
   ...localizedPaths,
   ...roomPaths,
+  ...pairingPaths,
   root: '/'
 } as const
 
@@ -104,8 +120,28 @@ export const gameHomePathFor = ({
 export const hostPathFor = (code: RoomCode): string =>
   pathFor(paths.host, { roomCode: code })
 
-export const invitePathFor = (code: RoomCode): string =>
-  pathFor(paths.invite, { roomCode: code })
+const FROM_WALL_PARAM = 'from'
+const FROM_WALL_VALUE = 'wall'
+
+/**
+ * The console a wall becomes when it takes the room over. Marked in the address
+ * rather than in memory, so a reload keeps it folding its answers and stepping
+ * back when the host's own screen returns.
+ */
+export const hostFromWallPathFor = (code: RoomCode): string =>
+  `${hostPathFor(code)}?${new URLSearchParams({ [FROM_WALL_PARAM]: FROM_WALL_VALUE })}`
+
+export const useCameFromWall = (): boolean => {
+  const [searchParams] = useSearchParams()
+
+  return searchParams.get(FROM_WALL_PARAM) === FROM_WALL_VALUE
+}
+
+export const wallPathFor = (code: RoomCode): string =>
+  pathFor(paths.wall, { roomCode: code })
+
+export const pairWallPathFor = (pairingCode: WallPairingCode): string =>
+  pathFor(paths.pairWall, { pairingCode })
 
 export const playPathFor = (code: RoomCode): string =>
   pathFor(paths.play, { roomCode: code })
@@ -120,13 +156,19 @@ export const playUrlFor = (code: RoomCode): string =>
   `${location.origin}${playPathFor(code)}`
 
 /**
- * The invitation on a screen of its own, for the machine wired to the projector
- * — which is rarely the machine running the room. Absolute for the same reason
- * `playUrlFor` is: the console offers it as a new tab, and a new tab is a
- * document request rather than a client-side navigation.
+ * The room on a screen of its own, opened in a new tab by the console that
+ * holds the token — a document request rather than a client-side navigation,
+ * so it can be dragged onto the machine wired to the projector.
  */
-export const inviteUrlFor = (code: RoomCode): string =>
-  `${location.origin}${invitePathFor(code)}`
+export const wallUrlFor = (code: RoomCode): string =>
+  `${location.origin}${wallPathFor(code)}`
+
+/**
+ * What the waiting wall's QR code encodes. Scanned by anyone it is harmless: the
+ * page it opens pairs only with a token the scanning device already holds.
+ */
+export const pairWallUrlFor = (pairingCode: WallPairingCode): string =>
+  `${location.origin}${pairWallPathFor(pairingCode)}`
 
 /** Where an unprefixed page belongs, once a language has been negotiated for it. */
 export const localizedPathFor = ({
@@ -188,10 +230,19 @@ const withoutTrailingSlash = (path: string): string =>
 export const useRoomCodeParam = (): RoomCode | null => {
   const { roomCode } =
     useParams<
-      RouteParamOf<typeof paths.host | typeof paths.invite | typeof paths.play>
+      RouteParamOf<typeof paths.host | typeof paths.play | typeof paths.wall>
     >()
 
   return roomCode === undefined ? null : normalizeRoomCode(roomCode)
+}
+
+export const usePairingCodeParam = (): WallPairingCode | null => {
+  const { pairingCode } = useParams<RouteParamOf<typeof paths.pairWall>>()
+  const parsed = wallPairingCodeSchema.safeParse(
+    pairingCode?.toUpperCase() ?? ''
+  )
+
+  return parsed.success ? parsed.data : null
 }
 
 export const useGameParam = (): ShelvedGame | null => {

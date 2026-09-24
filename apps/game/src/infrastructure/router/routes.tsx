@@ -7,6 +7,7 @@ import {
 } from '@/infrastructure/router/locale-prefix'
 import {
   localizedPaths,
+  pairingPaths,
   paths,
   roomPaths
 } from '@/infrastructure/router/navigation'
@@ -69,17 +70,30 @@ const pageFor = {
     }),
     module: 'src/features/host/host-console-page.tsx'
   },
-  [paths.invite]: {
+  [paths.pairWall]: {
     lazy: async () => ({
-      Component: (await import('@/features/invite/invite-page')).InvitePage
+      Component: (await import('@/features/wall/pair-wall-page')).PairWallPage
     }),
-    module: 'src/features/invite/invite-page.tsx'
+    module: 'src/features/wall/pair-wall-page.tsx'
   },
   [paths.play]: {
     lazy: async () => ({
       Component: (await import('@/features/player/player-page')).PlayerPage
     }),
     module: 'src/features/player/player-page.tsx'
+  },
+  [paths.wall]: {
+    lazy: async () => ({
+      Component: (await import('@/features/wall/wall-page')).WallPage
+    }),
+    module: 'src/features/wall/wall-page.tsx'
+  },
+  [paths.wallPairing]: {
+    lazy: async () => ({
+      Component: (await import('@/features/wall/wall-pairing-page'))
+        .WallPairingPage
+    }),
+    module: 'src/features/wall/wall-pairing-page.tsx'
   }
 } satisfies Record<RoutedPath, LazyPage>
 
@@ -112,6 +126,7 @@ export const routes: RouteObject[] = [
         children: Object.values(localizedPaths).map(routeFor)
       },
       ...Object.values(roomPaths).map(routeFor),
+      ...Object.values(pairingPaths).map(routeFor),
       { Component: NotFoundPage, path: '*' }
     ],
     // On the root, so a throw anywhere below replaces the shell instead of

@@ -9,8 +9,14 @@ import {
   createRoomResponseSchema,
   type HealthResponse,
   healthResponseSchema,
+  type OpenWallPairingResponse,
+  openWallPairingResponseSchema,
+  type PairWallRequest,
   roomExistsResponseSchema,
-  trackListResponseSchema
+  trackListResponseSchema,
+  type WallPairingCode,
+  type WallPairingPollResponse,
+  wallPairingPollResponseSchema
 } from '@taverla/protocol/http'
 import type { RoomCode } from '@taverla/protocol/identifiers'
 import type { Locale } from '@taverla/protocol/locale'
@@ -55,6 +61,42 @@ export const roomExists = async (
   return response.status === 'failure'
     ? response
     : Result.success(response.data.exists)
+}
+
+export const openWallPairing = async (): Promise<
+  Result<OpenWallPairingResponse, ApiError>
+> => request('/api/walls', openWallPairingResponseSchema, { method: 'POST' })
+
+export const pollWallPairing = async ({
+  pairingCode,
+  secret
+}: {
+  pairingCode: WallPairingCode
+  secret: string
+}): Promise<Result<WallPairingPollResponse, ApiError>> =>
+  request(
+    `/api/walls/${pairingCode}?${new URLSearchParams({ secret })}`,
+    wallPairingPollResponseSchema
+  )
+
+/** Answers nothing on success, so there is no body to parse. */
+export const pairWall = async ({
+  pairingCode,
+  ...body
+}: PairWallRequest & { pairingCode: WallPairingCode }): Promise<
+  Result<void, ApiError>
+> => {
+  try {
+    const response = await fetch(`/api/walls/${pairingCode}/pair`, {
+      body: JSON.stringify(body satisfies PairWallRequest),
+      headers: { 'content-type': 'application/json' },
+      method: 'POST'
+    })
+
+    return response.ok ? Result.success() : Result.failure('rejected')
+  } catch {
+    return Result.failure('unreachable')
+  }
 }
 
 export const fetchPlaylistTracks = async ({

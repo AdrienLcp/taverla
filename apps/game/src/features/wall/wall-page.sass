@@ -1,0 +1,32 @@
+@use '../../presentation/styles/layout'
+@use '../../presentation/styles/typography'
+
+@layer components
+  .wall-page
+    // The one thing this screen asks a hand for, beside the round index where
+    // somebody setting the wall up is already looking. It leaves on the press
+    // that grants it, which is why it can sit in the header rather than in the
+    // stage the room is reading.
+    > header .sound-offer
+      flex: none
+
+    // Said once the console has been gone longer than a blink, and offered to
+    // whoever is standing at the wall. Die-cut, because it is the one line on
+    // this screen about the evening rather than the game, and the room reading
+    // the stage around it has to see that it is not part of the round.
+    .host-away
+      @include layout.cut
+
+      align-items: center
+      align-self: center
+      display: flex
+      flex-wrap: wrap
+      gap: var(--space-s) var(--space-m)
+      justify-content: center
+      padding: var(--space-s) var(--space-m)
+
+      p
+        @include typography.title
+
+        text-align: center
+        text-wrap: balance

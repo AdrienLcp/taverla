@@ -152,9 +152,9 @@ export const useRoomSocket = ({
         socket.send(
           encodeMessage({
             hostToken:
-              role === 'host'
-                ? (readHostToken(roomCode) ?? undefined)
-                : undefined,
+              role === 'player'
+                ? undefined
+                : (readHostToken(roomCode) ?? undefined),
             nickname: nickname ?? undefined,
             protocolVersion: PROTOCOL_VERSION,
             role,

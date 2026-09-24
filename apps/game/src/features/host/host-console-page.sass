@@ -378,6 +378,11 @@
       gap: var(--space-s)
       min-width: 0
 
+      // The wall's stand-in for the picker: what the table is about to play,
+      // read rather than chosen.
+      .game-name
+        @include typography.billboard
+
       .pitch,
       .prompt,
       .scoring

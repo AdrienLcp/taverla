@@ -317,6 +317,7 @@ export const FR_DICTIONARY = defineDictionary({
     startGame: 'À table\u00a0!',
     verdict: {
       right: 'Bonne réponse',
+      showAnswer: 'Voir la réponse',
       wrong: 'Raté'
     }
   },
@@ -324,22 +325,8 @@ export const FR_DICTIONARY = defineDictionary({
     copied: 'Copié',
     copyCode: 'Copier le code',
     copyFailed: 'Copie impossible',
-    documentTitle: 'Invitation — Taverla',
-    door: {
-      action: 'Afficher',
-      description:
-        'Elle ne donne rien : pas de place, pas de partie, aucun moyen de tenir la table. Elle montre ce que la table affiche déjà.',
-      label: 'Afficher l’invitation d’une table',
-      summary: 'Le code et le carré, sur un écran à part'
-    },
     joinLate: 'La porte est ouverte',
-    project: 'Sur un écran à part',
-    title: 'Scanne et prends place',
-    unknown: {
-      description:
-        'Ce code n’ouvre aucune table. Elle a peut-être été levée, ou le code mal lu.',
-      title: 'Aucune table ici'
-    }
+    title: 'Scanne et prends place'
   },
   join: {
     divider: 'ou',
@@ -681,5 +668,53 @@ export const FR_DICTIONARY = defineDictionary({
     },
     yourAnswer: 'Tu as écrit',
     yourSheet: 'Toute ta feuille'
+  },
+  wall: {
+    door: {
+      action: 'Afficher une table ici',
+      description:
+        'Pour l’écran que toute la tablée voit. Il affiche un code, celui qui tient la table le confirme, et la partie apparaît ici — sans les réponses et sans rien à presser.',
+      label: 'Afficher une table sur cet écran',
+      summary: 'La partie en grand, sans rien à tenir'
+    },
+    hostAway: {
+      takeOver: 'Tenir la table d’ici',
+      title: 'L’aubergiste a décroché. La partie attend son retour.'
+    },
+    menu: {
+      description:
+        'Ouvre la table sur un autre écran, puis tape le code qu’il affiche.',
+      failed: 'Ce code n’affiche rien. L’écran en montre peut-être un nouveau.',
+      label: 'Code de l’écran',
+      openHere: 'L’afficher dans un nouvel onglet',
+      pair: 'Y afficher la table',
+      paired: 'C’est fait : la table est sur cet écran.'
+    },
+    pair: {
+      backToTable: 'Retour à ma table',
+      description:
+        'L’écran qui affiche {code} montrera ta table, sans les réponses et sans rien à presser.',
+      documentTitle: 'Afficher une table — Taverla',
+      done: 'Ta table est sur cet écran.',
+      failed:
+        'Ça n’est pas passé. Le code a peut-être expiré — l’écran en affiche un nouveau.',
+      nothingHeld: {
+        description:
+          'Seul l’écran qui tient une table peut l’afficher ailleurs. Scanne le carré depuis celui-là.',
+        title: 'Aucune table à afficher'
+      },
+      show: 'Afficher la table {room}',
+      title: 'Afficher ta table sur cet écran-là ?'
+    },
+    pairAgain: 'Appairer cet écran',
+    pairing: {
+      caption:
+        'Scanne depuis l’écran qui tient la table, ou tape ce code dans son menu',
+      documentTitle: 'En attente d’une table — Taverla',
+      failed: 'On n’arrive pas à joindre la taverne pour avoir un code.',
+      retry: 'Réessayer',
+      title: 'Cet écran attend sa table'
+    },
+    sound: 'Mettre le son'
   }
 })

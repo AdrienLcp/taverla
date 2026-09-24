@@ -547,7 +547,7 @@ Three things follow from that ceiling, and each is a rule of its own:
   row is `3.6cqi`: the same 16px on a phone, its ceiling at a 556px list.
 
   **And the container has to be the box the text sits in**, which is one level
-  further than that sentence goes. The poster page splits the same invitation
+  further than that sentence goes. The wall's pairing screen splits the same composition
   into two columns, so the unit measured against the invitation was measuring
   twice the box the code is drawn in, and `7T9` landed on one line with `Y` on
   the next — the identical failure, one composition on. `container-type` goes on
