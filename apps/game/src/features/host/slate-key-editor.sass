@@ -1,0 +1,16 @@
+@use '../../presentation/styles/typography'
+
+@layer components
+  .answer-key
+    .hint
+      @include typography.caption
+
+      color: var(--ink-muted)
+      max-inline-size: 60ch
+      text-wrap: pretty
+
+    .keys
+      display: grid
+      gap: var(--space-s)
+      grid-template-columns: repeat(auto-fill, minmax(min(14rem, 100%), 1fr))
+      list-style: none

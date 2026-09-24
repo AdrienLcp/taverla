@@ -36,6 +36,7 @@ import {
 } from '@/presentation/i18n/translation'
 
 import { NO_LIMIT, NumberChoice, useDurationLabels } from './number-choice'
+import { SlateKeyEditor } from './slate-key-editor'
 import { SlateLabelsEditor } from './slate-labels-editor'
 
 import './settings-panel.sass'
@@ -199,6 +200,10 @@ type SettingsPanelProps = {
   isRoundInPlay: boolean
   /** Applied to the room as it is pressed; nothing here waits for the launch. */
   onChange: (settings: RoomSettings) => void
+  /** Files one key on this machine; the room hears of it only when the sheets open. */
+  onPrepareSlateKey: (itemIndex: number, key: string) => void
+  /** The slate's answer key as this host prepared it, by item index. */
+  preparedSlateKeys: readonly (string | null)[]
   settings: RoomSettings
 }
 
@@ -212,6 +217,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   isLive,
   isRoundInPlay,
   onChange,
+  onPrepareSlateKey,
+  preparedSlateKeys,
   settings
 }) => {
   const translate = useTranslate()
@@ -346,6 +353,17 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           onChange={(labels) => {
             onChange({ ...settings, game: { ...game, labels } })
           }}
+        />
+      )}
+
+      {game?.kind === 'slate' && !isRoundInPlay && (
+        <SlateKeyEditor
+          hint={translate('slate.key.hint')}
+          isDisabled={false}
+          itemCount={game.itemCount}
+          keys={preparedSlateKeys}
+          labels={game.labels}
+          onSetKey={onPrepareSlateKey}
         />
       )}
 

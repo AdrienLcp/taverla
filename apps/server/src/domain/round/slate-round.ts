@@ -29,12 +29,28 @@ export type SlateRejection = Extract<
   'invalid_message' | 'stale_round' | 'wrong_phase'
 >
 
-/** The slate's half of opening a round: a blank sheet as long as the setting says, every item open. */
-export const slateContent = (settings: SlateSettings): Round['content'] => ({
+/**
+ * The slate's half of opening a round: a blank sheet as long as the setting
+ * says, every item open, and whatever key the host prepared. A key past the
+ * sheet waits there until `host.addItem` grows the sheet to it, the way a
+ * label does.
+ */
+export const slateContent = ({
+  keys,
+  settings
+}: {
+  keys: readonly (string | null)[]
+  settings: SlateSettings
+}): Round['content'] => ({
   currentItemIndex: null,
   items: Array.from({ length: settings.itemCount }, () => OPEN_ITEM),
-  keys: new Map(),
+  keys: new Map(
+    keys.flatMap((key, index) =>
+      key === null || key === '' ? [] : [[index, key] as const]
+    )
+  ),
   kind: 'slate',
+  revealedKeyIndexes: new Set(),
   sheets: new Map()
 })
 
@@ -205,6 +221,44 @@ export const setSlateKey = ({
     content.keys.set(itemIndex, key)
   }
 
+  touch(room, now)
+
+  return Result.success()
+}
+
+/**
+ * The key of one closed item, up on the wall and on every sheet. An open item
+ * is refused: its key would be an answer somebody can still write down.
+ */
+export const revealSlateKey = ({
+  itemIndex,
+  now,
+  room,
+  roundId
+}: {
+  itemIndex: number
+  now: number
+  room: Room
+  roundId: RoundId
+}): Result<void, SlateRejection> => {
+  const found = liveSlateRoundIn({ room, roundId })
+
+  if (found.status === 'failure') {
+    return found
+  }
+
+  const { content } = found.data
+  const item = content.items[itemIndex]
+
+  if (item === undefined || !content.keys.has(itemIndex)) {
+    return Result.failure('invalid_message')
+  }
+
+  if (item.state === 'open') {
+    return Result.failure('wrong_phase')
+  }
+
+  content.revealedKeyIndexes.add(itemIndex)
   touch(room, now)
 
   return Result.success()

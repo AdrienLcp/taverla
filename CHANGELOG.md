@@ -8,6 +8,14 @@ one part.
 
 ### Breaking Changes
 
+- `[Shared]` **The slate's key is revealed on purpose, and can be prepared
+  before the evening**, and `PROTOCOL_VERSION` goes to 21. `host.revealItemKey`
+  puts one closed item's key up: the wall draws it big and every sheet reads it
+  from `round.content.revealedKeys`, `null` on an open item or a key held back.
+  `host.startRound` carries an optional `slateKeys`, the key the host typed in
+  the lobby — kept in `taverla:host-setup` beside the per-game setup, never in
+  the settings, which reach every player.
+
 - `[Shared]` **A latecomer's slate no longer calls a collected item blank**,
   and `PROTOCOL_VERSION` goes to 20: every line of `yourSheet` carries
   `closedBeforeYou`, `true` on an item that closed before the reader held a

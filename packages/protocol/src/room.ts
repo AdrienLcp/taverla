@@ -311,6 +311,13 @@ export const roundContentSchema = z.discriminatedUnion('kind', [
     itemStates: z.array(slateItemStateSchema),
     kind: z.literal('slate'),
     /**
+     * One per item: the host's key once they revealed it on a closed item, and
+     * `null` everywhere else — an open item, or a key still held back. Every
+     * other game hands its answer to the players at the reveal, and a closed
+     * item is revealed for the same reason: nobody can still write to it.
+     */
+    revealedKeys: z.array(z.string().nullable()),
+    /**
      * The reader's own sheet, one line per item, and nobody else's — not even
      * the host screen holds another player's answer to an item still open,
      * because the host screen is the wall. `null` for a reader with no seat.
@@ -471,9 +478,9 @@ export const hostRoundContentSchema = z.discriminatedUnion('kind', [
      */
     filledCounts: z.array(z.number().int().nonnegative()),
     /**
-     * The host's memo per item, `null` where none was noted. Host-only for the
-     * length of the game, the reveal included: it is a note, not the answer the
-     * players were marked against.
+     * The host's memo per item, `null` where none was noted. Host-only until
+     * the host reveals it on a closed item, which is when it joins
+     * `round.content.revealedKeys` for every screen.
      */
     keys: z.array(z.string().nullable()),
     kind: z.literal('slate'),

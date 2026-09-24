@@ -11,6 +11,7 @@ import { lieSchema } from './lefake'
 import { roomSettingsSchema } from './room'
 import { singleVerdictSchema, verdictSchema } from './scoring'
 import {
+  MAX_SLATE_ITEMS,
   slateAnswerSchema,
   slateItemIndexSchema,
   slateKeySchema
@@ -152,7 +153,14 @@ export const updateSettingsMessageSchema = z.object({
   type: z.literal('host.updateSettings')
 })
 
+/**
+ * `slateKeys` is the answer key a host typed before the evening, kept on their
+ * own machine because the settings reach every player. It rides the press that
+ * opens the sheet, so the round never exists without it and a console that
+ * reloads mid-game has nothing to send again. Ignored by every other game.
+ */
 export const startRoundMessageSchema = z.object({
+  slateKeys: z.array(slateKeySchema.nullable()).max(MAX_SLATE_ITEMS).optional(),
   type: z.literal('host.startRound')
 })
 
@@ -195,6 +203,17 @@ export const setItemKeyMessageSchema = z.object({
   key: slateKeySchema,
   roundId: roundIdSchema,
   type: z.literal('host.setItemKey')
+})
+
+/**
+ * The host's key for one closed item goes up big on the wall and onto every
+ * sheet. Only a closed item: nobody can still write an answer it would give
+ * away.
+ */
+export const revealItemKeyMessageSchema = z.object({
+  itemIndex: slateItemIndexSchema,
+  roundId: roundIdSchema,
+  type: z.literal('host.revealItemKey')
 })
 
 /**
@@ -283,6 +302,7 @@ export const hostClientMessageSchema = z.discriminatedUnion('type', [
   clearLockoutsMessageSchema,
   addItemMessageSchema,
   setItemKeyMessageSchema,
+  revealItemKeyMessageSchema,
   closeItemMessageSchema,
   collectSheetsMessageSchema,
   showItemMessageSchema,
@@ -324,6 +344,7 @@ export const clientMessageSchema = z.discriminatedUnion('type', [
   clearLockoutsMessageSchema,
   addItemMessageSchema,
   setItemKeyMessageSchema,
+  revealItemKeyMessageSchema,
   closeItemMessageSchema,
   collectSheetsMessageSchema,
   showItemMessageSchema,
@@ -354,6 +375,7 @@ export const HOST_ONLY_MESSAGE_TYPES = new Set<ClientMessageType>([
   'host.clearLockouts',
   'host.addItem',
   'host.setItemKey',
+  'host.revealItemKey',
   'host.closeItem',
   'host.collectSheets',
   'host.showItem',

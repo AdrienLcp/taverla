@@ -164,3 +164,31 @@ reads the wall in a band above the sheet.
 as a duplicate on a box the host could see. The editor now sends only the
 sheet's positions. In the lobby it lives in the settings; once the sheets are
 open, beside the answer key, sized to the sheet as it has grown.
+
+## Follow-up — the key, revealed and prepared
+
+Two requests from the host after the first evening.
+
+**The key is revealed by a press the room can see, and reaches the players.**
+The wall's key sat behind an underlined link nobody took for a button. It is now
+a full-width *Reveal the answer* above the answers, and pressing it sends
+`host.revealItemKey`: the key goes up as a stamped block on the wall and joins
+`round.content.revealedKeys` on every screen. Sent to players because every
+other game hands its answer over at the reveal, and a closed item is safe to
+reveal — nobody can still write to it. The server refuses an open item
+(`wrong_phase`) and an item with no key (`invalid_message`); a player frame
+carries the key of a revealed item and of nothing else. The reveal is server
+state rather than the console's, so a reload keeps it and each item has its own.
+
+**The key is prepared before the evening, on the host's machine.**
+`HostPreferences.slateKeys` sits beside the per-game setup rather than in it,
+because the setup is room settings and the settings reach every player. The
+lobby's settings carry an *Answer key* fold under the labels that writes there
+and nowhere else; a key typed mid-sheet is filed there too. It travels as
+`slateKeys` on `host.startRound` — chosen over a `host.setItemKeys` sent at the
+countdown because the press that opens the sheet carrying its key leaves no
+window where the round exists without it, and nothing for a mid-game reload to
+send again: the restore rule holds by construction. A key past the sheet waits
+until `host.addItem` grows it, as a label does. Labels already travelled with
+the per-game setup and survive a new room; checked in the browser, nothing to
+fix.

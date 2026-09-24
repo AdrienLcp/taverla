@@ -311,6 +311,11 @@ const toContentView = ({
       itemCount: content.items.length,
       itemStates: content.items.map(slateItemStateOf),
       kind: 'slate',
+      revealedKeys: content.items.map((_, index) =>
+        content.revealedKeyIndexes.has(index)
+          ? (content.keys.get(index) ?? null)
+          : null
+      ),
       yourSheet: youId === null ? null : toSlateSheet({ content, youId })
     }
   }

@@ -42,6 +42,7 @@ const SLATE: RoomSettings = {
 const ANA_SECRET = 'Paprika fumé d’Ana'
 const BO_SECRET = 'Barbecue de Bo'
 const KEY_SECRET = 'Clé du chef: vinaigre'
+const OTHER_KEY_SECRET = 'Clé du chef: romarin'
 
 const roundIdOf = (peer: {
   frames: Peer<PlayerServerMessage>['frames']
@@ -105,12 +106,15 @@ describe('slate', () => {
     await harness.stop()
   })
 
-  const openSheets = async (settings: RoomSettings = SLATE) => {
+  const openSheets = async (
+    settings: RoomSettings = SLATE,
+    slateKeys?: (string | null)[]
+  ) => {
     const { code, host } = await harness.openRoom(settings)
     const ana = await harness.seat({ code, nickname: 'Ana' })
     const bo = await harness.seat({ code, nickname: 'Bo' })
 
-    host.send({ type: 'host.startRound' })
+    host.send({ slateKeys, type: 'host.startRound' })
     await waitFor(
       () => playerView(ana)?.phase === 'playing',
       'the sheets to open'
@@ -552,6 +556,68 @@ describe('slate', () => {
       'wrong_phase'
     ])
     expect(hostSlateContent(host)?.keys).toHaveLength(5)
+  })
+
+  it('[slate] opens the sheet on the keys the start carried, one waiting past the sheet', async () => {
+    const { ana, bo, host, roundId } = await openSheets(SLATE, [
+      'Sel',
+      null,
+      KEY_SECRET,
+      OTHER_KEY_SECRET
+    ])
+
+    await waitFor(
+      () => hostSlateContent(host)?.keys.length === 3,
+      'the host arm with its keys'
+    )
+    expect(hostSlateContent(host)?.keys).toEqual(['Sel', null, KEY_SECRET])
+
+    host.send({ roundId, type: 'host.addItem' })
+    await waitFor(
+      () => hostSlateContent(host)?.keys[3] === OTHER_KEY_SECRET,
+      'the waiting key on the added item'
+    )
+
+    expect(rawTranscript(ana)).not.toContain(KEY_SECRET)
+    expect(rawTranscript(bo)).not.toContain(OTHER_KEY_SECRET)
+  })
+
+  it('[slate] sends a player a key only once the host reveals it on a closed item', async () => {
+    const { ana, bo, host, roundId } = await openSheets(SLATE, [
+      KEY_SECRET,
+      OTHER_KEY_SECRET
+    ])
+
+    host.send({ itemIndex: 0, roundId, type: 'host.revealItemKey' })
+    await waitFor(() => errorsIn(host).length > 0, 'the open item refused')
+    await write({ answer: ANA_SECRET, itemIndex: 0, player: ana, roundId })
+    await close({ host, itemIndex: 0, roundId })
+
+    expect(rawTranscript(ana)).not.toContain(KEY_SECRET)
+    expect(rawTranscript(bo)).not.toContain(KEY_SECRET)
+
+    host.send({ itemIndex: 0, roundId, type: 'host.revealItemKey' })
+    await waitFor(
+      () => slateRound(playerView(bo))?.revealedKeys[0] === KEY_SECRET,
+      'the key on the sheets'
+    )
+
+    expect(slateRound(playerView(ana))?.revealedKeys).toEqual([
+      KEY_SECRET,
+      null,
+      null
+    ])
+    expect(rawTranscript(ana)).not.toContain(OTHER_KEY_SECRET)
+    expect(rawTranscript(bo)).not.toContain(OTHER_KEY_SECRET)
+
+    await collect({ host, roundId })
+    host.send({ itemIndex: 2, roundId, type: 'host.revealItemKey' })
+    await waitFor(() => errorsIn(host).length > 1, 'the keyless item refused')
+
+    expect(errorsIn(host).map((error) => error.code)).toEqual([
+      'wrong_phase',
+      'invalid_message'
+    ])
   })
 
   // The host holds the key and marks the sheets, so a seat would be a sheet

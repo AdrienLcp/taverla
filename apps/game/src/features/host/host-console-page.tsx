@@ -22,7 +22,8 @@ import {
 import { isJudgedByHost } from '@taverla/core/room/game-modes'
 import {
   type HostPreferences,
-  rememberSettings
+  rememberSettings,
+  rememberSlateKey
 } from '@taverla/core/room/host-preferences'
 import { isGameInPlay } from '@taverla/core/room/room-phase'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
@@ -189,6 +190,28 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
 
   useRestoreStoredSetup({ onRestore: changeSettings, preferences, view })
 
+  const rememberPreparedKey = (itemIndex: number, key: string) => {
+    if (view === null) {
+      return
+    }
+
+    const remembered = rememberSlateKey({
+      itemIndex,
+      key,
+      preferences:
+        readStoredHostPreferences() ??
+        rememberSettings({ preferences: null, settings: view.settings })
+    })
+
+    writeStoredHostPreferences(remembered)
+    setPreferences(remembered)
+  }
+
+  const preparedSlateKeys =
+    view?.settings.game?.kind === 'slate' && preferences !== null
+      ? [...preferences.slateKeys]
+      : undefined
+
   const endGame = useCallback(() => {
     send({ type: 'host.endGame' })
   }, [send])
@@ -318,6 +341,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
         canPlay={canPlay}
         clock={clock}
         isLive={isLive}
+        onRememberSlateKey={rememberPreparedKey}
         onRemovePlayer={removePlayer}
         onSettingsChange={changeSettings}
         onTakeSeat={takeSeat}
@@ -362,6 +386,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
                 }
               }}
               send={send}
+              slateKeys={preparedSlateKeys}
               slateWall={slateWall}
               view={view}
             />
@@ -391,6 +416,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
                   draftSource={draftSource}
                   isLive={isLive}
                   onDraftSource={setDraftSource}
+                  onRememberSlateKey={rememberPreparedKey}
                   onSettingsChange={changeSettings}
                   onTakeSeat={takeSeat}
                   preferences={preferences}
@@ -410,6 +436,8 @@ type StageProps = {
   canPlay: boolean
   clock: ClockEstimate | null
   isLive: boolean
+  /** Keeps a key typed mid-sheet for the next sheet this host opens. */
+  onRememberSlateKey: (itemIndex: number, key: string) => void
   /** Aimed at the console's own seat too, which is why it is not a bare frame. */
   onRemovePlayer: (playerId: PlayerId) => void
   onSettingsChange: (settings: RoomSettings) => void
@@ -431,6 +459,7 @@ const Stage: React.FC<StageProps> = ({
   canPlay,
   clock,
   isLive,
+  onRememberSlateKey,
   onRemovePlayer,
   onSettingsChange,
   onTakeSeat,
@@ -532,6 +561,7 @@ const Stage: React.FC<StageProps> = ({
     ) : (
       <SlateWritingStage
         isLive={isLive}
+        onRememberSlateKey={onRememberSlateKey}
         onSettingsChange={onSettingsChange}
         send={send}
         view={view}

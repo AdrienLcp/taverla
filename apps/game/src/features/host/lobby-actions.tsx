@@ -9,6 +9,7 @@ export const LobbyActions: React.FC<HostActionsProps> = ({
   isLive,
   onOpenRound,
   send,
+  slateKeys,
   view
 }) => {
   const translate = useTranslate()
@@ -21,7 +22,7 @@ export const LobbyActions: React.FC<HostActionsProps> = ({
         isDisabled={!isLive || isRoomEmpty || hasNoGame}
         onPress={() => {
           onOpenRound()
-          send({ type: 'host.startRound' })
+          send({ slateKeys, type: 'host.startRound' })
         }}
         size='large'
       >

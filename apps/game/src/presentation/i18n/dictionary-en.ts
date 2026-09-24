@@ -671,7 +671,7 @@ export const EN_DICTIONARY = defineDictionary({
       finish: 'Show the scores',
       judge: 'Right',
       key: {
-        reveal: 'Show the answer',
+        reveal: 'Reveal the answer',
         title: 'The answer'
       },
       next: 'Next',
@@ -695,6 +695,7 @@ export const EN_DICTIONARY = defineDictionary({
     },
     key: {
       field: 'Answer for {item}',
+      hint: 'Kept on this screen and sent when the sheets open. Players only see an answer once you reveal it.',
       label: 'Answer key',
       summary: defineTranslation('{count:plural}', {
         plural: { count: { other: 'Hidden · {?} noted' } }
@@ -721,6 +722,7 @@ export const EN_DICTIONARY = defineDictionary({
       closedBeforeYou: 'Collected before you arrived',
       field: 'Your answer for {item}',
       grid: 'Your sheet',
+      key: 'Answer: {key}',
       next: 'Next',
       previous: 'Previous',
       saved:

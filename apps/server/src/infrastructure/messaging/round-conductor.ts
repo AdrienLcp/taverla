@@ -51,7 +51,14 @@ const roomsDrawing = new Set<RoomCode>()
  * countdown that lands, a round that runs out, and a reveal that moves on by
  * itself are not messages anyone sent, but they still end in a broadcast.
  */
-export const beginRound = async (room: Room): Promise<void> => {
+/**
+ * `slateKeys` is what a host prepared before the evening, carried by the press
+ * that opens the sheet; every path nobody pressed opens it with none.
+ */
+export const beginRound = async (
+  room: Room,
+  { slateKeys = [] }: { slateKeys?: readonly (string | null)[] } = {}
+): Promise<void> => {
   if (roomsDrawing.has(room.code)) {
     return
   }
@@ -82,7 +89,7 @@ export const beginRound = async (room: Room): Promise<void> => {
           ? { kind: 'buzzer' }
           : game.kind === 'reflex'
             ? reflexContent()
-            : slateContent(game),
+            : slateContent({ keys: slateKeys, settings: game }),
       now: Date.now(),
       room
     })

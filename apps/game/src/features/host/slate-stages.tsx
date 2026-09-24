@@ -1,18 +1,12 @@
 import type React from 'react'
-import { useState } from 'react'
 
 import type { ClientMessage } from '@taverla/protocol/client-message'
 import type {
   HostRoomView,
-  HostRoundContent,
   PublicPlayer,
   RoomSettings
 } from '@taverla/protocol/room'
-import {
-  MAX_SLATE_ITEMS,
-  SLATE_KEY_MAX_LENGTH,
-  type SlateItemState
-} from '@taverla/protocol/slate'
+import { MAX_SLATE_ITEMS, type SlateItemState } from '@taverla/protocol/slate'
 
 import { slateContent, slateHostContent } from '@/helpers/round-content'
 import {
@@ -22,19 +16,16 @@ import {
 } from '@/helpers/slate-labels'
 import { Button } from '@/presentation/components/button'
 import { CheckIcon } from '@/presentation/components/check-icon'
-import { Disclosure } from '@/presentation/components/disclosure'
 import { LockIcon } from '@/presentation/components/lock-icon'
 import { Scoreboard } from '@/presentation/components/scoreboard'
-import { TextField } from '@/presentation/components/text-field'
 import { ToggleButton } from '@/presentation/components/toggle-button'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
+import { SlateKeyEditor } from './slate-key-editor'
 import { SlateLabelsEditor } from './slate-labels-editor'
 import type { SlateWall } from './use-slate-wall'
 
 import './slate-stages.sass'
-
-type SlateHostContent = Extract<HostRoundContent, { kind: 'slate' }>
 
 type SlateStageProps = {
   /** The socket is open. Every control here sends a frame, so none of them work without it. */
@@ -64,9 +55,11 @@ const closedIndexesOf = (itemStates: readonly SlateItemState[]): number[] =>
  */
 export const SlateWritingStage: React.FC<
   SlateStageProps & {
+    /** Keeps a key typed mid-sheet for the next sheet this host opens. */
+    onRememberSlateKey: (itemIndex: number, key: string) => void
     onSettingsChange: (settings: RoomSettings) => void
   }
-> = ({ isLive, onSettingsChange, send, view }) => {
+> = ({ isLive, onRememberSlateKey, onSettingsChange, send, view }) => {
   const translate = useTranslate()
   const round = view.round
   const content = slateHostContent(view)
@@ -197,14 +190,15 @@ export const SlateWritingStage: React.FC<
           })}
         </ul>
 
-        <AnswerKey
-          content={content}
-          isLive={isLive}
+        <SlateKeyEditor
+          isDisabled={!isLive}
           itemCount={itemCount}
+          keys={content.keys}
           labels={labels}
-          onSetKey={(itemIndex, key) =>
+          onSetKey={(itemIndex, key) => {
+            onRememberSlateKey(itemIndex, key)
             send({ itemIndex, key, roundId: round.id, type: 'host.setItemKey' })
-          }
+          }}
         />
 
         {game?.kind === 'slate' && (
@@ -225,60 +219,6 @@ export const SlateWritingStage: React.FC<
   )
 }
 
-const AnswerKey: React.FC<{
-  content: SlateHostContent
-  /** The socket is open. */
-  isLive: boolean
-  itemCount: number
-  labels: readonly (string | null)[]
-  /** Sent when a field is left, with what it holds — empty clears the note. */
-  onSetKey: (itemIndex: number, key: string) => void
-}> = ({ content, isLive, itemCount, labels, onSetKey }) => {
-  const translate = useTranslate()
-  const [drafts, setDrafts] = useState<Readonly<Record<number, string>>>({})
-  const noted = content.keys.filter((key) => key !== null).length
-
-  return (
-    <Disclosure
-      className='answer-key'
-      label={translate('slate.key.label')}
-      summary={translate('slate.key.summary', { count: noted })}
-    >
-      <ol className='keys'>
-        {Array.from({ length: itemCount }, (_, index) => {
-          const saved = content.keys[index] ?? ''
-
-          return (
-            <li key={String(index)}>
-              <TextField
-                autoComplete='off'
-                isDisabled={!isLive}
-                label={translate('slate.key.field', {
-                  item:
-                    labels[index] ??
-                    translate('slate.item', { index: index + 1 })
-                })}
-                maxLength={SLATE_KEY_MAX_LENGTH}
-                onBlur={() => {
-                  const draft = drafts[index]
-
-                  if (draft !== undefined && draft.trim() !== saved) {
-                    onSetKey(index, draft.trim())
-                  }
-                }}
-                onChange={(next) => {
-                  setDrafts((previous) => ({ ...previous, [index]: next }))
-                }}
-                value={drafts[index] ?? saved}
-              />
-            </li>
-          )
-        })}
-      </ol>
-    </Disclosure>
-  )
-}
-
 /**
  * The papers marked on the wall, one item at a time: its label, the key the
  * host noted if they choose to show it, every distinct answer with who wrote
@@ -290,11 +230,11 @@ export const SlateCorrectionStage: React.FC<SlateStageProps> = ({
   view
 }) => {
   const translate = useTranslate()
-  const [shownKeyIndex, setShownKeyIndex] = useState<number | null>(null)
   const round = view.round
   const content = slateHostContent(view)
-  const itemIndex = slateContent(round)?.currentItemIndex ?? null
-  const itemCount = slateContent(round)?.itemCount ?? 0
+  const roundContent = slateContent(round)
+  const itemIndex = roundContent?.currentItemIndex ?? null
+  const itemCount = roundContent?.itemCount ?? 0
 
   if (
     round === null ||
@@ -307,6 +247,7 @@ export const SlateCorrectionStage: React.FC<SlateStageProps> = ({
 
   const { blankPlayerIds, groups } = content.correction
   const key = content.keys[itemIndex] ?? null
+  const revealedKey = roundContent?.revealedKeys[itemIndex] ?? null
   const name = slateItemName({
     itemIndex,
     labels: slateLabelsOf(view.settings)
@@ -329,25 +270,35 @@ export const SlateCorrectionStage: React.FC<SlateStageProps> = ({
                 index: itemIndex + 1
               })}
             </h2>
-            {key !== null &&
-              (shownKeyIndex === itemIndex ? (
-                <p className='key'>
-                  <span className='key-title'>
-                    {translate('slate.correct.key.title')}
-                  </span>
-                  <span className='key-text'>{key}</span>
-                </p>
-              ) : (
-                <Button
-                  onPress={() => setShownKeyIndex(itemIndex)}
-                  size='small'
-                  variant='underlined'
-                >
-                  {translate('slate.correct.key.reveal')}
-                </Button>
-              ))}
           </div>
         </header>
+
+        {revealedKey !== null ? (
+          <p className='key' key={itemIndex}>
+            <span className='key-title'>
+              {translate('slate.correct.key.title')}
+            </span>
+            <span className='key-text'>{revealedKey}</span>
+          </p>
+        ) : (
+          key !== null && (
+            <Button
+              className='reveal-key'
+              isDisabled={!isLive}
+              onPress={() =>
+                send({
+                  itemIndex,
+                  roundId: round.id,
+                  type: 'host.revealItemKey'
+                })
+              }
+              size='large'
+              variant='outlined'
+            >
+              {translate('slate.correct.key.reveal')}
+            </Button>
+          )
+        )}
 
         {groups.length === 0 ? (
           <p className='nobody'>{translate('slate.correct.nobody')}</p>

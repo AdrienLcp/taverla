@@ -4,6 +4,7 @@ import { gameKindSchema, gameSettingsSchema } from '@taverla/protocol/game'
 import { type Nickname, nicknameSchema } from '@taverla/protocol/identifiers'
 import { isLocale, type Locale } from '@taverla/protocol/locale'
 import { modeSettingsSchema, roomSettingsSchema } from '@taverla/protocol/room'
+import { MAX_SLATE_ITEMS, slateKeySchema } from '@taverla/protocol/slate'
 
 import type { HostPreferences } from '@taverla/core/room/host-preferences'
 
@@ -37,7 +38,8 @@ const hostPreferencesSchema = z.object({
     game: true,
     mode: true,
     roundCount: true
-  })
+  }),
+  slateKeys: z.array(slateKeySchema.nullable()).max(MAX_SLATE_ITEMS).default([])
 })
 
 export const DEFAULT_VOLUME = 0.8

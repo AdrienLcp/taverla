@@ -55,12 +55,13 @@ nobody can pick up is a party ended by a dead battery.
 | `lefake.vote` | player | `roundId`, `candidateId` |
 | `slate.write` | player | `roundId`, `itemIndex`, `answer` — an upsert of one line; `''` clears it |
 | `host.updateSettings` | host | `settings` |
-| `host.startRound` | host | — |
+| `host.startRound` | host | `slateKeys` (optional) — the slate's prepared answer key, read by that game alone |
 | `host.judge` | host | `roundId`, `playerId`, `verdict` |
 | `host.reveal` | host | `roundId` |
 | `host.clearLockouts` | host | `roundId` |
 | `host.addItem` | host | `roundId` |
 | `host.setItemKey` | host | `roundId`, `itemIndex`, `key` — `''` clears it |
+| `host.revealItemKey` | host | `roundId`, `itemIndex` — a closed item with a key; it joins `round.content.revealedKeys` |
 | `host.closeItem` | host | `roundId`, `itemIndex` |
 | `host.collectSheets` | host | `roundId` — closes every item still open |
 | `host.showItem` | host | `roundId`, `itemIndex` |

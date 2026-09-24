@@ -200,6 +200,8 @@ export type Round = {
         /** The host's memo by item index. It reaches the host arm and no other. */
         keys: Map<number, string>
         kind: 'slate'
+        /** The items whose key the host put up; only ever closed ones. */
+        revealedKeyIndexes: Set<number>
         /** Every player's lines by item index; a cleared line is deleted, never stored empty. */
         sheets: Map<PlayerId, Map<number, string>>
       }

@@ -22,6 +22,8 @@ type SetupFoldProps = {
   isLive: boolean
   /** Must be stable — the picker reports upward from an effect. */
   onDraftSource: (source: TrackSource | null) => void
+  /** Files one key of the slate's answer key on this machine. */
+  onRememberSlateKey: (itemIndex: number, key: string) => void
   onSettingsChange: (settings: RoomSettings) => void
   onTakeSeat: (nickname: string) => void
   /** What this host last left each game set to, so picking one restores it. */
@@ -46,6 +48,7 @@ export const SetupFold: React.FC<SetupFoldProps> = ({
   draftSource,
   isLive,
   onDraftSource,
+  onRememberSlateKey,
   onSettingsChange,
   onTakeSeat,
   preferences,
@@ -91,6 +94,8 @@ export const SetupFold: React.FC<SetupFoldProps> = ({
         isLive={isLive}
         isRoundInPlay={roundInPlay}
         onChange={onSettingsChange}
+        onPrepareSlateKey={onRememberSlateKey}
+        preparedSlateKeys={preferences?.slateKeys ?? []}
         settings={view.settings}
       />
       {/*

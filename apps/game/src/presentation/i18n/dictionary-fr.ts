@@ -597,7 +597,7 @@ export const FR_DICTIONARY = defineDictionary({
       finish: 'Voir les scores',
       judge: 'Juste',
       key: {
-        reveal: 'Montrer la réponse',
+        reveal: 'Dévoiler la réponse',
         title: 'La réponse'
       },
       next: 'Suivant',
@@ -621,6 +621,7 @@ export const FR_DICTIONARY = defineDictionary({
     },
     key: {
       field: 'Réponse pour {item}',
+      hint: 'Gardé sur cet écran et envoyé à l’ouverture des feuilles. Les joueurs ne voient une réponse que quand vous la dévoilez.',
       label: 'Corrigé',
       summary: defineTranslation('{count:plural}', {
         plural: {
@@ -649,6 +650,7 @@ export const FR_DICTIONARY = defineDictionary({
       closedBeforeYou: 'Ramassé avant ton arrivée',
       field: 'Ta réponse pour {item}',
       grid: 'Ta feuille',
+      key: 'Réponse : {key}',
       next: 'Suivant',
       previous: 'Précédent',
       saved:

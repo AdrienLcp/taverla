@@ -197,6 +197,29 @@
         color: var(--ink-muted)
         text-transform: none
 
+    // The innkeeper's key, once put up: the same stamp the wall wears, so a
+    // reader who never looks up still sees what the room was marked against.
+    .key
+      --ink-muted: color-mix(in oklab, var(--field) 85%, var(--ink))
+
+      background: var(--ink)
+      color: var(--field)
+      display: flex
+      flex-direction: column
+      gap: var(--space-2xs)
+      max-inline-size: 100%
+      padding: var(--space-s) var(--space-m)
+
+    .key-title
+      @include typography.label
+
+      color: var(--ink-muted)
+
+    .key-text
+      @include typography.title
+
+      overflow-wrap: anywhere
+
     // Above the sheet while the reader still writes: one ruled band, the
     // label on the left and the answer beside it, the whole of it a glance.
     &.compact
@@ -232,6 +255,13 @@
 
         padding: var(--space-2xs) var(--space-s)
 
+      .key
+        flex: 1 1 100%
+        flex-direction: row
+        flex-wrap: wrap
+        gap: var(--space-2xs) var(--space-s)
+        padding: var(--space-xs) var(--space-s)
+
   .slate-whole-sheet
     // One grid for every line, so the label column is as wide as the longest
     // label and no wider, and every answer starts at the same edge.
@@ -253,6 +283,12 @@
 
         &[aria-current]
           font-weight: 800
+
+      .text > .key
+        @include typography.caption
+
+        color: var(--ink-muted)
+        display: block
 
       .index
         @include typography.numeric

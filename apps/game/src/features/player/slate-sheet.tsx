@@ -254,6 +254,7 @@ export const SlateOnTheWall: React.FC<SlateOnTheWallProps> = ({
 
   const index = content.currentItemIndex
   const line = content.yourSheet?.[index] ?? EMPTY_LINE
+  const revealedKey = content.revealedKeys[index] ?? null
   const name = slateItemName({ itemIndex: index, labels })
 
   return (
@@ -290,6 +291,14 @@ export const SlateOnTheWall: React.FC<SlateOnTheWallProps> = ({
           {translate(verdictKey(line.verdict))}
         </p>
       )}
+      {revealedKey !== null && (
+        <p className='key'>
+          <span className='key-title'>
+            {translate('slate.correct.key.title')}
+          </span>
+          <span className='key-text'>{revealedKey}</span>
+        </p>
+      )}
     </section>
   )
 }
@@ -317,6 +326,7 @@ export const SlateWholeSheet: React.FC<{
       <ol className='lines'>
         {slateItemIndexes(content.itemCount).map((itemIndex) => {
           const entry = sheet[itemIndex] ?? EMPTY_LINE
+          const revealedKey = content.revealedKeys[itemIndex] ?? null
 
           return (
             <li
@@ -335,6 +345,11 @@ export const SlateWholeSheet: React.FC<{
                 {entry.closedBeforeYou
                   ? translate('slate.sheet.closedBeforeYou')
                   : (entry.answer ?? translate('slate.sheet.blank'))}
+                {revealedKey !== null && (
+                  <span className='key'>
+                    {translate('slate.sheet.key', { key: revealedKey })}
+                  </span>
+                )}
               </span>
               {entry.verdict !== null && (
                 <span className='mark'>

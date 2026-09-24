@@ -61,6 +61,7 @@ import {
   collectSheets,
   isSheetClosed,
   judgeSlateGroup,
+  revealSlateKey,
   type SlateRejection,
   setSlateKey,
   showSlateItem,
@@ -412,7 +413,7 @@ export const createRoomSocketEvents = (
         break
       }
       case 'host.startRound': {
-        start(outbound, room)
+        start({ outbound, room, slateKeys: message.slateKeys })
         break
       }
       case 'host.addItem': {
@@ -435,6 +436,20 @@ export const createRoomSocketEvents = (
           result: setSlateKey({
             itemIndex: message.itemIndex,
             key: message.key,
+            now: Date.now(),
+            room,
+            roundId: message.roundId
+          }),
+          room
+        })
+        break
+      }
+      case 'host.revealItemKey': {
+        answerSlateFrame({
+          outbound,
+          refusal: 'That key cannot be revealed now',
+          result: revealSlateKey({
+            itemIndex: message.itemIndex,
             now: Date.now(),
             room,
             roundId: message.roundId
@@ -717,7 +732,15 @@ export const createRoomSocketEvents = (
     broadcastRoom(room)
   }
 
-  const start = (outbound: Outbound, room: Room): void => {
+  const start = ({
+    outbound,
+    room,
+    slateKeys
+  }: {
+    outbound: Outbound
+    room: Room
+    slateKeys: readonly (string | null)[] | undefined
+  }): void => {
     if (room.phase !== 'lobby') {
       sendError(outbound, {
         code: 'wrong_phase',
@@ -732,7 +755,7 @@ export const createRoomSocketEvents = (
       return
     }
 
-    void beginRound(room)
+    void beginRound(room, { slateKeys })
   }
 
   /**

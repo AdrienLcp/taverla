@@ -11,6 +11,7 @@ export const FinishedActions: React.FC<HostActionsProps> = ({
   isLive,
   onOpenRound,
   send,
+  slateKeys,
   view
 }) => {
   const translate = useTranslate()
@@ -27,7 +28,7 @@ export const FinishedActions: React.FC<HostActionsProps> = ({
           // lands in is a phase nobody needs to look at when the answer to
           // "again?" was yes.
           send({ type: 'host.playAgain' })
-          send({ type: 'host.startRound' })
+          send({ slateKeys, type: 'host.startRound' })
         }}
         size='large'
       >

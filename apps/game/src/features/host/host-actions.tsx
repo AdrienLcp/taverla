@@ -19,6 +19,8 @@ export type HostActionsProps = {
   /** Commits the picker's draft and blesses the audio element — every control that opens a round calls it first. */
   onOpenRound: () => void
   send: (message: ClientMessage) => boolean
+  /** The answer key this host prepared, sent with the press that opens a slate; absent on any other game. */
+  slateKeys: (string | null)[] | undefined
   /** Whether the slate's console is showing the wall or the sheets. */
   slateWall: SlateWall
   view: HostRoomView
