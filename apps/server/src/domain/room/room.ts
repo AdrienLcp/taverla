@@ -14,6 +14,7 @@ import type { HostTrack, TrackIdentity } from '@taverla/protocol/track'
 import type { BoardEntry, WrittenLie } from '@taverla/core/lefake/lie-board'
 import type { Vote } from '@taverla/core/lefake/tally'
 import type { RoundRoster } from '@taverla/core/round/round-roster'
+import type { ItemMarking } from '@taverla/core/slate/sheet-marking'
 
 /**
  * The server's own model, deliberately richer than either wire view: it holds
@@ -191,6 +192,21 @@ export type Round = {
         /** In arrival order, which is the only ordering anyone can trust. */
         presses: ReflexPress[]
       }
+    | {
+        /** `null` while the sheets are open; the item on the wall once they are collected. */
+        currentItemIndex: number | null
+        itemCount: number
+        /** The host's memo by item index. It reaches the host arm and no other. */
+        keys: Map<number, string>
+        kind: 'slate'
+        /**
+         * One per item, laid down at collection — the count is fixed from
+         * then — and empty while the sheets are open.
+         */
+        markings: ItemMarking[]
+        /** Every player's lines by item index; a cleared line is deleted, never stored empty. */
+        sheets: Map<PlayerId, Map<number, string>>
+      }
   /**
    * The round's own clock, and the pair that makes a miss resumable: a buzz
    * stops it, and the round has to know how much is left rather than handing
@@ -206,6 +222,10 @@ export type Round = {
    * `@taverla/core/round/round-roster`. One stamp covers the whole round, Le
    * Fake's vote included: the people who may vote are the people who were there
    * for the writing.
+   *
+   * The slate stamps it at **collection** instead. Its sheet has no clock and
+   * no race, so a friend arriving at the fifth cup is owed a sheet rather than
+   * a wait; it is the correction a latecomer cannot join.
    */
   openedWithPlayerIds: RoundRoster
   revealed: boolean

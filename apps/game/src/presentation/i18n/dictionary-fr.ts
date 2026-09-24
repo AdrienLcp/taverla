@@ -579,5 +579,10 @@ export const FR_DICTIONARY = defineDictionary({
     nobody: 'Personne n’a trouvé',
     scored: '+{points:number}',
     speedBonus: 'dont {points:number} pour la vitesse'
+  },
+  slate: {
+    name: 'L’Ardoise',
+    scoring:
+      'Chacun écrit sur sa feuille sans rien montrer, puis l’hôte corrige : un point par réponse qu’il valide.'
   }
 })

@@ -28,6 +28,7 @@ import {
   cancelRoundTimers,
   scheduleRoundTimer
 } from '@/domain/round/round-timers'
+import { slateContent } from '@/domain/round/slate-round'
 import { drawPlayableTrack } from '@/domain/round/track-pool'
 import { logger } from '@/infrastructure/logging/logger'
 import {
@@ -67,12 +68,21 @@ export const beginRound = async (room: Room): Promise<void> => {
 
   // No catalogue, no network call, and nothing to fail — the room already holds
   // the question, or there is no question at all. Opening the round is the whole
-  // of serving these two.
-  if (game.kind === 'buzzer' || game.kind === 'reflex') {
+  // of serving these three.
+  if (
+    game.kind === 'buzzer' ||
+    game.kind === 'reflex' ||
+    game.kind === 'slate'
+  ) {
     cancelRoundTimer(room.code, 'advance')
 
     const round = openRound({
-      content: game.kind === 'buzzer' ? { kind: 'buzzer' } : reflexContent(),
+      content:
+        game.kind === 'buzzer'
+          ? { kind: 'buzzer' }
+          : game.kind === 'reflex'
+            ? reflexContent()
+            : slateContent(game),
       now: Date.now(),
       room
     })

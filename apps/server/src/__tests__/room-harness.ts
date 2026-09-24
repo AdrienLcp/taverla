@@ -323,6 +323,22 @@ export const reflexRound = (
   return content?.kind === 'reflex' ? content : null
 }
 
+export const slateRound = (
+  view: { round: RoundView | null } | null
+): Extract<RoundContent, { kind: 'slate' }> | null => {
+  const content = view?.round?.content
+
+  return content?.kind === 'slate' ? content : null
+}
+
+export const hostSlateContent = (
+  host: Peer<HostServerMessage>
+): Extract<HostRoundContent, { kind: 'slate' }> | null => {
+  const content = hostView(host)?.currentContent
+
+  return content?.kind === 'slate' ? content : null
+}
+
 export const hostLefakeContent = (host: Peer<HostServerMessage>) => {
   const content = hostView(host)?.currentContent
 

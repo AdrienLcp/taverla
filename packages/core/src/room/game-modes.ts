@@ -18,6 +18,14 @@ const BUZZER_ONLY = ['buzzer'] as const satisfies readonly AnswerMode[]
 const CHOICE_ONLY = ['choice'] as const satisfies readonly AnswerMode[]
 
 /**
+ * The slate is written, so it is `typed` — the mode says how a round is
+ * answered, and a sheet is answered by typing. What the mode usually brings
+ * with it, a server grade and a speed bonus, is the game's to refuse: the host
+ * marks the sheets, which `isJudgedByHost` says rather than this.
+ */
+const TYPED_ONLY = ['typed'] as const satisfies readonly AnswerMode[]
+
+/**
  * Which answer modes a game offers. The mode is the room's because the shell
  * reads it everywhere a round is answered and scored; what a game does is
  * narrow it, and two of them narrow it to one — four candidates and a typed
@@ -51,6 +59,8 @@ export const answerModesFor = (
       return BUZZER_ONLY
     case 'lefake':
       return CHOICE_ONLY
+    case 'slate':
+      return TYPED_ONLY
   }
 }
 
@@ -72,6 +82,9 @@ export const offersAnswerMode = ({
  * there, so the heat settles on the presses and nobody reads anything out.
  * Keying on the mode alone caught it by accident of what it narrows to.
  *
+ * The slate is the one game judged by hand under another mode: its sheets are
+ * typed and its host marks them, knowing every answer from the key.
+ *
  * A room with no game yet answers `true` under `buzzer`, because the seat is
  * withheld until something says otherwise rather than the other way round.
  */
@@ -81,7 +94,7 @@ export const isJudgedByHost = ({
 }: {
   game: GameKind | null
   mode: AnswerMode
-}): boolean => mode === 'buzzer' && game !== 'reflex'
+}): boolean => game === 'slate' || (mode === 'buzzer' && game !== 'reflex')
 
 /**
  * Whether the missing seat is worth explaining, which is narrower than the seat

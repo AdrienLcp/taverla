@@ -9,6 +9,12 @@ describe('isRoundInPlay', () => {
     expect(isRoundInPlay('buzzed')).toBe(true)
   })
 
+  // The slate's scores still move while it is corrected, so a game switched
+  // under the correction would leave the wall marking a sheet nobody holds.
+  it('[room-phase] counts the correction, whose scores are still moving', () => {
+    expect(isRoundInPlay('correcting')).toBe(true)
+  })
+
   it('[room-phase] leaves the gaps a host may change things in', () => {
     expect(isRoundInPlay('lobby')).toBe(false)
     expect(isRoundInPlay('revealed')).toBe(false)

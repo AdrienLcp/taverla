@@ -7,12 +7,19 @@ import type {
   RoundContent,
   RoundView
 } from '@taverla/protocol/room'
+import type { SlateLine } from '@taverla/protocol/slate'
 import type { HostTrack, TrackIdentity } from '@taverla/protocol/track'
 
 import { hasJoinedAfterStart } from '@taverla/core/round/round-roster'
 import { pointsFor } from '@taverla/core/scoring/verdict'
+import {
+  filledLineCount,
+  lineVerdict,
+  UNMARKED_ITEM
+} from '@taverla/core/slate/sheet-marking'
 
 import { elapsedRoundMs, flipsAtOf } from '@/domain/round/round-service'
+import { answerGroupsFor, blankPlayerIdsFor } from '@/domain/round/slate-round'
 
 import type { Participant, PlayerAttempts, Room, Round } from './room'
 
@@ -33,7 +40,9 @@ export const toHostView = ({
 }): HostRoomView => ({
   ...toBaseView({ isHostConnected, room, youId: seatId }),
   currentContent:
-    room.round === null ? null : toHostContent({ round: room.round, seatId }),
+    room.round === null
+      ? null
+      : toHostContent({ room, round: room.round, seatId }),
   remainingPoolSize: room.trackPool.length,
   youId: seatId
 })
@@ -45,9 +54,11 @@ export const toHostView = ({
  * takes the whole question and leaves nothing behind.
  */
 const toHostContent = ({
+  room,
   round,
   seatId
 }: {
+  room: Room
   round: Round
   seatId: PlayerId | null
 }): HostRoundContent => {
@@ -72,10 +83,56 @@ const toHostContent = ({
     return { kind: 'reflex' }
   }
 
+  if (content.kind === 'slate') {
+    return toHostSlateContent({ content, room })
+  }
+
   return {
     audioUrl: content.track.previewUrl,
     kind: 'blindtest',
     track: seatId === null ? content.track : null
+  }
+}
+
+/**
+ * The wall's half of the slate. Until the sheets are collected it is counts and
+ * the host's own memo — not one answer, because everyone is looking at it.
+ */
+const toHostSlateContent = ({
+  content,
+  room
+}: {
+  content: Extract<Round['content'], { kind: 'slate' }>
+  room: Room
+}): HostRoundContent => {
+  const itemIndex = content.currentItemIndex
+  const marking =
+    itemIndex === null
+      ? UNMARKED_ITEM
+      : (content.markings[itemIndex] ?? UNMARKED_ITEM)
+
+  return {
+    correction:
+      itemIndex === null
+        ? null
+        : {
+            blankPlayerIds: blankPlayerIdsFor({ itemIndex, room }),
+            groups: answerGroupsFor({ itemIndex, room }).map((group) => ({
+              isCorrect: lineVerdict({ answer: group.text, marking }),
+              key: group.key,
+              playerIds: group.playerIds,
+              text: group.text
+            }))
+          },
+    keys: Array.from(
+      { length: content.itemCount },
+      (_, index) => content.keys.get(index) ?? null
+    ),
+    kind: 'slate',
+    progress: [...room.players.keys()].map((playerId) => ({
+      filledCount: filledLineCount(content.sheets.get(playerId) ?? new Map()),
+      playerId
+    }))
   }
 }
 
@@ -243,11 +300,53 @@ const toContentView = ({
     }
   }
 
+  if (content.kind === 'slate') {
+    return {
+      currentItemIndex: content.currentItemIndex,
+      itemCount: content.itemCount,
+      kind: 'slate',
+      yourSheet: youId === null ? null : toSlateSheet({ content, round, youId })
+    }
+  }
+
   return {
     choices: content.choices,
     kind: 'blindtest',
     revealedTrack: round.revealed ? toTrackIdentity(content.track) : null
   }
+}
+
+/**
+ * The reader's lines and nobody else's. A seat taken after the collection was
+ * never marked, so it is owed no verdict rather than a column of wrongs.
+ */
+const toSlateSheet = ({
+  content,
+  round,
+  youId
+}: {
+  content: Extract<Round['content'], { kind: 'slate' }>
+  round: Round
+  youId: PlayerId
+}): SlateLine[] => {
+  const sheet = content.sheets.get(youId)
+  const isMarked = !hasJoinedAfterStart({
+    openedWithPlayerIds: round.openedWithPlayerIds,
+    playerId: youId
+  })
+
+  return Array.from({ length: content.itemCount }, (_, index) => {
+    const answer = sheet?.get(index) ?? null
+    const marking = content.markings[index]
+
+    return {
+      answer,
+      verdict:
+        isMarked && marking !== undefined
+          ? lineVerdict({ answer, marking })
+          : null
+    }
+  })
 }
 
 const toTrackIdentity = (track: HostTrack): TrackIdentity => ({

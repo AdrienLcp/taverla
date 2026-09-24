@@ -1,3 +1,4 @@
+import type { Result } from '@adrienlcp/result'
 import type { WSContext, WSEvents } from 'hono/ws'
 import { nanoid } from 'nanoid'
 
@@ -54,6 +55,15 @@ import {
   startAutoAdvanceHold,
   type VerdictOutcome
 } from '@/domain/round/round-service'
+import {
+  addSlateItem,
+  collectSheets,
+  judgeSlateGroup,
+  type SlateRejection,
+  setSlateKey,
+  showSlateItem,
+  writeSlateLine
+} from '@/domain/round/slate-round'
 import { discardPoolIfStale } from '@/domain/round/track-pool'
 import { logger } from '@/infrastructure/logging/logger'
 
@@ -395,8 +405,83 @@ export const createRoomSocketEvents = (
         castVote(message, active, outbound, room)
         break
       }
+      case 'slate.write': {
+        writeLine(message, active, outbound, room)
+        break
+      }
       case 'host.startRound': {
         start(outbound, room)
+        break
+      }
+      case 'host.addItem': {
+        answerSlateFrame({
+          outbound,
+          refusal: 'No item can be added now',
+          result: addSlateItem({
+            now: Date.now(),
+            room,
+            roundId: message.roundId
+          }),
+          room
+        })
+        break
+      }
+      case 'host.setItemKey': {
+        answerSlateFrame({
+          outbound,
+          refusal: 'That key cannot be noted now',
+          result: setSlateKey({
+            itemIndex: message.itemIndex,
+            key: message.key,
+            now: Date.now(),
+            room,
+            roundId: message.roundId
+          }),
+          room
+        })
+        break
+      }
+      case 'host.collectSheets': {
+        answerSlateFrame({
+          outbound,
+          refusal: 'There are no open sheets to collect',
+          result: collectSheets({
+            now: Date.now(),
+            room,
+            roundId: message.roundId
+          }),
+          room
+        })
+        break
+      }
+      case 'host.showItem': {
+        answerSlateFrame({
+          outbound,
+          refusal: 'That item cannot be shown now',
+          result: showSlateItem({
+            itemIndex: message.itemIndex,
+            now: Date.now(),
+            room,
+            roundId: message.roundId
+          }),
+          room
+        })
+        break
+      }
+      case 'host.judgeGroup': {
+        answerSlateFrame({
+          outbound,
+          refusal: 'That verdict does not apply any more',
+          result: judgeSlateGroup({
+            groupKey: message.groupKey,
+            isCorrect: message.verdict.isCorrect,
+            itemIndex: message.itemIndex,
+            now: Date.now(),
+            room,
+            roundId: message.roundId
+          }),
+          room
+        })
         break
       }
       case 'host.judge': {
@@ -436,6 +521,65 @@ export const createRoomSocketEvents = (
         break
       }
     }
+  }
+
+  /**
+   * The slate's host frames all end the same way: refused with the code the
+   * room gave, or broadcast. None of them arms a clock — the sheet has none.
+   */
+  const answerSlateFrame = ({
+    outbound,
+    refusal,
+    result,
+    room
+  }: {
+    outbound: Outbound
+    refusal: string
+    result: Result<void, SlateRejection>
+    room: Room
+  }): void => {
+    if (result.status === 'failure') {
+      sendError(outbound, {
+        code: result.error,
+        fatal: false,
+        message: refusal
+      })
+
+      return
+    }
+
+    broadcastRoom(room)
+  }
+
+  const writeLine = (
+    message: Extract<ClientMessage, { type: 'slate.write' }>,
+    active: Connection,
+    outbound: Outbound,
+    room: Room
+  ): void => {
+    if (active.playerId === null) {
+      sendError(outbound, {
+        code: 'invalid_message',
+        fatal: false,
+        message: 'Only a seated player holds a sheet'
+      })
+
+      return
+    }
+
+    answerSlateFrame({
+      outbound,
+      refusal: 'That line was not saved',
+      result: writeSlateLine({
+        answer: message.answer,
+        itemIndex: message.itemIndex,
+        now: Date.now(),
+        playerId: active.playerId,
+        room,
+        roundId: message.roundId
+      }),
+      room
+    })
   }
 
   const buzz = (
@@ -646,6 +790,19 @@ export const createRoomSocketEvents = (
     // before anybody has voted on it.
     if (room.round?.content.kind === 'lefake') {
       closeLefakePhase(room)
+
+      return
+    }
+
+    // The sheets are collected by their own frame, which is what makes the
+    // collection a decision rather than a reveal pressed early: here the round
+    // ends only from the correction.
+    if (room.round?.content.kind === 'slate' && room.phase !== 'correcting') {
+      sendError(outbound, {
+        code: 'wrong_phase',
+        fatal: false,
+        message: 'The sheets have not been collected yet'
+      })
 
       return
     }

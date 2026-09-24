@@ -53,11 +53,17 @@ nobody can pick up is a party ended by a dead battery.
 | `player.answer` | player | `roundId`, `answer` — `{kind:'choice', choiceIndex}` or `{kind:'typed', guess}` |
 | `lefake.submit` | player | `roundId`, `lie` |
 | `lefake.vote` | player | `roundId`, `candidateId` |
+| `slate.write` | player | `roundId`, `itemIndex`, `answer` — an upsert of one line; `''` clears it |
 | `host.updateSettings` | host | `settings` |
 | `host.startRound` | host | — |
 | `host.judge` | host | `roundId`, `playerId`, `verdict` |
 | `host.reveal` | host | `roundId` |
 | `host.clearLockouts` | host | `roundId` |
+| `host.addItem` | host | `roundId` |
+| `host.setItemKey` | host | `roundId`, `itemIndex`, `key` — `''` clears it |
+| `host.collectSheets` | host | `roundId` |
+| `host.showItem` | host | `roundId`, `itemIndex` |
+| `host.judgeGroup` | host | `roundId`, `itemIndex`, `groupKey`, `verdict` — `{kind:'single', isCorrect}` |
 | `host.nextRound` | host | — |
 | `host.endGame` | host | — |
 | `host.playAgain` | host | — |
@@ -88,6 +94,28 @@ buzzer would pay two points for one charade.
 round is a clip that runs out, so a lockout there expires on its own; a game
 whose question the room owns has no such clock.
 
+**The slate's five host frames and its one player frame.** The sheet is one
+round: `playing` is the writing, `host.collectSheets` turns it into
+`correcting` with the wall on item 0, `host.showItem` moves the wall — back as
+well as forward — and `host.reveal` ends the correction into `revealed`. A
+`host.reveal` before the collection is refused with `wrong_phase`: collecting is
+a decision of its own, never a reveal pressed early. Every index is 0-based.
+
+`host.judgeGroup` is its own frame rather than `host.judge` taught an item index.
+`host.judge` names one player on the floor and ends in a lockout, a resumed clip
+or a reveal; this names every player who wrote the same thing on the item on the
+wall, is paid or unpaid on the spot, and can be taken back. The two share the
+`single` verdict shape and nothing else. `itemIndex` must be the item on the
+wall (`stale_round` otherwise, the way a stale `roundId` is), and `groupKey` must
+name a group of it (`invalid_message` otherwise) — a blank line is never a group,
+which is the whole guard against validating one.
+
+The slate stamps the round's roster **at collection**, not when the writing
+opens: a sheet has no clock and no race, so a latecomer gets one. After the
+collection the shell's `joinedAfterStart` applies unchanged. `slate.write` is not
+a floor frame — it moves nothing along, so it is accepted while the console is
+away.
+
 Every `host.*` type is listed in `HOST_ONLY_MESSAGE_TYPES`, which the server
 checks before dispatch. A test asserts the set matches the naming convention, so
 a new host message cannot quietly become player-callable.
@@ -115,7 +143,7 @@ Shared by both:
 ```jsonc
 {
   "code": "K3M9",
-  "phase": "playing",              // lobby | countdown | playing | buzzed | revealed | finished
+  "phase": "playing",              // lobby | countdown | playing | buzzed | voting | correcting | revealed | finished
   "players": [{ "id": "…", "nickname": "Alice", "score": 2, "isConnected": true }],
   "settings": { "roundCount": 10,          // null → until the host ends it
                 "countdownMs": 3000,
@@ -183,6 +211,20 @@ The host view adds what only the host may see:
 }
 ```
 
+**The slate splits its round between the two views on privacy, not on the
+answer.** `round.content` carries `itemCount`, `currentItemIndex` (`null` while
+the sheets are open) and `yourSheet` — the reader's own lines, one per item, each
+`{ answer, verdict }`, and `null` for a reader with no seat. It is the only place
+a player's answers travel to them, which is what a reload comes back to. The
+host arm carries `progress` (`{ playerId, filledCount }` per seat), `keys` (the
+host's memo per item, reaching no player frame ever) and `correction`, which is
+`null` until the collection: **the host screen is the wall**, so it holds counts
+and not one answer while the room writes. From `correcting` it holds the item on
+the wall, grouped — `{ key, text, playerIds, isCorrect }` per group, blanks
+listed apart as `blankPlayerIds`. A line's verdict is `null` until its group is
+judged or the wall has moved past its item, which is when an answer nobody
+validated becomes wrong.
+
 `audioUrl` and `track` are separate because a host who has taken a seat keeps
 the first and gets `null` for the second: that screen still has to play the
 clip, and must not be handed the answer.
@@ -208,7 +250,9 @@ is the rule and it is the room's, not the form's: a console remembers the name i
 was seated under and replays it on every reconnect, so a rule enforced only where
 the control is drawn is a rule the next `hello` walks through. Buzzer mode is
 what asks for a judge; the reflex race shares that mode and needs none, because
-being first *is* being right there.
+being first *is* being right there. The slate is the other way round: it is
+`typed` — a sheet is typed — and still judged, because its host holds the key
+and marks the sheets.
 
 **A console's tab closing ends both of the things it was.** `onClose` asks two
 questions, and the seated host is the one socket that answers both — whether the

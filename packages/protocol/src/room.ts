@@ -15,12 +15,19 @@ import {
   revealedQuestionSchema
 } from './question'
 import { awardSchema, verdictSchema } from './scoring'
+import {
+  slateAnswerGroupSchema,
+  slateItemCountSchema,
+  slateItemIndexSchema,
+  slateLineSchema,
+  slateProgressSchema
+} from './slate'
 import { hostTrackSchema, trackIdentitySchema } from './track'
 
 export const MAX_PLAYERS_PER_ROOM = 24
 
 /**
- * `voting` is the one member no buzz-first game reaches, and the only phase
+ * `voting` is the one member no buzz-first game reaches, and the first phase
  * added since the shelf began. The catalogue's rule was that these names stay
  * fused until a game needs one they cannot carry, and the submit-then-vote shape
  * needs exactly one: its writing phase *is* `playing` — everyone submitting
@@ -30,6 +37,11 @@ export const MAX_PLAYERS_PER_ROOM = 24
  * Adding a name is not the split the catalogue warns against. It is what keeps
  * the enum shared: every shell check can still spell what it is checking, and
  * the next submit-then-vote game reuses this for nothing.
+ *
+ * `correcting` is the second name added on the same argument, and the slate's
+ * alone: the sheets are collected and the host is marking them one item at a
+ * time. It is not `voting` — nobody on the floor acts — and not `revealed`,
+ * because the scores are still moving.
  */
 export const roomPhases = [
   'lobby',
@@ -37,6 +49,7 @@ export const roomPhases = [
   'playing',
   'buzzed',
   'voting',
+  'correcting',
   'revealed',
   'finished'
 ] as const
@@ -285,6 +298,25 @@ export const roundContentSchema = z.discriminatedUnion('kind', [
      * `lockedOutPlayerIds` — which in this game has no other cause.
      */
     presses: z.array(roundAnswerSchema)
+  }),
+  z.object({
+    /**
+     * The item the wall is correcting, and `null` while the sheets are still
+     * being written. 0-based, like every index this game sends.
+     */
+    currentItemIndex: slateItemIndexSchema.nullable(),
+    /** The round's own count, which `host.addItem` grows while the sheets are open. */
+    itemCount: slateItemCountSchema,
+    kind: z.literal('slate'),
+    /**
+     * The reader's own sheet, one line per item, and nobody else's — until the
+     * collection not even the host screen holds another player's answer, because
+     * the host screen is the wall. `null` for a reader with no seat.
+     *
+     * It is what a reload comes back to: a locked screen loses nothing, since
+     * every line was saved on its own as it was written.
+     */
+    yourSheet: z.array(slateLineSchema).nullable()
   })
 ])
 
@@ -413,7 +445,33 @@ export const hostRoundContentSchema = z.discriminatedUnion('kind', [
    * `flipsAt` off the round like every player does, because it is flipping the
    * same screen at the same moment.
    */
-  z.object({ kind: z.literal('reflex') })
+  z.object({ kind: z.literal('reflex') }),
+  z.object({
+    /**
+     * The item being corrected, grouped, and `null` until the sheets are
+     * collected — which is the whole of the wall's privacy: before that, this
+     * arm holds counts and the host's own memo and not one answer.
+     *
+     * One item rather than the whole pile because the wall shows one, and the
+     * cursor is what moves: the next snapshot carries the next item.
+     */
+    correction: z
+      .object({
+        /** Who left this item empty. Shown, and never a group — a blank cannot be validated. */
+        blankPlayerIds: z.array(playerIdSchema),
+        groups: z.array(slateAnswerGroupSchema)
+      })
+      .nullable(),
+    /**
+     * The host's memo per item, `null` where none was noted. Host-only for the
+     * length of the game, the reveal included: it is a note, not the answer the
+     * players were marked against.
+     */
+    keys: z.array(z.string().nullable()),
+    kind: z.literal('slate'),
+    /** Every seated player's count of filled lines — *Julie 12/26*. */
+    progress: z.array(slateProgressSchema)
+  })
 ])
 
 /**

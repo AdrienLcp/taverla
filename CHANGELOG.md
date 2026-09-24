@@ -8,6 +8,29 @@ one part.
 
 ### Breaking Changes
 
+- `[Shared]` **The slate is served**, and `PROTOCOL_VERSION` goes to 17: a
+  sixth game where everyone fills a numbered sheet in private and the host marks
+  it item by item on the wall. It was asked for as a chip tasting and is kept
+  because it is any tasting, any quiz on paper. `RoomPhase` gains
+  `correcting` — the sheets collected, the scores still moving — which is what
+  an older tab would fail to parse.
+
+  One player frame, `slate.write`, saves one line as an upsert, and five host
+  frames run the sheet: `host.addItem`, `host.setItemKey`,
+  `host.collectSheets`, `host.showItem` and `host.judgeGroup`. The last is its
+  own rather than `host.judge` taught an item index: it names every player who
+  wrote the same thing, pays on the spot, and can be taken back, so a verdict
+  changed on an earlier item moves the board at once. Answers are grouped by the
+  shared normalisation and nothing more — no typo tolerance, since a near miss
+  is the host's call.
+
+  **Nobody's answers reach anybody else, the host screen included, until the
+  collection** — the host screen is the wall, so it holds counts. The host's
+  answer key reaches no player frame at all. The round's roster is stamped at
+  collection rather than when the writing opens, so a friend arriving at the
+  fifth cup gets a sheet. It is in `gameKinds` and not yet on the shelf: its
+  screens are the next session.
+
 - `[Shared]` **A room can ask for cinema, and for video games**, and
   `PROTOCOL_VERSION` goes to 16. `arts` was not a subject, it was the
   leftovers — films, television, animation, video games, music, books, comics,

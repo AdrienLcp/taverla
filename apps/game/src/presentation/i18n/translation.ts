@@ -77,6 +77,7 @@ export const scoringKey = ({
   | 'buzzer.scoring'
   | 'lefake.scoring'
   | 'reflex.scoring'
+  | 'slate.scoring'
   | `blindtest.scoring.${AnswerMode}`
   | `blindtest.scoringFilm.${Exclude<AnswerMode, 'choice'>}`
   | `quiz.scoring.${AnswerMode}`
@@ -96,6 +97,8 @@ export const scoringKey = ({
       return `quiz.scoring.${answerMode}`
     case 'reflex':
       return 'reflex.scoring'
+    case 'slate':
+      return 'slate.scoring'
   }
 }
 

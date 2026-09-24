@@ -9,7 +9,12 @@ import {
 } from './identifiers'
 import { lieSchema } from './lefake'
 import { roomSettingsSchema } from './room'
-import { verdictSchema } from './scoring'
+import { singleVerdictSchema, verdictSchema } from './scoring'
+import {
+  slateAnswerSchema,
+  slateItemIndexSchema,
+  slateKeySchema
+} from './slate'
 
 export const connectionRoles = ['host', 'player'] as const
 export const connectionRoleSchema = z.enum(connectionRoles)
@@ -126,6 +131,22 @@ export const voteMessageSchema = z.object({
   type: z.literal('lefake.vote')
 })
 
+/**
+ * One line of the slate, saved on its own as it is written — an upsert, and an
+ * empty `answer` takes the line back. One line per frame rather than the whole
+ * sheet, so two screens of one player cannot overwrite each other's other
+ * lines, and a frame lost to a blink costs one answer rather than all of them.
+ *
+ * In the game's namespace for Le Fake's reason: nothing else on the shelf
+ * writes a sheet.
+ */
+export const writeSlateLineMessageSchema = z.object({
+  answer: slateAnswerSchema,
+  itemIndex: slateItemIndexSchema,
+  roundId: roundIdSchema,
+  type: z.literal('slate.write')
+})
+
 export const updateSettingsMessageSchema = z.object({
   settings: roomSettingsSchema,
   type: z.literal('host.updateSettings')
@@ -157,6 +178,51 @@ export const revealMessageSchema = z.object({
 export const clearLockoutsMessageSchema = z.object({
   roundId: roundIdSchema,
   type: z.literal('host.clearLockouts')
+})
+
+/**
+ * One more thing to guess on the slate, while the sheets are open. A host who
+ * brings the cups one at a time opens on one item and adds as they go.
+ */
+export const addItemMessageSchema = z.object({
+  roundId: roundIdSchema,
+  type: z.literal('host.addItem')
+})
+
+/** The host's memo for one item; empty clears it. It reaches no player frame, ever. */
+export const setItemKeyMessageSchema = z.object({
+  itemIndex: slateItemIndexSchema,
+  key: slateKeySchema,
+  roundId: roundIdSchema,
+  type: z.literal('host.setItemKey')
+})
+
+/** The slate's sheets go read-only and the correction opens on the first item. */
+export const collectSheetsMessageSchema = z.object({
+  roundId: roundIdSchema,
+  type: z.literal('host.collectSheets')
+})
+
+/** Moves the correction to one item — forward, or back to change a verdict already given. */
+export const showItemMessageSchema = z.object({
+  itemIndex: slateItemIndexSchema,
+  roundId: roundIdSchema,
+  type: z.literal('host.showItem')
+})
+
+/**
+ * A verdict over every player who wrote the same thing on the item on the wall.
+ * Its own frame rather than `host.judge`, which names one player on the floor
+ * and ends in a lockout or a reveal: this names a group, pays or unpays it on
+ * the spot, and can be taken back. `itemIndex` guards a late tap the way
+ * `roundId` does — it must be the item on the wall.
+ */
+export const judgeGroupMessageSchema = z.object({
+  groupKey: z.string().min(1),
+  itemIndex: slateItemIndexSchema,
+  roundId: roundIdSchema,
+  type: z.literal('host.judgeGroup'),
+  verdict: singleVerdictSchema
 })
 
 export const nextRoundMessageSchema = z.object({
@@ -204,6 +270,11 @@ export const hostClientMessageSchema = z.discriminatedUnion('type', [
   judgeMessageSchema,
   revealMessageSchema,
   clearLockoutsMessageSchema,
+  addItemMessageSchema,
+  setItemKeyMessageSchema,
+  collectSheetsMessageSchema,
+  showItemMessageSchema,
+  judgeGroupMessageSchema,
   nextRoundMessageSchema,
   endGameMessageSchema,
   playAgainMessageSchema,
@@ -219,7 +290,8 @@ export const playerClientMessageSchema = z.discriminatedUnion('type', [
   buzzMessageSchema,
   answerMessageSchema,
   submitLieMessageSchema,
-  voteMessageSchema
+  voteMessageSchema,
+  writeSlateLineMessageSchema
 ])
 
 /** Everything the server's decoder accepts, before it knows which role sent it. */
@@ -232,11 +304,17 @@ export const clientMessageSchema = z.discriminatedUnion('type', [
   answerMessageSchema,
   submitLieMessageSchema,
   voteMessageSchema,
+  writeSlateLineMessageSchema,
   updateSettingsMessageSchema,
   startRoundMessageSchema,
   judgeMessageSchema,
   revealMessageSchema,
   clearLockoutsMessageSchema,
+  addItemMessageSchema,
+  setItemKeyMessageSchema,
+  collectSheetsMessageSchema,
+  showItemMessageSchema,
+  judgeGroupMessageSchema,
   nextRoundMessageSchema,
   endGameMessageSchema,
   playAgainMessageSchema,
@@ -261,6 +339,11 @@ export const HOST_ONLY_MESSAGE_TYPES = new Set<ClientMessageType>([
   'host.judge',
   'host.reveal',
   'host.clearLockouts',
+  'host.addItem',
+  'host.setItemKey',
+  'host.collectSheets',
+  'host.showItem',
+  'host.judgeGroup',
   'host.nextRound',
   'host.endGame',
   'host.playAgain',
@@ -275,6 +358,10 @@ export const HOST_ONLY_MESSAGE_TYPES = new Set<ClientMessageType>([
  * — `player.leave`, `player.rename` — are deliberately not here, because
  * leaving a room nobody is running is exactly what a player should still be
  * allowed to do.
+ *
+ * `slate.write` is not here either: a line on a sheet moves nothing along —
+ * only the host collects — and refusing a save over a console's Wi-Fi blink
+ * would lose an answer the player believes is kept.
  */
 export const FLOOR_MESSAGE_TYPES = new Set<ClientMessageType>([
   'player.buzz',

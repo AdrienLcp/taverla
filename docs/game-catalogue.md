@@ -284,8 +284,8 @@ compiler did walk through the change in an afternoon, exactly as this paragraph
 predicted it would once there were two cases.
 
 **`RoomPhase` stays fused, and Le Fake is what proved that rule rather than
-breaking it.** `lobby → countdown → playing → buzzed → voting → revealed →
-finished` is the blind test's life cycle wearing the room's name, and it stays
+breaking it.** `lobby → countdown → playing → buzzed → voting → correcting →
+revealed → finished` is the blind test's life cycle wearing the room's name, and it stays
 whole because a phase carries **no field at all** — it is a name. `settings.game`,
 `settings.mode`, `round.content` and `Verdict` each split because a field
 belonged to one arm and sat on all of them. Splitting a name buys nothing of the
@@ -300,6 +300,11 @@ simultaneous round already means, and `answers` already carries the names
 filling the screen. Adding a member keeps the enum shared and hands the next
 submit-then-vote game its phase for nothing. A drawing game's "everyone is
 drawing at once" is the same test again, and still has no equivalent here.
+
+The slate added the second name on the same argument: `correcting`, the sheets
+collected and the host marking them one item at a time. Its writing is
+`playing` again, with no clock; the correction is neither `voting` — nobody on
+the floor acts — nor `revealed`, because the scores are still moving.
 
 **Message names are blind-test verbs.** `player.buzz`, `host.judge`,
 `host.reveal`. When a second game lands, its messages take its own namespace

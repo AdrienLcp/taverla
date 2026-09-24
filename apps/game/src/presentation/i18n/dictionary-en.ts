@@ -653,5 +653,10 @@ export const EN_DICTIONARY = defineDictionary({
      * replaced a rank the room could count, so what it paid has to be said.
      */
     speedBonus: '{points:number} of that for being early'
+  },
+  slate: {
+    name: 'Slate',
+    scoring:
+      'Everyone fills in their own sheet in private, then the host marks it: one point per answer they validate.'
   }
 })

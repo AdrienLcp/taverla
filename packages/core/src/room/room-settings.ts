@@ -30,7 +30,9 @@ const DEFAULT_ROUND_COUNT: Record<GameKind, number | null> = {
   lefake: 5,
   quiz: 10,
   /** A heat is a wait and a press, so ten of them is under two minutes. */
-  reflex: 10
+  reflex: 10,
+  /** One sheet is the evening's tasting; a second is a second tasting, and the host can say so. */
+  slate: 1
 }
 
 /**
@@ -52,7 +54,8 @@ const DEFAULT_ANSWER_MODE: Record<GameKind, AnswerMode> = {
   buzzer: 'buzzer',
   lefake: 'choice',
   quiz: 'choice',
-  reflex: 'buzzer'
+  reflex: 'buzzer',
+  slate: 'typed'
 }
 
 /**

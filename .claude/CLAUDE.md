@@ -134,14 +134,17 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   its arm of `settings.game` and `round.content`, and narrows the answer mode
 - **Round** — one track, one question, a screen about to change colour, or
   nothing at all.
-  `lobby → countdown → playing → buzzed → voting → revealed → finished`.
-  `roundCount` is nullable, and `null` means until the host ends it. `voting` is
-  Le Fake's alone; every other game goes from `playing` straight to a reveal,
-  and the reflex race is the only one that never passes through `buzzed` at all.
+  `lobby → countdown → playing → buzzed → voting → correcting → revealed →
+  finished`. `roundCount` is nullable, and `null` means until the host ends it.
+  `voting` is Le Fake's alone and `correcting` the slate's — the sheets
+  collected, the host marking them item by item; every other game goes from
+  `playing` straight to a reveal, and the reflex race is the only one that never
+  passes through `buzzed` at all.
   A
   round **stamps who it opened on** when its clip starts, and waits for those
   players and nobody else — one stamp for the whole round, Le Fake's vote
-  included. A screen that arrives after keeps its seat, is refused everything it
+  included. The slate stamps at **collection** instead: a sheet has no clock and
+  no race, so a latecomer is owed one. A screen that arrives after keeps its seat, is refused everything it
   could send with `joined_mid_round`, and plays from the next round
 - **Answer mode** — `typed` (one field, the default), `choice` (four candidates)
   or `buzzer` (one player, judged by the host). The first two are everyone at

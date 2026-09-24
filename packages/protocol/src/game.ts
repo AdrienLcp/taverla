@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { questionDrawSettingsSchema } from './question'
+import { slateItemCountSchema } from './slate'
 import { trackDifficultySchema, trackSourceSchema } from './track'
 
 export const gameKinds = [
@@ -8,7 +9,8 @@ export const gameKinds = [
   'buzzer',
   'lefake',
   'quiz',
-  'reflex'
+  'reflex',
+  'slate'
 ] as const
 
 export const gameKindSchema = z.enum(gameKinds)
@@ -19,10 +21,9 @@ export const gameKindSchema = z.enum(gameKinds)
  * room opened on one of those would render another game's round. Refusing it at
  * the door beats opening a room whose first "start" cannot be looked at.
  *
- * Every served game is on it today. The list still is not `gameKinds` and must
- * not collapse into it: the next game will be served before it has screens, and
- * this is where it waits — `reflex` spent a stage in exactly that window, and
- * every game before it did too.
+ * `slate` is the game waiting here now: served in full, with no screens yet.
+ * `reflex` spent a stage in exactly that window, and every game before it did
+ * too.
  *
  * **The order is the shelf's**, not the alphabet's: it is the order the front
  * door draws its cards in and the order the lobby's picker offers, so the two
@@ -95,7 +96,16 @@ export const gameSettingsSchema = z.discriminatedUnion('kind', [
    * fixed one is a wait a room learns to count — and the floor that keeps the
    * race honest is not a taste call either.
    */
-  z.object({ kind: z.literal('reflex') })
+  z.object({ kind: z.literal('reflex') }),
+  z.object({
+    /**
+     * How many numbered lines a sheet opens with. The round's own count starts
+     * here and grows with `host.addItem`, so a host who goes one cup at a time
+     * opens on one — this setting is where the next sheet starts, not a cap.
+     */
+    itemCount: slateItemCountSchema,
+    kind: z.literal('slate')
+  })
 ])
 
 export type GameKind = z.infer<typeof gameKindSchema>
@@ -106,6 +116,7 @@ export type BuzzerSettings = Extract<GameSettings, { kind: 'buzzer' }>
 export type LefakeSettings = Extract<GameSettings, { kind: 'lefake' }>
 export type QuizSettings = Extract<GameSettings, { kind: 'quiz' }>
 export type ReflexSettings = Extract<GameSettings, { kind: 'reflex' }>
+export type SlateSettings = Extract<GameSettings, { kind: 'slate' }>
 
 /**
  * How long a round stays open unanswered, or `null` for a game whose *settings*
@@ -122,7 +133,10 @@ export type ReflexSettings = Extract<GameSettings, { kind: 'reflex' }>
  * than *the round's*.
  */
 export const roundDurationMsOf = (game: GameSettings | null): number | null =>
-  game === null || game.kind === 'buzzer' || game.kind === 'reflex'
+  game === null ||
+  game.kind === 'buzzer' ||
+  game.kind === 'reflex' ||
+  game.kind === 'slate'
     ? null
     : game.roundDurationMs
 
@@ -176,11 +190,17 @@ export const DEFAULT_QUIZ_SETTINGS: QuizSettings = {
 
 export const DEFAULT_REFLEX_SETTINGS: ReflexSettings = { kind: 'reflex' }
 
+export const DEFAULT_SLATE_SETTINGS: SlateSettings = {
+  itemCount: 10,
+  kind: 'slate'
+}
+
 /** A record rather than a switch, so a new kind without a default cannot compile. */
 export const DEFAULT_GAME_SETTINGS: Record<GameKind, GameSettings> = {
   blindtest: DEFAULT_BLINDTEST_SETTINGS,
   buzzer: DEFAULT_BUZZER_SETTINGS,
   lefake: DEFAULT_LEFAKE_SETTINGS,
   quiz: DEFAULT_QUIZ_SETTINGS,
-  reflex: DEFAULT_REFLEX_SETTINGS
+  reflex: DEFAULT_REFLEX_SETTINGS,
+  slate: DEFAULT_SLATE_SETTINGS
 }

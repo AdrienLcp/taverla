@@ -51,6 +51,7 @@ import {
 
 import type { PlayerAttempts, Room, Round } from '@/domain/room/room'
 import { touch } from '@/domain/room/room-service'
+import { markEveryItem } from '@/domain/round/slate-round'
 import { drawChoices } from '@/domain/round/track-pool'
 
 export type VerdictRejection = Extract<
@@ -167,7 +168,8 @@ export const startRoundClock = ({
   }
 
   room.phase = 'playing'
-  room.round.openedWithPlayerIds = new Set(room.players.keys())
+  room.round.openedWithPlayerIds =
+    room.round.content.kind === 'slate' ? null : new Set(room.players.keys())
   room.round.runningSince = now
   touch(room, now)
 
@@ -1228,6 +1230,13 @@ export const startAutoAdvanceHold = (room: Room, now: number): void => {
 export const closeRound = (room: Room, now: number): void => {
   if (room.round?.content.kind === 'reflex') {
     settleReflexRound(room, now)
+
+    return
+  }
+
+  if (room.round?.content.kind === 'slate') {
+    markEveryItem(room)
+    revealRound(room, now)
 
     return
   }

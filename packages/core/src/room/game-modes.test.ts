@@ -52,6 +52,14 @@ describe('isJudgedByHost', () => {
     expect(isJudgedByHost({ game: 'blindtest', mode: 'buzzer' })).toBe(true)
   })
 
+  // The slate is typed and still marked by hand: the host holds the key, so a
+  // seat for them is a sheet filled in from the answers.
+  it('[game-modes] keeps the slate’s host marking the sheets under its typed mode', () => {
+    expect(answerModesFor('slate')).toEqual(['typed'])
+    expect(isJudgedByHost({ game: 'slate', mode: 'typed' })).toBe(true)
+    expect(isSeatWithheldByMode({ game: 'slate', mode: 'typed' })).toBe(false)
+  })
+
   it('[game-modes] withholds the seat from a room that has picked nothing yet', () => {
     expect(isJudgedByHost({ game: null, mode: 'buzzer' })).toBe(true)
   })
