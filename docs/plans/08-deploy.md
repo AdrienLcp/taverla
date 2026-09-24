@@ -64,7 +64,7 @@ on the same port, and the QR code encoding that origin.
   `dist/index.mjs` with the workspace packages inlined — they ship as
   TypeScript source, so anything that left them external would only start under
   a loader. Third-party dependencies stay external; Render installs them.
-  `pnpm --filter @taverla/server start` was Render's start command until September 2026, when Render made `/usr/bin` read-only and `corepack enable` began failing with EROFS; The build now runs Render's own pnpm with no corepack, which reads `packageManager` and switches versions itself — a corepack shim under `$HOME` got the install right and then lost the nested `pnpm -r build` to Render's pnpm 10 — and the service starts with plain `node`. **The service does not read `render.yaml`**: its build and start commands live in the dashboard, which is where that change had to be made by hand — the file is a record, and a change to it deploys nothing.
+  `pnpm --filter @taverla/server start` was Render's start command until September 2026, when Render made `/usr/bin` read-only and `corepack enable` began failing with EROFS. The build now runs Render's own pnpm with no corepack, which reads `packageManager` and switches versions itself — a corepack shim under `$HOME` got the install right and then lost the nested `pnpm -r build` to Render's pnpm 10 — and the service starts with plain `node`. **The service does not read `render.yaml`**: its build and start commands live in the dashboard, which is where that change had to be made by hand — the file is a record, and a change to it deploys nothing.
 
 - **`POST /api/rooms` is rate-limited** — 30 per address per ten minutes, which
   is the window the sweeper clears an unjoined room in. It answers 429 with

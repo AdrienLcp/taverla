@@ -9,20 +9,16 @@ services:
     # and a phone would reach the wrong one.
     numInstances: 1
     healthCheckPath: /api/health
-    # Render's /usr/bin is read-only, so a bare `corepack enable` dies on EROFS
-    # replacing its pnpm. The shims go to a directory of our own instead, and
-    # the start command needs no pnpm at all.
-    buildCommand: >-
-      mkdir -p "$HOME/.corepack-bin" &&
-      corepack enable --install-directory "$HOME/.corepack-bin" &&
-      export PATH="$HOME/.corepack-bin:$PATH" &&
-      pnpm install --frozen-lockfile && pnpm build
+    # A record, not the source: the service reads its commands from the
+    # dashboard, so a change here must be made there too (API or UI).
+    # No corepack: Render's /usr/bin is read-only, so `corepack enable` dies on
+    # EROFS. Render's own pnpm reads `packageManager` and switches to that
+    # version by itself, nested script calls included.
+    buildCommand: pnpm install --frozen-lockfile && pnpm build
     startCommand: cd apps/server && node dist/index.mjs
     envVars:
       - key: NODE_VERSION
         value: '24'
-      - key: COREPACK_ENABLE_DOWNLOAD_PROMPT
-        value: '0'
       # Relative to the server package, which is where the start command runs.
       - key: SERVE_GAME_FROM
         value: ../game/dist
