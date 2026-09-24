@@ -268,6 +268,19 @@ A label longer than three glyphs widens every column of the grid at once, so
 the tiles stay one size, and ends in an ellipsis; the field above spells it
 whole.
 
+**A console card is three fixed rows, and its press never moves.** The label's
+row is one numeral tall; a word is set at half a numeral and clamped to two
+lines, which is the same height, so renaming `1` to *Glass twelve* changes the
+lettering and nothing under it — it used to lift the button 24px beneath the
+host's finger. The state is one line, a step above a caption so `3/3 written`
+carries beside the numeral. The grid is `auto-fill` over a floor measured on the
+widest press, `RAMASSER` at 105px of text: the small box's own padding and edge,
+then the card's `--space-xs` and edge, 157px (`9.875rem`) — two across a phone,
+five at 1024, seven at 1920. The progress and the two folds sit **beside** the
+board only from `$poster-screen` (`poster-wide`); below it they go under it, in
+two halves above `wide` and one column on a phone, because a side column at
+1024 left the board three cards across and nine rows deep.
+
 ### Icons
 
 There is an icon family, and it is authored rather than installed. Every glyph

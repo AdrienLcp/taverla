@@ -9,10 +9,16 @@
       gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
       grid-template-columns: minmax(0, 1fr)
 
+    // The board is the wall and takes every column it can; the progress and
+    // the two folds are the host's, read between presses. Beside the board
+    // only from the poster width, so the board keeps five cards across: at
+    // 1024 a side column left it three, nine rows deep.
     &.slate-writing
-      @include layout.wide
-        align-items: center
-        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr)
+      align-content: start
+
+      @include layout.poster-wide
+        align-items: start
+        grid-template-columns: minmax(0, 1fr) clamp(20rem, 22vw, 28rem)
 
     // The item is what the room reads; the standings are what the host glances
     // at between two presses, so they take the narrower column.
@@ -56,18 +62,32 @@
     // with no word: open is outlined like a field still to fill, closed is
     // solid ink because it is what the wall owes the room next, and marked
     // recedes to the rule colour because nothing is left to do on it.
+    // `9.875rem` is the widest press measured, not guessed: `RAMASSER` is
+    // 105px of text at the small size, `Collect` 85. Around it the small
+    // box's own `--space-s` and edge, then the card's `--space-xs` and edge —
+    // 157px, which is two across a 390px phone, five at 1024 and seven beside
+    // the side column at 1920. The small size is set in `rem`, so the floor
+    // scales with the text it was measured on.
     .items
       display: grid
       gap: var(--space-s)
-      grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr))
+      grid-template-columns: repeat(auto-fill, minmax(min(9.875rem, 100%), 1fr))
       list-style: none
 
+    // Three fixed rows, so the press sits at the same height on every card
+    // whatever its label says. The label's row is one numeral tall and a word
+    // is set at half a numeral over two lines at most, which is the same
+    // height: renaming `1` to `Glass twelve` used to swap a 59px line for a
+    // 36px one and lift the button 24px under the host's finger.
     .item
+      --numeral: clamp(2.25rem, 7vmin, 3.5rem)
+
       align-items: center
       border: 3px solid var(--edge)
-      display: flex
-      flex-direction: column
+      display: grid
       gap: var(--space-2xs)
+      grid-template-rows: calc(var(--numeral) * 1.05) auto auto
+      justify-items: center
       min-width: 0
       padding: var(--space-xs)
       text-align: center
@@ -76,7 +96,7 @@
         @include typography.monument
         @include typography.numeric
 
-        font-size: clamp(2.25rem, 7vmin, 3.5rem)
+        font-size: var(--numeral)
         line-height: 1.05
         max-inline-size: 100%
         overflow: hidden
@@ -86,22 +106,36 @@
         &.long
           @include typography.title
 
-          line-height: 1.3
+          -webkit-box-orient: vertical
+          display: -webkit-box
+          font-size: calc(var(--numeral) / 2)
+          -webkit-line-clamp: 2
+          line-clamp: 2
+          line-height: 1.05
+          overflow-wrap: anywhere
+          white-space: normal
 
+      // Read from across the room beside the numeral, so a step up from the
+      // caption it started as — and one line always, so it cannot move the
+      // press either.
       .state
         @include typography.caption
         @include typography.numeric
 
         align-items: center
         display: inline-flex
+        font-size: clamp(0.875rem, 2.2vmin, 1.25rem)
         gap: var(--space-2xs)
+        max-inline-size: 100%
+        white-space: nowrap
 
         svg
           block-size: 1em
+          flex: none
           inline-size: 1em
 
       .button
-        align-self: stretch
+        justify-self: stretch
 
       // The flip's own swap, scoped to one item: the sheets are only on screen
       // in `playing`, so its pair is the one to reverse, and the derived three
@@ -163,6 +197,29 @@
       gap: var(--space-s)
       grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr))
       list-style: none
+
+  // Under the board and still wider than a column needs, the progress takes
+  // one half and the two folds stack in the other; beside the board, and on
+  // a phone, all three are one column. Two classes deep so it outranks the
+  // lobby's `.host-side`, which the console page declares at the same weight.
+  .stage.slate-writing > .host-side
+    align-content: start
+    display: grid
+    gap: var(--space-l)
+    min-width: 0
+
+    @include layout.wide
+      align-items: start
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr)
+
+      .progress
+        grid-row: span 2
+
+    @include layout.poster-wide
+      grid-template-columns: minmax(0, 1fr)
+
+      .progress
+        grid-row: auto
 
   .slate-correcting
     .item

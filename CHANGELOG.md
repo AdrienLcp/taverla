@@ -729,6 +729,13 @@ one part.
 
 ### Improvements
 
+- `[Game]` **The slate's console board holds still and uses the screen.** A
+  card's press stays at the same height whatever its label says — a word used
+  to lift it 24px — and the collect button keeps its padding, because the grid's
+  floor is now measured on the widest press in both locales. The progress and
+  the folds go under the board below 1200px, so it keeps five cards across at
+  1024 and two on a phone.
+
 - `[Server]` **Zod's compiler, on the one path that pays for it.**
   `import 'zod/compile'` is the first line of the server entry point, which
   compiles every schema built after it — and the wire schemas are all of them,

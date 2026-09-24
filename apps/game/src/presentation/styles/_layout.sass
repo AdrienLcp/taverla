@@ -25,6 +25,14 @@ $poster-screen: 1200px
   @media (width < $wide-screen)
     @content
 
+/// Past `wide`, where a stage whose payload is a grid can afford a column
+/// beside it and still keep the grid five cards across. Between the two the
+/// column goes under the grid instead, because beside it the grid dropped to
+/// three.
+@mixin poster-wide
+  @media (width >= $poster-screen)
+    @content
+
 /// Arriving on a page, and the only motion a *navigation* is allowed. Carried
 /// by the two page mixins rather than written on each root, so the six screens
 /// cannot drift and the seventh inherits it.
