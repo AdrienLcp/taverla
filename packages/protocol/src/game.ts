@@ -31,10 +31,10 @@ export const gameKindSchema = z.enum(gameKinds)
 export const shelvedGames = [
   'blindtest',
   'quiz',
+  'slate',
   'reflex',
   'lefake',
-  'buzzer',
-  'slate'
+  'buzzer'
 ] as const satisfies readonly GameKind[]
 
 export const shelvedGameSchema = z.enum(shelvedGames)
