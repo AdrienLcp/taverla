@@ -200,7 +200,7 @@ type SettingsPanelProps = {
   isRoundInPlay: boolean
   /** Applied to the room as it is pressed; nothing here waits for the launch. */
   onChange: (settings: RoomSettings) => void
-  /** Files one key on this machine; the room hears of it only when the sheets open. */
+  /** Files one key on this tab; the room hears of it only when the sheets open. */
   onPrepareSlateKey: (itemIndex: number, key: string) => void
   /** The slate's answer key as this host prepared it, by item index. */
   preparedSlateKeys: readonly (string | null)[]

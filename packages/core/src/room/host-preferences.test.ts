@@ -7,7 +7,6 @@ import {
   type HostPreferences,
   rememberedSetupFor,
   rememberSettings,
-  rememberSlateKey,
   restoredSettings
 } from './host-preferences'
 import { roomSettingsFor } from './room-settings'
@@ -119,7 +118,7 @@ describe('restoredSettings', () => {
   it('[host-preferences] leaves a field nobody remembered as the door set it', () => {
     const inEnglish = roomSettingsFor({ game: 'quiz', locale: 'en' })
     const restored = restoredSettings({
-      preferences: { games: {}, room: preferences.room, slateKeys: [] },
+      preferences: { games: {}, room: preferences.room },
       settings: inEnglish
     })
 
@@ -154,43 +153,9 @@ describe('rememberedSetupFor', () => {
           roundCount: null
         }
       },
-      room: { countdownMs: 3_000 },
-      slateKeys: []
+      room: { countdownMs: 3_000 }
     }
 
     expect(rememberedSetupFor({ game: 'quiz', preferences })).toBeNull()
-  })
-})
-
-describe('rememberSlateKey', () => {
-  const none = rememberSettings({ preferences: null, settings: onNothing })
-
-  it('[host-preferences] keeps a prepared key across every settings change', () => {
-    const prepared = rememberSlateKey({
-      itemIndex: 2,
-      key: ' Paprika ',
-      preferences: none
-    })
-
-    expect(
-      rememberSettings({ preferences: prepared, settings: onTheQuiz }).slateKeys
-    ).toEqual([null, null, 'Paprika'])
-  })
-
-  it('[host-preferences] shortens the key when its last entry is cleared', () => {
-    const prepared = rememberSlateKey({
-      itemIndex: 3,
-      key: 'Thym',
-      preferences: rememberSlateKey({
-        itemIndex: 0,
-        key: 'Sel',
-        preferences: none
-      })
-    })
-
-    expect(
-      rememberSlateKey({ itemIndex: 3, key: '', preferences: prepared })
-        .slateKeys
-    ).toEqual(['Sel'])
   })
 })

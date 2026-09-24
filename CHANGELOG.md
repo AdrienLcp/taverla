@@ -13,8 +13,11 @@ one part.
   puts one closed item's key up: the wall draws it big and every sheet reads it
   from `round.content.revealedKeys`, `null` on an open item or a key held back.
   `host.startRound` carries an optional `slateKeys`, the key the host typed in
-  the lobby — kept in `taverla:host-setup` beside the per-game setup, never in
-  the settings, which reach every player.
+  the lobby — kept for the tab alone, in `sessionStorage` under
+  `taverla:slate-keys`, never in the settings, which reach every player. It
+  survives a reload and a new room in the same tab and goes when the tab
+  closes; a `slateKeys` an earlier build left in `taverla:host-setup` is
+  dropped the next time the console reads it.
 
 - `[Shared]` **A latecomer's slate no longer calls a collected item blank**,
   and `PROTOCOL_VERSION` goes to 20: every line of `yourSheet` carries

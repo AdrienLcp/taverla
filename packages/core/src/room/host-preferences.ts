@@ -20,13 +20,6 @@ export type HostPreferences = {
   games: Partial<Record<GameKind, GameSetup>>
   /** Everything no game answers, so it survives every switch. */
   room: Omit<RoomSettings, keyof GameSetup>
-  /**
-   * The slate's answer key, typed before the evening, by item index. The one
-   * thing a host prepares that the settings cannot carry, because they reach
-   * every player: it stays on this machine and rides the press that opens the
-   * sheet.
-   */
-  slateKeys: readonly (string | null)[]
 }
 
 /**
@@ -97,32 +90,6 @@ export const rememberSettings = ({
             ...preferences?.games,
             [game.kind]: { autoAdvanceMs, game, mode, roundCount }
           },
-    room,
-    slateKeys: preferences?.slateKeys ?? []
+    room
   }
-}
-
-/**
- * The same preferences with one prepared key changed, `''` clearing it. The
- * list keeps no trailing gap, so a key cleared at the end shortens it.
- */
-export const rememberSlateKey = ({
-  itemIndex,
-  key,
-  preferences
-}: {
-  itemIndex: number
-  key: string
-  preferences: HostPreferences
-}): HostPreferences => {
-  const keys = Array.from(
-    { length: Math.max(preferences.slateKeys.length, itemIndex + 1) },
-    (_, index) =>
-      index === itemIndex
-        ? key.trim() || null
-        : (preferences.slateKeys[index] ?? null)
-  )
-  const lastKept = keys.findLastIndex((entry) => entry !== null)
-
-  return { ...preferences, slateKeys: keys.slice(0, lastKept + 1) }
 }

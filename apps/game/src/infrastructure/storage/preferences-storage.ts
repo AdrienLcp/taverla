@@ -4,7 +4,6 @@ import { gameKindSchema, gameSettingsSchema } from '@taverla/protocol/game'
 import { type Nickname, nicknameSchema } from '@taverla/protocol/identifiers'
 import { isLocale, type Locale } from '@taverla/protocol/locale'
 import { modeSettingsSchema, roomSettingsSchema } from '@taverla/protocol/room'
-import { MAX_SLATE_ITEMS, slateKeySchema } from '@taverla/protocol/slate'
 
 import type { HostPreferences } from '@taverla/core/room/host-preferences'
 
@@ -38,8 +37,7 @@ const hostPreferencesSchema = z.object({
     game: true,
     mode: true,
     roundCount: true
-  }),
-  slateKeys: z.array(slateKeySchema.nullable()).max(MAX_SLATE_ITEMS).default([])
+  })
 })
 
 export const DEFAULT_VOLUME = 0.8
@@ -126,7 +124,33 @@ export const readStoredHostPreferences = (): HostPreferences | null => {
 
   const parsed = hostPreferencesSchema.safeParse(parseJson(stored))
 
-  return parsed.success ? parsed.data : null
+  if (!parsed.success) {
+    return null
+  }
+
+  dropUnknownFields({ parsed: parsed.data, stored })
+
+  return parsed.data
+}
+
+/**
+ * The schema strips a field it no longer knows, and the blob is written back
+ * without it so the field does not sit on the machine until the next setting
+ * changes. The slate's answer key once lived here, and answers are not
+ * something this store may keep past the tab.
+ */
+const dropUnknownFields = ({
+  parsed,
+  stored
+}: {
+  parsed: HostPreferences
+  stored: string
+}): void => {
+  const cleaned = JSON.stringify(parsed)
+
+  if (cleaned !== stored) {
+    write(HOST_SETUP_KEY, cleaned)
+  }
 }
 
 export const writeStoredHostPreferences = (

@@ -22,12 +22,14 @@ type SetupFoldProps = {
   isLive: boolean
   /** Must be stable — the picker reports upward from an effect. */
   onDraftSource: (source: TrackSource | null) => void
-  /** Files one key of the slate's answer key on this machine. */
+  /** Files one key of the slate's answer key on this tab. */
   onRememberSlateKey: (itemIndex: number, key: string) => void
   onSettingsChange: (settings: RoomSettings) => void
   onTakeSeat: (nickname: string) => void
   /** What this host last left each game set to, so picking one restores it. */
   preferences: HostPreferences | null
+  /** The slate's answer key as typed on this tab, never sent before the sheet opens. */
+  preparedSlateKeys: readonly (string | null)[]
   view: HostRoomView
 }
 
@@ -52,6 +54,7 @@ export const SetupFold: React.FC<SetupFoldProps> = ({
   onSettingsChange,
   onTakeSeat,
   preferences,
+  preparedSlateKeys,
   view
 }) => {
   const translate = useTranslate()
@@ -95,7 +98,7 @@ export const SetupFold: React.FC<SetupFoldProps> = ({
         isRoundInPlay={roundInPlay}
         onChange={onSettingsChange}
         onPrepareSlateKey={onRememberSlateKey}
-        preparedSlateKeys={preferences?.slateKeys ?? []}
+        preparedSlateKeys={preparedSlateKeys}
         settings={view.settings}
       />
       {/*

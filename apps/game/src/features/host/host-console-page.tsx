@@ -22,10 +22,10 @@ import {
 import { isJudgedByHost } from '@taverla/core/room/game-modes'
 import {
   type HostPreferences,
-  rememberSettings,
-  rememberSlateKey
+  rememberSettings
 } from '@taverla/core/room/host-preferences'
 import { isGameInPlay } from '@taverla/core/room/room-phase'
+import { withPreparedKey } from '@taverla/core/slate/prepared-keys'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
 import { NotFoundPage } from '@/features/not-found/not-found-page'
@@ -47,6 +47,10 @@ import {
   writeStoredHostPreferences,
   writeStoredNickname
 } from '@/infrastructure/storage/preferences-storage'
+import {
+  readPreparedSlateKeys,
+  writePreparedSlateKeys
+} from '@/infrastructure/storage/prepared-keys-storage'
 import {
   forgetHostToken,
   forgetSeatNickname,
@@ -130,6 +134,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   const { volume } = useVolume()
   const [draftSource, setDraftSource] = useState<TrackSource | null>(null)
   const [preferences, setPreferences] = useState(readStoredHostPreferences)
+  const [preparedKeys, setPreparedKeys] = useState(readPreparedSlateKeys)
 
   useReportConnection({ clock, status })
   useRoomDocumentTitle(view?.settings.game?.kind ?? null)
@@ -191,26 +196,18 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   useRestoreStoredSetup({ onRestore: changeSettings, preferences, view })
 
   const rememberPreparedKey = (itemIndex: number, key: string) => {
-    if (view === null) {
-      return
-    }
-
-    const remembered = rememberSlateKey({
+    const remembered = withPreparedKey({
       itemIndex,
       key,
-      preferences:
-        readStoredHostPreferences() ??
-        rememberSettings({ preferences: null, settings: view.settings })
+      keys: readPreparedSlateKeys()
     })
 
-    writeStoredHostPreferences(remembered)
-    setPreferences(remembered)
+    writePreparedSlateKeys(remembered)
+    setPreparedKeys(remembered)
   }
 
   const preparedSlateKeys =
-    view?.settings.game?.kind === 'slate' && preferences !== null
-      ? [...preferences.slateKeys]
-      : undefined
+    view?.settings.game?.kind === 'slate' ? preparedKeys : undefined
 
   const endGame = useCallback(() => {
     send({ type: 'host.endGame' })
@@ -420,6 +417,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
                   onSettingsChange={changeSettings}
                   onTakeSeat={takeSeat}
                   preferences={preferences}
+                  preparedSlateKeys={preparedKeys}
                   view={view}
                 />
               </>
