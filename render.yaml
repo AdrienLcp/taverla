@@ -9,12 +9,20 @@ services:
     # and a phone would reach the wrong one.
     numInstances: 1
     healthCheckPath: /api/health
-    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm build
-    startCommand: pnpm --filter @taverla/server start
+    # Render's /usr/bin is read-only, so a bare `corepack enable` dies on EROFS
+    # replacing its pnpm. The shims go to a directory of our own instead, and
+    # the start command needs no pnpm at all.
+    buildCommand: >-
+      mkdir -p "$HOME/.corepack-bin" &&
+      corepack enable --install-directory "$HOME/.corepack-bin" &&
+      export PATH="$HOME/.corepack-bin:$PATH" &&
+      pnpm install --frozen-lockfile && pnpm build
+    startCommand: cd apps/server && node dist/index.mjs
     envVars:
       - key: NODE_VERSION
         value: '24'
-      # Relative to the server package, because `pnpm --filter` runs the script
-      # from that package's directory rather than the repository root.
+      - key: COREPACK_ENABLE_DOWNLOAD_PROMPT
+        value: '0'
+      # Relative to the server package, which is where the start command runs.
       - key: SERVE_GAME_FROM
         value: ../game/dist

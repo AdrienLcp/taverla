@@ -64,7 +64,7 @@ on the same port, and the QR code encoding that origin.
   `dist/index.mjs` with the workspace packages inlined — they ship as
   TypeScript source, so anything that left them external would only start under
   a loader. Third-party dependencies stay external; Render installs them.
-  `pnpm --filter @taverla/server start` is unchanged from Render's side.
+  `pnpm --filter @taverla/server start` was Render's start command until September 2026, when Render made `/usr/bin` read-only and `corepack enable` began failing with EROFS; `render.yaml` now installs the shims under `$HOME` and starts with plain `node`.
 
 - **`POST /api/rooms` is rate-limited** — 30 per address per ten minutes, which
   is the window the sweeper clears an unjoined room in. It answers 429 with
