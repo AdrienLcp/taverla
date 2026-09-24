@@ -3,6 +3,13 @@
 Two notes from the first look at [25](25-slate.md), both from the host who asked
 for it.
 
+## The line to hold
+
+Built for a chip tasting, never *about* chips. Every word on screen, every
+default and every control must read right for a wine tasting, a pub quiz on
+paper, *guess the price* or *who drew this* — nothing names cups, tasting or
+food. Numbers stay the default label; everything else is opt-in.
+
 ## Goal
 
 1. **Labels.** An item is not always a number. A tasting may use coloured
