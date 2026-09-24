@@ -197,13 +197,24 @@ export const setItemKeyMessageSchema = z.object({
   type: z.literal('host.setItemKey')
 })
 
-/** The slate's sheets go read-only and the correction opens on the first item. */
+/**
+ * One item of the slate goes read-only on every sheet and onto the wall, while
+ * every other item stays open for writing — the host marks what the room has
+ * finished with, not the whole sheet at once.
+ */
+export const closeItemMessageSchema = z.object({
+  itemIndex: slateItemIndexSchema,
+  roundId: roundIdSchema,
+  type: z.literal('host.closeItem')
+})
+
+/** Every item still open closes at once, and the wall moves to the first of them. */
 export const collectSheetsMessageSchema = z.object({
   roundId: roundIdSchema,
   type: z.literal('host.collectSheets')
 })
 
-/** Moves the correction to one item — forward, or back to change a verdict already given. */
+/** Moves the wall to one closed item — forward, or back to change a verdict already given. */
 export const showItemMessageSchema = z.object({
   itemIndex: slateItemIndexSchema,
   roundId: roundIdSchema,
@@ -272,6 +283,7 @@ export const hostClientMessageSchema = z.discriminatedUnion('type', [
   clearLockoutsMessageSchema,
   addItemMessageSchema,
   setItemKeyMessageSchema,
+  closeItemMessageSchema,
   collectSheetsMessageSchema,
   showItemMessageSchema,
   judgeGroupMessageSchema,
@@ -312,6 +324,7 @@ export const clientMessageSchema = z.discriminatedUnion('type', [
   clearLockoutsMessageSchema,
   addItemMessageSchema,
   setItemKeyMessageSchema,
+  closeItemMessageSchema,
   collectSheetsMessageSchema,
   showItemMessageSchema,
   judgeGroupMessageSchema,
@@ -341,6 +354,7 @@ export const HOST_ONLY_MESSAGE_TYPES = new Set<ClientMessageType>([
   'host.clearLockouts',
   'host.addItem',
   'host.setItemKey',
+  'host.closeItem',
   'host.collectSheets',
   'host.showItem',
   'host.judgeGroup',
@@ -360,7 +374,7 @@ export const HOST_ONLY_MESSAGE_TYPES = new Set<ClientMessageType>([
  * allowed to do.
  *
  * `slate.write` is not here either: a line on a sheet moves nothing along —
- * only the host collects — and refusing a save over a console's Wi-Fi blink
+ * only the host closes an item — and refusing a save over a console's Wi-Fi blink
  * would lose an answer the player believes is kept.
  */
 export const FLOOR_MESSAGE_TYPES = new Set<ClientMessageType>([

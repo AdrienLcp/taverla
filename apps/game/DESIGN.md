@@ -46,11 +46,11 @@ the token default so a first paint before React mounts is already correct.
 **Every colour a component uses is `--field`, `--ink`, `--ink-muted`, `--rule`,
 `--edge`, `--cut` or `--cut-ink`.** No component holds a hex.
 
-**Two phases borrow a pair rather than owning one.** `voting` falls back to the
-lobby's, and `correcting` — the slate's marking — wears `buzzed`'s: it is the
-same act, the host deciding while the room waits on the verdict, and on the
-lobby's orange the wall read as the game having ended between collecting the
-sheets and marking the first number.
+**One phase borrows a pair rather than owning one.** `voting` falls back to the
+lobby's. The slate's marking wore `buzzed`'s pair as a `correcting` phase until
+stage 26 folded marking into `playing` — the `[data-phase='correcting']`
+selector in `_tokens.sass` no longer matches anything, and what the wall wears
+while an item is on it is session B's call there.
 
 ### The one field change that is not a phase
 

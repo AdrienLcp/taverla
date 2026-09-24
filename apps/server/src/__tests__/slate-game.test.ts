@@ -88,6 +88,9 @@ const idOf = (player: Peer<PlayerServerMessage>): string => {
   return id
 }
 
+const slateLabelsOf = (game: RoomSettings['game'] | undefined) =>
+  game?.kind === 'slate' ? game.labels : null
+
 const rawTranscript = (peer: { frames: { raw: string }[] }): string =>
   peer.frames.map(({ raw }) => raw).join('\n')
 
@@ -143,8 +146,29 @@ describe('slate', () => {
   }) => {
     host.send({ roundId, type: 'host.collectSheets' })
     await waitFor(
-      () => hostView(host)?.phase === 'correcting',
-      'the sheets to be collected'
+      () =>
+        slateRound(hostView(host))?.itemStates.every(
+          (state) => state !== 'open'
+        ) === true,
+      'every item to be closed'
+    )
+  }
+
+  const close = async ({
+    host,
+    itemIndex,
+    roundId
+  }: {
+    host: Peer<HostServerMessage>
+    itemIndex: number
+    roundId: string
+  }) => {
+    host.send({ itemIndex, roundId, type: 'host.closeItem' })
+    await waitFor(
+      () =>
+        slateRound(hostView(host))?.currentItemIndex === itemIndex &&
+        hostSlateContent(host)?.correction !== null,
+      `item ${itemIndex} to be closed onto the wall`
     )
   }
 
@@ -289,7 +313,7 @@ describe('slate', () => {
   })
 
   // The host screen is the wall: while the room writes, it holds counts.
-  it('[slate] shows the wall progress and not one answer before the collection', async () => {
+  it('[slate] shows the wall progress and not one answer before an item closes', async () => {
     const { ana, bo, host, roundId } = await openSheets()
 
     await write({ answer: ANA_SECRET, itemIndex: 0, player: ana, roundId })
@@ -351,11 +375,36 @@ describe('slate', () => {
     expect(sheetOf(dee).map((line) => line.verdict)).toEqual([null, null, null])
   })
 
-  it('[slate] gives a reloaded player their own answers back', async () => {
-    const { ana, code, roundId } = await openSheets()
+  // The latecomer rule at the item's scale: owed what is still open, and
+  // neither asked nor marked on what closed before the seat was taken.
+  it('[slate] lets a player seated mid-marking write only the items still open', async () => {
+    const { code, host, roundId } = await openSheets()
+
+    await close({ host, itemIndex: 0, roundId })
+
+    const cy = await harness.seat({ code, nickname: 'Cy' })
+
+    expect(playerView(cy)?.round?.joinedAfterStart).toBe(false)
+
+    cy.send({ answer: 'Sel', itemIndex: 0, roundId, type: 'slate.write' })
+    await waitFor(() => errorsIn(cy).length > 0, 'the closed item refused')
+    await write({ answer: 'Ail', itemIndex: 1, player: cy, roundId })
+    await close({ host, itemIndex: 1, roundId })
+    judge({ groupKey: 'ail', host, isCorrect: true, itemIndex: 1, roundId })
+    await waitFor(() => scoreOf(host, idOf(cy)) === 1, 'the latecomer paid')
+    await collect({ host, roundId })
+
+    expect(errorsIn(cy).map((error) => error.code)).toEqual(['wrong_phase'])
+    expect(sheetOf(cy).map((line) => line.verdict)).toEqual([null, true, null])
+  })
+
+  it('[slate] gives a reloaded player their own answers back, and which items are locked', async () => {
+    const { ana, code, host, roundId } = await openSheets()
 
     await write({ answer: 'Sel', itemIndex: 0, player: ana, roundId })
     await write({ answer: 'Poivre', itemIndex: 2, player: ana, roundId })
+    await close({ host, itemIndex: 0, roundId })
+    await close({ host, itemIndex: 2, roundId })
     ana.close()
 
     const back = await harness.seat({
@@ -365,6 +414,12 @@ describe('slate', () => {
     })
 
     expect(answersOf(back)).toEqual(['Sel', null, 'Poivre'])
+    expect(slateRound(playerView(back))?.itemStates).toEqual([
+      'marked',
+      'open',
+      'closed'
+    ])
+    expect(slateRound(playerView(back))?.currentItemIndex).toBe(2)
   })
 
   it('[slate] pays a whole group, and follows a verdict changed on an earlier item', async () => {
@@ -439,7 +494,7 @@ describe('slate', () => {
     expect(scoreOf(host, idOf(bo))).toBe(0)
   })
 
-  it('[slate] adds an item while the sheets are open, and not after', async () => {
+  it('[slate] adds an item until the reveal, open even after the rest closed', async () => {
     const { ana, host, roundId } = await openSheets()
 
     host.send({ roundId, type: 'host.addItem' })
@@ -450,10 +505,25 @@ describe('slate', () => {
     await write({ answer: 'Ail', itemIndex: 3, player: ana, roundId })
     await collect({ host, roundId })
     host.send({ roundId, type: 'host.addItem' })
-    await waitFor(() => errorsIn(host).length > 0, 'the late item refused')
+    await waitFor(
+      () => slateRound(playerView(ana))?.itemStates[4] === 'open',
+      'a fifth item, open'
+    )
+    await write({ answer: 'Thym', itemIndex: 4, player: ana, roundId })
 
-    expect(errorsIn(host).map((error) => error.code)).toEqual(['wrong_phase'])
-    expect(hostSlateContent(host)?.keys).toHaveLength(4)
+    host.send({ roundId, type: 'host.reveal' })
+    await waitFor(() => errorsIn(host).length > 0, 'the reveal refused')
+    await collect({ host, roundId })
+    host.send({ roundId, type: 'host.reveal' })
+    await waitFor(() => playerView(ana)?.phase === 'revealed', 'the reveal')
+    host.send({ roundId, type: 'host.addItem' })
+    await waitFor(() => errorsIn(host).length > 1, 'the late item refused')
+
+    expect(errorsIn(host).map((error) => error.code)).toEqual([
+      'wrong_phase',
+      'wrong_phase'
+    ])
+    expect(hostSlateContent(host)?.keys).toHaveLength(5)
   })
 
   // The host holds the key and marks the sheets, so a seat would be a sheet
@@ -470,14 +540,152 @@ describe('slate', () => {
     expect(hostView(host)?.players).toEqual([])
   })
 
-  it('[slate] ends the round only from the correction', async () => {
+  it('[slate] refuses the reveal while an item is still open', async () => {
     const { ana, host, roundId } = await openSheets()
 
+    await close({ host, itemIndex: 1, roundId })
     host.send({ roundId, type: 'host.reveal' })
     await waitFor(() => errorsIn(host).length > 0, 'the early reveal refused')
 
     expect(errorsIn(host).map((error) => error.code)).toEqual(['wrong_phase'])
     expect(playerView(ana)?.phase).toBe('playing')
     expect(hostRoundIdOf(host)).toBe(roundId)
+  })
+  // An item on the wall opens that item, and only that one: the rest of every
+  // sheet is still private while the room writes it.
+  it('[slate] keeps every open item private while another is on the wall', async () => {
+    const { ana, bo, host, roundId } = await openSheets()
+
+    await write({ answer: ANA_SECRET, itemIndex: 0, player: ana, roundId })
+    await write({ answer: 'Sel', itemIndex: 1, player: ana, roundId })
+    await write({ answer: 'Sel', itemIndex: 1, player: bo, roundId })
+    await close({ host, itemIndex: 1, roundId })
+    await write({ answer: BO_SECRET, itemIndex: 2, player: bo, roundId })
+    judge({ groupKey: 'sel', host, isCorrect: true, itemIndex: 1, roundId })
+    await waitFor(() => scoreOf(host, idOf(bo)) === 1, 'the item paid')
+
+    expect(hostSlateContent(host)?.correction?.groups).toHaveLength(1)
+    expect(rawTranscript(host)).not.toContain(ANA_SECRET)
+    expect(rawTranscript(host)).not.toContain(BO_SECRET)
+    expect(rawTranscript(ana)).not.toContain(BO_SECRET)
+    expect(rawTranscript(bo)).not.toContain(ANA_SECRET)
+
+    await close({ host, itemIndex: 2, roundId })
+
+    expect(hostSlateContent(host)?.correction?.groups[0]?.text).toBe(BO_SECRET)
+    expect(rawTranscript(host)).not.toContain(ANA_SECRET)
+    expect(rawTranscript(ana)).not.toContain(BO_SECRET)
+  })
+
+  it('[slate] refuses a line on a closed item and keeps the open ones writable', async () => {
+    const { ana, host, roundId } = await openSheets()
+
+    await write({ answer: 'Sel', itemIndex: 0, player: ana, roundId })
+    await close({ host, itemIndex: 0, roundId })
+
+    ana.send({ answer: 'Poivre', itemIndex: 0, roundId, type: 'slate.write' })
+    await waitFor(() => errorsIn(ana).length > 0, 'the closed line refused')
+    await write({ answer: 'Ail', itemIndex: 1, player: ana, roundId })
+    await write({ answer: 'Thym', itemIndex: 2, player: ana, roundId })
+
+    expect(errorsIn(ana).map((error) => error.code)).toEqual(['wrong_phase'])
+    expect(answersOf(ana)).toEqual(['Sel', 'Ail', 'Thym'])
+    expect(slateRound(playerView(ana))?.itemStates).toEqual([
+      'closed',
+      'open',
+      'open'
+    ])
+  })
+
+  it('[slate] carries the labels to every screen, and refuses two alike', async () => {
+    const { code, host } = await harness.openRoom(SLATE)
+    const ana = await harness.seat({ code, nickname: 'Ana' })
+    const labelled: RoomSettings = {
+      ...SLATE,
+      game: {
+        ...DEFAULT_SLATE_SETTINGS,
+        itemCount: 3,
+        labels: ['🔴', null, 'Glass 3']
+      }
+    }
+
+    host.send({ settings: labelled, type: 'host.updateSettings' })
+    await waitFor(
+      () => slateLabelsOf(playerView(ana)?.settings.game)?.[2] === 'Glass 3',
+      'the labels to reach the player'
+    )
+
+    for (const labels of [['B', ' b '], ['2', null], ['x'.repeat(13)]]) {
+      host.send({
+        settings: { ...SLATE, game: { ...DEFAULT_SLATE_SETTINGS, labels } },
+        type: 'host.updateSettings'
+      })
+    }
+    await waitFor(() => errorsIn(host).length === 3, 'the three refused')
+
+    expect(errorsIn(host).map((error) => error.code)).toEqual([
+      'invalid_message',
+      'invalid_message',
+      'invalid_message'
+    ])
+    expect(slateLabelsOf(hostView(host)?.settings.game)).toEqual([
+      '🔴',
+      null,
+      'Glass 3'
+    ])
+  })
+
+  it('[slate] scores items closed one by one, a verdict changed, then the rest collected', async () => {
+    const { ana, bo, host, roundId } = await openSheets({
+      ...SLATE,
+      game: { ...DEFAULT_SLATE_SETTINGS, itemCount: 4 }
+    })
+
+    await write({ answer: 'Sel', itemIndex: 0, player: ana, roundId })
+    await write({ answer: 'Sel', itemIndex: 0, player: bo, roundId })
+    await write({ answer: 'Ail', itemIndex: 1, player: ana, roundId })
+    await write({ answer: 'Thym', itemIndex: 1, player: bo, roundId })
+
+    await close({ host, itemIndex: 1, roundId })
+    judge({ groupKey: 'ail', host, isCorrect: true, itemIndex: 1, roundId })
+    await waitFor(() => scoreOf(host, idOf(ana)) === 1, 'item 2 paid')
+
+    await close({ host, itemIndex: 0, roundId })
+    judge({ groupKey: 'sel', host, isCorrect: true, itemIndex: 0, roundId })
+    await waitFor(() => scoreOf(host, idOf(bo)) === 1, 'item 1 paid')
+
+    await write({ answer: 'Poivre', itemIndex: 3, player: bo, roundId })
+    await show({ host, itemIndex: 1, roundId })
+    judge({ groupKey: 'ail', host, isCorrect: false, itemIndex: 1, roundId })
+    judge({ groupKey: 'thym', host, isCorrect: true, itemIndex: 1, roundId })
+    await waitFor(() => scoreOf(host, idOf(bo)) === 2, 'the verdict moved')
+
+    await collect({ host, roundId })
+
+    expect(slateRound(hostView(host))?.currentItemIndex).toBe(2)
+
+    await show({ host, itemIndex: 3, roundId })
+    judge({ groupKey: 'poivre', host, isCorrect: true, itemIndex: 3, roundId })
+    await waitFor(() => scoreOf(host, idOf(bo)) === 3, 'the last item paid')
+
+    host.send({ roundId, type: 'host.reveal' })
+    await waitFor(() => playerView(ana)?.phase === 'revealed', 'the reveal')
+
+    expect(sheetOf(ana).map((line) => line.verdict)).toEqual([
+      true,
+      false,
+      false,
+      false
+    ])
+
+    host.send({ type: 'host.nextRound' })
+    await waitFor(() => playerView(bo)?.phase === 'finished', 'the final board')
+
+    expect(
+      hostView(host)?.players.map(({ id, score }) => ({ id, score }))
+    ).toEqual([
+      { id: idOf(ana), score: 1 },
+      { id: idOf(bo), score: 3 }
+    ])
   })
 })

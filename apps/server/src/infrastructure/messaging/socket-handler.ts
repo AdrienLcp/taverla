@@ -57,7 +57,9 @@ import {
 } from '@/domain/round/round-service'
 import {
   addSlateItem,
+  closeSlateItem,
   collectSheets,
+  isSheetClosed,
   judgeSlateGroup,
   type SlateRejection,
   setSlateKey,
@@ -441,10 +443,24 @@ export const createRoomSocketEvents = (
         })
         break
       }
+      case 'host.closeItem': {
+        answerSlateFrame({
+          outbound,
+          refusal: 'That item cannot be closed now',
+          result: closeSlateItem({
+            itemIndex: message.itemIndex,
+            now: Date.now(),
+            room,
+            roundId: message.roundId
+          }),
+          room
+        })
+        break
+      }
       case 'host.collectSheets': {
         answerSlateFrame({
           outbound,
-          refusal: 'There are no open sheets to collect',
+          refusal: 'There is no open item to collect',
           result: collectSheets({
             now: Date.now(),
             room,
@@ -794,14 +810,14 @@ export const createRoomSocketEvents = (
       return
     }
 
-    // The sheets are collected by their own frame, which is what makes the
-    // collection a decision rather than a reveal pressed early: here the round
-    // ends only from the correction.
-    if (room.round?.content.kind === 'slate' && room.phase !== 'correcting') {
+    // Items are closed by their own frames, which is what makes closing one a
+    // decision rather than a reveal pressed early: the round ends only once
+    // every item has been on the wall's side of the line.
+    if (room.round?.content.kind === 'slate' && !isSheetClosed(room)) {
       sendError(outbound, {
         code: 'wrong_phase',
         fatal: false,
-        message: 'The sheets have not been collected yet'
+        message: 'An item is still open'
       })
 
       return

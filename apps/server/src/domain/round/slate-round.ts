@@ -10,25 +10,31 @@ import {
   groupAnswers,
   isBlankAnswer
 } from '@taverla/core/slate/answer-groups'
-import { sheetPoints, UNMARKED_ITEM } from '@taverla/core/slate/sheet-marking'
+import {
+  closedItem,
+  OPEN_ITEM,
+  type SheetItem,
+  sheetPoints
+} from '@taverla/core/slate/sheet-marking'
 
 import type { Room, Round } from '@/domain/room/room'
 import { touch } from '@/domain/room/room-service'
 
 type SlateContent = Extract<Round['content'], { kind: 'slate' }>
 
+type SlateRound = { content: SlateContent; round: Round }
+
 export type SlateRejection = Extract<
   ProtocolErrorCode,
   'invalid_message' | 'stale_round' | 'wrong_phase'
 >
 
-/** The slate's half of opening a round: a blank sheet as long as the setting says. */
+/** The slate's half of opening a round: a blank sheet as long as the setting says, every item open. */
 export const slateContent = (settings: SlateSettings): Round['content'] => ({
   currentItemIndex: null,
-  itemCount: settings.itemCount,
+  items: Array.from({ length: settings.itemCount }, () => OPEN_ITEM),
   keys: new Map(),
   kind: 'slate',
-  markings: [],
   sheets: new Map()
 })
 
@@ -38,7 +44,7 @@ const slateRoundIn = ({
 }: {
   room: Room
   roundId: RoundId
-}): Result<{ content: SlateContent; round: Round }, SlateRejection> => {
+}): Result<SlateRound, SlateRejection> => {
   const round = room.round
 
   if (round === null || round.content.kind !== 'slate') {
@@ -52,17 +58,38 @@ const slateRoundIn = ({
   return Result.success({ content: round.content, round })
 }
 
-/**
- * Who is marked: the players stamped at collection who still hold a seat. A
- * sheet whose writer left is not marked, and nobody is left to be paid for it.
- */
-export const markedPlayerIds = (room: Room): PlayerId[] => {
-  const stamped = room.round?.openedWithPlayerIds ?? null
+/** Writing and marking share `playing`: nothing is written before it, and nothing moves after the reveal. */
+const liveSlateRoundIn = ({
+  room,
+  roundId
+}: {
+  room: Room
+  roundId: RoundId
+}): Result<SlateRound, SlateRejection> => {
+  const found = slateRoundIn({ room, roundId })
 
-  return stamped === null
-    ? []
-    : [...room.players.keys()].filter((playerId) => stamped.has(playerId))
+  if (found.status === 'success' && room.phase !== 'playing') {
+    return Result.failure('wrong_phase')
+  }
+
+  return found
 }
+
+/**
+ * Who is marked on one item: the players seated when it closed who still hold
+ * a seat. A sheet whose writer left is not marked, and nobody is left to be
+ * paid for it.
+ */
+const markedOn = ({
+  item,
+  room
+}: {
+  item: SheetItem
+  room: Room
+}): PlayerId[] =>
+  item.state === 'closed'
+    ? [...room.players.keys()].filter((playerId) => item.roster.has(playerId))
+    : []
 
 export const writeSlateLine = ({
   answer,
@@ -79,20 +106,21 @@ export const writeSlateLine = ({
   room: Room
   roundId: RoundId
 }): Result<void, SlateRejection> => {
-  const found = slateRoundIn({ room, roundId })
+  const found = liveSlateRoundIn({ room, roundId })
 
   if (found.status === 'failure') {
     return found
   }
 
-  if (room.phase !== 'playing') {
-    return Result.failure('wrong_phase')
+  const { content } = found.data
+  const item = content.items[itemIndex]
+
+  if (item === undefined) {
+    return Result.failure('invalid_message')
   }
 
-  const { content } = found.data
-
-  if (itemIndex >= content.itemCount) {
-    return Result.failure('invalid_message')
+  if (item.state !== 'open') {
+    return Result.failure('wrong_phase')
   }
 
   const sheet = content.sheets.get(playerId) ?? new Map<number, string>()
@@ -109,6 +137,7 @@ export const writeSlateLine = ({
   return Result.success()
 }
 
+/** Open until the reveal: an item added after every other has closed reopens the sheet for it. */
 export const addSlateItem = ({
   now,
   room,
@@ -118,21 +147,20 @@ export const addSlateItem = ({
   room: Room
   roundId: RoundId
 }): Result<void, SlateRejection> => {
-  const found = slateRoundIn({ room, roundId })
+  const found = liveSlateRoundIn({ room, roundId })
 
   if (found.status === 'failure') {
     return found
   }
 
-  if (room.phase !== 'playing') {
-    return Result.failure('wrong_phase')
-  }
+  const { content, round } = found.data
 
-  if (found.data.content.itemCount >= MAX_SLATE_ITEMS) {
+  if (content.items.length >= MAX_SLATE_ITEMS) {
     return Result.failure('invalid_message')
   }
 
-  found.data.content.itemCount += 1
+  content.items.push(OPEN_ITEM)
+  stampRound({ content, round })
   touch(room, now)
 
   return Result.success()
@@ -167,7 +195,7 @@ export const setSlateKey = ({
 
   const { content } = found.data
 
-  if (itemIndex >= content.itemCount) {
+  if (itemIndex >= content.items.length) {
     return Result.failure('invalid_message')
   }
 
@@ -183,10 +211,47 @@ export const setSlateKey = ({
 }
 
 /**
- * The sheets go read-only and the wall opens on the first item. This is the
- * slate's stamp: whoever holds a seat now is marked, and anybody arriving
- * after is the shell's latecomer.
+ * One item goes read-only on every sheet and onto the wall. This is the item's
+ * stamp: whoever holds a seat now is marked on it, and anybody arriving after
+ * was never asked it — but is still owed every item left open.
  */
+export const closeSlateItem = ({
+  itemIndex,
+  now,
+  room,
+  roundId
+}: {
+  itemIndex: number
+  now: number
+  room: Room
+  roundId: RoundId
+}): Result<void, SlateRejection> => {
+  const found = liveSlateRoundIn({ room, roundId })
+
+  if (found.status === 'failure') {
+    return found
+  }
+
+  const { content, round } = found.data
+  const item = content.items[itemIndex]
+
+  if (item === undefined) {
+    return Result.failure('invalid_message')
+  }
+
+  if (item.state !== 'open') {
+    return Result.failure('wrong_phase')
+  }
+
+  content.items[itemIndex] = closedItem(new Set(room.players.keys()))
+  moveWall({ content, itemIndex })
+  settle({ content, room, round })
+  touch(room, now)
+
+  return Result.success()
+}
+
+/** Every item still open closes on one stamp, and the wall moves to the first of them. */
 export const collectSheets = ({
   now,
   room,
@@ -196,31 +261,29 @@ export const collectSheets = ({
   room: Room
   roundId: RoundId
 }): Result<void, SlateRejection> => {
-  const found = slateRoundIn({ room, roundId })
+  const found = liveSlateRoundIn({ room, roundId })
 
   if (found.status === 'failure') {
     return found
   }
 
-  if (room.phase !== 'playing') {
+  const { content, round } = found.data
+  const firstOpen = content.items.findIndex((item) => item.state === 'open')
+
+  if (firstOpen === -1) {
     return Result.failure('wrong_phase')
   }
 
-  const { content, round } = found.data
-
-  round.openedWithPlayerIds = new Set(room.players.keys())
-  content.markings = Array.from({ length: content.itemCount }, () => ({
-    ...UNMARKED_ITEM
-  }))
-  content.currentItemIndex = 0
-  room.phase = 'correcting'
+  closeOpenItems({ content, room })
+  moveWall({ content, itemIndex: firstOpen })
+  settle({ content, room, round })
   touch(room, now)
 
   return Result.success()
 }
 
 /**
- * Moves the wall to another item, and passes the one it leaves: from then on
+ * Moves the wall to a closed item, and passes the one it leaves: from then on
  * an answer there that nobody validated is wrong. Going back is allowed, and a
  * passed item stays passed — what changes on a revisit is a verdict.
  */
@@ -235,25 +298,25 @@ export const showSlateItem = ({
   room: Room
   roundId: RoundId
 }): Result<void, SlateRejection> => {
-  const found = slateRoundIn({ room, roundId })
+  const found = liveSlateRoundIn({ room, roundId })
 
   if (found.status === 'failure') {
     return found
   }
 
-  if (room.phase !== 'correcting') {
-    return Result.failure('wrong_phase')
-  }
-
   const { content, round } = found.data
+  const item = content.items[itemIndex]
 
-  if (itemIndex >= content.itemCount) {
+  if (item === undefined) {
     return Result.failure('invalid_message')
   }
 
-  passCurrentItem(content)
-  content.currentItemIndex = itemIndex
-  rescoreSheets({ content, room, round })
+  if (item.state !== 'closed') {
+    return Result.failure('wrong_phase')
+  }
+
+  moveWall({ content, itemIndex })
+  settle({ content, room, round })
   touch(room, now)
 
   return Result.success()
@@ -282,22 +345,18 @@ export const judgeSlateGroup = ({
   room: Room
   roundId: RoundId
 }): Result<void, SlateRejection> => {
-  const found = slateRoundIn({ room, roundId })
+  const found = liveSlateRoundIn({ room, roundId })
 
   if (found.status === 'failure') {
     return found
   }
 
-  if (room.phase !== 'correcting') {
-    return Result.failure('wrong_phase')
-  }
-
   const { content, round } = found.data
-  const marking = content.markings[itemIndex]
+  const item = content.items[itemIndex]
 
   // The wall has moved on since the tap was made, the way a stale round id
   // means the round has.
-  if (itemIndex !== content.currentItemIndex || marking === undefined) {
+  if (itemIndex !== content.currentItemIndex || item?.state !== 'closed') {
     return Result.failure('stale_round')
   }
 
@@ -309,17 +368,31 @@ export const judgeSlateGroup = ({
     return Result.failure('invalid_message')
   }
 
-  content.markings[itemIndex] = {
-    judged: new Map(marking.judged).set(groupKey, isCorrect),
-    passed: marking.passed
+  content.items[itemIndex] = {
+    ...item,
+    marking: {
+      judged: new Map(item.marking.judged).set(groupKey, isCorrect),
+      passed: item.marking.passed
+    }
   }
-  rescoreSheets({ content, room, round })
+  settle({ content, room, round })
   touch(room, now)
 
   return Result.success()
 }
 
-/** Everything left unvalidated is wrong now; the round is about to be revealed. */
+/**
+ * Whether the host may end the sheet. An item never closed would be revealed
+ * without anybody having seen its answers, so the reveal waits for them all.
+ */
+export const isSheetClosed = (room: Room): boolean =>
+  room.round?.content.kind === 'slate' &&
+  room.round.content.items.every((item) => item.state !== 'open')
+
+/**
+ * The round is being revealed, or the game ended under it: anything still open
+ * closes, and everything left unvalidated is wrong now.
+ */
 export const markEveryItem = (room: Room): void => {
   const round = room.round
 
@@ -327,14 +400,18 @@ export const markEveryItem = (room: Room): void => {
     return
   }
 
-  round.content.markings = round.content.markings.map((marking) => ({
-    ...marking,
-    passed: true
-  }))
-  rescoreSheets({ content: round.content, room, round })
+  const content = round.content
+
+  closeOpenItems({ content, room })
+  content.items = content.items.map((item) =>
+    item.state === 'closed'
+      ? { ...item, marking: { ...item.marking, passed: true } }
+      : item
+  )
+  settle({ content, room, round })
 }
 
-/** The item's non-blank answers, grouped, from the sheets being marked. */
+/** The item's non-blank answers, grouped — and none while it is open, which is the wall's privacy. */
 export const answerGroupsFor = ({
   itemIndex,
   room
@@ -343,13 +420,14 @@ export const answerGroupsFor = ({
   room: Room
 }): AnswerGroup[] => {
   const content = room.round?.content
+  const item = content?.kind === 'slate' ? content.items[itemIndex] : undefined
 
-  if (content?.kind !== 'slate') {
+  if (content?.kind !== 'slate' || item === undefined) {
     return []
   }
 
   return groupAnswers(
-    markedPlayerIds(room).flatMap((playerId) => {
+    markedOn({ item, room }).flatMap((playerId) => {
       const text = content.sheets.get(playerId)?.get(itemIndex)
 
       return text === undefined ? [] : [{ playerId, text }]
@@ -366,25 +444,75 @@ export const blankPlayerIdsFor = ({
   room: Room
 }): PlayerId[] => {
   const content = room.round?.content
+  const item = content?.kind === 'slate' ? content.items[itemIndex] : undefined
 
-  if (content?.kind !== 'slate') {
+  if (content?.kind !== 'slate' || item === undefined) {
     return []
   }
 
-  return markedPlayerIds(room).filter((playerId) =>
+  return markedOn({ item, room }).filter((playerId) =>
     isBlankAnswer(content.sheets.get(playerId)?.get(itemIndex) ?? null)
   )
 }
 
-const passCurrentItem = (content: SlateContent): void => {
-  const current = content.currentItemIndex
-  const marking = current === null ? undefined : content.markings[current]
+const closeOpenItems = ({
+  content,
+  room
+}: {
+  content: SlateContent
+  room: Room
+}): void => {
+  const roster = new Set(room.players.keys())
 
-  if (current === null || marking === undefined) {
-    return
+  content.items = content.items.map((item) =>
+    item.state === 'open' ? closedItem(roster) : item
+  )
+}
+
+const moveWall = ({
+  content,
+  itemIndex
+}: {
+  content: SlateContent
+  itemIndex: number
+}): void => {
+  const current = content.currentItemIndex
+  const leaving = current === null ? undefined : content.items[current]
+
+  if (current !== null && leaving?.state === 'closed') {
+    content.items[current] = {
+      ...leaving,
+      marking: { ...leaving.marking, passed: true }
+    }
   }
 
-  content.markings[current] = { ...marking, passed: true }
+  content.currentItemIndex = itemIndex
+}
+
+const settle = ({
+  content,
+  room,
+  round
+}: SlateRound & { room: Room }): void => {
+  stampRound({ content, round })
+  rescoreSheets({ content, room, round })
+}
+
+/**
+ * The shell's latecomer rule at the sheet's scale: nobody arrives late while
+ * there is still an item to write. Once none is open, a seat is late unless
+ * some item closed on it.
+ */
+const stampRound = ({ content, round }: SlateRound): void => {
+  round.openedWithPlayerIds = content.items.some(
+    (item) => item.state === 'open'
+  )
+    ? null
+    : new Set(
+        content.items.flatMap((item) =>
+          item.state === 'closed' ? [...item.roster] : []
+        )
+      )
 }
 
 /**
@@ -396,29 +524,32 @@ const rescoreSheets = ({
   content,
   room,
   round
-}: {
-  content: SlateContent
-  room: Room
-  round: Round
-}): void => {
-  round.awards = markedPlayerIds(room).map((playerId) => {
-    const points = sheetPoints({
-      markings: content.markings,
-      sheet: content.sheets.get(playerId) ?? new Map()
+}: SlateRound & { room: Room }): void => {
+  const marked = new Set(
+    content.items.flatMap((item) => markedOn({ item, room }))
+  )
+
+  round.awards = [...room.players.keys()]
+    .filter((playerId) => marked.has(playerId))
+    .map((playerId) => {
+      const points = sheetPoints({
+        items: content.items,
+        playerId,
+        sheet: content.sheets.get(playerId) ?? new Map()
+      })
+      const paid =
+        round.awards.find((award) => award.playerId === playerId)?.points ?? 0
+      const participant = room.players.get(playerId)
+
+      if (participant !== undefined) {
+        participant.score += points - paid
+      }
+
+      return {
+        playerId,
+        points,
+        speedBonus: 0,
+        verdict: { isCorrect: points > 0, kind: 'single' }
+      }
     })
-    const paid =
-      round.awards.find((award) => award.playerId === playerId)?.points ?? 0
-    const participant = room.players.get(playerId)
-
-    if (participant !== undefined) {
-      participant.score += points - paid
-    }
-
-    return {
-      playerId,
-      points,
-      speedBonus: 0,
-      verdict: { isCorrect: points > 0, kind: 'single' }
-    }
-  })
 }

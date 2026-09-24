@@ -14,8 +14,9 @@ import { hasJoinedAfterStart } from '@taverla/core/round/round-roster'
 import { pointsFor } from '@taverla/core/scoring/verdict'
 import {
   filledLineCount,
+  itemVerdictFor,
   lineVerdict,
-  UNMARKED_ITEM
+  slateItemStateOf
 } from '@taverla/core/slate/sheet-marking'
 
 import { elapsedRoundMs, flipsAtOf } from '@/domain/round/round-service'
@@ -95,8 +96,8 @@ const toHostContent = ({
 }
 
 /**
- * The wall's half of the slate. Until the sheets are collected it is counts and
- * the host's own memo — not one answer, because everyone is looking at it.
+ * The wall's half of the slate. Of an item still open it is counts and the
+ * host's own memo — not one answer, because everyone is looking at it.
  */
 const toHostSlateContent = ({
   content,
@@ -106,28 +107,25 @@ const toHostSlateContent = ({
   room: Room
 }): HostRoundContent => {
   const itemIndex = content.currentItemIndex
-  const marking =
-    itemIndex === null
-      ? UNMARKED_ITEM
-      : (content.markings[itemIndex] ?? UNMARKED_ITEM)
+  const item = itemIndex === null ? undefined : content.items[itemIndex]
 
   return {
     correction:
-      itemIndex === null
+      itemIndex === null || item?.state !== 'closed'
         ? null
         : {
             blankPlayerIds: blankPlayerIdsFor({ itemIndex, room }),
             groups: answerGroupsFor({ itemIndex, room }).map((group) => ({
-              isCorrect: lineVerdict({ answer: group.text, marking }),
+              isCorrect: lineVerdict({
+                answer: group.text,
+                marking: item.marking
+              }),
               key: group.key,
               playerIds: group.playerIds,
               text: group.text
             }))
           },
-    keys: Array.from(
-      { length: content.itemCount },
-      (_, index) => content.keys.get(index) ?? null
-    ),
+    keys: content.items.map((_, index) => content.keys.get(index) ?? null),
     kind: 'slate',
     progress: [...room.players.keys()].map((playerId) => ({
       filledCount: filledLineCount(content.sheets.get(playerId) ?? new Map()),
@@ -303,9 +301,10 @@ const toContentView = ({
   if (content.kind === 'slate') {
     return {
       currentItemIndex: content.currentItemIndex,
-      itemCount: content.itemCount,
+      itemCount: content.items.length,
+      itemStates: content.items.map(slateItemStateOf),
       kind: 'slate',
-      yourSheet: youId === null ? null : toSlateSheet({ content, round, youId })
+      yourSheet: youId === null ? null : toSlateSheet({ content, youId })
     }
   }
 
@@ -317,34 +316,25 @@ const toContentView = ({
 }
 
 /**
- * The reader's lines and nobody else's. A seat taken after the collection was
- * never marked, so it is owed no verdict rather than a column of wrongs.
+ * The reader's lines and nobody else's. An item that closed before the reader
+ * held a seat was never asked of them, so it owes no verdict rather than a
+ * wrong one.
  */
 const toSlateSheet = ({
   content,
-  round,
   youId
 }: {
   content: Extract<Round['content'], { kind: 'slate' }>
-  round: Round
   youId: PlayerId
 }): SlateLine[] => {
   const sheet = content.sheets.get(youId)
-  const isMarked = !hasJoinedAfterStart({
-    openedWithPlayerIds: round.openedWithPlayerIds,
-    playerId: youId
-  })
 
-  return Array.from({ length: content.itemCount }, (_, index) => {
+  return content.items.map((item, index) => {
     const answer = sheet?.get(index) ?? null
-    const marking = content.markings[index]
 
     return {
       answer,
-      verdict:
-        isMarked && marking !== undefined
-          ? lineVerdict({ answer, marking })
-          : null
+      verdict: itemVerdictFor({ answer, item, playerId: youId })
     }
   })
 }

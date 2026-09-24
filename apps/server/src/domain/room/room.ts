@@ -14,7 +14,7 @@ import type { HostTrack, TrackIdentity } from '@taverla/protocol/track'
 import type { BoardEntry, WrittenLie } from '@taverla/core/lefake/lie-board'
 import type { Vote } from '@taverla/core/lefake/tally'
 import type { RoundRoster } from '@taverla/core/round/round-roster'
-import type { ItemMarking } from '@taverla/core/slate/sheet-marking'
+import type { SheetItem } from '@taverla/core/slate/sheet-marking'
 
 /**
  * The server's own model, deliberately richer than either wire view: it holds
@@ -193,17 +193,13 @@ export type Round = {
         presses: ReflexPress[]
       }
     | {
-        /** `null` while the sheets are open; the item on the wall once they are collected. */
+        /** The item on the wall — always a closed one — and `null` until the first closes. */
         currentItemIndex: number | null
-        itemCount: number
+        /** One per item, in order; the sheet's length is theirs. */
+        items: SheetItem[]
         /** The host's memo by item index. It reaches the host arm and no other. */
         keys: Map<number, string>
         kind: 'slate'
-        /**
-         * One per item, laid down at collection — the count is fixed from
-         * then — and empty while the sheets are open.
-         */
-        markings: ItemMarking[]
         /** Every player's lines by item index; a cleared line is deleted, never stored empty. */
         sheets: Map<PlayerId, Map<number, string>>
       }
@@ -223,9 +219,9 @@ export type Round = {
    * Fake's vote included: the people who may vote are the people who were there
    * for the writing.
    *
-   * The slate stamps it at **collection** instead. Its sheet has no clock and
-   * no race, so a friend arriving at the fifth cup is owed a sheet rather than
-   * a wait; it is the correction a latecomer cannot join.
+   * The slate stamps each item as it closes instead, and this only once none
+   * is left open: its sheet has no clock and no race, so a friend arriving
+   * mid-sheet is owed every item still open rather than a wait.
    */
   openedWithPlayerIds: RoundRoster
   revealed: boolean

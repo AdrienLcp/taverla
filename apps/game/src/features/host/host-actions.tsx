@@ -40,10 +40,14 @@ export const HostActions: React.FC<HostActionsProps> = (props) => {
     // the round is open rather than abandoning it — and without it a vote with
     // no clock would have nothing to end it.
     case 'voting':
-      // A sheet is ended by collecting it, and `host.reveal` is refused until
-      // then — the papers still have to be marked.
+      // The slate writes and marks in one phase, and `host.reveal` is refused
+      // while an item is still open — its answers have not been on the wall.
       if (props.view.round?.content.kind === 'slate') {
-        return <SlateWritingActions {...props} />
+        return props.view.round.content.currentItemIndex === null ? (
+          <SlateWritingActions {...props} />
+        ) : (
+          <SlateCorrectionActions {...props} />
+        )
       }
 
       // The one round that ends without being ended: a heat closes when
@@ -58,8 +62,6 @@ export const HostActions: React.FC<HostActionsProps> = (props) => {
     // which the stage owns, beside the answer it is judged against.
     case 'buzzed':
       return null
-    case 'correcting':
-      return <SlateCorrectionActions {...props} />
     case 'revealed':
       return <RevealActions {...props} />
     case 'finished':

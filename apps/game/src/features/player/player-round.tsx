@@ -67,7 +67,6 @@ import './player-round.sass'
 
 const ROUND_IS_RUNNING = new Set<RoomPhase>([
   'buzzed',
-  'correcting',
   'countdown',
   'playing',
   'voting'
@@ -218,7 +217,11 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
     )
   }
 
-  if (view.phase === 'correcting' && round !== null) {
+  if (
+    view.phase === 'playing' &&
+    round?.content.kind === 'slate' &&
+    round.content.currentItemIndex !== null
+  ) {
     return (
       <section className='player-round'>
         <SlateMarking round={round} />

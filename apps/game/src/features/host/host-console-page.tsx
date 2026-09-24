@@ -514,11 +514,11 @@ const Stage: React.FC<StageProps> = ({
   }
 
   if (view.phase === 'playing' && round?.content.kind === 'slate') {
-    return <SlateWritingStage isLive={isLive} send={send} view={view} />
-  }
-
-  if (view.phase === 'correcting') {
-    return <SlateCorrectionStage isLive={isLive} send={send} view={view} />
+    return round.content.currentItemIndex === null ? (
+      <SlateWritingStage isLive={isLive} send={send} view={view} />
+    ) : (
+      <SlateCorrectionStage isLive={isLive} send={send} view={view} />
+    )
   }
 
   if (view.phase === 'playing' && round != null) {

@@ -1,5 +1,8 @@
 # Stage 26 — The slate names its items and marks them as they close
 
+**Half done.** Session A (served) landed; session B (drawn) is owed. Read
+"What the build disagreed with" at the end first.
+
 Two notes from the first look at [25](25-slate.md), both from the host who asked
 for it.
 
@@ -50,3 +53,80 @@ see [27](27-host-remote.md). It is a shell change, not a slate one.
   early, marks it on the wall while the others keep writing, then collects the
   rest and finishes — in a muted browser, at 390 and 1440.
 - `pnpm validate` green, with socket tests for per-item locking and leaks.
+
+## What the build disagreed with
+
+Session A — served. Protocol, core, server, `slate-game.test.ts` (18 socket
+tests, the six new ones each broken once on purpose), `slate.test.ts` in the
+protocol, `PROTOCOL_VERSION` 17 → **18**.
+
+**`correcting` is gone; items carry the state.** The brief's likely answer
+held. Writing and marking overlap now, and a phase is the room's: so the slate
+lives in `playing` from the first line to the reveal, and each item is `open`
+(writable on every sheet), `closed` (locked, on the wall's side) or `marked`
+(closed and passed by the wall at least once — an answer nobody validated there
+is wrong). `marking` was the brief's middle name; it reads as *on the wall
+now*, which is `currentItemIndex`'s job, so the middle state is `closed`.
+`isRoundInPlay` loses `correcting` with nothing to replace: `playing` was
+already in it.
+
+**Closing one item is `host.closeItem`.** It locks the item, stamps it and moves
+the wall to it — passing whatever the wall leaves, as `host.showItem` does.
+`host.collectSheets` survives as *close everything still open*, on one stamp,
+with the wall moving to the first item it closed. `host.showItem` moves only
+between closed items (`wrong_phase` on an open one). `host.reveal` is refused
+`wrong_phase` while any item is open; there is no separate *finish* frame,
+because the reveal already is one. `host.addItem` works until the reveal, not
+until the first close — an item added after every other has closed reopens the
+sheet for it.
+
+**The roster is stamped per item, at its closing.** A closed item holds the
+seats held when it closed; a player is grouped, marked and paid only on items
+stamped with them (`itemVerdictFor` and `sheetPoints` in
+`core/slate/sheet-marking.ts`). The round's own `openedWithPlayerIds` — what the
+shell's `joinedAfterStart` reads — stays `null` while an item is open, so a
+latecomer gets a sheet, and becomes the union of the item stamps once none is.
+A player seated mid-marking writes the open items, is refused the closed ones,
+and reads `null` verdicts on them rather than wrongs.
+
+**The anti-leak invariants hold per item.** `answerGroupsFor` returns nothing
+for an open item, and the host arm's `correction` is `null` unless the item on
+the wall is closed. Player frames carry the reader's own sheet only, as before.
+
+**Labels live in `settings.game.labels` alone**, `(string | null)[]`, at most
+60, edited with `host.updateSettings` in any phase — there is no label frame.
+One store serves the lobby and an item added mid-sheet, and a label set for
+position 12 waits there until the sheet grows to it. Limits: trimmed, 1 to 12
+UTF-16 units (enough for `Glass 12` or a flag; a joined emoji spends several),
+and **every position of a 60-item sheet must read differently** once folded
+(NFKC, lower case, runs of spacing) — which also refuses a label that reads as
+another position's number, so a tile drawn `2` is always item 2. It is a
+`.refine` on the schema, so a bad set is `invalid_message` from the decoder.
+`.default([])` lets a setup stored before labels existed still parse.
+`slateItemLabel({ itemIndex, labels })` in `protocol/slate.ts` is what a screen
+draws.
+
+**The app was bridged, not redrawn.** Removing `correcting` broke three type
+checks; each now asks whether the wall holds an item (`currentItemIndex !==
+null`) instead, so today's screens still play the old flow — collect
+everything, then mark — against the new server. Nothing on screen closes one
+item, edits a label or draws one yet.
+
+### What session B consumes
+
+- `round.content` (`kind: 'slate'`): `itemCount`, `itemStates`
+  (`('open' | 'closed' | 'marked')[]`), `currentItemIndex` (`number | null`,
+  always a closed item), `yourSheet` (`{ answer, verdict }[]` or `null`).
+- `currentContent` (`kind: 'slate'`, host only): `keys`, `progress`,
+  `correction` (`null` unless a closed item is on the wall) — shapes unchanged.
+- `settings.game.labels` and `slateItemLabel`; `SLATE_LABEL_MAX_LENGTH` (12)
+  and `duplicateSlateLabelIndex` for the editor to refuse before sending.
+- Frames: `host.closeItem { roundId, itemIndex }`, `host.collectSheets` (the
+  shortcut), `host.showItem` (closed items only), `host.judgeGroup`,
+  `host.addItem`, `host.setItemKey`, `slate.write` (refused `wrong_phase` on a
+  closed item), `host.reveal` (refused while an item is open).
+- Owed: the tile and field show labels, a closed tile reads locked on the
+  sheet, the console closes one item and moves between closed ones while the
+  roster keeps writing, the label editor (lobby fold and added items), the
+  wall's phase colour now that `[data-phase='correcting']` matches nothing,
+  dictionaries, and the muted browser pass at 390 and 1440.

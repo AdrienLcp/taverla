@@ -4,8 +4,7 @@ const PHASES_WITH_A_ROUND_IN_PLAY = new Set<RoomPhase>([
   'countdown',
   'playing',
   'buzzed',
-  'voting',
-  'correcting'
+  'voting'
 ])
 
 /**

@@ -19,6 +19,7 @@ import {
   slateAnswerGroupSchema,
   slateItemCountSchema,
   slateItemIndexSchema,
+  slateItemStateSchema,
   slateLineSchema,
   slateProgressSchema
 } from './slate'
@@ -38,10 +39,9 @@ export const MAX_PLAYERS_PER_ROOM = 24
  * the enum shared: every shell check can still spell what it is checking, and
  * the next submit-then-vote game reuses this for nothing.
  *
- * `correcting` is the second name added on the same argument, and the slate's
- * alone: the sheets are collected and the host is marking them one item at a
- * time. It is not `voting` — nobody on the floor acts — and not `revealed`,
- * because the scores are still moving.
+ * The slate once added `correcting` on the same argument and gave it back: its
+ * items close one at a time while the rest are still being written, so writing
+ * and marking share `playing` and each item carries its own state instead.
  */
 export const roomPhases = [
   'lobby',
@@ -49,7 +49,6 @@ export const roomPhases = [
   'playing',
   'buzzed',
   'voting',
-  'correcting',
   'revealed',
   'finished'
 ] as const
@@ -301,17 +300,20 @@ export const roundContentSchema = z.discriminatedUnion('kind', [
   }),
   z.object({
     /**
-     * The item the wall is correcting, and `null` while the sheets are still
-     * being written. 0-based, like every index this game sends.
+     * The item on the wall — always a closed one — and `null` until the host
+     * closes the first. 0-based, like every index this game sends; what a
+     * screen draws for it is `settings.game.labels`, or its number.
      */
     currentItemIndex: slateItemIndexSchema.nullable(),
-    /** The round's own count, which `host.addItem` grows while the sheets are open. */
+    /** The round's own count, which `host.addItem` grows until the reveal. */
     itemCount: slateItemCountSchema,
+    /** One per item: whether it can still be written, and how far its marking has gone. */
+    itemStates: z.array(slateItemStateSchema),
     kind: z.literal('slate'),
     /**
-     * The reader's own sheet, one line per item, and nobody else's — until the
-     * collection not even the host screen holds another player's answer, because
-     * the host screen is the wall. `null` for a reader with no seat.
+     * The reader's own sheet, one line per item, and nobody else's — not even
+     * the host screen holds another player's answer to an item still open,
+     * because the host screen is the wall. `null` for a reader with no seat.
      *
      * It is what a reload comes back to: a locked screen loses nothing, since
      * every line was saved on its own as it was written.
@@ -448,9 +450,10 @@ export const hostRoundContentSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('reflex') }),
   z.object({
     /**
-     * The item being corrected, grouped, and `null` until the sheets are
-     * collected — which is the whole of the wall's privacy: before that, this
-     * arm holds counts and the host's own memo and not one answer.
+     * The item on the wall, grouped, and `null` until the host closes one. It
+     * only ever holds a closed item, which is the whole of the wall's privacy:
+     * of an item still open this arm holds counts and the host's memo and not
+     * one answer.
      *
      * One item rather than the whole pile because the wall shows one, and the
      * cursor is what moves: the next snapshot carries the next item.

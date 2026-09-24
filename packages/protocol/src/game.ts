@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 import { questionDrawSettingsSchema } from './question'
-import { slateItemCountSchema } from './slate'
+import { slateItemCountSchema, slateLabelsSchema } from './slate'
 import { trackDifficultySchema, trackSourceSchema } from './track'
 
 export const gameKinds = [
@@ -104,7 +104,8 @@ export const gameSettingsSchema = z.discriminatedUnion('kind', [
      * opens on one — this setting is where the next sheet starts, not a cap.
      */
     itemCount: slateItemCountSchema,
-    kind: z.literal('slate')
+    kind: z.literal('slate'),
+    labels: slateLabelsSchema
   })
 ])
 
@@ -192,7 +193,8 @@ export const DEFAULT_REFLEX_SETTINGS: ReflexSettings = { kind: 'reflex' }
 
 export const DEFAULT_SLATE_SETTINGS: SlateSettings = {
   itemCount: 10,
-  kind: 'slate'
+  kind: 'slate',
+  labels: []
 }
 
 /** A record rather than a switch, so a new kind without a default cannot compile. */

@@ -8,6 +8,23 @@ one part.
 
 ### Breaking Changes
 
+- `[Shared]` **The slate marks an item while the rest are still being
+  written**, and `PROTOCOL_VERSION` goes to 18. `RoomPhase` loses
+  `correcting`: the slate writes and marks inside `playing`, and each item
+  carries `open`, `closed` or `marked` on `round.content.itemStates`. A new host
+  frame, `host.closeItem`, locks one item on every sheet and puts its grouped
+  answers on the wall while the others stay writable; `host.collectSheets` now
+  closes whatever is still open; `host.reveal` waits until nothing is. Each item
+  is stamped with the seats held when it closed, so a player arriving mid-sheet
+  still writes every open item and is marked on those alone. No frame carries an
+  answer to an item still open, the wall's included.
+
+  Items can be **labelled** — `🔴`, `B`, `Glass 3` — through
+  `settings.game.labels`: public, edited in any phase, up to 12 characters, and
+  refused when two positions would read the same, a bare number included.
+  Numbers stay the default. The screens are the next session; today's still
+  play collect-then-mark against the new server.
+
 - `[Shared]` **The slate is served**, and `PROTOCOL_VERSION` goes to 17: a
   sixth game where everyone fills a numbered sheet in private and the host marks
   it item by item on the wall. It was asked for as a chip tasting and is kept

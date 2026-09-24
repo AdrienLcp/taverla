@@ -61,7 +61,8 @@ nobody can pick up is a party ended by a dead battery.
 | `host.clearLockouts` | host | `roundId` |
 | `host.addItem` | host | `roundId` |
 | `host.setItemKey` | host | `roundId`, `itemIndex`, `key` — `''` clears it |
-| `host.collectSheets` | host | `roundId` |
+| `host.closeItem` | host | `roundId`, `itemIndex` |
+| `host.collectSheets` | host | `roundId` — closes every item still open |
 | `host.showItem` | host | `roundId`, `itemIndex` |
 | `host.judgeGroup` | host | `roundId`, `itemIndex`, `groupKey`, `verdict` — `{kind:'single', isCorrect}` |
 | `host.nextRound` | host | — |
@@ -94,12 +95,17 @@ buzzer would pay two points for one charade.
 round is a clip that runs out, so a lockout there expires on its own; a game
 whose question the room owns has no such clock.
 
-**The slate's five host frames and its one player frame.** The sheet is one
-round: `playing` is the writing, `host.collectSheets` turns it into
-`correcting` with the wall on item 0, `host.showItem` moves the wall — back as
-well as forward — and `host.reveal` ends the correction into `revealed`. A
-`host.reveal` before the collection is refused with `wrong_phase`: collecting is
-a decision of its own, never a reveal pressed early. Every index is 0-based.
+**The slate's six host frames and its one player frame.** The sheet is one
+round, and writing and marking share `playing`: every item carries its own
+state instead — `open` (writable on every sheet), `closed` (locked, its answers
+on the wall's side) and `marked` (closed and passed by the wall, so an answer
+nobody validated is wrong). `host.closeItem` closes one item and puts it on the
+wall while every other stays writable; `host.collectSheets` closes every item
+still open at once and moves the wall to the first of them; `host.showItem`
+moves the wall between closed items — back as well as forward; `host.addItem`
+adds an open item until the reveal. `host.reveal` is refused with `wrong_phase`
+while any item is open, then ends the sheet into `revealed`. A line written to
+a closed item is `wrong_phase`. Every index is 0-based.
 
 `host.judgeGroup` is its own frame rather than `host.judge` taught an item index.
 `host.judge` names one player on the floor and ends in a lockout, a resumed clip
@@ -110,11 +116,21 @@ wall (`stale_round` otherwise, the way a stale `roundId` is), and `groupKey` mus
 name a group of it (`invalid_message` otherwise) — a blank line is never a group,
 which is the whole guard against validating one.
 
-The slate stamps the round's roster **at collection**, not when the writing
-opens: a sheet has no clock and no race, so a latecomer gets one. After the
-collection the shell's `joinedAfterStart` applies unchanged. `slate.write` is not
-a floor frame — it moves nothing along, so it is accepted while the console is
-away.
+The slate stamps **each item** with the seats held when it closes, and marks
+and pays a player only on the items stamped with them: a sheet has no clock and
+no race, so a latecomer is owed every item still open. The round's own roster —
+what `joinedAfterStart` reads — stays `null` while an item is open, and is the
+union of the item stamps once none is. `slate.write` is not a floor frame — it
+moves nothing along, so it is accepted while the console is away.
+
+**Labels are settings, not round state.** `settings.game.labels` is
+`(string | null)[]`, at most 60, one per item index, `null` (or absent) for an
+item drawn as its 1-based number. Public by nature, so it travels to everyone
+with the settings and is edited by `host.updateSettings` in any phase — which is
+how an item added mid-sheet gets one. Each label is trimmed, 1 to 12 UTF-16
+units, and every position must read differently once case, width and spacing
+are folded — a label that reads as another position's number is refused too, so
+a tile drawn `2` is always item 2. A refused set is `invalid_message`.
 
 Every `host.*` type is listed in `HOST_ONLY_MESSAGE_TYPES`, which the server
 checks before dispatch. A test asserts the set matches the naming convention, so
@@ -143,7 +159,7 @@ Shared by both:
 ```jsonc
 {
   "code": "K3M9",
-  "phase": "playing",              // lobby | countdown | playing | buzzed | voting | correcting | revealed | finished
+  "phase": "playing",              // lobby | countdown | playing | buzzed | voting | revealed | finished
   "players": [{ "id": "…", "nickname": "Alice", "score": 2, "isConnected": true }],
   "settings": { "roundCount": 10,          // null → until the host ends it
                 "countdownMs": 3000,
@@ -212,18 +228,20 @@ The host view adds what only the host may see:
 ```
 
 **The slate splits its round between the two views on privacy, not on the
-answer.** `round.content` carries `itemCount`, `currentItemIndex` (`null` while
-the sheets are open) and `yourSheet` — the reader's own lines, one per item, each
+answer.** `round.content` carries `itemCount`, `itemStates` (one per item),
+`currentItemIndex` (the item on the wall, always a closed one, `null` until the
+first closes) and `yourSheet` — the reader's own lines, one per item, each
 `{ answer, verdict }`, and `null` for a reader with no seat. It is the only place
 a player's answers travel to them, which is what a reload comes back to. The
 host arm carries `progress` (`{ playerId, filledCount }` per seat), `keys` (the
 host's memo per item, reaching no player frame ever) and `correction`, which is
-`null` until the collection: **the host screen is the wall**, so it holds counts
-and not one answer while the room writes. From `correcting` it holds the item on
-the wall, grouped — `{ key, text, playerIds, isCorrect }` per group, blanks
+`null` until an item closes: **the host screen is the wall**, so of an item
+still open it holds counts and not one answer. Once one is on the wall it holds
+that item, grouped — `{ key, text, playerIds, isCorrect }` per group, blanks
 listed apart as `blankPlayerIds`. A line's verdict is `null` until its group is
 judged or the wall has moved past its item, which is when an answer nobody
-validated becomes wrong.
+validated becomes wrong — and stays `null` on an item that closed before the
+reader held a seat.
 
 `audioUrl` and `track` are separate because a host who has taken a seat keeps
 the first and gets `null` for the second: that screen still has to play the
