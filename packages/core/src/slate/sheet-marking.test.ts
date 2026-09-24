@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import {
   closedItem,
+  filledCountsPerItem,
   filledLineCount,
   type ItemMarking,
   itemVerdictFor,
@@ -151,5 +152,26 @@ describe('filledLineCount', () => {
         ])
       )
     ).toBe(2)
+  })
+})
+
+describe('filledCountsPerItem', () => {
+  it('[slate] counts, per item, the sheets with something written on it', () => {
+    expect(
+      filledCountsPerItem({
+        itemCount: 3,
+        sheets: [
+          new Map([
+            [0, 'sel'],
+            [2, ' ']
+          ]),
+          new Map([
+            [0, 'poivre'],
+            [1, 'oignon'],
+            [5, 'hors feuille']
+          ])
+        ]
+      })
+    ).toEqual([2, 1, 0])
   })
 })

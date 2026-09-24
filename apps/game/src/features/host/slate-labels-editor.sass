@@ -1,0 +1,22 @@
+@use '../../presentation/styles/typography'
+
+@layer components
+  .slate-labels-editor
+    .hint
+      @include typography.caption
+
+      color: var(--ink-muted)
+      max-inline-size: 60ch
+      text-wrap: pretty
+
+    // Wide enough for an emoji at the field's own size or eight letters of a
+    // word, and never so wide that sixty of them stop fitting a phone in
+    // three columns.
+    .labels
+      display: grid
+      gap: var(--space-s)
+      grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr))
+      list-style: none
+
+      .react-aria-Input
+        text-align: center

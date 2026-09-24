@@ -9,6 +9,7 @@ import { LobbyActions } from './lobby-actions'
 import { RevealActions } from './reveal-actions'
 import { RoundActions } from './round-actions'
 import { SlateCorrectionActions, SlateWritingActions } from './slate-stages'
+import type { SlateWall } from './use-slate-wall'
 
 export type HostActionsProps = {
   /** What the picker is showing, which `onOpenRound` commits — so it is what the next round will be built from. */
@@ -18,6 +19,8 @@ export type HostActionsProps = {
   /** Commits the picker's draft and blesses the audio element — every control that opens a round calls it first. */
   onOpenRound: () => void
   send: (message: ClientMessage) => boolean
+  /** Whether the slate's console is showing the wall or the sheets. */
+  slateWall: SlateWall
   view: HostRoomView
 }
 
@@ -43,10 +46,10 @@ export const HostActions: React.FC<HostActionsProps> = (props) => {
       // The slate writes and marks in one phase, and `host.reveal` is refused
       // while an item is still open — its answers have not been on the wall.
       if (props.view.round?.content.kind === 'slate') {
-        return props.view.round.content.currentItemIndex === null ? (
-          <SlateWritingActions {...props} />
+        return props.slateWall.isOnWall ? (
+          <SlateCorrectionActions {...props} wall={props.slateWall} />
         ) : (
-          <SlateCorrectionActions {...props} />
+          <SlateWritingActions {...props} wall={props.slateWall} />
         )
       }
 

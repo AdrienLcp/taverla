@@ -466,6 +466,11 @@ export const hostRoundContentSchema = z.discriminatedUnion('kind', [
       })
       .nullable(),
     /**
+     * Per item, how many sheets have something on it. A count, like
+     * `progress`: it says an item is ready to close, never what it holds.
+     */
+    filledCounts: z.array(z.number().int().nonnegative()),
+    /**
      * The host's memo per item, `null` where none was noted. Host-only for the
      * length of the game, the reveal included: it is a note, not the answer the
      * players were marked against.

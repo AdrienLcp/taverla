@@ -24,11 +24,16 @@
         grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr)
 
   .slate-writing
-    .sheet-size
-      align-items: flex-start
+    .item-board
       display: flex
       flex-direction: column
-      gap: var(--space-s)
+      gap: var(--space-m)
+      min-width: 0
+
+      > header
+        display: flex
+        flex-direction: column
+        gap: var(--space-s)
 
       .now
         @include typography.title
@@ -36,13 +41,84 @@
         max-inline-size: 24ch
         text-wrap: balance
 
-      .count
-        @include typography.monument
-        @include typography.numeric
+      .size
+        align-items: center
+        display: flex
+        flex-wrap: wrap
+        gap: var(--space-s) var(--space-m)
 
       .count-label
         @include typography.label
 
+        color: var(--ink-muted)
+
+    // The three states are three materials, so they read from across a room
+    // with no word: open is outlined like a field still to fill, closed is
+    // solid ink because it is what the wall owes the room next, and marked
+    // recedes to the rule colour because nothing is left to do on it.
+    .items
+      display: grid
+      gap: var(--space-s)
+      grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr))
+      list-style: none
+
+    .item
+      align-items: center
+      border: 3px solid var(--edge)
+      display: flex
+      flex-direction: column
+      gap: var(--space-2xs)
+      min-width: 0
+      padding: var(--space-xs)
+      text-align: center
+
+      .label
+        @include typography.monument
+        @include typography.numeric
+
+        font-size: clamp(2.25rem, 7vmin, 3.5rem)
+        line-height: 1.05
+        max-inline-size: 100%
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
+
+        &.long
+          @include typography.title
+
+          line-height: 1.3
+
+      .state
+        @include typography.caption
+        @include typography.numeric
+
+        align-items: center
+        display: inline-flex
+        gap: var(--space-2xs)
+
+        svg
+          block-size: 1em
+          inline-size: 1em
+
+      .button
+        align-self: stretch
+
+      // The flip's own swap, scoped to one item: the sheets are only on screen
+      // in `playing`, so its pair is the one to reverse, and the derived three
+      // are mixed again here because the root's arrive already resolved.
+      &.closed
+        --field: var(--ink-playing)
+        --ink: var(--field-playing)
+        --ink-muted: color-mix(in oklab, var(--ink) 85%, var(--field))
+        --rule: color-mix(in oklab, var(--ink) 32%, var(--field))
+        --edge: color-mix(in oklab, var(--ink) 60%, var(--field))
+
+        background: var(--field)
+        border-color: var(--field)
+        color: var(--ink)
+
+      &.marked
+        border-color: var(--rule)
         color: var(--ink-muted)
 
     .progress
@@ -100,9 +176,16 @@
         display: flex
         gap: clamp(var(--space-m), 4vmin, var(--space-xl))
 
-      .number
+      .label
         @include typography.monument
         @include typography.numeric
+
+        flex: none
+        max-inline-size: 50%
+        overflow-wrap: anywhere
+
+        &.long
+          @include typography.billboard
 
       .naming
         align-items: flex-start
@@ -177,9 +260,11 @@
 
       color: var(--ink-muted)
 
-  // Two presses sharing one row, which at 390px is 60px narrower than their
-  // two labels in English: they wrap rather than push the page sideways.
-  .slate-correction-actions
+  // The press that moves the marking on, the one that steps back, and the way
+  // to the sheets as a quieter third: at 390px they wrap rather than push the
+  // page sideways.
+  .slate-actions
+    align-items: center
     display: flex
     flex-wrap: wrap
     gap: var(--space-s)
@@ -187,3 +272,6 @@
 
     .button
       flex: 1 1 auto
+
+    .button.aside
+      flex: 0 0 100%

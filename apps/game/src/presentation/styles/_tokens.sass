@@ -178,7 +178,8 @@
   // The slate's marking is the same act as a buzz being judged — the host
   // deciding, the room waiting on the verdict — so it wears the same pair
   // rather than falling back to the lobby's, which read as the game ending.
-  \:root:is([data-phase='buzzed'], [data-phase='correcting'])
+  // It shares `playing` with the writing, so `useMarkingField` says which.
+  \:root:is([data-phase='buzzed'], [data-phase='playing'][data-marking])
     --field: var(--field-buzzed)
     --ink: var(--ink-buzzed)
 

@@ -655,6 +655,17 @@ export const EN_DICTIONARY = defineDictionary({
     speedBonus: '{points:number} of that for being early'
   },
   slate: {
+    board: {
+      close: 'Collect',
+      closeItem: 'Collect {item} and mark it now',
+      markItem: 'Mark {item}',
+      show: 'Mark',
+      state: {
+        closed: 'To mark',
+        marked: 'Marked',
+        open: '{filled:number}/{count:number} written'
+      }
+    },
     correct: {
       blanks: 'Left blank: {names}',
       finish: 'Show the scores',
@@ -683,11 +694,23 @@ export const EN_DICTIONARY = defineDictionary({
       })
     },
     key: {
-      field: 'Answer to no. {index:number}',
+      field: 'Answer for {item}',
       label: 'Answer key',
       summary: defineTranslation('{count:plural}', {
         plural: { count: { other: 'Hidden · {?} noted' } }
       })
+    },
+    labels: {
+      duplicate: 'Another item already shows this.',
+      hint: 'Leave a box empty to keep its number. A letter, an emoji or a short word all work.',
+      label: 'Names on the items',
+      none: 'Numbered 1, 2, 3…',
+      some: defineTranslation('{count:plural}', {
+        plural: { count: { one: '{?} named', other: '{?} named' } }
+      })
+    },
+    marking: {
+      now: 'Being marked'
     },
     name: 'Slate',
     progress: '{filled:number}/{count:number}',
@@ -695,15 +718,16 @@ export const EN_DICTIONARY = defineDictionary({
       'Everyone fills in their own sheet in private, then the innkeeper marks it: one point per answer they accept.',
     sheet: {
       blank: 'Left blank',
-      field: 'Your answer to no. {index:number}',
+      field: 'Your answer for {item}',
       grid: 'Your sheet',
       next: 'Next',
       previous: 'Previous',
       saved:
-        'Saved as you write. You can change anything until the innkeeper collects the sheets.',
+        'Saved as you write. You can change an answer until the innkeeper collects it.',
       tile: {
-        empty: 'No. {index:number}, empty',
-        filled: 'No. {index:number}: {answer}'
+        empty: '{item}, empty',
+        filled: '{item}: {answer}',
+        locked: '{item}, collected'
       }
     },
     tagline: 'Everyone writes. Nobody peeks.',
@@ -714,7 +738,10 @@ export const EN_DICTIONARY = defineDictionary({
     },
     wall: {
       collect: 'Collect the sheets',
-      filling: 'Sheets are open. Write what you think each number is.'
+      collectRest: 'Collect the rest',
+      filling: 'Sheets are open. Write what you think each one is.',
+      toSheets: 'Back to the sheets',
+      toWall: 'Back to marking'
     },
     yourAnswer: 'You wrote',
     yourSheet: 'Your whole sheet'

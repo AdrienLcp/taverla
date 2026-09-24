@@ -1,7 +1,7 @@
 # Stage 26 — The slate names its items and marks them as they close
 
-**Half done.** Session A (served) landed; session B (drawn) is owed. Read
-"What the build disagreed with" at the end first.
+**Done.** Both sessions landed. Read "What the build disagreed with" at the
+end first.
 
 Two notes from the first look at [25](25-slate.md), both from the host who asked
 for it.
@@ -130,3 +130,37 @@ item, edits a label or draws one yet.
   roster keeps writing, the label editor (lobby fold and added items), the
   wall's phase colour now that `[data-phase='correcting']` matches nothing,
   dictionaries, and the muted browser pass at 390 and 1440.
+
+Session B — drawn. Muted pass with a console and four seats in their own
+contexts, players in French and the console in English, 390 and 1440, both
+themes.
+
+**The console needed a count per item, so the host arm grew one.**
+`filledCounts` (`PROTOCOL_VERSION` 19) is how many sheets have something on
+each item — the host's cue that an item is ready to close. A count, like
+`progress`, so the anti-leak line is unchanged; `filledCountsPerItem` in
+`core/slate/sheet-marking.ts` computes it.
+
+**Wall or sheets is the console's choice, reset by the cursor.** `useSlateWall`
+holds whether the host asked for the sheets, and clears it whenever
+`currentItemIndex` moves — keyed on the last cursor *seen*, not the one the
+sheets were opened over, because stepping through the wall comes back to that
+very item and a first version then showed the sheets instead. Both the stage
+and the footer read it, so it lives in `HostConsole`.
+
+**Actions follow the order of the evening.** On the wall the primary press is
+*Next* while a later item is collected, *Collect the rest* while any is open,
+and *Show the scores* once none is — so the reveal is never offered disabled,
+it simply is not the next thing yet. *Previous* stays, and *Back to the sheets*
+sits under them while anything is open.
+
+**The marking colour is `data-marking`, not a phase.** `useMarkingField` stamps
+it on the console while it shows the wall, and on a player only once nothing
+is left for them to write; a player still writing keeps `playing`'s field and
+reads the wall in a band above the sheet.
+
+**The label editor drops what lies past the sheet.** A label kept at position
+6 by a longer sheet has no box on a sheet of 3, and still refused its own text
+as a duplicate on a box the host could see. The editor now sends only the
+sheet's positions. In the lobby it lives in the settings; once the sheets are
+open, beside the answer key, sized to the sheet as it has grown.

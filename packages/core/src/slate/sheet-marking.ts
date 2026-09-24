@@ -111,3 +111,27 @@ export const sheetPoints = ({
 /** Lines with something in them — the count the wall may show of a sheet still being written. */
 export const filledLineCount = (sheet: ReadonlyMap<number, string>): number =>
   [...sheet.values()].filter((answer) => !isBlankAnswer(answer)).length
+
+/**
+ * How many sheets have something on each item — what tells the host an item
+ * everyone has answered is ready to close, without saying what anyone wrote.
+ */
+export const filledCountsPerItem = ({
+  itemCount,
+  sheets
+}: {
+  itemCount: number
+  sheets: Iterable<ReadonlyMap<number, string>>
+}): number[] => {
+  const counts = Array.from({ length: itemCount }, () => 0)
+
+  for (const sheet of sheets) {
+    for (const [itemIndex, answer] of sheet) {
+      if (itemIndex < itemCount && !isBlankAnswer(answer)) {
+        counts[itemIndex] = (counts[itemIndex] ?? 0) + 1
+      }
+    }
+  }
+
+  return counts
+}

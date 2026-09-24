@@ -77,6 +77,7 @@ import {
   protocolErrorKey
 } from '@/presentation/i18n/translation'
 import { useReportRoomActions } from '@/presentation/room-actions/room-actions-provider'
+import { useMarkingField } from '@/presentation/theme/use-marking-field'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
 import { useScreenAwake } from '@/presentation/use-screen-awake'
 
@@ -92,6 +93,7 @@ import { useRoundAudio } from './round-audio'
 import { SetupFold } from './setup-fold'
 import { SlateCorrectionStage, SlateWritingStage } from './slate-stages'
 import { useRestoreStoredSetup } from './use-restore-stored-setup'
+import { type SlateWall, useSlateWall } from './use-slate-wall'
 import { VerdictPanel } from './verdict-panel'
 
 import './host-console-page.sass'
@@ -131,6 +133,8 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   useReportConnection({ clock, status })
   useRoomDocumentTitle(view?.settings.game?.kind ?? null)
   usePhaseField(view?.phase ?? null)
+  const slateWall = useSlateWall(view)
+  useMarkingField(view?.phase === 'playing' && slateWall.isOnWall)
   useScreenAwake(status !== 'refused' && view?.phase !== 'finished')
   const { canPlay, refusal, unlock } = useRoundAudio({ clock, view, volume })
 
@@ -322,6 +326,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
         refusal={refusal}
         roomCode={roomCode}
         send={send}
+        slateWall={slateWall}
         view={view}
       />
 
@@ -357,6 +362,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
                 }
               }}
               send={send}
+              slateWall={slateWall}
               view={view}
             />
             {/*
@@ -417,6 +423,7 @@ type StageProps = {
   refusal: ClipRefusal | null
   roomCode: RoomCode
   send: (message: ClientMessage) => boolean
+  slateWall: SlateWall
   view: HostRoomView | null
 }
 
@@ -432,6 +439,7 @@ const Stage: React.FC<StageProps> = ({
   refusal,
   roomCode,
   send,
+  slateWall,
   view
 }) => {
   const translate = useTranslate()
@@ -514,10 +522,21 @@ const Stage: React.FC<StageProps> = ({
   }
 
   if (view.phase === 'playing' && round?.content.kind === 'slate') {
-    return round.content.currentItemIndex === null ? (
-      <SlateWritingStage isLive={isLive} send={send} view={view} />
+    return slateWall.isOnWall ? (
+      <SlateCorrectionStage
+        isLive={isLive}
+        send={send}
+        view={view}
+        wall={slateWall}
+      />
     ) : (
-      <SlateCorrectionStage isLive={isLive} send={send} view={view} />
+      <SlateWritingStage
+        isLive={isLive}
+        onSettingsChange={onSettingsChange}
+        send={send}
+        view={view}
+        wall={slateWall}
+      />
     )
   }
 

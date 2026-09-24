@@ -33,7 +33,11 @@ import {
 import { LieForm, VoteBoard } from '@/features/player/lefake-forms'
 import { ReflexBuzzer } from '@/features/player/reflex-buzzer'
 import { RoundBoard } from '@/features/player/round-board'
-import { SlateMarking, SlateSheet } from '@/features/player/slate-sheet'
+import {
+  SlateOnTheWall,
+  SlateSheet,
+  SlateWholeSheet
+} from '@/features/player/slate-sheet'
 import { answerFitting } from '@/helpers/answer-fitting'
 import {
   blindtestContent,
@@ -41,6 +45,7 @@ import {
   quizContent,
   reflexContent
 } from '@/helpers/round-content'
+import { slateLabelsOf } from '@/helpers/slate-labels'
 import { buzzFeedback } from '@/infrastructure/browser'
 import { useRoomCodeParam } from '@/infrastructure/router/navigation'
 import { AskedQuestion } from '@/presentation/components/asked-question'
@@ -217,14 +222,25 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
     )
   }
 
-  if (
-    view.phase === 'playing' &&
-    round?.content.kind === 'slate' &&
-    round.content.currentItemIndex !== null
-  ) {
+  if (view.phase === 'playing' && round?.content.kind === 'slate') {
+    const labels = slateLabelsOf(view.settings)
+    const hasOpenItem = round.content.itemStates.includes('open')
+
     return (
       <section className='player-round'>
-        <SlateMarking round={round} />
+        <SlateOnTheWall isCompact={hasOpenItem} labels={labels} round={round} />
+        {hasOpenItem && (
+          <SlateSheet
+            labels={labels}
+            onWrite={(itemIndex, answer) =>
+              onWriteLine(itemIndex, answer, round.id)
+            }
+            round={round}
+          />
+        )}
+        {round.content.currentItemIndex !== null && (
+          <SlateWholeSheet labels={labels} round={round} />
+        )}
       </section>
     )
   }
@@ -266,19 +282,6 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
             onSubmitLie={(lie) => onSubmitLie(lie, round.id)}
             round={round}
             youId={view.youId}
-          />
-        </section>
-      )
-    }
-
-    if (round.content.kind === 'slate') {
-      return (
-        <section className='player-round'>
-          <SlateSheet
-            onWrite={(itemIndex, answer) =>
-              onWriteLine(itemIndex, answer, round.id)
-            }
-            round={round}
           />
         </section>
       )

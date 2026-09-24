@@ -14,6 +14,7 @@ import { standingOf } from '@taverla/core/scoring/scoreboard'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
 import { NotFoundPage } from '@/features/not-found/not-found-page'
+import { slateContent } from '@/helpers/round-content'
 import {
   type PlayerConnection,
   usePlayerConnection
@@ -36,6 +37,7 @@ import { useRoomDocumentTitle } from '@/presentation/head/use-room-document-titl
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { protocolErrorKey } from '@/presentation/i18n/translation'
 import { useReportRoomActions } from '@/presentation/room-actions/room-actions-provider'
+import { useMarkingField } from '@/presentation/theme/use-marking-field'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
 import { useScreenAwake } from '@/presentation/use-screen-awake'
 
@@ -204,6 +206,12 @@ const Lobby: React.FC<{
 
   useReportConnection({ clock, status })
   usePhaseField(view?.phase ?? null)
+  const slate = slateContent(view?.round)
+  useMarkingField(
+    view?.phase === 'playing' &&
+      slate?.currentItemIndex != null &&
+      !slate.itemStates.includes('open')
+  )
   useScreenAwake(status !== 'refused' && view?.phase !== 'finished')
 
   if (status === 'refused') {

@@ -8,6 +8,11 @@ one part.
 
 ### Breaking Changes
 
+- `[Shared]` **The console counts every item**, and `PROTOCOL_VERSION` goes to
+  19: the slate's host arm carries `filledCounts`, how many sheets have
+  something on each item — a count, never an answer — so the host sees an item
+  is ready to close.
+
 - `[Shared]` **The slate marks an item while the rest are still being
   written**, and `PROTOCOL_VERSION` goes to 18. `RoomPhase` loses
   `correcting`: the slate writes and marks inside `playing`, and each item
@@ -22,8 +27,7 @@ one part.
   Items can be **labelled** — `🔴`, `B`, `Glass 3` — through
   `settings.game.labels`: public, edited in any phase, up to 12 characters, and
   refused when two positions would read the same, a bare number included.
-  Numbers stay the default. The screens are the next session; today's still
-  play collect-then-mark against the new server.
+  Numbers stay the default.
 
 - `[Shared]` **The slate is served**, and `PROTOCOL_VERSION` goes to 17: a
   sixth game where everyone fills a numbered sheet in private and the host marks
@@ -157,6 +161,20 @@ one part.
   `deezer-client.ts`. See [`docs/game-catalogue.md`](docs/game-catalogue.md)
 
 ### Features
+
+- `[Game]` **The slate's screens name their items and mark them one at a
+  time.** A *Names on the items* fold in the lobby, and beside the answer key
+  once the sheets are open, gives each item a label; a box left empty keeps its
+  number, and a label another item already shows is refused on the spot. Every
+  tile, field, wall and sheet line draws the label. The console's sheets view
+  is a board of every item — outlined while open with `3/4 written`, solid ink
+  and a padlock once collected, faded once marked — where one press collects an
+  item and puts it on the wall while the rest are still written. The wall steps
+  between collected items, then collects the rest, then shows the scores; *Back
+  to the sheets* and *Back to marking* move between the two. A player's
+  collected tile is hatched, padlocked and refused; the item on the wall rides
+  above their sheet as a band with their answer and its verdict, and takes the
+  whole screen once nothing is left to write.
 
 - `[Game]` **The slate is on the shelf**, sixth and last: *L'Ardoise* in
   French. The host sets how many things there are to guess (1 to 60), every
@@ -1353,6 +1371,10 @@ one part.
   and the extra width is only void
 
 ### Fixes
+
+- `[Game]` The slate's marking wears the judged-buzz field again. It lost it
+  when `correcting` left the phases; `useMarkingField` stamps `data-marking`
+  on the wall and on a player with nothing left to write.
 
 - `[Game]` **The game picker is three by two on the big console**, not a
   column of six. Stacking below `37rem` stopped the 5+1 wrap but drew the

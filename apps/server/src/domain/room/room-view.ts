@@ -13,6 +13,7 @@ import type { HostTrack, TrackIdentity } from '@taverla/protocol/track'
 import { hasJoinedAfterStart } from '@taverla/core/round/round-roster'
 import { pointsFor } from '@taverla/core/scoring/verdict'
 import {
+  filledCountsPerItem,
   filledLineCount,
   itemVerdictFor,
   lineVerdict,
@@ -125,6 +126,12 @@ const toHostSlateContent = ({
               text: group.text
             }))
           },
+    filledCounts: filledCountsPerItem({
+      itemCount: content.items.length,
+      sheets: [...room.players.keys()].map(
+        (playerId) => content.sheets.get(playerId) ?? new Map()
+      )
+    }),
     keys: content.items.map((_, index) => content.keys.get(index) ?? null),
     kind: 'slate',
     progress: [...room.players.keys()].map((playerId) => ({

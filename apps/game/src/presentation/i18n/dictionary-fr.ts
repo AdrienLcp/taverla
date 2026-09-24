@@ -581,6 +581,17 @@ export const FR_DICTIONARY = defineDictionary({
     speedBonus: 'dont {points:number} pour la vitesse'
   },
   slate: {
+    board: {
+      close: 'Ramasser',
+      closeItem: 'Ramasser {item} et le corriger maintenant',
+      markItem: 'Corriger {item}',
+      show: 'Corriger',
+      state: {
+        closed: 'À corriger',
+        marked: 'Corrigé',
+        open: '{filled:number}/{count:number} écrits'
+      }
+    },
     correct: {
       blanks: 'Rien écrit : {names}',
       finish: 'Voir les scores',
@@ -609,7 +620,7 @@ export const FR_DICTIONARY = defineDictionary({
       })
     },
     key: {
-      field: 'Réponse du n° {index:number}',
+      field: 'Réponse pour {item}',
       label: 'Corrigé',
       summary: defineTranslation('{count:plural}', {
         plural: {
@@ -617,21 +628,34 @@ export const FR_DICTIONARY = defineDictionary({
         }
       })
     },
+    labels: {
+      duplicate: 'Une autre case affiche déjà ça.',
+      hint: 'Laisse une case vide pour garder son numéro. Une lettre, un emoji ou un mot court, tout marche.',
+      label: 'Noms des choses à deviner',
+      none: 'Numérotées 1, 2, 3…',
+      some: defineTranslation('{count:plural}', {
+        plural: { count: { one: '{?} nommée', other: '{?} nommées' } }
+      })
+    },
+    marking: {
+      now: 'En correction'
+    },
     name: 'L’Ardoise',
     progress: '{filled:number}/{count:number}',
     scoring:
       'Chacun remplit sa feuille sans rien montrer, puis l’aubergiste corrige : un point par réponse qu’il accepte.',
     sheet: {
       blank: 'Rien écrit',
-      field: 'Ta réponse au n° {index:number}',
+      field: 'Ta réponse pour {item}',
       grid: 'Ta feuille',
       next: 'Suivant',
       previous: 'Précédent',
       saved:
-        'Enregistré au fil de l’eau. Tu peux tout changer jusqu’à ce que l’aubergiste ramasse les feuilles.',
+        'Enregistré au fil de l’eau. Tu peux changer une réponse jusqu’à ce que l’aubergiste la ramasse.',
       tile: {
-        empty: 'N° {index:number}, vide',
-        filled: 'N° {index:number} : {answer}'
+        empty: '{item}, vide',
+        filled: '{item} : {answer}',
+        locked: '{item}, ramassé'
       }
     },
     tagline: 'Chacun écrit. Personne ne copie.',
@@ -642,8 +666,11 @@ export const FR_DICTIONARY = defineDictionary({
     },
     wall: {
       collect: 'Ramasser les feuilles',
+      collectRest: 'Ramasser le reste',
       filling:
-        'Les feuilles sont ouvertes. Écrivez ce que vous pensez de chaque numéro.'
+        'Les feuilles sont ouvertes. Écrivez ce que vous pensez de chacun.',
+      toSheets: 'Revenir aux feuilles',
+      toWall: 'Reprendre la correction'
     },
     yourAnswer: 'Tu as écrit',
     yourSheet: 'Toute ta feuille'

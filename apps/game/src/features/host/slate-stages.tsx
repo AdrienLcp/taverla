@@ -5,18 +5,32 @@ import type { ClientMessage } from '@taverla/protocol/client-message'
 import type {
   HostRoomView,
   HostRoundContent,
-  PublicPlayer
+  PublicPlayer,
+  RoomSettings
 } from '@taverla/protocol/room'
-import { MAX_SLATE_ITEMS, SLATE_KEY_MAX_LENGTH } from '@taverla/protocol/slate'
+import {
+  MAX_SLATE_ITEMS,
+  SLATE_KEY_MAX_LENGTH,
+  type SlateItemState
+} from '@taverla/protocol/slate'
 
 import { slateContent, slateHostContent } from '@/helpers/round-content'
+import {
+  slateItemIndexes,
+  slateItemName,
+  slateLabelsOf
+} from '@/helpers/slate-labels'
 import { Button } from '@/presentation/components/button'
 import { CheckIcon } from '@/presentation/components/check-icon'
 import { Disclosure } from '@/presentation/components/disclosure'
+import { LockIcon } from '@/presentation/components/lock-icon'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { TextField } from '@/presentation/components/text-field'
 import { ToggleButton } from '@/presentation/components/toggle-button'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
+
+import { SlateLabelsEditor } from './slate-labels-editor'
+import type { SlateWall } from './use-slate-wall'
 
 import './slate-stages.sass'
 
@@ -27,6 +41,7 @@ type SlateStageProps = {
   isLive: boolean
   send: (message: ClientMessage) => boolean
   view: HostRoomView
+  wall: SlateWall
 }
 
 const nicknamesOf = (
@@ -39,40 +54,127 @@ const nicknamesOf = (
     .map((player) => player.nickname)
     .join(', ')
 
+const closedIndexesOf = (itemStates: readonly SlateItemState[]): number[] =>
+  itemStates.flatMap((state, index) => (state === 'open' ? [] : [index]))
+
 /**
  * The console while the sheets are open. It is the wall, so it shows how far
- * along everyone is and never a word of what they wrote — and the key the host
- * keeps is folded away, because opening it is opening it to the room.
+ * along everyone is and never a word of what they wrote: every item with how
+ * many sheets have it, closed one at a time as the room is done with it.
  */
-export const SlateWritingStage: React.FC<SlateStageProps> = ({
-  isLive,
-  send,
-  view
-}) => {
+export const SlateWritingStage: React.FC<
+  SlateStageProps & {
+    onSettingsChange: (settings: RoomSettings) => void
+  }
+> = ({ isLive, onSettingsChange, send, view }) => {
   const translate = useTranslate()
   const round = view.round
   const content = slateHostContent(view)
-  const itemCount = slateContent(round)?.itemCount ?? 0
+  const roundContent = slateContent(round)
+  const game = view.settings.game
 
-  if (round === null || content === null) {
+  if (round === null || content === null || roundContent === null) {
     return null
   }
 
+  const { itemCount, itemStates } = roundContent
+  const labels = slateLabelsOf(view.settings)
+  const spokenName = (itemIndex: number): string =>
+    labels[itemIndex] ?? translate('slate.item', { index: itemIndex + 1 })
+
   return (
     <div className='stage slate-writing'>
-      <div className='sheet-size'>
-        <p className='now'>{translate('slate.wall.filling')}</p>
-        <p className='count'>{itemCount}</p>
-        <p className='count-label'>{translate('slate.items.label')}</p>
-        <Button
-          isDisabled={!isLive || itemCount >= MAX_SLATE_ITEMS}
-          onPress={() => send({ roundId: round.id, type: 'host.addItem' })}
-          size='small'
-          variant='outlined'
-        >
-          {translate('slate.items.add')}
-        </Button>
-      </div>
+      <section className='item-board'>
+        <header>
+          <h2 className='now'>{translate('slate.wall.filling')}</h2>
+          <div className='size'>
+            <p className='count-label'>
+              {translate('slate.items.summary', { count: itemCount })}
+            </p>
+            <Button
+              isDisabled={!isLive || itemCount >= MAX_SLATE_ITEMS}
+              onPress={() => send({ roundId: round.id, type: 'host.addItem' })}
+              size='small'
+              variant='outlined'
+            >
+              {translate('slate.items.add')}
+            </Button>
+          </div>
+        </header>
+
+        <ol aria-label={translate('slate.items.label')} className='items'>
+          {slateItemIndexes(itemCount).map((itemIndex) => {
+            const state = itemStates[itemIndex] ?? 'open'
+            const name = slateItemName({ itemIndex, labels })
+
+            return (
+              <li className={`item ${state}`} key={`${round.id}:${itemIndex}`}>
+                <span
+                  aria-hidden
+                  className={name.isShort ? 'label' : 'label long'}
+                  title={name.label}
+                >
+                  {name.label}
+                </span>
+                <span className='state'>
+                  {state === 'open' ? (
+                    translate('slate.board.state.open', {
+                      count: view.players.length,
+                      filled: content.filledCounts[itemIndex] ?? 0
+                    })
+                  ) : (
+                    <>
+                      {state === 'closed' ? <LockIcon /> : <CheckIcon />}
+                      {translate(
+                        state === 'closed'
+                          ? 'slate.board.state.closed'
+                          : 'slate.board.state.marked'
+                      )}
+                    </>
+                  )}
+                </span>
+                {state === 'open' ? (
+                  <Button
+                    aria-label={translate('slate.board.closeItem', {
+                      item: spokenName(itemIndex)
+                    })}
+                    isDisabled={!isLive}
+                    onPress={() =>
+                      send({
+                        itemIndex,
+                        roundId: round.id,
+                        type: 'host.closeItem'
+                      })
+                    }
+                    size='small'
+                    variant='outlined'
+                  >
+                    {translate('slate.board.close')}
+                  </Button>
+                ) : (
+                  <Button
+                    aria-label={translate('slate.board.markItem', {
+                      item: spokenName(itemIndex)
+                    })}
+                    isDisabled={!isLive}
+                    onPress={() =>
+                      send({
+                        itemIndex,
+                        roundId: round.id,
+                        type: 'host.showItem'
+                      })
+                    }
+                    size='small'
+                    variant='outlined'
+                  >
+                    {translate('slate.board.show')}
+                  </Button>
+                )}
+              </li>
+            )
+          })}
+        </ol>
+      </section>
 
       <div className='host-side'>
         <ul className='progress'>
@@ -99,10 +201,25 @@ export const SlateWritingStage: React.FC<SlateStageProps> = ({
           content={content}
           isLive={isLive}
           itemCount={itemCount}
+          labels={labels}
           onSetKey={(itemIndex, key) =>
             send({ itemIndex, key, roundId: round.id, type: 'host.setItemKey' })
           }
         />
+
+        {game?.kind === 'slate' && (
+          <SlateLabelsEditor
+            isDisabled={!isLive}
+            itemCount={itemCount}
+            labels={game.labels}
+            onChange={(next) => {
+              onSettingsChange({
+                ...view.settings,
+                game: { ...game, labels: next }
+              })
+            }}
+          />
+        )}
       </div>
     </div>
   )
@@ -113,9 +230,10 @@ const AnswerKey: React.FC<{
   /** The socket is open. */
   isLive: boolean
   itemCount: number
+  labels: readonly (string | null)[]
   /** Sent when a field is left, with what it holds — empty clears the note. */
   onSetKey: (itemIndex: number, key: string) => void
-}> = ({ content, isLive, itemCount, onSetKey }) => {
+}> = ({ content, isLive, itemCount, labels, onSetKey }) => {
   const translate = useTranslate()
   const [drafts, setDrafts] = useState<Readonly<Record<number, string>>>({})
   const noted = content.keys.filter((key) => key !== null).length
@@ -127,41 +245,42 @@ const AnswerKey: React.FC<{
       summary={translate('slate.key.summary', { count: noted })}
     >
       <ol className='keys'>
-        {Array.from({ length: itemCount }, (_, index) => index + 1).map(
-          (itemNumber) => {
-            const index = itemNumber - 1
-            const saved = content.keys[index] ?? ''
+        {Array.from({ length: itemCount }, (_, index) => {
+          const saved = content.keys[index] ?? ''
 
-            return (
-              <li key={itemNumber}>
-                <TextField
-                  autoComplete='off'
-                  isDisabled={!isLive}
-                  label={translate('slate.key.field', { index: itemNumber })}
-                  maxLength={SLATE_KEY_MAX_LENGTH}
-                  onBlur={() => {
-                    const draft = drafts[index]
+          return (
+            <li key={String(index)}>
+              <TextField
+                autoComplete='off'
+                isDisabled={!isLive}
+                label={translate('slate.key.field', {
+                  item:
+                    labels[index] ??
+                    translate('slate.item', { index: index + 1 })
+                })}
+                maxLength={SLATE_KEY_MAX_LENGTH}
+                onBlur={() => {
+                  const draft = drafts[index]
 
-                    if (draft !== undefined && draft.trim() !== saved) {
-                      onSetKey(index, draft.trim())
-                    }
-                  }}
-                  onChange={(next) => {
-                    setDrafts((previous) => ({ ...previous, [index]: next }))
-                  }}
-                  value={drafts[index] ?? saved}
-                />
-              </li>
-            )
-          }
-        )}
+                  if (draft !== undefined && draft.trim() !== saved) {
+                    onSetKey(index, draft.trim())
+                  }
+                }}
+                onChange={(next) => {
+                  setDrafts((previous) => ({ ...previous, [index]: next }))
+                }}
+                value={drafts[index] ?? saved}
+              />
+            </li>
+          )
+        })}
       </ol>
     </Disclosure>
   )
 }
 
 /**
- * The papers marked on the wall, one number at a time: the number, the key the
+ * The papers marked on the wall, one item at a time: its label, the key the
  * host noted if they choose to show it, every distinct answer with who wrote
  * it, and one press per answer. The standings beside it move with each press.
  */
@@ -188,6 +307,10 @@ export const SlateCorrectionStage: React.FC<SlateStageProps> = ({
 
   const { blankPlayerIds, groups } = content.correction
   const key = content.keys[itemIndex] ?? null
+  const name = slateItemName({
+    itemIndex,
+    labels: slateLabelsOf(view.settings)
+  })
 
   return (
     <div
@@ -196,8 +319,8 @@ export const SlateCorrectionStage: React.FC<SlateStageProps> = ({
     >
       <section className='item'>
         <header>
-          <p aria-hidden className='number'>
-            {itemIndex + 1}
+          <p aria-hidden className={name.isShort ? 'label' : 'label long'}>
+            {name.label}
           </p>
           <div className='naming'>
             <h2 className='of'>
@@ -276,11 +399,15 @@ export const SlateCorrectionStage: React.FC<SlateStageProps> = ({
   )
 }
 
-/** Previous and next through the papers, and the scores once the last number is marked. */
+/**
+ * Through the closed items, and on to whatever comes after the last of them:
+ * the rest of the sheets while any item is open, the scores once none is.
+ */
 export const SlateCorrectionActions: React.FC<SlateStageProps> = ({
   isLive,
   send,
-  view
+  view,
+  wall
 }) => {
   const translate = useTranslate()
   const round = view.round
@@ -291,67 +418,109 @@ export const SlateCorrectionActions: React.FC<SlateStageProps> = ({
     return null
   }
 
-  const isLast = itemIndex >= content.itemCount - 1
+  const closed = closedIndexesOf(content.itemStates)
+  const previous = closed.findLast((index) => index < itemIndex)
+  const next = closed.find((index) => index > itemIndex)
+  const hasOpenItem = content.itemStates.includes('open')
+
+  const primary =
+    next !== undefined ? (
+      <Button
+        isDisabled={!isLive}
+        onPress={() =>
+          send({ itemIndex: next, roundId: round.id, type: 'host.showItem' })
+        }
+      >
+        {translate('slate.correct.next')}
+      </Button>
+    ) : hasOpenItem ? (
+      <Button
+        isDisabled={!isLive}
+        onPress={() => send({ roundId: round.id, type: 'host.collectSheets' })}
+      >
+        {translate('slate.wall.collectRest')}
+      </Button>
+    ) : (
+      <Button
+        isDisabled={!isLive}
+        onPress={() => send({ roundId: round.id, type: 'host.reveal' })}
+      >
+        {translate('slate.correct.finish')}
+      </Button>
+    )
 
   return (
-    <div className='slate-correction-actions'>
+    <div className='slate-actions'>
       <Button
-        isDisabled={!isLive || itemIndex === 0}
-        onPress={() =>
-          send({
-            itemIndex: itemIndex - 1,
-            roundId: round.id,
-            type: 'host.showItem'
-          })
-        }
-        variant='outlined'
-      >
-        {translate('slate.correct.previous')}
-      </Button>
-      {isLast ? (
-        <Button
-          isDisabled={!isLive}
-          onPress={() => send({ roundId: round.id, type: 'host.reveal' })}
-        >
-          {translate('slate.correct.finish')}
-        </Button>
-      ) : (
-        <Button
-          isDisabled={!isLive}
-          onPress={() =>
+        isDisabled={!isLive || previous === undefined}
+        onPress={() => {
+          if (previous !== undefined) {
             send({
-              itemIndex: itemIndex + 1,
+              itemIndex: previous,
               roundId: round.id,
               type: 'host.showItem'
             })
           }
+        }}
+        variant='outlined'
+      >
+        {translate('slate.correct.previous')}
+      </Button>
+      {primary}
+      {hasOpenItem && (
+        <Button
+          className='aside'
+          onPress={wall.showSheets}
+          size='small'
+          variant='underlined'
         >
-          {translate('slate.correct.next')}
+          {translate('slate.wall.toSheets')}
         </Button>
       )}
     </div>
   )
 }
 
-/** The one thing to press while the sheets are open. */
+/** Collecting what is left, and the way back to the item on the wall. */
 export const SlateWritingActions: React.FC<SlateStageProps> = ({
   isLive,
   send,
-  view
+  view,
+  wall
 }) => {
   const translate = useTranslate()
   const round = view.round
+  const content = slateContent(round)
 
-  if (round === null || view.phase !== 'playing') {
+  if (round === null || content === null || view.phase !== 'playing') {
     return null
   }
 
+  const hasOpenItem = content.itemStates.includes('open')
+  const hasClosedItem = content.currentItemIndex !== null
+
   return (
-    <Button
-      isDisabled={!isLive}
-      onPress={() => send({ roundId: round.id, type: 'host.collectSheets' })}
-    >
-      {translate('slate.wall.collect')}
-    </Button>
+    <div className='slate-actions'>
+      {hasOpenItem && (
+        <Button
+          isDisabled={!isLive}
+          onPress={() =>
+            send({ roundId: round.id, type: 'host.collectSheets' })
+          }
+        >
+          {translate(
+            hasClosedItem ? 'slate.wall.collectRest' : 'slate.wall.collect'
+          )}
+        </Button>
+      )}
+      {hasClosedItem && (
+        <Button
+          onPress={wall.showWall}
+          variant={hasOpenItem ? 'outlined' : 'filled'}
+        >
+          {translate('slate.wall.toWall')}
+        </Button>
+      )}
+    </div>
   )
 }

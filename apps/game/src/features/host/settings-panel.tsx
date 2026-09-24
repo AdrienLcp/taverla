@@ -36,6 +36,7 @@ import {
 } from '@/presentation/i18n/translation'
 
 import { NO_LIMIT, NumberChoice, useDurationLabels } from './number-choice'
+import { SlateLabelsEditor } from './slate-labels-editor'
 
 import './settings-panel.sass'
 
@@ -330,6 +331,21 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
             }
           }}
           value={game.itemCount}
+        />
+      )}
+
+      {/*
+        The lobby's copy of the editor. Once the sheets are open the console
+        carries one beside the answer key, sized to the sheet as it has grown.
+      */}
+      {game?.kind === 'slate' && !isRoundInPlay && (
+        <SlateLabelsEditor
+          isDisabled={isDisabled}
+          itemCount={game.itemCount}
+          labels={game.labels}
+          onChange={(labels) => {
+            onChange({ ...settings, game: { ...game, labels } })
+          }}
         />
       )}
 

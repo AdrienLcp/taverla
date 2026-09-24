@@ -331,6 +331,7 @@ describe('slate', () => {
       { filledCount: 2, playerId: idOf(ana) },
       { filledCount: 1, playerId: idOf(bo) }
     ])
+    expect(hostSlateContent(host)?.filledCounts.slice(0, 3)).toEqual([1, 1, 1])
     expect(hostSlateContent(host)?.correction).toBeNull()
     expect(rawTranscript(host)).not.toContain(ANA_SECRET)
     expect(rawTranscript(host)).not.toContain(BO_SECRET)

@@ -12,12 +12,20 @@
       flex-direction: column
       gap: var(--space-s)
 
-    .number
+    .label
       @include typography.monument
       @include typography.numeric
 
       font-size: clamp(4.5rem, 24vmin, 9rem)
+      overflow-wrap: anywhere
       text-align: center
+
+      // Twelve letters at a number's size are wider than any screen, so a word
+      // steps down to the billboard and wraps inside the column.
+      &.long
+        @include typography.billboard
+
+        text-wrap: balance
 
     .answer .react-aria-Input
       font-size: clamp(1.375rem, 4.5vmin, 2rem)
@@ -43,6 +51,19 @@
       grid-template-columns: repeat(auto-fill, minmax(44px, 1fr))
       padding-block-end: var(--space-xs)
 
+      // A word on a tile needs the width a number does not: the columns widen
+      // for the whole grid so the tiles stay one size, and a label longer than
+      // its tile ends in an ellipsis — the field above spells it in full.
+      &.long
+        grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr))
+
+        .tile
+          aspect-ratio: auto
+          min-block-size: 52px
+
+          .text.long
+            @include typography.label
+
     .tile
       @include focus.ring
       @include typography.title
@@ -55,6 +76,8 @@
       cursor: pointer
       display: flex
       justify-content: center
+      min-width: 0
+      padding-inline: 2px
       position: relative
       transition: background-color var(--transition-fast, 0) var(--timing, ease), color var(--transition-fast, 0) var(--timing, ease)
 
@@ -80,7 +103,30 @@
       &[data-pressed]
         transform: translateY(1px)
 
-  .slate-marking
+      .text
+        max-inline-size: 100%
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
+
+      // Collected: struck through with the rule's hatching and a padlock in
+      // the corner, so a locked answer reads as out of reach rather than as
+      // one more empty box.
+      &[data-disabled]
+        background: repeating-linear-gradient(-45deg, transparent 0 5px, var(--rule) 5px 7px)
+        border-color: var(--rule)
+        color: var(--ink-muted)
+        cursor: default
+
+        svg
+          background: var(--field)
+          block-size: 14px
+          inline-size: 14px
+          inset-block-start: 2px
+          inset-inline-end: 2px
+          position: absolute
+
+  .slate-on-the-wall
     align-items: center
     display: flex
     flex: 1
@@ -94,9 +140,15 @@
 
       color: var(--ink-muted)
 
-    .number
+    .label
       @include typography.monument
       @include typography.numeric
+
+      max-inline-size: 100%
+      overflow-wrap: anywhere
+
+      &.long
+        @include typography.billboard
 
     .yours
       display: flex
@@ -129,13 +181,43 @@
         color: var(--ink-muted)
         text-transform: none
 
-    .whole-sheet
-      align-self: stretch
+    // Above the sheet while the reader still writes: one ruled band, the
+    // label on the left and the answer beside it, the whole of it a glance.
+    &.compact
+      align-items: center
+      border-block: 3px solid var(--ink)
+      flex: none
+      flex-direction: row
+      flex-wrap: wrap
+      gap: var(--space-xs) var(--space-m)
+      justify-content: flex-start
+      padding-block: var(--space-s)
       text-align: start
 
+      .label
+        @include typography.billboard
+
+        max-inline-size: 40%
+
+      .yours
+        flex: 1 1 10rem
+        min-width: 0
+
+        .answer
+          @include typography.title
+
+      .verdict
+        @include typography.label
+
+        padding: var(--space-2xs) var(--space-s)
+
+  .slate-whole-sheet
+    // One grid for every line, so the label column is as wide as the longest
+    // label and no wider, and every answer starts at the same edge.
     .lines
-      display: flex
-      flex-direction: column
+      column-gap: var(--space-s)
+      display: grid
+      grid-template-columns: minmax(2.5ch, max-content) minmax(0, 1fr) auto
       list-style: none
 
       li
@@ -144,8 +226,8 @@
         align-items: baseline
         border-block-end: 1px solid var(--rule)
         display: grid
-        gap: var(--space-s)
-        grid-template-columns: 2.5ch minmax(0, 1fr) auto
+        grid-column: 1 / -1
+        grid-template-columns: subgrid
         padding-block: var(--space-xs)
 
         &[aria-current]
@@ -155,7 +237,11 @@
         @include typography.numeric
 
         color: var(--ink-muted)
+        max-inline-size: 12ch
+        overflow: hidden
         text-align: end
+        text-overflow: ellipsis
+        white-space: nowrap
 
       .text
         overflow-wrap: anywhere

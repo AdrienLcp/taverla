@@ -47,10 +47,19 @@ the token default so a first paint before React mounts is already correct.
 `--edge`, `--cut` or `--cut-ink`.** No component holds a hex.
 
 **One phase borrows a pair rather than owning one.** `voting` falls back to the
-lobby's. The slate's marking wore `buzzed`'s pair as a `correcting` phase until
-stage 26 folded marking into `playing` — the `[data-phase='correcting']`
-selector in `_tokens.sass` no longer matches anything, and what the wall wears
-while an item is on it is session B's call there.
+lobby's. And one moment borrows a pair without being a phase: the slate writes
+and marks inside `playing`, so `useMarkingField` stamps `data-marking` on the
+root and `[data-phase='playing'][data-marking]` wears `buzzed`'s pair — the
+host judging, the room waiting. The console stamps it while it shows the wall;
+a player only once nothing is left to write, because a sheet still being
+filled is `playing` and reads the wall in a band above it.
+
+**The flip's swap also works on one element.** The slate's board inverts a
+collected item by setting `--field: var(--ink-playing)` and `--ink:
+var(--field-playing)` on the cell and mixing `--ink-muted`, `--rule` and
+`--edge` again there, since the root's arrive resolved. The button inside
+inverts with it for free. It is only right where the field is `playing`'s,
+which is the only place the board is drawn.
 
 ### The one field change that is not a phase
 
@@ -250,7 +259,14 @@ vocabulary — and for that reason off does not fill in under a pointer the way
 an outlined button does, because there that is exactly what *on* looks like.
 The slate's tiles use the same pair for *written* and *empty*, and mark the
 number in the field with a bar under the tile: focus owns the outline, and the
-arrow keys move focus without moving the selection.
+arrow keys move focus without moving the selection. A **collected** tile is the
+third state and is neither material: hatched in `--rule`, drawn in
+`--ink-muted`, with a padlock in its corner — out of reach rather than empty.
+The console's board says the same three states louder, for four metres:
+outlined while open, solid ink once collected, faded to the rule once marked.
+A label longer than three glyphs widens every column of the grid at once, so
+the tiles stay one size, and ends in an ellipsis; the field above spells it
+whole.
 
 ### Icons
 
