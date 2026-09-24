@@ -1378,6 +1378,12 @@ one part.
 
 ### Fixes
 
+- `[Game]` **Opening a fold no longer shifts the page sideways**, a focused
+  field inside one keeps its whole ring, and the slate's item names are wide
+  enough to read twelve letters and an emoji whole: the document reserves its
+  scrollbar gutter, the fold's clip leaves the ring room, and a name box is
+  sized to the longest name the protocol takes.
+
 - `[Game]` The slate's marking wears the judged-buzz field again. It lost it
   when `correcting` left the phases; `useMarkingField` stamps `data-marking`
   on the wall and on a player with nothing left to write.

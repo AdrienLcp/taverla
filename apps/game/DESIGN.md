@@ -499,6 +499,12 @@ breakpoint is content-driven rather than a device size: 1200px is where a 72px
 headline still falls in three or four lines once the field is split, and below it
 two columns are worse than one.
 
+**The document is the only scroller, and it reserves its scrollbar gutter**
+(`scrollbar-gutter: stable` on `html`), so a fold opening never steps the page
+sideways; the field is painted on the canvas, so the gutter is never an
+off-colour strip. A clip on anything holding a control leaves `focus.$ring-reach`
+of room, or the ring it cuts is the only sign of where the keyboard is.
+
 The mixin takes **two children exactly**, `> header` and `> .actions`, and the
 grouping is in the markup on purpose. Spanning the header down the rows instead
 does not work and fails quietly: with no explicit rows to span, `grid-row: 1 /

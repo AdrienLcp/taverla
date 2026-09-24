@@ -74,5 +74,12 @@
       flex-direction: column
       gap: var(--space-m)
       min-height: 0
-      overflow: hidden
+      // The clip the row animation needs would cut a focused field's ring,
+      // which reaches past the field's box. The inline room is given in
+      // padding and taken back in margin, so it holds everywhere; the block
+      // start relies on the clip margin alone, which Safari ignores.
+      margin-inline: calc(-1 * focus.$ring-reach)
+      overflow: clip
+      overflow-clip-margin: focus.$ring-reach
       padding-block-end: var(--space-m)
+      padding-inline: focus.$ring-reach

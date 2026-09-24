@@ -12,6 +12,15 @@
   // content still scrolls on a desktop browser, but on a phone the height does
   // not follow the URL bar retracting, and the last thing on the page becomes
   // unreachable. `dvh` is the height that tracks it.
+  // The document is the one scroller, and a fold opening is enough to make it
+  // start scrolling: without the reserved gutter the whole page steps sideways
+  // by the scrollbar's width. `stable` and not `both-edges`, because the
+  // layouts are not symmetric and a strip on the left would read as a margin.
+  // The body's field propagates to the canvas, so the gutter is painted in
+  // the phase's own colour rather than left as a white bar.
+  html
+    scrollbar-gutter: stable
+
   #root
     min-height: 100dvh
 

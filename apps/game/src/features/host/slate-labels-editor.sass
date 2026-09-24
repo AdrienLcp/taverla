@@ -9,13 +9,14 @@
       max-inline-size: 60ch
       text-wrap: pretty
 
-    // Wide enough for an emoji at the field's own size or eight letters of a
-    // word, and never so wide that sixty of them stop fitting a phone in
-    // three columns.
+    // Wide enough for the longest label the protocol takes — twelve letters
+    // and an emoji at the field's own size measure about 240px — so a name is
+    // read whole rather than scrolled inside its box. On a phone that is one
+    // column, the same as the answer key beside it.
     .labels
       display: grid
       gap: var(--space-s)
-      grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr))
+      grid-template-columns: repeat(auto-fill, minmax(min(17rem, 100%), 1fr))
       list-style: none
 
       .react-aria-Input
