@@ -44,9 +44,11 @@ costs the countdown its own mechanism.
 
 ### Role-scoped messages are the anti-cheat mechanism
 
-`HostServerMessage` and `PlayerServerMessage` are separate unions. Only the host
-variants mention `hostRoomViewSchema`, which is the one place `HostTrack` — the
-title, the artist and the audio URL — reaches the wire before a reveal.
+`HostServerMessage`, `PlayerServerMessage` and `WallServerMessage` are separate
+unions. Only the host variants mention `hostRoomViewSchema`, which is the one
+place `HostTrack` — the title, the artist and the audio URL — reaches the wire
+before a reveal. The wall, the room's own screen, gets the clip's URL and never
+the answer, by the same means.
 
 That is the type-level half. The runtime half is `encodeChecked`, which encodes
 *through* the schema so Zod drops unknown keys; `codec.test.ts` fails when the

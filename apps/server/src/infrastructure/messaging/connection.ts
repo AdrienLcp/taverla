@@ -16,12 +16,14 @@ export type Outbound = {
  * running the game, and a real id for one who is also playing.
  *
  * A player is never seatless, which is what lets the broadcaster build a player
- * view without inventing a fallback id.
+ * view without inventing a fallback id. A wall never holds one: it is the
+ * room's screen, not somebody's.
  */
 export type Connection = Outbound &
   (
     | { playerId: PlayerId | null; role: 'host' }
     | { playerId: PlayerId; role: 'player' }
+    | { playerId: null; role: 'wall' }
   ) & {
     sessionId: SessionId
   }

@@ -17,7 +17,13 @@ import {
   slateKeySchema
 } from './slate'
 
-export const connectionRoles = ['host', 'player'] as const
+/**
+ * `wall` is the room's own screen: it shows the game to everyone and holds no
+ * secret, no control and no seat. A role of its own rather than a flag on the
+ * host, so every check written for *the* host — who is present, who may send a
+ * `host.*` frame, who a token claim displaces — already leaves it out.
+ */
+export const connectionRoles = ['host', 'player', 'wall'] as const
 export const connectionRoleSchema = z.enum(connectionRoles)
 
 /**
@@ -26,8 +32,9 @@ export const connectionRoleSchema = z.enum(connectionRoles)
  * A player must name themselves, a host must not.
  *
  * `hostToken` is the room's own secret, replayed the same way and read by the
- * server only on a host claim: it is what takes the room back from a screen that
- * took it over. A player frame carrying one is answering a question nobody asked.
+ * server on a host claim — it is what takes the room back from a screen that
+ * took it over — and on a wall, which is refused without it because it carries
+ * the clip. A player frame carrying one is answering a question nobody asked.
  */
 export const helloMessageSchema = z.object({
   hostToken: hostTokenSchema.optional(),
@@ -326,6 +333,12 @@ export const playerClientMessageSchema = z.discriminatedUnion('type', [
   writeSlateLineMessageSchema
 ])
 
+/** A wall says who it is and keeps its clock, and nothing else. */
+export const wallClientMessageSchema = z.discriminatedUnion('type', [
+  helloMessageSchema,
+  timePingMessageSchema
+])
+
 /** Everything the server's decoder accepts, before it knows which role sent it. */
 export const clientMessageSchema = z.discriminatedUnion('type', [
   helloMessageSchema,
@@ -360,6 +373,7 @@ export type ConnectionRole = z.infer<typeof connectionRoleSchema>
 export type HelloMessage = z.infer<typeof helloMessageSchema>
 export type HostClientMessage = z.infer<typeof hostClientMessageSchema>
 export type PlayerClientMessage = z.infer<typeof playerClientMessageSchema>
+export type WallClientMessage = z.infer<typeof wallClientMessageSchema>
 export type ClientMessage = z.infer<typeof clientMessageSchema>
 export type ClientMessageType = ClientMessage['type']
 

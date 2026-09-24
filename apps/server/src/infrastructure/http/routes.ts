@@ -8,20 +8,30 @@ import type {
   CatalogueTrack,
   CreateRoomResponse,
   HealthResponse,
+  OpenWallPairingResponse,
   RoomExistsResponse,
-  TrackListResponse
+  TrackListResponse,
+  WallPairingPollResponse
 } from '@taverla/protocol/http'
 import {
   createRoomRequestSchema,
   decadePreviewQuerySchema,
+  pairWallRequestSchema,
   playlistPreviewQuerySchema,
-  trackSearchQuerySchema
+  trackSearchQuerySchema,
+  wallPairingCodeSchema,
+  wallPairingPollQuerySchema
 } from '@taverla/protocol/http'
 import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
 import { normalizeRoomCode } from '@taverla/core/room/room-code'
 
 import { createRoom, findRoom } from '@/domain/room/room-store'
+import {
+  collectWallPairing,
+  openWallPairing,
+  pairWall
+} from '@/domain/room/wall-pairing'
 import { env } from '@/env'
 import { limitRoomCreation } from '@/infrastructure/http/rate-limit'
 import {
@@ -58,8 +68,13 @@ const respondWithTracks = (
   return context.json(body)
 }
 
+const pairingNotFound: ApiErrorResponse = {
+  code: 'pairing_not_found',
+  message: 'That screen code has expired or was never shown'
+}
+
 /**
- * Seven routes, and none of them run during a game — creating a room, checking
+ * Ten routes, and none of them run during a game — creating a room, checking
  * one exists, browsing the catalogue. Everything that happens while people are
  * playing is a WebSocket frame.
  */
@@ -112,6 +127,93 @@ export const registerHttpRoutes = (app: Hono): void => {
 
     return context.json(body)
   })
+
+  // A wall asks for a code to show, the host's device vouches for it with the
+  // room's token, and the wall collects the token by polling. Rate-limited with
+  // room creation: a code is the same cheap allocation a room is.
+  app.post('/api/walls', limitRoomCreation, (context) => {
+    const opened = openWallPairing(Date.now())
+
+    if (opened === null) {
+      const error: ApiErrorResponse = {
+        code: 'internal_error',
+        message: 'Could not allocate a screen code'
+      }
+
+      return context.json(error, 503)
+    }
+
+    const body: OpenWallPairingResponse = opened
+
+    return context.json(body, 201)
+  })
+
+  app.get(
+    '/api/walls/:pairingCode',
+    zValidator('query', wallPairingPollQuerySchema),
+    (context) => {
+      const pairingCode = wallPairingCodeSchema.safeParse(
+        context.req.param('pairingCode')
+      )
+
+      if (!pairingCode.success) {
+        return context.json(pairingNotFound, 404)
+      }
+
+      const collected = collectWallPairing({
+        now: Date.now(),
+        pairingCode: pairingCode.data,
+        secret: context.req.valid('query').secret
+      })
+
+      if (collected.status === 'failure') {
+        return context.json(pairingNotFound, 404)
+      }
+
+      const body: WallPairingPollResponse = collected.data
+
+      return context.json(body)
+    }
+  )
+
+  app.post(
+    '/api/walls/:pairingCode/pair',
+    zValidator('json', pairWallRequestSchema),
+    (context) => {
+      const pairingCode = wallPairingCodeSchema.safeParse(
+        context.req.param('pairingCode')
+      )
+
+      if (!pairingCode.success) {
+        return context.json(pairingNotFound, 404)
+      }
+
+      const { hostToken, roomCode } = context.req.valid('json')
+      const room = findRoom(roomCode)
+
+      if (room === null || room.hostToken !== hostToken) {
+        const error: ApiErrorResponse = {
+          code: 'wall_not_paired',
+          message: 'Only the device hosting this room can pair a screen to it'
+        }
+
+        return context.json(error, 403)
+      }
+
+      const paired = pairWall({
+        hostToken,
+        now: Date.now(),
+        pairingCode: pairingCode.data,
+        roomCode
+      })
+
+      if (paired.status === 'failure') {
+        return context.json(pairingNotFound, 404)
+      }
+
+      return context.body(null, 204)
+    }
+  )
 
   app.get(
     '/api/tracks/search',

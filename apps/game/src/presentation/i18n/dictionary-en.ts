@@ -230,6 +230,8 @@ export const EN_DICTIONARY = defineDictionary({
     nickname_taken: 'Someone already took that nickname.',
     no_content_available: 'Nothing left to play. Try other settings.',
     no_game_chosen: 'Pick a game first.',
+    pairing_not_found:
+      'That screen code has expired. Open the screen again for a new one.',
     player_locked_out: 'You are out for this round.',
     protocol_version_mismatch: 'This page is out of date. Reload it.',
     rate_limited: 'That is a lot of tables. Wait a minute and retry.',
@@ -244,6 +246,8 @@ export const EN_DICTIONARY = defineDictionary({
       title: 'Something broke'
     },
     stale_round: 'That round is already over.',
+    wall_not_paired:
+      'This screen is not paired. Pair it from the device keeping the table.',
     wrong_phase: 'Too late, the game has moved on.'
   },
   home: {

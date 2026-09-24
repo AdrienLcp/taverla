@@ -2,7 +2,11 @@ import { z } from 'zod'
 
 import { protocolErrorCodeSchema } from './error-code'
 import { serverTimeSchema, sessionIdSchema } from './identifiers'
-import { hostRoomViewSchema, playerRoomViewSchema } from './room'
+import {
+  hostRoomViewSchema,
+  playerRoomViewSchema,
+  wallRoomViewSchema
+} from './room'
 
 /**
  * Mirrors `time.ping` back with the server's own clock reading. The client
@@ -41,6 +45,11 @@ export const playerWelcomeMessageSchema = z.object({
   view: playerRoomViewSchema
 })
 
+export const wallWelcomeMessageSchema = z.object({
+  ...welcomeFields,
+  view: wallRoomViewSchema
+})
+
 /**
  * The only broadcast in the protocol: after any state change the server sends
  * each socket its whole role-scoped view. A room holds at most
@@ -56,6 +65,11 @@ export const hostRoomUpdatedMessageSchema = z.object({
 export const playerRoomUpdatedMessageSchema = z.object({
   type: z.literal('room.updated'),
   view: playerRoomViewSchema
+})
+
+export const wallRoomUpdatedMessageSchema = z.object({
+  type: z.literal('room.updated'),
+  view: wallRoomViewSchema
 })
 
 /**
@@ -78,7 +92,18 @@ export const playerServerMessageSchema = z.discriminatedUnion('type', [
   protocolErrorMessageSchema
 ])
 
+export const wallServerMessageSchema = z.discriminatedUnion('type', [
+  wallWelcomeMessageSchema,
+  wallRoomUpdatedMessageSchema,
+  timePongMessageSchema,
+  protocolErrorMessageSchema
+])
+
 export type ProtocolErrorMessage = z.infer<typeof protocolErrorMessageSchema>
 export type HostServerMessage = z.infer<typeof hostServerMessageSchema>
 export type PlayerServerMessage = z.infer<typeof playerServerMessageSchema>
-export type ServerMessage = HostServerMessage | PlayerServerMessage
+export type WallServerMessage = z.infer<typeof wallServerMessageSchema>
+export type ServerMessage =
+  | HostServerMessage
+  | PlayerServerMessage
+  | WallServerMessage

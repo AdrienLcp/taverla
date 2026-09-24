@@ -261,6 +261,7 @@ describe('the two views', () => {
   it('[room] shows the host the pool, and no content before a round opens', () => {
     const view = toHostView({
       isHostConnected: true,
+      isWallConnected: false,
       room,
       seatId: null
     })

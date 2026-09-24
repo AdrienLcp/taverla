@@ -205,6 +205,8 @@ export const FR_DICTIONARY = defineDictionary({
     nickname_taken: 'Ce pseudo est déjà pris.',
     no_content_available: 'Il ne reste rien à jouer. Change les réglages.',
     no_game_chosen: 'Choisis d’abord un jeu.',
+    pairing_not_found:
+      'Ce code d’écran a expiré. Rouvre l’écran pour en avoir un nouveau.',
     player_locked_out: 'Tu es hors-jeu pour cette tournée.',
     protocol_version_mismatch: 'Cette page n’est plus à jour. Recharge-la.',
     rate_limited: 'Ça fait beaucoup de tables. Attends une minute et réessaie.',
@@ -219,6 +221,8 @@ export const FR_DICTIONARY = defineDictionary({
       title: 'Quelque chose a cassé'
     },
     stale_round: 'Cette tournée est déjà terminée.',
+    wall_not_paired:
+      'Cet écran n’est pas appairé. Appaire-le depuis l’appareil qui tient la table.',
     wrong_phase: 'Trop tard, la partie est passée à autre chose.'
   },
   home: {

@@ -58,6 +58,10 @@ export const hostConnectionIn = (code: RoomCode): Connection | null =>
 export const isHostConnected = (code: RoomCode): boolean =>
   connectionsIn(code).some((connection) => connection.role === 'host')
 
+/** Read by the console, which leaves the clip to a wall whenever one is there. */
+export const isWallConnected = (code: RoomCode): boolean =>
+  connectionsIn(code).some((connection) => connection.role === 'wall')
+
 /**
  * The same question for a seat, and a seated host holds one too. Two sockets on
  * one seat is ordinary rather than a fault: `seatPlayer` reclaims by

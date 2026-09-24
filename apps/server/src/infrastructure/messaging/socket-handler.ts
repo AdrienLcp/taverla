@@ -200,7 +200,9 @@ export const createRoomSocketEvents = (
     const seated =
       message.role === 'host'
         ? seatHost({ hostWasConnected, message, outbound, room, sessionId, ws })
-        : seatPlayer({ message, outbound, room, sessionId })
+        : message.role === 'wall'
+          ? seatWall({ message, outbound, room, sessionId, ws })
+          : seatPlayer({ message, outbound, room, sessionId })
 
     if (seated === null) {
       return
@@ -222,6 +224,39 @@ export const createRoomSocketEvents = (
     sendWelcome(seated, { room, serverTime: Date.now(), sessionId })
     broadcastRoom(room)
     logger.info('Socket joined', { code, role: seated.role })
+  }
+
+  /**
+   * The room's own screen. The token is the whole of its admission: it carries
+   * the clip, whose URL names the track, so the room code alone does not open
+   * one. It claims nothing — the console keeps the room, and a wall arriving or
+   * leaving neither displaces it nor freezes or resumes a round.
+   */
+  const seatWall = ({
+    message,
+    outbound,
+    room,
+    sessionId,
+    ws
+  }: {
+    message: HelloMessage
+    outbound: Outbound
+    room: Room
+    sessionId: string
+    ws: WSContext
+  }): Connection | null => {
+    if (message.hostToken !== room.hostToken) {
+      reject(
+        outbound,
+        ws,
+        'wall_not_paired',
+        'Pair this screen from the device hosting the room'
+      )
+
+      return null
+    }
+
+    return { playerId: null, role: 'wall', send: outbound.send, sessionId }
   }
 
   /**
@@ -1317,6 +1352,13 @@ export const createRoomSocketEvents = (
       }
 
       if (connection.role === 'player') {
+        return
+      }
+
+      // The console only has to learn it is the speaker again.
+      if (connection.role === 'wall') {
+        broadcastRoom(room)
+
         return
       }
 

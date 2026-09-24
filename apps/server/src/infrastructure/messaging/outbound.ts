@@ -5,15 +5,17 @@ import {
   hostServerMessageSchema,
   playerServerMessageSchema,
   protocolErrorMessageSchema,
-  timePongMessageSchema
+  timePongMessageSchema,
+  wallServerMessageSchema
 } from '@taverla/protocol/server-message'
 import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
 import type { Room } from '@/domain/room/room'
-import { toHostView, toPlayerView } from '@/domain/room/room-view'
+import { toHostView, toPlayerView, toWallView } from '@/domain/room/room-view'
 import {
   connectionsIn,
-  isHostConnected
+  isHostConnected,
+  isWallConnected
 } from '@/infrastructure/messaging/connection-registry'
 
 import type { Connection, Outbound } from './connection'
@@ -49,6 +51,66 @@ export const sendPong = (
   )
 }
 
+/**
+ * The one place a connection's role picks its view, for the welcome and every
+ * update alike. Encoding runs through the role's own schema, so a field that
+ * reached the wrong projection by mistake is stripped before it leaves the
+ * process rather than shipped — see `encodeChecked`.
+ */
+const encodeViewFor = (
+  connection: Connection,
+  {
+    envelope,
+    isHostThere,
+    isWallThere,
+    room
+  }: {
+    envelope:
+      | {
+          protocolVersion: number
+          serverTime: number
+          sessionId: SessionId
+          type: 'welcome'
+        }
+      | { type: 'room.updated' }
+    isHostThere: boolean
+    isWallThere: boolean
+    room: Room
+  }
+): string => {
+  switch (connection.role) {
+    case 'host': {
+      return encodeChecked(hostServerMessageSchema, {
+        ...envelope,
+        view: toHostView({
+          isHostConnected: isHostThere,
+          isWallConnected: isWallThere,
+          room,
+          seatId: connection.playerId
+        })
+      })
+    }
+
+    case 'player': {
+      return encodeChecked(playerServerMessageSchema, {
+        ...envelope,
+        view: toPlayerView({
+          isHostConnected: isHostThere,
+          room,
+          youId: connection.playerId
+        })
+      })
+    }
+
+    case 'wall': {
+      return encodeChecked(wallServerMessageSchema, {
+        ...envelope,
+        view: toWallView({ isHostConnected: isHostThere, room })
+      })
+    }
+  }
+}
+
 export const sendWelcome = (
   connection: Connection,
   {
@@ -57,63 +119,37 @@ export const sendWelcome = (
     sessionId
   }: { room: Room; serverTime: number; sessionId: SessionId }
 ): void => {
-  const hostIsThere = isHostConnected(room.code)
-
   connection.send(
-    connection.role === 'host'
-      ? encodeChecked(hostServerMessageSchema, {
-          protocolVersion: PROTOCOL_VERSION,
-          serverTime,
-          sessionId,
-          type: 'welcome',
-          view: toHostView({
-            isHostConnected: hostIsThere,
-            room,
-            seatId: connection.playerId
-          })
-        })
-      : encodeChecked(playerServerMessageSchema, {
-          protocolVersion: PROTOCOL_VERSION,
-          serverTime,
-          sessionId,
-          type: 'welcome',
-          view: toPlayerView({
-            isHostConnected: hostIsThere,
-            room,
-            youId: connection.playerId
-          })
-        })
+    encodeViewFor(connection, {
+      envelope: {
+        protocolVersion: PROTOCOL_VERSION,
+        serverTime,
+        sessionId,
+        type: 'welcome'
+      },
+      isHostThere: isHostConnected(room.code),
+      isWallThere: isWallConnected(room.code),
+      room
+    })
   )
 }
 
 /**
  * Every state change ends here: each socket receives its whole role-scoped
- * view. Encoding runs through the role's schema, so a host-only field that
- * reached a player payload by mistake is stripped before it leaves the process
- * rather than shipped — see `encodeChecked`.
+ * view, never a delta.
  */
 export const broadcastRoom = (room: Room): void => {
-  const hostIsThere = isHostConnected(room.code)
+  const isHostThere = isHostConnected(room.code)
+  const isWallThere = isWallConnected(room.code)
 
   for (const connection of connectionsIn(room.code)) {
     connection.send(
-      connection.role === 'host'
-        ? encodeChecked(hostServerMessageSchema, {
-            type: 'room.updated',
-            view: toHostView({
-              isHostConnected: hostIsThere,
-              room,
-              seatId: connection.playerId
-            })
-          })
-        : encodeChecked(playerServerMessageSchema, {
-            type: 'room.updated',
-            view: toPlayerView({
-              isHostConnected: hostIsThere,
-              room,
-              youId: connection.playerId
-            })
-          })
+      encodeViewFor(connection, {
+        envelope: { type: 'room.updated' },
+        isHostThere,
+        isWallThere,
+        room
+      })
     )
   }
 }

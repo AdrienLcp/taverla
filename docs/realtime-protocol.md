@@ -41,6 +41,26 @@ after the last one dropped (`host_reconnecting`), which is the Wi-Fi blink and
 the closing lid; past that window the code alone is enough, because a room
 nobody can pick up is a party ended by a dead battery.
 
+### The wall
+
+`role: 'wall'` is the room's own screen — a television, a projector, a laptop
+turned to face the sofa — which shows the game and holds no secret, no control
+and no seat. It is a third role rather than a flag on the host, so every check
+written for *the* host leaves it out without being touched: it is not a presence
+(`isHostConnected`), it cannot send a `host.*` frame (`host_only_action`), a
+token claim neither displaces it nor is displaced by it, and its arriving or
+leaving freezes and resumes nothing. The console learns it is there from
+`isWallConnected` on its view, and leaves the clip to it.
+
+A wall is admitted on the room's token alone, and refused a fatal
+`wall_not_paired` without it, because it carries the clip and the clip's URL
+names the track. It reaches the token by **pairing**: `POST /api/walls` hands the
+waiting screen a six-character code to display and a secret to keep; the host's
+device posts the code with the room code and the token to
+`/api/walls/:code/pair`; the screen, polling `/api/walls/:code?secret=…`,
+collects the token once and the pairing is gone. The code can sit on a screen
+the whole room reads, because it pairs nothing without the token beside it.
+
 ## Client → server
 
 | Type | Sent by | Payload |
@@ -153,9 +173,14 @@ receives its whole view. No deltas — a room is at most 24 players changing at
 human speed, so a snapshot costs a few hundred bytes and removes every way for a
 client to hold a partially-applied update.
 
-### The two views
+### The three views
 
-Shared by both:
+The host's and the player's below; the wall's is the player's without a seat,
+plus the blind test's `audioUrl` and the slate's `correction`, `filledCounts` and
+`progress` — its own schema, `wallRoomViewSchema`, whose arms have no field for
+`track`, `question` or `keys` to land in.
+
+Shared by all three:
 
 ```jsonc
 {

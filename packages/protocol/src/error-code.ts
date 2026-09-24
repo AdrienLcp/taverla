@@ -26,6 +26,14 @@ export const protocolErrorCodes = [
   'host_reconnecting',
   'host_only_action',
   /**
+   * A wall without the room's token. Fatal: the wall carries the clip, whose
+   * URL names the track, so it is not something the room code alone opens —
+   * the screen has to be paired by the host's device first.
+   */
+  'wall_not_paired',
+  /** A wall pairing code that expired, was collected, or never existed. */
+  'pairing_not_found',
+  /**
    * A frame from the floor while the room has no console. The host's browser is
    * the speaker and the judge, so their leaving freezes every timer — but a
    * frozen round the floor can still fill in is not frozen: everyone answering

@@ -5,7 +5,9 @@ import type {
   PlayerRoomView,
   PublicPlayer,
   RoundContent,
-  RoundView
+  RoundView,
+  WallRoomView,
+  WallRoundContent
 } from '@taverla/protocol/room'
 import type { SlateLine } from '@taverla/protocol/slate'
 import type { HostTrack, TrackIdentity } from '@taverla/protocol/track'
@@ -27,15 +29,18 @@ import type { Participant, PlayerAttempts, Room, Round } from './room'
 
 /**
  * The single seam between the server's model and the wire. Everything secret —
- * session ids, the pool, the track being played — is dropped here, and the two
- * projections are the reason `HostTrack` cannot reach a player by accident.
+ * session ids, the pool, the track being played — is dropped here, and the
+ * three projections are the reason `HostTrack` cannot reach a player or a wall
+ * by accident.
  */
 export const toHostView = ({
   isHostConnected,
+  isWallConnected,
   room,
   seatId
 }: {
   isHostConnected: boolean
+  isWallConnected: boolean
   room: Room
   /** The seat this host took, if they took one — they then read what a player reads. */
   seatId: PlayerId | null
@@ -45,9 +50,51 @@ export const toHostView = ({
     room.round === null
       ? null
       : toHostContent({ room, round: room.round, seatId }),
+  isWallConnected,
   remainingPoolSize: room.trackPool.length,
   youId: seatId
 })
+
+/**
+ * What the room's own screen reads: a seatless player's view, plus the clip it
+ * plays and the slate pile it shows being marked. Every field is named, from
+ * the host's content, so an answer added to that arm later reaches the wall
+ * only by somebody writing it here.
+ */
+export const toWallView = ({
+  isHostConnected,
+  room
+}: {
+  isHostConnected: boolean
+  room: Room
+}): WallRoomView => ({
+  ...toBaseView({ isHostConnected, room, youId: null }),
+  currentContent:
+    room.round === null
+      ? null
+      : toWallContent(toHostContent({ room, round: room.round, seatId: null }))
+})
+
+const toWallContent = (content: HostRoundContent): WallRoundContent => {
+  switch (content.kind) {
+    case 'blindtest': {
+      return { audioUrl: content.audioUrl, kind: 'blindtest' }
+    }
+
+    case 'slate': {
+      return {
+        correction: content.correction,
+        filledCounts: content.filledCounts,
+        kind: 'slate',
+        progress: content.progress
+      }
+    }
+
+    default: {
+      return { kind: content.kind }
+    }
+  }
+}
 
 /**
  * A seated host reads what a player reads. The blind test keeps `audioUrl`

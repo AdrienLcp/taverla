@@ -495,6 +495,11 @@ export const hostRoundContentSchema = z.discriminatedUnion('kind', [
  */
 export const hostRoomViewSchema = baseRoomViewSchema.extend({
   currentContent: hostRoundContentSchema.nullable(),
+  /**
+   * Whether a wall is showing the room. It is the speaker whenever it is
+   * there, so this is what tells the console to keep the clip to itself.
+   */
+  isWallConnected: z.boolean(),
   remainingPoolSize: z.number().int().nonnegative(),
   /**
    * The seat this console took, and `null` while it is only running the room.
@@ -509,6 +514,40 @@ export const playerRoomViewSchema = baseRoomViewSchema.extend({
   youId: playerIdSchema
 })
 
+/**
+ * The room's own screen, and what it adds to a seatless player's view is only
+ * what a wall has to show or play: the clip, and the slate's pile as it is
+ * marked in front of everyone. Its own arm per game rather than the host's with
+ * fields nulled, so an answer reaching it is a schema the encoder strips rather
+ * than a projection somebody has to remember — `track`, `question` and the
+ * slate's `keys` have no field here to land in.
+ */
+export const wallRoundContentSchema = z.discriminatedUnion('kind', [
+  z.object({
+    audioUrl: z.url().nullable(),
+    kind: z.literal('blindtest')
+  }),
+  z.object({ kind: z.literal('buzzer') }),
+  z.object({ kind: z.literal('lefake') }),
+  z.object({ kind: z.literal('quiz') }),
+  z.object({ kind: z.literal('reflex') }),
+  z.object({
+    correction: z
+      .object({
+        blankPlayerIds: z.array(playerIdSchema),
+        groups: z.array(slateAnswerGroupSchema)
+      })
+      .nullable(),
+    filledCounts: z.array(z.number().int().nonnegative()),
+    kind: z.literal('slate'),
+    progress: z.array(slateProgressSchema)
+  })
+])
+
+export const wallRoomViewSchema = baseRoomViewSchema.extend({
+  currentContent: wallRoundContentSchema.nullable()
+})
+
 export type RoomPhase = z.infer<typeof roomPhaseSchema>
 export type PublicPlayer = z.infer<typeof publicPlayerSchema>
 export type ActiveBuzz = z.infer<typeof activeBuzzSchema>
@@ -517,3 +556,5 @@ export type HostRoundContent = z.infer<typeof hostRoundContentSchema>
 export type RoundView = z.infer<typeof roundViewSchema>
 export type HostRoomView = z.infer<typeof hostRoomViewSchema>
 export type PlayerRoomView = z.infer<typeof playerRoomViewSchema>
+export type WallRoundContent = z.infer<typeof wallRoundContentSchema>
+export type WallRoomView = z.infer<typeof wallRoomViewSchema>

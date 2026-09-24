@@ -113,11 +113,14 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   judges answers. It can also take a **seat** and play — everywhere
   `isJudgedByHost` says no verdict is owed, which is every mode but `buzzer` plus
   the reflex race — and the server then withholds the track's **title and
-  artist** while still sending it the clip; that screen is the room's only
-  speaker, seated or not. The rule is the **room's**, so the server grants no
+  artist** while still sending it the clip; that screen is the room's speaker,
+  seated or not, until a **wall** is there to be it instead. The rule is the **room's**, so the server grants no
   seat under it and takes back the one it granted when the settings frame moves
   the room to a game it must judge. It is the only role that can **close** the
   room — see `Exits` below
+- **Wall** — the room's own screen, paired to it by the host's device: it shows
+  the game, plays the clip and holds no answer, no control and no seat. A third
+  role, so nothing written for the host reaches it — see `docs/realtime-protocol.md`
 - **Player** — anyone who joined, by scanning the QR code or by typing the room
   code. Holds a seat and a score
 - **Game** — what the room is playing, and **`null` until somebody says**: the

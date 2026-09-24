@@ -2,7 +2,11 @@ import { z } from 'zod'
 
 import { protocolErrorCodeSchema } from './error-code'
 import { shelvedGameSchema } from './game'
-import { hostTokenSchema, roomCodeSchema } from './identifiers'
+import {
+  hostTokenSchema,
+  ROOM_CODE_ALPHABET,
+  roomCodeSchema
+} from './identifiers'
 import { DEFAULT_LOCALE, localeSchema } from './locale'
 import {
   trackDecadeSchema,
@@ -54,6 +58,51 @@ export const createRoomResponseSchema = z.object({
 
 export const roomExistsResponseSchema = z.object({
   exists: z.boolean()
+})
+
+export const WALL_PAIRING_CODE_LENGTH = 6
+
+/**
+ * Shown on the wall, big, and either scanned by the host's device or typed into
+ * its menu. The room's alphabet because it is read across a room and typed.
+ * Seeing it is harmless: it pairs only a device that also holds the room's
+ * token, which is why it can sit on a screen everyone is looking at.
+ */
+export const wallPairingCodeSchema = z
+  .string()
+  .length(WALL_PAIRING_CODE_LENGTH)
+  .regex(new RegExp(`^[${ROOM_CODE_ALPHABET}]+$`))
+
+/**
+ * `secret` is the waiting screen's alone, and it is what the token is handed
+ * back against: the code is on display, so the code cannot be what collects.
+ */
+export const openWallPairingResponseSchema = z.object({
+  pairingCode: wallPairingCodeSchema,
+  secret: z.string().min(16).max(64)
+})
+
+export const wallPairingPollQuerySchema = z.object({
+  secret: z.string().min(16).max(64)
+})
+
+/**
+ * The second place a `hostToken` reaches a client, and the only one it reaches
+ * one that did not open the room: the host's device vouched for this screen by
+ * sending the token itself. Read once — the pairing is gone after it.
+ */
+export const wallPairingPollResponseSchema = z.discriminatedUnion('status', [
+  z.object({ status: z.literal('waiting') }),
+  z.object({
+    hostToken: hostTokenSchema,
+    roomCode: roomCodeSchema,
+    status: z.literal('paired')
+  })
+])
+
+export const pairWallRequestSchema = z.object({
+  hostToken: hostTokenSchema,
+  roomCode: roomCodeSchema
 })
 
 /**
@@ -114,6 +163,14 @@ export const apiErrorResponseSchema = z.object({
 export type CreateRoomRequest = z.infer<typeof createRoomRequestSchema>
 export type CreateRoomResponse = z.infer<typeof createRoomResponseSchema>
 export type RoomExistsResponse = z.infer<typeof roomExistsResponseSchema>
+export type WallPairingCode = z.infer<typeof wallPairingCodeSchema>
+export type OpenWallPairingResponse = z.infer<
+  typeof openWallPairingResponseSchema
+>
+export type WallPairingPollResponse = z.infer<
+  typeof wallPairingPollResponseSchema
+>
+export type PairWallRequest = z.infer<typeof pairWallRequestSchema>
 export type CatalogueTrack = z.infer<typeof catalogueTrackSchema>
 export type TrackListResponse = z.infer<typeof trackListResponseSchema>
 export type HealthResponse = z.infer<typeof healthResponseSchema>
