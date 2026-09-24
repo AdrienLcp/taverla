@@ -326,6 +326,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
         canPlay={canPlay}
         clock={clock}
         controls={{
+          error: error?.code ?? null,
           isAnswerFolded: cameFromWall,
           isLive,
           onRememberSlateKey: rememberPreparedKey,

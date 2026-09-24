@@ -2,6 +2,7 @@ import type React from 'react'
 import { useState } from 'react'
 
 import type { ClientMessage } from '@taverla/protocol/client-message'
+import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
 import { roundDurationMsOf } from '@taverla/protocol/game'
 import type { PlayerId, RoomCode } from '@taverla/protocol/identifiers'
 import type {
@@ -22,6 +23,7 @@ import {
   type PlayerAnswer,
   TypedAnswer
 } from '@/features/player/answer-forms'
+import { LieForm, VoteBoard } from '@/features/player/lefake-forms'
 import {
   blindtestHostContent,
   holdsTheAnswer,
@@ -50,6 +52,8 @@ import { VerdictPanel } from './verdict-panel'
 
 /** What the console can do to the room from its stage. A wall has none of it. */
 export type StageControls = {
+  /** The last refusal, which a seat's Le Fake forms take back their "sent" on. */
+  error: ProtocolErrorCode | null
   /**
    * The answer is behind a press rather than printed, because this console is
    * the room's own screen, taken over while its host was away.
@@ -240,14 +244,31 @@ export const RoomStage: React.FC<RoomStageProps> = ({
             elapsedMs={view.roundElapsedMs}
           />
         )}
-        {isSeated && view.settings.mode.kind === 'choice' && (
-          <ChoiceAnswer
+        {/*
+          Le Fake is played in choice mode and has no candidates to pick while
+          the room writes: a seat writes its lie here, as a player's screen does.
+        */}
+        {isSeated && view.youId !== null && round.content.kind === 'lefake' && (
+          <LieForm
+            error={controls.error}
             key={round.id}
-            onAnswer={answerWithRound}
+            onSubmitLie={(lie) =>
+              controls.send({ lie, roundId: round.id, type: 'lefake.submit' })
+            }
             round={round}
             youId={view.youId}
           />
         )}
+        {isSeated &&
+          round.content.kind !== 'lefake' &&
+          view.settings.mode.kind === 'choice' && (
+            <ChoiceAnswer
+              key={round.id}
+              onAnswer={answerWithRound}
+              round={round}
+              youId={view.youId}
+            />
+          )}
         {isSeated && view.settings.mode.kind === 'typed' && (
           <TypedAnswer
             // A seated console is withheld the answer the same way a player
@@ -283,17 +304,39 @@ export const RoomStage: React.FC<RoomStageProps> = ({
         */}
         <div className='asking'>
           <AskedQuestion prompt={lefakeContent(round)?.prompt ?? null} />
-          <p className='now'>
-            {translate('lefake.vote.waiting', {
-              count: lefakeContent(round)?.votedPlayerIds.length ?? 0
-            })}
-          </p>
+          {/* A seat's board carries its own tally under it. */}
+          {!isSeated && (
+            <p className='now'>
+              {translate('lefake.vote.waiting', {
+                count: lefakeContent(round)?.votedPlayerIds.length ?? 0
+              })}
+            </p>
+          )}
         </div>
-        <ul className='lie-board' style={{ '--board-lines': board.length }}>
-          {board.map((candidate) => (
-            <li key={candidate.id}>{candidate.text}</li>
-          ))}
-        </ul>
+        {/*
+          A seat votes on the board itself rather than beside a copy of it: the
+          same lines, pressable, with its own lie shown and refused.
+        */}
+        {isSeated && view.youId !== null ? (
+          <VoteBoard
+            error={controls.error}
+            onVote={(candidateId) =>
+              controls.send({
+                candidateId,
+                roundId: round.id,
+                type: 'lefake.vote'
+              })
+            }
+            round={round}
+            youId={view.youId}
+          />
+        ) : (
+          <ul className='lie-board' style={{ '--board-lines': board.length }}>
+            {board.map((candidate) => (
+              <li key={candidate.id}>{candidate.text}</li>
+            ))}
+          </ul>
+        )}
       </div>
     )
   }
