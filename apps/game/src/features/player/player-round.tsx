@@ -33,6 +33,7 @@ import {
 import { LieForm, VoteBoard } from '@/features/player/lefake-forms'
 import { ReflexBuzzer } from '@/features/player/reflex-buzzer'
 import { RoundBoard } from '@/features/player/round-board'
+import { SlateMarking, SlateSheet } from '@/features/player/slate-sheet'
 import { answerFitting } from '@/helpers/answer-fitting'
 import {
   blindtestContent,
@@ -66,6 +67,7 @@ import './player-round.sass'
 
 const ROUND_IS_RUNNING = new Set<RoomPhase>([
   'buzzed',
+  'correcting',
   'countdown',
   'playing',
   'voting'
@@ -87,6 +89,8 @@ type PlayerRoundProps = {
   onSubmitLie: (lie: string, roundId: string) => boolean
   /** `false` from the socket means the frame was never written. */
   onVote: (candidateId: string, roundId: string) => boolean
+  /** `false` from the socket means the frame was never written. */
+  onWriteLine: (itemIndex: number, answer: string, roundId: string) => boolean
   view: PlayerRoomView
 }
 
@@ -97,6 +101,7 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
   onBuzz,
   onSubmitLie,
   onVote,
+  onWriteLine,
   view
 }) => {
   const translate = useTranslate()
@@ -109,7 +114,16 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
   // the three screens below would say why. The buzzer carries its own reason
   // through `findBuzzBlocker`; a grid of choices and a pair of text fields have
   // nowhere to put one, and would sit there looking answerable.
-  if (!view.isHostConnected && ROUND_IS_RUNNING.has(view.phase)) {
+  // A sheet is the exception: a line moves nothing along, so the server keeps
+  // taking them while the console is away, and the pen stays in the hand.
+  const isWritingASheet =
+    view.phase === 'playing' && round?.content.kind === 'slate'
+
+  if (
+    !view.isHostConnected &&
+    !isWritingASheet &&
+    ROUND_IS_RUNNING.has(view.phase)
+  ) {
     return (
       <section className='player-round centred'>
         <p className='paused'>{translate('buzz.blocked.host_away')}</p>
@@ -204,6 +218,14 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
     )
   }
 
+  if (view.phase === 'correcting' && round !== null) {
+    return (
+      <section className='player-round'>
+        <SlateMarking round={round} />
+      </section>
+    )
+  }
+
   if (view.phase === 'voting' && view.round !== null) {
     const round = view.round
 
@@ -241,6 +263,19 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
             onSubmitLie={(lie) => onSubmitLie(lie, round.id)}
             round={round}
             youId={view.youId}
+          />
+        </section>
+      )
+    }
+
+    if (round.content.kind === 'slate') {
+      return (
+        <section className='player-round'>
+          <SlateSheet
+            onWrite={(itemIndex, answer) =>
+              onWriteLine(itemIndex, answer, round.id)
+            }
+            round={round}
           />
         </section>
       )

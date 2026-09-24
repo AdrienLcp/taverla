@@ -141,6 +141,18 @@ one part.
 
 ### Features
 
+- `[Game]` **The slate is on the shelf**, sixth and last: *L'Ardoise* in
+  French. The host sets how many things there are to guess (1 to 60), every
+  player gets a grid of numbered tiles that is both the way to a number and how
+  much of the sheet is done, and tapping one opens a single large field for it.
+  Lines save as they are written and survive a reload; a friend arriving
+  mid-sheet gets one. The console shows *Julie 12/26* and never a word, with the
+  answer key folded away and one more number a press away. Once the sheets are
+  collected the wall marks one number at a time: the key behind a tap, every
+  distinct answer with who wrote it, one toggle each, and the standings moving
+  with every press — back as well as forward. The marking wears the field a
+  judged buzz does.
+
 - `[Game]` **A press now answers back.** Taking the floor is one firm 100 ms thud
   on the screen that took it; losing the race is two shorter knocks (45–65–45)
   on every screen that entered it and was beaten — the false start a reflex

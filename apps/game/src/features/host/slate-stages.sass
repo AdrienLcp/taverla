@@ -1,0 +1,189 @@
+@use '../../presentation/styles/layout'
+@use '../../presentation/styles/typography'
+
+@layer components
+  .host-console-page .stage
+    &.slate-writing,
+    &.slate-correcting
+      display: grid
+      gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
+      grid-template-columns: minmax(0, 1fr)
+
+    &.slate-writing
+      @include layout.wide
+        align-items: center
+        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr)
+
+    // The item is what the room reads; the standings are what the host glances
+    // at between two presses, so they take the narrower column.
+    &.slate-correcting
+      align-content: start
+
+      @include layout.wide
+        align-items: start
+        grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr)
+
+  .slate-writing
+    .sheet-size
+      align-items: flex-start
+      display: flex
+      flex-direction: column
+      gap: var(--space-s)
+
+      .now
+        @include typography.title
+
+        max-inline-size: 24ch
+        text-wrap: balance
+
+      .count
+        @include typography.monument
+        @include typography.numeric
+
+      .count-label
+        @include typography.label
+
+        color: var(--ink-muted)
+
+    .progress
+      display: flex
+      flex-direction: column
+      list-style: none
+
+      // The bar is the row's own ground: a hairline rule under every name,
+      // inked as far as that sheet is filled.
+      li
+        @include typography.title
+
+        align-items: baseline
+        border-block-end: 1px solid var(--rule)
+        display: flex
+        gap: var(--space-m)
+        justify-content: space-between
+        padding-block: var(--space-xs) var(--space-s)
+        position: relative
+
+        &::after
+          background: var(--ink)
+          block-size: 4px
+          content: ''
+          inline-size: calc(var(--filled, 0) * 100%)
+          inset-block-end: -1px
+          inset-inline-start: 0
+          position: absolute
+          transition: inline-size var(--transition-base, 0) var(--timing, ease)
+
+      .nickname
+        min-width: 0
+        overflow-wrap: anywhere
+
+      .tally
+        @include typography.numeric
+
+        flex-shrink: 0
+
+    .keys
+      display: grid
+      gap: var(--space-s)
+      grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr))
+      list-style: none
+
+  .slate-correcting
+    .item
+      display: flex
+      flex-direction: column
+      gap: clamp(var(--space-m), 4vmin, var(--space-xl))
+      min-width: 0
+
+      > header
+        align-items: center
+        display: flex
+        gap: clamp(var(--space-m), 4vmin, var(--space-xl))
+
+      .number
+        @include typography.monument
+        @include typography.numeric
+
+      .naming
+        align-items: flex-start
+        display: flex
+        flex-direction: column
+        gap: var(--space-xs)
+        min-width: 0
+
+      .of
+        @include typography.label
+
+        color: var(--ink-muted)
+
+      .key
+        display: flex
+        flex-direction: column
+        gap: var(--space-2xs)
+
+      .key-title
+        @include typography.label
+
+        color: var(--ink-muted)
+
+      .key-text
+        @include typography.billboard
+
+        overflow-wrap: anywhere
+
+    .groups
+      display: flex
+      flex-direction: column
+      list-style: none
+
+    .group
+      align-items: center
+      border-block-start: 1px solid var(--rule)
+      display: flex
+      gap: var(--space-m)
+      justify-content: space-between
+      padding-block: var(--space-s)
+
+      &:last-child
+        border-block-end: 1px solid var(--rule)
+
+      .said
+        display: flex
+        flex-direction: column
+        gap: var(--space-2xs)
+        min-width: 0
+
+      .text
+        @include typography.billboard
+
+        font-size: clamp(1.5rem, 5vmin, 3.5rem)
+        overflow-wrap: anywhere
+
+      .writers
+        @include typography.caption
+
+        color: var(--ink-muted)
+
+      .toggle-button
+        flex-shrink: 0
+
+      // Passed without a press: wrong, and read as the lesser line.
+      &.missed .text
+        color: var(--ink-muted)
+
+    .nobody,
+    .blanks
+      @include typography.body
+
+      color: var(--ink-muted)
+
+  // Two presses sharing one row, which at 390px is 60px narrower than their
+  // two labels in English: they wrap rather than push the page sideways.
+  .slate-correction-actions
+    display: flex
+    flex-wrap: wrap
+    gap: var(--space-s)
+    justify-content: center
+
+    .button
+      flex: 1 1 auto

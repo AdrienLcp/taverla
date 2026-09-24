@@ -90,6 +90,7 @@ import { ReflexStage } from './reflex-stage'
 import { RevealPanel } from './reveal-panel'
 import { useRoundAudio } from './round-audio'
 import { SetupFold } from './setup-fold'
+import { SlateCorrectionStage, SlateWritingStage } from './slate-stages'
 import { useRestoreStoredSetup } from './use-restore-stored-setup'
 import { VerdictPanel } from './verdict-panel'
 
@@ -508,6 +509,14 @@ const Stage: React.FC<StageProps> = ({
         />
       </div>
     )
+  }
+
+  if (view.phase === 'playing' && round?.content.kind === 'slate') {
+    return <SlateWritingStage isLive={isLive} send={send} view={view} />
+  }
+
+  if (view.phase === 'correcting') {
+    return <SlateCorrectionStage isLive={isLive} send={send} view={view} />
   }
 
   if (view.phase === 'playing' && round != null) {

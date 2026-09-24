@@ -1,0 +1,21 @@
+@use '../styles/control'
+
+@layer components
+  .toggle-button
+    @include control.control
+
+    // An outlined control answers a hover by filling in, which on a toggle is
+    // exactly what *on* looks like — a pointer resting on an unticked answer
+    // read as ticked. Off stays ruled under the pointer, and says it with a
+    // wash of the hairline instead.
+    @media (hover: hover) and (pointer: fine)
+      &.outlined:not([data-selected], [data-disabled])[data-hovered]
+        background: var(--rule)
+        color: var(--ink)
+
+    &[data-selected]
+      background: var(--ink)
+      color: var(--field)
+
+      &:not([data-disabled])[data-pressed]
+        background: var(--ink-muted)

@@ -13,6 +13,7 @@ import {
   DEFAULT_MODE_SETTINGS,
   type RoomSettings
 } from '@taverla/protocol/room'
+import { MAX_SLATE_ITEMS, MIN_SLATE_ITEMS } from '@taverla/protocol/slate'
 import {
   type TrackDifficulty,
   type TrackSource,
@@ -22,6 +23,7 @@ import {
 import { hasAdultContent } from '@taverla/core/quiz/adult-content'
 import { answerModesFor } from '@taverla/core/room/game-modes'
 
+import { NumberField } from '@/presentation/components/number-field'
 import { SegmentedControl } from '@/presentation/components/segmented-control'
 import { Switch } from '@/presentation/components/switch'
 import { ToggleGroup } from '@/presentation/components/toggle-group'
@@ -315,6 +317,22 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         />
       )}
 
+      {game?.kind === 'slate' && (
+        <NumberField
+          className='item-count'
+          isDisabled={isDisabled}
+          label={translate('slate.items.label')}
+          maxValue={MAX_SLATE_ITEMS}
+          minValue={MIN_SLATE_ITEMS}
+          onChange={(itemCount) => {
+            if (Number.isInteger(itemCount)) {
+              onChange({ ...settings, game: { ...game, itemCount } })
+            }
+          }}
+          value={game.itemCount}
+        />
+      )}
+
       {(game?.kind === 'lefake' || game?.kind === 'quiz') && (
         <QuestionBankSettings
           game={game}
@@ -325,22 +343,30 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         />
       )}
 
-      <NumberChoice
-        className='round-count'
-        isDisabled={isDisabled}
-        label={translate('host.rounds')}
-        onChange={(count) => {
-          onChange({
-            ...settings,
-            roundCount: count === NO_LIMIT ? null : count
-          })
-        }}
-        optionLabel={(count) =>
-          count === NO_LIMIT ? translate('host.roundCount.open') : String(count)
-        }
-        options={ROUND_COUNT_OPTIONS}
-        value={settings.roundCount ?? NO_LIMIT}
-      />
+      {/*
+        A slate is one sheet, marked once: the next sheet is the next game, set
+        up afresh, and a strip offering five of them would offer no *one*.
+      */}
+      {game?.kind !== 'slate' && (
+        <NumberChoice
+          className='round-count'
+          isDisabled={isDisabled}
+          label={translate('host.rounds')}
+          onChange={(count) => {
+            onChange({
+              ...settings,
+              roundCount: count === NO_LIMIT ? null : count
+            })
+          }}
+          optionLabel={(count) =>
+            count === NO_LIMIT
+              ? translate('host.roundCount.open')
+              : String(count)
+          }
+          options={ROUND_COUNT_OPTIONS}
+          value={settings.roundCount ?? NO_LIMIT}
+        />
+      )}
 
       {game?.kind === 'blindtest' && (
         <NumberChoice

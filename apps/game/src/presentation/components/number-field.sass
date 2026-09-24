@@ -1,0 +1,58 @@
+@use '../styles/focus'
+@use '../styles/typography'
+
+@layer components
+  .number-field
+    display: flex
+    flex-direction: column
+    gap: var(--space-2xs)
+
+    .react-aria-Label
+      @include typography.label
+
+      color: var(--ink-muted)
+
+    .steps
+      display: flex
+      inline-size: fit-content
+
+    .react-aria-Input
+      @include focus.ring
+      @include typography.title
+      @include typography.numeric
+
+      background: var(--cut)
+      border: 3px solid var(--ink)
+      border-inline: 0
+      color: var(--cut-ink)
+      inline-size: 4.5ch
+      min-height: 52px
+      text-align: center
+
+    .step
+      @include focus.ring
+      @include typography.title
+
+      align-items: center
+      background: transparent
+      border: 3px solid var(--ink)
+      color: var(--ink)
+      cursor: pointer
+      display: flex
+      justify-content: center
+      inline-size: 52px
+      min-height: 52px
+
+      &[data-pressed]
+        background: var(--ink)
+        color: var(--field)
+
+      &[data-disabled]
+        border-color: var(--rule)
+        color: var(--ink-muted)
+        cursor: not-allowed
+
+      @media (hover: hover) and (pointer: fine)
+        &:not([data-disabled])[data-hovered]
+          background: var(--ink)
+          color: var(--field)

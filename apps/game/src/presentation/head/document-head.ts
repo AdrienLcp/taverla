@@ -63,6 +63,11 @@ export const PAGE_HEADS: Record<Locale, Record<IndexedPage, PageHead>> = {
       description:
         "The screen changes colour and the first in wins. Every device times the flip on its own clock, so the race measures a reflex and not the room's Wi-Fi. Going early costs the round.",
       title: 'Reflex — Taverla'
+    },
+    slate: {
+      description:
+        'Numbered things to guess and a private answer sheet on every phone. Nobody copies the loudest voice; the host marks the papers one number at a time on the big screen.',
+      title: 'Slate — Taverla'
     }
   },
   fr: {
@@ -100,6 +105,11 @@ export const PAGE_HEADS: Record<Locale, Record<IndexedPage, PageHead>> = {
       description:
         "L'écran change de couleur, le plus rapide gagne. Chaque appareil programme le basculement sur sa propre horloge : la course mesure un réflexe, pas le Wi-Fi de la salle. Partir trop tôt coûte la manche.",
       title: 'Réflexe — Taverla'
+    },
+    slate: {
+      description:
+        "Des choses numérotées à deviner et une feuille de réponses privée sur chaque téléphone. Personne ne copie la voix la plus forte ; l'hôte corrige les copies numéro par numéro sur le grand écran.",
+      title: "L'Ardoise — Taverla"
     }
   }
 }

@@ -655,8 +655,68 @@ export const EN_DICTIONARY = defineDictionary({
     speedBonus: '{points:number} of that for being early'
   },
   slate: {
+    correct: {
+      blanks: 'Left blank: {names}',
+      finish: 'Show the scores',
+      judge: 'Right',
+      key: {
+        reveal: 'Show the answer',
+        title: 'The answer'
+      },
+      next: 'Next',
+      nobody: 'Nobody wrote anything for this one.',
+      previous: 'Previous'
+    },
+    home: {
+      description:
+        'Numbered things to guess — cups to taste, photos, prices — and everyone writes on a sheet nobody else can see, in any order they like. Then the innkeeper marks the papers one number at a time, and every answer they accept is worth a point.'
+    },
+    item: 'No. {index:number}',
+    itemOf: 'No. {index:number} of {count:number}',
+    items: {
+      add: 'One more',
+      label: 'Things to guess',
+      summary: defineTranslation('{count:plural}', {
+        plural: {
+          count: { one: '{?} thing to guess', other: '{?} things to guess' }
+        }
+      })
+    },
+    key: {
+      field: 'Answer to no. {index:number}',
+      label: 'Answer key',
+      summary: defineTranslation('{count:plural}', {
+        plural: { count: { other: 'Hidden · {?} noted' } }
+      })
+    },
     name: 'Slate',
+    progress: '{filled:number}/{count:number}',
     scoring:
-      'Everyone fills in their own sheet in private, then the host marks it: one point per answer they validate.'
+      'Everyone fills in their own sheet in private, then the innkeeper marks it: one point per answer they accept.',
+    sheet: {
+      blank: 'Left blank',
+      field: 'Your answer to no. {index:number}',
+      grid: 'Your sheet',
+      next: 'Next',
+      previous: 'Previous',
+      saved:
+        'Saved as you write. You can change anything until the innkeeper collects the sheets.',
+      tile: {
+        empty: 'No. {index:number}, empty',
+        filled: 'No. {index:number}: {answer}'
+      }
+    },
+    tagline: 'Everyone writes. Nobody peeks.',
+    verdict: {
+      pending: 'Waiting for the innkeeper…',
+      right: 'Accepted',
+      wrong: 'Not this time'
+    },
+    wall: {
+      collect: 'Collect the sheets',
+      filling: 'Sheets are open. Write what you think each number is.'
+    },
+    yourAnswer: 'You wrote',
+    yourSheet: 'Your whole sheet'
   }
 })

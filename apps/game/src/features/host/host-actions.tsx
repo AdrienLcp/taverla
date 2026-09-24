@@ -8,6 +8,7 @@ import { FinishedActions } from './finished-actions'
 import { LobbyActions } from './lobby-actions'
 import { RevealActions } from './reveal-actions'
 import { RoundActions } from './round-actions'
+import { SlateCorrectionActions, SlateWritingActions } from './slate-stages'
 
 export type HostActionsProps = {
   /** What the picker is showing, which `onOpenRound` commits — so it is what the next round will be built from. */
@@ -39,6 +40,12 @@ export const HostActions: React.FC<HostActionsProps> = (props) => {
     // the round is open rather than abandoning it — and without it a vote with
     // no clock would have nothing to end it.
     case 'voting':
+      // A sheet is ended by collecting it, and `host.reveal` is refused until
+      // then — the papers still have to be marked.
+      if (props.view.round?.content.kind === 'slate') {
+        return <SlateWritingActions {...props} />
+      }
+
       // The one round that ends without being ended: a heat closes when
       // everyone expected in it has acted, and the press window closes it when
       // somebody never does. There is no answer to give and no field to
@@ -51,6 +58,8 @@ export const HostActions: React.FC<HostActionsProps> = (props) => {
     // which the stage owns, beside the answer it is judged against.
     case 'buzzed':
       return null
+    case 'correcting':
+      return <SlateCorrectionActions {...props} />
     case 'revealed':
       return <RevealActions {...props} />
     case 'finished':

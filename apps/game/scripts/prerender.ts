@@ -43,7 +43,7 @@ type BuildChunk = {
  * Every replacement is required to match exactly once. `index.html` stays a
  * valid standalone document — it is what `pnpm dev` serves — so there are no
  * placeholders to key off, and a tag that is edited out of it would otherwise
- * leave fourteen documents quietly carrying the wrong head.
+ * leave sixteen documents quietly carrying the wrong head.
  */
 const replaceOnce = ({
   html,

@@ -39,6 +39,20 @@ describe('settingsSummary', () => {
     expect(parts.some((part) => part.kind === 'source')).toBe(false)
   })
 
+  // A sheet's length is the whole of its setup, and the fold is closed.
+  it('[settings-summary] names how many things a slate asks for', () => {
+    expect(
+      settingsSummary({
+        draftSource: null,
+        settings: roomSettingsFor({ game: 'slate', locale: 'fr' })
+      })
+    ).toEqual([
+      { game: 'slate', kind: 'game' },
+      { count: 10, kind: 'itemCount' },
+      { count: 1, kind: 'roundCount' }
+    ])
+  })
+
   it('[settings-summary] says nothing about an answer mode the host was never offered', () => {
     const parts = settingsSummary({
       draftSource: null,

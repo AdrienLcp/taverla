@@ -253,6 +253,9 @@ const Lobby: React.FC<{
             onVote={(candidateId, roundId) =>
               send({ candidateId, roundId, type: 'lefake.vote' })
             }
+            onWriteLine={(itemIndex, answer, roundId) =>
+              send({ answer, itemIndex, roundId, type: 'slate.write' })
+            }
             view={view}
           />
         </>

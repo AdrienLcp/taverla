@@ -12,6 +12,7 @@ import { isShelvedGame } from './shelved-game'
  */
 export type SettingsSummaryPart =
   | { count: number | null; kind: 'roundCount' }
+  | { count: number; kind: 'itemCount' }
   | { game: ShelvedGame; kind: 'game' }
   | { kind: 'answerMode'; mode: AnswerMode }
   | { kind: 'source'; source: TrackSource['kind'] }
@@ -48,6 +49,10 @@ export const settingsSummary = ({
 
   if (game.kind === 'blindtest') {
     parts.push({ kind: 'source', source: (draftSource ?? game.source).kind })
+  }
+
+  if (game.kind === 'slate') {
+    parts.push({ count: game.itemCount, kind: 'itemCount' })
   }
 
   if (answerModesFor(game.kind).length > 1) {

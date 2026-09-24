@@ -31,6 +31,11 @@ export const reflexContent = (
 ): Extract<RoundContent, { kind: 'reflex' }> | null =>
   round?.content.kind === 'reflex' ? round.content : null
 
+export const slateContent = (
+  round: RoundView | null | undefined
+): Extract<RoundContent, { kind: 'slate' }> | null =>
+  round?.content.kind === 'slate' ? round.content : null
+
 /** The same over the half only the host is sent. */
 export const blindtestHostContent = (
   view: HostRoomView | null | undefined
@@ -46,6 +51,11 @@ export const lefakeHostContent = (
   view: HostRoomView | null | undefined
 ): Extract<HostRoundContent, { kind: 'lefake' }> | null =>
   view?.currentContent?.kind === 'lefake' ? view.currentContent : null
+
+export const slateHostContent = (
+  view: HostRoomView | null | undefined
+): Extract<HostRoundContent, { kind: 'slate' }> | null =>
+  view?.currentContent?.kind === 'slate' ? view.currentContent : null
 
 /**
  * Whether the host still holds what this round is judged against. A host who

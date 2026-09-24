@@ -21,9 +21,10 @@ type TextFieldProps = ReactAriaTextFieldProps & {
    * What the on-screen keyboard's action key says and does. `'send'` on a
    * single-field form, which already submits on Enter — that key is then the
    * whole submit affordance, and the button below it can be under the keyboard
-   * without costing anyone the round.
+   * without costing anyone the round. `'next'` on a field whose Enter moves
+   * to the following one rather than submitting anything.
    */
-  enterKeyHint?: 'done' | 'go' | 'send'
+  enterKeyHint?: 'done' | 'go' | 'next' | 'send'
   errorMessage?: string
   label: string
   placeholder?: string

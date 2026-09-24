@@ -1,0 +1,167 @@
+@use '../../presentation/styles/focus'
+@use '../../presentation/styles/typography'
+
+@layer components
+  .slate-sheet
+    display: flex
+    flex-direction: column
+    gap: var(--space-l)
+
+    .writing
+      display: flex
+      flex-direction: column
+      gap: var(--space-s)
+
+    .number
+      @include typography.monument
+      @include typography.numeric
+
+      font-size: clamp(4.5rem, 24vmin, 9rem)
+      text-align: center
+
+    .answer .react-aria-Input
+      font-size: clamp(1.375rem, 4.5vmin, 2rem)
+      min-height: 64px
+
+    .stepper
+      display: flex
+      gap: var(--space-s)
+      justify-content: space-between
+
+    .saved
+      @include typography.caption
+
+      color: var(--ink-muted)
+      text-wrap: pretty
+
+    // Sized from the width it is given, so sixty numbers make nine rows at
+    // 360px and four at a laptop's column, and a tile never drops under a
+    // thumb's 44px.
+    .tiles
+      display: grid
+      gap: var(--space-xs)
+      grid-template-columns: repeat(auto-fill, minmax(44px, 1fr))
+      padding-block-end: var(--space-xs)
+
+    .tile
+      @include focus.ring
+      @include typography.title
+      @include typography.numeric
+
+      align-items: center
+      aspect-ratio: 1
+      border: 3px solid var(--edge)
+      color: var(--ink)
+      cursor: pointer
+      display: flex
+      justify-content: center
+      position: relative
+      transition: background-color var(--transition-fast, 0) var(--timing, ease), color var(--transition-fast, 0) var(--timing, ease)
+
+      &.filled
+        background: var(--ink)
+        border-color: var(--ink)
+        color: var(--field)
+
+      // The number in the field above. Focus already owns the outline, and the
+      // arrow keys move focus without moving this, so the two need different
+      // marks: a bar under the tile, in the gap the grid leaves.
+      &[data-selected]
+        border-color: var(--ink)
+
+        &::after
+          background: var(--ink)
+          block-size: 4px
+          content: ''
+          inset-block-end: -9px
+          inset-inline: 0
+          position: absolute
+
+      &[data-pressed]
+        transform: translateY(1px)
+
+  .slate-marking
+    align-items: center
+    display: flex
+    flex: 1
+    flex-direction: column
+    gap: var(--space-m)
+    justify-content: center
+    text-align: center
+
+    .framing
+      @include typography.label
+
+      color: var(--ink-muted)
+
+    .number
+      @include typography.monument
+      @include typography.numeric
+
+    .yours
+      display: flex
+      flex-direction: column
+      gap: var(--space-2xs)
+      max-inline-size: 100%
+
+      .answer
+        @include typography.billboard
+
+        overflow-wrap: anywhere
+        text-wrap: balance
+
+        &.blank
+          color: var(--ink-muted)
+
+    .verdict
+      @include typography.title
+
+      border: 3px solid var(--ink)
+      padding: var(--space-xs) var(--space-m)
+      text-transform: uppercase
+
+      &.right
+        background: var(--ink)
+        color: var(--field)
+
+      &.pending
+        border-color: transparent
+        color: var(--ink-muted)
+        text-transform: none
+
+    .whole-sheet
+      align-self: stretch
+      text-align: start
+
+    .lines
+      display: flex
+      flex-direction: column
+      list-style: none
+
+      li
+        @include typography.body
+
+        align-items: baseline
+        border-block-end: 1px solid var(--rule)
+        display: grid
+        gap: var(--space-s)
+        grid-template-columns: 2.5ch minmax(0, 1fr) auto
+        padding-block: var(--space-xs)
+
+        &[aria-current]
+          font-weight: 800
+
+      .index
+        @include typography.numeric
+
+        color: var(--ink-muted)
+        text-align: end
+
+      .text
+        overflow-wrap: anywhere
+
+      .mark
+        @include typography.label
+
+      .wrong .mark
+        color: var(--ink-muted)

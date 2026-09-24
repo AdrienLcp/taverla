@@ -1,11 +1,12 @@
 @use '../../presentation/styles/strip'
 
 @layer components
-  // Five is prime, so no wrap of two, three or four columns divides it and the
-  // strip's only orphan-free shapes are one row and one column. `30rem` is
-  // where the French row — `Blind test · Buzzer · Le Fake · Quiz · Réflexe`,
-  // the longer of the two locales — stops fitting: 476px of label, padding,
-  // gap and rule, measured on the page.
+  // A strip has two shapes, one row and one column, so the threshold is where
+  // the French row — `Blind test · Quiz · Réflexe · Le Fake · Buzzer ·
+  // L’Ardoise`, the longer of the two locales — stops fitting: 587px of
+  // label, padding, gap and rule, measured on the page with the slate on the
+  // shelf. It was 476px and `30rem` with five games; a sixth wrapped 5+1 at
+  // 480px, which is what the strip-rows journey caught.
   //
   // Measured with the strip's own label at its **ceiling**, which is the widest
   // it is ever drawn. A label is sized against the viewport and this threshold
@@ -14,4 +15,4 @@
   // size. Taking the narrow reading would fit the row on a phone and wrap it
   // there.
   .game-picker
-    @include strip.stacks-below(30rem)
+    @include strip.stacks-below(37rem)

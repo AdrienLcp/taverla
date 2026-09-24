@@ -40,6 +40,8 @@ export const useSettingsSummary = ({
         return translate(sourceKindKey(part.source))
       case 'answerMode':
         return translate(answerModeLabelKey(part.mode))
+      case 'itemCount':
+        return translate('slate.items.summary', { count: part.count })
       case 'roundCount':
         return part.count === null
           ? translate('host.roundCount.openSummary')

@@ -21,9 +21,8 @@ export const gameKindSchema = z.enum(gameKinds)
  * room opened on one of those would render another game's round. Refusing it at
  * the door beats opening a room whose first "start" cannot be looked at.
  *
- * `slate` is the game waiting here now: served in full, with no screens yet.
- * `reflex` spent a stage in exactly that window, and every game before it did
- * too.
+ * `slate` spent a stage in exactly that window, as `reflex` did before it and
+ * every game before that.
  *
  * **The order is the shelf's**, not the alphabet's: it is the order the front
  * door draws its cards in and the order the lobby's picker offers, so the two
@@ -34,7 +33,8 @@ export const shelvedGames = [
   'quiz',
   'reflex',
   'lefake',
-  'buzzer'
+  'buzzer',
+  'slate'
 ] as const satisfies readonly GameKind[]
 
 export const shelvedGameSchema = z.enum(shelvedGames)

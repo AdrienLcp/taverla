@@ -46,6 +46,12 @@ the token default so a first paint before React mounts is already correct.
 **Every colour a component uses is `--field`, `--ink`, `--ink-muted`, `--rule`,
 `--edge`, `--cut` or `--cut-ink`.** No component holds a hex.
 
+**Two phases borrow a pair rather than owning one.** `voting` falls back to the
+lobby's, and `correcting` — the slate's marking — wears `buzzed`'s: it is the
+same act, the host deciding while the room waits on the verdict, and on the
+lobby's orange the wall read as the game having ended between collecting the
+sheets and marking the first number.
+
 ### The one field change that is not a phase
 
 The reflex race needs a stimulus, and `:root[data-flipped]` is it: `--field`
@@ -231,6 +237,14 @@ switch, so it starts where that switch's label starts, one track's width in.
 amounts to, not the description of a control, so it begins at the panel's edge.
 Starting the first one there too was what made it read as a stray sentence in
 the middle of a column of settings.
+
+**A toggle is the two action materials, never a third.** `ToggleButton` is
+outlined off and filled on, which reads from across a room with no new
+vocabulary — and for that reason off does not fill in under a pointer the way
+an outlined button does, because there that is exactly what *on* looks like.
+The slate's tiles use the same pair for *written* and *empty*, and mark the
+number in the field with a bar under the tile: focus owns the outline, and the
+arrow keys move focus without moving the selection.
 
 ### Icons
 

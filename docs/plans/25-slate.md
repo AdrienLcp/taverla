@@ -1,8 +1,7 @@
 # Stage 25 — The slate
 
-**Half done.** Session A (served) landed; session B (drawn) is owed. The brief
-below is left as written — read "What the build disagreed with" at the end
-first.
+**Done.** Both sessions landed. The brief below is left as written — read
+"What the build disagreed with" at the end first.
 
 ## Goal
 
@@ -236,3 +235,63 @@ an item the wall has left is `stale_round`.
 - Only `slate.name` and `slate.scoring` exist in the dictionaries — the type
   forced them. Everything else, `shelvedGames`, the picker, the shelf page and
   the muted browser pass are session B's.
+
+Session B — drawn. The four screens, both dictionaries, the shelf, the muted
+browser pass.
+
+**The item count is a stepper, not a strip.** Every other number a host sets is
+a strip of four or five values; this one runs 1 to 60 and 26 is the case that
+asked for it, so it is a react-aria `NumberField` (`presentation/components/
+number-field.tsx`) inside the setup fold. The fold's summary names it —
+*Slate · 26 things to guess* — through a new `itemCount` part in
+`core/room/settings-summary.ts`, because a closed fold that hides the one
+setting this game has is the dishonest collapse `DESIGN.md` refuses.
+
+**The rounds strip is hidden for the slate.** It offers 5, 10, 20, 30 and none,
+so the slate's `roundCount: 1` left it with nothing selected. A sheet is marked
+once; the next sheet is the next game.
+
+**The tiles are a `ListBox` with `layout='grid'`.** Picking the number in your
+hand is a single choice from a list, and the grid layout gives the arrow keys
+two dimensions for free. A filled tile is the filled material (ink ground); the
+tile on the field is marked by a bar under it, because focus already owns the
+outline and the arrows move focus without moving the selection. Each tile is
+named *No. 7: Cheddar* for a screen reader. Enter in the field moves to the next
+number (`enterKeyHint='next'`, added to `TextField`).
+
+**A line saves on a 600 ms debounce, on blur and on leaving the number** —
+nothing is submitted. The field reads the local draft over the snapshot, and a
+reload opens on the first empty number.
+
+**The writing screen stays up while the console is away.** `slate.write` is
+accepted without it, so the player's pen is not taken away by the host's Wi-Fi;
+`correcting` joins the phases that do show the pause.
+
+**`correcting` wears the `buzzed` field.** `voting` falls back to the lobby's
+orange, and on the slate that read as the game having ended between *collect*
+and the first number. Marking is the same act as judging a buzz, so it takes
+that pair; `correcting → revealed` is the 57-degree step `buzzed → revealed`
+already is.
+
+**The validate control is a `ToggleButton`**, a new design-system wrapper that
+is outlined off and filled on. An outlined control fills in under a hover, which
+on a toggle is what *on* looks like — the browser pass caught a pointer resting
+on an unticked answer reading as ticked — so off stays ruled under the pointer.
+
+**The key hides behind a tap per number**, and closes again when the wall moves.
+Previous and next live in the footer beside the other presses; on the last
+number *next* becomes *show the scores* (`host.reveal`). A blank answer on the
+player's screen shows no pending verdict: it is never a group, so nothing is
+coming.
+
+**A sixth game moved the picker's stacking threshold** from `30rem` to `37rem`:
+the French row of six is 587px, and the strip-rows journey caught the 5+1 wrap
+at 480px. At 1440 the French lobby's 561px column now draws the picker as a
+column.
+
+Verified in a browser, muted, with a console and four player contexts: filled
+out of order, an edit, a reload finding its answers, a latecomer writing number
+6 after the sheet opened, the host adding a number and noting a key; the
+console's DOM held no answer before collection; *Paprika* and *paprika* grouped;
+a verdict taken back moved the board; the final board matched. French and
+English, both themes, 390 and 1440, sixty tiles at 360.

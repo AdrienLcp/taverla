@@ -581,8 +581,71 @@ export const FR_DICTIONARY = defineDictionary({
     speedBonus: 'dont {points:number} pour la vitesse'
   },
   slate: {
+    correct: {
+      blanks: 'Rien écrit : {names}',
+      finish: 'Voir les scores',
+      judge: 'Juste',
+      key: {
+        reveal: 'Montrer la réponse',
+        title: 'La réponse'
+      },
+      next: 'Suivant',
+      nobody: 'Personne n’a rien écrit pour celui-là.',
+      previous: 'Précédent'
+    },
+    home: {
+      description:
+        'Des choses numérotées à deviner — des verres à goûter, des photos, des prix — et chacun écrit sur une feuille que personne ne voit, dans l’ordre qu’il veut. Puis l’aubergiste corrige les copies numéro par numéro, et chaque réponse qu’il accepte vaut un point.'
+    },
+    item: 'N° {index:number}',
+    itemOf: 'N° {index:number} sur {count:number}',
+    items: {
+      add: 'Un de plus',
+      label: 'Choses à deviner',
+      summary: defineTranslation('{count:plural}', {
+        plural: {
+          count: { one: '{?} chose à deviner', other: '{?} choses à deviner' }
+        }
+      })
+    },
+    key: {
+      field: 'Réponse du n° {index:number}',
+      label: 'Corrigé',
+      summary: defineTranslation('{count:plural}', {
+        plural: {
+          count: { one: 'Caché · {?} noté', other: 'Caché · {?} notés' }
+        }
+      })
+    },
     name: 'L’Ardoise',
+    progress: '{filled:number}/{count:number}',
     scoring:
-      'Chacun écrit sur sa feuille sans rien montrer, puis l’hôte corrige : un point par réponse qu’il valide.'
+      'Chacun remplit sa feuille sans rien montrer, puis l’aubergiste corrige : un point par réponse qu’il accepte.',
+    sheet: {
+      blank: 'Rien écrit',
+      field: 'Ta réponse au n° {index:number}',
+      grid: 'Ta feuille',
+      next: 'Suivant',
+      previous: 'Précédent',
+      saved:
+        'Enregistré au fil de l’eau. Tu peux tout changer jusqu’à ce que l’aubergiste ramasse les feuilles.',
+      tile: {
+        empty: 'N° {index:number}, vide',
+        filled: 'N° {index:number} : {answer}'
+      }
+    },
+    tagline: 'Chacun écrit. Personne ne copie.',
+    verdict: {
+      pending: 'L’aubergiste corrige…',
+      right: 'Accepté',
+      wrong: 'Pas cette fois'
+    },
+    wall: {
+      collect: 'Ramasser les feuilles',
+      filling:
+        'Les feuilles sont ouvertes. Écrivez ce que vous pensez de chaque numéro.'
+    },
+    yourAnswer: 'Tu as écrit',
+    yourSheet: 'Toute ta feuille'
   }
 })
