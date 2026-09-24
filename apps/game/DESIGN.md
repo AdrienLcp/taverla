@@ -184,8 +184,7 @@ length hands the short row's segments the width the missing ones would have had
 has. `Le premier qui buzze` alone across the top of a strip whose real answer
 was `Quatre propositions` is the defect, and a phone is where it happens.
 `strip.stacks-below($width)` is the escape, and its argument is measured off the
-labels in the longer locale rather than taken from a device size: the game
-picker's French row comes to 433px, so it stacks below `28rem`. It is a
+labels in the longer locale rather than taken from a device size. It is a
 **container** query, because the same picker is 369px inside the lobby's column
 and 900px inside the setup fold at one and the same 1000px viewport. Six other
 strips still wrapped this way and take the same escape, each with a threshold
@@ -195,6 +194,13 @@ around each segment need no thresholds at all, and cost the strip its outer
 boundary and its equal columns, which is the die-cut block this whole system is
 made of. The thresholds are read off the dictionary, so what makes them safe is
 the check that no strip ever holds rows of two different lengths.
+
+**A strip whose count divides has more shapes than two, and uses them.** The
+game picker's six stamps are also three by two and two by three, on an
+equal-column grid (`strip.tiles-below`) whose cell is the widest label: one row
+above 591px, three columns above 368px, two above 246px, then a column. Going
+straight from the row to the column drew six stacked stamps in the lobby's
+556px column on a 1440px console — the screen the picker is mostly read on.
 
 **A section a reader opens is a ruled row, not a block.** A bordered control
 beside the one action on the screen reads as a second one, so `Disclosure`'s

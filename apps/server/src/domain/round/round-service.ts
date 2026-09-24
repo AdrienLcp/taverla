@@ -1218,7 +1218,11 @@ export const startAutoAdvanceHold = (room: Room, now: number): void => {
     return
   }
 
-  room.round.advancesAt = holdMs === null ? null : now + holdMs
+  // The console offers no hold for the slate — one sheet, one reveal — so a
+  // value remembered from before it was hidden must not end the game unseen.
+  const isHeld = holdMs !== null && room.round.content.kind !== 'slate'
+
+  room.round.advancesAt = isHeld ? now + holdMs : null
 }
 
 /**

@@ -1337,6 +1337,16 @@ one part.
 
 ### Fixes
 
+- `[Game]` **The game picker is three by two on the big console**, not a
+  column of six. Stacking below `37rem` stopped the 5+1 wrap but drew the
+  lobby's 556px picker at 1440px as one column; it now takes one row, three by
+  two, two by three or one column, from thresholds measured off the widest
+  French label at its ceiling. `strip.tiles-below` is the grid shape.
+- `[Shared]` **The slate offers no reveal hold.** The console hides the
+  auto-advance strip under it, as it hides the rounds strip, and the server
+  never counts a slate reveal down — a hold remembered from another game would
+  otherwise move the room to the final board with no control on screen.
+
 - `[Game]` **The four choice buttons drew at 52px with no block padding**, on
   the screen whose comment says they are *sized by the press rather than by the
   words*. `box` is included inside `&.outlined`, so a control's height and

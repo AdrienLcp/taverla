@@ -1,18 +1,26 @@
 @use '../../presentation/styles/strip'
 
 @layer components
-  // A strip has two shapes, one row and one column, so the threshold is where
-  // the French row — `Blind test · Quiz · Réflexe · Le Fake · Buzzer ·
-  // L’Ardoise`, the longer of the two locales — stops fitting: 587px of
-  // label, padding, gap and rule, measured on the page with the slate on the
-  // shelf. It was 476px and `30rem` with five games; a sixth wrapped 5+1 at
-  // 480px, which is what the strip-rows journey caught.
+  // Six games take four shapes, and never a wrap: one row, three by two, two
+  // by three, one column. Measured with each label at its **ceiling**, the
+  // widest it is ever drawn, in French — the longer locale:
   //
-  // Measured with the strip's own label at its **ceiling**, which is the widest
-  // it is ever drawn. A label is sized against the viewport and this threshold
-  // against the container, so the two are free to disagree — the console's
-  // lobby hands this picker 369px at a 1000px viewport, where the type is full
-  // size. Taking the narrow reading would fit the row on a phone and wrap it
-  // there.
+  // - the row is `Blind test · Quiz · Réflexe · Le Fake · Buzzer · L’Ardoise`,
+  //   577px of stamps plus gaps and rule, so 591px: `37rem`;
+  // - a grid cell is the widest stamp, `Blind test` at 120px, so three columns
+  //   need 368px (`23.5rem`) and two need 246px (`15.5rem`).
+  //
+  // So the lobby's column at 1440px (556px) is three by two, at 1024px (379px)
+  // still three by two, and a phone's (343px) two by three; the column is left
+  // for a container no phone produces. Stacking straight from the row to the
+  // column, as it did, drew six stacked stamps on the big console.
+  //
+  // The thresholds read the container and the labels read the viewport, so the
+  // two are free to disagree — the ceiling is what keeps a threshold safe on a
+  // screen that draws the type smaller.
   .game-picker
-    @include strip.stacks-below(37rem)
+    container-type: inline-size
+
+    @include strip.tiles-below(37rem, 3)
+    @include strip.tiles-below(23.5rem, 2)
+    @include strip.tiles-below(15.5rem, 1)

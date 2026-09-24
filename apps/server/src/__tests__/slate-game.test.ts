@@ -237,6 +237,20 @@ describe('slate', () => {
     ])
   })
 
+  it('[slate] holds its reveal for the host whatever hold the room carries', async () => {
+    const { bo, host, roundId } = await openSheets({
+      ...SLATE,
+      autoAdvanceMs: 2_000
+    })
+
+    await collect({ host, roundId })
+    host.send({ roundId, type: 'host.reveal' })
+    await waitFor(() => playerView(bo)?.phase === 'revealed', 'the reveal')
+
+    expect(hostView(host)?.round?.advancesAt).toBeNull()
+    expect(playerView(bo)?.round?.advancesAt).toBeNull()
+  })
+
   // The whole transcript, not the last view: a leak in any frame is a leak.
   it('[slate] never sends a player another player’s answer, or any key', async () => {
     const { ana, bo, host, roundId } = await openSheets()

@@ -374,11 +374,13 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
             */}
             {view.phase !== 'finished' && (
               <>
-                <AutoAdvanceChoice
-                  isLive={isLive}
-                  onSettingsChange={changeSettings}
-                  settings={view.settings}
-                />
+                {view.settings.game?.kind !== 'slate' && (
+                  <AutoAdvanceChoice
+                    isLive={isLive}
+                    onSettingsChange={changeSettings}
+                    settings={view.settings}
+                  />
+                )}
                 <SetupFold
                   draftSource={draftSource}
                   isLive={isLive}

@@ -27,6 +27,22 @@
     .segments
       flex-direction: column
 
+/// A strip whose option count divides evenly has more orphan-free shapes than
+/// one row and one column: six stamps are also three by two and two by three.
+/// Each call puts the segments on an equal-column grid of `$columns` below
+/// `$width`, so the caller stacks its calls widest first and each narrower one
+/// wins where it applies. Equal columns rather than `flex: 1` because a grid's
+/// rows are the same length by construction, and every cell is the widest
+/// label's — so `$width` is that label times `$columns`, plus the rules.
+///
+/// The caller declares the container: this reads it and never sets it, so it
+/// composes with `stacks-below` or stands alone after a `container-type`.
+@mixin tiles-below($width, $columns)
+  @container (width < #{$width})
+    .segments
+      display: grid
+      grid-template-columns: repeat(#{$columns}, 1fr)
+
 /// The look both choice strips wear — `SegmentedControl` for one answer,
 /// `ToggleGroup` for several. Declared once here rather than in a component
 /// they would both have to wrap, so a variant is one edit and never two.
