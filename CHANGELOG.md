@@ -8,6 +8,12 @@ one part.
 
 ### Breaking Changes
 
+- `[Shared]` **A latecomer's slate no longer calls a collected item blank**,
+  and `PROTOCOL_VERSION` goes to 20: every line of `yourSheet` carries
+  `closedBeforeYou`, `true` on an item that closed before the reader held a
+  seat, so the sheet says it was collected before they arrived instead of
+  *Left blank*.
+
 - `[Shared]` **The console counts every item**, and `PROTOCOL_VERSION` goes to
   19: the slate's host arm carries `filledCounts`, how many sheets have
   something on each item — a count, never an answer — so the host sees an item

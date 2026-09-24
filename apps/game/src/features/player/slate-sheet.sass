@@ -165,6 +165,22 @@
         &.blank
           color: var(--ink-muted)
 
+        // Never asked of this reader, so drawn as the grid draws a collected
+        // tile — small, muted, padlocked — and never at the size of a miss.
+        &.absent
+          @include typography.body
+
+          align-items: center
+          color: var(--ink-muted)
+          display: inline-flex
+          gap: var(--space-2xs)
+          justify-content: center
+
+          svg
+            block-size: 1em
+            flex: none
+            inline-size: 1em
+
     .verdict
       @include typography.title
 
@@ -205,6 +221,11 @@
 
         .answer
           @include typography.title
+
+          &.absent
+            @include typography.body
+
+            justify-content: flex-start
 
       .verdict
         @include typography.label
@@ -249,5 +270,6 @@
       .mark
         @include typography.label
 
-      .wrong .mark
+      .wrong .mark,
+      .absent .text
         color: var(--ink-muted)

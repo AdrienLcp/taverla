@@ -21,7 +21,11 @@ import './slate-sheet.sass'
 
 const SAVE_DELAY_MS = 600
 
-const EMPTY_LINE: SlateLine = { answer: null, verdict: null }
+const EMPTY_LINE: SlateLine = {
+  answer: null,
+  closedBeforeYou: false,
+  verdict: null
+}
 
 type Labels = readonly (string | null)[]
 
@@ -269,7 +273,12 @@ export const SlateOnTheWall: React.FC<SlateOnTheWallProps> = ({
                 index: index + 1
               })}
         </p>
-        {line.answer === null ? (
+        {line.closedBeforeYou ? (
+          <p className='answer absent'>
+            <LockIcon />
+            {translate('slate.sheet.closedBeforeYou')}
+          </p>
+        ) : line.answer === null ? (
           <p className='answer blank'>{translate('slate.sheet.blank')}</p>
         ) : (
           <p className='answer'>{line.answer}</p>
@@ -314,14 +323,18 @@ export const SlateWholeSheet: React.FC<{
               aria-current={
                 itemIndex === content.currentItemIndex ? 'true' : undefined
               }
-              className={verdictClass(entry.verdict)}
+              className={
+                entry.closedBeforeYou ? 'absent' : verdictClass(entry.verdict)
+              }
               key={itemIndex}
             >
               <span className='index'>
                 {slateItemName({ itemIndex, labels }).label}
               </span>
               <span className='text'>
-                {entry.answer ?? translate('slate.sheet.blank')}
+                {entry.closedBeforeYou
+                  ? translate('slate.sheet.closedBeforeYou')
+                  : (entry.answer ?? translate('slate.sheet.blank'))}
               </span>
               {entry.verdict !== null && (
                 <span className='mark'>

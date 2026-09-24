@@ -113,10 +113,12 @@ export const slateItemStateSchema = z.enum(slateItemStates)
  * One line of the reader's own sheet. `verdict` is `null` until that line is
  * marked — its group judged, or the wall having moved past its item, which is
  * when an answer nobody validated becomes a wrong one — and stays `null` on an
- * item that closed before the reader held a seat.
+ * item that closed before the reader held a seat, which `closedBeforeYou`
+ * says: that line was never asked, so it is no blank.
  */
 export const slateLineSchema = z.object({
   answer: z.string().nullable(),
+  closedBeforeYou: z.boolean(),
   verdict: z.boolean().nullable()
 })
 

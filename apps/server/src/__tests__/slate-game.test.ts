@@ -399,6 +399,33 @@ describe('slate', () => {
     expect(sheetOf(cy).map((line) => line.verdict)).toEqual([null, true, null])
   })
 
+  it('[slate] tells a latecomer which items closed before their seat, and nobody else', async () => {
+    const { ana, code, host, roundId } = await openSheets()
+
+    await close({ host, itemIndex: 0, roundId })
+
+    const cy = await harness.seat({ code, nickname: 'Cy' })
+
+    await close({ host, itemIndex: 1, roundId })
+    await waitFor(
+      () =>
+        slateRound(playerView(cy))?.itemStates[1] !== 'open' &&
+        slateRound(playerView(ana))?.itemStates[1] !== 'open',
+      'both sheets to see item 1 closed'
+    )
+
+    expect(sheetOf(cy).map((line) => line.closedBeforeYou)).toEqual([
+      true,
+      false,
+      false
+    ])
+    expect(sheetOf(ana).map((line) => line.closedBeforeYou)).toEqual([
+      false,
+      false,
+      false
+    ])
+  })
+
   it('[slate] gives a reloaded player their own answers back, and which items are locked', async () => {
     const { ana, code, host, roundId } = await openSheets()
 

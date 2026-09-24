@@ -116,7 +116,7 @@ item, edits a label or draws one yet.
 
 - `round.content` (`kind: 'slate'`): `itemCount`, `itemStates`
   (`('open' | 'closed' | 'marked')[]`), `currentItemIndex` (`number | null`,
-  always a closed item), `yourSheet` (`{ answer, verdict }[]` or `null`).
+  always a closed item), `yourSheet` (`{ answer, closedBeforeYou, verdict }[]` or `null`).
 - `currentContent` (`kind: 'slate'`, host only): `keys`, `progress`,
   `correction` (`null` unless a closed item is on the wall) — shapes unchanged.
 - `settings.game.labels` and `slateItemLabel`; `SLATE_LABEL_MAX_LENGTH` (12)

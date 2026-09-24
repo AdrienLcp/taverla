@@ -341,6 +341,7 @@ const toSlateSheet = ({
 
     return {
       answer,
+      closedBeforeYou: item.state === 'closed' && !item.roster.has(youId),
       verdict: itemVerdictFor({ answer, item, playerId: youId })
     }
   })

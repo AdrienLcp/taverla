@@ -646,6 +646,7 @@ export const FR_DICTIONARY = defineDictionary({
       'Chacun remplit sa feuille sans rien montrer, puis l’aubergiste corrige : un point par réponse qu’il accepte.',
     sheet: {
       blank: 'Rien écrit',
+      closedBeforeYou: 'Ramassé avant ton arrivée',
       field: 'Ta réponse pour {item}',
       grid: 'Ta feuille',
       next: 'Suivant',

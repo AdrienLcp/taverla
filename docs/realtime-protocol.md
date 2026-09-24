@@ -231,7 +231,7 @@ The host view adds what only the host may see:
 answer.** `round.content` carries `itemCount`, `itemStates` (one per item),
 `currentItemIndex` (the item on the wall, always a closed one, `null` until the
 first closes) and `yourSheet` — the reader's own lines, one per item, each
-`{ answer, verdict }`, and `null` for a reader with no seat. It is the only place
+`{ answer, closedBeforeYou, verdict }`, and `null` for a reader with no seat. It is the only place
 a player's answers travel to them, which is what a reload comes back to. The
 host arm carries `progress` (`{ playerId, filledCount }` per seat), `keys` (the
 host's memo per item, reaching no player frame ever) and `correction`, which is
@@ -241,7 +241,8 @@ that item, grouped — `{ key, text, playerIds, isCorrect }` per group, blanks
 listed apart as `blankPlayerIds`. A line's verdict is `null` until its group is
 judged or the wall has moved past its item, which is when an answer nobody
 validated becomes wrong — and stays `null` on an item that closed before the
-reader held a seat.
+reader held a seat, which `closedBeforeYou` says outright so a screen does not
+draw that line as a blank.
 
 `audioUrl` and `track` are separate because a host who has taken a seat keeps
 the first and gets `null` for the second: that screen still has to play the

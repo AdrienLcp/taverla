@@ -718,6 +718,7 @@ export const EN_DICTIONARY = defineDictionary({
       'Everyone fills in their own sheet in private, then the innkeeper marks it: one point per answer they accept.',
     sheet: {
       blank: 'Left blank',
+      closedBeforeYou: 'Collected before you arrived',
       field: 'Your answer for {item}',
       grid: 'Your sheet',
       next: 'Next',
