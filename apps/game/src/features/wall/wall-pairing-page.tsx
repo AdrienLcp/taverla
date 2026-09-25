@@ -15,8 +15,7 @@ import { CodeAndSquare } from '@/presentation/components/room-invitation'
 import { useDocumentTitle } from '@/presentation/head/use-document-title'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
-
-import { useIdleChrome } from './use-idle-chrome'
+import { useIdleChrome } from '@/presentation/use-idle-chrome'
 
 import './wall-pairing-page.sass'
 

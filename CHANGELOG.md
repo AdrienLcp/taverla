@@ -1396,6 +1396,20 @@ one part.
 
 ### Fixes
 
+- `[Game]` **The invitation poster is back**: `/invite/:code` shows the room's
+  code and square alone, centred, for a big screen that only has to let people
+  in. The wall had replaced it, but its lobby also draws the game and the
+  table, and it needs the host's device to pair. The console menu offers
+  *Show the QR code, big* beside *Show the game in a new tab*, and the home page
+  folds *Show a table's invitation* back in under *Show a table on this screen*.
+
+- `[Game]` **The menu scrolls when it outgrows a short screen**: React Aria capped
+  the popover at the viewport edge and left the rest overflowing, so a host's
+  exits could fall off the bottom.
+
+- `[Game]` **The wall's lobby says the innkeeper is choosing a game** instead of
+  telling nobody to choose one.
+
 - `[Game]` **Opening a fold no longer shifts the page sideways**, a focused
   field inside one keeps its whole ring, and the slate's item names are wide
   enough to read twelve letters and an emoji whole: the document reserves its

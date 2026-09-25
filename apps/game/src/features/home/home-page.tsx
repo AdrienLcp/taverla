@@ -3,6 +3,7 @@ import { Button as ReactAriaButton } from 'react-aria-components'
 
 import { shelvedGames } from '@taverla/protocol/game'
 
+import { ProjectWithCode } from '@/features/invite/project-with-code'
 import { JoinWithCode } from '@/features/join/join-with-code'
 import { WallDoor } from '@/features/wall/wall-door'
 import { Button } from '@/presentation/components/button'
@@ -127,6 +128,7 @@ export const HomePage: React.FC = () => {
           nothing.
         */}
         <WallDoor />
+        <ProjectWithCode />
       </div>
     </main>
   )

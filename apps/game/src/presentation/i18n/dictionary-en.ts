@@ -360,8 +360,22 @@ export const EN_DICTIONARY = defineDictionary({
     copied: 'Copied',
     copyCode: 'Copy the code',
     copyFailed: 'Could not copy',
+    documentTitle: 'Invitation — Taverla',
+    door: {
+      action: 'Show it',
+      description:
+        'It grants nothing: no seat, no game, and no way to run the table. It draws what the table is already showing.',
+      label: 'Show a table’s invitation',
+      summary: 'The code and the square, on a screen of their own'
+    },
     joinLate: 'The door is open',
-    title: 'Scan and pull up a chair'
+    project: 'Show the QR code, big',
+    title: 'Scan and pull up a chair',
+    unknown: {
+      description:
+        'That code opens no table. It may have been cleared, or read wrong.',
+      title: 'No table here'
+    }
   },
   join: {
     divider: 'or',
@@ -757,7 +771,7 @@ export const EN_DICTIONARY = defineDictionary({
         'Open the table on another screen, then type the code it shows.',
       failed: 'That code shows nothing. The screen may have a new one.',
       label: 'Screen code',
-      openHere: 'Show it in a new tab',
+      openHere: 'Show the game in a new tab',
       pair: 'Show the table there',
       paired: 'Done: the table is on that screen.'
     },

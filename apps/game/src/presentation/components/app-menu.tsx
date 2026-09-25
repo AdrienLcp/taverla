@@ -27,6 +27,7 @@ import { fetchHealth, pairWall } from '@/infrastructure/api/taverla-api'
 import {
   creditsPathFor,
   homePathFor,
+  inviteUrlFor,
   useIsCurrentPath,
   useNavigateToLocale,
   useRoomCodeParam,
@@ -65,11 +66,13 @@ import { useMenuWidth } from './use-menu-width'
 import './app-menu.sass'
 
 /**
- * The two ways to put this table on a wall. The same machine opens it in a new
- * tab — a plain navigation off the console would close its socket, and the
- * server cannot tell that from a closed tab — which is also what lets the tab be
- * dragged onto the screen wired to the projector. Any other screen shows a code
- * of its own at `/wall`, and this console vouches for it with the token.
+ * The ways to put this table on a big screen. The invitation is the code and
+ * the square alone, for a crowd that only has to get in; the wall is the whole
+ * game. The same machine opens either in a new tab — a plain navigation off the
+ * console would close its socket, and the server cannot tell that from a closed
+ * tab — which is also what lets the tab be dragged onto the screen wired to the
+ * projector. Any other screen shows a code of its own at `/wall`, and this
+ * console vouches for it with the token.
  */
 const WallDoors: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   const translate = useTranslate()
@@ -105,6 +108,14 @@ const WallDoors: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
 
   return (
     <div className='wall-doors'>
+      <Link
+        href={inviteUrlFor(roomCode)}
+        rel='noreferrer'
+        target='_blank'
+        variant='underlined'
+      >
+        {translate('invite.project')}
+      </Link>
       <Link
         href={wallUrlFor(roomCode)}
         rel='noreferrer'

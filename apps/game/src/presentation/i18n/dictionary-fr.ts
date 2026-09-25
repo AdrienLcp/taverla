@@ -325,8 +325,22 @@ export const FR_DICTIONARY = defineDictionary({
     copied: 'Copié',
     copyCode: 'Copier le code',
     copyFailed: 'Copie impossible',
+    documentTitle: 'Invitation — Taverla',
+    door: {
+      action: 'Afficher',
+      description:
+        'Elle ne donne rien : pas de place, pas de partie, aucun moyen de tenir la table. Elle montre ce que la table affiche déjà.',
+      label: 'Afficher l’invitation d’une table',
+      summary: 'Le code et le carré, sur un écran à part'
+    },
     joinLate: 'La porte est ouverte',
-    title: 'Scanne et prends place'
+    project: 'Afficher le QR code en grand',
+    title: 'Scanne et prends place',
+    unknown: {
+      description:
+        'Ce code n’ouvre aucune table. Elle a peut-être été levée, ou le code mal lu.',
+      title: 'Aucune table ici'
+    }
   },
   join: {
     divider: 'ou',
@@ -686,7 +700,7 @@ export const FR_DICTIONARY = defineDictionary({
         'Ouvre la table sur un autre écran, puis tape le code qu’il affiche.',
       failed: 'Ce code n’affiche rien. L’écran en montre peut-être un nouveau.',
       label: 'Code de l’écran',
-      openHere: 'L’afficher dans un nouvel onglet',
+      openHere: 'Afficher la partie dans un nouvel onglet',
       pair: 'Y afficher la table',
       paired: 'C’est fait : la table est sur cet écran.'
     },

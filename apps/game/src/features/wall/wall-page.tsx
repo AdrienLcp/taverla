@@ -25,10 +25,10 @@ import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { useReportRoomActions } from '@/presentation/room-actions/room-actions-provider'
 import { useMarkingField } from '@/presentation/theme/use-marking-field'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
+import { useIdleChrome } from '@/presentation/use-idle-chrome'
 import { useScreenAwake } from '@/presentation/use-screen-awake'
 
 import { useAbsentFor } from './use-absent-for'
-import { useIdleChrome } from './use-idle-chrome'
 import { asRoomScreenView } from './wall-view'
 
 import '@/features/host/host-console-page.sass'

@@ -47,6 +47,7 @@ export const localizedPaths = {
  */
 export const roomPaths = {
   host: '/host/:roomCode',
+  invite: '/invite/:roomCode',
   play: '/play/:roomCode',
   wall: '/wall/:roomCode'
 } as const
@@ -152,6 +153,17 @@ export const playPathFor = (code: RoomCode): string =>
  * in dev, over the public host in production — with no second domain to
  * configure and no CORS to arrange.
  */
+export const invitePathFor = (code: RoomCode): string =>
+  pathFor(paths.invite, { roomCode: code })
+
+/**
+ * The invitation alone, for a screen that only has to let people in: absolute
+ * because the console offers it as a new tab, a document request rather than a
+ * client-side navigation.
+ */
+export const inviteUrlFor = (code: RoomCode): string =>
+  `${location.origin}${invitePathFor(code)}`
+
 export const playUrlFor = (code: RoomCode): string =>
   `${location.origin}${playPathFor(code)}`
 

@@ -104,14 +104,15 @@ Two sessions, split like the slate.
 
 ## What the build disagreed with
 
-**The wall replaced the poster.** `/invite/:code` was a socketless page showing
-a room's invitation for a projector, reached from the home page's *show a
-table's invitation* fold and the console menu's *on its own screen* link. The
-wall's lobby is that poster, and every later phase too, so both doors now lead
-to the wall and the poster page is gone: the home fold opens `/wall`, the menu
-opens `/wall/:code` in a new tab. What the poster could do and the wall cannot
-is show a room with nobody from it in the room to pair — an event projector
-typed in by a stranger — which is a case nobody has had.
+**The wall replaced the poster, and the poster came back.** `/invite/:code` is
+a socketless page showing a room's code and square alone, for a projector. The
+build removed it on the argument that the wall's lobby was that poster, and it
+is not: the lobby also draws the game and the table, left-aligned, and a wall
+has to be paired by the host's device. A guinguette throwing the invitation on
+a giant screen so a crowd can join wants the code and the square and nothing
+else, typed in by whoever runs the projector. So both exist: the menu offers
+*show the QR code, big* beside *show the game in a new tab*, and the home page
+folds *show a table's invitation* under *show a table on this screen*.
 
 **The console's stage is the wall's.** No second set of screens: `Stage` left
 `host-console-page.tsx` for `room-stage.tsx` as `RoomStage`, taking
