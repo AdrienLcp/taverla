@@ -79,7 +79,17 @@
     background: var(--field)
     border: 3px solid var(--ink)
     max-width: min(92vw, 320px)
+    // React Aria writes a `max-height` inline that stops the box at the
+    // viewport's edge, and says nothing about what happens to the rest: a host's
+    // menu on a landscape phone holds the invitation, the wall doors, the seat,
+    // the preferences and three exits, and ran off the bottom with the exits
+    // unreachable. `contain` keeps a scroll that hits the end from moving the
+    // page behind.
+    overflow-y: auto
+    overscroll-behavior: contain
     padding: var(--space-m)
+    scrollbar-color: var(--ink-muted) transparent
+    scrollbar-width: thin
 
     &[data-entering]
       animation: popover-strike var(--transition-fast, 0) var(--timing, ease)
