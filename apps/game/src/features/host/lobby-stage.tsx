@@ -60,7 +60,7 @@ export const LobbyStage: React.FC<LobbyStageProps> = ({
               settings={view.settings}
             />
           )}
-          <GamePitch view={view} />
+          <GamePitch isUnattended={controls === null} view={view} />
         </section>
 
         <section className='roster'>
@@ -105,12 +105,19 @@ export const LobbyStage: React.FC<LobbyStageProps> = ({
  * sentence was in the setup fold, which is collapsed at every width. So it is
  * here too, under the promise it is the terms of.
  */
-const GamePitch: React.FC<{ view: HostRoomView }> = ({ view }) => {
+const GamePitch: React.FC<{ isUnattended: boolean; view: HostRoomView }> = ({
+  isUnattended,
+  view
+}) => {
   const translate = useTranslate()
   const game = view.settings.game
 
   if (game === null || !isShelvedGame(game.kind)) {
-    return <p className='prompt'>{translate('host.game.prompt')}</p>
+    return (
+      <p className='prompt'>
+        {translate(isUnattended ? 'player.choosingGame' : 'host.game.prompt')}
+      </p>
+    )
   }
 
   return (
