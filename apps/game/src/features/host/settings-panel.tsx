@@ -198,6 +198,8 @@ type SettingsPanelProps = {
    * `reshapesRound`.
    */
   isRoundInPlay: boolean
+  /** The lobby's stage carries the sheet's own setup, so the fold does not repeat it. */
+  isSheetOnStage: boolean
   /** Applied to the room as it is pressed; nothing here waits for the launch. */
   onChange: (settings: RoomSettings) => void
   /** Files one key on this tab; the room hears of it only when the sheets open. */
@@ -216,6 +218,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   draftSource,
   isLive,
   isRoundInPlay,
+  isSheetOnStage,
   onChange,
   onPrepareSlateKey,
   preparedSlateKeys,
@@ -325,7 +328,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         />
       )}
 
-      {game?.kind === 'slate' && (
+      {game?.kind === 'slate' && !isSheetOnStage && (
         <NumberField
           className='item-count'
           isDisabled={isDisabled}
@@ -345,7 +348,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         The lobby's copy of the editor. Once the sheets are open the console
         carries one beside the answer key, sized to the sheet as it has grown.
       */}
-      {game?.kind === 'slate' && !isRoundInPlay && (
+      {game?.kind === 'slate' && !isSheetOnStage && !isRoundInPlay && (
         <SlateLabelsEditor
           isDisabled={isDisabled}
           itemCount={game.itemCount}
@@ -356,7 +359,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         />
       )}
 
-      {game?.kind === 'slate' && !isRoundInPlay && (
+      {game?.kind === 'slate' && !isSheetOnStage && !isRoundInPlay && (
         <SlateKeyEditor
           hint={translate('slate.key.hint')}
           isDisabled={false}

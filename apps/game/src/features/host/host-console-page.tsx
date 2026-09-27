@@ -334,6 +334,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
           onSettingsChange: changeSettings,
           onTakeSeat: takeSeat,
           preferences,
+          preparedSlateKeys: preparedKeys,
           send
         }}
         isSpeaker={isSpeaker}

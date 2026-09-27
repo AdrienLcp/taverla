@@ -719,6 +719,14 @@ export const EN_DICTIONARY = defineDictionary({
       now: 'Being marked'
     },
     name: 'Slate',
+    prepare: {
+      keys: defineTranslation('{count:plural}', {
+        plural: {
+          count: { one: '{?} answer noted', other: '{?} answers noted' }
+        }
+      }),
+      title: 'Prepare the sheet'
+    },
     progress: '{filled:number}/{count:number}',
     scoring:
       'Everyone fills in their own sheet in private, then the innkeeper marks it: one point per answer they accept.',
@@ -745,9 +753,11 @@ export const EN_DICTIONARY = defineDictionary({
       wrong: 'Not this time'
     },
     wall: {
+      allCollected: 'Every sheet is in.',
       collect: 'Collect the sheets',
       collectRest: 'Collect the rest',
       filling: 'Sheets are open. Write what you think each one is.',
+      toList: 'Back to the list',
       toSheets: 'Back to the sheets',
       toWall: 'Back to marking'
     },

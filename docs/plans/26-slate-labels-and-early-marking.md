@@ -152,7 +152,15 @@ and the footer read it, so it lives in `HostConsole`.
 *Next* while a later item is collected, *Collect the rest* while any is open,
 and *Show the scores* once none is — so the reveal is never offered disabled,
 it simply is not the next thing yet. *Previous* stays, and *Back to the sheets*
-sits under them while anything is open.
+sits under them while anything is open — *Back to the list* once nothing is.
+Hiding it then stranded a host who collected everything at once: the grid,
+the only way to jump to any item, was gone until the game ended.
+
+**The sheet is prepared on the lobby's stage.** Count, names and key sat in the
+setup fold, collapsed and summarised by a count, and a host read the lobby as
+having nothing to prepare. They are now one fold of their own under the pitch,
+summarised by what is ready; the setup fold drops them while the lobby shows
+them.
 
 **The marking colour is `data-marking`, not a phase.** `useMarkingField` stamps
 it on the console while it shows the wall, and on a player only once nothing

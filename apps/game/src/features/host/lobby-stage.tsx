@@ -17,6 +17,7 @@ import {
 import { GamePicker } from './game-picker'
 import { HostSeat } from './host-seat'
 import type { StageControls } from './room-stage'
+import { SlatePreparation } from './slate-preparation'
 
 type LobbyStageProps = {
   /** `null` on the wall, which shows who has arrived and what they will play. */
@@ -62,6 +63,17 @@ export const LobbyStage: React.FC<LobbyStageProps> = ({
           )}
           <GamePitch isUnattended={controls === null} view={view} />
         </section>
+
+        {controls !== null && view.settings.game?.kind === 'slate' && (
+          <SlatePreparation
+            game={view.settings.game}
+            isLive={controls.isLive}
+            onChange={controls.onSettingsChange}
+            onPrepareKey={controls.onRememberSlateKey}
+            preparedKeys={controls.preparedSlateKeys}
+            settings={view.settings}
+          />
+        )}
 
         <section className='roster'>
           <h2>

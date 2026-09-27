@@ -69,6 +69,8 @@ export type StageControls = {
   onTakeSeat: (nickname: string) => void
   /** What this host last left each game set to, for the lobby's picker. */
   preferences: HostPreferences | null
+  /** The slate's answer key as typed on this tab, never sent before the sheet opens. */
+  preparedSlateKeys: readonly (string | null)[]
   send: (message: ClientMessage) => boolean
 }
 

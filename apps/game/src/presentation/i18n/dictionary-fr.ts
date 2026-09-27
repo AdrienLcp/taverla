@@ -647,6 +647,14 @@ export const FR_DICTIONARY = defineDictionary({
       now: 'En correction'
     },
     name: 'L’Ardoise',
+    prepare: {
+      keys: defineTranslation('{count:plural}', {
+        plural: {
+          count: { one: '{?} réponse notée', other: '{?} réponses notées' }
+        }
+      }),
+      title: 'Préparer la feuille'
+    },
     progress: '{filled:number}/{count:number}',
     scoring:
       'Chacun remplit sa feuille sans rien montrer, puis l’aubergiste corrige : un point par réponse qu’il accepte.',
@@ -673,10 +681,12 @@ export const FR_DICTIONARY = defineDictionary({
       wrong: 'Pas cette fois'
     },
     wall: {
+      allCollected: 'Tout est ramassé.',
       collect: 'Ramasser les feuilles',
       collectRest: 'Ramasser le reste',
       filling:
         'Les feuilles sont ouvertes. Écrivez ce que vous pensez de chacun.',
+      toList: 'Revenir à la liste',
       toSheets: 'Revenir aux feuilles',
       toWall: 'Reprendre la correction'
     },

@@ -96,6 +96,7 @@ export const SetupFold: React.FC<SetupFoldProps> = ({
         draftSource={draftSource}
         isLive={isLive}
         isRoundInPlay={roundInPlay}
+        isSheetOnStage={isInLobby}
         onChange={onSettingsChange}
         onPrepareSlateKey={onRememberSlateKey}
         preparedSlateKeys={preparedSlateKeys}

@@ -740,6 +740,12 @@ one part.
 
 ### Improvements
 
+- `[Game]` **The slate's sheet is prepared on the lobby's stage.** How many
+  things to guess, their names and the answer key are one fold under the
+  game's pitch, summarised by what is ready, rather than inside the collapsed
+  settings where a host never thought to look.
+
+
 - `[Game]` **The slate's console board holds still and uses the screen.** A
   card's press stays at the same height whatever its label says — a word used
   to lift it 24px — and the collect button keeps its padding, because the grid's
@@ -1395,6 +1401,14 @@ one part.
   and the extra width is only void
 
 ### Fixes
+
+- `[Game]` **Marking the slate keeps the way back to the list.** Once every
+  sheet was collected, the console lost *Back to the sheets* and with it the
+  only grid of items, so a host could not jump to one without ending the game.
+  It now reads *Back to the list*, and the grid's heading says everything is in.
+- `[Game]` **A fold inside a fold keeps its own chevron**: an open parent no
+  longer turns every nested chevron upside down.
+
 
 - `[Game]` **The invitation poster is back**: `/invite/:code` shows the room's
   code and square alone, centred, for a big screen that only has to let people

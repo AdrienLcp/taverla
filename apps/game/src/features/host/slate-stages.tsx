@@ -72,6 +72,7 @@ export const SlateWritingStage: React.FC<SlateBoardProps> = ({
 
   const isDisabled = controls === null || !controls.isLive
   const { itemCount, itemStates } = roundContent
+  const hasOpenItem = itemStates.includes('open')
   const labels = slateLabelsOf(view.settings)
   const spokenName = (itemIndex: number): string =>
     labels[itemIndex] ?? translate('slate.item', { index: itemIndex + 1 })
@@ -80,7 +81,11 @@ export const SlateWritingStage: React.FC<SlateBoardProps> = ({
     <div className='stage slate-writing'>
       <section className='item-board'>
         <header>
-          <h2 className='now'>{translate('slate.wall.filling')}</h2>
+          <h2 className='now'>
+            {translate(
+              hasOpenItem ? 'slate.wall.filling' : 'slate.wall.allCollected'
+            )}
+          </h2>
           <div className='size'>
             <p className='count-label'>
               {translate('slate.items.summary', { count: itemCount })}
@@ -442,16 +447,14 @@ export const SlateCorrectionActions: React.FC<SlateStageProps> = ({
         {translate('slate.correct.previous')}
       </Button>
       {primary}
-      {hasOpenItem && (
-        <Button
-          className='aside'
-          onPress={wall.showSheets}
-          size='small'
-          variant='underlined'
-        >
-          {translate('slate.wall.toSheets')}
-        </Button>
-      )}
+      <Button
+        className='aside'
+        onPress={wall.showSheets}
+        size='small'
+        variant='underlined'
+      >
+        {translate(hasOpenItem ? 'slate.wall.toSheets' : 'slate.wall.toList')}
+      </Button>
     </div>
   )
 }
