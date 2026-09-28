@@ -214,7 +214,6 @@ export const EN_DICTIONARY = defineDictionary({
       unexpected_response: 'We did not know what to make of that. Try again.',
       unreachable: 'We cannot reach the tavern. Try again in a moment.'
     },
-    cannot_vote_for_own_lie: 'That one is yours. Pick another.',
     false_start: 'Too soon. Wait for the change.',
     host_already_connected: 'Someone is already keeping this table.',
     host_away: 'The innkeeper stepped away. The round is waiting for them.',
@@ -224,7 +223,6 @@ export const EN_DICTIONARY = defineDictionary({
     internal_error: 'Something broke on our side. Try again.',
     invalid_message: 'We did not understand that. Try again.',
     joined_mid_round: 'You are in from the next round.',
-    lie_is_the_answer: 'That is the real answer. Make something up instead.',
     music_source_unavailable:
       'The music has stopped answering. Try again in a moment.',
     nickname_taken: 'Someone already took that nickname.',
@@ -399,52 +397,6 @@ export const EN_DICTIONARY = defineDictionary({
             other: 'A table code is {?} characters long.'
           }
         }
-      })
-    }
-  },
-  lefake: {
-    home: {
-      description:
-        'A question whose answer nobody sees coming. Everyone invents one convincing enough to fool the rest, they all go up beside the truth, and the table votes. You score for spotting the real one, and again for every friend who bites.'
-    },
-    name: 'Le Fake',
-    reveal: {
-      fooled: defineTranslation('{count:plural}', {
-        plural: { count: { other: '{?} fell for it' } }
-      }),
-      /** Named while the list is short enough to read; counted past that. */
-      fooledNames: 'Fooled: {names}',
-      found: defineTranslation('{count:plural}', {
-        plural: { count: { one: '{?} found it', other: '{?} found it' } }
-      }),
-      foundBy: 'Found by {names}',
-      nobody: 'Nobody wrote that one',
-      title: 'The truth was'
-    },
-    scoring:
-      'Everyone writes a fake answer, then the table votes on the lot. Two points for finding the real one, and one more for every player who falls for yours.',
-    tagline: 'Write a lie. Fool the table.',
-    vote: {
-      done: 'Your vote is in. Waiting for the others…',
-      duration: 'Time to vote',
-      title: 'Which one is true?',
-      waiting: defineTranslation('{count:plural}', {
-        plural: { count: { other: '{?} voted so far' } }
-      }),
-      yours: 'Yours'
-    },
-    write: {
-      description: 'Something they will believe. The real answer gets refused.',
-      duration: 'Time to write',
-      label: 'Your lie',
-      sent: 'Your lie is in. Waiting for the others…',
-      /**
-       * Its own rather than the shell's `round.answer.waiting`: nobody is
-       * answering anything yet, and "0 answered" over a field asking for a lie
-       * reads as a round that has already gone wrong.
-       */
-      waiting: defineTranslation('{count:plural}', {
-        plural: { count: { other: '{?} written so far' } }
       })
     }
   },

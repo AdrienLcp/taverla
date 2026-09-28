@@ -8,6 +8,12 @@ one part.
 
 ### Breaking Changes
 
+- `[Shared]` **Le Fake is off the shelf.** The game, its `/lefake` front door,
+  its lobby card and its strings are gone, and with it the `voting` phase, the
+  `lefake.submit` and `lefake.vote` frames and the `lie_is_the_answer` and
+  `cannot_vote_for_own_lie` codes. A console whose remembered setup still names
+  it drops that entry on the next read and keeps every other game's.
+
 - `[Shared]` **The slate's key is revealed on purpose, and can be prepared
   before the evening**, and `PROTOCOL_VERSION` goes to 21. `host.revealItemKey`
   puts one closed item's key up: the wall draws it big and every sheet reads it

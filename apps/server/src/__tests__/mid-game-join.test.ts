@@ -1,9 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import {
-  DEFAULT_BUZZER_SETTINGS,
-  DEFAULT_LEFAKE_SETTINGS
-} from '@taverla/protocol/game'
+import { DEFAULT_BUZZER_SETTINGS } from '@taverla/protocol/game'
 import {
   DEFAULT_MODE_SETTINGS,
   DEFAULT_ROOM_SETTINGS,
@@ -14,9 +11,7 @@ import {
   errorsIn,
   FAST_GAME,
   hostView,
-  lefakeRound,
   playerView,
-  QUESTIONS,
   type RoomHarness,
   startRoomHarness,
   waitFor
@@ -28,27 +23,9 @@ vi.mock('@/infrastructure/music/deezer-client', async () => {
   return deezerClientStub()
 })
 
-vi.mock('@/infrastructure/questions/question-bank', async () => {
-  const { questionBankStub } = await import('./room-harness')
-
-  return questionBankStub()
-})
-
 const CHOICE_GAME: RoomSettings = {
   ...FAST_GAME,
   mode: DEFAULT_MODE_SETTINGS.choice
-}
-
-const LE_FAKE: RoomSettings = {
-  ...DEFAULT_ROOM_SETTINGS,
-  countdownMs: 20,
-  game: {
-    ...DEFAULT_LEFAKE_SETTINGS,
-    roundDurationMs: 30_000,
-    voteDurationMs: 30_000
-  },
-  mode: DEFAULT_MODE_SETTINGS.choice,
-  roundCount: 3
 }
 
 const BUZZER_GAME: RoomSettings = {
@@ -178,55 +155,6 @@ describe('a player who arrives mid-game', () => {
     // Still open: the round Nina was in from the start waits for her table too.
     expect(playerView(zoe)?.phase).toBe('playing')
     expect(errorsIn(nina)).toHaveLength(0)
-  })
-
-  /**
-   * One stamp covers the whole round, so somebody who walks in on the board
-   * neither votes on lies they never saw nor holds the tally up.
-   */
-  it('[latecomer] closes the vote on the players who wrote', async () => {
-    const { code, host } = await harness.openRoom(LE_FAKE)
-    const ana = await harness.seat({ code, nickname: 'Ana' })
-    const bo = await harness.seat({ code, nickname: 'Bo' })
-
-    host.send({ type: 'host.startRound' })
-    await waitFor(
-      () => playerView(ana)?.phase === 'playing',
-      'the writing to open'
-    )
-
-    const roundId = playerView(ana)?.round?.id ?? ''
-
-    ana.send({ lie: 'Le Mont Rose', roundId, type: 'lefake.submit' })
-    bo.send({ lie: 'La Jungfrau', roundId, type: 'lefake.submit' })
-    await waitFor(
-      () => playerView(ana)?.phase === 'voting',
-      'the board to go up'
-    )
-
-    const nina = await harness.seat({ code, nickname: 'Nina' })
-
-    await waitFor(
-      () => (playerView(ana)?.players.length ?? 0) === 3,
-      'the room to see Nina arrive'
-    )
-
-    const truth =
-      lefakeRound(playerView(ana))?.board?.find(
-        (entry) => entry.text === QUESTIONS[0]?.answer
-      )?.id ?? ''
-
-    nina.send({ candidateId: truth, roundId, type: 'lefake.vote' })
-    await waitFor(() => errorsIn(nina).length === 1, 'the refusal')
-
-    expect(errorsIn(nina)[0]).toMatchObject({ code: 'joined_mid_round' })
-
-    ana.send({ candidateId: truth, roundId, type: 'lefake.vote' })
-    bo.send({ candidateId: truth, roundId, type: 'lefake.vote' })
-    await waitFor(
-      () => playerView(ana)?.phase === 'revealed',
-      'the tally to land on the two who wrote'
-    )
   })
 
   /**

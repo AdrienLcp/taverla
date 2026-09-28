@@ -307,14 +307,6 @@ export const hostQuestion = (host: Peer<HostServerMessage>) => {
   return content?.kind === 'quiz' ? content.question : null
 }
 
-export const lefakeRound = (
-  view: { round: RoundView | null } | null
-): Extract<RoundContent, { kind: 'lefake' }> | null => {
-  const content = view?.round?.content
-
-  return content?.kind === 'lefake' ? content : null
-}
-
 export const reflexRound = (
   view: { round: RoundView | null } | null
 ): Extract<RoundContent, { kind: 'reflex' }> | null => {
@@ -337,12 +329,6 @@ export const hostSlateContent = (
   const content = hostView(host)?.currentContent
 
   return content?.kind === 'slate' ? content : null
-}
-
-export const hostLefakeContent = (host: Peer<HostServerMessage>) => {
-  const content = hostView(host)?.currentContent
-
-  return content?.kind === 'lefake' ? content : null
 }
 
 /**

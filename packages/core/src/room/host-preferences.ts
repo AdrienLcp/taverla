@@ -10,9 +10,9 @@ import type { GameSetup } from './room-settings'
  *
  * That is why `roundCount` and `autoAdvanceMs` sit on the game's side of the
  * line despite being room settings. A host who lengthened the countdown meant it
- * for every game; a host who set Le Fake to five rounds did not mean it for the
- * quiz, and neither did the one whose bare buzzer runs until they stop it. Nor
- * did the one who held the reveal twenty-five seconds so a quiz note could be
+ * for every game; a host who set the quiz to twenty rounds did not mean it for
+ * the slate, and neither did the one whose bare buzzer runs until they stop it.
+ * Nor did the one who held the reveal twenty-five seconds so a quiz note could be
  * read aloud mean it for a reflex race, which has nothing to read.
  */
 export type HostPreferences = {

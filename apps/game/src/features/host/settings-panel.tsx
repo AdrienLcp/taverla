@@ -1,6 +1,6 @@
 import type React from 'react'
 
-import type { GameSettings } from '@taverla/protocol/game'
+import type { QuizSettings } from '@taverla/protocol/game'
 import {
   type QuestionCategory,
   type QuestionLanguage,
@@ -51,39 +51,14 @@ const COUNTDOWN_DURATIONS_MS = [3_000, 5_000, 10_000] as const
  */
 const QUESTION_DURATIONS_MS = [15_000, 30_000, 60_000] as const
 
-/**
- * Longer again at both ends, and for two different jobs: inventing something
- * believable takes longer than recalling an answer, and reading five lies off a
- * screen before choosing takes longer than reading four candidates.
- */
-const WRITING_DURATIONS_MS = [30_000, 60_000, 90_000, NO_LIMIT] as const
-
-/**
- * The floor is 20 rather than the 10 the other ladders start at: this one is
- * spent reading a board that holds up to ten lines somebody else wrote, and a
- * choice offered where nobody could have finished reading is a trap.
- */
-const VOTING_DURATIONS_MS = [20_000, 30_000, 60_000, NO_LIMIT] as const
-
 const ANSWER_WINDOWS_MS = [5_000, 10_000, 20_000, NO_LIMIT] as const
 const ROUND_COUNT_OPTIONS = [...ROUND_COUNTS, NO_LIMIT] as const
 
-/**
- * Both games that draw from the bank, in the one type their shared controls
- * need. It is an `Extract` rather than a new protocol type because what they
- * share is three settings, not a shape worth naming on the wire.
- */
-type BankDrawingGame = Extract<GameSettings, { kind: 'lefake' | 'quiz' }>
-
-/**
- * The three questions the bank asks whoever is drawing from it. Extracted the
- * moment a second game asked them, and not before — the quiz carried them
- * inline while it was the only one.
- */
+/** The three questions the bank asks whoever is drawing from it. */
 const QuestionBankSettings: React.FC<{
-  game: BankDrawingGame
+  game: QuizSettings
   isDisabled: boolean
-  onChange: (game: BankDrawingGame) => void
+  onChange: (game: QuizSettings) => void
 }> = ({ game, isDisabled, onChange }) => {
   const translate = useTranslate()
 
@@ -370,7 +345,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         />
       )}
 
-      {(game?.kind === 'lefake' || game?.kind === 'quiz') && (
+      {game?.kind === 'quiz' && (
         <QuestionBankSettings
           game={game}
           isDisabled={isDisabled}
@@ -429,45 +404,6 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           options={QUESTION_DURATIONS_MS}
           value={game.roundDurationMs}
         />
-      )}
-
-      {game?.kind === 'lefake' && (
-        <>
-          <NumberChoice
-            className='write-duration'
-            isDisabled={isHeldByRound}
-            label={translate('lefake.write.duration')}
-            onChange={(chosen) => {
-              onChange({
-                ...settings,
-                game: {
-                  ...game,
-                  roundDurationMs: chosen === NO_LIMIT ? null : chosen
-                }
-              })
-            }}
-            optionLabel={openEndedSecondsLabel}
-            options={WRITING_DURATIONS_MS}
-            value={game.roundDurationMs ?? NO_LIMIT}
-          />
-          <NumberChoice
-            className='vote-duration'
-            isDisabled={isHeldByRound}
-            label={translate('lefake.vote.duration')}
-            onChange={(chosen) => {
-              onChange({
-                ...settings,
-                game: {
-                  ...game,
-                  voteDurationMs: chosen === NO_LIMIT ? null : chosen
-                }
-              })
-            }}
-            optionLabel={openEndedSecondsLabel}
-            options={VOTING_DURATIONS_MS}
-            value={game.voteDurationMs ?? NO_LIMIT}
-          />
-        </>
       )}
 
       {/*

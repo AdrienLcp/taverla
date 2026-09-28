@@ -46,13 +46,8 @@ export const PAGE_HEADS: Record<Locale, Record<IndexedPage, PageHead>> = {
     },
     home: {
       description:
-        'One screen runs the game, everyone joins by scanning a QR code or typing the room code — no install, no account. Blind test, Buzzer, Quiz, Le Fake and Reflex.',
+        'One screen runs the game, everyone joins by scanning a QR code or typing the room code — no install, no account. Blind test, Buzzer, Quiz, Reflex and Slate.',
       title: 'Taverla — party games for one screen and the whole room'
-    },
-    lefake: {
-      description:
-        'Everyone writes a lie about a real question. The screen shows them all beside the truth and the room votes — being believed pays as well as being right.',
-      title: 'Le Fake — Taverla'
     },
     quiz: {
       description:
@@ -88,13 +83,8 @@ export const PAGE_HEADS: Record<Locale, Record<IndexedPage, PageHead>> = {
     },
     home: {
       description:
-        'Un écran fait tourner le jeu, tout le monde rejoint en scannant un QR code ou en tapant le code de la salle — sans installation, sans compte. Blind test, Buzzer, Quiz, Le Fake et Réflexe.',
+        'Un écran fait tourner le jeu, tout le monde rejoint en scannant un QR code ou en tapant le code de la salle — sans installation, sans compte. Blind test, Buzzer, Quiz, Réflexe et L’Ardoise.',
       title: 'Taverla — des jeux de soirée pour un écran et toute la salle'
-    },
-    lefake: {
-      description:
-        "Chacun écrit un mensonge sur une vraie question. L'écran les affiche tous à côté de la vérité et la salle vote — être cru rapporte autant qu'avoir raison.",
-      title: 'Le Fake — Taverla'
     },
     quiz: {
       description:

@@ -21,7 +21,6 @@ describe('isGameInPlay', () => {
     expect(isGameInPlay('countdown')).toBe(true)
     expect(isGameInPlay('playing')).toBe(true)
     expect(isGameInPlay('buzzed')).toBe(true)
-    expect(isGameInPlay('voting')).toBe(true)
     expect(isGameInPlay('revealed')).toBe(true)
   })
 

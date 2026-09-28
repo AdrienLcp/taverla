@@ -84,11 +84,10 @@ export const questionLanguages = ['en', 'fr'] as const
 export const questionLanguageSchema = z.enum(questionLanguages)
 
 /**
- * What any game drawing from the bank has to choose. It is shared because two
- * games draw from it and ask it the same three things — not because a game's
- * settings are expected to have a common shape. The quiz and Le Fake each keep
- * their own durations beside these, and a third game that wants the bank on
- * different terms takes what it needs rather than widening this.
+ * What any game drawing from the bank has to choose — the three things the bank
+ * is asked, not a shape a game's settings are expected to share. The quiz keeps
+ * its own duration beside these, and a game that wants the bank on different
+ * terms takes what it needs rather than widening this.
  */
 export const questionDrawSettingsSchema = z.object({
   /**

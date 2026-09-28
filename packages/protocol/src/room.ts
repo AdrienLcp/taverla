@@ -8,7 +8,6 @@ import {
   roundIdSchema,
   serverTimeSchema
 } from './identifiers'
-import { candidateSchema, revealedCandidateSchema } from './lefake'
 import {
   hostQuestionSchema,
   questionPromptSchema,
@@ -27,28 +26,11 @@ import { hostTrackSchema, trackIdentitySchema } from './track'
 
 export const MAX_PLAYERS_PER_ROOM = 24
 
-/**
- * `voting` is the one member no buzz-first game reaches, and the first phase
- * added since the shelf began. The catalogue's rule was that these names stay
- * fused until a game needs one they cannot carry, and the submit-then-vote shape
- * needs exactly one: its writing phase *is* `playing` — everyone submitting
- * against a deadline, which is what a simultaneous round already means — while
- * "the board is up and the room is choosing" is neither that nor `buzzed`.
- *
- * Adding a name is not the split the catalogue warns against. It is what keeps
- * the enum shared: every shell check can still spell what it is checking, and
- * the next submit-then-vote game reuses this for nothing.
- *
- * The slate once added `correcting` on the same argument and gave it back: its
- * items close one at a time while the rest are still being written, so writing
- * and marking share `playing` and each item carries its own state instead.
- */
 export const roomPhases = [
   'lobby',
   'countdown',
   'playing',
   'buzzed',
-  'voting',
   'revealed',
   'finished'
 ] as const
@@ -238,39 +220,6 @@ export const roundContentSchema = z.discriminatedUnion('kind', [
    */
   z.object({ kind: z.literal('buzzer') }),
   z.object({
-    /**
-     * `null` while the room is still writing, and the shuffled board the moment
-     * the vote opens. Shuffled once, so its order says nothing about who wrote
-     * what or which line came from the bank.
-     */
-    board: z.array(candidateSchema).nullable(),
-    kind: z.literal('lefake'),
-    prompt: questionPromptSchema,
-    /** Everything withheld until the tally: authorship, the votes, the truth. */
-    revealedBoard: z.array(revealedCandidateSchema).nullable(),
-    /**
-     * Who has voted, and who has written — never what for, and never what. They
-     * are this game's own rather than the shell's `answers`, which is projected
-     * from the attempts a simultaneous round grades: a lie is graded by nobody,
-     * so it has no attempt to be counted in.
-     *
-     * Both are the tension of watching a screen fill up with names, and neither
-     * leaks: a name says somebody is done, not what they said.
-     */
-    votedPlayerIds: z.array(playerIdSchema),
-    writtenPlayerIds: z.array(playerIdSchema),
-    /**
-     * Which line on the board is the reader's own, so their screen can show it
-     * back and refuse to let them vote for it. Scoped to the reader the way
-     * `yourVerdict` is, and inside the game's arm because no other game has the
-     * concept — `null` for the host, and for a player who wrote nothing.
-     *
-     * It survives a reload, which is the point: a device that locked its screen
-     * comes back knowing which one it must not pick.
-     */
-    yourCandidateId: z.string().nullable()
-  }),
-  z.object({
     /** Choice mode only, and shuffled per round. */
     choices: z.array(z.string()),
     kind: z.literal('quiz'),
@@ -435,21 +384,12 @@ export const hostRoundContentSchema = z.discriminatedUnion('kind', [
     track: hostTrackSchema.nullable()
   }),
   z.object({ kind: z.literal('buzzer') }),
-  /**
-   * Nothing, and it is the second arm to end up that way for a reason of its
-   * own. The bare buzzer has nothing because the room owns the question; Le Fake
-   * has nothing because the host screen is *in* the room — anything it renders
-   * during the writing is read by everyone sitting in front of it, so the answer
-   * must not be there. The truth reaches that screen the way it reaches a
-   * player: unlabelled on the board, then marked at the tally.
-   */
-  z.object({ kind: z.literal('lefake') }),
   z.object({
     kind: z.literal('quiz'),
     question: hostQuestionSchema.nullable()
   }),
   /**
-   * The third arm with nothing, and the only one where nothing is not a
+   * The second arm with nothing, and the only one where nothing is not a
    * withholding: there is no answer anywhere in this game. The console reads
    * `flipsAt` off the round like every player does, because it is flipping the
    * same screen at the same moment.
@@ -528,7 +468,6 @@ export const wallRoundContentSchema = z.discriminatedUnion('kind', [
     kind: z.literal('blindtest')
   }),
   z.object({ kind: z.literal('buzzer') }),
-  z.object({ kind: z.literal('lefake') }),
   z.object({ kind: z.literal('quiz') }),
   z.object({ kind: z.literal('reflex') }),
   z.object({

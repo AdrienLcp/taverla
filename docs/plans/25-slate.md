@@ -45,7 +45,7 @@ second is the first with N growing, so **one mode does both**:
   snapshot, so a locked screen or a reload loses nothing.
 - **A player's answers go to that player and nobody else until collection** —
   not to other players, **not to the host screen either**, because the host
-  screen is the wall (Le Fake's argument). During writing, the console shows
+  screen is the wall. During writing, the console shows
   each player's progress only: *Julie 12/26*.
 - **An optional answer key, host-only.** The host may note what each number
   is ("12 — Barbecue") in setup or during writing. It is part of the host arm
@@ -58,8 +58,7 @@ second is the first with N growing, so **one mode does both**:
   collection, the shell's rule applies unchanged.
 - **The whole sheet is one round.** Phases: `playing` is the writing, then a
   new phase name, **`correcting`**, holds an item cursor, then `revealed` and
-  the final board. Adding a name, not splitting the enum — the rule Le Fake
-  applied to `voting`.
+  the final board. Adding a name, not splitting the enum.
 - **Correction groups identical answers.** For the current item, answers are
   grouped after the shared normalisation (case, accents, whitespace, leading
   article), so one tap validates every *paprika*. A blank is shown and cannot
@@ -267,9 +266,8 @@ reload opens on the first empty number.
 accepted without it, so the player's pen is not taken away by the host's Wi-Fi;
 `correcting` joins the phases that do show the pause.
 
-**`correcting` wears the `buzzed` field.** `voting` falls back to the lobby's
-orange, and on the slate that read as the game having ended between *collect*
-and the first number. Marking is the same act as judging a buzz, so it takes
+**`correcting` wears the `buzzed` field.** Falling back to the lobby's orange
+read as the game having ended between *collect* and the first number. Marking is the same act as judging a buzz, so it takes
 that pair; `correcting → revealed` is the 57-degree step `buzzed → revealed`
 already is.
 

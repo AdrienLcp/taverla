@@ -99,15 +99,13 @@
 
       // The reveal and the standings, which is the one moment the room asks
       // what the round did to the game — and stacked, the one stage that could
-      // not deliver it. A room of ten writing ten lies measured 2 377px against
-      // a 1080px screen: the board alone filled it, and the standings, the half
-      // the room had actually asked for, sat eight hundred pixels below the
+      // not deliver it: the reveal alone filled a 1080px screen, and the
+      // standings, the half the room had actually asked for, sat below the
       // fold on a screen nobody walks over to scroll.
       //
-      // So above the split they sit side by side, in the geometry the room read
-      // the vote in one press earlier: the wide column is the board, because
-      // that is the half the room is looking at. The standings take the place
-      // the question had.
+      // So above the split they sit side by side: the wide column is the
+      // reveal, because that is the half the room is looking at. The standings
+      // take the place the question had.
       &.revealed
         // Hoisted out of the split below, because the row the hold bar spends
         // is its own height plus one of these gaps.
@@ -151,10 +149,9 @@
           .reveal-panel
             --outcome-budget: var(--stacked-budget)
 
-          // The furniture before the type, the same bargain the lie board
-          // struck above: 12px of fixed padding is 24px a formula can never
-          // reach, where an `em` makes a row one multiple of its own size and
-          // the divisor mean something. The score goes with it or it is the
+          // The furniture before the type: 12px of fixed padding is 24px a
+          // formula can never reach, where an `em` makes a row one multiple of
+          // its own size and the divisor mean something. The score goes with it or it is the
           // tallest thing in a row it was supposed to be sized by.
           .scoreboard li
             font-size: clamp(0.9rem, calc(var(--stacked-budget) / var(--standings-rows, 8) / 2.8), 1.25rem)
@@ -166,12 +163,12 @@
             .score
               font-size: 1.5em
 
-        // Both halves divide the screen rather than a box of their own, which
-        // the vote's board does too once it is stacked. A container query is
-        // the more precise instrument and it was the first answer here, but
-        // `container-type: size` also *contains* the overflow: on a 768px
-        // laptop, where ten lines do not fit at any legible size, the board ran
-        // out of its box and the launch button was drawn straight through it.
+        // Both halves divide the screen rather than a box of their own. A
+        // container query is the more precise instrument and it was the first
+        // answer here, but `container-type: size` also *contains* the overflow:
+        // on a 768px laptop, where ten lines do not fit at any legible size, the
+        // board ran out of its box and the launch button was drawn straight
+        // through it.
         // Dividing the viewport keeps the worst case a scroll — which is what
         // this screen does below the split already — instead of a collision.
         //
@@ -194,40 +191,8 @@
             grid-column: 1 / -1
             width: 100%
 
-          // No subtraction beyond that, unlike the vote's board, because nothing
-          // in a row is a fixed size here: the gaps and the padding are in `em`
-          // too, so a row is one multiple of its type and the divisor is that
-          // multiple. Ten rows of fixed 12px furniture came to 240px of a 548px
-          // board — more than the type it was framing, and the part a formula
-          // that only shrinks type can never reach.
-          //
-          // The divisor is bigger than the vote's because every line here is a
-          // lie *and* who wrote it, where the vote's board was a lie alone. A
-          // table of five still clamps to the full size; only a room that wrote
-          // ten reads them smaller, which is the room with more to read.
-          .revealed-lie-board
-            font-size: clamp(0.8rem, calc((100dvh - 31rem - var(--hold-bar)) / var(--board-lines, 5) / 4), 1.75rem)
-            gap: 0.7em
-
-            li
-              gap: 0.3em
-              padding-bottom: 0.7em
-
-            .line
-              font-size: 1em
-
-            .framing
-              font-size: 0.45em
-
-            .authors,
-            .fooled
-              font-size: 0.62em
-
-            .truth .line
-              font-size: 2.4em
-
-          // The same divisor for the other three games, whose reveal is an
-          // answer and then one row per player who spoke. Two columns brought
+          // One divisor for a reveal that is an answer and then one row per
+          // player who spoke. Two columns brought
           // the quiz from 2 080px to 1 157px at 1080, which is a screen that
           // still loses its last row — the arithmetic is what closes it.
           //
@@ -319,49 +284,6 @@
         align-items: center
         justify-content: center
 
-      // The one stage where the payload is a list rather than a single object,
-      // and the room has to read all of it at once. Splitting it puts the board
-      // against the full height of the field instead of against what is left
-      // under the question — which is the difference between ten lines fitting
-      // and six of them fitting.
-      //
-      // The wider column is the board, where the lobby's wider column is the
-      // invitation: both times it is the half the room is looking at.
-      &.voting
-        display: grid
-        gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr)
-
-        @include layout.narrow
-          grid-template-columns: minmax(0, 1fr)
-
-        // Above the split the stage owns the height, so the row can be bounded
-        // by it and the board's box becomes a measurement of the room it has
-        // rather than the sum of its own type. That is what lets the lines be
-        // sized from the box instead of from a guess at how much chrome sits
-        // around it.
-        //
-        // `container-type: size` belongs to that case alone: it makes the box
-        // ignore its contents, which is only safe while something else is
-        // giving it a height. Stacked, the row is sized by what is in it, the
-        // page scrolls anyway, and the fallback below governs.
-        @include layout.wide
-          grid-template-rows: minmax(0, 1fr)
-
-          .lie-board
-            container-type: size
-
-            li
-              font-size: clamp(1.25rem, calc(100cqh / var(--board-lines, 5) - 2rem), 4.5rem)
-
-        .asking
-          display: flex
-          flex-direction: column
-          gap: var(--space-l)
-          justify-content: center
-          min-width: 0
-
-
     // The host's own column, beside the invitation the room is reading: what
     // they are about to play, and who has turned up for it.
     .host-side
@@ -434,36 +356,6 @@
     // question does: the prompt is already a step below billboard.
     .asked-question + .now
       font-size: clamp(1.25rem, 3vmin, 2rem)
-
-    // The board is what the room reads and argues over, so it is sized for the
-    // far side of a table rather than for the screen it happens to be on.
-    //
-    // Its type is the one size in the product that is not fixed. `--board-lines`
-    // carries how many candidates there are and the space is divided by it, so
-    // a table of five keeps the full billboard and only a room that wrote ten
-    // reads them smaller — which is the room with more to read. The subtraction
-    // in each formula is a row's own furniture: the rule and the gap under it,
-    // plus slack for a couple of candidates too long to sit on one line.
-    //
-    // Stacked, there is no box to measure, so this divides the viewport instead
-    // and the page takes whatever is left over.
-    .lie-board
-      display: flex
-      flex-direction: column
-      gap: var(--space-s)
-      justify-content: center
-      list-style: none
-      min-height: 0
-      width: 100%
-
-      li
-        @include typography.billboard
-
-        border-bottom: 1px solid var(--rule)
-        color: var(--ink)
-        font-size: clamp(1.25rem, calc(60vmin / var(--board-lines, 5) - 1.5rem), 4.5rem)
-        padding-bottom: var(--space-s)
-        text-wrap: balance
 
     .playing .scoreboard
       width: min(900px, 100%)

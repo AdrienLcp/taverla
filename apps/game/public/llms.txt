@@ -18,8 +18,6 @@ it plays the audio and shows the score.
   quiz on paper or the lesson; the screen only settles who was first.
 - **Quiz** — question banks bundled with the server, in French and English, by
   subject.
-- **Le Fake** — everyone writes a lie about a real question, the screen shows
-  them all beside the truth, and the room votes.
 - **Reflex** — the screen changes colour and the first in wins. Going before
   it changes costs the round.
 
@@ -34,7 +32,6 @@ language: it negotiates from the browser's and redirects, which is what
 - [Blind test](https://taverla.onrender.com/en/blindtest)
 - [Buzzer](https://taverla.onrender.com/en/buzzer)
 - [Quiz](https://taverla.onrender.com/en/quiz)
-- [Le Fake](https://taverla.onrender.com/en/lefake)
 - [Reflex](https://taverla.onrender.com/en/reflex)
 - [Credits](https://taverla.onrender.com/en/credits)
 

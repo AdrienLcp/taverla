@@ -145,9 +145,7 @@ server keeps open. `use-room-socket.ts` sets `refused` and closes the socket
 itself the moment `fatal` arrives.
 
 **An error outlives its moment**, so the client forgets it on a phase change.
-The socket keeps its last error until it reconnects — Le Fake's
-`lie_is_the_answer`, refused while the room was writing, was still on screen
-under the vote a minute later. `useForgetErrorOnPhaseChange` clears it when
-`view.phase` turns over, and both connection hooks call it. A form asking
-whether a refusal is *its own* checks that it has acted this round; before that,
-any error is somebody else's news.
+The socket keeps its last error until it reconnects — a reflex race's
+`false_start`, refused before the screen flipped, would still be on screen over
+the reveal that followed. `useForgetErrorOnPhaseChange` clears it when
+`view.phase` turns over, and both connection hooks call it.

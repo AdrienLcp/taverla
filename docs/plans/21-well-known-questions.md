@@ -144,12 +144,11 @@ third multiplicative filter on `eligible` after categories and adult content.
 
 **The switch is on `QuestionDrawSettings`, not on the quiz's arm alone.** The
 plan said "the arm on the quiz's `settings.game`", written before the console
-was read: `BankDrawingGame` is one component rendering the language, the
-subjects and the adult switch for the quiz *and* Le Fake, and its strings
-already live under `quiz.*`. Both games draw from the same bank and the rating
-is the bank's, so `wellKnownOnly` sits beside `allowsAdultContent` and Le Fake
-gets it for the same reason it already gets the categories. The `quiz.*` prefix
-the plan asked for is where those strings live anyway.
+was read: `QuestionBankSettings` is one component rendering the language, the
+subjects and the adult switch, and its strings already live under `quiz.*`. The
+rating is the bank's, so `wellKnownOnly` sits beside `allowsAdultContent` for
+any game drawing from it. The `quiz.*` prefix the plan asked for is where those
+strings live anyway.
 
 **No `stacks-below()` threshold, and `STRIPS_EXPECTED` stays at 16.** The plan's
 file list expected both, from before the switch-not-a-picker decision. A

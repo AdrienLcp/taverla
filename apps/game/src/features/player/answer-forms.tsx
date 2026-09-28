@@ -57,11 +57,9 @@ const candidatesIn = (round: RoundView): Candidate[] => {
         subtitle: choice.artist,
         title: whatTheRoomNames(choice)
       }))
-    // None of these serves candidates to pick from here: two have no content
-    // at all, Le Fake's board is written by the room and voted on by its own
-    // form, and the slate is a sheet rather than a pick.
+    // None of these serves candidates to pick from: two have no content at
+    // all, and the slate is a sheet rather than a pick.
     case 'buzzer':
-    case 'lefake':
     case 'reflex':
     case 'slate':
       return []

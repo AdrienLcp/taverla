@@ -5,11 +5,8 @@ import type { RoomPhase } from '@taverla/protocol/room'
 /**
  * A refusal is about the moment it happened, and the socket keeps its last one
  * until it reconnects — which is far too long a life for a message about
- * something the room has stopped doing.
- *
- * Le Fake is what made it matter. Its round has two collection phases, so "that
- * is the real answer", refused while the room was writing, would still be on
- * screen under the board a minute later, where it reads as a refused vote.
+ * something the room has stopped doing: left on screen into the next phase, it
+ * reads as a refusal of whatever that phase is asking.
  */
 export const useForgetErrorOnPhaseChange = ({
   clearError,

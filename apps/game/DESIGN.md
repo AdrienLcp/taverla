@@ -46,8 +46,7 @@ the token default so a first paint before React mounts is already correct.
 **Every colour a component uses is `--field`, `--ink`, `--ink-muted`, `--rule`,
 `--edge`, `--cut` or `--cut-ink`.** No component holds a hex.
 
-**One phase borrows a pair rather than owning one.** `voting` falls back to the
-lobby's. And one moment borrows a pair without being a phase: the slate writes
+**One moment borrows a pair without being a phase.** The slate writes
 and marks inside `playing`, so `useMarkingField` stamps `data-marking` on the
 root and `[data-phase='playing'][data-marking]` wears `buzzed`'s pair — the
 host judging, the room waiting. The console stamps it while it shows the wall;

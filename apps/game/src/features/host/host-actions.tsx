@@ -40,11 +40,6 @@ export const HostActions: React.FC<HostActionsProps> = (props) => {
       return <LobbyActions {...props} />
     case 'countdown':
     case 'playing':
-    // The board is up and the room is choosing. It is the same control as the
-    // phase before it — `host.reveal` over this game closes whichever half of
-    // the round is open rather than abandoning it — and without it a vote with
-    // no clock would have nothing to end it.
-    case 'voting':
       // The slate writes and marks in one phase, and `host.reveal` is refused
       // while an item is still open — its answers have not been on the wall.
       if (props.view.round?.content.kind === 'slate') {

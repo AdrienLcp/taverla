@@ -10,16 +10,15 @@ party — they hold it up.
 
 Three symptoms, one cause.
 
-**A latecomer blocks every early close.** `everyoneIsDone` and `everyoneHasActed`
-both build their expected set from `[...room.players.values()]` filtered by
-`isStillExpected` alone. A player with no attempt makes `.every()` false, so a
+**A latecomer blocks every early close.** `everyoneIsDone` builds its expected
+set from `[...room.players.values()]` filtered by `isStillExpected` alone. A player with no attempt makes `.every()` false, so a
 round that would have closed the moment the last player answered now runs to its
 full deadline. The table sits there. This is the one that is felt.
 
-**A latecomer can act in the round in play.** Buzz, typed answer, pick, lie and
-vote are each guarded on phase, round id and mode — never on whether the player
-was there when the round opened. Someone who joined during `voting` can score
-the two points for finding the truth in a round whose lies they never saw.
+**A latecomer can act in the round in play.** Buzz, typed answer and pick are
+each guarded on phase, round id and mode — never on whether the player was there
+when the round opened. Someone who joined in the last second of a clip can score
+in a round they never heard.
 
 **A latecomer keeps a dead buzzer round alive.** `resumeOrReveal` passes
 `candidates: [...room.players.values()]` to `hasEligibleBuzzer`, so a round where
@@ -38,11 +37,6 @@ It is `ReadonlySet<PlayerId> | null` rather than a set that starts empty, and th
 round*, where the truth is that the roster is not decided yet. Every reader gets
 the right answer for free — during the countdown nobody has arrived late,
 because there is nothing to be late for.
-
-One stamp covers the whole round, Le Fake's `voting` included: the people who
-may vote are the people who were there for the writing. A player who was present
-and wrote nothing still votes — that stays true, and it is the sentence in
-`everyoneHasActed`'s docstring that this stage must not break.
 
 The rule goes in `packages/core/src/round/round-roster.ts`, as two exports
 rather than the one this plan first drew:
@@ -78,9 +72,9 @@ established: the answer to "what is this round to **you**".
 | File | Change |
 |---|---|
 | `apps/server/src/domain/room/room.ts` | `openedWithPlayerIds` on `Round` |
-| `apps/server/src/domain/round/round-service.ts` | stamp in `startRoundClock`; `everyoneIsDone`, `everyoneHasActed`, `resumeOrReveal` read it; refuse in `registerBuzz`, `registerAnswer`, `registerLie`, `registerVote` |
+| `apps/server/src/domain/round/round-service.ts` | stamp in `startRoundClock`; `everyoneIsDone`, `resumeOrReveal` read it; refuse in `registerBuzz`, `registerAnswer` |
 | `packages/core/src/round/round-roster.ts` | the rule, with its test |
-| `apps/server/src/__tests__/mid-game-join.test.ts` | the four scenarios below, at socket level |
+| `apps/server/src/__tests__/mid-game-join.test.ts` | the scenarios below, at socket level |
 | `packages/protocol/src/error-code.ts` | `joined_mid_round` |
 | `packages/protocol/src/room.ts` | `joinedAfterStart` on the player round view |
 | `apps/server/src/domain/room/room-view.ts` | project it |
@@ -113,8 +107,6 @@ established: the answer to "what is this round to **you**".
 - Four players in a typed round, a fifth joins mid-clip: the round still closes
   the moment the original four are done, and the fifth's screen says they are in
   from the next round rather than offering a field.
-- Le Fake, a player joins during `voting`: no vote from them, the phase closes
-  on the writers, and they score nothing that round.
 - A buzzer round where every seated player is locked out reveals, even with a
   phone that joined after the lockouts.
 - The next round opens and the latecomer plays it like anybody else.

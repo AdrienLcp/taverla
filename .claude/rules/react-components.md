@@ -58,17 +58,15 @@ from ever being written about it.
 `TextField` inside a react-aria `Form` sets the input's **native** custom
 validity from `isInvalid`. A controlled error that stays on screen therefore
 leaves `form.checkValidity()` false and `requestSubmit()` a silent no-op: the
-button looks alive, the press does nothing, and nothing is logged. Le Fake found
-it — writing the real answer is refused on purpose and the player is meant to
-try again, which they could not.
+button looks alive, the press does nothing, and nothing is logged. A taken
+nickname is refused on purpose and the player is meant to try another, which
+they could not.
 
-**Clear the error as the value changes**, which is what a form should do anyway:
+**Tie the refusal to the value it was given for**, so any other draft drops it,
+which is what a form should do anyway:
 
 ```tsx
-onChange={(next) => {
-  setLie(next)
-  setSentForRoundId(null)   // drops `isInvalid`, and the field submits again
-}}
+const isRefused = draft.trim() === refusedNickname   // another name submits again
 ```
 
 It shows one way only: read `input.validationMessage` in a browser after a

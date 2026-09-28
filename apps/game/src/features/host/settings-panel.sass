@@ -15,7 +15,7 @@
     // difficulty goes the other way. Rounded up to the next `rem` for headroom,
     // the way the game picker's 476 became 30.
     //
-    //   answer mode 536 · difficulty 520 · subjects 952 · write and vote 304
+    //   answer mode 536 · difficulty 520 · subjects 952
     //   rounds 276 · auto-advance and answer window 296
     //
     // All of them measured with the labels at their **ceiling**: a label is
@@ -31,10 +31,6 @@
 
     .question-subjects
       @include strip.stacks-below(60rem)
-
-    .write-duration,
-    .vote-duration
-      @include strip.stacks-below(20rem)
 
     .answer-window
       @include strip.stacks-below(19rem)

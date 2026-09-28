@@ -7,7 +7,6 @@ import {
   roundIdSchema,
   sessionIdSchema
 } from './identifiers'
-import { lieSchema } from './lefake'
 import { roomSettingsSchema } from './room'
 import { singleVerdictSchema, verdictSchema } from './scoring'
 import {
@@ -117,36 +116,13 @@ export const answerMessageSchema = z.object({
 })
 
 /**
- * A game's own namespace rather than `player.*`, because these two are the only
- * client frames on the shelf that no other game could receive: every other
- * message names something the shell does — buzz, answer, judge — where writing a
- * lie and voting on a board exist nowhere else.
- *
- * Neither carries a timestamp, and here that is not even about forgery: nothing
- * in this round is ranked by speed. Being quick to invent something is not the
- * game, and a bonus for voting first would pay a room for not reading the board.
- */
-export const submitLieMessageSchema = z.object({
-  lie: lieSchema,
-  roundId: roundIdSchema,
-  type: z.literal('lefake.submit')
-})
-
-/** `candidateId` rather than an index: the board is shuffled, and a vote must survive it. */
-export const voteMessageSchema = z.object({
-  candidateId: z.string().min(1),
-  roundId: roundIdSchema,
-  type: z.literal('lefake.vote')
-})
-
-/**
  * One line of the slate, saved on its own as it is written — an upsert, and an
  * empty `answer` takes the line back. One line per frame rather than the whole
  * sheet, so two screens of one player cannot overwrite each other's other
  * lines, and a frame lost to a blink costs one answer rather than all of them.
  *
- * In the game's namespace for Le Fake's reason: nothing else on the shelf
- * writes a sheet.
+ * In the game's namespace rather than `player.*`, because nothing else on the
+ * shelf writes a sheet: every `player.*` frame names something the shell does.
  */
 export const writeSlateLineMessageSchema = z.object({
   answer: slateAnswerSchema,
@@ -328,8 +304,6 @@ export const playerClientMessageSchema = z.discriminatedUnion('type', [
   renameMessageSchema,
   buzzMessageSchema,
   answerMessageSchema,
-  submitLieMessageSchema,
-  voteMessageSchema,
   writeSlateLineMessageSchema
 ])
 
@@ -347,8 +321,6 @@ export const clientMessageSchema = z.discriminatedUnion('type', [
   renameMessageSchema,
   buzzMessageSchema,
   answerMessageSchema,
-  submitLieMessageSchema,
-  voteMessageSchema,
   writeSlateLineMessageSchema,
   updateSettingsMessageSchema,
   startRoundMessageSchema,
@@ -403,7 +375,7 @@ export const HOST_ONLY_MESSAGE_TYPES = new Set<ClientMessageType>([
 
 /**
  * The frames that move a round along from the floor, partitioned out for the
- * one gate that has to refuse all four at once: a room whose console is gone is
+ * one gate that has to refuse both at once: a room whose console is gone is
  * frozen, and a freeze the floor can still fill in is not one. The seat frames
  * — `player.leave`, `player.rename` — are deliberately not here, because
  * leaving a room nobody is running is exactly what a player should still be
@@ -415,7 +387,5 @@ export const HOST_ONLY_MESSAGE_TYPES = new Set<ClientMessageType>([
  */
 export const FLOOR_MESSAGE_TYPES = new Set<ClientMessageType>([
   'player.buzz',
-  'player.answer',
-  'lefake.submit',
-  'lefake.vote'
+  'player.answer'
 ])

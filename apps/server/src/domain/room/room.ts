@@ -11,8 +11,6 @@ import type { RoomPhase, RoomSettings } from '@taverla/protocol/room'
 import type { Award, Verdict } from '@taverla/protocol/scoring'
 import type { HostTrack, TrackIdentity } from '@taverla/protocol/track'
 
-import type { BoardEntry, WrittenLie } from '@taverla/core/lefake/lie-board'
-import type { Vote } from '@taverla/core/lefake/tally'
 import type { RoundRoster } from '@taverla/core/round/round-roster'
 import type { SheetItem } from '@taverla/core/slate/sheet-marking'
 
@@ -163,18 +161,6 @@ export type Round = {
       }
     | { kind: 'buzzer' }
     | {
-        /**
-         * Assembled the moment the writing closes, and `null` for as long as it
-         * is open — which is also what tells the two phases apart in every
-         * projection: a board is a room that has stopped writing.
-         */
-        board: BoardEntry[] | null
-        kind: 'lefake'
-        lies: WrittenLie[]
-        question: HostQuestion
-        votes: Vote[]
-      }
-    | {
         choices: string[]
         correctChoiceIndex: number | null
         kind: 'quiz'
@@ -217,9 +203,7 @@ export type Round = {
   lockedOutPlayerIds: Set<PlayerId>
   /**
    * Who the round is played by, and `null` until its clip starts — see
-   * `@taverla/core/round/round-roster`. One stamp covers the whole round, Le
-   * Fake's vote included: the people who may vote are the people who were there
-   * for the writing.
+   * `@taverla/core/round/round-roster`. One stamp covers the whole round.
    *
    * The slate stamps each item as it closes instead, and this only once none
    * is left open: its sheet has no clock and no race, so a friend arriving

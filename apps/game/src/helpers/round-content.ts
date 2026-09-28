@@ -21,11 +21,6 @@ export const quizContent = (
 ): Extract<RoundContent, { kind: 'quiz' }> | null =>
   round?.content.kind === 'quiz' ? round.content : null
 
-export const lefakeContent = (
-  round: RoundView | null | undefined
-): Extract<RoundContent, { kind: 'lefake' }> | null =>
-  round?.content.kind === 'lefake' ? round.content : null
-
 export const reflexContent = (
   round: RoundView | null | undefined
 ): Extract<RoundContent, { kind: 'reflex' }> | null =>
@@ -47,11 +42,6 @@ export const quizHostContent = (
 ): Extract<HostRoundContent, { kind: 'quiz' }> | null =>
   view?.currentContent?.kind === 'quiz' ? view.currentContent : null
 
-export const lefakeHostContent = (
-  view: HostRoomView | null | undefined
-): Extract<HostRoundContent, { kind: 'lefake' }> | null =>
-  view?.currentContent?.kind === 'lefake' ? view.currentContent : null
-
 export const slateHostContent = (
   view: HostRoomView | null | undefined
 ): Extract<HostRoundContent, { kind: 'slate' }> | null =>
@@ -70,13 +60,11 @@ export const holdsTheAnswer = (content: HostRoundContent): boolean => {
   switch (content.kind) {
     case 'blindtest':
       return content.track !== null
-    // None of the three hands this screen an answer a seat could take away: the
-    // bare buzzer's question is the room's, Le Fake's is judged by the server —
-    // and never rendered here at all, since everyone can see the host screen —
-    // and the reflex race has no answer anywhere, only who was first. The
-    // slate's console is never seated, so its sheets never leave it.
+    // Neither hands this screen an answer a seat could take away: the bare
+    // buzzer's question is the room's, and the reflex race has no answer
+    // anywhere, only who was first. The slate's console is never seated, so
+    // its sheets never leave it.
     case 'buzzer':
-    case 'lefake':
     case 'reflex':
     case 'slate':
       return true

@@ -108,12 +108,9 @@ export const hostQuestionOf = ({
  * runs: a category whose questions have all been played is not in `eligible`
  * any more, so it stops being offered.
  *
- * `isUsable` is how a game asks for a shape of question rather than a subject,
- * and **both games that draw from the bank pass one**. A `choiceOnly` row wants
- * its own decoys on screen, which is true of a quiz in `choice` mode and of
- * nothing else: typed mode has a text field, and Le Fake shows the prompt with
- * no candidates at all. Le Fake adds a rule of its own on top — see
- * `canBeLiedAbout`.
+ * `isUsable` is how a game asks for a shape of question rather than a subject.
+ * A `choiceOnly` row wants its own decoys on screen, which is true of a quiz in
+ * `choice` mode and of nothing else: typed mode has a text field.
  */
 export const drawQuestion = ({
   isUsable,

@@ -1,25 +1,20 @@
 import type { RoomCode, RoundId } from '@taverla/protocol/identifiers'
 
-import { canBeLiedAbout } from '@taverla/core/lefake/answer-eligibility'
-
 import type { Room } from '@/domain/room/room'
 import { releaseAbandonedSeats } from '@/domain/room/room-service'
 import { allRooms, findRoom } from '@/domain/room/room-store'
 import {
   blindtestContent,
   closeRound,
-  closeWriting,
   finishGame,
   holdRoundClock,
   isFinalRound,
-  lefakeContent,
   openRound,
   quizContent,
   reflexContent,
   releaseBuzz,
   remainingRoundMs,
   resumeRoundClock,
-  settleLieBoard,
   startRoundClock,
   timeOutBuzz
 } from '@/domain/round/round-service'
@@ -103,17 +98,13 @@ export const beginRound = async (
   // The bank is bundled, so the draw is synchronous and cannot fail on someone
   // else's web server being down. Running out of unplayed questions can still
   // happen, and it is the room's own doing rather than an outage.
-  if (game.kind === 'quiz' || game.kind === 'lefake') {
+  if (game.kind === 'quiz') {
     // A `choiceOnly` row is a question only while its own three decoys are on
-    // screen, which is a quiz in `choice` mode and nothing else — Le Fake shows
-    // the prompt with no candidates at all.
-    const showsItsCandidates =
-      game.kind === 'quiz' && room.settings.mode.kind === 'choice'
+    // screen, which is a quiz in `choice` mode and nothing else.
+    const showsItsCandidates = room.settings.mode.kind === 'choice'
 
     const question = drawQuestion({
-      isUsable: (row) =>
-        (showsItsCandidates || !row.choiceOnly) &&
-        (game.kind !== 'lefake' || canBeLiedAbout(row)),
+      isUsable: (row) => showsItsCandidates || !row.choiceOnly,
       playedIds: room.playedContentIds,
       settings: game
     })
@@ -138,10 +129,7 @@ export const beginRound = async (
     const asked = hostQuestionOf(question)
 
     const round = openRound({
-      content:
-        game.kind === 'lefake'
-          ? lefakeContent(asked)
-          : quizContent({ question: asked, room }),
+      content: quizContent({ question: asked, room }),
       now: Date.now(),
       room
     })
@@ -221,15 +209,6 @@ export const armRoundTimeout = (room: Room): void => {
     delayMs: remaining,
     kind: 'round',
     run: () => {
-      // Le Fake spends the same clock twice, so what running out means depends
-      // on which of its two open phases the room is in — and the writing running
-      // out is not the end of the round but the board going up.
-      if (room.round?.content.kind === 'lefake') {
-        closeLefakePhase(room)
-
-        return
-      }
-
       // The round running out ends it the same way the last answer does,
       // scoring included: whoever did not answer simply did not.
       closeRound(room, Date.now())
@@ -238,29 +217,6 @@ export const armRoundTimeout = (room: Room): void => {
       armAutoAdvance(room)
     }
   })
-}
-
-/**
- * Ends whichever of Le Fake's two open phases the room is in — the writing by
- * putting the board up, the vote by paying it out. Called from the clock and
- * from the last player to act alike, because a table that all finished early
- * should not sit watching a deadline it has nothing left to spend.
- */
-export const closeLefakePhase = (room: Room): void => {
-  const now = Date.now()
-
-  if (room.phase === 'voting') {
-    settleLieBoard(room, now)
-    abandonRound(room.code)
-    broadcastRoom(room)
-    armAutoAdvance(room)
-
-    return
-  }
-
-  closeWriting(room, now)
-  broadcastRoom(room)
-  armRoundTimeout(room)
 }
 
 /**
@@ -381,7 +337,7 @@ export const resumeRoundForHost = (room: Room): void => {
     return
   }
 
-  if (room.phase === 'playing' || room.phase === 'voting') {
+  if (room.phase === 'playing') {
     armRoundTimeout(room)
 
     return

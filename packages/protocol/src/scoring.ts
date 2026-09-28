@@ -61,28 +61,10 @@ export const POINTS_FOR_A_CLAIM = 1
  * changeable between two rounds, so both rates do land on one board; and 4
  * against 1 inside one choice round reads as rounding rather than as a rule.
  *
- * Le Fake pays no such bonus, and it is the only game on the shelf that does
- * not: voting quickly is voting without reading the board, which is the half of
- * that round worth having. The bare buzzer pays none either, and cannot — it
- * has no round clock at all, because the host brings the content and eight
+ * The bare buzzer pays no such bonus, and cannot — it has no round clock at all, because the host brings the content and eight
  * seconds into a charade is not eight seconds into a riddle.
  */
 export const MOST_A_SPEED_BONUS_PAYS = 3
-
-/**
- * Picking the truth out of a board of lies. Twice what a right pick is worth in
- * every other game, because the wrong answers here were written by people in the
- * room trying to catch you rather than authored to be plausible.
- */
-export const POINTS_FOR_FINDING_THE_TRUTH = 2
-
-/**
- * Per player who voted for your lie — and the first thing on the shelf that pays
- * for a wrong answer. It is deliberately not capped: a lie the whole table fell
- * for is the round everyone remembers, and shaving it would be scoring against
- * the point of the game.
- */
-export const POINTS_PER_PLAYER_FOOLED = 1
 
 /**
  * What the host granted, in the vocabulary of the game they were judging — the

@@ -71,8 +71,6 @@ the whole room reads, because it pairs nothing without the token beside it.
 | `player.rename` | any seat | `nickname` |
 | `player.buzz` | player | `roundId` |
 | `player.answer` | player | `roundId`, `answer` — `{kind:'choice', choiceIndex}` or `{kind:'typed', guess}` |
-| `lefake.submit` | player | `roundId`, `lie` |
-| `lefake.vote` | player | `roundId`, `candidateId` |
 | `slate.write` | player | `roundId`, `itemIndex`, `answer` — an upsert of one line; `''` clears it |
 | `host.updateSettings` | host | `settings` |
 | `host.startRound` | host | `slateKeys` (optional) — the slate's prepared answer key, read by that game alone |
@@ -185,7 +183,7 @@ Shared by all three:
 ```jsonc
 {
   "code": "K3M9",
-  "phase": "playing",              // lobby | countdown | playing | buzzed | voting | revealed | finished
+  "phase": "playing",              // lobby | countdown | playing | buzzed | revealed | finished
   "players": [{ "id": "…", "nickname": "Alice", "score": 2, "isConnected": true }],
   "settings": { "roundCount": 10,          // null → until the host ends it
                 "countdownMs": 3000,
@@ -332,9 +330,7 @@ starts — the countdown is still *get ready*, so a player who lands inside it i
 in the round — and waits for those players and nobody else before closing a
 phase. A latecomer keeps its seat and plays from the next round; everything it
 could send in this one is refused with `joined_mid_round`, which is the backstop
-behind the screen rather than the mechanism. One stamp covers the whole round,
-Le Fake's vote included: the people who may vote are the people who were there
-for the writing.
+behind the screen rather than the mechanism. One stamp covers the whole round.
 
 `HostTrack` reaches the wire in exactly two places: the host view, and
 `round.content.revealedTrack` once the round is over — and the reveal carries no

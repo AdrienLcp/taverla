@@ -7,7 +7,6 @@ import { trackDifficultySchema, trackSourceSchema } from './track'
 export const gameKinds = [
   'blindtest',
   'buzzer',
-  'lefake',
   'quiz',
   'reflex',
   'slate'
@@ -33,7 +32,6 @@ export const shelvedGames = [
   'quiz',
   'slate',
   'reflex',
-  'lefake',
   'buzzer'
 ] as const satisfies readonly GameKind[]
 
@@ -69,23 +67,6 @@ export const gameSettingsSchema = z.discriminatedUnion('kind', [
     locksOutOnMiss: z.boolean()
   }),
   questionDrawSettingsSchema.extend({
-    kind: z.literal('lefake'),
-    /**
-     * How long the room has to write a lie, which is what `playing` means in
-     * this game — the one phase every other game spends answering. It is longer
-     * than a question stays open because inventing something believable is a
-     * slower act than recognising the truth.
-     *
-     * `null` is the host's own word, the same as `roundCount` and the buzzer's
-     * `answerWindowMs`: both of this game's phases close the moment everybody
-     * has acted, so the clock is what covers the table that is one player short
-     * of finishing — not what ends the phase in the ordinary case.
-     */
-    roundDurationMs: z.number().int().min(15_000).max(180_000).nullable(),
-    /** How long the board stays open once everyone has written; `null` for the host's word. */
-    voteDurationMs: z.number().int().min(10_000).max(120_000).nullable()
-  }),
-  questionDrawSettingsSchema.extend({
     kind: z.literal('quiz'),
     /** How long a question stays open before the round times out. */
     roundDurationMs: z.number().int().min(5_000).max(120_000)
@@ -114,7 +95,6 @@ export type ShelvedGame = z.infer<typeof shelvedGameSchema>
 export type GameSettings = z.infer<typeof gameSettingsSchema>
 export type BlindtestSettings = Extract<GameSettings, { kind: 'blindtest' }>
 export type BuzzerSettings = Extract<GameSettings, { kind: 'buzzer' }>
-export type LefakeSettings = Extract<GameSettings, { kind: 'lefake' }>
 export type QuizSettings = Extract<GameSettings, { kind: 'quiz' }>
 export type ReflexSettings = Extract<GameSettings, { kind: 'reflex' }>
 export type SlateSettings = Extract<GameSettings, { kind: 'slate' }>
@@ -142,14 +122,6 @@ export const roundDurationMsOf = (game: GameSettings | null): number | null =>
     : game.roundDurationMs
 
 /**
- * How long the board stays open, for the one game that has a second open phase.
- * `null` everywhere else, which is what lets the round clock be re-armed from a
- * single accessor rather than the voting phase growing a clock of its own.
- */
-export const voteDurationMsOf = (game: GameSettings | null): number | null =>
-  game?.kind === 'lefake' ? game.voteDurationMs : null
-
-/**
  * Whether a wrong answer sits the player out for the rest of the round. Only the
  * bare buzzer gets a say: every other game's round is a clip or a question that
  * runs out on its own, so a table that could buzz forever would spend it in
@@ -168,16 +140,6 @@ export const DEFAULT_BLINDTEST_SETTINGS: BlindtestSettings = {
 export const DEFAULT_BUZZER_SETTINGS: BuzzerSettings = {
   kind: 'buzzer',
   locksOutOnMiss: true
-}
-
-export const DEFAULT_LEFAKE_SETTINGS: LefakeSettings = {
-  allowsAdultContent: false,
-  categories: [],
-  kind: 'lefake',
-  language: 'fr',
-  roundDurationMs: 60_000,
-  voteDurationMs: 30_000,
-  wellKnownOnly: false
 }
 
 export const DEFAULT_QUIZ_SETTINGS: QuizSettings = {
@@ -201,7 +163,6 @@ export const DEFAULT_SLATE_SETTINGS: SlateSettings = {
 export const DEFAULT_GAME_SETTINGS: Record<GameKind, GameSettings> = {
   blindtest: DEFAULT_BLINDTEST_SETTINGS,
   buzzer: DEFAULT_BUZZER_SETTINGS,
-  lefake: DEFAULT_LEFAKE_SETTINGS,
   quiz: DEFAULT_QUIZ_SETTINGS,
   reflex: DEFAULT_REFLEX_SETTINGS,
   slate: DEFAULT_SLATE_SETTINGS

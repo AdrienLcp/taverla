@@ -6,9 +6,9 @@ QR code, everyone else plays on whatever screen they have to hand, and the first
 to buzz names the track. **Buzzer** is the same unforgeable race for the floor
 with no content at all — the host brings the charade, the quiz on paper or the
 lesson. **Quiz** serves its own, two question banks bundled with the server in
-French and English. **Le Fake** is the first where a wrong answer scores:
-everyone writes a lie about a real question, the screen shows them all beside
-the truth, and the room votes.
+French and English. **Reflex** is a race against a screen about to change
+colour, and **Slate** is a private answer sheet on every screen that the host
+marks on the wall, one item at a time.
 
 A phone is the common case, not the contract: the room code is displayed to be
 read aloud and typed, so a laptop in the same room joins the same way. Nothing
@@ -16,8 +16,8 @@ user-facing may assume the device.
 
 Two names, two scopes, and the distinction is load-bearing. The product owns
 `@taverla/*`, the `taverla:*` storage keys and the repository name. A game owns
-its own translation prefix — `blindtest.*`, `buzzer.*`, `quiz.*`, `lefake.*` —
-and nothing else. A string the next game would show unchanged is the shell's.
+its own translation prefix — `blindtest.*`, `buzzer.*`, `quiz.*`, `reflex.*`,
+`slate.*` — and nothing else. A string the next game would show unchanged is the shell's.
 
 ## Tech stack
 
@@ -137,16 +137,13 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   its arm of `settings.game` and `round.content`, and narrows the answer mode
 - **Round** — one track, one question, a screen about to change colour, or
   nothing at all.
-  `lobby → countdown → playing → buzzed → voting → revealed → finished`.
-  `roundCount` is nullable, and `null` means until the host ends it. `voting`
-  is Le Fake's alone; every other game goes from `playing` straight to a
-  reveal — the slate writes and marks inside `playing`, each item carrying its
-  own `open | closed | marked` state — and the reflex race is the only one that
-  never passes through `buzzed` at all.
-  A
-  round **stamps who it opened on** when its clip starts, and waits for those
-  players and nobody else — one stamp for the whole round, Le Fake's vote
-  included. The slate stamps at **collection** instead: a sheet has no clock and
+  `lobby → countdown → playing → buzzed → revealed → finished`.
+  `roundCount` is nullable, and `null` means until the host ends it. Every game
+  goes from `playing` straight to a reveal — the slate writes and marks inside
+  `playing`, each item carrying its own `open | closed | marked` state — and the
+  reflex race is the only one that never passes through `buzzed` at all.
+  A round **stamps who it opened on** when its clip starts, and waits for those
+  players and nobody else — one stamp for the whole round. The slate stamps at **collection** instead: a sheet has no clock and
   no race, so a latecomer is owed one. A screen that arrives after keeps its seat, is refused everything it
   could send with `joined_mid_round`, and plays from the next round
 - **Answer mode** — `typed` (one field, the default), `choice` (four candidates)
@@ -258,7 +255,7 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
 
 ## The blind test is the first game, not the product
 
-Four games share the room, the QR code and every screen, and the rule that got
+Five games share the room, the QR code and every screen, and the rule that got
 them there has not changed: **do not weld a seam shut, and do not invent a
 shared shape before there is a second case to measure it against.** **Read
 [`docs/game-catalogue.md`](../docs/game-catalogue.md) before generalising

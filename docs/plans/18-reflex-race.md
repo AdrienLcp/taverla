@@ -92,7 +92,7 @@ key builders at `translation.ts:99–109`, which is what forces `reflex.name`,
 | `settings-panel.tsx:297–412` | no controls at all |
 | `reveal-panel.tsx:28–89`, `player-round.tsx:358–386` | bare scoreline |
 | `player-round.tsx:155–215` | the player gets the generic `<Buzzer>` |
-| `verdict-panel.tsx:120–138` | non-exhaustive **today** — it is already missing `lefake` |
+| `verdict-panel.tsx:120–138` | non-exhaustive **today** |
 | `game.ts:113/127`, `core/scoring/verdict.ts:22` | `locksOutOnMissIn` → `true`, `playsAudioIn` → `false`, `verdictKindFor` → `'single'` — all three happen to be right here |
 | `shelvedGames` | invisible on the shelf, the picker and `/:game` — **add it last** |
 
@@ -106,8 +106,8 @@ are also where a missing default fails first. Write
 false-start floor is a `packages/core` rule with a test of its own, broken on
 purpose once.
 
-**No e2e.** Nothing in `e2e/` enumerates games, and Le Fake did not get a journey
-either. Add one only if the flow turns out to be new.
+**No e2e.** Nothing in `e2e/` enumerates games. Add one only if the flow turns
+out to be new.
 
 ## What session A settled
 
@@ -116,8 +116,7 @@ either. Add one only if the flow turns out to be new.
   with them. So `Award` is untouched, and the shell gained nothing for one game.
 - **The presses live in the game's own arm**, not in `round.answers`. `answers`
   is projected from the attempts a graded round accumulates, and a press is
-  graded by nobody. Le Fake had already made the same move with
-  `votedPlayerIds`.
+  graded by nobody.
 - **A false start is `lockedOutPlayerIds` and nothing else.** In this game the
   lockout has exactly one cause, so the reveal can read the two lists as *who
   reacted* and *who jumped*. `false_start` is its own error code, deliberately

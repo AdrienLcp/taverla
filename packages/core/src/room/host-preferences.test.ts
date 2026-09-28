@@ -137,7 +137,7 @@ describe('rememberedSetupFor', () => {
       settings: onTheQuiz
     })
 
-    expect(rememberedSetupFor({ game: 'lefake', preferences })).toBeNull()
+    expect(rememberedSetupFor({ game: 'slate', preferences })).toBeNull()
   })
 
   // This is read back out of the browser's own storage, so a key and the arm

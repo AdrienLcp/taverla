@@ -22,16 +22,32 @@ const VOLUME_KEY = 'taverla:volume'
  * from drifting: whatever the room grows that no game answers is remembered
  * without an edit.
  */
-const hostPreferencesSchema = z.object({
-  games: z.partialRecord(
-    gameKindSchema,
-    z.object({
-      autoAdvanceMs: roomSettingsSchema.shape.autoAdvanceMs,
-      game: gameSettingsSchema,
-      mode: modeSettingsSchema,
-      roundCount: roomSettingsSchema.shape.roundCount
+const gameSetupSchema = z.object({
+  autoAdvanceMs: roomSettingsSchema.shape.autoAdvanceMs,
+  game: gameSettingsSchema,
+  mode: modeSettingsSchema,
+  roundCount: roomSettingsSchema.shape.roundCount
+})
+
+/**
+ * Entry by entry, so one game this build no longer serves — or one whose
+ * settings changed shape — costs that game's memory and not the host's whole
+ * setup.
+ */
+const usableGameSetups = (
+  stored: Record<string, unknown>
+): HostPreferences['games'] =>
+  Object.fromEntries(
+    Object.entries(stored).flatMap(([key, value]) => {
+      const game = gameKindSchema.safeParse(key)
+      const setup = gameSetupSchema.safeParse(value)
+
+      return game.success && setup.success ? [[game.data, setup.data]] : []
     })
-  ),
+  )
+
+const hostPreferencesSchema = z.object({
+  games: z.record(z.string(), z.unknown()).transform(usableGameSetups),
   room: roomSettingsSchema.omit({
     autoAdvanceMs: true,
     game: true,

@@ -476,14 +476,7 @@ unmounted by then and observes nothing — which is how the outcome was found to
 belong on the page. Read the slow player, never only the fast one: the fast one
 passes either way.
 
-## Reaching Le Fake's vote board costs one launch and a wait
-
-Nobody has to write anything. The lie window closes on its own and the round
-goes to `voting` with zero submissions — the board draws the truth beside the
-bank's own decoys, four rows of it, and the screen is fully formed. Three seats
-were in the room and not one of them typed. So the vote screen is the cheapest
-of Le Fake's phases to reach, not the most expensive, and the lie-writing
-plumbing below is only needed when the *lies* are the subject.
+## Seats driven from raw sockets
 
 **A raw socket's snapshot arrives on the join and on each change, and never on
 request.** A listener attached after the launch sees nothing until the room next
@@ -493,27 +486,17 @@ that starts the round. Attaching afterwards and waiting reports an empty log,
 which reads as a socket that was never seated rather than a room that simply did
 not change.
 
-**It is cheap to reach and short to hold.** The window closes on its own with
-nobody voting, so a sweep spread over two tool calls reads the reveal on the
-second and reports it as the vote. Reach `voting` and measure inside **one**
-`browser_run_code_unsafe`. The lie window is the same shape and closes the
-instant the last seat has written — and a lie longer than `LIE_MAX_LENGTH` (80)
-is refused in silence, so eight sockets and one refusal leaves the room waiting
-out a timer with *8 ont écrit* as the only witness.
-
-**A full board needs the lies written, and the round id carrying them is the
-trap.** `lefake.submit` takes a `roundId`, and a log of frames scanned backwards
-for `phase === 'playing'` answers with the *previous* round's frame the instant
-it is asked — the new one has not arrived yet. Clear the log before sending the
-frame that advances the round, or all eight lies are refused as stale and the
-board draws the bank's four candidates as though nobody had written.
-
 **The player's phase is in neither the DOM nor the fiber.** `main.player-page`
 carries a static `playing` class that is a variant rather than a phase — it
 reads the same in a lobby — and a walk from `#root[__reactContainer…].current`
 came back with no `child` to follow. What answers is the raw socket: every
-`room.updated` frame carries `view.phase` and `view.round.id`, so the eight
-sockets opened for the seats are also the phase clock for the whole pass.
+`room.updated` frame carries `view.phase` and `view.round.id`, so the sockets
+opened for the seats are also the phase clock for the whole pass.
+
+**Clear a socket's log before sending the frame that advances the round.** A
+frame carries a `roundId`, and a log scanned backwards for `phase === 'playing'`
+answers with the *previous* round's frame the instant it is asked — the new one
+has not arrived yet — so everything sent on it is refused as stale.
 
 ## What a pass covers
 

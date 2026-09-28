@@ -43,18 +43,15 @@ of this shape is close to free.
 
 **2. Submit-then-vote.** Every player types something, the screen reveals the
 answers, everyone votes. Needs a collection phase with a deadline, a reveal that
-does not leak authorship, and a vote tally. **This was the biggest reusable thing
-missing, and stage 16 built it** — six of the games left below still want it,
-which is most of what remains behind one engine that now exists.
+does not leak authorship, and a vote tally. **This is the biggest reusable thing
+missing** — six of the games below want it, which is most of what remains
+behind one engine that does not exist yet.
 
-What Le Fake paid for, and what a second game of this shape inherits: the
-`voting` phase, a collection that closes on the last player or on a deadline, a
-board assembled from what the room wrote with duplicates merged, and a reveal
-that withholds authorship until the tally. What it did **not** generalise, on
-purpose: the board lives in `round.content`'s `lefake` arm and the tally in
-`@taverla/core/lefake/`. Generalising before there are two cases is the
-anti-pattern this file names three times — the second game is what earns the
-shared shape, and it is the one that will show which half was Le Fake's alone.
+The first game of this shape builds its board and tally inside its own arm of
+`round.content` and its own directory of `@taverla/core`, not as a shared
+engine. Generalising before there are two cases is the anti-pattern this file
+names three times — the second game is what earns the shared shape, and it is
+the one that shows which half was the first game's alone.
 
 **3. Hidden role.** Each player gets a private payload, then discussion, then a
 vote. Needs per-player private state (the role-scoped views are half of it) and
@@ -76,10 +73,9 @@ team on the player model and a turn owner.
 | **Quiz / trivia** | Buzz-first | — | **shipped** ([12](plans/12-trivia.md), [14](plans/14-question-languages.md)) |
 | **Lyrics blackout** — the line is missing, sing it | Buzz-first | Same as the blind test, different reveal | a session |
 | **Reflex race** — first to press when the screen flips | Buzz-first | It needed one thing after all: a fair stimulus | **shipped** ([stage 18](plans/18-reflex-race.md)) |
-| **Le Fake** (Fibbage) — write a fake answer, fool the others | Submit-then-vote | — | **shipped** ([stage 16](plans/16-le-fake.md)) |
 | **Petit Bac** — a letter, six categories, type fast | Submit-then-vote | Scoring by uniqueness | a session |
 | **Just One** — everyone writes one clue, duplicates cancel | Submit-then-vote | A clue-collision pass | a session |
-| **Qui a écrit ça ?** — answer a prompt, then guess the author | Submit-then-vote | Authorship survives the reveal, where Le Fake buries it | a session |
+| **Qui a écrit ça ?** — answer a prompt, then guess the author | Submit-then-vote | Authorship survives the reveal | a session |
 | **Le curseur** (Wavelength) — a spectrum, a secret target, one clue | Submit-then-vote | A shared slider; the target is hidden from all but one | two sessions |
 | **Undercover** — same secret word for everyone but one | Hidden role | Per-player payloads, a talk phase, a vote | two sessions |
 | **Loup-garou** — the full night/day machine | Hidden role | Phase machine, timers, a narrator screen | the biggest on this list |
@@ -89,9 +85,9 @@ team on the player model and a turn owner.
 | **Time's Up** — three rounds, same cards, less and less speech | Team relay | Teams, turn owner, per-turn timer | two sessions |
 | **Bingo de soirée** — a grid of things that will happen tonight | Submit-then-vote | Almost nothing; grids and presses | an evening |
 
-Le Fake was the one that unlocked the most, and it shipped. Six games of that
-shape are left and each is now a session rather than two plus an engine, which
-is the whole return on having built it once.
+Submit-then-vote is the shape that unlocks the most: six games share it. Their
+appetites assume the engine exists, so the first of them also pays for it, and
+every one after is a session rather than two plus an engine.
 
 **Reflex race was costed as the cheapest, and the estimate was wrong in an
 instructive way.** "Almost nothing; it *is* the buzz" was true of everything
@@ -283,8 +279,7 @@ them: `settings.game` and `round.content` are discriminated on `kind`, and the
 compiler did walk through the change in an afternoon, exactly as this paragraph
 predicted it would once there were two cases.
 
-**`RoomPhase` stays fused, and Le Fake is what proved that rule rather than
-breaking it.** `lobby → countdown → playing → buzzed → voting → revealed →
+**`RoomPhase` stays fused.** `lobby → countdown → playing → buzzed → revealed →
 finished` is the blind test's life cycle wearing the room's name, and it stays
 whole because a phase carries **no field at all** — it is a name. `settings.game`,
 `settings.mode`, `round.content` and `Verdict` each split because a field
@@ -292,17 +287,16 @@ belonged to one arm and sat on all of them. Splitting a name buys nothing of the
 sort, and costs every check in the shell the ability to spell what it is
 checking.
 
-The rule was to split it the day a game needs a phase these names cannot carry,
-and that day arrived as an *addition* instead: the submit-then-vote shape needed
-**one** new name, `voting`, and got it. Not two — its writing phase *is*
-`playing`, because "everyone submitting against a deadline" is what a
-simultaneous round already means, and `answers` already carries the names
-filling the screen. Adding a member keeps the enum shared and hands the next
-submit-then-vote game its phase for nothing. A drawing game's "everyone is
-drawing at once" is the same test again, and still has no equivalent here.
+The rule is to split it the day a game needs a phase these names cannot carry,
+and that day is likelier to arrive as an *addition*: a submit-then-vote game
+needs **one** new name, for the room choosing from a board. Not two — its
+writing phase *is* `playing`, because "everyone submitting against a deadline"
+is what a simultaneous round already means. Adding a member keeps the enum
+shared. A drawing game's "everyone is drawing at once" is the same test again,
+and still has no equivalent here.
 
-The slate added a second name on the same argument, `correcting`, and gave it
-back a stage later. Marking one item while the rest are still being written
+The slate added a name on that argument, `correcting`, and gave it back a stage
+later. Marking one item while the rest are still being written
 means writing and marking overlap, and a phase is the room's, not an item's: so
 the slate lives in `playing` and each item carries `open | closed | marked` on
 its own arm of `round.content`. A phase name earns its place when the *whole
@@ -310,8 +304,8 @@ room* changes what it is doing; a game whose parts move separately carries the
 state on the parts.
 
 **Message names are blind-test verbs.** `player.buzz`, `host.judge`,
-`host.reveal`. When a second game lands, its messages take its own namespace
-(`fake.submit`, `fake.vote`) and the shell keeps `host.startRound` /
+`host.reveal`. A frame no other game could receive takes its game's own
+namespace (`slate.write`) and the shell keeps `host.startRound` /
 `host.endGame`. `HOST_ONLY_MESSAGE_TYPES` partitions by prefix already, so the
 guard survives the split.
 
@@ -337,7 +331,7 @@ chosen and the lobby's picker is where the table decides, which is what
 game. See `docs/plans/13-room-first.md`.
 
 **i18n is namespaced by game.** A prefix per game — `blindtest.*`, `buzzer.*`,
-`quiz.*`, `lefake.*` — and `join.*`, `host.*`, `player.*`, `round.*`, `buzz.*`,
+`quiz.*`, `reflex.*`, `slate.*` — and `join.*`, `host.*`, `player.*`, `round.*`, `buzz.*`,
 `error.*`, `connection.*`, `menu.*` and `preferences.*` for the shell. A new game
 adds its own prefix and touches nothing else. The test itself — *would the second
 game display this string unchanged?* — is in

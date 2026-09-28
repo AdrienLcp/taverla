@@ -7,7 +7,7 @@ import { useI18n } from '@/presentation/i18n/i18n-provider'
  * The tab, after an in-app navigation. The served document already carries the
  * right title — that is the half a crawler and a link unfurl read, and it is
  * written at build time — but a client-side navigation replaces no head at all,
- * so without this a screen that walked from the home page to Le Fake keeps the
+ * so without this a screen that walked from the home page to the quiz keeps the
  * first title it was served for the life of the tab.
  *
  * Every screen owes one. A room and the not-found page are served by the SPA

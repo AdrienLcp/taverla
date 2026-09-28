@@ -189,7 +189,6 @@ export const FR_DICTIONARY = defineDictionary({
       unreachable:
         'On n’arrive pas à joindre la taverne. Réessaie dans un instant.'
     },
-    cannot_vote_for_own_lie: 'Celle-là est la tienne. Choisis-en une autre.',
     false_start: 'Trop tôt. Attends que ça change.',
     host_already_connected: 'Quelqu’un tient déjà cette table.',
     host_away: 'L’aubergiste a décroché. La tournée attend son retour.',
@@ -199,7 +198,6 @@ export const FR_DICTIONARY = defineDictionary({
     internal_error: 'Ça a cassé de notre côté. Réessaie.',
     invalid_message: 'On n’a pas compris. Réessaie.',
     joined_mid_round: 'Tu joues à partir de la prochaine tournée.',
-    lie_is_the_answer: 'C’est la vraie réponse. Invente autre chose.',
     music_source_unavailable:
       'La musique ne répond plus. Réessaie dans un instant.',
     nickname_taken: 'Ce pseudo est déjà pris.',
@@ -366,54 +364,6 @@ export const FR_DICTIONARY = defineDictionary({
             other: 'Un code de table fait {?} caractères.'
           }
         }
-      })
-    }
-  },
-  lefake: {
-    home: {
-      description:
-        'Une question dont personne ne voit venir la réponse. Chacun en invente une assez crédible pour berner les autres, elles passent toutes à côté de la vraie, et la tablée vote. Tu marques en trouvant la vraie, et encore à chaque copain qui mord.'
-    },
-    name: 'Le Fake',
-    reveal: {
-      fooled: defineTranslation('{count:plural}', {
-        plural: {
-          count: {
-            one: '{?} personne a mordu',
-            other: '{?} personnes ont mordu'
-          }
-        }
-      }),
-      fooledNames: 'Ça a mordu\u00a0: {names}',
-      found: defineTranslation('{count:plural}', {
-        plural: {
-          count: { one: '{?} l’a trouvée', other: '{?} l’ont trouvée' }
-        }
-      }),
-      foundBy: 'Trouvée par {names}',
-      nobody: 'Personne n’a écrit celle-là',
-      title: 'La vérité, c’était'
-    },
-    scoring:
-      'Chacun écrit une fausse réponse, puis la tablée vote sur le tout. 2 points pour trouver la vraie, et 1 de plus par joueur qui tombe dans la tienne.',
-    tagline: 'Écris un mensonge. Fais mordre la table.',
-    vote: {
-      done: 'Ton vote est parti. On attend les autres…',
-      duration: 'Temps pour voter',
-      title: 'Laquelle est vraie ?',
-      waiting: defineTranslation('{count:plural}', {
-        plural: { count: { one: '{?} a voté', other: '{?} ont voté' } }
-      }),
-      yours: 'La tienne'
-    },
-    write: {
-      description:
-        'Quelque chose qu’ils croiront. La vraie réponse est refusée.',
-      duration: 'Temps pour écrire',
-      label: 'Ton mensonge',
-      sent: 'Ton mensonge est parti. On attend les autres…',
-      waiting: defineTranslation('{count:plural}', {
-        plural: { count: { one: '{?} a écrit', other: '{?} ont écrit' } }
       })
     }
   },

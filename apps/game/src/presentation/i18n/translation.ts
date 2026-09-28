@@ -75,7 +75,6 @@ export const scoringKey = ({
   game: GameKind
 }): BuiltKey<
   | 'buzzer.scoring'
-  | 'lefake.scoring'
   | 'reflex.scoring'
   | 'slate.scoring'
   | `blindtest.scoring.${AnswerMode}`
@@ -91,8 +90,6 @@ export const scoringKey = ({
         : `blindtest.scoring.${answerMode}`
     case 'buzzer':
       return 'buzzer.scoring'
-    case 'lefake':
-      return 'lefake.scoring'
     case 'quiz':
       return `quiz.scoring.${answerMode}`
     case 'reflex':

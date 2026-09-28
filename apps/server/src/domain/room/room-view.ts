@@ -124,10 +124,6 @@ const toHostContent = ({
     }
   }
 
-  if (content.kind === 'lefake') {
-    return { kind: 'lefake' }
-  }
-
   if (content.kind === 'reflex') {
     return { kind: 'reflex' }
   }
@@ -301,33 +297,6 @@ const toContentView = ({
 
   if (content.kind === 'buzzer') {
     return { kind: 'buzzer' }
-  }
-
-  if (content.kind === 'lefake') {
-    const { category, id, prompt } = content.question
-
-    return {
-      board:
-        content.board?.map((entry) => ({ id: entry.id, text: entry.text })) ??
-        null,
-      kind: 'lefake',
-      prompt: { category, id, prompt },
-      revealedBoard: round.revealed
-        ? (content.board?.map((entry) => ({
-            ...entry,
-            voterIds: content.votes
-              .filter((vote) => vote.candidateId === entry.id)
-              .map((vote) => vote.playerId)
-          })) ?? null)
-        : null,
-      votedPlayerIds: content.votes.map((vote) => vote.playerId),
-      writtenPlayerIds: content.lies.map((lie) => lie.playerId),
-      yourCandidateId:
-        youId === null
-          ? null
-          : (content.board?.find((entry) => entry.authorIds.includes(youId))
-              ?.id ?? null)
-    }
   }
 
   if (content.kind === 'quiz') {

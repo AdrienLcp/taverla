@@ -69,15 +69,6 @@ export const protocolErrorCodes = [
    * make on the screen they are looking at.
    */
   'no_game_chosen',
-  /**
-   * A lie that turned out to be the answer. Refused rather than accepted,
-   * because the truth appearing twice on the board is a vote with no right
-   * answer — and the player has to be told why, or "rejected" reads as a bug in
-   * a game whose whole input is a free-text field.
-   */
-  'lie_is_the_answer',
-  /** Voting for your own lie, which is the one line on the board nobody may pick. */
-  'cannot_vote_for_own_lie',
   'no_content_available',
   'music_source_unavailable',
   'rate_limited',

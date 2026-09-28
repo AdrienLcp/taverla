@@ -2,7 +2,6 @@ import type React from 'react'
 import { useState } from 'react'
 
 import type { ClientMessage } from '@taverla/protocol/client-message'
-import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
 import { roundDurationMsOf } from '@taverla/protocol/game'
 import type { PlayerId, RoomCode } from '@taverla/protocol/identifiers'
 import type {
@@ -23,11 +22,9 @@ import {
   type PlayerAnswer,
   TypedAnswer
 } from '@/features/player/answer-forms'
-import { LieForm, VoteBoard } from '@/features/player/lefake-forms'
 import {
   blindtestHostContent,
   holdsTheAnswer,
-  lefakeContent,
   quizContent
 } from '@/helpers/round-content'
 import { AskedQuestion } from '@/presentation/components/asked-question'
@@ -52,8 +49,6 @@ import { VerdictPanel } from './verdict-panel'
 
 /** What the console can do to the room from its stage. A wall has none of it. */
 export type StageControls = {
-  /** The last refusal, which a seat's Le Fake forms take back their "sent" on. */
-  error: ProtocolErrorCode | null
   /**
    * The answer is behind a press rather than printed, because this console is
    * the room's own screen, taken over while its host was away.
@@ -215,21 +210,6 @@ export const RoomStage: React.FC<RoomStageProps> = ({
         {round.content.kind === 'quiz' && (
           <AskedQuestion prompt={quizContent(round)?.prompt ?? null} />
         )}
-        {/*
-          The prompt *and* a line saying what the room is doing with it: unlike
-          every other game, seeing the question here does not tell you what the
-          screen is waiting for.
-        */}
-        {round.content.kind === 'lefake' && (
-          <>
-            <AskedQuestion prompt={lefakeContent(round)?.prompt ?? null} />
-            <p className='now'>
-              {translate('lefake.write.waiting', {
-                count: lefakeContent(round)?.writtenPlayerIds.length ?? 0
-              })}
-            </p>
-          </>
-        )}
         {(round.content.kind === 'blindtest' ||
           round.content.kind === 'buzzer') && (
           <p className='now'>
@@ -246,31 +226,14 @@ export const RoomStage: React.FC<RoomStageProps> = ({
             elapsedMs={view.roundElapsedMs}
           />
         )}
-        {/*
-          Le Fake is played in choice mode and has no candidates to pick while
-          the room writes: a seat writes its lie here, as a player's screen does.
-        */}
-        {isSeated && view.youId !== null && round.content.kind === 'lefake' && (
-          <LieForm
-            error={controls.error}
+        {isSeated && view.settings.mode.kind === 'choice' && (
+          <ChoiceAnswer
             key={round.id}
-            onSubmitLie={(lie) =>
-              controls.send({ lie, roundId: round.id, type: 'lefake.submit' })
-            }
+            onAnswer={answerWithRound}
             round={round}
             youId={view.youId}
           />
         )}
-        {isSeated &&
-          round.content.kind !== 'lefake' &&
-          view.settings.mode.kind === 'choice' && (
-            <ChoiceAnswer
-              key={round.id}
-              onAnswer={answerWithRound}
-              round={round}
-              youId={view.youId}
-            />
-          )}
         {isSeated && view.settings.mode.kind === 'typed' && (
           <TypedAnswer
             // A seated console is withheld the answer the same way a player
@@ -287,58 +250,6 @@ export const RoomStage: React.FC<RoomStageProps> = ({
         )}
         {clipOffer}
         <Scoreboard players={view.players} />
-      </div>
-    )
-  }
-
-  // The board on the screen the room reads, which is where this game is
-  // actually played: the room reads it, argues about it, and votes on their own
-  // screens.
-  if (view.phase === 'voting' && round != null) {
-    const board = lefakeContent(round)?.board ?? []
-
-    return (
-      <div className='stage voting'>
-        {/*
-          No scoreboard here, unlike every other stage: it is as tall as the
-          room is large, and the board is the one thing everybody has to read at
-          once. The standings are a press away, on the reveal this leads to.
-        */}
-        <div className='asking'>
-          <AskedQuestion prompt={lefakeContent(round)?.prompt ?? null} />
-          {/* A seat's board carries its own tally under it. */}
-          {!isSeated && (
-            <p className='now'>
-              {translate('lefake.vote.waiting', {
-                count: lefakeContent(round)?.votedPlayerIds.length ?? 0
-              })}
-            </p>
-          )}
-        </div>
-        {/*
-          A seat votes on the board itself rather than beside a copy of it: the
-          same lines, pressable, with its own lie shown and refused.
-        */}
-        {isSeated && view.youId !== null ? (
-          <VoteBoard
-            error={controls.error}
-            onVote={(candidateId) =>
-              controls.send({
-                candidateId,
-                roundId: round.id,
-                type: 'lefake.vote'
-              })
-            }
-            round={round}
-            youId={view.youId}
-          />
-        ) : (
-          <ul className='lie-board' style={{ '--board-lines': board.length }}>
-            {board.map((candidate) => (
-              <li key={candidate.id}>{candidate.text}</li>
-            ))}
-          </ul>
-        )}
       </div>
     )
   }

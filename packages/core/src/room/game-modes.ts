@@ -9,15 +9,6 @@ import {
 const BUZZER_ONLY = ['buzzer'] as const satisfies readonly AnswerMode[]
 
 /**
- * Le Fake's round ends in a pick from a shuffled list, which is exactly what
- * `choice` means — so it narrows to that rather than adding a fourth mode for
- * itself. What is new there is the phase *before* the pick, and a phase belongs
- * to the game: the mode says how a round is answered, the game says what ends up
- * on the board.
- */
-const CHOICE_ONLY = ['choice'] as const satisfies readonly AnswerMode[]
-
-/**
  * The slate is written, so it is `typed` — the mode says how a round is
  * answered, and a sheet is answered by typing. What the mode usually brings
  * with it, a server grade and a speed bonus, is the game's to refuse: the host
@@ -57,8 +48,6 @@ export const answerModesFor = (
     case 'buzzer':
     case 'reflex':
       return BUZZER_ONLY
-    case 'lefake':
-      return CHOICE_ONLY
     case 'slate':
       return TYPED_ONLY
   }

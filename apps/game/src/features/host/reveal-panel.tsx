@@ -7,12 +7,10 @@ import { cueOf, whatTheRoomNames } from '@taverla/core/blindtest/typed-answer'
 import { answerFitting } from '@/helpers/answer-fitting'
 import {
   blindtestContent,
-  lefakeContent,
   quizContent,
   reflexContent
 } from '@/helpers/round-content'
 import { ReactionBoard } from '@/presentation/components/reaction-board'
-import { RevealedLieBoard } from '@/presentation/components/revealed-lie-board'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import './reveal-panel.sass'
@@ -32,20 +30,6 @@ export const RevealPanel: React.FC<RevealPanelProps> = ({ players, round }) => {
   const translate = useTranslate()
   const track = blindtestContent(round)?.revealedTrack ?? null
   const question = quizContent(round)?.revealedQuestion ?? null
-  const lieBoard = lefakeContent(round)?.revealedBoard ?? null
-
-  // The board *is* the reveal here, and it already names who scored what off
-  // whom — so `Outcome`'s list of nicknames beside it would say it twice.
-  if (lieBoard !== null) {
-    return (
-      <section className='reveal-panel'>
-        <div className='identity'>
-          <RevealedLieBoard board={lieBoard} players={[...players]} />
-        </div>
-      </section>
-    )
-  }
-
   if (track !== null) {
     return (
       <section className='reveal-panel with-cover'>
