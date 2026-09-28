@@ -44,6 +44,15 @@ const WIDEST_PX = 1_400
  */
 const STRIPS_EXPECTED = 16
 
+/**
+ * The faces are `font-display: swap`, so a page measured the moment it is
+ * visible can still be drawn in the fallback. On a Linux runner that is DejaVu,
+ * wide enough to wrap every strip, and a measure racing the font failed CI
+ * without ever failing on Windows, whose fallback is narrow.
+ */
+const loadEveryFace = () =>
+  Promise.all([...document.fonts].map((face) => face.load())).then(() => {})
+
 type Fault = {
   /** The width of the strip's own layout box, in CSS pixels. */
   at: number
@@ -177,6 +186,7 @@ test('[layout] no strip on the console ever holds rows of two different lengths'
     }, locale)
     await page.reload()
     await expect(games.first()).toBeVisible()
+    await page.evaluate(loadEveryFace)
 
     for (let index = 0; index < gameCount; index++) {
       await games.nth(index).click()

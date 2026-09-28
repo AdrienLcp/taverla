@@ -57,9 +57,9 @@ jobs:
         uses: actions/upload-artifact@v5
         with:
           name: playwright-traces
-          # Root, not `e2e/`: Playwright resolves `outputDir` from the working
-          # directory, not from the config beside the specs.
-          path: test-results
+          # `outputDir` is relative to the config, so the traces are under `e2e/`;
+          # the root this once pointed at uploaded nothing.
+          path: e2e/test-results
           retention-days: 7
 
   # Nothing deploys from the image — Render builds the workspace with its own
