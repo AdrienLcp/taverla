@@ -15,3 +15,6 @@ reworded copy of it.
 Everything around `src/` — this file, `package.json`, `tsconfig.json`,
 `vitest.config.ts` — is Taverla's, and is what makes the copy a workspace
 package under the name it would carry on npm.
+
+Where the library came from, and what it owes to Web Dev Simplified's
+`intl-crash-course`, is in `C:/git/toolkit/packages/i18n/README.md`.
