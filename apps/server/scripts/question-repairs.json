@@ -1410,6 +1410,10 @@
     "drop": true,
     "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
   },
+  "vikidia-figures-de-la-revolution-4": {
+    "drop": true,
+    "why": "it answers Alsace for Cadoudal, who fought the chouannerie in Brittany and marched with the Vendéens printed beside it as a wrong answer"
+  },
   "vikidia-films-disney-5": {
     "drop": true,
     "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
@@ -1644,6 +1648,10 @@
     "drop": true,
     "why": "the row names no work, and the decoy kittens are villains too"
   },
+  "vikidia-la-revolution-et-l-empire-a-travers-les-arts-13": {
+    "answer": "le 19 brumaire",
+    "why": "10 November 1799 is 19 brumaire; the source answers the day the coup began, which was the 9th"
+  },
   "vikidia-langue-neerlandaise-8": {
     "drop": true,
     "why": "a sentence about being a wiki user, which means nothing to a room"
@@ -1781,6 +1789,10 @@
     "drop": true,
     "why": "there are seven Koopalings, which the row prints as a wrong answer"
   },
+  "vikidia-mars-planete-4": {
+    "drop": true,
+    "why": "its decoy says rusted iron covers the planet, which is the answer in other words"
+  },
   "vikidia-marvel-1": {
     "drop": true,
     "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
@@ -1792,6 +1804,14 @@
   "vikidia-marvel-15": {
     "drop": true,
     "why": "\"la série\" names nothing once the row is dealt alone"
+  },
+  "vikidia-metaux-2": {
+    "decoys": [
+      "Depuis le Moyen Âge",
+      "Depuis la Renaissance",
+      "Depuis l'Antiquité"
+    ],
+    "why": "the Neolithic printed as a wrong answer falls inside the Prehistory it answers"
   },
   "vikidia-minecraft-2": {
     "drop": true,

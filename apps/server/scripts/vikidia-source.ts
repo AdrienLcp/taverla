@@ -1,3 +1,7 @@
+import { readFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
 import type { QuestionCategory } from '@taverla/protocol/question'
 
 import { frenchViewsOfTitles, isWellKnownInFrench } from './frwiki-notability'
@@ -35,12 +39,30 @@ const TITLES_PER_REQUEST = 50
 const ARTICLES_CACHE = 'vikidia-articles.json'
 
 const ATTRIBUTION: Attribution = {
-  author: 'Vikidia contributors',
+  author: 'Vikidia contributors, with a fourth candidate added to some rows',
   language: 'fr',
   licence: 'CC BY-SA 3.0',
   source: 'Vikidia',
   url: 'https://fr.vikidia.org/wiki/Vikidia:Quiz'
 }
+
+/**
+ * A fourth candidate for the rows the wiki wrote with three, by row id. The
+ * bank asks for exactly three decoys and a children's quiz often stops at two,
+ * which left 383 rows — a hundred of them science — refused for a shape rather
+ * than for anything wrong with the question. Each was written by hand against
+ * its own row, in the register of the two decoys beside it, and has to be wrong
+ * for that question alone. A `null` is a row with no honest fourth: *Oui* and
+ * *Non* are all there is.
+ *
+ * It is a change to CC BY-SA material, so the attribution says so.
+ */
+const writtenDecoys: Record<string, string | null> = JSON.parse(
+  readFileSync(
+    join(dirname(fileURLToPath(import.meta.url)), 'vikidia-fourth-decoys.json'),
+    'utf8'
+  )
+)
 
 /**
  * What a quiz page is about, for the hundred and eighty that carry a `<quiz>`
@@ -609,6 +631,7 @@ export const ingestVikidia = async (): Promise<IngestedQuestions> => {
   const unrated: Unrated[] = []
   const rejections: string[] = []
   const unmapped: string[] = []
+  const rowIds = new Set<string>()
 
   for (const [title, wikitext] of Object.entries(pages).toSorted()) {
     const blocks = [...wikitext.matchAll(/<quiz>([\s\S]*?)(?:<\/quiz>|$)/giu)]
@@ -626,9 +649,19 @@ export const ingestVikidia = async (): Promise<IngestedQuestions> => {
 
     const slug = slugOf(title)
 
-    for (const [index, row] of blocks
+    for (const [index, parsed] of blocks
       .flatMap(([, block]) => rowsIn(block ?? ''))
       .entries()) {
+      const id = `vikidia-${slug}-${index + 1}`
+      rowIds.add(id)
+      const written = writtenDecoys[id] ?? null
+      const row =
+        written === null || parsed.options.length !== 3
+          ? parsed
+          : {
+              ...parsed,
+              options: [...parsed.options, { isAnswer: false, text: written }]
+            }
       const refusal = refusalOf(row)
 
       if (refusal !== null) {
@@ -658,7 +691,7 @@ export const ingestVikidia = async (): Promise<IngestedQuestions> => {
         category: page.category,
         choiceOnly: false,
         decoys,
-        id: `vikidia-${slug}-${index + 1}`,
+        id,
         isAdult: false,
         language: 'fr',
         note: null,
@@ -666,6 +699,14 @@ export const ingestVikidia = async (): Promise<IngestedQuestions> => {
         subject: page.article ?? subjectOf(title),
         theme: subjectOf(title)
       })
+    }
+  }
+
+  for (const id of Object.keys(writtenDecoys)) {
+    if (!rowIds.has(id)) {
+      console.warn(
+        `  stale written decoy ${id}: no row carries that id any more`
+      )
     }
   }
 

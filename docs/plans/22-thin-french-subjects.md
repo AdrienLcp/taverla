@@ -326,9 +326,12 @@ arts rows moved the miss rate from 4.3% to 5.4%, which is what surfaced it.
 
 ### What is left, and what it would buy
 
-- **The 3-candidate rows.** 401 of them, 101 science. Banking them needs a
-  fourth candidate from somewhere, and nothing in this repo can produce one for
-  *quelle est la température à la surface du soleil*.
+- ~~**The 3-candidate rows.**~~ — **done**, 28 September 2026. Counted again
+  they were 383 (the 401 included rows refused for something else too), and
+  each took a fourth candidate written by hand against its row, in
+  `apps/server/scripts/vikidia-fourth-decoys.json`. Ten stay refused as closed
+  sets — *Oui / Non / On ne sait pas*. 356 reached the bank, science
+  339 → 435, and writing them caught four rows the source had wrong.
 - **MMMLU `FR_FR`**, still unargued: ~1 600 French science rows, MIT, decoys
   shipped, exam register. It is the only remaining depth for the subject.
 - ~~**`frenchAliasesOf` for PolyFact**~~ — **done**, 11 September 2026, and it

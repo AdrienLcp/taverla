@@ -22,7 +22,7 @@
       "url": "https://github.com/amazon-science/mintaka"
     },
     {
-      "author": "Vikidia contributors",
+      "author": "Vikidia contributors, with a fourth candidate added to some rows",
       "language": "fr",
       "licence": "CC BY-SA 3.0",
       "source": "Vikidia",
@@ -117257,6 +117257,24 @@
     },
     {
       "accepted": [],
+      "answer": "Alexis et Mark Siegel",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Cazenove et William",
+        "Garnier et Fléchais",
+        "Arleston et Tarquin"
+      ],
+      "id": "vikidia-5-mondes-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'appellent les auteurs ?",
+      "theme": "5 mondes",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
       "answer": "Ticked tabby",
       "category": "science",
       "choiceOnly": false,
@@ -117288,6 +117306,24 @@
       "language": "fr",
       "note": null,
       "prompt": "Jusqu'à combien peut peser l'abyssin, en moyenne ?",
+      "theme": "Abyssin",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Non, c'est inconnu",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Oui, d'Abyssinie",
+        "Oui, d'Égypte",
+        "Oui, de Perse"
+      ],
+      "id": "vikidia-abyssin-9",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Peut-on dire de quel pays est originaire l'abyssin ?",
       "theme": "Abyssin",
       "isWellKnown": true
     },
@@ -117401,6 +117437,60 @@
     },
     {
       "accepted": [],
+      "answer": "on accorde toujours",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "On n'accorde jamais",
+        "On accorde si le COD est avant le verbe",
+        "On accorde seulement au pluriel"
+      ],
+      "id": "vikidia-accord-du-participe-passe-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Que fait-on lorsque le participe passé est utilisé avec les deux auxiliaires ?",
+      "theme": "Accord du participe passé",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "2001",
+      "category": "videogames",
+      "choiceOnly": false,
+      "decoys": [
+        "2000",
+        "2002",
+        "1999"
+      ],
+      "id": "vikidia-ace-attorney-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "En quelle année est sorti le premier jeu Ace Attorney ?",
+      "theme": "Ace Attorney",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Ace Attorney Investigations: Miles Edgeworth",
+      "category": "videogames",
+      "choiceOnly": false,
+      "decoys": [
+        "Gyakuten Kenji 2",
+        "Benjamin Hunter: Ace Attorney",
+        "Phoenix Wright: Ace Attorney"
+      ],
+      "id": "vikidia-ace-attorney-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'appelle le premier jeu dérivé où l'on incarne Benjamin Hunter ?",
+      "theme": "Ace Attorney",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "1h30",
       "category": "science",
       "choiceOnly": false,
@@ -117416,6 +117506,24 @@
       "prompt": "Un TGV met environ 2 heures pour aller de Lyon à Paris. Un TGV met environ 3h30 pour aller de Paris à Marseille. Combien de temps va mettre un TGV pour aller de Lyon à Marseille ?",
       "theme": "Addition",
       "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Des fléchettes tranquillisantes.",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Une berceuse.",
+        "Un hamac automatisé qui se balance tout seul.",
+        "Une infusion de fleurs soporifiques."
+      ],
+      "id": "vikidia-aile-de-pluie-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle technique les Ailes de Pluie utilisent-ils pour endormir leurs visiteurs ?",
+      "theme": "Aile de Pluie",
+      "isWellKnown": true
     },
     {
       "accepted": [],
@@ -117437,6 +117545,42 @@
     },
     {
       "accepted": [],
+      "answer": "Dans le forêt de Pluie.",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Dans la forêt des songes de bananes.",
+        "Au pays des melons.",
+        "Dans les montagnes de glace."
+      ],
+      "id": "vikidia-aile-de-pluie-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Où habitent les Ailes de Pluie ?",
+      "theme": "Aile de Pluie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Chaque adulte du clan leur enseigne quelque chose (vol plané, lancé de venin..).",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Il y a un école pour apprendre à lire, à calculer, ect.",
+        "Leurs parents leur font eux-même école.",
+        "Ils apprennent seuls en observant les autres dragons."
+      ],
+      "id": "vikidia-aile-de-pluie-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Dans quel cadre les dragonnets sont-ils éduqués ?",
+      "theme": "Aile de Pluie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "Magnifique",
       "category": "arts",
       "choiceOnly": false,
@@ -117450,6 +117594,24 @@
       "language": "fr",
       "note": null,
       "prompt": "Comment s'appelle la reine qui précédait Gloria ?",
+      "theme": "Aile de Pluie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "RainWings",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Wings of Rain",
+        "Wings de pluie",
+        "RainDragons"
+      ],
+      "id": "vikidia-aile-de-pluie-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est le nom anglais des Ailes de Pluie ?",
       "theme": "Aile de Pluie",
       "isWellKnown": true
     },
@@ -117797,6 +117959,24 @@
     },
     {
       "accepted": [],
+      "answer": "Isocèle",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Rectangle",
+        "Equilatéral",
+        "Scalène"
+      ],
+      "id": "vikidia-angle-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Si un triangle a deux angles égaux, ce triangle est ...",
+      "theme": "Angle",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
       "answer": "1/2",
       "category": "science",
       "choiceOnly": false,
@@ -117812,6 +117992,96 @@
       "prompt": "Que vaut le cosinus d'un angle de 60° ?",
       "theme": "Angle",
       "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Londres",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "Irlande",
+        "Snew City",
+        "Manchester"
+      ],
+      "id": "vikidia-angleterre-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle est la capitale de l’Angleterre ?",
+      "theme": "Angleterre",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Charles",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "Édouard",
+        "Guillaume",
+        "Henri"
+      ],
+      "id": "vikidia-angleterre-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s’appelle le roi ?",
+      "theme": "Angleterre",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "2",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "3",
+        "5",
+        "4"
+      ],
+      "id": "vikidia-angleterre-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Combien les bus ont-ils d’étages le plus souvent ?",
+      "theme": "Angleterre",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "On prends le thé",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "On va au restaurant",
+        "On va à la douche",
+        "On va se coucher"
+      ],
+      "id": "vikidia-angleterre-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Que fait on à 17 heures ?",
+      "theme": "Angleterre",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Hello",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "Thank you",
+        "Please",
+        "Goodbye"
+      ],
+      "id": "vikidia-angleterre-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment dit-on bonjour en anglais ?",
+      "theme": "Angleterre",
+      "isWellKnown": true
     },
     {
       "accepted": [],
@@ -118913,6 +119183,384 @@
     },
     {
       "accepted": [],
+      "answer": "Youri Gagarine",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Neil Armstrong",
+        "Alan Shepard",
+        "John Glenn"
+      ],
+      "id": "vikidia-astronautique-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui est le premier homme dans l'espace?",
+      "theme": "Astronautique",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "À environ 400 km",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "À environ 30 km",
+        "À environ 1 km",
+        "À environ 36 000 km"
+      ],
+      "id": "vikidia-astronautique-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "À quel altitude se trouve la Station spatiale internationale?",
+      "theme": "Astronautique",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Un chien",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Un singe",
+        "Un chat",
+        "Un lapin"
+      ],
+      "id": "vikidia-astronautique-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui est le premier animal dans l'espace?",
+      "theme": "Astronautique",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Saturn V",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Soyouz",
+        "Nova",
+        "Ariane"
+      ],
+      "id": "vikidia-astronautique-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'appelle la fusée qui a permis au homme d'aller sur la Lune ?",
+      "theme": "Astronautique",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "V2",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Saturn V",
+        "R-7",
+        "Redstone"
+      ],
+      "id": "vikidia-astronautique-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'appelle le missile balistique Allemand ?",
+      "theme": "Astronautique",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Il y a 5 milliards d'années, une planète nommée Theia de la taille de Mars est entré en collision avec la terre.Theia à été detruite et quelques morceaux de la Terre ont été éjécté dans l'espace.Les morceaux de Theia et de la Terre se sont attiré entre eux et a formé la Lune",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Une partie de la Terre, s'est détaché d'elle, elle a commencé à prendre une forme ronde et donne naissance à la Lune",
+        "Elle s'est formé d'astéroides.",
+        "Elle a été capturée par la Terre alors qu'elle passait près d'elle."
+      ],
+      "id": "vikidia-astronomie-2-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'est formé la Lune ?",
+      "theme": "Astronomie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "8",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "14",
+        "9",
+        "12"
+      ],
+      "id": "vikidia-astronomie-2-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Combien y a-t-il de planètes dans le Système solaire ?",
+      "theme": "Astronomie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Un synonyme de \"exoplanète\"",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Une planète \"morte\" qui n'a plus d'étoile",
+        "Mais ca n'existe pas ça !",
+        "Une planète plus grande que le Soleil"
+      ],
+      "id": "vikidia-astronomie-2-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qu'est que c'est qu'une planète extrasolaire ?",
+      "theme": "Astronomie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "La vie extraterrestre",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "La vie anti-Terrienne",
+        "La vie cousine-Terrienne",
+        "La vie sous-Terrienne"
+      ],
+      "id": "vikidia-astronomie-2-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment apelle-t-on de la vie qui existe sur une autre planète ?",
+      "theme": "Astronomie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "On ne sait pas",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Il n'y a rien mais il nous envoie dans une autre dimension",
+        "Il n'y a rien mais il nous envoie dans un autre bras de la Voie lactée.Pour le trou noir du centre de la Voie lactée, il nous envoie dans une autre galaxie",
+        "Une étoile géante qui brille très fort"
+      ],
+      "id": "vikidia-astronomie-2-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qu'est ce qu'il y a au fond d'un trou-noir ?",
+      "theme": "Astronomie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "6000 degrés Celsius environ",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "15 millions de degrés Celsius environ",
+        "250 degrés Celsius environ",
+        "1 000 degrés Celsius environ"
+      ],
+      "id": "vikidia-astronomie-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle est la température à la surface du soleil ?",
+      "theme": "Astronomie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "8",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "9",
+        "15",
+        "10"
+      ],
+      "id": "vikidia-astronomie-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Combien y a-t-il de planètes dans notre système solaire ?",
+      "theme": "Astronomie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "des milliards de milliards",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "une cinquantaine",
+        "des millions de millions",
+        "quelques milliers"
+      ],
+      "id": "vikidia-astronomie-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Combien y a-t-il de galaxies dans l'Univers, selon les scientifiques ?",
+      "theme": "Astronomie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "un trou noir",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "une étoile supergéante",
+        "un pulsar",
+        "une naine blanche"
+      ],
+      "id": "vikidia-astronomie-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est l'objet qui a le plus de gravité dans l'Univers ?",
+      "theme": "Astronomie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "des milliards de milliards",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "des millions de millions",
+        "une cinquantaine",
+        "quelques milliers"
+      ],
+      "id": "vikidia-astronomie-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Combien y a-t-il d'étoiles dans chaque galaxie, selon les scientifiques ?",
+      "theme": "Astronomie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "l'Année-lumière",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "le Kilomètre",
+        "le Mètre",
+        "le Mile"
+      ],
+      "id": "vikidia-astronomie-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle est la principale unité qu'utilisent les scientifiques pour mesurer les distances dans l'Univers ?",
+      "theme": "Astronomie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "des zones froides du Soleil",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "des trous dans le Soleil",
+        "des zones chaudes du Soleil",
+        "des volcans du Soleil"
+      ],
+      "id": "vikidia-astronomie-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Que sont les taches solaires ?",
+      "theme": "Astronomie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "bleues",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "jaunes",
+        "rouges",
+        "oranges"
+      ],
+      "id": "vikidia-astronomie-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "De quelle couleur sont les étoiles les plus chaudes ?",
+      "theme": "Astronomie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "rouges",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "jaunes",
+        "bleues",
+        "vertes"
+      ],
+      "id": "vikidia-astronomie-9",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "De quelle couleur sont les étoiles en fin de vie ?",
+      "theme": "Astronomie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "elles explosent",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "elles refroidissent lentement",
+        "elles refroidissent brutalement",
+        "elles deviennent des naines blanches"
+      ],
+      "id": "vikidia-astronomie-10",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Que font les étoiles 8× plus massives que le Soleil en fin de vie ?",
+      "theme": "Astronomie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "une planète naine",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "une planète",
+        "une étoile",
+        "une lune de Neptune"
+      ],
+      "id": "vikidia-astronomie-11",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Que-ce que pluton",
+      "theme": "Astronomie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "Un ion",
       "category": "science",
       "choiceOnly": false,
@@ -119057,6 +119705,114 @@
     },
     {
       "accepted": [],
+      "answer": "4",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "1",
+        "5",
+        "3"
+      ],
+      "id": "vikidia-belgique-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Combien de frontières communes avec d'autres pays a la Belgique ?",
+      "theme": "Belgique",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Le 19 juin 1623",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Le 30 avril 1622",
+        "Le 25 août 1625",
+        "Le 12 mars 1620"
+      ],
+      "id": "vikidia-blaise-pascal-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand naquit Blaise Pascal?",
+      "theme": "Blaise Pascal",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "À Clermont-Ferrand",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "À Bordeaux",
+        "À Paris",
+        "À Rouen"
+      ],
+      "id": "vikidia-blaise-pascal-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Où naquit Blaise Pascal?",
+      "theme": "Blaise Pascal",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Le 19 août 1662",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Le 26 septembre 1665",
+        "Le 26 octobre 1660",
+        "Le 14 juillet 1658"
+      ],
+      "id": "vikidia-blaise-pascal-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand mourut Blaise Pascal?",
+      "theme": "Blaise Pascal",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "À Paris",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "À Londres",
+        "À Lyon",
+        "À Rouen"
+      ],
+      "id": "vikidia-blaise-pascal-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Où mourut Blaise Pascal?",
+      "theme": "Blaise Pascal",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "À 18 ans",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "À 25 ans",
+        "À 26 ans",
+        "À 12 ans"
+      ],
+      "id": "vikidia-blaise-pascal-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "À quel âge Blaise Pascal conçu la pascaline?",
+      "theme": "Blaise Pascal",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "Physarum polycephalum",
       "category": "science",
       "choiceOnly": false,
@@ -119070,6 +119826,60 @@
       "language": "fr",
       "note": null,
       "prompt": "Quel est le nom scientifique du blob ?",
+      "theme": "Blob",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Audrey Dussutour",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Audrey Tautou",
+        "Audrey Lamy",
+        "Audrey Pulvar"
+      ],
+      "id": "vikidia-blob-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'appelle la chercheuse française qui étudie le blob ?",
+      "theme": "Blob",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Sclérote",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Coma",
+        "Syncope",
+        "Hypnose"
+      ],
+      "id": "vikidia-blob-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'appelle l'état de dormance dans lequel peut tomber le blob ?",
+      "theme": "Blob",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Cytoplasme",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Hémoglobine",
+        "Sève",
+        "Lymphe"
+      ],
+      "id": "vikidia-blob-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment est appelé le « sang » du blob ?",
       "theme": "Blob",
       "isWellKnown": true
     },
@@ -119093,6 +119903,60 @@
     },
     {
       "accepted": [],
+      "answer": "Non.",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Oui.",
+        "Il aime ça mais à une certaine limite.",
+        "Il ne sait pas ce que c'est."
+      ],
+      "id": "vikidia-blue-les-royaumes-de-feu-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Blue aime-t-il la violence ?",
+      "theme": "Blue (Les Royaumes de feu)",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Criquette, Droséra et Bombyx.",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Lune Claire, Qibli et Frelonne.",
+        "La reine Fournaise.",
+        "Tsunami, Gloria et Comète."
+      ],
+      "id": "vikidia-blue-les-royaumes-de-feu-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui sont ses amis ?",
+      "theme": "Blue (Les Royaumes de feu)",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Il a de la soie de feu.",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Il est animus.",
+        "Il lit dans les pensées.",
+        "Il peut se rendre invisible."
+      ],
+      "id": "vikidia-blue-les-royaumes-de-feu-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quels sont les pouvoirs de Blue ?",
+      "theme": "Blue (Les Royaumes de feu)",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "Sur le continent perdu.",
       "category": "arts",
       "choiceOnly": false,
@@ -119111,6 +119975,42 @@
     },
     {
       "accepted": [],
+      "answer": "le Boeing 737-100",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "le Boeing 737MAX",
+        "le Boeing 737-500",
+        "le Boeing 737-800"
+      ],
+      "id": "vikidia-boeing-737-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "La première version du Boeing 737 est...",
+      "theme": "Boeing 737",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "1000 km/h",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "800 km/h",
+        "1200 km/h",
+        "600 km/h"
+      ],
+      "id": "vikidia-boeing-737-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Un Boeing 737NG peut atteindre...",
+      "theme": "Boeing 737",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "l'Airbus A320",
       "category": "science",
       "choiceOnly": false,
@@ -119124,6 +120024,42 @@
       "language": "fr",
       "note": null,
       "prompt": "Quel est le principal concurrent du Boeing 737 ?",
+      "theme": "Boeing 737",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "éclaté en vol",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "perdu le contrôle",
+        "touché le sol trop tôt",
+        "pris feu au décollage"
+      ],
+      "id": "vikidia-boeing-737-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Lors du vol Aloha Airlines 243, l'avion a...",
+      "theme": "Boeing 737",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "le Boeing 737MAX",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "le Boeing 737-500",
+        "le Boeing 737-900",
+        "le Boeing 737NG"
+      ],
+      "id": "vikidia-boeing-737-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est la prochaine version du Boeing 737 ?",
       "theme": "Boeing 737",
       "isWellKnown": true
     },
@@ -119453,6 +120389,24 @@
     },
     {
       "accepted": [],
+      "answer": "Neuhof Rodolphe Reuss",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "Abdou",
+        "Neuhof Stéphanie",
+        "Homme de Fer"
+      ],
+      "id": "vikidia-bus-24-de-strasbourg-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est l’arrêt desservi par Flex’hop?",
+      "theme": "Bus 24 de Strasbourg",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
       "answer": "Strasbourg",
       "category": "geography",
       "choiceOnly": true,
@@ -119615,6 +120569,294 @@
     },
     {
       "accepted": [],
+      "answer": "Sophie Frédérique d'Anhalt",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Anne-Marie Clerzt",
+        "Georgette de Moscou",
+        "Marie-Louise de Prusse"
+      ],
+      "id": "vikidia-catherine-ii-de-russie-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "De son vrai nom, Catherine II de Russie est",
+      "theme": "Catherine II de Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Stettin",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Salzbourg",
+        "Saint-Petersbourg",
+        "Berlin"
+      ],
+      "id": "vikidia-catherine-ii-de-russie-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Catherine est née à",
+      "theme": "Catherine II de Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "1729",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "1789",
+        "1802",
+        "1740"
+      ],
+      "id": "vikidia-catherine-ii-de-russie-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Catherine est née en",
+      "theme": "Catherine II de Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Pierre III de Russie",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Paul I de Russie",
+        "Urbain VII de Russie",
+        "Ivan VI de Russie"
+      ],
+      "id": "vikidia-catherine-ii-de-russie-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Le futur mari de Catherine se nomme",
+      "theme": "Catherine II de Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Assez mal, il est brutal",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Très bien, ils s'entendent à merveille",
+        "Malheureusement, ils meurent tous les deux sans pouvoir se connaître",
+        "Très tendrement, il la couvre de cadeaux"
+      ],
+      "id": "vikidia-catherine-ii-de-russie-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Le mari de Catherine II se comporte",
+      "theme": "Catherine II de Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "1744",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "1760",
+        "1995",
+        "1755"
+      ],
+      "id": "vikidia-catherine-ii-de-russie-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Catherine débarque à Saint-Petersbourg en",
+      "theme": "Catherine II de Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "1744",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Elle n'est pas morte.",
+        "1735",
+        "1790"
+      ],
+      "id": "vikidia-catherine-ii-de-russie-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Élisabeth de Russie meurt en",
+      "theme": "Catherine II de Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Peterhof",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "la Loire",
+        "Saint-James",
+        "Versailles"
+      ],
+      "id": "vikidia-catherine-ii-de-russie-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Catherine est enfermée dans le(s) château(x) de",
+      "theme": "Catherine II de Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Septembre 1762",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Juillet 1793",
+        "Décembre 1848",
+        "Mars 1725"
+      ],
+      "id": "vikidia-catherine-ii-de-russie-9",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Catherine se fait proclamer impératrice en",
+      "theme": "Catherine II de Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Au palais de la Dormition",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "À la cathédrale de Chartres",
+        "À la chapelle Sixtine",
+        "À la basilique Saint-Pierre"
+      ],
+      "id": "vikidia-catherine-ii-de-russie-10",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Où Catherine II se fait-elle couronner",
+      "theme": "Catherine II de Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Les philosophes des Lumières",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Les philosophes de Moscou",
+        "Les philosophes Copernicien",
+        "Les philosophes de la Renaissance"
+      ],
+      "id": "vikidia-catherine-ii-de-russie-11",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Les philosophes que Catherine fréquente s'appelle",
+      "theme": "Catherine II de Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "De créer un parlement",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "De faire de la Russie une monarchie",
+        "De rendre la Russie communiste",
+        "De déclarer la guerre à la France"
+      ],
+      "id": "vikidia-catherine-ii-de-russie-12",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Ils lui conseillent de",
+      "theme": "Catherine II de Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Pougatchev",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Raspoutine",
+        "Gorbatchev",
+        "Stenka Razine"
+      ],
+      "id": "vikidia-catherine-ii-de-russie-13",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Le meneur de la grande révolte qui éclata lors du mouvement de réformes se nomme",
+      "theme": "Catherine II de Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Très mal avec elle, il lui reproche d'avoir tué son père",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Très bien avec elle, il lui a même offert une sucette",
+        "Assez bien avec elle, ils mènent une vie paisible",
+        "Très bien avec elle, il l'aide à gouverner"
+      ],
+      "id": "vikidia-catherine-ii-de-russie-15",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Le fils de Catherine se comporte",
+      "theme": "Catherine II de Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Son petit-fils, Alexandre",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Son fils Paul, comme le font tous les souverains",
+        "Sa fille Anastasia",
+        "Son amant, Potemkine"
+      ],
+      "id": "vikidia-catherine-ii-de-russie-16",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Dans son testament, Catherine désigne en tant que son successeur",
+      "theme": "Catherine II de Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "le 17 novembre 1796",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "27 février 1801",
+        "le 13 décembre 1700",
+        "le 5 janvier 1762"
+      ],
+      "id": "vikidia-catherine-ii-de-russie-17",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Catherine est décédée",
+      "theme": "Catherine II de Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "2 505 000",
       "category": "geography",
       "choiceOnly": true,
@@ -119682,6 +120924,24 @@
       "language": "fr",
       "note": null,
       "prompt": "Combien peut-il y avoir de point par cercle ?",
+      "theme": "Cercle",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "La moitié d'un diamètre",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Le tour du cercle",
+        "Le double d'une corde",
+        "Le double du diamètre"
+      ],
+      "id": "vikidia-cercle-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Le rayon d'un cercle = ...",
       "theme": "Cercle",
       "isWellKnown": true
     },
@@ -119881,6 +121141,24 @@
       "note": null,
       "prompt": "Pourquoi le chat mange-t-il de l'herbe ?",
       "theme": "Chat",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "L’Akhal Téké",
+      "category": "sport",
+      "choiceOnly": false,
+      "decoys": [
+        "Le Pur sang arabe",
+        "Le Barbe",
+        "Le Frison"
+      ],
+      "id": "vikidia-cheval-et-equitation-difficile-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel cheval est considéré comme le plus beau du monde ?",
+      "theme": "Cheval et équitation",
       "isWellKnown": true
     },
     {
@@ -120119,6 +121397,78 @@
     },
     {
       "accepted": [],
+      "answer": "Le Vau et Mansard",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Ronsard et Molière",
+        "Pierre Le Grand et Jean Le Petit",
+        "Viollet-le-Duc et Haussmann"
+      ],
+      "id": "vikidia-chateau-de-versailles-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui sont les principaux architectes du château de Versailles ?",
+      "theme": "Château de Versailles",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Le Nôtre",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Le Vau",
+        "Pierre Le Jardinier",
+        "Mansard"
+      ],
+      "id": "vikidia-chateau-de-versailles-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui a conçu les jardins du château de Versailles ?",
+      "theme": "Château de Versailles",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "dans les Yvelines",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "dans les hauts de seines",
+        "dans l'Allier",
+        "dans l'Essonne"
+      ],
+      "id": "vikidia-chateau-de-versailles-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Dans quel département ce situe le château ?",
+      "theme": "Château de Versailles",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "la galerie des Glaces",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "la galerie royale",
+        "la galerie Vauban",
+        "la galerie d'Apollon"
+      ],
+      "id": "vikidia-chateau-de-versailles-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'appelle la grande galerie située dans l'aile sud ?",
+      "theme": "Château de Versailles",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "4",
       "category": "history",
       "choiceOnly": false,
@@ -120152,6 +121502,132 @@
       "prompt": "Lequel de ces artistes à participer à des fêtes à Versailles ?",
       "theme": "Château de Versailles",
       "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "38951",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "28591",
+        "38591",
+        "41762"
+      ],
+      "id": "vikidia-colomiers-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Combien d'habitants compte Colomiers? Difficile !!!",
+      "theme": "Colomiers",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "De faire passer un film pour les enfants et un pour les adultes en même temps",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "De faire passer deux films que pour les adultes puis deux films pour les enfants",
+        "Il n'a pas de particularité",
+        "De projeter les films en plein air"
+      ],
+      "id": "vikidia-colomiers-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est la particularité du cinéma?",
+      "theme": "Colomiers",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Avoir Colomiers rugby",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "Avoir un complexe sportif",
+        "Avoir une médiathèque centre d'art et centre de culture.",
+        "Avoir un château médiéval"
+      ],
+      "id": "vikidia-colomiers-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "La ville est connu pour quoi?",
+      "theme": "Colomiers",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Aldebert et AC/DC",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "Bigflo & Oli et Jean Dujardin",
+        "Pompe up the swing et les Medef ina Babylone",
+        "Mozart et Beethoven"
+      ],
+      "id": "vikidia-colomiers-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel grand artiste(s) a joué au hall Comminges?",
+      "theme": "Colomiers",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Ce sont Avoir et Être.",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "Ce sont Manger et Danser",
+        "Ce sont les Verbes et les Noms",
+        "Ce sont Faire et Aller"
+      ],
+      "id": "vikidia-conjugaison-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quels sont les deux auxiliaires?",
+      "theme": "Conjugaison",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Nous allâmes.",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "Nous allons",
+        "Nous alliâmes",
+        "Nous allions"
+      ],
+      "id": "vikidia-conjugaison-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'écrit aller à la première personne du pluriel au passé simple?",
+      "theme": "Conjugaison",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Les verbes du 2e groupes sont ceux qui se terminent par -ir et qui font -issons au présent, par exemple nous finissons.",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "Les verbes du 2e groupes sont ceux qui se terminent par -issons",
+        "Les verbes du 2e groupes sont ceux qui se terminent par -ir et qui font -irons au présent, par exemple nous irons.",
+        "Les verbes du 2e groupes sont ceux qui se terminent par -re, par exemple nous prenons."
+      ],
+      "id": "vikidia-conjugaison-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quels sont les verbes du 2e groupe?",
+      "theme": "Conjugaison",
+      "isWellKnown": false
     },
     {
       "accepted": [],
@@ -120389,6 +121865,24 @@
     },
     {
       "accepted": [],
+      "answer": "Le Vieux baril",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Le jeune dépôt",
+        "La Courtoise",
+        "Le Petit Caribou"
+      ],
+      "id": "vikidia-celine-dion-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'appelle le bar de ses parents ?",
+      "theme": "Céline Dion",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "3",
       "category": "arts",
       "choiceOnly": false,
@@ -120407,6 +121901,60 @@
     },
     {
       "accepted": [],
+      "answer": "En fait oui, puisque les oiseaux descendent des dinosaures.",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Non, les dinosaures ont disparu avant l'existence des hommes préhistoriques",
+        "Oui, tu ne regardes jamais les dessins animées ? On voit que les hommes et les dinosaures se rencontrent",
+        "Oui, ils vivaient ensemble il y a 65 millions d'années"
+      ],
+      "id": "vikidia-dinosaures-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Est-ce que les hommes préhistoriques et les dinosaures se sont rencontrés ?",
+      "theme": "Dinosaures",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "L' Archéopteryx",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Le Vélociraptor",
+        "Le Eosinopteryx",
+        "Le Tyrannosaure"
+      ],
+      "id": "vikidia-dinosaures-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est le premier dinosaure à plumes découvert ?",
+      "theme": "Dinosaures",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Jurassic Park",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Dinosaures",
+        "Sur la Terre des dinosaures",
+        "King Kong"
+      ],
+      "id": "vikidia-dinosaures-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est le film de dinosaures le plus célèbre qui a fait trembler les salles en 1992 ?",
+      "theme": "Dinosaures",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "Le Tyrannosaure",
       "category": "science",
       "choiceOnly": false,
@@ -120421,6 +121969,168 @@
       "note": null,
       "prompt": "Le roi des dinosaures est...",
       "theme": "Dinosaures",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Le Jurassique",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Le Crétacé",
+        "Le Trias",
+        "Le Permien"
+      ],
+      "id": "vikidia-dinosaures-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "A quelle période sont apparus les premiers oiseaux ?",
+      "theme": "Dinosaures",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Mais il existe pas !",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Un sauropode",
+        "Un Théropode",
+        "Un ornithopode"
+      ],
+      "id": "vikidia-dinosaures-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Le Summusosaure était un...",
+      "theme": "Dinosaures",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Le Poulet",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "L' Autruche",
+        "Le Pigeon",
+        "Le Canard"
+      ],
+      "id": "vikidia-dinosaures-9",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle ADN d'oiseau ressemble le plus à celle du T-Rex ?",
+      "theme": "Dinosaures",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Un Dinosaure géant à long cou",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Un Dinosaure à 3 cornes",
+        "Un Dinosaure à bec de Canard",
+        "Un Dinosaure à plaques sur le dos"
+      ],
+      "id": "vikidia-dinosaures-10",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qu'est ce que c'est qu'un sauropode ?",
+      "theme": "Dinosaures",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Le Diplodocus",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Le Tricératops",
+        "Le Brachiosaurus",
+        "Le Stégosaure"
+      ],
+      "id": "vikidia-dinosaures-11",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est le sauropode le plus célébre ?",
+      "theme": "Dinosaures",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "L' Aigle mangeur de Singes",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Le Faucon pèlerin",
+        "L' Hibou grand-duc",
+        "L' Aigle royal"
+      ],
+      "id": "vikidia-dinosaures-12",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est le plus grand rapace ?",
+      "theme": "Dinosaures",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Iguanodon",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Megalosaurus",
+        "Tyrannosaurus",
+        "Stegosaurus"
+      ],
+      "id": "vikidia-dinosaures-16",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Bonus Quel-est le tout premier dinosaure découvert ?",
+      "theme": "Dinosaures",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Dans le sens passant",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Dans le sens bloquant",
+        "Dans aucun des deux",
+        "Dans les deux sens"
+      ],
+      "id": "vikidia-diode-electroluminescente-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Dans quel sens la diode laisse-t-elle passer le courant?",
+      "theme": "Diode électroluminescente",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "À signaler l'état d'arrêt de marche, de veille d'un appareil",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "À décorer",
+        "À éclairer",
+        "À chauffer"
+      ],
+      "id": "vikidia-diode-electroluminescente-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "À quoi sert principalement la diode?",
+      "theme": "Diode électroluminescente",
       "isWellKnown": true
     },
     {
@@ -120695,6 +122405,24 @@
     },
     {
       "accepted": [],
+      "answer": "Empire romain d'Orient",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Empire grec d'Orient",
+        "Empire perse d'Orient",
+        "Empire slave d'Orient"
+      ],
+      "id": "vikidia-empire-byzantin-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est le nom officiel de l'Empire byzantin durant son existence ?",
+      "theme": "Empire byzantin",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "395 — 1453",
       "category": "history",
       "choiceOnly": false,
@@ -120708,6 +122436,24 @@
       "language": "fr",
       "note": null,
       "prompt": "Quelles sont les dates d'existence de l'Empire byzantin ?",
+      "theme": "Empire byzantin",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Constantinople",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Andrinople",
+        "Antioche",
+        "Thessalonique"
+      ],
+      "id": "vikidia-empire-byzantin-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle est la capitale de l'Empire byzantin ?",
       "theme": "Empire byzantin",
       "isWellKnown": true
     },
@@ -120749,6 +122495,24 @@
     },
     {
       "accepted": [],
+      "answer": "Basileus",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Imperator",
+        "Shah",
+        "Calife"
+      ],
+      "id": "vikidia-empire-byzantin-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel titre porte l'empereur byzantin à partir de 641 ?",
+      "theme": "Empire byzantin",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "Constantin XI",
       "category": "history",
       "choiceOnly": false,
@@ -120762,6 +122526,24 @@
       "language": "fr",
       "note": null,
       "prompt": "Qui est le dernier empereur byzantin ?",
+      "theme": "Empire byzantin",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Mehmed II, sultan ottoman",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Hâroun ar-Rachîd, calife abbasside",
+        "Salah ad-Dîn, sultan ayyoubide",
+        "Soliman le Magnifique, sultan ottoman"
+      ],
+      "id": "vikidia-empire-byzantin-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel conquérant s'empare des restes de l'Empire byzantin en 1453 ? Quel empire dirige-t-il ?",
       "theme": "Empire byzantin",
       "isWellKnown": true
     },
@@ -120803,6 +122585,78 @@
     },
     {
       "accepted": [],
+      "answer": "Oui, mais par une seule association",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Oui",
+        "Non",
+        "Oui, par toutes les associations"
+      ],
+      "id": "vikidia-european-shorthair-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "L'appellation celtic shorthair est-elle autorisée ?",
+      "theme": "European shorthair",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Fédération internationale féline",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Livre officiel des origines félines",
+        "World Cat Federation",
+        "Cat Fanciers' Association"
+      ],
+      "id": "vikidia-european-shorthair-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle association a reconnu l'european shorthair en 1983 ?",
+      "theme": "European shorthair",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Âge du fer",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Âge du bronze",
+        "Âge de la pierre",
+        "Âge du cuivre"
+      ],
+      "id": "vikidia-european-shorthair-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "De quand datent les squelettes de chat retrouvés à Lutèce, l'actuelle Paris ?",
+      "theme": "European shorthair",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "American shorthair",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "American curl",
+        "British shorthair",
+        "American bobtail"
+      ],
+      "id": "vikidia-european-shorthair-10",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle race porte concurrence à l'european shorthair aux États-Unis ?",
+      "theme": "European shorthair",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "10",
       "category": "science",
       "choiceOnly": true,
@@ -120834,6 +122688,42 @@
       "language": "fr",
       "note": null,
       "prompt": "Une seule des associations félines ci-dessous reconnaît l'european shorthair. Laquelle ?",
+      "theme": "European shorthair",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Ronde",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Amande",
+        "Citron",
+        "Triangulaire"
+      ],
+      "id": "vikidia-european-shorthair-19",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle est la forme des yeux ?",
+      "theme": "European shorthair",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Fédération internationale féline",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Livre officiel des origines félines",
+        "World Cat Federation",
+        "The International Cat Association"
+      ],
+      "id": "vikidia-european-shorthair-20",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle est l'association la plus ancienne ?",
       "theme": "European shorthair",
       "isWellKnown": true
     },
@@ -120947,6 +122837,204 @@
     },
     {
       "accepted": [],
+      "answer": "30 août 1772",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "20 juillet 1762",
+        "10 juin 1752",
+        "15 avril 1768"
+      ],
+      "id": "vikidia-figures-de-la-revolution-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle est la date de naissance de Henri de La Rochejaquelein ?",
+      "theme": "Figures de la Révolution",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "à Toulon et Marseille",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "à Fox-Amphoux et Lyon",
+        "à Toulouse et Marseille",
+        "à Bordeaux et Nantes"
+      ],
+      "id": "vikidia-figures-de-la-revolution-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Pendant la Terreur, où Paul Barras est-il été assigné d'une mission de guerre ?",
+      "theme": "Figures de la Révolution",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "bourreau",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "fabricant d'armes",
+        "avocat",
+        "imprimeur"
+      ],
+      "id": "vikidia-figures-de-la-revolution-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel était le métier de Charles-Henri Sanson ?",
+      "theme": "Figures de la Révolution",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Valmy",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Austerlitz",
+        "Fleurus",
+        "Waterloo"
+      ],
+      "id": "vikidia-figures-de-la-revolution-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "A quelle célèbre bataille Charles-François Dumouriez a-t-il participé ?",
+      "theme": "Figures de la Révolution",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "28 mai 1735",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "28 mai 1734",
+        "28 mai 1736",
+        "28 mai 1737"
+      ],
+      "id": "vikidia-figures-de-la-revolution-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle est la date de naissance de François Christophe Kellermann ?",
+      "theme": "Figures de la Révolution",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Paris",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Grenoble",
+        "Saint-Étienne",
+        "Lyon"
+      ],
+      "id": "vikidia-figures-de-la-revolution-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Où est mort Antoine Barnave ?",
+      "theme": "Figures de la Révolution",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "l'abbé Chasles",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Rousseau",
+        "Voltaire",
+        "Diderot"
+      ],
+      "id": "vikidia-figures-de-la-revolution-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Avec quel philosophe célèbre Jacques Pierre Brissot a-t-il fait ses études à Chartres ?",
+      "theme": "Figures de la Révolution",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "la pendaison",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "la guillotine",
+        "la supplice de la roue",
+        "les galères"
+      ],
+      "id": "vikidia-figures-de-la-revolution-9",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "En 1776, quelle condamnation fuit Philippe Fabre d'Eglantine ?",
+      "theme": "Figures de la Révolution",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "1777",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "1769",
+        "1792",
+        "1785"
+      ],
+      "id": "vikidia-figures-de-la-revolution-10",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "En quelle année Jean-Baptiste Kléber s'engage-t-il dans l'armée ?",
+      "theme": "Figures de la Révolution",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "son maintien comme otage à la Conciergerie",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "sa mort",
+        "son exil en Autriche",
+        "sa libération immédiate"
+      ],
+      "id": "vikidia-figures-de-la-revolution-11",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Au procès de roi Louis XVI Jean-Jacques Régis de Cambacérès a-t-il voté ?",
+      "theme": "Figures de la Révolution",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "député",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "ministre de Louis XVI",
+        "1er consul",
+        "maire de Paris"
+      ],
+      "id": "vikidia-figures-de-la-revolution-12",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle fonction politique Charles-François Lebrun a-t-il occupé ?",
+      "theme": "Figures de la Révolution",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "Brad Pitt",
       "category": "cinema",
       "choiceOnly": true,
@@ -121001,6 +123089,24 @@
     },
     {
       "accepted": [],
+      "answer": "Mickey Mouse",
+      "category": "cinema",
+      "choiceOnly": false,
+      "decoys": [
+        "Balthazar Picsou",
+        "Daisy Duck",
+        "Della Duck"
+      ],
+      "id": "vikidia-films-disney-10",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Par rapport à Donald Duck, qui est l'intrus ?",
+      "theme": "Films Disney",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "Pongo et Perdita",
       "category": "cinema",
       "choiceOnly": false,
@@ -121015,6 +123121,60 @@
       "note": null,
       "prompt": "Dans le film animé Les 101 dalmatiens, comment s'appelle les chiens dalmatiens?",
       "theme": "Films Disney",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Une station-essence",
+      "category": "cinema",
+      "choiceOnly": false,
+      "decoys": [
+        "Une marque de vêtements",
+        "Un groupe de méchants",
+        "Une chaîne de restaurants"
+      ],
+      "id": "vikidia-films-disney-12",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qu'est-ce que Dinoco ?",
+      "theme": "Films Disney",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Karim Benzema",
+      "category": "sport",
+      "choiceOnly": false,
+      "decoys": [
+        "Kemal Benzema",
+        "Karin Benzema",
+        "Kylian Benzema"
+      ],
+      "id": "vikidia-football-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est le prénom de Benzema ?",
+      "theme": "Football",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Camp Nou",
+      "category": "sport",
+      "choiceOnly": false,
+      "decoys": [
+        "New Camp",
+        "Camp New",
+        "Santiago Bernabéu"
+      ],
+      "id": "vikidia-football-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s’appelle le stade de football de Barcelone ?",
+      "theme": "Football",
       "isWellKnown": true
     },
     {
@@ -121087,6 +123247,222 @@
       "note": null,
       "prompt": "Que représentent les deux tiers du cinquième des trois quarts ?",
       "theme": "Fractions",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "1494",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "1498",
+        "1514",
+        "1491"
+      ],
+      "id": "vikidia-francois-ier-de-france-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "En quelle année François Ier est-il né ?",
+      "theme": "François Ier de France",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "1515",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "1514",
+        "1547",
+        "1525"
+      ],
+      "id": "vikidia-francois-ier-de-france-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "En quelle année François Ier a-t-il été sacré roi de France ?",
+      "theme": "François Ier de France",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Lord Bellecoiffe",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Lord Grassecoiffe",
+        "Lord Divinecoiffe",
+        "Lord Fièrecoiffe"
+      ],
+      "id": "vikidia-gardiens-des-cites-perdues-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Après avoir perdu un pari, comment Ro doit-elle surnommer Keefe ?",
+      "theme": "Gardiens des cités perdues",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Ben Affleck",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Tim Burton",
+        "James Cameron",
+        "Steven Spielberg"
+      ],
+      "id": "vikidia-gardiens-des-cites-perdues-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel réalisateur va adapter la saga Gardiens des Cités Perdues en film ?",
+      "theme": "Gardiens des cités perdues",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Télépathe, Polyglotte, Instillatrice, Téléportatrice et Optimisatrice.",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Télépathe, Pyrokinésiste, Technopathe, Givreur et Chargeur.",
+        "Télépathe, Éclipseuse, Empathe, Hydrokynésie, Rafaleur et Invoquateur.",
+        "Télépathe, Hydrokinésiste, Phaseuse, Vociférante et Charmeuse."
+      ],
+      "id": "vikidia-gardiens-des-cites-perdues-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quels sont les cinq pouvoirs de Sophie ?",
+      "theme": "Gardiens des cités perdues",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Le lutin de Sophie",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "L'Alicorne de Sophie",
+        "Le chat de Sophie",
+        "Le hibou de Sophie"
+      ],
+      "id": "vikidia-gardiens-des-cites-perdues-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui est Iggy ?",
+      "theme": "Gardiens des cités perdues",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Allée des Embrumes",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Everglen",
+        "Lumenaria",
+        "Havenfield"
+      ],
+      "id": "vikidia-gardiens-des-cites-perdues-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Lequel de ces lieux ne fait pas partie de l'univers de Gardiens des Cités Perdues ?",
+      "theme": "Gardiens des cités perdues",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Fitzroy Vacker",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Sir Tiergan",
+        "Edaline Ruewen",
+        "Dex Dizznee"
+      ],
+      "id": "vikidia-gardiens-des-cites-perdues-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est l'elfe qui ramène Sophie dans le monde des elfes ?",
+      "theme": "Gardiens des cités perdues",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Prentice et Cyrah Endal",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Grady et Edaline Ruewen",
+        "Alden et Della Vacker",
+        "Kesler et Juline Dizznee"
+      ],
+      "id": "vikidia-gardiens-des-cites-perdues-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quels sont les parents de Wylie ?",
+      "theme": "Gardiens des cités perdues",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Sandor",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Boros",
+        "Granite",
+        "Grondar"
+      ],
+      "id": "vikidia-gardiens-des-cites-perdues-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est le nom du garde du corps de Sophie ?",
+      "theme": "Gardiens des cités perdues",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Livvy Sonden",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Sir Tiergan",
+        "Lord Cassius",
+        "Lady Gisela"
+      ],
+      "id": "vikidia-gardiens-des-cites-perdues-9",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est l'identité de Médoc ?",
+      "theme": "Gardiens des cités perdues",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Le colibri",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "L'aigle",
+        "La souris",
+        "La chouette"
+      ],
+      "id": "vikidia-gardiens-des-cites-perdues-10",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment Sophie est-elle surnommée ?",
+      "theme": "Gardiens des cités perdues",
       "isWellKnown": true
     },
     {
@@ -121285,6 +123661,114 @@
       "note": null,
       "prompt": "Est-ce que le GIGN peut faire ce qu'il veut ?",
       "theme": "Groupe d'intervention de la Gendarmerie nationale",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "La guerre de Troie a eu lieu entre 1200 et 1150 av. J.-C.",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "La guerre de Troie n'a pas eu lieu car les Troyens se sont rendus immédiatement",
+        "La guerre de Troie a eu lieu entre 1200 et 1190 av. J.-C.",
+        "La guerre de Troie a eu lieu entre 800 et 750 av. J.-C."
+      ],
+      "id": "vikidia-guerre-de-troie-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelles sont les dates de la guerre de Troie ?",
+      "theme": "Guerre de Troie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "La guerre de Troie a été causée par la faute d'Hélène, reine grecque de Sparte partie avec un prince troyen en visite à Sparte.",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "La guerre de Troie a été causée par la faute de la mère d'Achille, qui a offensée les dieux.",
+        "La guerre de Troie a été causée par le meurtre d'Hector.",
+        "La guerre de Troie a été causée par un tremblement de terre qui a détruit Sparte."
+      ],
+      "id": "vikidia-guerre-de-troie-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui a causé la guerre de Troie ?",
+      "theme": "Guerre de Troie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Les pays concernés étaient la Grèce et Troie.",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Les pays concernés étaient Sparte et Troie.",
+        "Les pays concernés étaient l'Illiade et Troie.",
+        "Les pays concernés étaient l'Égypte et Troie."
+      ],
+      "id": "vikidia-guerre-de-troie-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quels sont les pays concernés par la guerre de Troie ?",
+      "theme": "Guerre de Troie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Les principaux héros de la guerre de Troie sont Ulysse, Achille, Pâris et Hector.",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Les principaux héros de la guerre de Troie sont Ulysse, Agamemnon, Ménélas et Achille.",
+        "Les principaux héros de la guerre de Troie sont Ulysse, Patrocle, Hélène et Achille.",
+        "Les principaux héros de la guerre de Troie sont Jason, Thésée, Persée et Héraclès."
+      ],
+      "id": "vikidia-guerre-de-troie-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quels sont les principaux héros concernés par la guerre de Troie ?",
+      "theme": "Guerre de Troie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "La guerre de Troie s'est passée en Asie Mineure (dans l'actuelle Turquie)",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "La guerre de Troie s'est passée en France",
+        "La guerre de Troie s'est passée en Grèce",
+        "La guerre de Troie s'est passée en Égypte"
+      ],
+      "id": "vikidia-guerre-de-troie-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Où se passe la guerre de Troie ?",
+      "theme": "Guerre de Troie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "La guerre de Troie s'est terminée après qu'Ulysse a eu l'idée de construire le cheval de Troie.",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "La guerre de Troie s'est terminée après qu'Achille fut tué.",
+        "La guerre de Troie s'est terminée après qu'Hector est mort.",
+        "La guerre de Troie s'est terminée après que Pâris a rendu Hélène aux Grecs."
+      ],
+      "id": "vikidia-guerre-de-troie-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'est terminée la guerre de Troie ?",
+      "theme": "Guerre de Troie",
       "isWellKnown": true
     },
     {
@@ -121505,6 +123989,186 @@
     },
     {
       "accepted": [],
+      "answer": "Elseneur",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Bralensfar",
+        "Fiscamor",
+        "Holmsborg"
+      ],
+      "id": "vikidia-hamlet-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est le nom du château de Claudius (acte 1) ?",
+      "theme": "Hamlet",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Claudius",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Gertrude",
+        "Polonius",
+        "Laërte"
+      ],
+      "id": "vikidia-hamlet-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui est l’assassin du Spectre (acte 1) ?",
+      "theme": "Hamlet",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Découvrir la raison du comportement d’Hamlet",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Tuer Hamlet",
+        "Protéger Ophélie",
+        "Épouser Gertrude"
+      ],
+      "id": "vikidia-hamlet-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle mission s’est fixé Polonius (acte 2) ?",
+      "theme": "Hamlet",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Des comédiens pour la pièce organisée par Hamlet",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Du poison",
+        "Sa fille Ophélie",
+        "Une épée empoisonnée"
+      ],
+      "id": "vikidia-hamlet-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Que ramène Polonius à Hamlet (acte 2) ?",
+      "theme": "Hamlet",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Il est troublé",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Il est content",
+        "Il est déçu",
+        "Il est amusé"
+      ],
+      "id": "vikidia-hamlet-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Dans quel état d’esprit est le roi en regardant la pièce d’Hamlet (acte 3) ?",
+      "theme": "Hamlet",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Il a commis une erreur fatale qui coûtera la vie à toute la famille royale",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Il a accompli son but",
+        "Il a fait un petit truc de rien du tout",
+        "Il a sauvé sa mère d'un assassin"
+      ],
+      "id": "vikidia-hamlet-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qu’a fait Hamlet en tuant Polonius à travers une tapisserie sous les yeux de Gertrude (acte 3) ?",
+      "theme": "Hamlet",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Car Hamlet a tué Polonius et se montre dangereux envers les autres",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Car Hamlet a fait jouer une pièce qui a représenté un événement du passé",
+        "Car Fortinbras les attaque et a le dessus",
+        "Car Ophélie a disparu et personne ne la retrouve"
+      ],
+      "id": "vikidia-hamlet-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Pourquoi le royaume est-il terrorisé et organise t-il un conseil (acte 4) ?",
+      "theme": "Hamlet",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Venger Polonius et Ophélie en considérant Hamlet comme responsable",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Pleurer sa sœur Ophélie pour sa folie puis pour sa noyade",
+        "Venger Polonius et Ophélie en considérant Claudius comme responsable",
+        "Devenir roi du Danemark à la place de Claudius"
+      ],
+      "id": "vikidia-hamlet-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Que veut Laërte (acte 4) ?",
+      "theme": "Hamlet",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Laërte se bagarre contre Hamlet pour venger le mal qu’il a fait à sa famille",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Hamlet et Claudius se battent pour leur survie",
+        "Laërte et Hamlet se disputent à cause de la mort d’Ophélie",
+        "Le Spectre apparaît à tous les personnages réunis"
+      ],
+      "id": "vikidia-hamlet-9",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Que se passe-t-il au cimetière (acte 5) ?",
+      "theme": "Hamlet",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Tous se tuent entre eux et Fortinbras, leur ennemi envahit le Danemark",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Tous se réconcilient et gagnent le combat contre Fortinbras",
+        "Claudius tue Hamlet",
+        "Hamlet épouse Ophélie et devient roi"
+      ],
+      "id": "vikidia-hamlet-10",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Que se passe-t-il (acte 5) ?",
+      "theme": "Hamlet",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "Le Quidditch",
       "category": "arts",
       "choiceOnly": false,
@@ -121631,6 +124295,24 @@
     },
     {
       "accepted": [],
+      "answer": "De vengeance contre les charognards.",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "D'un barbecue qui a mal tourné.",
+        "D'un festin.",
+        "D'un concours de chant."
+      ],
+      "id": "vikidia-histoire-de-les-royaumes-de-feu-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "(Question concernant toujours le Grand Incendie) De quoi était-il question ?",
+      "theme": "Histoire de Les Royaumes de feu",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "Un humain qui volait des œufs de dragon.",
       "category": "arts",
       "choiceOnly": true,
@@ -121644,6 +124326,24 @@
       "language": "fr",
       "note": null,
       "prompt": "À cause de qui le Grand Incendie s'est déclenché ?",
+      "theme": "Histoire de Les Royaumes de feu",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Parce que cela faisait plusieurs années que les charognards leur volaient des œufs, bijoux et autre choses précieuses.",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Parce qu'ils en avaient envie.",
+        "Parce qu'ils avaient faim",
+        "Parce que la reine voulait agrandir son royaume."
+      ],
+      "id": "vikidia-histoire-de-les-royaumes-de-feu-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Pourquoi les dragons ont déclenché un incendie ?",
       "theme": "Histoire de Les Royaumes de feu",
       "isWellKnown": true
     },
@@ -122225,6 +124925,114 @@
     },
     {
       "accepted": [],
+      "answer": "Blizzard",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Forêt de glace",
+        "Aurore",
+        "Avalanche"
+      ],
+      "id": "vikidia-juline-dizznee-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'appelle-t-elle dans le Cygne Noir ?",
+      "theme": "Juline Dizznee",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Kesler",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Grady",
+        "Rudi",
+        "Alden"
+      ],
+      "id": "vikidia-juline-dizznee-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'appelle son mari ?",
+      "theme": "Juline Dizznee",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Clémentine Beauvais",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Gaston Leroux",
+        "Jean-Christophe Tixier",
+        "Timothée de Fombelle"
+      ],
+      "id": "vikidia-l-affaire-petit-prince-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui a écrit L'Affaire Petit Prince ?",
+      "theme": "L'Affaire Petit Prince",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "272",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "128",
+        "300",
+        "196"
+      ],
+      "id": "vikidia-l-affaire-petit-prince-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Combien de pages fait cet ouvrage ?",
+      "theme": "L'Affaire Petit Prince",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Pierre Bayard",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Édith Desbourgs",
+        "Odette Lunette",
+        "Marie Desplechin"
+      ],
+      "id": "vikidia-l-affaire-petit-prince-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "De qui s'est inspirée l'autrice ?",
+      "theme": "L'Affaire Petit Prince",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "aux éditions Sarbacane",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "aux éditions Fleurus",
+        "aux éditions Bayard Jeunesse",
+        "aux éditions Gallimard Jeunesse"
+      ],
+      "id": "vikidia-l-affaire-petit-prince-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Où est paru le roman ?",
+      "theme": "L'Affaire Petit Prince",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
       "answer": "Française",
       "category": "arts",
       "choiceOnly": false,
@@ -122492,6 +125300,240 @@
       "prompt": "Quelle est l'activité préférée de Ruben ?",
       "theme": "La Pat' Patrouille",
       "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Bailly",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Dauch",
+        "Necker",
+        "Mirabeau"
+      ],
+      "id": "vikidia-la-revolution-et-l-empire-a-travers-les-arts-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s’appelle le personnage qui lit le Serment du Jeu de paume ?",
+      "theme": "La Révolution et l'Empire à travers les arts",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "le ministre des Finances de Louis XVI",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "le commandant des gardes nationaux",
+        "un philosophe du XVIIIème siècle",
+        "le lieutenant général de police de Paris"
+      ],
+      "id": "vikidia-la-revolution-et-l-empire-a-travers-les-arts-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui est Necker, dont le renvoi a causé la prise de la Bastille ? cf Prise de la Bastille et arrestation du gouverneur M. de Launay, le 14 juillet 1789",
+      "theme": "La Révolution et l'Empire à travers les arts",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "le vicomte de Noailles",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Maximilien de Robespierre",
+        "Jean Paul Marat",
+        "Georges Danton"
+      ],
+      "id": "vikidia-la-revolution-et-l-empire-a-travers-les-arts-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel personnage, au centre du tableau Nuit du 4 août 1789 dans l'Assemblée nationale française. Abandon de tous les privilèges féodaux, réclame l’abolition des privilèges ?",
+      "theme": "La Révolution et l'Empire à travers les arts",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "des femmes en colère se rendant au château de Versailles",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "La prise du château des Tuileries à Paris",
+        "une guerre civile entre Royalistes et Républicains",
+        "le retour du roi à Paris après Varennes"
+      ],
+      "id": "vikidia-la-revolution-et-l-empire-a-travers-les-arts-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Que représente l'œuvre À Versailles, le 5 octobre 1789 ?",
+      "theme": "La Révolution et l'Empire à travers les arts",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "sur le Champs de Mars à Paris",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "au château de Versailles",
+        "à la cathédrale Notre-Dame de Paris",
+        "sur la place de la Concorde"
+      ],
+      "id": "vikidia-la-revolution-et-l-empire-a-travers-les-arts-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Où s’est déroulée La Fête de la Fédération, le 14 juillet 1790 ?",
+      "theme": "La Révolution et l'Empire à travers les arts",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Gilbert du Motier marquis de La Fayette",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Maximilien de Robespierre",
+        "Napoléon Bonaparte",
+        "Louis-Antoine de Saint-Just"
+      ],
+      "id": "vikidia-la-revolution-et-l-empire-a-travers-les-arts-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui a annoncé la fuite du Roi ? cf Arrestation de Louis XVI à Varennes le 22 juin 1791",
+      "theme": "La Révolution et l'Empire à travers les arts",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "des gardes suisses",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "les Prussiens",
+        "les Sans-Culottes",
+        "les fédérés marseillais"
+      ],
+      "id": "vikidia-la-revolution-et-l-empire-a-travers-les-arts-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui défend le palais des Tuileries ? cf La prise du palais des Tuileries le 10 août 1792",
+      "theme": "La Révolution et l'Empire à travers les arts",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "l’armée française contre l’armée prussienne",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "l’armée française contre l’armée autrichienne",
+        "l’armée des révolutionnaires contre l’armée des royalistes",
+        "l’armée française contre l’armée anglaise"
+      ],
+      "id": "vikidia-la-revolution-et-l-empire-a-travers-les-arts-9",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quels sont les deux camps qui s’affrontent lors de la Bataille de Valmy, le 20 septembre 1792 ?",
+      "theme": "La Révolution et l'Empire à travers les arts",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "le bonnet phrygien",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Marianne",
+        "le coq",
+        "la fleur de lys"
+      ],
+      "id": "vikidia-la-revolution-et-l-empire-a-travers-les-arts-10",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel symbole de la Liberté se trouve sur la gravure illustrant La décapitation de Louis XVI ?",
+      "theme": "La Révolution et l'Empire à travers les arts",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Les Montagnards",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "la Plaine",
+        "les Feuillants",
+        "les Monarchiens"
+      ],
+      "id": "vikidia-la-revolution-et-l-empire-a-travers-les-arts-11",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel groupe politique est à l’origine de l'Arrestation des Girondins à la Convention Nationale le 2 Juin 1793 ?",
+      "theme": "La Révolution et l'Empire à travers les arts",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Couthon",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Merda",
+        "Saint Just",
+        "Le Bas"
+      ],
+      "id": "vikidia-la-revolution-et-l-empire-a-travers-les-arts-12",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s’appelait le « robespierriste » qui était handicapé ? cf La Nuit du 9 au 10 thermidor an II, Arrestation de Robespierre",
+      "theme": "La Révolution et l'Empire à travers les arts",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "le 19 brumaire",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "le 10 nivôse",
+        "le 17 fructidor",
+        "le 9 thermidor"
+      ],
+      "id": "vikidia-la-revolution-et-l-empire-a-travers-les-arts-13",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle est la date, dans le calendrier républicain, qui correspond au 10 novembre ? cf Le général Bonaparte au Conseil des Cinq-Cents, à Saint Cloud. 10 novembre 1799",
+      "theme": "La Révolution et l'Empire à travers les arts",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Napoléon Ier",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "le Tsar de Russie",
+        "le Roi de Prusse",
+        "l’Empereur d’Autriche"
+      ],
+      "id": "vikidia-la-revolution-et-l-empire-a-travers-les-arts-14",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui était réellement absent au congrès de Vienne et qui est toutefois représenté sur le dessin 1815 : Les rois d’Europe rétablissent leur pouvoir ?",
+      "theme": "La Révolution et l'Empire à travers les arts",
+      "isWellKnown": true
     },
     {
       "accepted": [],
@@ -122801,6 +125843,24 @@
     },
     {
       "accepted": [],
+      "answer": "On ne le sait pas vraiment",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Oui",
+        "Non",
+        "Uniquement avec le capitaine Haddock"
+      ],
+      "id": "vikidia-les-aventures-de-tintin-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Milou parle-t-il réellement ?",
+      "theme": "Les Aventures de Tintin",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "Archibald",
       "category": "arts",
       "choiceOnly": false,
@@ -122850,6 +125910,24 @@
       "language": "fr",
       "note": null,
       "prompt": "À qui Hergé a-t-il emprunté le prénom du professeur Tournesol ?",
+      "theme": "Les Aventures de Tintin",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Objectif Lune et On a marché sur la Lune",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Le Secret de la Licorne et Le Trésor de Rackham le Rouge",
+        "Les Sept Boules de cristal et Le Temple du Soleil",
+        "Les Cigares du pharaon et Le Lotus bleu"
+      ],
+      "id": "vikidia-les-aventures-de-tintin-12",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Dans quel album en deux parties Tournesol dévoile-t-il son véritable talent ?",
       "theme": "Les Aventures de Tintin",
       "isWellKnown": true
     },
@@ -123377,6 +126455,24 @@
     },
     {
       "accepted": [],
+      "answer": "Silver",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Peluche",
+        "Dodo",
+        "Moka"
+      ],
+      "id": "vikidia-les-royaumes-de-feu-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'appelle le paresseux de Gloria ?",
+      "theme": "Les Royaumes de Feu",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "Argil",
       "category": "arts",
       "choiceOnly": false,
@@ -123390,6 +126486,24 @@
       "language": "fr",
       "note": null,
       "prompt": "Quel Dragonnet du Destin a été mordu par une vipère mord-dragon ?",
+      "theme": "Les Royaumes de Feu",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "des charognes",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "des animaux nocturnes",
+        "des pierres",
+        "des fruits"
+      ],
+      "id": "vikidia-les-royaumes-de-feu-10",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Que mangent les Ailes de Nuit ?",
       "theme": "Les Royaumes de Feu",
       "isWellKnown": true
     },
@@ -123446,6 +126560,420 @@
       "prompt": "Qui a inventé la Prophétie des Dragonnets du Destin ?",
       "theme": "Les Royaumes de Feu",
       "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "En 1789",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "En 1880",
+        "En 1775",
+        "En 1815"
+      ],
+      "id": "vikidia-les-dates-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand débute la Révolution française?",
+      "theme": "Les dates",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "En - 52",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "En -46",
+        "En 14",
+        "En -58"
+      ],
+      "id": "vikidia-les-dates-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand Jules César a-t-il mené la bataille d'Alésia?",
+      "theme": "Les dates",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "En 1918",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "En 1914",
+        "En 1920",
+        "En 1945"
+      ],
+      "id": "vikidia-les-dates-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand se termine la Première Guerre mondiale?",
+      "theme": "Les dates",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "En 1492",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "En 1234",
+        "En 568",
+        "En 1610"
+      ],
+      "id": "vikidia-les-dates-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand a t-on découvert l'Amérique?",
+      "theme": "Les dates",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "AU XVIIe siècle",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Au XIXe siècle",
+        "Au XVe siècle",
+        "Au XIIe siècle"
+      ],
+      "id": "vikidia-les-dates-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand fut construit le château de Versailles?",
+      "theme": "Les dates",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Au XVIIIe siècle",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Au XXIe siècle",
+        "Au XVIIe siècle",
+        "Au XVIe siècle"
+      ],
+      "id": "vikidia-les-dates-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand se situe le siècle des Lumières?",
+      "theme": "Les dates",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "À la Renaissance",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Au Moyen Âge",
+        "À l'Antiquité",
+        "À la Préhistoire"
+      ],
+      "id": "vikidia-les-dates-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle est la période auquel vécu Léonard de Vinci?",
+      "theme": "Les dates",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "En 1270",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "En 1199",
+        "En 2013",
+        "En 1096"
+      ],
+      "id": "vikidia-les-dates-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand a eu lieu la dernière croisade?",
+      "theme": "Les dates",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "En 1963",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "En 888",
+        "En 1924",
+        "En 1968"
+      ],
+      "id": "vikidia-les-dates-9",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand fut assassiné John Fitzgerald Kennedy?",
+      "theme": "Les dates",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "En 496",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "En 123",
+        "En 374",
+        "En 800"
+      ],
+      "id": "vikidia-les-dates-10",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle est la date de début du Moyen Âge?",
+      "theme": "Les dates",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "En 1635",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "En 1693",
+        "En 1778",
+        "En 1715"
+      ],
+      "id": "vikidia-les-dates-11",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Richelieu a créé l'Académie Française, à quelle date?",
+      "theme": "Les dates",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Cathy Cassidy",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Susie Morgenstern",
+        "Marie Desplechin",
+        "Jacqueline Wilson"
+      ],
+      "id": "vikidia-les-filles-au-chocolat-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui est l'auteur des filles au chocolat ?",
+      "theme": "Les filles au chocolat",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Honey, Skye, Summer et Coco",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Anna, Line, Summer et Lou",
+        "Skye, Fleur, Jane et Louane",
+        "Rose, Lily, Daisy et Holly"
+      ],
+      "id": "vikidia-les-filles-au-chocolat-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment se nomme les quatre belles-sœurs de Cherry ?",
+      "theme": "Les filles au chocolat",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Skye Tanberry",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Coco Tanberry",
+        "Summer Tanberry",
+        "Honey Tanberry"
+      ],
+      "id": "vikidia-les-filles-au-chocolat-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui prononce cette citation : « Je préfère largement mon monde à la réalité.Le passé est un lieu sombre, doux et sucré comme de la guimauve » ?",
+      "theme": "Les filles au chocolat",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Rex",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Alex",
+        "Tim",
+        "Max"
+      ],
+      "id": "vikidia-les-filles-au-chocolat-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'appelle le poisson rouge de Cherry ?",
+      "theme": "Les filles au chocolat",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "La brebis de Coco",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Le canard de Coco",
+        "Le chat de Coco",
+        "La chèvre de Coco"
+      ],
+      "id": "vikidia-les-filles-au-chocolat-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui est Joyeux Noël ?",
+      "theme": "Les filles au chocolat",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "L'Histoire",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "La musique",
+        "La géologie",
+        "La danse"
+      ],
+      "id": "vikidia-les-filles-au-chocolat-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle est la passion de Skye ?",
+      "theme": "Les filles au chocolat",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Paddy",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Greg",
+        "Paul",
+        "Harry"
+      ],
+      "id": "vikidia-les-filles-au-chocolat-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui est le père de Cherry ?",
+      "theme": "Les filles au chocolat",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Shay Fletcher",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Tommy Anderson",
+        "Alex",
+        "Luke Parker"
+      ],
+      "id": "vikidia-les-filles-au-chocolat-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui est le petit ami de Honey dans le tome 1 ?",
+      "theme": "Les filles au chocolat",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Tommy Anderson",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Shay Fletcher",
+        "Zack Jones",
+        "Ryan Miller"
+      ],
+      "id": "vikidia-les-filles-au-chocolat-9",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui offre à Summer la barrette décorée d'une rose en soie ?",
+      "theme": "Les filles au chocolat",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Le 14 février",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Le 1er Avril",
+        "Le 31 octobre",
+        "Le 25 décembre"
+      ],
+      "id": "vikidia-les-filles-au-chocolat-10",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand sont nées Skye et Summer ?",
+      "theme": "Les filles au chocolat",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Tara et Bennie",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Tina et Jane",
+        "Lison et Helen",
+        "Emma et Kate"
+      ],
+      "id": "vikidia-les-filles-au-chocolat-11",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui sont les amie de Honey qu'elle rencontre en Australie ?",
+      "theme": "Les filles au chocolat",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "L'anorexie",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "La boulimie",
+        "Le diabète",
+        "L'asthme"
+      ],
+      "id": "vikidia-les-filles-au-chocolat-12",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle est la maladie de Summer",
+      "theme": "Les filles au chocolat",
+      "isWellKnown": false
     },
     {
       "accepted": [],
@@ -123626,6 +127154,348 @@
       "prompt": "Le lion est :",
       "theme": "Lion",
       "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Le 27 décembre 1822",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "le 26 aout 1825",
+        "le 14 mars 1823",
+        "le 3 juin 1821"
+      ],
+      "id": "vikidia-louis-pasteur-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand naquit Louis Pasteur?",
+      "theme": "Louis Pasteur",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "À Dole",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "À Bruxelles",
+        "À Paris",
+        "À Arbois"
+      ],
+      "id": "vikidia-louis-pasteur-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Où naquit Louis Pasteur ?",
+      "theme": "Louis Pasteur",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Le 28 septembre 1895",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Le 11 avril 1894",
+        "Le 7 mai 1898",
+        "Le 2 octobre 1893"
+      ],
+      "id": "vikidia-louis-pasteur-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand mourut Louis Pasteur?",
+      "theme": "Louis Pasteur",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "À Marnes-La-Coquette",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "À Lyon",
+        "À Paris",
+        "À Strasbourg"
+      ],
+      "id": "vikidia-louis-pasteur-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Où mourut Louis Pasteur?",
+      "theme": "Louis Pasteur",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "En 1861",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "En 1885",
+        "En 1865",
+        "En 1878"
+      ],
+      "id": "vikidia-louis-pasteur-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand Louis Pasteur démontra-t-il l'existence des bactéries?",
+      "theme": "Louis Pasteur",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "En 1863",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "En 1896",
+        "En 1901",
+        "En 1848"
+      ],
+      "id": "vikidia-louis-pasteur-9",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand Louis pasteur inventa un processus pour la conservation des aliments?",
+      "theme": "Louis Pasteur",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "le 5 septembre 1638",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Le 29 novembre 1645",
+        "Le 17 juin 1741",
+        "Le 14 mai 1643"
+      ],
+      "id": "vikidia-louis-xiv-de-france-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand est né Louis XIV?",
+      "theme": "Louis XIV de France",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "A Saint-Germain-en-Laye",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "A Vienne",
+        "A Paris",
+        "A Fontainebleau"
+      ],
+      "id": "vikidia-louis-xiv-de-france-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Où est né Louis XIV?",
+      "theme": "Louis XIV de France",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "A 77 ans",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "A 63 ans",
+        "A 80 ans",
+        "A 72 ans"
+      ],
+      "id": "vikidia-louis-xiv-de-france-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "A quel âge mourut Louis XIV ?",
+      "theme": "Louis XIV de France",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Le 1er septembre 1715",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Le 30 juillet 1715",
+        "Le 14 juillet 1715",
+        "Le 26 août 1715"
+      ],
+      "id": "vikidia-louis-xiv-de-france-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand mourut Louis XIV ?",
+      "theme": "Louis XIV de France",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "A Versailles",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "A Vienne",
+        "A Berlin",
+        "A Fontainebleau"
+      ],
+      "id": "vikidia-louis-xiv-de-france-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Où mourut Louis XIV ?",
+      "theme": "Louis XIV de France",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "72 ans",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "30 ans",
+        "49 ans",
+        "54 ans"
+      ],
+      "id": "vikidia-louis-xiv-de-france-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Combien de temps dura le règne de Louis XIV ?",
+      "theme": "Louis XIV de France",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Louis XIII",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Henri VIII",
+        "Louis XII",
+        "Henri IV"
+      ],
+      "id": "vikidia-louis-xiv-de-france-9",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui était le père de Louis XIV ?",
+      "theme": "Louis XIV de France",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Anne d'Autriche",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Anne de Bretagne",
+        "Marie de Médicis",
+        "Catherine de Médicis"
+      ],
+      "id": "vikidia-louis-xiv-de-france-10",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui était la mère de de Louis XIV ?",
+      "theme": "Louis XIV de France",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Colbert",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Jules Mazarin",
+        "André le Nôtre",
+        "Nicolas Fouquet"
+      ],
+      "id": "vikidia-louis-xiv-de-france-12",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui était le contrôleur général des finances de Louis XIV ?",
+      "theme": "Louis XIV de France",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "A Sébastien Le Prestre de Vauban",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "A Jules Mazarin",
+        "A Colbert",
+        "A Nicolas Fouquet"
+      ],
+      "id": "vikidia-louis-xiv-de-france-13",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "A qui Louis XIV demanda-t-il de fortifier ses frontières?",
+      "theme": "Louis XIV de France",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Marie-Thérèse d'Autriche",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Marie-Antoinette d'Autriche",
+        "Marie-Joséphine d'Autriche",
+        "Marie-Louise d'Autriche"
+      ],
+      "id": "vikidia-louis-xiv-de-france-17",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui fut la première femme de Louis XIV ?",
+      "theme": "Louis XIV de France",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "catiche",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "cache",
+        "cacheti",
+        "garenne"
+      ],
+      "id": "vikidia-loutre-cendree-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'appelle le terrier des loutres cendrée ?",
+      "theme": "Loutre cendrée",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Loutre d'asie",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Loutre noir",
+        "Loutre de rivière",
+        "Loutre de mer"
+      ],
+      "id": "vikidia-loutre-cendree-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est le deuxième nom de la loutre cendrée ?",
+      "theme": "Loutre cendrée",
+      "isWellKnown": false
     },
     {
       "accepted": [],
@@ -124007,6 +127877,150 @@
     },
     {
       "accepted": [],
+      "answer": "Royaume Champignon",
+      "category": "videogames",
+      "choiceOnly": false,
+      "decoys": [
+        "Royaume de Sarasaland",
+        "Royaume Xhampi",
+        "Royaume Koopa"
+      ],
+      "id": "vikidia-mario-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'appelle le royaume dans lequel vit Mario ?",
+      "theme": "Mario",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Roi Boo",
+      "category": "videogames",
+      "choiceOnly": false,
+      "decoys": [
+        "Bowser",
+        "Roi Bob-omb",
+        "Wario"
+      ],
+      "id": "vikidia-mario-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui est l'ennemi juré de Luigi dans Luigi's Mansion ?",
+      "theme": "Mario",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Bowser",
+      "category": "videogames",
+      "choiceOnly": false,
+      "decoys": [
+        "Goomboss",
+        "Big Boo",
+        "Kamek"
+      ],
+      "id": "vikidia-mario-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui est le roi des Koopas Troopas ?",
+      "theme": "Mario",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Daisy",
+      "category": "videogames",
+      "choiceOnly": false,
+      "decoys": [
+        "Amy Rose",
+        "Princesse Xhampi",
+        "Harmonie"
+      ],
+      "id": "vikidia-mario-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui est la meilleur amie de Peach ?",
+      "theme": "Mario",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Royaume de Sarasaland",
+      "category": "videogames",
+      "choiceOnly": false,
+      "decoys": [
+        "Royaume Champignon",
+        "Royaume de Végésia",
+        "Royaume Koopa"
+      ],
+      "id": "vikidia-mario-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Et comment s'appelle son Royaume ?",
+      "theme": "Mario",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Roi Boo",
+      "category": "videogames",
+      "choiceOnly": false,
+      "decoys": [
+        "Boohemoth",
+        "Fantominus",
+        "Maskass"
+      ],
+      "id": "vikidia-mario-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui est le chef des Boos ?",
+      "theme": "Mario",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Big Boo",
+      "category": "videogames",
+      "choiceOnly": false,
+      "decoys": [
+        "Boohemoth",
+        "Booxer",
+        "Kamek"
+      ],
+      "id": "vikidia-mario-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Et qui est l'ancien roi des Boos ?",
+      "theme": "Mario",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Lakitu",
+      "category": "videogames",
+      "choiceOnly": false,
+      "decoys": [
+        "Makibu",
+        "Magnakib",
+        "Paratroopa"
+      ],
+      "id": "vikidia-mario-9",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment est appelé le Koopa Troopa qui vole sur un nuage ?",
+      "theme": "Mario",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "Super Mario Land 2 6 Golden Coins",
       "category": "videogames",
       "choiceOnly": true,
@@ -124169,6 +128183,24 @@
     },
     {
       "accepted": [],
+      "answer": "simplement à l'œil nu",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "au moins avec des jumelles",
+        "seulement avec un télescope",
+        "seulement depuis l'espace"
+      ],
+      "id": "vikidia-mars-planete-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Mars est visible…",
+      "theme": "Mars (planète)",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "6786 km",
       "category": "science",
       "choiceOnly": true,
@@ -124200,6 +128232,24 @@
       "language": "fr",
       "note": null,
       "prompt": "Mars tourne sur elle-même en…",
+      "theme": "Mars (planète)",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "sous forme de glace",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "sous forme liquide",
+        "sous forme de gaz",
+        "sous forme de boue"
+      ],
+      "id": "vikidia-mars-planete-10",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "À la surface de Mars, l'eau est surtout présente…",
       "theme": "Mars (planète)",
       "isWellKnown": true
     },
@@ -124259,6 +128309,24 @@
     },
     {
       "accepted": [],
+      "answer": "changer de taille",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "devenir invisible",
+        "voler",
+        "lire dans les pensées"
+      ],
+      "id": "vikidia-marvel-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Que permet l'armure d'Ant-Man ?",
+      "theme": "Marvel",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "chirurgien",
       "category": "arts",
       "choiceOnly": false,
@@ -124290,6 +128358,24 @@
       "language": "fr",
       "note": null,
       "prompt": "Qui sont les Gardiens de la Galaxie ?",
+      "theme": "Marvel",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Black Widow et Hawkeye",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Wanda et Vision",
+        "Docteur Strange et Iron-Man",
+        "Thor et Hulk"
+      ],
+      "id": "vikidia-marvel-10",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quels Avengers n'ont ni armure ni super-pouvoir ?",
       "theme": "Marvel",
       "isWellKnown": true
     },
@@ -124655,6 +128741,60 @@
     },
     {
       "accepted": [],
+      "answer": "Depuis la Préhistoire",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Depuis le Moyen Âge",
+        "Depuis la Renaissance",
+        "Depuis l'Antiquité"
+      ],
+      "id": "vikidia-metaux-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Depuis quand le cuivre est-il utilisé ?",
+      "theme": "Métaux",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Il s'oxyde",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Il ne s'oxyde pas",
+        "Il noircit",
+        "Il s'enflamme"
+      ],
+      "id": "vikidia-metaux-12",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Si \"non\", comment se comporte-t-il au contact de l'air ?",
+      "theme": "Métaux",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Parce qu'il est dur et léger",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Parce qu'il est léger",
+        "Parce qu'il est inoxydable",
+        "Parce qu'il est lourd et mou"
+      ],
+      "id": "vikidia-metaux-43",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Si vrai, pourquoi ?",
+      "theme": "Métaux",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "À Ajaccio",
       "category": "history",
       "choiceOnly": false,
@@ -124709,6 +128849,366 @@
     },
     {
       "accepted": [],
+      "answer": "soviétique",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "française",
+        "américaine",
+        "britannique"
+      ],
+      "id": "vikidia-navette-spatiale-bourane-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "La navette spatiale Bourane est une navette spatiale :",
+      "theme": "Navette spatiale Bourane",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "OK-1.01",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "OV-1.01",
+        "OV-101",
+        "OK-GLI"
+      ],
+      "id": "vikidia-navette-spatiale-bourane-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est son autre nom ?",
+      "theme": "Navette spatiale Bourane",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Baïkal",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Ptichka",
+        "Bor",
+        "Mir"
+      ],
+      "id": "vikidia-navette-spatiale-bourane-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Avant d'être Bourane, quel était le nom de cette navette ?",
+      "theme": "Navette spatiale Bourane",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "à Moscou",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "à Baïkonour",
+        "à Saint-Pétersbourg",
+        "à Kiev"
+      ],
+      "id": "vikidia-navette-spatiale-bourane-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Où est-elle construite ?",
+      "theme": "Navette spatiale Bourane",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "1986",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "1987",
+        "1988",
+        "1985"
+      ],
+      "id": "vikidia-navette-spatiale-bourane-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "En quelle année a commencé sa construction ?",
+      "theme": "Navette spatiale Bourane",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Bourane",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Navette spatiale",
+        "Hermès",
+        "Apollo"
+      ],
+      "id": "vikidia-navette-spatiale-bourane-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Pour quel programme spatial est-elle construite ?",
+      "theme": "Navette spatiale Bourane",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "29 octobre 1988",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "27 octobre 1988",
+        "15 novembre 1988",
+        "1er novembre 1988"
+      ],
+      "id": "vikidia-navette-spatiale-bourane-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel jour le premier vol était-il prévu ?",
+      "theme": "Navette spatiale Bourane",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "15 novembre 1988",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "27 octobre 1988",
+        "29 octobre 1988",
+        "3 novembre 1988"
+      ],
+      "id": "vikidia-navette-spatiale-bourane-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel jour a-t-il eu lieu ?",
+      "theme": "Navette spatiale Bourane",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Défavorables",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Idéales",
+        "Plutôt bonnes",
+        "Moyennes"
+      ],
+      "id": "vikidia-navette-spatiale-bourane-9",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Dans quelles conditions météo ?",
+      "theme": "Navette spatiale Bourane",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Energia",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "N-1",
+        "Soyouz",
+        "Proton"
+      ],
+      "id": "vikidia-navette-spatiale-bourane-10",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel lanceur lui à permis de décoller ?",
+      "theme": "Navette spatiale Bourane",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "2",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "1",
+        "3",
+        "4"
+      ],
+      "id": "vikidia-navette-spatiale-bourane-11",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Combien de révolutions autour de la Terre fait-elle ?",
+      "theme": "Navette spatiale Bourane",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "1 heure et demi",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "1 heure",
+        "2 heures",
+        "3 heures"
+      ],
+      "id": "vikidia-navette-spatiale-bourane-12",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "En combien de temps ?",
+      "theme": "Navette spatiale Bourane",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Un avion MIG-25",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Un hélicoptère",
+        "Un boeing 747",
+        "Un Airbus A300"
+      ],
+      "id": "vikidia-navette-spatiale-bourane-13",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Lors de la descente, qui-est-ce qui accompagne la navette jusqu'à son atterrissage ?",
+      "theme": "Navette spatiale Bourane",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "L'atterrissage",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Le décollage",
+        "Le vol orbital",
+        "La mise en orbite"
+      ],
+      "id": "vikidia-navette-spatiale-bourane-14",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est la partie du vol de la navette la plus notable en performance ?",
+      "theme": "Navette spatiale Bourane",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "38600",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "38500",
+        "38700",
+        "38800"
+      ],
+      "id": "vikidia-navette-spatiale-bourane-15",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "De combien de tuiles est constituée Bourane ?",
+      "theme": "Navette spatiale Bourane",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "7",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "5",
+        "13",
+        "12"
+      ],
+      "id": "vikidia-navette-spatiale-bourane-16",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Combien en a-t-elle perdu lors de la rentrée dans l'atmosphère ?",
+      "theme": "Navette spatiale Bourane",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Non puisqu'elle n'a pas revolé",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Oui",
+        "Non, elle a eu un accident",
+        "Oui, une dizaine de fois"
+      ],
+      "id": "vikidia-navette-spatiale-bourane-17",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Les vols suivants de Bourane se sont-ils déroulés avec succès ?",
+      "theme": "Navette spatiale Bourane",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Elle a été déposée dans son hangar devenu ouvert aux visites",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Elle a été vendue en morceau sur Internet",
+        "Elle a été vendue à un musée qui l'a achetée",
+        "Elle a été détruite juste après son vol"
+      ],
+      "id": "vikidia-navette-spatiale-bourane-18",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qu'est devenue Bourane après son dernier vol ?",
+      "theme": "Navette spatiale Bourane",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Le hangar abritant Bourane, mal entretenu, s'effondre",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Bourane est de nouveau utilisée pour une mission spatiale",
+        "Bourane est déplacée de son hangar",
+        "Bourane est vendue à un collectionneur"
+      ],
+      "id": "vikidia-navette-spatiale-bourane-19",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qu'est t-il arrivé le 12 mai 2002 ?",
+      "theme": "Navette spatiale Bourane",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "L'engin est pulvérisé et les autres navettes sont gardées avec plus d'attention voire même déplacées de leur hangar",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "La navette spatiale que Bourane était censée concurrencer sera retirée au profit de Bourane",
+        "Bourane se fait connaître par des émissions télévisées et autre",
+        "Bourane est restaurée et exposée à Moscou"
+      ],
+      "id": "vikidia-navette-spatiale-bourane-20",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quels en sont les conséquences ?",
+      "theme": "Navette spatiale Bourane",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
       "answer": "Le 1er novembre 1636",
       "category": "arts",
       "choiceOnly": true,
@@ -124723,6 +129223,24 @@
       "note": null,
       "prompt": "Quand est né Nicolas Boileau ?",
       "theme": "Nicolas Boileau",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Console de salon",
+      "category": "videogames",
+      "choiceOnly": false,
+      "decoys": [
+        "Console portable",
+        "Console hybride (portable et de salon)",
+        "Console d'arcade"
+      ],
+      "id": "vikidia-nintendo-64-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est le type de console de la Nintendo 64 ?",
+      "theme": "Nintendo 64",
       "isWellKnown": true
     },
     {
@@ -124961,6 +129479,24 @@
     },
     {
       "accepted": [],
+      "answer": "Oui",
+      "category": "videogames",
+      "choiceOnly": false,
+      "decoys": [
+        "Non",
+        "Il y a eu un prototype mais jamais sorti sur la console officiellement",
+        "Oui, mais seulement au Japon"
+      ],
+      "id": "vikidia-psp-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "GTA existe t-il sur PSP?",
+      "theme": "PSP",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "Doko Demo Issyo",
       "category": "videogames",
       "choiceOnly": true,
@@ -124974,6 +129510,24 @@
       "language": "fr",
       "note": null,
       "prompt": "Quel jeu est sorti que au Japon sur PSP?",
+      "theme": "PSP",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "La Nintendo DS",
+      "category": "videogames",
+      "choiceOnly": false,
+      "decoys": [
+        "La GameBoy",
+        "La Wii",
+        "La Xbox"
+      ],
+      "id": "vikidia-psp-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Le rival de la PSP est?",
       "theme": "PSP",
       "isWellKnown": true
     },
@@ -125249,6 +129803,114 @@
     },
     {
       "accepted": [],
+      "answer": "Le musée d'Orsay",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "Le musée de Gaulle",
+        "Le musée du Louvre",
+        "Le musée Grévin"
+      ],
+      "id": "vikidia-paris-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Avant, c'était une gare de Paris ; aujourd'hui, c'est un musée ?",
+      "theme": "Paris",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "La tour Eiffel",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "La tour d'Acier",
+        "La tour Gustave",
+        "La tour Montparnasse"
+      ],
+      "id": "vikidia-paris-9",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Un grand monument très connu, d'une hauteur de 320 mètres, qui a été construit par Gustave Eiffel pour l'exposition universelle au début du XXe siècle ?",
+      "theme": "Paris",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Le château de Versailles",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "Le château de Soleil",
+        "Le musée du Louvre",
+        "Le château de Vincennes"
+      ],
+      "id": "vikidia-paris-10",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Un très grand château construit au XVIIe siècle, où ont logé Louis XIV ou Louis XVI?",
+      "theme": "Paris",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Le musée du Louvre",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "Le musée Grévin",
+        "Le musée Guggenheim",
+        "Le musée d'Orsay"
+      ],
+      "id": "vikidia-paris-11",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Un grand musée, qui compte La Joconde parmi ses œuvres. Avant d'être un musée, c'était un château médiéval?",
+      "theme": "Paris",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "La cathédrale Notre-Dame de Paris",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "La cathédrale de Chartres",
+        "La cathédrale de la Cité",
+        "La cathédrale de Reims"
+      ],
+      "id": "vikidia-paris-12",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "C'est une grande cathédrale, dont la légende parle de Quasimodo ou des gargouilles. elle a brûlé en 2019?",
+      "theme": "Paris",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Unité éducative activité de jour",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "Unité éducative activité en justice",
+        "Unité élaboration activité en justice",
+        "Union européenne des animateurs de jeunesse"
+      ],
+      "id": "vikidia-paris-13",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Que signifie le sigle UEAJ?",
+      "theme": "Paris",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "+ de 3,5 millions",
       "category": "geography",
       "choiceOnly": false,
@@ -125429,6 +130091,24 @@
     },
     {
       "accepted": [],
+      "answer": "Batterie",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Marimba",
+        "Maracas",
+        "Tambourin"
+      ],
+      "id": "vikidia-percussions-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Ici, quel est l'instrument le plus récent",
+      "theme": "Percussions",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "Hermès, le bateau s'appelle le Princesse Andromède",
       "category": "arts",
       "choiceOnly": true,
@@ -125550,6 +130230,24 @@
       "language": "fr",
       "note": null,
       "prompt": "Pierre Bottero était en train d'écrire une histoire lorsqu'il est décédé. Cette histoire a quand même été publiée. Laquelle est-ce ?",
+      "theme": "Pierre Bottero",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "...marchombre",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "...assassin",
+        "...sorcière",
+        "...mercenaire"
+      ],
+      "id": "vikidia-pierre-bottero-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Ellana est formée par Jilano Alhuïn pour devenir...",
       "theme": "Pierre Bottero",
       "isWellKnown": true
     },
@@ -125789,6 +130487,42 @@
     },
     {
       "accepted": [],
+      "answer": "eau et vol",
+      "category": "videogames",
+      "choiceOnly": false,
+      "decoys": [
+        "feu et sol",
+        "dragon et combat",
+        "eau et dragon"
+      ],
+      "id": "vikidia-pokemon-partie-2-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "De quel type est Léviator ?",
+      "theme": "Pokemon partie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "un dresseur de pokémon",
+      "category": "videogames",
+      "choiceOnly": false,
+      "decoys": [
+        "un bébé",
+        "un maitre d'arène",
+        "un professeur pokémon"
+      ],
+      "id": "vikidia-pokemon-partie-2-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui est Sacha ?",
+      "theme": "Pokemon partie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "Pierre",
       "category": "videogames",
       "choiceOnly": false,
@@ -125897,6 +130631,42 @@
     },
     {
       "accepted": [],
+      "answer": "Les élections législatives",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "Les élections députoriales",
+        "Les élections assemblée-nationales",
+        "Les élections municipales"
+      ],
+      "id": "vikidia-politique-en-france-10",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'appellent les élections des députés ?",
+      "theme": "Politique en France",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Tous les 5 ans, entre avril et juin",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "Tous les 5 ans, entre octobre et décembre",
+        "Tous les 4 ans, entre avril et juin",
+        "Tous les 6 ans, entre avril et juin"
+      ],
+      "id": "vikidia-politique-en-france-11",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand l'élection présidentielle a-t-elle lieu ?",
+      "theme": "Politique en France",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
       "answer": "très important car les littoraux sont fragiles et ont une biodiversité riche.",
       "category": "geography",
       "choiceOnly": true,
@@ -125910,6 +130680,24 @@
       "language": "fr",
       "note": null,
       "prompt": "La protection du littoral est ?",
+      "theme": "Protection du littoral",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
+      "answer": "Jonathan",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "Jonetquiattend",
+        "Gilet jaune",
+        "Jean-Claude"
+      ],
+      "id": "vikidia-protection-du-littoral-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qu’est-ce qui est jaune et qui attend?",
       "theme": "Protection du littoral",
       "isWellKnown": false
     },
@@ -125969,6 +130757,24 @@
     },
     {
       "accepted": [],
+      "answer": "Un langage de haut-niveau.",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Un langage de bas-niveau.",
+        "Un langage de moyen-niveau.",
+        "Un langage d'assemblage."
+      ],
+      "id": "vikidia-python-facile-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est le type de langage de Python ?",
+      "theme": "Python",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "à définir une fonction",
       "category": "science",
       "choiceOnly": false,
@@ -125983,6 +130789,42 @@
       "note": null,
       "prompt": "A quoi sert l'instruction def ?",
       "theme": "Python",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "L'Arabie Saoudite",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "L'Amérique",
+        "La Russie",
+        "L'Iran"
+      ],
+      "id": "vikidia-petrole-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est le premier producteur mondial de pétrole?",
+      "theme": "Pétrole",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "les québécois",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "les quebequins",
+        "les quebequiens",
+        "les acadiens"
+      ],
+      "id": "vikidia-quebec-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment appelle-t-on les habitants du Québec ?",
+      "theme": "Québec",
       "isWellKnown": true
     },
     {
@@ -126041,6 +130883,24 @@
     },
     {
       "accepted": [],
+      "answer": "2023 et 2024",
+      "category": "sport",
+      "choiceOnly": false,
+      "decoys": [
+        "2005 et 2006",
+        "2017 et 2018",
+        "2010 et 2011"
+      ],
+      "id": "vikidia-rc-lens-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "En quelles années Lens a-t-il joué en ligue des champions ?",
+      "theme": "RC Lens",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "un jeu sur Roblox",
       "category": "videogames",
       "choiceOnly": false,
@@ -126059,6 +130919,132 @@
     },
     {
       "accepted": [],
+      "answer": "Zen",
+      "category": "videogames",
+      "choiceOnly": false,
+      "decoys": [
+        "Radosin",
+        "Kaydop",
+        "Turbopolsa"
+      ],
+      "id": "vikidia-rocket-league-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est le meilleur joueur français ?",
+      "theme": "Rocket league",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "SSL",
+      "category": "videogames",
+      "choiceOnly": false,
+      "decoys": [
+        "Bronze",
+        "Diamant",
+        "Platine"
+      ],
+      "id": "vikidia-rocket-league-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est le meilleur rank de Rocket League ?",
+      "theme": "Rocket league",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Champion",
+      "category": "videogames",
+      "choiceOnly": false,
+      "decoys": [
+        "Grand Champion",
+        "Silver",
+        "Or"
+      ],
+      "id": "vikidia-rocket-league-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est le rang de Jocelyn Masson ?",
+      "theme": "Rocket league",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "joclyne",
+      "category": "videogames",
+      "choiceOnly": false,
+      "decoys": [
+        "jocelYn",
+        "JOcelYn_profdemaths",
+        "masson_jocelyn"
+      ],
+      "id": "vikidia-rocket-league-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Et quel est le pseudo de Jocelyn Masson ?",
+      "theme": "Rocket league",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Car sa tête est ronde comme une bille",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Car c'est son prénom",
+        "Car il fait toujours rouler une bille pour trouver un coupable",
+        "Car il se déplace toujours à vélo"
+      ],
+      "id": "vikidia-rouletabille-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "D'où vient le surnom de \"Rouletabille\" ?",
+      "theme": "Rouletabille",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "D'un meurtre d'un Boulanger",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "D'avoir tué le Ptésident de la république",
+        "D'avoir grillé un feu rouge",
+        "D'avoir volé un tableau au Louvre"
+      ],
+      "id": "vikidia-rouletabille-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "De quoi est-il accusé dans le crime de Rouletabille ?",
+      "theme": "Rouletabille",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Reporter",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Détective",
+        "Animateur TV de sports",
+        "Policier"
+      ],
+      "id": "vikidia-rouletabille-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est son métier ?",
+      "theme": "Rouletabille",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "Joseph Joséphin",
       "category": "arts",
       "choiceOnly": false,
@@ -126073,6 +131059,528 @@
       "note": null,
       "prompt": "Quel est son vrai nom ?",
       "theme": "Rouletabille",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "hongrois",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "britannique",
+        "français",
+        "japonais"
+      ],
+      "id": "vikidia-rubik-s-cube-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Le Rubik's Cube a été inventé par un :",
+      "theme": "Rubik's Cube",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Magic Cube",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "Cube de Rubik",
+        "Impossible Cube",
+        "Rainbow Cube"
+      ],
+      "id": "vikidia-rubik-s-cube-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'appelait le cube au début ?",
+      "theme": "Rubik's Cube",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Rubik's Revenge",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "Professor's Cube",
+        "W-Cube 4",
+        "Mirror Cube"
+      ],
+      "id": "vikidia-rubik-s-cube-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'appelle le cube 4x4x4 ?",
+      "theme": "Rubik's Cube",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "1974",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "1975",
+        "1977",
+        "1980"
+      ],
+      "id": "vikidia-rubik-s-cube-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "En quelle année a été inventé ce casse-tête ?",
+      "theme": "Rubik's Cube",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Les années 1980",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "Les années 1970",
+        "Les années 1990",
+        "Les années 1960"
+      ],
+      "id": "vikidia-rubik-s-cube-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "De quelle décennie est-il devenu le symbole ?",
+      "theme": "Rubik's Cube",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "26",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "27",
+        "54",
+        "24"
+      ],
+      "id": "vikidia-rubik-s-cube-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Combien contient-il de cubes ?",
+      "theme": "Rubik's Cube",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "4",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "2",
+        "5",
+        "3"
+      ],
+      "id": "vikidia-rubik-s-cube-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Combien de variantes cubiques a commercialisé Ernő Rubik ?",
+      "theme": "Rubik's Cube",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Septembre 1979",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "Novembre 1979",
+        "Novembre 1980",
+        "Mars 1979"
+      ],
+      "id": "vikidia-rubik-s-cube-9",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Dans quel mois l'accord avec Ideal Toys pour distribuer le cube a t-il été signé ?",
+      "theme": "Rubik's Cube",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Mai 1980",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "Décembre 1980",
+        "Mai 1981",
+        "Janvier 1980"
+      ],
+      "id": "vikidia-rubik-s-cube-10",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Dans quel mois la Hongrie exporte les premiers exemplaires publics vers New-York, Paris et Londres ?",
+      "theme": "Rubik's Cube",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Winning Moves",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "Ystari Games",
+        "Asmodee",
+        "Gigamic"
+      ],
+      "id": "vikidia-rubik-s-cube-11",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle principale marque distribue le cube en France ?",
+      "theme": "Rubik's Cube",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Jumbo",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "Abacus",
+        "Haba",
+        "Clementoni"
+      ],
+      "id": "vikidia-rubik-s-cube-12",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Et en Belgique ?",
+      "theme": "Rubik's Cube",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "100000 000",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "50000 000",
+        "80000 000",
+        "20000 000"
+      ],
+      "id": "vikidia-rubik-s-cube-13",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Combien de cubes sont vendus entre 1980 et 1982 ?",
+      "theme": "Rubik's Cube",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "1981",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "1986",
+        "2003",
+        "1979"
+      ],
+      "id": "vikidia-rubik-s-cube-14",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Un écolier, Patrick Bossert, publia la solution du Rubik's Cube. Quand ?",
+      "theme": "Rubik's Cube",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Douze ans",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "Neuf ans",
+        "Treize ans",
+        "Quinze ans"
+      ],
+      "id": "vikidia-rubik-s-cube-15",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel âge avait-il ?",
+      "theme": "Rubik's Cube",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Vert",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "Rouge",
+        "Jaune",
+        "Orange"
+      ],
+      "id": "vikidia-rubik-s-cube-16",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle couleur est opposée à Bleu sur les faces du cube résolu ?",
+      "theme": "Rubik's Cube",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "3 s 47",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "5,02 s",
+        "5, 47 s",
+        "6,18 s"
+      ],
+      "id": "vikidia-rubik-s-cube-17",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est le record du monde actuel ?",
+      "theme": "Rubik's Cube",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Yusheng Du",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "Feliks Zemdegs",
+        "Mats Valk",
+        "Erik Akkersdijk"
+      ],
+      "id": "vikidia-rubik-s-cube-18",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui le détient ?",
+      "theme": "Rubik's Cube",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "43252003274489 856 000",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "43252003274489 712 000",
+        "43252003113646 165 000",
+        "43252003274489 945 000"
+      ],
+      "id": "vikidia-rubik-s-cube-19",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Combien le Rubik's Cube a de combinaisons ?",
+      "theme": "Rubik's Cube",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Cubestormer III",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "Cubestormer II",
+        "Cubestormer IV",
+        "Rubot II"
+      ],
+      "id": "vikidia-rubik-s-cube-20",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Le 17 mars 2014, un robot pulvérise le record humain et l'établit à 3,253 s, battant ainsi son prédécesseur qui avait résolu le cube en 5,27 s. Quel est son nom ?",
+      "theme": "Rubik's Cube",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Josip Matijek",
+      "category": "everyday",
+      "choiceOnly": false,
+      "decoys": [
+        "Uwe Mèffert",
+        "Ernő Rubik",
+        "Tony Fisher"
+      ],
+      "id": "vikidia-rubik-s-cube-21",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui a inventé la Twistball ?",
+      "theme": "Rubik's Cube",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "La Fédération de Russie",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "L'Empire russe",
+        "L'Union Soviétique",
+        "La Moscovie"
+      ],
+      "id": "vikidia-russie-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle est la Russie d'aujourd'hui ?",
+      "theme": "Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Staline",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "Poutine",
+        "Ivan le Terrible",
+        "Gorbatchev"
+      ],
+      "id": "vikidia-russie-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Beaucoup de gens ont été exécutés sans jugement en Union soviétique. Mais sous quel dictateur, principalement ?",
+      "theme": "Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "À Moscou",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "À Saint-Pétersbourg",
+        "À Volgograd",
+        "À Novgorod"
+      ],
+      "id": "vikidia-russie-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Où se trouve la basilique de Saint-Basile-le-Bienheureux ?",
+      "theme": "Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "À Saint-Pétersbourg",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "À Kostroma",
+        "À Moscou",
+        "À Kazan"
+      ],
+      "id": "vikidia-russie-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Où se trouve la basilique de Saint-Sauveur-sur-le-Sang-Versé ?",
+      "theme": "Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Leningrad",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "Stalingrad",
+        "Kostringrad",
+        "Kaliningrad"
+      ],
+      "id": "vikidia-russie-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est l'ancien nom de Saint-Pétersbourg ?",
+      "theme": "Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Saint-Pétersbourg",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "Voronej",
+        "Volgograd",
+        "Mourmansk"
+      ],
+      "id": "vikidia-russie-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle ville a fondé Pierre-le-Grand pour sauver lEmpire russe alors qu'elle allait être envahie ?",
+      "theme": "Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Lac Baïkal",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "Lac Ladoga",
+        "Lac Aral",
+        "Lac Onega"
+      ],
+      "id": "vikidia-russie-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "En Sibérie se trouve la plus grande réserve d'eau douce du monde. Comment s'appelle-t-elle ?",
+      "theme": "Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Volgograd",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "Saratov",
+        "Saint-Pétersbourg",
+        "Samara"
+      ],
+      "id": "vikidia-russie-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle ville s'appelait autre fois Stalingrad ?",
+      "theme": "Russie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Les ponts qui enjambent la Neva se lèvent au même moment pour laisser passer les bateaux.",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "Les bâtiments s'illuminent.",
+        "Il y a des spectacles de rue partout.",
+        "Un feu d'artifice est tiré sur la place Rouge."
+      ],
+      "id": "vikidia-russie-9",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Que se passe-t-il un soir de nuit blanche à Saint-Péterbourg ?",
+      "theme": "Russie",
       "isWellKnown": true
     },
     {
@@ -126113,6 +131621,186 @@
     },
     {
       "accepted": [],
+      "answer": "1 septembre 1939",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "3 août 1939",
+        "10 mai 1940",
+        "15 mars 1939"
+      ],
+      "id": "vikidia-seconde-guerre-mondiale-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand est-ce que les armées allemandes attaquent la Pologne ?",
+      "theme": "Seconde Guerre Mondiale",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "3 septembre 1939",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "1 septembre 1939",
+        "2 septembre 1939",
+        "10 mai 1940"
+      ],
+      "id": "vikidia-seconde-guerre-mondiale-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand la France entre-t-elle en guerre contre l'Allemagne aux cotés de l'Angleterre ?",
+      "theme": "Seconde Guerre Mondiale",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "à Rethondes, dans le même wagon que la Première Guerre Mondiale",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "à Berlin, dans le bureau d’Hitler",
+        "à Rethondes, dans une petite salle",
+        "à Vichy, dans le bureau de Pétain"
+      ],
+      "id": "vikidia-seconde-guerre-mondiale-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Où est signé l’armistice du 22 juin 1940 ?",
+      "theme": "Seconde Guerre Mondiale",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Philippe Pétain",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Pierre Laval",
+        "Charles de Gaulle",
+        "Paul Reynaud"
+      ],
+      "id": "vikidia-seconde-guerre-mondiale-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui est le principal chef du régime de Vichy ?",
+      "theme": "Seconde Guerre Mondiale",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Allemagne, Japon, Italie",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Allemagne, France, Angleterre, États-Unis",
+        "Pologne, Allemagne, États-Unis, Algérie",
+        "Allemagne, Espagne, Portugal"
+      ],
+      "id": "vikidia-seconde-guerre-mondiale-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quels pays font partie des Forces de l’Axe ?",
+      "theme": "Seconde Guerre Mondiale",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "le 8 décembre 1941",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "le 17 juin 1942",
+        "le 18 juin 1942",
+        "le 6 juin 1944"
+      ],
+      "id": "vikidia-seconde-guerre-mondiale-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand est-ce que les États-Unis entrent en guerre ?",
+      "theme": "Seconde Guerre Mondiale",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Car des japonais ont attaqué la base de Pearl Harbor",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Car des japonais ont assassiné Franklin Roosevelt",
+        "Car les américains avaient peur de l’extension du Japon dans le Pacifique",
+        "Car l'Allemagne avait envahi le Canada"
+      ],
+      "id": "vikidia-seconde-guerre-mondiale-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Pourquoi entrent-ils en guerre ?",
+      "theme": "Seconde Guerre Mondiale",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "l’URSS",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "l’Allemagne",
+        "la France",
+        "l'Italie"
+      ],
+      "id": "vikidia-seconde-guerre-mondiale-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui remporte la bataille de Stalingrad ?",
+      "theme": "Seconde Guerre Mondiale",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "le débarquement en Normandie",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "le débarquement en Allemagne",
+        "le débarquement en URSS",
+        "le débarquement en Norvège"
+      ],
+      "id": "vikidia-seconde-guerre-mondiale-9",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel débarquement a permis la libération de la France ?",
+      "theme": "Seconde Guerre Mondiale",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "le 30 avril 1945",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "le 2 mai 1945",
+        "le 1 mai 1945",
+        "le 8 mai 1945"
+      ],
+      "id": "vikidia-seconde-guerre-mondiale-10",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand Hitler se suicide t-il ?",
+      "theme": "Seconde Guerre Mondiale",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "Soviétique",
       "category": "history",
       "choiceOnly": false,
@@ -126126,6 +131814,42 @@
       "language": "fr",
       "note": null,
       "prompt": "Quelle armée arrive en premier dans la ville de Berlin?",
+      "theme": "Seconde Guerre Mondiale",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "pouvoir négocier avantageusement sur l’occupation de la capitale",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "se débarrasser des allemands par eux mêmes",
+        "être récompensé d’avoir détruit Berlin et les allemands",
+        "recevoir la moitié de l'or trouvé dans la ville"
+      ],
+      "id": "vikidia-seconde-guerre-mondiale-12",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel avantage est donné à cette armée ?",
+      "theme": "Seconde Guerre Mondiale",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Berlin est occupée par les Soviétiques à l’Est, par les Américains au Sud Ouest et par les Français au Nord Ouest",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "Berlin est reconstruite par les allemands puis ils continuèrent sans violence leur vie",
+        "Berlin est occupée par les Soviétiques qui y instaurent le communisme",
+        "Berlin est rasée puis reconstruite ailleurs par les Alliés"
+      ],
+      "id": "vikidia-seconde-guerre-mondiale-13",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qu’arrive-t-il à Berlin après la guerre?",
       "theme": "Seconde Guerre Mondiale",
       "isWellKnown": true
     },
@@ -126216,24 +131940,6 @@
       "language": "fr",
       "note": null,
       "prompt": "Autrefois, quel astre était encore considéré comme une planète dans le système solaire ?",
-      "theme": "Soleil",
-      "isWellKnown": true
-    },
-    {
-      "accepted": [],
-      "answer": "5500 °C",
-      "category": "science",
-      "choiceOnly": false,
-      "decoys": [
-        "30000 °C",
-        "5500 °K",
-        "13450 °C"
-      ],
-      "id": "vikidia-soleil-2",
-      "isAdult": false,
-      "language": "fr",
-      "note": null,
-      "prompt": "Quelle est la température à la surface du Soleil ?",
       "theme": "Soleil",
       "isWellKnown": true
     },
@@ -126725,6 +132431,24 @@
     },
     {
       "accepted": [],
+      "answer": "Car 24,25 - 15,369 = 8,881",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Car 24,25 - 15,369 = 12,944",
+        "Car 24,25 - 15,369 = 8,41 (la réponse donnée est juste)",
+        "Car 24,25 - 15,369 = 9,121"
+      ],
+      "id": "vikidia-soustraction-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Expliquer (cocher la bonne réponse)",
+      "theme": "Soustraction",
+      "isWellKnown": false
+    },
+    {
+      "accepted": [],
       "answer": "agent secret",
       "category": "cinema",
       "choiceOnly": false,
@@ -126738,6 +132462,24 @@
       "language": "fr",
       "note": null,
       "prompt": "Quel métier fait le personnage principal de Spy x Family ?",
+      "theme": "Spy x Family",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Ostania",
+      "category": "cinema",
+      "choiceOnly": false,
+      "decoys": [
+        "Westalis",
+        "Une petite île dans l’océan Pacifique",
+        "Un micro-État des Alpes"
+      ],
+      "id": "vikidia-spy-x-family-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "De quel pays Berlint est la capitale ?",
       "theme": "Spy x Family",
       "isWellKnown": true
     },
@@ -126757,6 +132499,348 @@
       "note": null,
       "prompt": "Pour finir, quelle est l’adresse de la famille Forger ?",
       "theme": "Spy x Family",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "George Lucas",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "James Luceno",
+        "JJ. Abrams",
+        "Steven Spielberg"
+      ],
+      "id": "vikidia-star-wars-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui a réalisé Star Wars ?",
+      "theme": "Star Wars",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "2002",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "1999",
+        "2005",
+        "1997"
+      ],
+      "id": "vikidia-star-wars-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quand fut sorti l'épisode II ?",
+      "theme": "Star Wars",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Non, l'auteur original avait annoncé qu'il n'y aurait pas de troisième trilogie qui est l'œuvre de d'autres personnes ayant récupéré les droits.",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Oui, totalement. Ces films étaient prévus et ont été réalisés par la même personne.",
+        "Oui, pour le scénario. Non, pour la réalisation.",
+        "Oui, pour la réalisation. Non, pour le scénario."
+      ],
+      "id": "vikidia-star-wars-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Les épisodes VII, VIII et IX, ont-ils été réalisés ou leur scénario écrit par le même réalisateur/scénariste ?",
+      "theme": "Star Wars",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Anakin Skywalker",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Obi-Wan Kenobi",
+        "Luke Skywalker",
+        "Mace Windu"
+      ],
+      "id": "vikidia-star-wars-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel était le nom de Dark Vador en tant que Jedi ?",
+      "theme": "Star Wars",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Qui-Gon Jinn",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Dark Maul",
+        "Yoda",
+        "Mace Windu"
+      ],
+      "id": "vikidia-star-wars-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui est le maître d'Obi-Wan ?",
+      "theme": "Star Wars",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Tatooine",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Coruscant",
+        "Endor",
+        "Naboo"
+      ],
+      "id": "vikidia-star-wars-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Sur quelle planète est le futur Dark Vador ?",
+      "theme": "Star Wars",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Alderaan",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Endor",
+        "Naboo",
+        "Dagobah"
+      ],
+      "id": "vikidia-star-wars-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle planète est détruite par l'Étoile Noire ?",
+      "theme": "Star Wars",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Biggs Darklighter",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Wedge Antilles",
+        "Garven Dreis",
+        "Dak Ralter"
+      ],
+      "id": "vikidia-star-wars-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'appelle l'ami le plus proche de Luke Skywalker qui périt lors de la Bataille de Yavin ?",
+      "theme": "Star Wars",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Boba Fett",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Cassus Fett",
+        "Jango Fett",
+        "Bossk"
+      ],
+      "id": "vikidia-star-wars-9",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'appelle le chasseur de prime qui livre Han Solo à Jabba le Hutt ?",
+      "theme": "Star Wars",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Qui-Gon Jinn",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Obi-Wan Kenobi",
+        "Sifo-Dyas",
+        "Mace Windu"
+      ],
+      "id": "vikidia-star-wars-10",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "De qui le Comte Dooku a autrefois été le maître ?",
+      "theme": "Star Wars",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Rugor Nass",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Jar Jar Binks",
+        "Otoh Gunga",
+        "Capitaine Tarpals"
+      ],
+      "id": "vikidia-star-wars-11",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui est le chef des Gungans ?",
+      "theme": "Star Wars",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Jango Fett",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Zam Wesell",
+        "Dash Rendar",
+        "Aurra Sing"
+      ],
+      "id": "vikidia-star-wars-12",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Obi-Wan Kenobi identifie le commanditaire de la tentative de meurtre à l'encontre de la sénatrice Amidala. Qui est-il ?",
+      "theme": "Star Wars",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Jocasta Nu",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Vandar Tokare",
+        "Bria Tharen",
+        "Dexter Jettster"
+      ],
+      "id": "vikidia-star-wars-13",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui est l'archéologue gardant les archives Jedi ?",
+      "theme": "Star Wars",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Dark Plagueis",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Dark Bane",
+        "Dark Tenebrous",
+        "Dark Maul"
+      ],
+      "id": "vikidia-star-wars-14",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui fut autrefois le maître de Dark Sidious ?",
+      "theme": "Star Wars",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Ben",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Jacen",
+        "Anakin",
+        "Jaina"
+      ],
+      "id": "vikidia-star-wars-15",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Dans la chronologie officielle, lequel de ces enfants est un enfant d'Han Solo et de Leia Organa ?",
+      "theme": "Star Wars",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Ben",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Jaina",
+        "Jacen",
+        "Anakin"
+      ],
+      "id": "vikidia-star-wars-16",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Dans la chronologie légendaire, lequel de ces enfants n'est pas un enfant d'Han Solo et de Leia Organa ?",
+      "theme": "Star Wars",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Hosnian Prime",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Coruscant",
+        "Alderaan",
+        "Jakku"
+      ],
+      "id": "vikidia-star-wars-17",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Dans la chronologie officielle, quel est le nom du système planétaire détruit par la Base Starkiller ?",
+      "theme": "Star Wars",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Galen Marek",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Quinlan Vos",
+        "Mara Jade",
+        "Kyle Katarn"
+      ],
+      "id": "vikidia-star-wars-18",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Dans la chronologie légendaire, qui est le fondateur de l'Alliance rebelle ?",
+      "theme": "Star Wars",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "La future Exilée",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Revan",
+        "Malak",
+        "Bastila Shan"
+      ],
+      "id": "vikidia-star-wars-20",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Dans la chronologie légendaire, qui est le général qui déclenche la superarme antigravitique lors de la Bataille de Malachor V ?",
+      "theme": "Star Wars",
       "isWellKnown": true
     },
     {
@@ -126846,6 +132930,24 @@
       "language": "fr",
       "note": null,
       "prompt": "Quel membre de Stray Kids est né le 15 septembre ?",
+      "theme": "Stray Kids",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Woojin",
+      "category": "arts",
+      "choiceOnly": false,
+      "decoys": [
+        "Han",
+        "Jimin",
+        "Hyunjin"
+      ],
+      "id": "vikidia-stray-kids-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Qui a quitté le groupe en 2019 ?",
       "theme": "Stray Kids",
       "isWellKnown": true
     },
@@ -126941,6 +133043,24 @@
     },
     {
       "accepted": [],
+      "answer": "Le Razor Crest",
+      "category": "cinema",
+      "choiceOnly": false,
+      "decoys": [
+        "Le Faucon Millenium",
+        "Il n'a pas de nom",
+        "Le Slave I"
+      ],
+      "id": "vikidia-the-mandalorian-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment se nomme le vaisseau de Mando ?",
+      "theme": "The Mandalorian",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "3",
       "category": "science",
       "choiceOnly": false,
@@ -127027,6 +133147,24 @@
       "note": null,
       "prompt": "Soit ABCDEF un hexagone régulier. On trace les différentes droites joignant deux sommets. Combien y-a-t-il de droites ?",
       "theme": "Triangle",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "15 républiques",
+      "category": "history",
+      "choiceOnly": false,
+      "decoys": [
+        "15 pays",
+        "15 régions",
+        "15 provinces"
+      ],
+      "id": "vikidia-urss-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "L'URSS était composée de",
+      "theme": "URSS",
       "isWellKnown": true
     },
     {
@@ -127319,6 +133457,114 @@
     },
     {
       "accepted": [],
+      "answer": "un volcan effusif",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "un volcan explosif",
+        "un volcan liquide",
+        "un volcan endormi"
+      ],
+      "id": "vikidia-volcan-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment appelle-t-on un volcan qui crache presque uniquement de la lave ?",
+      "theme": "Volcan",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Le Vésuve",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "L'Etna",
+        "Le Piton de la Fournaise",
+        "Le Stromboli"
+      ],
+      "id": "vikidia-volcan-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel volcan est entré en éruption en 79 ap. J.-C",
+      "theme": "Volcan",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Popocatepetl",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Yellowstone",
+        "Krakatoa",
+        "Stromboli"
+      ],
+      "id": "vikidia-volcan-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est le plus haut de ces trois volcans ?",
+      "theme": "Volcan",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Les ordinateurs qui fonctionne avec Windows 7 et Windows 8.1",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Tous les ordinateurs",
+        "Aucun",
+        "Les ordinateurs qui fonctionnent avec Windows XP"
+      ],
+      "id": "vikidia-windows-10-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Windows était gratuit à son lancement pour",
+      "theme": "Windows 10",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Microsoft Edge",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Internet Explorer",
+        "Mozilla Firefox",
+        "Google Chrome"
+      ],
+      "id": "vikidia-windows-10-3",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Le navigateur Web de Windows 10 est",
+      "theme": "Windows 10",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Candy Crush Soda Saga",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Roblox",
+        "Candy Crush Saga",
+        "Fortnite"
+      ],
+      "id": "vikidia-windows-10-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Lequel de ces jeux est immédiatement télécharger lors de la mise à niveau vers Windows 10",
+      "theme": "Windows 10",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "Link",
       "category": "videogames",
       "choiceOnly": false,
@@ -127332,6 +133578,24 @@
       "language": "fr",
       "note": null,
       "prompt": "Qui est le personnage jouable dans Zelda?",
+      "theme": "Zelda",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Que on ne peut pas passer",
+      "category": "videogames",
+      "choiceOnly": false,
+      "decoys": [
+        "C'est une référence à Impa",
+        "C'est un mot très spécifique en hyrulien",
+        "C'est le nom d'un donjon du jeu"
+      ],
+      "id": "vikidia-zelda-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Que veut dire \"impasse\" dans Ocarina of Time?",
       "theme": "Zelda",
       "isWellKnown": true
     },
@@ -127409,6 +133673,24 @@
     },
     {
       "accepted": [],
+      "answer": "Le GIEC",
+      "category": "science",
+      "choiceOnly": false,
+      "decoys": [
+        "Le gieck",
+        "L'EFEO",
+        "L'OMS"
+      ],
+      "id": "vikidia-ecologie-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Comment s'appelle l'assemblée de scientifique qui étudient le climat ?",
+      "theme": "Écologie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
       "answer": "hydraulique",
       "category": "science",
       "choiceOnly": true,
@@ -127441,6 +133723,132 @@
       "note": null,
       "prompt": "Quelle bouteille devez vous choisir pour être le moins polluant ?",
       "theme": "Écologie",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Washington D.C.",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "New York",
+        "Los Angeles",
+        "Chicago"
+      ],
+      "id": "vikidia-etats-unis-1",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle est la capitale des États-Unis ?",
+      "theme": "États-Unis",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "310 millions",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "380 millions",
+        "470 millions",
+        "250 millions"
+      ],
+      "id": "vikidia-etats-unis-2",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Combien y a-t-il d'habitants aux États-Unis ?",
+      "theme": "États-Unis",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "1776",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "955",
+        "1526",
+        "1812"
+      ],
+      "id": "vikidia-etats-unis-4",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "En quelle année les Américains ont-ils déclaré leur indépendance ?",
+      "theme": "États-Unis",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "en Alaska",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "en Californie",
+        "à Hawaii",
+        "au Colorado"
+      ],
+      "id": "vikidia-etats-unis-5",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Où se trouve le plus haut sommet des États-Unis ?",
+      "theme": "États-Unis",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "en 1941",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "en 1939",
+        "en 1944",
+        "en 1942"
+      ],
+      "id": "vikidia-etats-unis-6",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "En quelle année les États-Unis entrent-ils dans la Seconde Guerre mondiale ?",
+      "theme": "États-Unis",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "New York",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "Los Angeles",
+        "Washington D.C.",
+        "Chicago"
+      ],
+      "id": "vikidia-etats-unis-7",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quelle est la ville la plus peuplée des États-Unis ?",
+      "theme": "États-Unis",
+      "isWellKnown": true
+    },
+    {
+      "accepted": [],
+      "answer": "Abraham Lincoln",
+      "category": "geography",
+      "choiceOnly": false,
+      "decoys": [
+        "George Washington",
+        "Franklin Roosevelt",
+        "Thomas Jefferson"
+      ],
+      "id": "vikidia-etats-unis-8",
+      "isAdult": false,
+      "language": "fr",
+      "note": null,
+      "prompt": "Quel est le nom du président américain pendant la Guerre de Sécession ?",
+      "theme": "États-Unis",
       "isWellKnown": true
     },
     {

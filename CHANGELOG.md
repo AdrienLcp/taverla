@@ -185,6 +185,16 @@ one part.
 
 ### Features
 
+- `[Server]` **356 more French questions, 96 of them science**, from Vikidia rows
+  the wiki wrote with three candidates. Each takes a fourth written by hand
+  against its own row, in `vikidia-fourth-decoys.json`, and ten keep their
+  refusal because *Oui*, *Non* and a third are all there is. French science
+  goes 339 → 435, history 513 → 598, arts 1 253 → 1 339, and the bank reaches
+  11 453. Writing them surfaced four rows the source had wrong — Cadoudal
+  fighting in Alsace, 10 November 1799 dated 18 brumaire, a decoy that restates
+  why Mars is red, the Neolithic offered as a wrong answer to *since the
+  Prehistory* — repaired or dropped in `question-repairs.json`.
+
 - `[Game]` **The slate's screens name their items and mark them one at a
   time.** A *Names on the items* fold in the lobby, and beside the answer key
   once the sheets are open, gives each item a label; a box left empty keeps its
