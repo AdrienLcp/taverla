@@ -208,9 +208,12 @@ importers:
       '@adrienlcp/safe-storage':
         specifier: ^0.1.0
         version: 0.1.0
-      '@adrienlcp/theme-preference':
+      '@adrienlcp/styles':
         specifier: ^0.1.0
-        version: 0.1.0(react@19.3.0)
+        version: 0.1.0(sass@1.104.1)
+      '@adrienlcp/theme-preference':
+        specifier: ^0.2.0
+        version: 0.2.0(react@19.3.0)
       '@taverla/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -365,8 +368,16 @@ packages:
   '@adrienlcp/safe-storage@0.1.0':
     resolution: {integrity: sha512-7bdnrjNQF3fedYJvYSDIpP+9Vb+csASYjS7b2zTTiqhxr91AZx75R3Ixxhl8i7y7V0SFyCNgqhyLMngcUahbTg==}
 
-  '@adrienlcp/theme-preference@0.1.0':
-    resolution: {integrity: sha512-zrlfheDPFtv+tCt69R33cQKeSl6T6/h44ZNhIahD5LbJR35enQxGnsCtEzDvwvAPGzJLE0KP2Hl172eT7MB0Qg==}
+  '@adrienlcp/styles@0.1.0':
+    resolution: {integrity: sha512-nqaJlaJnZmu7QVSQn/ax3f6EwB7n8xAilTALHLorQqEc8nDef6oKOMn00Gai8iwwSHJUO5Zu+HCe3GOPvnyUSw==}
+    peerDependencies:
+      sass: '>=1.80.0'
+    peerDependenciesMeta:
+      sass:
+        optional: true
+
+  '@adrienlcp/theme-preference@0.2.0':
+    resolution: {integrity: sha512-dz0m08FNUkElNNANXt9PeDyejoOd+QSPD9CO+bQpll3h0yeADxRkAVywzgad1TY7va9gwKUKt8MfIU85kv7ITQ==}
     peerDependencies:
       react: '>=18'
     peerDependenciesMeta:
@@ -2994,7 +3005,11 @@ snapshots:
     dependencies:
       '@adrienlcp/result': 0.1.0
 
-  '@adrienlcp/theme-preference@0.1.0(react@19.3.0)':
+  '@adrienlcp/styles@0.1.0(sass@1.104.1)':
+    optionalDependencies:
+      sass: 1.104.1
+
+  '@adrienlcp/theme-preference@0.2.0(react@19.3.0)':
     optionalDependencies:
       react: 19.3.0
 

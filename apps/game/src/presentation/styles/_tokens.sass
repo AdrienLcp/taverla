@@ -11,8 +11,8 @@
 // Each pair is one `light-dark()`, read as the row DESIGN.md tabulates it as:
 // light beside dark, which is what you compare when you tune one. It also means
 // the palette is declared once instead of in both places a theme can be decided
-// from — those two now set nothing but `color-scheme`, which is what
-// `light-dark()` reads.
+// from — `@adrienlcp/theme-preference/color-scheme.css` sets nothing but
+// `color-scheme`, which is what `light-dark()` reads.
 //
 // Every value is an exact conversion of the hex it replaces: all twenty-nine
 // round-trip to the same 8-bit sRGB colour, so this moved the notation and
@@ -22,8 +22,8 @@
 //
 // `light-dark()` is the newest thing here and costs nothing, because
 // LightningCSS lowers it for Vite's default target: what ships is a pair of
-// custom properties toggled between a space and `initial`, attached to these
-// same two rules, which works anywhere `var()` does. `oklch()` and
+// custom properties toggled between a space and `initial`, attached to the
+// `color-scheme` rules, which works anywhere `var()` does. `oklch()` and
 // `color-mix()` are inside that target and ship as written. So the authored
 // floor is Baseline 2024 and the shipped one is far older — check the built
 // CSS rather than this comment before assuming either.
@@ -32,10 +32,6 @@
 
 @layer tokens
   \:root
-    // Dark is the default because a room plays with the lights down. The two
-    // rules further down move `color-scheme` and nothing else.
-    color-scheme: dark
-
     --field-lobby: light-dark(oklch(72.58% 0.1782 43.19), oklch(49.27% 0.1593 36.32))
     --ink-lobby: light-dark(oklch(20.74% 0.0556 49.07), oklch(96.81% 0.0212 65.32))
 
@@ -190,27 +186,3 @@
   \:root[data-phase='finished']
     --field: var(--field-finished)
     --ink: var(--ink-finished)
-
-  // `ThemeProvider` stamps `data-theme` only for an explicit choice, which
-  // leaves the system default to be resolved here — in CSS, before any script
-  // has run. A JavaScript-decided theme cannot be applied until after the first
-  // paint, and that gap is the flash of the wrong ground.
-  //
-  // Both rules set `color-scheme` alone. Every token above reads it through
-  // `light-dark()`, so a theme is one declaration rather than a second palette.
-  \:root[data-theme='light']
-    color-scheme: light
-
-  @media (prefers-color-scheme: light)
-    \:root:not([data-theme='dark'])
-      color-scheme: light
-
-  // Every duration token collapses here, which is why a `var(--transition-*)`
-  // reference must fall back to `0` and never to its nominal value: if the
-  // token ever disappears, the fallback is all that is left, and a literal
-  // duration would animate for someone who asked for no motion.
-  @media (prefers-reduced-motion: reduce)
-    \:root
-      --transition-fast: 0ms
-      --transition-base: 0ms
-      --transition-slow: 0ms

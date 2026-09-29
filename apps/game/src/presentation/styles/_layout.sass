@@ -1,9 +1,9 @@
 // Pure module: mixins and the one breakpoint, no top-level CSS.
 
-/// Where a screen stops being a phone's. A SASS variable rather than a token
-/// because a media query cannot read a custom property — and it is the source
-/// the wide-column token is derived from, so the two cannot drift.
-$wide-screen: 900px
+/// `$wide-screen`, `wide` and `narrow`: where a screen stops being a phone's,
+/// and the source the wide-column token is derived from.
+@forward '@adrienlcp/styles/breakpoints'
+@use '@adrienlcp/styles/breakpoints'
 
 /// Where a front door has room to be a poster: display type down one side and
 /// everything you can act on down the other. Content-driven rather than a device
@@ -11,19 +11,6 @@ $wide-screen: 900px
 /// lines once the field is split, and below it the two columns are worse than
 /// one.
 $poster-screen: 1200px
-
-/// The breakpoint as intent rather than as a comparison. Ten call sites outside
-/// this file open with `>=` or `<` on the same number, and those two have to
-/// stay each other's exact complement — which is the one thing a grep cannot
-/// check and the one thing that breaks if the boundary ever moves off `>=`.
-/// Behind these, that is one edit.
-@mixin wide
-  @media (width >= $wide-screen)
-    @content
-
-@mixin narrow
-  @media (width < $wide-screen)
-    @content
 
 /// Past `wide`, where a stage whose payload is a grid can afford a column
 /// beside it and still keep the grid five cards across. Between the two the
@@ -63,7 +50,7 @@ $poster-screen: 1200px
   padding-inline: var(--layout-padding-inline-start) var(--layout-padding-inline-end)
   width: 100%
 
-  @include wide
+  @include breakpoints.wide
     max-width: var(--column-wide-max-width)
 
 /// The host's surface. It is read anywhere from forty centimetres to four

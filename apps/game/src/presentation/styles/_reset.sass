@@ -1,19 +1,11 @@
+// Side-effect module: emits top-level CSS. Loaded once, from globals.sass.
+//
+// The shared reset, plus what a party game needs on top of it.
+
+@use '@adrienlcp/styles/reset.css'
+
 @layer reset
-  *,
-  *::before,
-  *::after
-    box-sizing: border-box
-
-  *
-    margin: 0
-    padding: 0
-
-  html
-    -webkit-text-size-adjust: 100%
-
   body
-    -webkit-font-smoothing: antialiased
-    line-height: 1.5
     // A party game is an app, not a document. A press that landed on a control
     // Android would not act on — a buzzer disabled because you already buzzed —
     // fell through to a text selection, and Chrome answered it with a "search
@@ -27,28 +19,9 @@
     // shape.
     -webkit-tap-highlight-color: transparent
 
-  img,
-  picture,
-  svg,
-  canvas
-    display: block
-    max-width: 100%
-
-  button,
-  input,
-  select,
-  textarea
-    color: inherit
-    font: inherit
-
   input,
   textarea
     user-select: text
-
-  button
-    background: none
-    border: none
-    cursor: pointer
 
   h1,
   h2,
@@ -56,8 +29,3 @@
   h4
     font-weight: 700
     line-height: 1.1
-    text-wrap: balance
-
-  ul,
-  ol
-    list-style: none
