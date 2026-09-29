@@ -200,8 +200,11 @@ importers:
         specifier: ^0.1.1
         version: 0.1.1
       '@adrienlcp/react':
+        specifier: ^0.2.0
+        version: 0.2.0(react@19.3.0)
+      '@adrienlcp/react-aria':
         specifier: ^0.1.0
-        version: 0.1.0(react@19.3.0)
+        version: 0.1.0(react-aria-components@1.21.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(sass@1.105.0)
       '@adrienlcp/result':
         specifier: ^0.1.0
         version: 0.1.0
@@ -209,11 +212,11 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0
       '@adrienlcp/styles':
-        specifier: ^0.1.0
-        version: 0.1.0(sass@1.105.0)
-      '@adrienlcp/theme-preference':
         specifier: ^0.2.0
-        version: 0.2.0(react@19.3.0)
+        version: 0.2.0(sass@1.105.0)
+      '@adrienlcp/theme-preference':
+        specifier: ^0.3.0
+        version: 0.3.0(react@19.3.0)(vite@8.3.1(@types/node@26.6.3)(esbuild@0.28.2)(sass@1.105.0)(tsx@4.23.15))
       '@taverla/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -357,8 +360,18 @@ packages:
   '@adrienlcp/i18n@0.1.1':
     resolution: {integrity: sha512-jt5NnArjdbJR3QrJGzqDMwbF7WRGA/Z9AIKsAkmLxd/gnt4hc2AIHZbYSawOPMwhxeOhqEmwXvmqEf4wEZAaNg==}
 
-  '@adrienlcp/react@0.1.0':
-    resolution: {integrity: sha512-OWXwuKk908qebVrZ538h3qAgBKpYdbfUSKNG6A1SYnbRD/8sC/xesqWGm5FYw9TIPMfALMFb1Hdgtwp1tbtGCA==}
+  '@adrienlcp/react-aria@0.1.0':
+    resolution: {integrity: sha512-tIK5xmvKqM4T68pCeM5ZkAX3fut9GlBi/1JUhIsUWsvnP1c8iBcoCCQFSU2jqRlOammhj0+m5gu/Px965I6Y3Q==}
+    peerDependencies:
+      react: '>=19'
+      react-aria-components: '>=1.21.0'
+      sass: '>=1.80.0'
+    peerDependenciesMeta:
+      sass:
+        optional: true
+
+  '@adrienlcp/react@0.2.0':
+    resolution: {integrity: sha512-Is157B8/SpM+aFwfLBR/Fgpfjdqbkh4iJp0o/baLSOxRxrXPMJrDXtFBSUX9Y8074yfmVHwyT/liXHigDyRgkw==}
     peerDependencies:
       react: '>=19'
 
@@ -368,20 +381,23 @@ packages:
   '@adrienlcp/safe-storage@0.1.0':
     resolution: {integrity: sha512-7bdnrjNQF3fedYJvYSDIpP+9Vb+csASYjS7b2zTTiqhxr91AZx75R3Ixxhl8i7y7V0SFyCNgqhyLMngcUahbTg==}
 
-  '@adrienlcp/styles@0.1.0':
-    resolution: {integrity: sha512-nqaJlaJnZmu7QVSQn/ax3f6EwB7n8xAilTALHLorQqEc8nDef6oKOMn00Gai8iwwSHJUO5Zu+HCe3GOPvnyUSw==}
+  '@adrienlcp/styles@0.2.0':
+    resolution: {integrity: sha512-nbkdUjv7Q/8S5lr0fazkLvhqk/gotk/5hGtw9n5D9JULjl/HYen4edH4uzU8ANMJ8yDjH+nc8V+GNrT5fQPF2g==}
     peerDependencies:
       sass: '>=1.80.0'
     peerDependenciesMeta:
       sass:
         optional: true
 
-  '@adrienlcp/theme-preference@0.2.0':
-    resolution: {integrity: sha512-dz0m08FNUkElNNANXt9PeDyejoOd+QSPD9CO+bQpll3h0yeADxRkAVywzgad1TY7va9gwKUKt8MfIU85kv7ITQ==}
+  '@adrienlcp/theme-preference@0.3.0':
+    resolution: {integrity: sha512-s5cFtjJzKY4nNuEZAfXpHb/go4SKAU/K1mLGuQk7WFjfgLrB7NWnFZwdkEAKJ8Lu3Jm4YjF7J+Wg5TJFfvA2cA==}
     peerDependencies:
       react: '>=18'
+      vite: '>=7'
     peerDependenciesMeta:
       react:
+        optional: true
+      vite:
         optional: true
 
   '@adrienlcp/tsconfig@0.1.0':
@@ -2985,7 +3001,14 @@ snapshots:
 
   '@adrienlcp/i18n@0.1.1': {}
 
-  '@adrienlcp/react@0.1.0(react@19.3.0)':
+  '@adrienlcp/react-aria@0.1.0(react-aria-components@1.21.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(sass@1.105.0)':
+    dependencies:
+      react: 19.3.0
+      react-aria-components: 1.21.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+    optionalDependencies:
+      sass: 1.105.0
+
+  '@adrienlcp/react@0.2.0(react@19.3.0)':
     dependencies:
       react: 19.3.0
 
@@ -2995,13 +3018,16 @@ snapshots:
     dependencies:
       '@adrienlcp/result': 0.1.0
 
-  '@adrienlcp/styles@0.1.0(sass@1.105.0)':
+  '@adrienlcp/styles@0.2.0(sass@1.105.0)':
     optionalDependencies:
       sass: 1.105.0
 
-  '@adrienlcp/theme-preference@0.2.0(react@19.3.0)':
+  '@adrienlcp/theme-preference@0.3.0(react@19.3.0)(vite@8.3.1(@types/node@26.6.3)(esbuild@0.28.2)(sass@1.105.0)(tsx@4.23.15))':
+    dependencies:
+      '@adrienlcp/safe-storage': 0.1.0
     optionalDependencies:
       react: 19.3.0
+      vite: 8.3.1(@types/node@26.6.3)(esbuild@0.28.2)(sass@1.105.0)(tsx@4.23.15)
 
   '@adrienlcp/tsconfig@0.1.0': {}
 

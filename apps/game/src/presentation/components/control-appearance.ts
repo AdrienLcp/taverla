@@ -1,4 +1,4 @@
-import { composeClassName } from '@adrienlcp/react'
+import { composeClassName } from '@adrienlcp/react-aria'
 import type { ClassNameOrFunction } from 'react-aria-components'
 
 export type ControlSize = 'small' | 'medium' | 'large'

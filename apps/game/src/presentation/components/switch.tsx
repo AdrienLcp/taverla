@@ -1,4 +1,4 @@
-import { composeClassName } from '@adrienlcp/react'
+import { composeClassName } from '@adrienlcp/react-aria'
 import type React from 'react'
 import {
   SwitchButton,
