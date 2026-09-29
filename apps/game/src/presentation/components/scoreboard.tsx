@@ -10,6 +10,7 @@ import {
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import { Button } from './button'
+import { VisuallyHidden } from './visually-hidden'
 
 import './scoreboard.sass'
 
@@ -114,9 +115,7 @@ export const Scoreboard: React.FC<ScoreboardProps> = ({
               <span className='state'>{translate('player.away')}</span>
             )}
             {player.id === youId && (
-              <span className='visually-hidden'>
-                {` (${translate('player.you')})`}
-              </span>
+              <VisuallyHidden elementType='span'>{` (${translate('player.you')})`}</VisuallyHidden>
             )}
           </span>
           {isRanked && <span className='score'>{player.score}</span>}

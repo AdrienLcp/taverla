@@ -7,6 +7,7 @@ import {
   hasAnybodyScored
 } from '@taverla/core/scoring/scoreboard'
 
+import { VisuallyHidden } from '@/presentation/components/visually-hidden'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import './round-board.sass'
@@ -77,9 +78,9 @@ export const RoundBoard: React.FC<RoundBoardProps> = ({ round, view }) => {
             <span className='nickname'>
               {player.nickname}
               {player.id === view.youId && (
-                <span className='visually-hidden'>
+                <VisuallyHidden elementType='span'>
                   {` (${translate('player.you')})`}
-                </span>
+                </VisuallyHidden>
               )}
             </span>
             {isPaying && (
