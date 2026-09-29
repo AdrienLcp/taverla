@@ -36,10 +36,6 @@ describe('translator', () => {
     expect(i18n.translator('en')('score', { count: 0 })).toBe('0 points')
   })
 
-  // A consumer memoising on the translator has to see a new identity when the
-  // locale changes and the same one when it does not. Rebuilding on every call
-  // — which is what a provider calling `createTranslator` inline does — makes
-  // every downstream `useMemo` recompute on every render.
   it('[i18n] hands out one translator per locale, not one per call', () => {
     expect(i18n.translator('fr')).toBe(i18n.translator('fr'))
     expect(i18n.translator('fr')).not.toBe(i18n.translator('en'))
@@ -59,7 +55,6 @@ describe('negotiate', () => {
 })
 
 describe('compare', () => {
-  // Sorting by code point puts É after Z, which no French reader expects.
   it('[i18n] orders names the way the locale does, not the way code points do', () => {
     const names = ['Zoé', 'Émile', 'Adrien']
 
@@ -129,8 +124,6 @@ describe('a dictionary that is not in the bundle yet', () => {
     expect(registry.translator('de')).not.toBe(registry.translator('en'))
   })
 
-  // The identity is the signal a consumer re-renders on: same translator, same
-  // language; new translator, new language.
   it('[i18n] hands out a new translator on the far side of a load', async () => {
     const { registry } = buildRegistry()
     const before = registry.translator('de')
@@ -233,14 +226,7 @@ describe('a dictionary that fails to load', () => {
   })
 })
 
-// Five languages is the shape this library exists for: one dictionary in the
-// bundle and four behind loaders. Regional variants are not wanted yet, so what
-// is asserted is that adding one stays a one-line decision — negotiation walks
-// a tag both up and down.
 describe('five languages', () => {
-  // What is under test is the registry's shape, not four vocabularies, so the
-  // four loaders fetch the same module. Which words come back is the business
-  // of the tests above.
   const laterOn = () => import('./dictionary-de.fixture')
 
   const registry = createI18n({

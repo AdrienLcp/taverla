@@ -109,14 +109,15 @@ export type MatchingDictionary<Reference, Candidate> = {
     Reference[Segment],
     Segment extends keyof Candidate ? Candidate[Segment] : never
   >
-} & {
-  /**
-   * A key the reference does not have, demanded as `never` so that whatever
-   * was written under it is refused. TypeScript's own excess property check
-   * cannot do this here: it fires on a literal with a type of its own, and a
-   * dictionary reaches the registry as a value, from another module as often
-   * as not.
-   */
+} & KeysTheReferenceLacksRefused<Reference, Candidate>
+
+/**
+ * A key the reference does not have, demanded as `never` so that whatever was
+ * written under it is refused. TypeScript's own excess property check cannot do
+ * this here: it fires on a literal with a type of its own, and a dictionary
+ * reaches the registry as a value, from another module as often as not.
+ */
+type KeysTheReferenceLacksRefused<Reference, Candidate> = {
   [Segment in Exclude<keyof Candidate, keyof Reference>]: never
 }
 
@@ -168,12 +169,14 @@ type Join<Segment, Rest> = Segment extends string
  * losing a key quietly — with a misleading error, since the whole path union
  * collapses at once.
  */
+type MaxPathDepth = 10
+
 type NextLevel = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 type Level = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
 
 /** Every leaf, as the dotted path that reaches it. */
-export type DotPath<T, Remaining extends Level = 10> = {
+export type DotPath<T, Remaining extends Level = MaxPathDepth> = {
   [Segment in keyof T]: T[Segment] extends string | DefinedTranslation
     ? Segment
     : NextLevel[Remaining] extends Level
@@ -227,6 +230,8 @@ type ValueForParam<
           ? number
           : never
 
+type FormattedCountMarker = '?'
+
 /**
  * Every placeholder a message writes, left as written — `name`, `at:date`. What
  * a caller owes is built from that union in one mapped type rather than folded
@@ -239,7 +244,7 @@ type ValueForParam<
  */
 type ParamsIn<Message extends string> =
   Message extends `${string}{${infer Param}}${infer Rest}`
-    ? (Param extends '?' ? never : Param) | ParamsIn<Rest>
+    ? (Param extends FormattedCountMarker ? never : Param) | ParamsIn<Rest>
     : never
 
 /**

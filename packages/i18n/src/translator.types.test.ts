@@ -66,10 +66,6 @@ describe('keys', () => {
     >()
   })
 
-  // The counter in `DotPath` has to stop somewhere, and past it the whole path
-  // union collapses at once — so the error a caller sees names their key rather
-  // than the nesting. Ten segments is about twice the deepest key a dictionary
-  // holds.
   it('[types] gives up past ten segments rather than lose a key quietly', () => {
     type TenSegments = {
       a: { b: { c: { d: { e: { f: { g: { h: { i: { j: 'x' } } } } } } } } }
@@ -103,12 +99,6 @@ describe('values', () => {
     }>()
   })
 
-  // The forms a plural chooses between are dictionary text like the sentence,
-  // and the runtime substitutes inside the one it selects. Reading the message
-  // alone left `{sender}` on screen with nothing in the types asking for it.
-  //
-  // `{?}` is not among them: it is where the count prints, filled from the
-  // number the caller already passed.
   it('[types] asks for a placeholder a plural form carries', () => {
     const inbox = defineTranslation('{count:plural}', {
       plural: {
@@ -150,9 +140,6 @@ describe('what a dictionary may hold', () => {
     >().toEqualTypeOf<'Played {at:date}'>()
   })
 
-  // A mapped type over a primitive returns that primitive, so the last branch
-  // has to name `Dictionary` for a leaf that is not a sentence to be caught at
-  // all.
   it('[types] refuses a leaf that is not a message', () => {
     expectTypeOf<WellFormed<{ count: 3 }>>().toBeNever()
     expectTypeOf<WellFormed<{ at: Date }>>().toBeNever()
@@ -250,17 +237,12 @@ describe('what a second locale owes each message', () => {
     expectTypeOf<Matches<'Hello', 'Bonjour {name}'>>().toEqualTypeOf<false>()
   })
 
-  // The value a caller passes is decided by the type after the colon, so two
-  // messages naming the same placeholder differently still ask for different
-  // things — a `number` the locale formats, or a string already printed.
   it('[types] refuses a placeholder whose value changes type', () => {
     expectTypeOf<
       Matches<'{count:number} left', '{count} restants'>
     >().toEqualTypeOf<false>()
   })
 
-  // Word order is the whole point of translating. Only what the message asks
-  // of the outside is compared, never where it asks for it.
   it('[types] lets the sentence be rebuilt around the placeholders', () => {
     expectTypeOf<
       Matches<'{name} played {at:date}', 'Le {at:date}, {name} a joué'>
@@ -280,9 +262,6 @@ describe('what a second locale owes each message', () => {
     >().toEqualTypeOf<false>()
   })
 
-  // The forms are compared as one set, not form by form: a language that names
-  // the sender only in its plural, where English names it in both, says the
-  // same thing. Dropping it from all of them does not.
   it('[types] compares the placeholders a plural’s forms carry, too', () => {
     expectTypeOf<Matches<typeof inbox, typeof inbox>>().toEqualTypeOf<true>()
     expectTypeOf<
@@ -316,11 +295,6 @@ describe('what a second locale owes each message', () => {
       >
     >().toEqualTypeOf<false>()
   })
-  // What `defineDictionary` is for. An annotated dictionary — and one written
-  // with `satisfies`, whose contextual type is that same `string` — reaches
-  // here with every message widened, and a widened message has no placeholder
-  // left to compare. Refusing it is the only honest answer: accepting it would
-  // let exactly the mistake this checks for through, unexamined.
   it('[types] refuses a dictionary whose messages have been widened', () => {
     expectTypeOf<Matches<'Hello {name}', string>>().toEqualTypeOf<false>()
   })
@@ -333,9 +307,6 @@ describe('rich values', () => {
     >().toEqualTypeOf<{ link: (children: string) => string }>()
   })
 
-  // Every placeholder in the message lands in one object, however many there
-  // are and wherever they were read from — the sentence, or a form a plural
-  // chooses between. The span functions are the intersection beside it.
   it('[types] asks for the message’s own values alongside them', () => {
     expectTypeOf<
       RichValuesFor<'Hi <b>{name}</b>, {count:number} left', number>
@@ -375,9 +346,6 @@ describe('the registry', () => {
     expectTypeOf(i18n.defaultLocale).toEqualTypeOf<'en'>()
   })
 
-  // The keys come from the default locale's dictionary even when the strings
-  // being read are another language's, so this call compiles for `fr` too — and
-  // a key no dictionary declares compiles for neither.
   it('[types] types the keys from the default locale’s dictionary', () => {
     expectTypeOf(i18n.translator('fr')('title')).toEqualTypeOf<string>()
     expectTypeOf(
@@ -406,8 +374,6 @@ describe('a registry that loads a locale late', () => {
     expectTypeOf(i18n.negotiate([])).toEqualTypeOf<'de' | 'en'>()
   })
 
-  // A loader is checked against the reference before it is ever called, so the
-  // keys are the same ones whether the dictionary is in the bundle or not.
   it('[types] types the keys from the default locale either way', () => {
     expectTypeOf(i18n.translator('de')('title')).toEqualTypeOf<string>()
     expectTypeOf(
@@ -421,10 +387,6 @@ describe('a registry that loads a locale late', () => {
     >()
   })
 
-  // The default locale's entry is the reference itself, so registering a loader
-  // there would type every key from a function — which is why the parameter
-  // refuses one. That refusal is a compile error, and this is the type the
-  // registry would otherwise reach.
   it('[types] would have no key at all if the reference arrived late', () => {
     expectTypeOf<
       DotPath<() => Promise<{ default: { title: 'Dashboard' } }>>

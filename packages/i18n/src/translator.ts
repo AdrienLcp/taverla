@@ -63,7 +63,7 @@ export const createTranslator = <Reference>({
   dictionary,
   locale
 }: TranslatorOptions<Reference>): Translator<Reference> => {
-  const formatters = createFormatters(locale)
+  const formatters = createTranslatorScopedFormatters(locale)
 
   function translate<Key extends PlainKey<Reference>>(key: Key): string
   function translate<
@@ -106,10 +106,9 @@ export const createTranslator = <Reference>({
         ? ([translation, {}] as const)
         : translation
 
-    // The spans are cut before anything is substituted, so a value that itself
-    // reads `<b>` is written out as text rather than becoming a span — the same
-    // rule the placeholders follow, for the same reason.
-    return splitSpans(message).map((span) => {
+    const spansCutBeforeSubstitution = splitSpansWithoutNesting(message)
+
+    return spansCutBeforeSubstitution.map((span) => {
       const text = substitute({
         formatters,
         message: span.text,
@@ -140,7 +139,7 @@ type Span = { tag: string | undefined; text: string }
  * function receives. Nesting is the price of that simplicity, and no sentence
  * has needed it yet.
  */
-const splitSpans = (message: string): Span[] => {
+const splitSpansWithoutNesting = (message: string): Span[] => {
   const spans: Span[] = []
   let cursor = 0
 
@@ -356,10 +355,10 @@ const pluralize = ({
     return String(count)
   }
 
-  const category =
-    count === 0 && forms.zero !== undefined
-      ? 'zero'
-      : formatters.plural({ type: forms.type }).select(count)
+  const optsIntoZeroForm = count === 0 && forms.zero !== undefined
+  const category = optsIntoZeroForm
+    ? 'zero'
+    : formatters.plural({ type: forms.type }).select(count)
 
   return (forms[category] ?? forms.other).replaceAll(
     FORMATTED_COUNT,
@@ -418,7 +417,7 @@ type Formatters = {
  * in a different order get an entry each. They come from dictionary literals,
  * so there are as many entries as the dictionary has distinct formats.
  */
-const createFormatters = (locale: string): Formatters => {
+const createTranslatorScopedFormatters = (locale: string): Formatters => {
   const dates = new Map<string, Intl.DateTimeFormat>()
   const displayNames = new Map<string, Intl.DisplayNames>()
   const lists = new Map<string, Intl.ListFormat>()

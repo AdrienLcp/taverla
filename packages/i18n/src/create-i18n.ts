@@ -35,6 +35,10 @@ type Registered<Reference> = Localized<Reference> | DictionaryLoader<Reference>
 
 type AnyLoader = () => Promise<{ default: Dictionary }>
 
+const isLoader = <Reference>(
+  registered: Registered<Reference> | undefined
+): registered is DictionaryLoader<Reference> => typeof registered === 'function'
+
 /**
  * One locale's entry held to the reference, whichever way it arrives. A loader
  * is compared through the dictionary its module `export default`s, so a locale
@@ -145,12 +149,7 @@ export const createI18n = <
 
   const locales = localesOf<Locale>(dictionaries)
 
-  // Read into a map once, which is what carries the signature's promise into
-  // the body. Indexed in place, an entry keeps every constraint the parameter
-  // is an intersection of, and inside that knot the compiler will not tell a
-  // dictionary from a loader; a map's value type is the plain alternative the
-  // registry was describing all along.
-  const registry = new Map<Locale, Registered<Reference>>(
+  const registryWithoutIntersection = new Map<Locale, Registered<Reference>>(
     locales.map((locale) => [locale, dictionaries[locale]])
   )
 
@@ -159,8 +158,8 @@ export const createI18n = <
   const loading = new Map<Locale, Promise<Translator<Reference>>>()
   const translators = new Map<Locale, Translator<Reference>>()
 
-  for (const [locale, registered] of registry) {
-    if (typeof registered !== 'function') {
+  for (const [locale, registered] of registryWithoutIntersection) {
+    if (!isLoader(registered)) {
       loaded.set(locale, registered)
     }
   }
@@ -188,7 +187,7 @@ export const createI18n = <
    * language it reads changes and the same one when it does not, or every
    * `useMemo` downstream either recomputes forever or serves the old language.
    */
-  const translatorFor = (
+  const stableTranslatorFor = (
     locale: Locale,
     dictionary: Localized<Reference>
   ): Translator<Reference> => {
@@ -209,15 +208,15 @@ export const createI18n = <
     const dictionary = loaded.get(locale)
 
     return dictionary === undefined
-      ? translatorFor(defaultLocale, defaultDictionary)
-      : translatorFor(locale, dictionary)
+      ? stableTranslatorFor(defaultLocale, defaultDictionary)
+      : stableTranslatorFor(locale, dictionary)
   }
 
   const load = (locale: Locale): Promise<Translator<Reference>> => {
     const dictionary = loaded.get(locale)
 
     if (dictionary !== undefined) {
-      return Promise.resolve(translatorFor(locale, dictionary))
+      return Promise.resolve(stableTranslatorFor(locale, dictionary))
     }
 
     const inFlight = loading.get(locale)
@@ -226,20 +225,17 @@ export const createI18n = <
       return inFlight
     }
 
-    const registered = registry.get(locale)
+    const loader = registryWithoutIntersection.get(locale)
 
-    // Unreachable while every locale is either loaded or a loader, which the
-    // loop above establishes — but `Map.get` cannot say so, and answering with
-    // the reader's current translator beats throwing at them.
-    if (registered === undefined || typeof registered !== 'function') {
+    if (!isLoader(loader)) {
       return Promise.resolve(translator(locale))
     }
 
-    const started = fetchDictionary<Reference>(registered)
+    const started = fetchDictionary<Reference>(loader)
       .then((dictionary) => {
         loaded.set(locale, dictionary)
 
-        return translatorFor(locale, dictionary)
+        return stableTranslatorFor(locale, dictionary)
       })
       .finally(() => {
         loading.delete(locale)

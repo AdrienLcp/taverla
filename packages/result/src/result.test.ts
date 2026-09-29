@@ -58,9 +58,6 @@ describe('Result.failure', () => {
 })
 
 describe('the type of a success', () => {
-  // Signature-only: the body never applied `NonNullable`, so putting it back
-  // narrows in silence — every call site stays assignable and every runtime
-  // assertion here passes either way.
   it('[result] keeps the nullability of what it was given', () => {
     expectTypeOf(Result.success<string | null>(null).data).toEqualTypeOf<
       string | null
@@ -69,8 +66,6 @@ describe('the type of a success', () => {
 })
 
 describe('the two statuses', () => {
-  // The repo settled on 'failure', never 'error' — a mismatch here would make
-  // every `result.status === 'failure'` check silently fall through to success.
   it('[result] are exactly "success" and "failure"', () => {
     expect(Result.success().status).toBe('success')
     expect(Result.failure().status).toBe('failure')

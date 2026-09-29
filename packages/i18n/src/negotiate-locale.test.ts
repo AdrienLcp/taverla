@@ -27,9 +27,6 @@ describe('negotiateLocale', () => {
     expect(negotiateLocale(['FR-fr'], TWO_LANGUAGES)).toBe('fr')
   })
 
-  // A region is only noise while every region reads the same dictionary. Ship
-  // one that does not — Brazilian against European Portuguese — and the whole
-  // tag has to win before it is stripped.
   it('[locale] prefers a supported region over its bare language', () => {
     const withRegions = {
       fallback: 'en',
@@ -40,10 +37,6 @@ describe('negotiateLocale', () => {
     expect(negotiateLocale(['pt-PT'], withRegions)).toBe('pt')
   })
 
-  // The mirror case, and the one a lookup that only walks up gets wrong: an app
-  // that ships two Frenches and no plain `fr` still has to answer somebody who
-  // asks for `fr`. Answering English there would be worse than answering the
-  // wrong French.
   it('[locale] answers a bare language with a region it does ship', () => {
     const regionsOnly = {
       fallback: 'en',

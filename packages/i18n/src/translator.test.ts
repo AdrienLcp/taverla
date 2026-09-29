@@ -126,8 +126,6 @@ describe('plural', () => {
     expect(inEnglish('waiting', { count: 3 })).toBe('3 have answered')
   })
 
-  // A form is dictionary text like the sentence that selected it, so what it
-  // writes besides the count is substituted too. Only `{?}` used to be.
   it('[plural] substitutes a placeholder the selected form carries', () => {
     expect(inEnglish('inbox', { count: 1, sender: 'Ada' })).toBe(
       '1 message from Ada'
@@ -153,9 +151,6 @@ describe('formatting', () => {
     )
   })
 
-  // The unit lives with the message because the message cannot say it, and the
-  // sign is Intl's own: negative is the past. `numeric: 'auto'` is what buys
-  // "yesterday" instead of "1 day ago".
   it('[relative] names a day the way the locale names it', () => {
     expect(inEnglish('posted', { when: -1 })).toBe('Posted yesterday')
     expect(inFrench('posted', { when: -1 })).toBe('Publié hier')
@@ -196,18 +191,12 @@ describe('substitution', () => {
     expect(inEnglish('echo', { name: 'Ada' })).toBe('Ada, hello Ada')
   })
 
-  // A player names their table `{seconds}`, a track title carries a brace: the
-  // message is walked once and what a value writes is never read as a
-  // placeholder. Substituting argument by argument would hand each result to
-  // the next argument's turn, and print the number of seconds inside the name.
   it('[translate] writes a value out rather than reading it back as a placeholder', () => {
     expect(inEnglish('menu.built', { build: '{seconds:number}' })).toBe(
       'Build {seconds:number}'
     )
   })
 
-  // Only the form the dictionary selected is read again, never what the caller
-  // wrote into it: a sender who names themselves `{count:plural}` is a sender.
   it('[translate] holds that rule inside a form it expanded', () => {
     expect(inEnglish('inbox', { count: 2, sender: '{count:plural}' })).toBe(
       '2 messages from {count:plural}'
@@ -222,8 +211,6 @@ describe('rich', () => {
     ).toStrictEqual(['Read the ', '[terms]', ' before playing'])
   })
 
-  // What a span becomes is the caller's business, and nothing here says it has
-  // to be a string — a UI framework returns an element and renders the list.
   it('[rich] lets a span become something that is not text', () => {
     expect(
       inFrench.rich('welcome', {
@@ -244,8 +231,6 @@ describe('rich', () => {
     ).toStrictEqual(['Welcome ', 'ADA', ', you have 1 points'])
   })
 
-  // The spans are cut before anything is substituted, so a value that reads
-  // like a span is written out as text — the same rule the placeholders follow.
   it('[rich] writes a value out rather than reading it back as a span', () => {
     expect(
       inEnglish.rich('welcome', {
@@ -265,10 +250,6 @@ describe('rich', () => {
   })
 })
 
-// What `defineDictionary` makes unwriteable, kept as the reason it does: a
-// `{count:plural}` with no forms to choose between has no branch to select. The
-// fixture therefore skips `defineDictionary` — the message degrades to the bare
-// count rather than throwing, so one unwriteable message costs one word.
 describe('a message missing the forms its placeholder needs', () => {
   const LOOSE = { impact: 'This impacts {count:plural}' as const }
 
@@ -282,10 +263,6 @@ describe('a message missing the forms its placeholder needs', () => {
   })
 })
 
-// A form naming the placeholder it was selected for is the one shape the
-// expansion has no floor of its own to stop on. It refuses to re-enter a name it
-// is already inside, and leaves that placeholder standing — the answer a value
-// of the wrong type gets, for the same reason: one word, not the sentence.
 describe('a plural form that names its own placeholder', () => {
   const LOOPING = defineDictionary({
     left: defineTranslation('{count:plural}', {
@@ -302,14 +279,3 @@ describe('a plural form that names its own placeholder', () => {
     expect(translate('left', { count: 2 })).toBe('{count:plural} left')
   })
 })
-
-// Three behaviours are deliberately left untested here: a key the dictionary does
-// not hold, which comes back as itself, and a value a message asked for and did
-// not get, which leaves its placeholder standing. Both are unreachable through
-// the types, so asserting either would need a cast — and the cast is what would
-// be untrue. Their guarantee lives in `translator.types.test.ts`, which is the
-// better place for it.
-//
-// The third is the formatter cache, which has no observable effect at all:
-// counting how often `Intl.NumberFormat` is constructed means replacing a
-// global, and a test that reaches that far is more fragile than what it proves.

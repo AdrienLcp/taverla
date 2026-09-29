@@ -24,14 +24,14 @@ function success<T>(data?: T) {
   return { data, status: STATUS_SUCCESS }
 }
 
+const isErrorOmitted = (args: readonly unknown[]): args is [] =>
+  args.length === 0
+
 function failure(): FailureResult<UnknownError>
 function failure<const E>(error: E): FailureResult<E>
-// The absent error is told from an explicit `undefined` by the argument count,
-// never by comparing the value: `failure(undefined)` is typed
-// `FailureResult<undefined>`, and answering `unknown` there returns something
-// the signature says it will not.
 function failure<const E>(...args: [] | [error: E]) {
-  if (args.length === 0) return { error: UNKNOWN_ERROR, status: STATUS_FAILURE }
+  if (isErrorOmitted(args))
+    return { error: UNKNOWN_ERROR, status: STATUS_FAILURE }
   return { error: args[0], status: STATUS_FAILURE }
 }
 

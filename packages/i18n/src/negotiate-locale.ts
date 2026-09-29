@@ -35,14 +35,12 @@ export const negotiateLocale = <Locale extends string>(
         return exact
       }
 
-      // Declaration order decides between two regions of one language: an app
-      // listing `fr-FR` before `fr-CA` answers a bare `fr` with `fr-FR`.
-      const extending = supported.find((locale) =>
+      const firstDeclaredRegion = supported.find((locale) =>
         locale.toLowerCase().startsWith(`${candidate}-`)
       )
 
-      if (extending !== undefined) {
-        return extending
+      if (firstDeclaredRegion !== undefined) {
+        return firstDeclaredRegion
       }
     }
   }
