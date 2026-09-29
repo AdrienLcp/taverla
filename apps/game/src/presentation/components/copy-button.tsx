@@ -1,7 +1,7 @@
+import { copyText } from '@adrienlcp/browser'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 
-import { copyToClipboard } from '@/infrastructure/browser'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import type { PlainTranslationKey } from '@/presentation/i18n/translation'
 
@@ -58,7 +58,9 @@ export const CopyButton: React.FC<CopyButtonProps> = ({ value }) => {
   }, [state])
 
   const copy = async (): Promise<void> => {
-    setState((await copyToClipboard(value)) ? 'copied' : 'failed')
+    const copied = await copyText(value)
+
+    setState(copied.status === 'success' ? 'copied' : 'failed')
   }
 
   return (

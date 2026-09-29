@@ -1,3 +1,4 @@
+import { useScreenAwake } from '@adrienlcp/browser/react'
 import type React from 'react'
 import { type FormEvent, useCallback, useEffect, useState } from 'react'
 import { Form } from 'react-aria-components'
@@ -39,7 +40,6 @@ import { protocolErrorKey } from '@/presentation/i18n/translation'
 import { useReportRoomActions } from '@/presentation/room-actions/room-actions-provider'
 import { useMarkingField } from '@/presentation/theme/use-marking-field'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
-import { useScreenAwake } from '@/presentation/use-screen-awake'
 
 import { PlayerRound } from './player-round'
 

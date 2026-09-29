@@ -1,3 +1,4 @@
+import { useScreenAwake } from '@adrienlcp/browser/react'
 import type React from 'react'
 import { useEffect, useEffectEvent } from 'react'
 
@@ -26,7 +27,6 @@ import { useReportRoomActions } from '@/presentation/room-actions/room-actions-p
 import { useMarkingField } from '@/presentation/theme/use-marking-field'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
 import { useIdleChrome } from '@/presentation/use-idle-chrome'
-import { useScreenAwake } from '@/presentation/use-screen-awake'
 
 import { useAbsentFor } from './use-absent-for'
 import { asRoomScreenView } from './wall-view'

@@ -1,3 +1,4 @@
+import { useScreenAwake } from '@adrienlcp/browser/react'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
@@ -52,7 +53,6 @@ import { protocolErrorKey } from '@/presentation/i18n/translation'
 import { useReportRoomActions } from '@/presentation/room-actions/room-actions-provider'
 import { useMarkingField } from '@/presentation/theme/use-marking-field'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
-import { useScreenAwake } from '@/presentation/use-screen-awake'
 
 import { AutoAdvanceChoice } from './auto-advance-choice'
 import { HostActions } from './host-actions'
