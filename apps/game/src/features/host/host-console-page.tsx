@@ -12,7 +12,10 @@ import type { RoomSettings } from '@taverla/protocol/room'
 import type { TrackSource } from '@taverla/protocol/track'
 
 import { isJudgedByHost } from '@taverla/core/room/game-modes'
-import { rememberSettings } from '@taverla/core/room/host-preferences'
+import {
+  type HostPreferences,
+  rememberSettings
+} from '@taverla/core/room/host-preferences'
 import { isGameInPlay } from '@taverla/core/room/room-phase'
 import { withPreparedKey } from '@taverla/core/slate/prepared-keys'
 
@@ -66,6 +69,12 @@ import { useSlateWall } from './use-slate-wall'
 
 import './host-console-page.sass'
 
+const storedHostPreferencesOrNone = (): HostPreferences | null => {
+  const stored = readStoredHostPreferences()
+
+  return stored.status === 'success' ? stored.data : null
+}
+
 export const HostConsolePage: React.FC = () => {
   const roomCode = useRoomCodeParam()
 
@@ -96,7 +105,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   const [hasOfferedToken, setHasOfferedToken] = useState(false)
   const { volume } = useVolume()
   const [draftSource, setDraftSource] = useState<TrackSource | null>(null)
-  const [preferences, setPreferences] = useState(readStoredHostPreferences)
+  const [preferences, setPreferences] = useState(storedHostPreferencesOrNone)
   const [preparedKeys, setPreparedKeys] = useState(readPreparedSlateKeys)
 
   useReportConnection({ clock, status })
@@ -138,7 +147,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   const changeSettings = useCallback(
     (settings: RoomSettings) => {
       const remembered = rememberSettings({
-        preferences: readStoredHostPreferences(),
+        preferences: storedHostPreferencesOrNone(),
         settings
       })
 

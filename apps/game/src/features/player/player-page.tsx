@@ -59,7 +59,11 @@ const PlayerScreen: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   // A device that has played before has already answered this, so it goes
   // straight to the table. The form is what remains for a screen with nothing
   // stored, and for the one case a stored name cannot settle: a refusal.
-  const [nickname, setNickname] = useState<string | null>(readStoredNickname)
+  const [nickname, setNickname] = useState<string | null>(() => {
+    const stored = readStoredNickname()
+
+    return stored.status === 'success' ? stored.data : null
+  })
   const [requestedNickname, setRequestedNickname] = useState<string | null>(
     null
   )
@@ -145,7 +149,11 @@ const NicknameForm: React.FC<{
   roomCode: RoomCode
 }> = ({ onSubmit, refusedNickname, rejection, roomCode }) => {
   const translate = useTranslate()
-  const [draft, setDraft] = useState(() => readStoredNickname() ?? '')
+  const [draft, setDraft] = useState(() => {
+    const stored = readStoredNickname()
+
+    return stored.status === 'success' ? (stored.data ?? '') : ''
+  })
   // The refusal belongs to the name it was given for, and holding `isInvalid`
   // past that is not a cosmetic slip: the field's native validity stays false,
   // so the form refuses to submit, the button looks alive and nothing is

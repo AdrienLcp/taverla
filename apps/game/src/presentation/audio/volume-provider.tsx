@@ -13,6 +13,16 @@ type VolumeContextValue = {
   volume: number
 }
 
+const DEFAULT_VOLUME = 0.8
+
+const storedVolumeOrDefault = (): number => {
+  const stored = readStoredVolume()
+
+  return stored.status === 'success' && stored.data !== null
+    ? stored.data
+    : DEFAULT_VOLUME
+}
+
 export const [VolumeContext, useVolume] =
   createSafeContext<VolumeContextValue>('VolumeProvider')
 
@@ -29,7 +39,7 @@ export const [VolumeContext, useVolume] =
 export const VolumeProvider: React.FC<{ children: React.ReactNode }> = ({
   children
 }) => {
-  const [volume, setVolume] = useState(readStoredVolume)
+  const [volume, setVolume] = useState(storedVolumeOrDefault)
 
   const chooseVolume = (next: number): void => {
     setVolume(next)

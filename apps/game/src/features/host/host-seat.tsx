@@ -41,7 +41,11 @@ export const HostSeat: React.FC<HostSeatProps> = ({ onTakeSeat, view }) => {
   const translate = useTranslate()
   // The same name a player's join form fills itself in with. It is the device
   // saying what it likes being called, and a console is a device like any other.
-  const [nickname, setNickname] = useState(() => readStoredNickname() ?? '')
+  const [nickname, setNickname] = useState(() => {
+    const stored = readStoredNickname()
+
+    return stored.status === 'success' ? (stored.data ?? '') : ''
+  })
 
   const game = view.settings.game
   const answering = {

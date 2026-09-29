@@ -1,3 +1,4 @@
+import { removeStored, writeStoredJson } from '@adrienlcp/safe-storage'
 import { z } from 'zod'
 
 import { connectionRoleSchema } from '@taverla/protocol/client-message'
@@ -25,6 +26,8 @@ import {
   rememberSeat,
   type SeatScope
 } from '@taverla/core/room/session-memory'
+
+import { readStoredWithSchema } from './read-stored-with-schema'
 
 const SEATS_KEY = 'taverla:seats'
 const HOST_TOKENS_KEY = 'taverla:host-tokens'
@@ -231,7 +234,7 @@ const dropSeatsKeptOneKeyEach = (): void => {
   try {
     for (const key of Object.keys(localStorage)) {
       if (key.startsWith(ONE_KEY_EACH_PREFIX)) {
-        localStorage.removeItem(key)
+        removeStored(key)
       }
     }
   } catch {
@@ -240,55 +243,37 @@ const dropSeatsKeptOneKeyEach = (): void => {
 }
 
 const readSeats = (): RememberedSeat[] => {
-  const stored = read(SEATS_KEY)
+  const stored = readStoredWithSchema({
+    key: SEATS_KEY,
+    schema: rememberedSeatsSchema
+  })
 
-  if (stored === null) {
+  if (stored.status === 'failure') {
+    return []
+  }
+
+  if (stored.data === null) {
     dropSeatsKeptOneKeyEach()
 
     return []
   }
 
-  const parsed = rememberedSeatsSchema.safeParse(parseJson(stored))
-
-  return parsed.success ? parsed.data : []
+  return stored.data
 }
 
 const writeSeats = (seats: RememberedSeat[]): void => {
-  write(SEATS_KEY, JSON.stringify(seats))
+  writeStoredJson({ key: SEATS_KEY, value: seats })
 }
 
 const readHostTokens = (): RememberedHostToken[] => {
-  const parsed = rememberedHostTokensSchema.safeParse(
-    parseJson(read(HOST_TOKENS_KEY) ?? '')
-  )
+  const stored = readStoredWithSchema({
+    key: HOST_TOKENS_KEY,
+    schema: rememberedHostTokensSchema
+  })
 
-  return parsed.success ? parsed.data : []
+  return stored.status === 'success' ? (stored.data ?? []) : []
 }
 
 const writeHostTokens = (tokens: RememberedHostToken[]): void => {
-  write(HOST_TOKENS_KEY, JSON.stringify(tokens))
-}
-
-const parseJson = (raw: string): unknown => {
-  try {
-    return JSON.parse(raw)
-  } catch {
-    return null
-  }
-}
-
-const read = (key: string): string | null => {
-  try {
-    return localStorage.getItem(key)
-  } catch {
-    return null
-  }
-}
-
-const write = (key: string, value: string): void => {
-  try {
-    localStorage.setItem(key, value)
-  } catch {
-    return
-  }
+  writeStoredJson({ key: HOST_TOKENS_KEY, value: tokens })
 }

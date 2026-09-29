@@ -26,7 +26,7 @@ paid on every read of the code.
 | `hono`, `@hono/*`, `hono-rate-limiter` | `apps/server/src/infrastructure/http/`, `apps/server/src/index.ts` |
 | `WebSocket` (browser) | `apps/game/src/infrastructure/messaging/use-room-socket.ts` |
 | `hono/ws` (server) | `apps/server/src/infrastructure/messaging/` |
-| `localStorage`, `sessionStorage` | `apps/game/src/infrastructure/storage/session-storage.ts` (seats), `preferences-storage.ts` (locale, theme) and `prepared-keys-storage.ts` (the slate's key, per tab) |
+| `localStorage`, `sessionStorage` | `apps/game/src/infrastructure/storage/`: `session-storage.ts` (seats, host tokens) and `preferences-storage.ts` (locale, nickname, volume, host setup) through `@adrienlcp/safe-storage`, with `read-stored-with-schema.ts` for a blob a Zod schema must transform; `prepared-keys-storage.ts` (the slate's key, per tab) on `sessionStorage` directly, which the package does not cover. The theme is `@adrienlcp/theme-preference`'s own |
 | `navigator`, `location` | `apps/game/src/infrastructure/browser.ts`, plus `location.origin` in `router/navigation.ts` |
 | the clipboard | `copyText` from `@adrienlcp/browser`, called only by `presentation/components/copy-button.tsx` — the package owns the `execCommand` fallback a host served from a LAN address over plain HTTP needs, since `navigator.clipboard` requires a secure context |
 | the screen wake lock | `useScreenAwake` from `@adrienlcp/browser/react`, called by the host console, the player page and the wall — the package re-takes the lock on every `visibilitychange`. Each page holds it for as long as a game runs, lobby included, and lets go on an exit (a refusal, a finished board), never on a phase: a screen that sleeps through the lobby misses the countdown |

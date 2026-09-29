@@ -1,3 +1,12 @@
+import { Result } from '@adrienlcp/result'
+import {
+  readRecognizedText,
+  readStoredText,
+  type StorageReadError,
+  type StorageWriteError,
+  writeStoredJson,
+  writeStoredText
+} from '@adrienlcp/safe-storage'
 import { z } from 'zod'
 
 import { gameKindSchema, gameSettingsSchema } from '@taverla/protocol/game'
@@ -6,6 +15,8 @@ import { isLocale, type Locale } from '@taverla/protocol/locale'
 import { modeSettingsSchema, roomSettingsSchema } from '@taverla/protocol/room'
 
 import type { HostPreferences } from '@taverla/core/room/host-preferences'
+
+import { readStoredWithSchema } from './read-stored-with-schema'
 
 const HOST_SETUP_KEY = 'taverla:host-setup'
 const LOCALE_KEY = 'taverla:locale'
@@ -53,26 +64,22 @@ const hostPreferencesSchema = z.object({
   })
 })
 
-export const DEFAULT_VOLUME = 0.8
-
 /**
- * `null` means "never chosen", which is not the same as choosing the default:
- * the caller falls back to what the browser and the operating system are
- * already saying rather than overriding them.
+ * Succeeds with `null` when no locale was ever chosen, which is not the same as
+ * choosing the default: the caller falls back to what the browser and the
+ * operating system are already saying rather than overriding them.
  *
- * Every access is guarded because `localStorage` throws outright in a Safari
- * private window. The degradation is a preference that does not survive a
- * reload, which beats a blank page.
+ * Every failure — `localStorage` throws outright in a Safari private window —
+ * degrades to a preference that does not survive a reload, which beats a blank
+ * page.
  */
-export const readStoredLocale = (): Locale | null => {
-  const stored = read(LOCALE_KEY)
+export const readStoredLocale = (): Result<Locale | null, StorageReadError> =>
+  readRecognizedText({ isRecognized: isLocale, key: LOCALE_KEY })
 
-  return stored !== null && isLocale(stored) ? stored : null
-}
-
-export const writeStoredLocale = (locale: Locale): void => {
-  write(LOCALE_KEY, locale)
-}
+export const writeStoredLocale = (
+  locale: Locale
+): Result<void, StorageWriteError> =>
+  writeStoredText({ key: LOCALE_KEY, text: locale })
 
 /**
  * Not the seat — that is `session-storage.ts`, keyed per room, and it is what
@@ -80,31 +87,62 @@ export const writeStoredLocale = (locale: Locale): void => {
  * player likes being called, so the join form on the *next* room arrives
  * filled in.
  */
-export const readStoredNickname = (): Nickname | null => {
-  const parsed = nicknameSchema.safeParse(read(NICKNAME_KEY))
+export const readStoredNickname = (): Result<
+  Nickname | null,
+  StorageReadError
+> => {
+  const stored = readStoredText(NICKNAME_KEY)
 
-  return parsed.success ? parsed.data : null
+  if (stored.status === 'failure') {
+    return stored
+  }
+
+  if (stored.data === null) {
+    return Result.success(null)
+  }
+
+  const parsed = nicknameSchema.safeParse(stored.data)
+
+  return parsed.success
+    ? Result.success(parsed.data)
+    : Result.failure('unrecognized')
 }
 
-export const writeStoredNickname = (nickname: Nickname): void => {
-  write(NICKNAME_KEY, nickname)
-}
+export const writeStoredNickname = (
+  nickname: Nickname
+): Result<void, StorageWriteError> =>
+  writeStoredText({ key: NICKNAME_KEY, text: nickname })
+
+const isVolume = (volume: number): boolean =>
+  Number.isFinite(volume) && volume >= 0 && volume <= 1
 
 /**
  * The host machine's own loudness, not the room's — it belongs to whichever
  * laptop is plugged into the speakers, so it never travels over the socket.
+ * Succeeds with `null` when none was ever chosen.
  */
-export const readStoredVolume = (): number => {
-  const stored = Number.parseFloat(read(VOLUME_KEY) ?? '')
+export const readStoredVolume = (): Result<number | null, StorageReadError> => {
+  const stored = readStoredText(VOLUME_KEY)
 
-  return Number.isFinite(stored) && stored >= 0 && stored <= 1
-    ? stored
-    : DEFAULT_VOLUME
+  if (stored.status === 'failure') {
+    return stored
+  }
+
+  if (stored.data === null) {
+    return Result.success(null)
+  }
+
+  const volume = Number.parseFloat(stored.data)
+
+  return isVolume(volume)
+    ? Result.success(volume)
+    : Result.failure('unrecognized')
 }
 
-export const writeStoredVolume = (volume: number): void => {
-  write(VOLUME_KEY, String(volume))
-}
+export const writeStoredVolume = (
+  volume: number
+): Result<void, StorageWriteError> =>
+  writeStoredText({ key: VOLUME_KEY, text: String(volume) })
 
 /**
  * How this host left the last room they ran, so the next one opens on it rather
@@ -112,26 +150,24 @@ export const writeStoredVolume = (volume: number): void => {
  *
  * `null` is a host who has never changed a setting, and it is deliberately not
  * "the defaults": the caller skips the restore entirely instead of opening every
- * room ever with a frame that says nothing. A blob that no longer parses is the
- * same answer — a shape this build cannot read is worth less than the defaults
- * it would replace.
+ * room ever with a frame that says nothing. A blob that no longer parses fails
+ * as `'unrecognized'`, and the caller treats it the same way — a shape this
+ * build cannot read is worth less than the defaults it would replace.
  */
-export const readStoredHostPreferences = (): HostPreferences | null => {
-  const stored = read(HOST_SETUP_KEY)
+export const readStoredHostPreferences = (): Result<
+  HostPreferences | null,
+  StorageReadError
+> => {
+  const stored = readStoredWithSchema({
+    key: HOST_SETUP_KEY,
+    schema: hostPreferencesSchema
+  })
 
-  if (stored === null) {
-    return null
+  if (stored.status === 'success' && stored.data !== null) {
+    dropUnknownFields(stored.data)
   }
 
-  const parsed = hostPreferencesSchema.safeParse(parseJson(stored))
-
-  if (!parsed.success) {
-    return null
-  }
-
-  dropUnknownFields({ parsed: parsed.data, stored })
-
-  return parsed.data
+  return stored
 }
 
 /**
@@ -140,46 +176,16 @@ export const readStoredHostPreferences = (): HostPreferences | null => {
  * changes. The slate's answer key once lived here, and answers are not
  * something this store may keep past the tab.
  */
-const dropUnknownFields = ({
-  parsed,
-  stored
-}: {
-  parsed: HostPreferences
-  stored: string
-}): void => {
-  const cleaned = JSON.stringify(parsed)
+const dropUnknownFields = (preferences: HostPreferences): void => {
+  const cleaned = JSON.stringify(preferences)
+  const stored = readStoredText(HOST_SETUP_KEY)
 
-  if (cleaned !== stored) {
-    write(HOST_SETUP_KEY, cleaned)
+  if (stored.status === 'success' && stored.data !== cleaned) {
+    writeStoredText({ key: HOST_SETUP_KEY, text: cleaned })
   }
 }
 
 export const writeStoredHostPreferences = (
   preferences: HostPreferences
-): void => {
-  write(HOST_SETUP_KEY, JSON.stringify(preferences))
-}
-
-const parseJson = (raw: string): unknown => {
-  try {
-    return JSON.parse(raw)
-  } catch {
-    return null
-  }
-}
-
-const read = (key: string): string | null => {
-  try {
-    return localStorage.getItem(key)
-  } catch {
-    return null
-  }
-}
-
-const write = (key: string, value: string): void => {
-  try {
-    localStorage.setItem(key, value)
-  } catch {
-    return
-  }
-}
+): Result<void, StorageWriteError> =>
+  writeStoredJson({ key: HOST_SETUP_KEY, value: preferences })

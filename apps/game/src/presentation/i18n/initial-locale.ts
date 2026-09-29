@@ -9,6 +9,12 @@ import {
 
 import { i18n } from './i18n'
 
+const storedLocaleOrNone = (): Locale | null => {
+  const stored = readStoredLocale()
+
+  return stored.status === 'success' ? stored.data : null
+}
+
 /**
  * The locale the app opens on: the one its URL names, then the one this device
  * asked for last, then the one its browser asks for.
@@ -27,7 +33,7 @@ import { i18n } from './i18n'
 export const applyInitialLocale = (): Locale => {
   const inUrl = localeInPath(servedPath())
   const locale =
-    inUrl ?? readStoredLocale() ?? i18n.negotiate(preferredLocales())
+    inUrl ?? storedLocaleOrNone() ?? i18n.negotiate(preferredLocales())
 
   // Remembered only when the URL named it, because a room's URL cannot: a
   // screen that reached one from a link shared in English would otherwise come
