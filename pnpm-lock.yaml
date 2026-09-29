@@ -197,8 +197,8 @@ importers:
         specifier: ^0.1.1
         version: 0.1.1(react@19.3.0)
       '@adrienlcp/i18n':
-        specifier: ^0.1.1
-        version: 0.1.1
+        specifier: ^0.1.2
+        version: 0.1.2
       '@adrienlcp/react':
         specifier: ^0.2.0
         version: 0.2.0(react@19.3.0)
@@ -357,8 +357,8 @@ packages:
       react:
         optional: true
 
-  '@adrienlcp/i18n@0.1.1':
-    resolution: {integrity: sha512-jt5NnArjdbJR3QrJGzqDMwbF7WRGA/Z9AIKsAkmLxd/gnt4hc2AIHZbYSawOPMwhxeOhqEmwXvmqEf4wEZAaNg==}
+  '@adrienlcp/i18n@0.1.2':
+    resolution: {integrity: sha512-LrozEXxr9UbYZWzkwF+uwpbnghduk07jgPkaeO5JUJVeCOay1tlwrHrZjIU/2ajSRcB7bCtpywbqX4lB5JxyPQ==}
 
   '@adrienlcp/react-aria@0.1.0':
     resolution: {integrity: sha512-tIK5xmvKqM4T68pCeM5ZkAX3fut9GlBi/1JUhIsUWsvnP1c8iBcoCCQFSU2jqRlOammhj0+m5gu/Px965I6Y3Q==}
@@ -2999,7 +2999,7 @@ snapshots:
     optionalDependencies:
       react: 19.3.0
 
-  '@adrienlcp/i18n@0.1.1': {}
+  '@adrienlcp/i18n@0.1.2': {}
 
   '@adrienlcp/react-aria@0.1.0(react-aria-components@1.21.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(sass@1.105.0)':
     dependencies:
