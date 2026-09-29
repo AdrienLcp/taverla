@@ -4,6 +4,7 @@
     "@adrienlcp/i18n": "^0.1.2",
     "@adrienlcp/react": "^0.2.0",
     "@adrienlcp/react-aria": "^0.1.0",
+    "@adrienlcp/react-router": "^0.1.0",
     "@adrienlcp/result": "^0.1.0",
     "@adrienlcp/safe-storage": "^0.1.0",
     "@adrienlcp/styles": "^0.2.0",
