@@ -126,6 +126,7 @@ export const RoomStage: React.FC<RoomStageProps> = ({
   // this screen deciding it — the host takes it off the roster, or the sweeper
   // gives it up — and a screen still drawing its own answer form owns nothing.
   const isSeated = controls !== null && view.youId !== null
+  const youId = isSeated ? view.youId : null
 
   // A silent round is *visually identical* to one that plays — the clip's
   // progress comes from the server, buzzes work, the reveal lands — so this is
@@ -182,7 +183,7 @@ export const RoomStage: React.FC<RoomStageProps> = ({
             controls?.send({ roundId, type: 'player.buzz' }) ?? false
           }
           round={round}
-          youId={isSeated ? view.youId : null}
+          youId={youId}
         />
       </div>
     )
@@ -249,7 +250,7 @@ export const RoomStage: React.FC<RoomStageProps> = ({
           />
         )}
         {clipOffer}
-        <Scoreboard players={view.players} />
+        <Scoreboard players={view.players} youId={youId} />
       </div>
     )
   }
@@ -321,7 +322,7 @@ export const RoomStage: React.FC<RoomStageProps> = ({
         style={{ '--standings-rows': view.players.length }}
       >
         <RevealPanel players={view.players} round={round} />
-        <Scoreboard players={view.players} />
+        <Scoreboard players={view.players} youId={youId} />
         {hold !== null && <RevealHold clock={clock} {...hold} />}
       </div>
     )
@@ -330,12 +331,19 @@ export const RoomStage: React.FC<RoomStageProps> = ({
   if (view.phase === 'finished') {
     return (
       <div className='stage finished'>
-        <FinalBoard players={view.players} />
+        <FinalBoard players={view.players} youId={youId} />
       </div>
     )
   }
 
-  return <LobbyStage controls={controls} roomCode={roomCode} view={view} />
+  return (
+    <LobbyStage
+      controls={controls}
+      roomCode={roomCode}
+      view={view}
+      youId={youId}
+    />
+  )
 }
 
 /**

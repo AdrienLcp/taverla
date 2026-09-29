@@ -1,5 +1,6 @@
 import type React from 'react'
 
+import type { PlayerId } from '@taverla/protocol/identifiers'
 import type { PublicPlayer } from '@taverla/protocol/room'
 
 import {
@@ -47,8 +48,11 @@ type ScoreboardProps = {
   players: readonly PublicPlayer[]
   /** Only ever CSS custom properties a layout needs at runtime. */
   style?: React.CSSProperties
-  /** Highlights one row; a player passes their own id, the host passes none. */
-  youId?: string
+  /**
+   * Highlights one row: a player passes their own id, a seated host console its
+   * seat, and the wall — nobody's screen — passes none.
+   */
+  youId?: PlayerId | null
 }
 
 export const Scoreboard: React.FC<ScoreboardProps> = ({

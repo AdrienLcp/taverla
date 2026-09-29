@@ -1,6 +1,6 @@
 import type React from 'react'
 
-import type { RoomCode } from '@taverla/protocol/identifiers'
+import type { PlayerId, RoomCode } from '@taverla/protocol/identifiers'
 import type { HostRoomView } from '@taverla/protocol/room'
 
 import { isShelvedGame } from '@taverla/core/room/shelved-game'
@@ -24,6 +24,8 @@ type LobbyStageProps = {
   controls: StageControls | null
   roomCode: RoomCode
   view: HostRoomView
+  /** The seat this console took; `null` on the wall and on an unseated console. */
+  youId: PlayerId | null
 }
 
 /**
@@ -38,7 +40,8 @@ type LobbyStageProps = {
 export const LobbyStage: React.FC<LobbyStageProps> = ({
   controls,
   roomCode,
-  view
+  view,
+  youId
 }) => {
   const translate = useTranslate()
 
@@ -85,6 +88,7 @@ export const LobbyStage: React.FC<LobbyStageProps> = ({
             <Scoreboard
               onRemove={controls?.onRemovePlayer}
               players={view.players}
+              youId={youId}
             />
           )}
 

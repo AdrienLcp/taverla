@@ -1,5 +1,6 @@
 import type React from 'react'
 
+import type { PlayerId } from '@taverla/protocol/identifiers'
 import type { PublicPlayer } from '@taverla/protocol/room'
 
 import {
@@ -15,6 +16,8 @@ import './final-board.sass'
 
 type FinalBoardProps = {
   players: readonly PublicPlayer[]
+  /** The seat this console took; `null` on the wall and on an unseated console. */
+  youId: PlayerId | null
 }
 
 /**
@@ -26,7 +29,7 @@ type FinalBoardProps = {
  * place, and inventing a winner out of alphabetical order would be a lie the
  * room can check.
  */
-export const FinalBoard: React.FC<FinalBoardProps> = ({ players }) => {
+export const FinalBoard: React.FC<FinalBoardProps> = ({ players, youId }) => {
   const translate = useTranslate()
   const ranked = buildScoreboard(players)
   const winners = ranked.filter((entry) => entry.rank === 1)
@@ -59,7 +62,7 @@ export const FinalBoard: React.FC<FinalBoardProps> = ({ players }) => {
       </header>
 
       <div className='standings'>
-        <Scoreboard isResult players={players} />
+        <Scoreboard isResult players={players} youId={youId} />
       </div>
     </section>
   )
