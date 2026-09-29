@@ -1,7 +1,6 @@
+import { createSafeContext } from '@adrienlcp/react'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
-
-import { createSafeContext } from '@/helpers/contexts'
 
 /**
  * What a screen inside a room offers the menu above it. The menu in the shell is

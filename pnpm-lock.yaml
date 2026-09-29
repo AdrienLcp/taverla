@@ -187,10 +187,19 @@ importers:
 
   apps/game:
     dependencies:
+      '@adrienlcp/browser':
+        specifier: ^0.1.0
+        version: 0.1.0(react@19.3.0)
       '@adrienlcp/i18n':
         specifier: ^0.1.0
         version: 0.1.0
+      '@adrienlcp/react':
+        specifier: ^0.1.0
+        version: 0.1.0(react@19.3.0)
       '@adrienlcp/result':
+        specifier: ^0.1.0
+        version: 0.1.0
+      '@adrienlcp/safe-storage':
         specifier: ^0.1.0
         version: 0.1.0
       '@adrienlcp/theme-preference':
@@ -323,11 +332,27 @@ importers:
 
 packages:
 
+  '@adrienlcp/browser@0.1.0':
+    resolution: {integrity: sha512-XX3zDDibCEE0BC6UUZIyBOEuB4WBQMP/W181YzKeSBt6EoZWx9FVENlfGUlM5o06fkNU7x3NjqnX3DhrKxldbw==}
+    peerDependencies:
+      react: '>=18'
+    peerDependenciesMeta:
+      react:
+        optional: true
+
   '@adrienlcp/i18n@0.1.0':
     resolution: {integrity: sha512-P4U8nY2pRTOkIKpEUIM1ABv5Q01GA+1Oo9w4Z+AicF/Tlrc6XL1cPomTw4GbP0G3qDgyggt/Kpzx7trvcELd8w==}
 
+  '@adrienlcp/react@0.1.0':
+    resolution: {integrity: sha512-OWXwuKk908qebVrZ538h3qAgBKpYdbfUSKNG6A1SYnbRD/8sC/xesqWGm5FYw9TIPMfALMFb1Hdgtwp1tbtGCA==}
+    peerDependencies:
+      react: '>=19'
+
   '@adrienlcp/result@0.1.0':
     resolution: {integrity: sha512-2LmABvoBLgB9bm+c0PKZApz4GXuyesb4m7zvZs+jn0efbdxxPc9ICFWXcDptiuy1LiBLxM6m/5WbenQx346GUA==}
+
+  '@adrienlcp/safe-storage@0.1.0':
+    resolution: {integrity: sha512-7bdnrjNQF3fedYJvYSDIpP+9Vb+csASYjS7b2zTTiqhxr91AZx75R3Ixxhl8i7y7V0SFyCNgqhyLMngcUahbTg==}
 
   '@adrienlcp/theme-preference@0.1.0':
     resolution: {integrity: sha512-zrlfheDPFtv+tCt69R33cQKeSl6T6/h44ZNhIahD5LbJR35enQxGnsCtEzDvwvAPGzJLE0KP2Hl172eT7MB0Qg==}
@@ -2933,9 +2958,23 @@ packages:
 
 snapshots:
 
+  '@adrienlcp/browser@0.1.0(react@19.3.0)':
+    dependencies:
+      '@adrienlcp/result': 0.1.0
+    optionalDependencies:
+      react: 19.3.0
+
   '@adrienlcp/i18n@0.1.0': {}
 
+  '@adrienlcp/react@0.1.0(react@19.3.0)':
+    dependencies:
+      react: 19.3.0
+
   '@adrienlcp/result@0.1.0': {}
+
+  '@adrienlcp/safe-storage@0.1.0':
+    dependencies:
+      '@adrienlcp/result': 0.1.0
 
   '@adrienlcp/theme-preference@0.1.0(react@19.3.0)':
     optionalDependencies:

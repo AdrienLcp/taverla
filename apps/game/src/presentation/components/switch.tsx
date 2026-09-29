@@ -1,3 +1,4 @@
+import { composeClassName } from '@adrienlcp/react'
 import type React from 'react'
 import {
   SwitchButton,
@@ -5,8 +6,6 @@ import {
   type SwitchFieldProps,
   Text
 } from 'react-aria-components'
-
-import { composeClassName } from './compose-class-name'
 
 import './switch.sass'
 

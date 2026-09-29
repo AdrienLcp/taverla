@@ -1,3 +1,4 @@
+import { composeClassName } from '@adrienlcp/react'
 import type React from 'react'
 import {
   Label,
@@ -6,8 +7,6 @@ import {
   RadioGroup,
   type RadioGroupProps
 } from 'react-aria-components'
-
-import { composeClassName } from './compose-class-name'
 
 import './segmented-control.sass'
 

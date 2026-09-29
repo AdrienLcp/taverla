@@ -1,3 +1,4 @@
+import { composeClassName } from '@adrienlcp/react'
 import type React from 'react'
 import {
   Group,
@@ -8,7 +9,6 @@ import {
   type NumberFieldProps as ReactAriaNumberFieldProps
 } from 'react-aria-components'
 
-import { composeClassName } from './compose-class-name'
 import { MinusIcon } from './minus-icon'
 import { PlusIcon } from './plus-icon'
 

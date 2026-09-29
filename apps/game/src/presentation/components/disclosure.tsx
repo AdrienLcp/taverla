@@ -1,3 +1,4 @@
+import { composeClassName } from '@adrienlcp/react'
 import type React from 'react'
 import {
   DisclosurePanel,
@@ -8,7 +9,6 @@ import {
 } from 'react-aria-components'
 
 import { ChevronIcon } from './chevron-icon'
-import { composeClassName } from './compose-class-name'
 
 import './disclosure.sass'
 

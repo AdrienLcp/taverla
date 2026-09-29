@@ -49,7 +49,7 @@ from ever being written about it.
 
 ## Contexts
 
-`createSafeContext` in `@/helpers/contexts.ts` returns
+`createSafeContext` from `@adrienlcp/react` returns
 `[Context, useSafe, useOptional]` — `useSafe()` throws outside the provider,
 `useOptional()` returns `undefined`.
 

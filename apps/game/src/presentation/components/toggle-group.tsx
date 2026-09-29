@@ -1,3 +1,4 @@
+import { composeClassName } from '@adrienlcp/react'
 import type React from 'react'
 import { useId } from 'react'
 import {
@@ -6,8 +7,6 @@ import {
   ToggleButtonGroup,
   type ToggleButtonGroupProps
 } from 'react-aria-components'
-
-import { composeClassName } from './compose-class-name'
 
 import './toggle-group.sass'
 

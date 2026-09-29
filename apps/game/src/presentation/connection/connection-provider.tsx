@@ -1,9 +1,9 @@
+import { createSafeContext } from '@adrienlcp/react'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
-import { createSafeContext } from '@/helpers/contexts'
 import type { SocketStatus } from '@/infrastructure/messaging/use-room-socket'
 
 export type ScreenConnection = {

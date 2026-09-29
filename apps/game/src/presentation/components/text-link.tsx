@@ -1,10 +1,9 @@
+import { composeClassName } from '@adrienlcp/react'
 import type React from 'react'
 import {
   Link as ReactAriaLink,
   type LinkProps as ReactAriaLinkProps
 } from 'react-aria-components'
-
-import { composeClassName } from './compose-class-name'
 
 import './text-link.sass'
 

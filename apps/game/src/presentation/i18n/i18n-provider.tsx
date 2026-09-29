@@ -1,10 +1,10 @@
+import { createSafeContext } from '@adrienlcp/react'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { I18nProvider as ReactAriaI18nProvider } from 'react-aria-components'
 
 import type { Locale } from '@taverla/protocol/locale'
 
-import { createSafeContext } from '@/helpers/contexts'
 import { writeStoredLocale } from '@/infrastructure/storage/preferences-storage'
 
 import { i18n } from './i18n'

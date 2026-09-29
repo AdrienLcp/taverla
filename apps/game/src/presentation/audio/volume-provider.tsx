@@ -1,7 +1,7 @@
+import { createSafeContext } from '@adrienlcp/react'
 import type React from 'react'
 import { useState } from 'react'
 
-import { createSafeContext } from '@/helpers/contexts'
 import {
   readStoredVolume,
   writeStoredVolume

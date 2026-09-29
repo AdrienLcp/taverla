@@ -29,9 +29,9 @@ blocks presses and hovers while keeping the button focusable and announced;
 `isDisabled={isDisabled || isPending}` on top of it takes the focusability away,
 which is a regression rather than a belt.
 
-`composeClassName` merges a caller's `className` with the classes the wrapper
-always applies. It wraps react-aria's `composeRenderProps`, so it **always
-returns a function** — which is what makes it fit a react-aria component and not
+`composeClassName` from `@adrienlcp/react` merges a caller's `className` with
+the classes the wrapper always applies. Like react-aria's `composeRenderProps`,
+it **always returns a function** — which is what makes it fit a react-aria component and not
 a plain DOM element. For a plain element, a template literal is the answer.
 
 ## A line is not a `Separator`

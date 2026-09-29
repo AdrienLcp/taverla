@@ -1,3 +1,4 @@
+import { composeClassName } from '@adrienlcp/react'
 import type React from 'react'
 import {
   FieldError,
@@ -7,8 +8,6 @@ import {
   type TextFieldProps as ReactAriaTextFieldProps,
   Text
 } from 'react-aria-components'
-
-import { composeClassName } from './compose-class-name'
 
 import './text-field.sass'
 

@@ -1,3 +1,4 @@
+import { composeClassName } from '@adrienlcp/react'
 import type React from 'react'
 import {
   Label,
@@ -7,8 +8,6 @@ import {
   SliderThumb,
   SliderTrack
 } from 'react-aria-components'
-
-import { composeClassName } from './compose-class-name'
 
 import './slider.sass'
 
