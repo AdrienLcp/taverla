@@ -14,15 +14,13 @@ WORKDIR /repo
 # here, which its own `|| true` already covers.
 #
 # One line per workspace package, and a new package needs one here or
-# `--frozen-lockfile` refuses an install the lockfile says has seven projects
-# and the image has five. The list is the price of the cache layer.
+# `--frozen-lockfile` refuses an install the lockfile says has five projects
+# and the image has four. The list is the price of the cache layer.
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/game/package.json apps/game/
 COPY apps/server/package.json apps/server/
 COPY packages/core/package.json packages/core/
-COPY packages/i18n/package.json packages/i18n/
 COPY packages/protocol/package.json packages/protocol/
-COPY packages/result/package.json packages/result/
 
 RUN corepack enable && pnpm install --frozen-lockfile
 
