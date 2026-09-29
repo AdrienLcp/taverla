@@ -188,11 +188,11 @@ importers:
   apps/game:
     dependencies:
       '@adrienlcp/i18n':
-        specifier: workspace:*
-        version: link:../../packages/i18n
+        specifier: ^0.1.0
+        version: 0.1.0
       '@adrienlcp/result':
-        specifier: workspace:*
-        version: link:../../packages/result
+        specifier: ^0.1.0
+        version: 0.1.0
       '@taverla/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -243,8 +243,8 @@ importers:
   apps/server:
     dependencies:
       '@adrienlcp/result':
-        specifier: workspace:*
-        version: link:../../packages/result
+        specifier: ^0.1.0
+        version: 0.1.0
       '@hono/node-server':
         specifier: ^2.1.1
         version: 2.1.1(hono@4.13.8)
@@ -305,15 +305,6 @@ importers:
         specifier: ^5.0.1
         version: 5.0.1(@types/node@26.6.1)(@vitest/coverage-v8@5.0.1)(vite@8.3.0(@types/node@26.6.1)(esbuild@0.28.2)(sass@1.104.1)(tsx@4.23.13))
 
-  packages/i18n:
-    devDependencies:
-      '@vitest/coverage-v8':
-        specifier: 5.0.1
-        version: 5.0.1(vitest@5.0.1)
-      vitest:
-        specifier: ^5.0.1
-        version: 5.0.1(@types/node@26.6.1)(@vitest/coverage-v8@5.0.1)(vite@8.3.0(@types/node@26.6.1)(esbuild@0.28.2)(sass@1.104.1)(tsx@4.23.13))
-
   packages/protocol:
     dependencies:
       zod:
@@ -327,16 +318,13 @@ importers:
         specifier: ^5.0.1
         version: 5.0.1(@types/node@26.6.1)(@vitest/coverage-v8@5.0.1)(vite@8.3.0(@types/node@26.6.1)(esbuild@0.28.2)(sass@1.104.1)(tsx@4.23.13))
 
-  packages/result:
-    devDependencies:
-      '@vitest/coverage-v8':
-        specifier: 5.0.1
-        version: 5.0.1(vitest@5.0.1)
-      vitest:
-        specifier: ^5.0.1
-        version: 5.0.1(@types/node@26.6.1)(@vitest/coverage-v8@5.0.1)(vite@8.3.0(@types/node@26.6.1)(esbuild@0.28.2)(sass@1.104.1)(tsx@4.23.13))
-
 packages:
+
+  '@adrienlcp/i18n@0.1.0':
+    resolution: {integrity: sha512-P4U8nY2pRTOkIKpEUIM1ABv5Q01GA+1Oo9w4Z+AicF/Tlrc6XL1cPomTw4GbP0G3qDgyggt/Kpzx7trvcELd8w==}
+
+  '@adrienlcp/result@0.1.0':
+    resolution: {integrity: sha512-2LmABvoBLgB9bm+c0PKZApz4GXuyesb4m7zvZs+jn0efbdxxPc9ICFWXcDptiuy1LiBLxM6m/5WbenQx346GUA==}
 
   '@babel/helper-string-parser@7.29.7':
     resolution: {integrity: sha512-Pb5ijPrZ89GDH8223L4UP8i6QApWxs04RbPQJTeWDV0/keR2E36MeKnyr6LYmUUvqRRI+Iv87SuF1W6ErINzYw==}
@@ -2933,6 +2921,10 @@ packages:
     resolution: {integrity: sha512-v5l/aFXZQeai4awLbOpSoHecE9UiMrnfx75tEXLjNonXVARxQ5mOeipTjROUchszUNCqnE+hqAMujRsRHsut2Q==}
 
 snapshots:
+
+  '@adrienlcp/i18n@0.1.0': {}
+
+  '@adrienlcp/result@0.1.0': {}
 
   '@babel/helper-string-parser@7.29.7': {}
 

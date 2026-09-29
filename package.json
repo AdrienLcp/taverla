@@ -24,12 +24,10 @@
     "lint": "biome check --write",
     "lint:ci": "biome ci",
     "preinstall": "git config core.hooksPath .githooks || true",
-    "test": "pnpm --filter @adrienlcp/i18n --filter @adrienlcp/result --filter @taverla/protocol --filter @taverla/core --filter @taverla/server test",
+    "test": "pnpm --filter @taverla/protocol --filter @taverla/core --filter @taverla/server test",
     "test:core:watch": "pnpm --filter @taverla/core test:watch",
     "test:e2e": "tsc --noEmit -p e2e && playwright test -c e2e",
-    "toolkit:check": "node --import tsx scripts/toolkit.ts --check",
-    "toolkit:sync": "node --import tsx scripts/toolkit.ts",
-    "validate": "pnpm toolkit:check && pnpm build && pnpm test && pnpm test:e2e"
+    "validate": "pnpm build && pnpm test && pnpm test:e2e"
   },
   "type": "module",
   "version": "0.1.0"

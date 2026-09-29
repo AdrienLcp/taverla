@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "@adrienlcp/i18n": "workspace:*",
-    "@adrienlcp/result": "workspace:*",
+    "@adrienlcp/i18n": "^0.1.0",
+    "@adrienlcp/result": "^0.1.0",
     "@taverla/core": "workspace:*",
     "@taverla/protocol": "workspace:*",
     "qrcode.react": "^4.2.0",

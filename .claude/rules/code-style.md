@@ -108,9 +108,5 @@ successes are the same type — so they are refused by
 `biome-plugins/no-undefined-argument-result.grit` instead, which runs in
 `pnpm lint`, in CI and in the pre-commit hook.
 
-**`Result` is not this repository's code.** `packages/result/` is a vendored
-copy of `@adrienlcp/result` in `C:/git/toolkit`, shared with Stargazer. Change
-the shape in the toolkit, then run `pnpm toolkit:sync`; `pnpm toolkit:check`
-fails when a copy has drifted and `pnpm validate` runs it. Biome does not lint
-the vendored `src/`, so the guard above applies to this repository's own code —
-which is why the library's own test may make the call the plugin refuses.
+**`Result` is not this repository's code.** `@adrienlcp/result` is installed
+from npm and lives in `github.com/AdrienLcp/packages`; change its shape there.

@@ -1,5 +1,4 @@
-import type { DotPath, PlainKey } from '@adrienlcp/i18n/dictionary'
-import type { Translator } from '@adrienlcp/i18n/translator'
+import type { DotPath, PlainKey, Translator } from '@adrienlcp/i18n'
 
 import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
 import type { GameKind, ShelvedGame } from '@taverla/protocol/game'

@@ -1,5 +1,4 @@
-import { createI18n } from '@adrienlcp/i18n/create-i18n'
-import type { Dictionary } from '@adrienlcp/i18n/dictionary'
+import { createI18n, type Dictionary } from '@adrienlcp/i18n'
 
 import { DEFAULT_LOCALE, type Locale } from '@taverla/protocol/locale'
 

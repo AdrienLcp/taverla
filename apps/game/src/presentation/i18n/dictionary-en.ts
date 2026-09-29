@@ -1,5 +1,4 @@
-import { defineTranslation } from '@adrienlcp/i18n/define-translation'
-import { defineDictionary } from '@adrienlcp/i18n/dictionary'
+import { defineDictionary, defineTranslation } from '@adrienlcp/i18n'
 
 /**
  * The reference dictionary: its keys are the type every other locale is checked

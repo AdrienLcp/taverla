@@ -9,8 +9,6 @@ apps/server         → Hono + native WebSocket. Authoritative game state.
 apps/game           → One Vite SPA serving both surfaces, by route.
 packages/protocol   → The wire contract (Zod). Depends on nothing but zod.
 packages/core       → Pure domain rules. Depends on protocol for types.
-packages/result     → Vendored @adrienlcp/result. Not ours — see below.
-packages/i18n       → Vendored @adrienlcp/i18n. Not ours — see below.
 docs/plans/         → The staged build plan; each file is one session's work.
 biome-plugins/      → GritQL lint rules, where Biome ships no built-in.
 ```
@@ -56,15 +54,11 @@ second app exists, not before.
 
 ## A brick shared with Adrien's other projects
 
-`packages/result/` and `packages/i18n/` are **vendored copies** of the packages
-in `C:/git/toolkit`, held under the names they would carry on npm. Their `src/`
-is byte-identical to the toolkit's and Biome does not lint it.
+`@adrienlcp/result` and `@adrienlcp/i18n` are installed from npm; their source
+is `github.com/AdrienLcp/packages`.
 
-- **Never edit a copy in place.** Change the library in the toolkit, run
-  `pnpm validate` there, then `pnpm toolkit:sync` here. `pnpm toolkit:check`
-  fails on a drifted copy and `pnpm validate` runs it first.
-- **A brick enters the toolkit on the second consumer, never the first.** A
+- **Change a library there, never here.** It ships as a release and lands here
+  as a version bump.
+- **A brick becomes a package on the second consumer, never the first.** A
   helper used once here is this repository's, and lives where the table above
   puts it.
-- The toolkit is local and unpublished, so CI never sees it: the check skips
-  when there is no toolkit beside this repository, or at `TOOLKIT_PATH`.

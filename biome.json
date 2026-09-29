@@ -36,8 +36,6 @@
       "!**/dist",
       "!**/*.svg",
       "!.claude/skills",
-      "!packages/i18n/src",
-      "!packages/result/src",
       "!apps/server/src/infrastructure/questions/question-bank.json"
     ]
   },

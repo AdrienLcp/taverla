@@ -2482,6 +2482,12 @@ one part.
 
 ### Internal
 
+- `[Shared]` **`Result` and the i18n library are installed from npm.**
+  `@adrienlcp/result` and `@adrienlcp/i18n` are published from
+  `github.com/AdrienLcp/packages`; the vendored `packages/result/` and
+  `packages/i18n/`, `pnpm toolkit:sync` and `pnpm toolkit:check` are gone, and
+  every i18n import comes from the package root.
+
 - `[Shared]` **`Result` and the i18n library moved to a toolkit, and are
   vendored back.** Five repositories held a dialect of `Result` and three held
   the i18n library; `C:/git/toolkit` now holds one of each, as
