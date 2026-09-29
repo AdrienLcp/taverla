@@ -193,6 +193,9 @@ importers:
       '@adrienlcp/result':
         specifier: ^0.1.0
         version: 0.1.0
+      '@adrienlcp/theme-preference':
+        specifier: ^0.1.0
+        version: 0.1.0(react@19.3.0)
       '@taverla/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -325,6 +328,14 @@ packages:
 
   '@adrienlcp/result@0.1.0':
     resolution: {integrity: sha512-2LmABvoBLgB9bm+c0PKZApz4GXuyesb4m7zvZs+jn0efbdxxPc9ICFWXcDptiuy1LiBLxM6m/5WbenQx346GUA==}
+
+  '@adrienlcp/theme-preference@0.1.0':
+    resolution: {integrity: sha512-zrlfheDPFtv+tCt69R33cQKeSl6T6/h44ZNhIahD5LbJR35enQxGnsCtEzDvwvAPGzJLE0KP2Hl172eT7MB0Qg==}
+    peerDependencies:
+      react: '>=18'
+    peerDependenciesMeta:
+      react:
+        optional: true
 
   '@babel/helper-string-parser@7.29.7':
     resolution: {integrity: sha512-Pb5ijPrZ89GDH8223L4UP8i6QApWxs04RbPQJTeWDV0/keR2E36MeKnyr6LYmUUvqRRI+Iv87SuF1W6ErINzYw==}
@@ -2925,6 +2936,10 @@ snapshots:
   '@adrienlcp/i18n@0.1.0': {}
 
   '@adrienlcp/result@0.1.0': {}
+
+  '@adrienlcp/theme-preference@0.1.0(react@19.3.0)':
+    optionalDependencies:
+      react: 19.3.0
 
   '@babel/helper-string-parser@7.29.7': {}
 

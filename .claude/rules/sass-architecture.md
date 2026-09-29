@@ -72,10 +72,11 @@ silently**, because nothing type-checks CSS.
   \:root:not([data-theme='dark'])               // the system, resolved in CSS
 ```
 
-`ThemeProvider` stamps `data-theme` **only for an explicit choice** and removes
-it for `system`. That is what keeps the first paint correct: a JavaScript-decided
-theme cannot apply until React has mounted, and that gap is the flash of the
-wrong ground. Do not "simplify" it into always stamping.
+`@adrienlcp/theme-preference` stamps `data-theme` **only for an explicit
+choice** and removes it for `system`, from a pre-paint script its Vite plugin
+inlines in the head and live from `themeStore`. That is what keeps the first
+paint correct: a theme decided after the first paint is the flash of the wrong
+ground. Do not "simplify" it into always stamping.
 
 **Adding a colour is adding it to both mixins**, then checking contrast at the
 size it is used — 4.5:1 for body text, and the light palette is where this

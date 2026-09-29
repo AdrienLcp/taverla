@@ -12,36 +12,6 @@
     <meta content="#a8330d" data-scheme="dark" media="(prefers-color-scheme: dark)" name="theme-color" />
     <meta content="#ff7a3d" data-scheme="light" media="(prefers-color-scheme: light)" name="theme-color" />
 
-    <!--
-      `_tokens.sass` answers `prefers-color-scheme` on its own, so only an
-      explicit override needs stamping — and `ThemeProvider` stamps it from an
-      effect, which is a second and a half after the first paint. That gap is
-      the flash. The two meta tags above are media-scoped to the system
-      preference for the same reason, so an override has to move them too or
-      the browser's own chrome keeps the palette the page just left.
-
-      Each tag says which scheme it is, and `themeColorMediaFor` in
-      `helpers/theme.ts` says what to do about it — the same rule, reached
-      twice, because this has to answer before a module is downloaded and
-      `ThemeProvider` has to answer again when the menu changes the theme an
-      hour later. Reading the media query back out of the tag is what this
-      cannot do: the first override overwrites it, and `'system'` then has
-      nothing to restore.
-    -->
-    <script>
-      try {
-        const theme = localStorage.getItem('taverla:theme')
-
-        if (theme === 'dark' || theme === 'light') {
-          document.documentElement.dataset.theme = theme
-
-          for (const meta of document.querySelectorAll('meta[name="theme-color"][data-scheme]')) {
-            meta.media = meta.dataset.scheme === theme ? 'all' : 'not all'
-          }
-        }
-      } catch {}
-    </script>
-
     <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
     <!-- iOS ignores an SVG icon outright, and a phone is where this is added to a home screen. -->
     <link href="/apple-touch-icon.png" rel="apple-touch-icon" />

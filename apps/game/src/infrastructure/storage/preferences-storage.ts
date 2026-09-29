@@ -7,12 +7,9 @@ import { modeSettingsSchema, roomSettingsSchema } from '@taverla/protocol/room'
 
 import type { HostPreferences } from '@taverla/core/room/host-preferences'
 
-import { isThemePreference, type ThemePreference } from '@/helpers/theme'
-
 const HOST_SETUP_KEY = 'taverla:host-setup'
 const LOCALE_KEY = 'taverla:locale'
 const NICKNAME_KEY = 'taverla:nickname'
-const THEME_KEY = 'taverla:theme'
 const VOLUME_KEY = 'taverla:volume'
 
 /**
@@ -75,18 +72,6 @@ export const readStoredLocale = (): Locale | null => {
 
 export const writeStoredLocale = (locale: Locale): void => {
   write(LOCALE_KEY, locale)
-}
-
-export const readStoredThemePreference = (): ThemePreference | null => {
-  const stored = read(THEME_KEY)
-
-  return stored !== null && isThemePreference(stored) ? stored : null
-}
-
-export const writeStoredThemePreference = (
-  preference: ThemePreference
-): void => {
-  write(THEME_KEY, preference)
 }
 
 /**

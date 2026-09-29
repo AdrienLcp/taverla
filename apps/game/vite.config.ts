@@ -1,8 +1,11 @@
 import { resolve } from 'node:path'
 
+import { themePreferencePlugin } from '@adrienlcp/theme-preference/vite'
 import optimizeLocales from '@react-aria/optimize-locales-plugin'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
+
+import { themeStore } from './src/presentation/theme/theme-store'
 
 const SERVER_ORIGIN = process.env.VITE_SERVER_ORIGIN ?? 'http://localhost:3100'
 
@@ -18,7 +21,11 @@ export default defineConfig({
   },
   plugins: [
     react({ compiler: { logDiagnostics: true } }),
-    { ...optimizeLocales.vite({ locales: ['en-US', 'fr-FR'] }), enforce: 'pre' }
+    {
+      ...optimizeLocales.vite({ locales: ['en-US', 'fr-FR'] }),
+      enforce: 'pre'
+    },
+    themePreferencePlugin(themeStore)
   ],
   resolve: {
     alias: {

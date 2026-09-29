@@ -1,3 +1,9 @@
+import {
+  isThemePreference,
+  THEME_PREFERENCES,
+  type ThemePreference
+} from '@adrienlcp/theme-preference'
+import { useThemePreference } from '@adrienlcp/theme-preference/react'
 import type React from 'react'
 import { type FormEvent, useRef, useState } from 'react'
 import {
@@ -18,11 +24,6 @@ import {
 } from '@taverla/protocol/identifiers'
 import { isLocale, LOCALES } from '@taverla/protocol/locale'
 
-import {
-  isThemePreference,
-  THEME_PREFERENCES,
-  type ThemePreference
-} from '@/helpers/theme'
 import { fetchHealth, pairWall } from '@/infrastructure/api/taverla-api'
 import {
   creditsPathFor,
@@ -46,7 +47,7 @@ import {
   useIsInsideRoom,
   useRoomActions
 } from '@/presentation/room-actions/room-actions-provider'
-import { useTheme } from '@/presentation/theme/theme-provider'
+import { themeStore } from '@/presentation/theme/theme-store'
 
 import { Button } from './button'
 import {
@@ -394,7 +395,7 @@ const THEME_KEYS: Record<ThemePreference, PlainTranslationKey> = {
 export const AppMenu: React.FC = () => {
   const { locale, setLocale, translate } = useI18n()
   const navigateToLocale = useNavigateToLocale()
-  const { preference, setPreference } = useTheme()
+  const { preference, setPreference } = useThemePreference(themeStore)
   const connection = useConnection()
   const isInsideRoom = useIsInsideRoom()
   const roomCode = useRoomCodeParam()

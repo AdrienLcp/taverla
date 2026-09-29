@@ -4,7 +4,6 @@ import type { Locale } from '@taverla/protocol/locale'
 
 import { VolumeProvider } from '@/presentation/audio/volume-provider'
 import { I18nProvider } from '@/presentation/i18n/i18n-provider'
-import { ThemeProvider } from '@/presentation/theme/theme-provider'
 
 type AppProvidersProps = {
   /** The router the app is rendered under — a browser one, or a static one. */
@@ -25,9 +24,7 @@ export const AppProviders: React.FC<AppProvidersProps> = ({
   children,
   locale
 }) => (
-  <ThemeProvider>
-    <VolumeProvider>
-      <I18nProvider locale={locale}>{children}</I18nProvider>
-    </VolumeProvider>
-  </ThemeProvider>
+  <VolumeProvider>
+    <I18nProvider locale={locale}>{children}</I18nProvider>
+  </VolumeProvider>
 )
