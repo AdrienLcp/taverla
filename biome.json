@@ -23,55 +23,15 @@
             ],
             "identifierOrder": "natural"
           }
-        },
-        "useSortedAttributes": "on",
-        "useSortedKeys": "on",
-        "useSortedProperties": "on"
-      }
-    }
-  },
-  "files": {
-    "includes": [
-      "**",
-      "!**/dist",
-      "!**/*.svg",
-      "!.claude/skills",
-      "!apps/server/src/infrastructure/questions/question-bank.json"
-    ]
-  },
-  "formatter": {
-    "indentStyle": "space"
-  },
-  "javascript": {
-    "formatter": {
-      "jsxQuoteStyle": "single",
-      "quoteStyle": "single",
-      "semicolons": "asNeeded",
-      "trailingCommas": "none"
-    }
-  },
-  "linter": {
-    "domains": {
-      "react": "recommended"
-    },
-    "rules": {
-      "nursery": {
-        "noFloatingPromises": "error"
-      },
-      "suspicious": {
-        "noConsole": {
-          "level": "error",
-          "options": {
-            "allow": ["debug", "error", "info", "warn"]
-          }
         }
       }
     }
   },
-  "vcs": {
-    "clientKind": "git",
-    "defaultBranch": "main",
-    "enabled": true,
-    "useIgnoreFile": true
+  "extends": ["@adrienlcp/biome-config", "@adrienlcp/biome-config/react"],
+  "files": {
+    "includes": [
+      "!.claude/skills",
+      "!apps/server/src/infrastructure/questions/question-bank.json"
+    ]
   }
 }

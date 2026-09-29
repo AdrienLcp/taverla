@@ -1,6 +1,8 @@
 {
   "author": "Adrien Lacourpaille",
   "devDependencies": {
+    "@adrienlcp/biome-config": "^0.1.0",
+    "@adrienlcp/tsconfig": "^0.1.0",
     "@biomejs/biome": "2.5.14",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.63.0",

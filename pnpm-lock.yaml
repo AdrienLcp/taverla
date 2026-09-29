@@ -166,6 +166,12 @@ importers:
 
   .:
     devDependencies:
+      '@adrienlcp/biome-config':
+        specifier: ^0.1.0
+        version: 0.1.0(@biomejs/biome@2.5.14)
+      '@adrienlcp/tsconfig':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@biomejs/biome':
         specifier: 2.5.14
         version: 2.5.14
@@ -332,6 +338,11 @@ importers:
 
 packages:
 
+  '@adrienlcp/biome-config@0.1.0':
+    resolution: {integrity: sha512-gkreW3vs81Y01Tc6aclTWOFF/vB6qRyELr++E0blhv1uju7YTtZGRnUc6qqJMyukaKGa6vGupP1vWNK2kMrbHw==}
+    peerDependencies:
+      '@biomejs/biome': '>=2.5.0'
+
   '@adrienlcp/browser@0.1.1':
     resolution: {integrity: sha512-oTR4g+YVlrvCGlHdsBE+n84V/vVD2fDEzvDFQLoWp9DTuTLfcJMfvmzj4uTxTJxwcgl+FdXaBrCtrbDgMFD1eg==}
     peerDependencies:
@@ -361,6 +372,9 @@ packages:
     peerDependenciesMeta:
       react:
         optional: true
+
+  '@adrienlcp/tsconfig@0.1.0':
+    resolution: {integrity: sha512-8M3i4zRtk7XpSk7qSqz/1bABVh+hXJ/A6UUaSqdzsxj/WG5aH6TKY6al2Eg+kINg/bT4cdlNH7RYvpLjTFqSHg==}
 
   '@babel/helper-string-parser@7.29.7':
     resolution: {integrity: sha512-Pb5ijPrZ89GDH8223L4UP8i6QApWxs04RbPQJTeWDV0/keR2E36MeKnyr6LYmUUvqRRI+Iv87SuF1W6ErINzYw==}
@@ -2958,6 +2972,10 @@ packages:
 
 snapshots:
 
+  '@adrienlcp/biome-config@0.1.0(@biomejs/biome@2.5.14)':
+    dependencies:
+      '@biomejs/biome': 2.5.14
+
   '@adrienlcp/browser@0.1.1(react@19.3.0)':
     dependencies:
       '@adrienlcp/result': 0.1.0
@@ -2979,6 +2997,8 @@ snapshots:
   '@adrienlcp/theme-preference@0.1.0(react@19.3.0)':
     optionalDependencies:
       react: 19.3.0
+
+  '@adrienlcp/tsconfig@0.1.0': {}
 
   '@babel/helper-string-parser@7.29.7': {}
 
