@@ -103,10 +103,5 @@ value with the absence spelled out, and `Result.failure(undefined)` builds a
 failure whose error *is* `undefined` — never the unknown error, which is what
 writing it almost always meant.
 
-Neither can be made a type error — `undefined extends void`, so the two
-successes are the same type — so they are refused by
-`biome-plugins/no-undefined-argument-result.grit` instead, which runs in
-`pnpm lint`, in CI and in the pre-commit hook.
-
 **`Result` is not this repository's code.** `@adrienlcp/result` is installed
 from npm and lives in `github.com/AdrienLcp/packages`; change its shape there.

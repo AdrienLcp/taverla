@@ -2482,6 +2482,11 @@ one part.
 
 ### Internal
 
+- `[Shared]` **The `no-undefined-argument-result` Biome plugin is gone.**
+  `Result.success(undefined)` is the same value as `Result.success()`, and a
+  `Result.failure(undefined)` already shows as a `FailureResult<undefined>`;
+  the lint rule was not worth its upkeep.
+
 - `[Shared]` **`Result` and the i18n library are installed from npm.**
   `@adrienlcp/result` and `@adrienlcp/i18n` are published from
   `github.com/AdrienLcp/packages`; the vendored `packages/result/` and
