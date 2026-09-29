@@ -49,9 +49,15 @@ const STRIPS_EXPECTED = 16
  * visible can still be drawn in the fallback. On a Linux runner that is DejaVu,
  * wide enough to wrap every strip, and a measure racing the font failed CI
  * without ever failing on Windows, whose fallback is narrow.
+ *
+ * Settled again after every viewport change, not once per page: a failing
+ * run's trace shows the face re-requested around each resize, which re-sizes
+ * the `vmin` labels, and a sweep taken before it settles reads the fallback.
  */
 const loadEveryFace = () =>
-  Promise.all([...document.fonts].map((face) => face.load())).then(() => {})
+  Promise.all([...document.fonts].map((face) => face.load()))
+    .then(() => document.fonts.ready)
+    .then(() => {})
 
 type Fault = {
   /** The width of the strip's own layout box, in CSS pixels. */
@@ -219,6 +225,7 @@ test('[layout] no strip on the console ever holds rows of two different lengths'
       }
 
       await page.setViewportSize({ height: 900, width: NARROWEST_SCREEN })
+      await page.evaluate(loadEveryFace)
 
       const floors = await page.evaluate(readFloors)
 
@@ -229,6 +236,7 @@ test('[layout] no strip on the console ever holds rows of two different lengths'
       }
 
       await page.setViewportSize({ height: 900, width: WIDEST_PX })
+      await page.evaluate(loadEveryFace)
 
       const { faults: found, seen } = await page.evaluate(sweepShapes, {
         floors,
