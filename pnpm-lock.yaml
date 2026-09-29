@@ -188,8 +188,8 @@ importers:
   apps/game:
     dependencies:
       '@adrienlcp/browser':
-        specifier: ^0.1.0
-        version: 0.1.0(react@19.3.0)
+        specifier: ^0.1.1
+        version: 0.1.1(react@19.3.0)
       '@adrienlcp/i18n':
         specifier: ^0.1.0
         version: 0.1.0
@@ -332,8 +332,8 @@ importers:
 
 packages:
 
-  '@adrienlcp/browser@0.1.0':
-    resolution: {integrity: sha512-XX3zDDibCEE0BC6UUZIyBOEuB4WBQMP/W181YzKeSBt6EoZWx9FVENlfGUlM5o06fkNU7x3NjqnX3DhrKxldbw==}
+  '@adrienlcp/browser@0.1.1':
+    resolution: {integrity: sha512-oTR4g+YVlrvCGlHdsBE+n84V/vVD2fDEzvDFQLoWp9DTuTLfcJMfvmzj4uTxTJxwcgl+FdXaBrCtrbDgMFD1eg==}
     peerDependencies:
       react: '>=18'
     peerDependenciesMeta:
@@ -2958,7 +2958,7 @@ packages:
 
 snapshots:
 
-  '@adrienlcp/browser@0.1.0(react@19.3.0)':
+  '@adrienlcp/browser@0.1.1(react@19.3.0)':
     dependencies:
       '@adrienlcp/result': 0.1.0
     optionalDependencies:

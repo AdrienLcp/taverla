@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@adrienlcp/browser": "^0.1.0",
+    "@adrienlcp/browser": "^0.1.1",
     "@adrienlcp/i18n": "^0.1.0",
     "@adrienlcp/react": "^0.1.0",
     "@adrienlcp/result": "^0.1.0",
