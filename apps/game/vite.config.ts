@@ -5,7 +5,7 @@ import optimizeLocales from '@react-aria/optimize-locales-plugin'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
-import { themeStore } from './src/presentation/theme/theme-store'
+import { themeStore } from './src/presentation/theme/theme-store.ts'
 
 const SERVER_ORIGIN = process.env.VITE_SERVER_ORIGIN ?? 'http://localhost:3100'
 
