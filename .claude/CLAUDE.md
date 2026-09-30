@@ -26,7 +26,10 @@ native WebSocket · Zod 4 · react-aria-components · SASS · Biome · Vitest.
 
 **No Socket.IO, and no OpenAPI codegen.** Realtime is a raw WebSocket carrying
 messages defined in `packages/protocol`; the small HTTP surface is defined in
-the same package. One answer to "where is the wire contract?".
+the same package, schemas in `http.ts` and every path in `routes.ts`. One
+answer to "where is the wire contract?" — codegen earns its keep when the client
+cannot import the server's types, and here both ends are TypeScript in one
+workspace.
 
 **TypeScript 7** — the native Go compiler, viable here precisely because nothing
 in this repo consumes the TypeScript JS compiler API (no `@hey-api/openapi-ts`,

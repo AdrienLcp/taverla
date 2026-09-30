@@ -7,6 +7,7 @@ import type {
 } from '@taverla/protocol/client-message'
 import { decodeMessage, encodeMessage } from '@taverla/protocol/codec'
 import type { RoomCode } from '@taverla/protocol/identifiers'
+import { fillRoute, ROOM_SOCKET_ROUTE } from '@taverla/protocol/routes'
 import {
   type ProtocolErrorMessage,
   protocolErrorMessageSchema,
@@ -137,7 +138,9 @@ export const useRoomSocket = ({
     }
 
     const connect = (): void => {
-      const socket = new WebSocket(`${socketOrigin()}/ws/rooms/${roomCode}`)
+      const socket = new WebSocket(
+        `${socketOrigin()}${fillRoute(ROOM_SOCKET_ROUTE, { code: roomCode })}`
+      )
 
       socketRef.current = socket
       setSocketStatus('connecting')

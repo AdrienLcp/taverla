@@ -126,15 +126,19 @@ export const playlistPreviewQuerySchema = z.object({
   difficulty: trackDifficultySchema.default('wellKnown')
 })
 
+export const DECADE_LIST_SEPARATOR = ','
+
 /**
- * The decades travel comma-separated, and an absent list is every decade —
- * which is what an empty selection means on the wire too.
+ * The decades travel as one separated string, and an absent list is every
+ * decade — which is what an empty selection means on the wire too.
  */
 export const decadePreviewQuerySchema = z.object({
   decades: z
     .string()
     .default('')
-    .transform((value) => value.split(',').filter((part) => part.length > 0))
+    .transform((value) =>
+      value.split(DECADE_LIST_SEPARATOR).filter((part) => part.length > 0)
+    )
     .pipe(z.array(trackDecadeSchema)),
   difficulty: trackDifficultySchema.default('wellKnown')
 })
@@ -175,3 +179,7 @@ export type CatalogueTrack = z.infer<typeof catalogueTrackSchema>
 export type TrackListResponse = z.infer<typeof trackListResponseSchema>
 export type HealthResponse = z.infer<typeof healthResponseSchema>
 export type ApiErrorResponse = z.infer<typeof apiErrorResponseSchema>
+export type WallPairingPollQuery = z.input<typeof wallPairingPollQuerySchema>
+export type TrackSearchQuery = z.input<typeof trackSearchQuerySchema>
+export type PlaylistPreviewQuery = z.input<typeof playlistPreviewQuerySchema>
+export type DecadePreviewQuery = z.input<typeof decadePreviewQuerySchema>

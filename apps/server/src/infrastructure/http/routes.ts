@@ -22,6 +22,7 @@ import {
   wallPairingCodeSchema,
   wallPairingPollQuerySchema
 } from '@taverla/protocol/http'
+import { API_PREFIX, API_ROUTES } from '@taverla/protocol/routes'
 import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
 import { normalizeRoomCode } from '@taverla/core/room/room-code'
@@ -81,9 +82,9 @@ const pairingNotFound: ApiErrorResponse = {
 export const registerHttpRoutes = (app: Hono): void => {
   // Only reached when the browser is not behind the Vite dev proxy; in dev the
   // app and the API share an origin, so nothing here fires.
-  app.use('/api/*', cors({ origin: env.allowedOrigins }))
+  app.use(`${API_PREFIX}/*`, cors({ origin: env.allowedOrigins }))
 
-  app.get('/api/health', (context) => {
+  app.get(API_ROUTES.health, (context) => {
     const body: HealthResponse = {
       build: env.build,
       protocolVersion: PROTOCOL_VERSION,
@@ -94,7 +95,7 @@ export const registerHttpRoutes = (app: Hono): void => {
   })
 
   app.post(
-    '/api/rooms',
+    API_ROUTES.rooms,
     limitRoomCreation,
     zValidator('json', createRoomRequestSchema),
     (context) => {
@@ -119,7 +120,7 @@ export const registerHttpRoutes = (app: Hono): void => {
     }
   )
 
-  app.get('/api/rooms/:code', (context) => {
+  app.get(API_ROUTES.room, (context) => {
     const code = normalizeRoomCode(context.req.param('code'))
     const body: RoomExistsResponse = {
       exists: code !== null && findRoom(code) !== null
@@ -131,7 +132,7 @@ export const registerHttpRoutes = (app: Hono): void => {
   // A wall asks for a code to show, the host's device vouches for it with the
   // room's token, and the wall collects the token by polling. Rate-limited with
   // room creation: a code is the same cheap allocation a room is.
-  app.post('/api/walls', limitRoomCreation, (context) => {
+  app.post(API_ROUTES.walls, limitRoomCreation, (context) => {
     const opened = openWallPairing(Date.now())
 
     if (opened === null) {
@@ -149,7 +150,7 @@ export const registerHttpRoutes = (app: Hono): void => {
   })
 
   app.get(
-    '/api/walls/:pairingCode',
+    API_ROUTES.wall,
     zValidator('query', wallPairingPollQuerySchema),
     (context) => {
       const pairingCode = wallPairingCodeSchema.safeParse(
@@ -177,7 +178,7 @@ export const registerHttpRoutes = (app: Hono): void => {
   )
 
   app.post(
-    '/api/walls/:pairingCode/pair',
+    API_ROUTES.wallPair,
     zValidator('json', pairWallRequestSchema),
     (context) => {
       const pairingCode = wallPairingCodeSchema.safeParse(
@@ -216,7 +217,7 @@ export const registerHttpRoutes = (app: Hono): void => {
   )
 
   app.get(
-    '/api/tracks/search',
+    API_ROUTES.trackSearch,
     zValidator('query', trackSearchQuerySchema),
     async (context) => {
       const { difficulty, q } = context.req.valid('query')
@@ -232,7 +233,7 @@ export const registerHttpRoutes = (app: Hono): void => {
   // A playlist id is copied out of a Deezer URL, so the host has no way of
   // knowing they pasted the wrong one until the first round comes up empty.
   app.get(
-    '/api/playlists/:playlistId/tracks',
+    API_ROUTES.playlistTracks,
     zValidator('query', playlistPreviewQuerySchema),
     async (context) => {
       const { difficulty } = context.req.valid('query')
@@ -250,7 +251,7 @@ export const registerHttpRoutes = (app: Hono): void => {
 
   // A decade names itself and says nothing about what is in it, so this is the
   // one source a host cannot check by reading the control they just pressed.
-  app.get('/api/tracks/films', async (context) => {
+  app.get(API_ROUTES.filmTracks, async (context) => {
     // No query: the arm carries no choice, and the room's difficulty is the one
     // setting this source overrules — see `FILM_SCORE_FLOOR`.
     const found = await fetchTracksFor({
@@ -262,7 +263,7 @@ export const registerHttpRoutes = (app: Hono): void => {
   })
 
   app.get(
-    '/api/tracks/decades',
+    API_ROUTES.decadeTracks,
     zValidator('query', decadePreviewQuerySchema),
     async (context) => {
       const { decades, difficulty } = context.req.valid('query')

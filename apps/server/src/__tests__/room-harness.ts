@@ -16,6 +16,11 @@ import {
   type RoundContent,
   type RoundView
 } from '@taverla/protocol/room'
+import {
+  API_ROUTES,
+  fillRoute,
+  ROOM_SOCKET_ROUTE
+} from '@taverla/protocol/routes'
 import type { HalvesVerdict, Verdict } from '@taverla/protocol/scoring'
 import {
   type HostServerMessage,
@@ -375,7 +380,9 @@ export const startRoomHarness = async (): Promise<RoomHarness> => {
     code: string,
     schema: z.ZodType<TMessage>
   ): Promise<Peer<TMessage>> => {
-    const socket = new WebSocket(`ws://${origin}/ws/rooms/${code}`)
+    const socket = new WebSocket(
+      `ws://${origin}${fillRoute(ROOM_SOCKET_ROUTE, { code })}`
+    )
     const frames: Peer<TMessage>['frames'] = []
 
     openSockets.push(socket)
@@ -437,7 +444,7 @@ export const startRoomHarness = async (): Promise<RoomHarness> => {
       (shelved) => shelved === settings.game?.kind
     )
 
-    const response = await fetch(`http://${origin}/api/rooms`, {
+    const response = await fetch(`http://${origin}${API_ROUTES.rooms}`, {
       body: JSON.stringify({ game: doorGame }),
       headers: { 'content-type': 'application/json' },
       method: 'POST'

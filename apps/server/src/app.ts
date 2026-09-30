@@ -1,6 +1,8 @@
 import { createNodeWebSocket } from '@hono/node-ws'
 import { Hono } from 'hono'
 
+import { ROOM_SOCKET_ROUTE } from '@taverla/protocol/routes'
+
 import { registerHttpRoutes } from '@/infrastructure/http/routes'
 import { registerStaticSite } from '@/infrastructure/http/static-site'
 import { createRoomSocketEvents } from '@/infrastructure/messaging/socket-handler'
@@ -15,7 +17,7 @@ export const createApp = () => {
   const { injectWebSocket, upgradeWebSocket } = createNodeWebSocket({ app })
 
   app.get(
-    '/ws/rooms/:code',
+    ROOM_SOCKET_ROUTE,
     upgradeWebSocket((context) =>
       createRoomSocketEvents(context.req.param('code'))
     )

@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { ApiErrorResponse } from '@taverla/protocol/http'
+import { API_ROUTES } from '@taverla/protocol/routes'
 
 import { type RoomHarness, startRoomHarness } from './room-harness'
 
@@ -32,11 +33,14 @@ describe('http routes', () => {
     let lastBody: ApiErrorResponse | null = null
 
     for (let attempt = 0; attempt < ATTEMPTS; attempt++) {
-      const response = await fetch(`http://${harness.origin}/api/rooms`, {
-        body: JSON.stringify({ game: 'blindtest' }),
-        headers: { 'content-type': 'application/json' },
-        method: 'POST'
-      })
+      const response = await fetch(
+        `http://${harness.origin}${API_ROUTES.rooms}`,
+        {
+          body: JSON.stringify({ game: 'blindtest' }),
+          headers: { 'content-type': 'application/json' },
+          method: 'POST'
+        }
+      )
 
       statuses.push(response.status)
 

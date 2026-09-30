@@ -2482,6 +2482,13 @@ one part.
 
 ### Internal
 
+- `[Shared]` **Route paths are part of the contract.** `@taverla/protocol/routes`
+  holds every HTTP path and the room socket's: the server registers the
+  pattern, the client fills it with `fillRoute`, which is typed on the
+  pattern's `:params`, and the Vite proxy reads the same prefixes. Queries are
+  checked against the `z.input` of the schema that parses them, so a renamed
+  query field is a type error instead of a silent default.
+
 - `[Shared]` **The `no-undefined-argument-result` Biome plugin is gone.**
   `Result.success(undefined)` is the same value as `Result.success()`, and a
   `Result.failure(undefined)` already shows as a `FailureResult<undefined>`;

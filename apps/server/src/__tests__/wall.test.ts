@@ -14,6 +14,7 @@ import {
   DEFAULT_ROOM_SETTINGS,
   type RoomSettings
 } from '@taverla/protocol/room'
+import { API_ROUTES, fillRoute } from '@taverla/protocol/routes'
 import {
   hostServerMessageSchema,
   type WallServerMessage,
@@ -122,14 +123,17 @@ describe('the wall', () => {
 
   it('[wall] is paired over http by the device holding the token, and nobody else', async () => {
     const { code, hostToken } = await harness.openRoom()
-    const api = `http://${harness.origin}/api/walls`
+    const origin = `http://${harness.origin}`
     const opened = (await (
-      await fetch(api, { method: 'POST' })
+      await fetch(`${origin}${API_ROUTES.walls}`, { method: 'POST' })
     ).json()) as OpenWallPairingResponse
+    const { pairingCode } = opened
     const poll = () =>
-      fetch(`${api}/${opened.pairingCode}?secret=${opened.secret}`)
+      fetch(
+        `${origin}${fillRoute(API_ROUTES.wall, { pairingCode })}?secret=${opened.secret}`
+      )
     const vouch = (token: string) =>
-      fetch(`${api}/${opened.pairingCode}/pair`, {
+      fetch(`${origin}${fillRoute(API_ROUTES.wallPair, { pairingCode })}`, {
         body: JSON.stringify({ hostToken: token, roomCode: code }),
         headers: { 'content-type': 'application/json' },
         method: 'POST'

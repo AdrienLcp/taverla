@@ -7,19 +7,25 @@ import {
   type CreateRoomRequest,
   type CreateRoomResponse,
   createRoomResponseSchema,
+  DECADE_LIST_SEPARATOR,
+  type DecadePreviewQuery,
   type HealthResponse,
   healthResponseSchema,
   type OpenWallPairingResponse,
   openWallPairingResponseSchema,
   type PairWallRequest,
+  type PlaylistPreviewQuery,
   roomExistsResponseSchema,
+  type TrackSearchQuery,
   trackListResponseSchema,
   type WallPairingCode,
+  type WallPairingPollQuery,
   type WallPairingPollResponse,
   wallPairingPollResponseSchema
 } from '@taverla/protocol/http'
 import type { RoomCode } from '@taverla/protocol/identifiers'
 import type { Locale } from '@taverla/protocol/locale'
+import { API_ROUTES, fillRoute } from '@taverla/protocol/routes'
 import type { TrackDecade, TrackDifficulty } from '@taverla/protocol/track'
 
 export type ApiError =
@@ -43,7 +49,7 @@ export const createRoom = async ({
   /** What the host reads, which is what a quiz opens on until they say otherwise. */
   locale: Locale
 }): Promise<Result<CreateRoomResponse, ApiError>> =>
-  request('/api/rooms', createRoomResponseSchema, {
+  request(API_ROUTES.rooms, createRoomResponseSchema, {
     body: JSON.stringify({ game, locale } satisfies CreateRoomRequest),
     headers: { 'content-type': 'application/json' },
     method: 'POST'
@@ -51,12 +57,15 @@ export const createRoom = async ({
 
 export const fetchHealth = async (): Promise<
   Result<HealthResponse, ApiError>
-> => request('/api/health', healthResponseSchema)
+> => request(API_ROUTES.health, healthResponseSchema)
 
 export const roomExists = async (
   code: RoomCode
 ): Promise<Result<boolean, ApiError>> => {
-  const response = await request(`/api/rooms/${code}`, roomExistsResponseSchema)
+  const response = await request(
+    fillRoute(API_ROUTES.room, { code }),
+    roomExistsResponseSchema
+  )
 
   return response.status === 'failure'
     ? response
@@ -65,7 +74,10 @@ export const roomExists = async (
 
 export const openWallPairing = async (): Promise<
   Result<OpenWallPairingResponse, ApiError>
-> => request('/api/walls', openWallPairingResponseSchema, { method: 'POST' })
+> =>
+  request(API_ROUTES.walls, openWallPairingResponseSchema, {
+    method: 'POST'
+  })
 
 export const pollWallPairing = async ({
   pairingCode,
@@ -75,7 +87,9 @@ export const pollWallPairing = async ({
   secret: string
 }): Promise<Result<WallPairingPollResponse, ApiError>> =>
   request(
-    `/api/walls/${pairingCode}?${new URLSearchParams({ secret })}`,
+    withQuery(fillRoute(API_ROUTES.wall, { pairingCode }), {
+      secret
+    } satisfies WallPairingPollQuery),
     wallPairingPollResponseSchema
   )
 
@@ -87,11 +101,14 @@ export const pairWall = async ({
   Result<void, ApiError>
 > => {
   try {
-    const response = await fetch(`/api/walls/${pairingCode}/pair`, {
-      body: JSON.stringify(body satisfies PairWallRequest),
-      headers: { 'content-type': 'application/json' },
-      method: 'POST'
-    })
+    const response = await fetch(
+      fillRoute(API_ROUTES.wallPair, { pairingCode }),
+      {
+        body: JSON.stringify(body satisfies PairWallRequest),
+        headers: { 'content-type': 'application/json' },
+        method: 'POST'
+      }
+    )
 
     return response.ok ? Result.success() : Result.failure('rejected')
   } catch {
@@ -107,7 +124,9 @@ export const fetchPlaylistTracks = async ({
   playlistId: string
 }): Promise<Result<CatalogueTrack[], ApiError>> => {
   const response = await request(
-    `/api/playlists/${encodeURIComponent(playlistId)}/tracks?difficulty=${difficulty}`,
+    withQuery(fillRoute(API_ROUTES.playlistTracks, { playlistId }), {
+      difficulty
+    } satisfies PlaylistPreviewQuery),
     trackListResponseSchema
   )
 
@@ -120,7 +139,7 @@ export const fetchPlaylistTracks = async ({
 export const fetchFilmTracks = async (): Promise<
   Result<CatalogueTrack[], ApiError>
 > => {
-  const response = await request('/api/tracks/films', trackListResponseSchema)
+  const response = await request(API_ROUTES.filmTracks, trackListResponseSchema)
 
   return response.status === 'failure'
     ? response
@@ -136,7 +155,10 @@ export const fetchDecadeTracks = async ({
   difficulty: TrackDifficulty
 }): Promise<Result<CatalogueTrack[], ApiError>> => {
   const response = await request(
-    `/api/tracks/decades?decades=${decades.join(',')}&difficulty=${difficulty}`,
+    withQuery(API_ROUTES.decadeTracks, {
+      decades: decades.join(DECADE_LIST_SEPARATOR),
+      difficulty
+    } satisfies DecadePreviewQuery),
     trackListResponseSchema
   )
 
@@ -153,7 +175,10 @@ export const searchTracks = async ({
   query: string
 }): Promise<Result<CatalogueTrack[], ApiError>> => {
   const response = await request(
-    `/api/tracks/search?q=${encodeURIComponent(query)}&difficulty=${difficulty}`,
+    withQuery(API_ROUTES.trackSearch, {
+      difficulty,
+      q: query
+    } satisfies TrackSearchQuery),
     trackListResponseSchema
   )
 
@@ -161,6 +186,11 @@ export const searchTracks = async ({
     ? response
     : Result.success(response.data.tracks)
 }
+
+const withQuery = (
+  path: string,
+  query: Readonly<Record<string, string>>
+): string => `${path}?${new URLSearchParams(query)}`
 
 /**
  * Responses are validated against the same schemas the server builds them from,

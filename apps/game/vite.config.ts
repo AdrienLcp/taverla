@@ -5,6 +5,8 @@ import optimizeLocales from '@react-aria/optimize-locales-plugin'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
+import { API_PREFIX, SOCKET_PREFIX } from '@taverla/protocol/routes'
+
 import { themeStore } from './src/presentation/theme/theme-store.ts'
 
 const SERVER_ORIGIN = process.env.VITE_SERVER_ORIGIN ?? 'http://localhost:3100'
@@ -40,8 +42,11 @@ export default defineConfig({
     // Same-origin in dev, which is what lets the QR code encode
     // `location.origin` and keeps CORS out of the picture entirely.
     proxy: {
-      '/api': { changeOrigin: true, target: SERVER_ORIGIN },
-      '/ws': { target: SERVER_ORIGIN.replace(/^http/, 'ws'), ws: true }
+      [API_PREFIX]: { changeOrigin: true, target: SERVER_ORIGIN },
+      [SOCKET_PREFIX]: {
+        target: SERVER_ORIGIN.replace(/^http/, 'ws'),
+        ws: true
+      }
     },
     strictPort: true
   }
