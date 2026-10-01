@@ -12,6 +12,9 @@ concurrency:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    # Runs take 2 to 3 minutes and the slowest seen took 8: twice that, so a
+    # hung browser or server is cut off instead of burning the 6-hour default.
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
 
@@ -67,6 +70,8 @@ jobs:
   # silent rot, so it builds and throws the result away.
   image:
     runs-on: ubuntu-latest
+    # Builds take about a minute, a cold cache a few more.
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
 
