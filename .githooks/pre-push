@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+# Typecheck, lint and unit tests before anything reaches CI, which takes minutes
+# to say what this says in about half a minute. Read-only: a push never rewrites
+# the tree it is pushing. The end-to-end journeys stay in CI, too slow to wait on
+# here. Skip once with `git push --no-verify`.
+
+set -e
+
+pnpm typecheck
+pnpm lint:ci
+pnpm test
