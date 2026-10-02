@@ -57,18 +57,29 @@ describe('drawQuestion', () => {
    */
   const ENOUGH_TO_MEET_A_RARE_RATING = 2_000
 
-  it('[bank] never draws an adult question unless the host asked for it', () => {
-    expect(DEFAULT_QUIZ_SETTINGS.allowsAdultContent).toBe(false)
+  /**
+   * Two thousand draws each filter a whole language half: a second or two
+   * on an idle machine, past Vitest's five-second default on a busy one while
+   * the socket suites run beside them.
+   */
+  const TWO_THOUSAND_DRAWS = { timeout: 30_000 }
 
-    const drawn = drawMany(DEFAULT_QUIZ_SETTINGS, {
-      times: ENOUGH_TO_MEET_A_RARE_RATING
-    })
+  it(
+    '[bank] never draws an adult question unless the host asked for it',
+    TWO_THOUSAND_DRAWS,
+    () => {
+      expect(DEFAULT_QUIZ_SETTINGS.allowsAdultContent).toBe(false)
 
-    expect(drawn.length).toBe(ENOUGH_TO_MEET_A_RARE_RATING)
-    expect(drawn.some((question) => question.isAdult)).toBe(false)
-  })
+      const drawn = drawMany(DEFAULT_QUIZ_SETTINGS, {
+        times: ENOUGH_TO_MEET_A_RARE_RATING
+      })
 
-  it('[bank] draws them once the host has', () => {
+      expect(drawn.length).toBe(ENOUGH_TO_MEET_A_RARE_RATING)
+      expect(drawn.some((question) => question.isAdult)).toBe(false)
+    }
+  )
+
+  it('[bank] draws them once the host has', TWO_THOUSAND_DRAWS, () => {
     const drawn = drawMany(
       { ...DEFAULT_QUIZ_SETTINGS, allowsAdultContent: true },
       { times: ENOUGH_TO_MEET_A_RARE_RATING }
