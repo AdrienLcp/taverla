@@ -4,11 +4,6 @@ import { defineConfig } from 'vitest/config'
 // suite runs in plain Node and is the fastest feedback loop in the repo.
 export default defineConfig({
   test: {
-    coverage: {
-      include: ['src/**/*.ts'],
-      provider: 'v8',
-      reporter: ['text', 'html']
-    },
     include: ['src/**/*.test.ts']
   }
 })

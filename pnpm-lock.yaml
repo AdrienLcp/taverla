@@ -184,12 +184,18 @@ importers:
       '@types/node':
         specifier: ^26.6.3
         version: 26.6.3
+      '@vitest/coverage-v8':
+        specifier: 5.0.2
+        version: 5.0.2(vitest@5.0.2)
       tsx:
         specifier: ^4.23.15
         version: 4.23.15
       typescript:
         specifier: ^7.0.2
         version: 7.0.2
+      vitest:
+        specifier: ^5.0.2
+        version: 5.0.2(@types/node@26.6.3)(@vitest/coverage-v8@5.0.2)(vite@8.3.1(@types/node@26.6.3)(esbuild@0.28.2)(sass@1.105.0)(tsx@4.23.15))
 
   apps/game:
     dependencies:

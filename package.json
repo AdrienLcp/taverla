@@ -7,8 +7,10 @@
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.63.0",
     "@types/node": "^26.6.3",
+    "@vitest/coverage-v8": "5.0.2",
     "tsx": "^4.23.15",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.2"
   },
   "engines": {
     "node": ">=24.0.0",
@@ -28,8 +30,9 @@
     "preinstall": "git config core.hooksPath .githooks || true",
     "test": "pnpm --filter @taverla/protocol --filter @taverla/core --filter @taverla/server test",
     "test:core:watch": "pnpm --filter @taverla/core test:watch",
+    "test:coverage": "vitest run --coverage",
     "test:e2e": "tsc --noEmit -p e2e && playwright test -c e2e",
-    "typecheck": "pnpm -r --parallel exec tsc --noEmit && tsc --noEmit -p e2e",
+    "typecheck": "pnpm -r --parallel exec tsc --noEmit && tsc --noEmit -p e2e && tsc --noEmit -p tsconfig.root.json",
     "validate": "pnpm build && pnpm test && pnpm test:e2e"
   },
   "type": "module",

@@ -5,11 +5,6 @@ import { defineConfig } from 'vitest/config'
 // `.claude/rules/test-first.md`.
 export default defineConfig({
   test: {
-    coverage: {
-      include: ['src/**/*.ts'],
-      provider: 'v8',
-      reporter: ['text', 'html']
-    },
     include: ['src/**/*.test.ts']
   }
 })
