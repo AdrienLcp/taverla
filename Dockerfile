@@ -21,7 +21,9 @@ COPY apps/server/package.json apps/server/
 COPY packages/core/package.json packages/core/
 COPY packages/protocol/package.json packages/protocol/
 
-RUN corepack enable && pnpm install --frozen-lockfile
+# Node 25 stopped bundling corepack, so it comes from npm: it is what installs
+# the exact pnpm `packageManager` pins and checks it against that hash.
+RUN npm install --global corepack && corepack enable && pnpm install --frozen-lockfile
 
 COPY . .
 
