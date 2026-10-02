@@ -39,7 +39,8 @@ jobs:
         run: pnpm test:coverage
 
       - name: Coverage summary
-        run: node -p "'Line coverage: ' + require('./coverage/coverage-summary.json').total.lines.pct + '%'" >> "$GITHUB_STEP_SUMMARY"
+        run: |
+          node -p "'Line coverage: ' + require('./coverage/coverage-summary.json').total.lines.pct + '%'" >> "$GITHUB_STEP_SUMMARY"
 
       # Only Chromium: the journeys assert behaviour, not rendering, and a
       # second engine would double the slowest step to re-check the same thing.
