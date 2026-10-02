@@ -5,7 +5,7 @@
 # running the production build on a laptop, and CI builds it on every push so
 # it cannot drift out of working order unnoticed.
 
-FROM node:24-alpine AS build
+FROM node:26-alpine AS build
 
 WORKDIR /repo
 
@@ -34,7 +34,7 @@ RUN pnpm build
 # `@adrienlcp/*`, so what is left is hono, zod and nanoid.
 RUN pnpm --filter @taverla/server --prod --legacy deploy /server
 
-FROM node:24-alpine AS runtime
+FROM node:26-alpine AS runtime
 
 ENV NODE_ENV=production
 

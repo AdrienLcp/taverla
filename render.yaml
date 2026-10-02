@@ -18,7 +18,7 @@ services:
     startCommand: cd apps/server && node dist/index.mjs
     envVars:
       - key: NODE_VERSION
-        value: '24'
+        value: '26'
       # Relative to the server package, which is where the start command runs.
       - key: SERVE_GAME_FROM
         value: ../game/dist
