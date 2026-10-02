@@ -1,11 +1,18 @@
 #!/usr/bin/env sh
-# Typecheck, lint and unit tests before anything reaches CI, which takes minutes
-# to say what this says in about half a minute. Read-only: a push never rewrites
-# the tree it is pushing. The end-to-end journeys stay in CI, too slow to wait on
-# here. Skip once with `git push --no-verify`.
+# The same checks as CI, so a red run on main is caught before it is pushed:
+# actionlint reads the workflows GitHub would refuse to parse. Skip once with
+# `git push --no-verify`.
 
 set -e
 
+if ! command -v actionlint >/dev/null 2>&1; then
+  echo "actionlint is missing: winget install rhysd.actionlint" >&2
+  exit 1
+fi
+actionlint
+
 pnpm typecheck
 pnpm lint:ci
-pnpm test
+pnpm build
+pnpm test:coverage
+pnpm test:e2e
