@@ -27,7 +27,6 @@
     "lighthouse": "pnpm build && node scripts/lighthouse.mjs",
     "lint": "biome check --write",
     "lint:ci": "biome ci",
-    "preinstall": "git config core.hooksPath .githooks || true",
     "test": "pnpm --filter @taverla/protocol --filter @taverla/core --filter @taverla/server test",
     "test:core:watch": "pnpm --filter @taverla/core test:watch",
     "test:coverage": "vitest run --coverage",

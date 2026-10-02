@@ -5,7 +5,7 @@ The record of what exists, so a later stage does not rebuild it.
 ## Delivered
 
 **Tooling.** pnpm workspace, TypeScript 7, Biome 2.5.7 (formatting, import
-groups, the `console.log` ban), a pre-commit hook, `.editorconfig`, ports offset
+groups, the `console.log` ban), `.editorconfig`, ports offset
 to 3100/5273 so the repo runs beside other dev servers.
 
 **`packages/protocol`.** The whole wire contract: identifiers, room views split

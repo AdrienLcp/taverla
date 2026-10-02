@@ -72,7 +72,7 @@ a locale) · `react-components` (the compiler owns memoization, the `style` prop
 · `design-system` (wrapping a react-aria primitive) · `sass-architecture`
 (layers, tokens, both palettes, state attributes) · `code-style` ·
 `file-naming` · `comments` · `test-conventions` (tags, the socket harness) ·
-`e2e` (build first, three journeys) · `git-hooks` (the pre-commit biome pass)
+`e2e` (build first, three journeys)
 
 ## Never
 

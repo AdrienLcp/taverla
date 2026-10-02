@@ -10,8 +10,7 @@ FROM node:26-alpine AS build
 WORKDIR /repo
 
 # The manifests alone, so a change to source code does not re-resolve the
-# dependency tree. `preinstall` points git at `.githooks` and there is no git
-# here, which its own `|| true` already covers.
+# dependency tree.
 #
 # One line per workspace package, and a new package needs one here or
 # `--frozen-lockfile` refuses an install the lockfile says has five projects

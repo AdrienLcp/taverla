@@ -177,8 +177,7 @@ which is the case that had to keep working.
 - **The inline script is not transpiled.** Vite processes `<script type="module">`
   and `src=`, and leaves a plain inline script exactly as written, so it is the
   one place in the app whose syntax is not compiled down. Biome does not read
-  `.html` either — the pre-commit hook filters on `.ts .tsx .js .jsx .mjs .json
-  .css .scss`.
+  `.html` either.
 
 - **Blocking `**/assets/*.js` is how the first paint is actually verified.**
   A page loaded with its bundles aborted *is* the first-paint state, and it can
