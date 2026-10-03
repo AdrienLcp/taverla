@@ -16,7 +16,7 @@ import {
   whatTheRoomNames,
   withGuessBanked
 } from '@taverla/core/blindtest/typed-answer'
-import { shuffled } from '@taverla/core/helpers/shuffle'
+import { shuffled } from '@taverla/core/helpers/random'
 import { gradeQuizGuess } from '@taverla/core/quiz/question-answer'
 import {
   drawFlipDelayMs,

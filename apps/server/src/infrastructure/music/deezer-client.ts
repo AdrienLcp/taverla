@@ -14,7 +14,7 @@ import {
   filmNamedBy,
   isScoredByOneOf
 } from '@taverla/core/blindtest/film-score'
-import { shuffled } from '@taverla/core/helpers/shuffle'
+import { shuffled } from '@taverla/core/helpers/random'
 
 import { env } from '@/env'
 import { logger } from '@/infrastructure/logging/logger'

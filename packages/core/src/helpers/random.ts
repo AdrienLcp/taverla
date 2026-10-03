@@ -19,3 +19,6 @@ export const shuffled = <TItem>(items: readonly TItem[]): TItem[] => {
 
   return copy
 }
+
+export const pickRandom = <TItem>(items: readonly TItem[]): TItem | null =>
+  items[Math.floor(Math.random() * items.length)] ?? null

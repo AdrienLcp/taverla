@@ -7,6 +7,8 @@ import type {
   TrackSource
 } from '@taverla/protocol/track'
 
+import { pickRandom, shuffled } from '@taverla/core/helpers/random'
+
 import type { Room } from '@/domain/room/room'
 import {
   fetchHostTrack,
@@ -35,11 +37,13 @@ export const drawPlayableTrack = async ({
       return refilled
     }
 
-    const candidate = takeRandom(room.trackPool)
+    const candidate = pickRandom(room.trackPool)
 
     if (candidate === null) {
       return Result.failure('no_content_available')
     }
+
+    room.trackPool.splice(room.trackPool.indexOf(candidate), 1)
 
     room.playedContentIds.add(candidate.id)
 
@@ -191,31 +195,4 @@ export const drawChoices = ({
     choices,
     correctIndex: choices.findIndex((choice) => choice.id === track.id)
   }
-}
-
-const shuffled = <TItem>(items: readonly TItem[]): TItem[] => {
-  const copy = [...items]
-
-  for (let index = copy.length - 1; index > 0; index--) {
-    const swap = Math.floor(Math.random() * (index + 1))
-    const held = copy[index]
-    const other = copy[swap]
-
-    if (held !== undefined && other !== undefined) {
-      copy[index] = other
-      copy[swap] = held
-    }
-  }
-
-  return copy
-}
-
-const takeRandom = <TItem>(items: TItem[]): TItem | null => {
-  if (items.length === 0) {
-    return null
-  }
-
-  const [drawn] = items.splice(Math.floor(Math.random() * items.length), 1)
-
-  return drawn ?? null
 }

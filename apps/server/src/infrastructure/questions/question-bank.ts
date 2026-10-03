@@ -7,6 +7,8 @@ import {
   questionLanguageSchema
 } from '@taverla/protocol/question'
 
+import { pickRandom } from '@taverla/core/helpers/random'
+
 import bank from './question-bank.json' with { type: 'json' }
 
 /**
@@ -133,8 +135,5 @@ export const drawQuestion = ({
 
   const byCategory = Map.groupBy(eligible, (question) => question.category)
 
-  return pickOne(pickOne([...byCategory.values()]) ?? [])
+  return pickRandom(pickRandom([...byCategory.values()]) ?? [])
 }
-
-const pickOne = <TItem>(from: readonly TItem[]): TItem | null =>
-  from[Math.floor(Math.random() * from.length)] ?? null
