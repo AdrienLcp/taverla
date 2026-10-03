@@ -8,7 +8,7 @@ import {
 } from '@/infrastructure/router/navigation'
 import { Link } from '@/presentation/components/link'
 import { RoomInvitation } from '@/presentation/components/room-invitation'
-import { useDocumentTitle } from '@/presentation/head/use-document-title'
+import { DocumentTitle } from '@/presentation/head/document-title'
 import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
 import { useIdleChrome } from '@/presentation/use-idle-chrome'
@@ -50,7 +50,6 @@ export const InvitePage: React.FC = () => {
   const isWall = roomCode !== null && !isMissing
 
   usePhaseField('lobby')
-  useDocumentTitle(translate('invite.documentTitle'))
   useIdleChrome(isWall)
 
   // After the paint, never before it: a projector showing nothing while a
@@ -83,6 +82,7 @@ export const InvitePage: React.FC = () => {
   if (!isWall) {
     return (
       <main className='invite-page missing'>
+        <DocumentTitle>{translate('invite.documentTitle')}</DocumentTitle>
         <h1>{translate('invite.unknown.title')}</h1>
         <p>{translate('invite.unknown.description')}</p>
         <Link href={homePathFor(locale)} variant='outlined'>
@@ -94,6 +94,7 @@ export const InvitePage: React.FC = () => {
 
   return (
     <main className='invite-page'>
+      <DocumentTitle>{translate('invite.documentTitle')}</DocumentTitle>
       <RoomInvitation isUnattended roomCode={roomCode} />
     </main>
   )

@@ -15,7 +15,7 @@ import {
 } from '@/infrastructure/storage/session-storage'
 import { Button } from '@/presentation/components/button'
 import { Link } from '@/presentation/components/link'
-import { useDocumentTitle } from '@/presentation/head/use-document-title'
+import { DocumentTitle } from '@/presentation/head/document-title'
 import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
 
@@ -43,7 +43,6 @@ export const PairWallPage: React.FC = () => {
   const [pairing, setPairing] = useState<Pairing>({ status: 'idle' })
 
   usePhaseField('lobby')
-  useDocumentTitle(translate('wall.pair.documentTitle'))
 
   const pair = async (roomCode: RoomCode): Promise<void> => {
     const hostToken = readHostToken(roomCode)
@@ -68,6 +67,7 @@ export const PairWallPage: React.FC = () => {
   if (pairing.status === 'paired') {
     return (
       <main className='pair-wall-page'>
+        <DocumentTitle>{translate('wall.pair.documentTitle')}</DocumentTitle>
         <h1>{translate('wall.pair.done')}</h1>
         <Link
           href={hostPathFor(pairing.roomCode)}
@@ -83,6 +83,7 @@ export const PairWallPage: React.FC = () => {
   if (pairingCode === null || hosted.length === 0) {
     return (
       <main className='pair-wall-page'>
+        <DocumentTitle>{translate('wall.pair.documentTitle')}</DocumentTitle>
         <h1>{translate('wall.pair.nothingHeld.title')}</h1>
         <p>{translate('wall.pair.nothingHeld.description')}</p>
         <Link href={homePathFor(locale)} variant='outlined'>
@@ -94,6 +95,7 @@ export const PairWallPage: React.FC = () => {
 
   return (
     <main className='pair-wall-page'>
+      <DocumentTitle>{translate('wall.pair.documentTitle')}</DocumentTitle>
       <h1>{translate('wall.pair.title')}</h1>
       <p>{translate('wall.pair.description', { code: pairingCode })}</p>
 

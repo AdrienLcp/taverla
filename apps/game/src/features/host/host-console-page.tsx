@@ -50,7 +50,7 @@ import {
   reflexOutcome,
   useBuzzOutcome
 } from '@/presentation/haptics/buzz-outcome'
-import { useRoomDocumentTitle } from '@/presentation/head/use-room-document-title'
+import { RoomDocumentTitle } from '@/presentation/head/room-document-title'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { protocolErrorKey } from '@/presentation/i18n/translation'
 import { useReportRoomActions } from '@/presentation/room-actions/room-actions-provider'
@@ -109,7 +109,6 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   const [preparedKeys, setPreparedKeys] = useState(readPreparedSlateKeys)
 
   useReportConnection({ clock, status })
-  useRoomDocumentTitle(view?.settings.game?.kind ?? null)
   usePhaseField(view?.phase ?? null)
   const slateWall = useSlateWall(view)
   useMarkingField(view?.phase === 'playing' && slateWall.isOnWall)
@@ -294,6 +293,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   if (status === 'refused') {
     return (
       <main className='host-console-page'>
+        <RoomDocumentTitle game={view?.settings.game?.kind ?? null} />
         <div className='stage solo'>
           <HostRefused
             error={error}
@@ -308,6 +308,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
 
   return (
     <main className='host-console-page'>
+      <RoomDocumentTitle game={view?.settings.game?.kind ?? null} />
       <header>
         {view?.round != null && view.phase !== 'finished' && (
           <p className='round-index'>

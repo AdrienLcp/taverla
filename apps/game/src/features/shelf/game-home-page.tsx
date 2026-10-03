@@ -4,8 +4,9 @@ import { useCreateRoom } from '@/features/home/use-create-room'
 import { NotFoundPage } from '@/features/not-found/not-found-page'
 import { useGameParam } from '@/infrastructure/router/navigation'
 import { Button } from '@/presentation/components/button'
-import { useIndexedPageTitle } from '@/presentation/head/use-document-title'
-import { useTranslate } from '@/presentation/i18n/i18n-provider'
+import { PAGE_HEADS } from '@/presentation/head/document-head'
+import { DocumentTitle } from '@/presentation/head/document-title'
+import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
 import {
   gameDescriptionKey,
   gameNameKey,
@@ -33,14 +34,13 @@ export const GameHomePage: React.FC = () => {
 }
 
 const GameHome: React.FC<{ game: ShelvedGame }> = ({ game }) => {
+  const { locale } = useI18n()
   const translate = useTranslate()
-
-  useIndexedPageTitle(game)
-
   const { isOpening, open, refusal } = useCreateRoom()
 
   return (
     <main className='game-home-page'>
+      <DocumentTitle>{PAGE_HEADS[locale][game].title}</DocumentTitle>
       <header>
         <p className='wordmark'>{translate(gameNameKey(game))}</p>
         <h1>{translate(gameTaglineKey(game))}</h1>

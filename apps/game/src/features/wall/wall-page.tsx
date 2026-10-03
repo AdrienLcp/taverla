@@ -21,7 +21,7 @@ import { Button } from '@/presentation/components/button'
 import { ConnectionRefused } from '@/presentation/components/connection-refused'
 import { Link } from '@/presentation/components/link'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
-import { useRoomDocumentTitle } from '@/presentation/head/use-room-document-title'
+import { RoomDocumentTitle } from '@/presentation/head/room-document-title'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { useReportRoomActions } from '@/presentation/room-actions/room-actions-provider'
 import { useMarkingField } from '@/presentation/theme/use-marking-field'
@@ -65,7 +65,6 @@ const Wall: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   })
 
   useReportConnection({ clock, status })
-  useRoomDocumentTitle(view?.settings.game?.kind ?? null)
   usePhaseField(view?.phase ?? null)
   useMarkingField(view?.phase === 'playing' && slateWall.isOnWall)
   useScreenAwake(!isRefused)
@@ -101,6 +100,7 @@ const Wall: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   if (isRefused) {
     return (
       <main className='host-console-page wall-page'>
+        <RoomDocumentTitle game={view?.settings.game?.kind ?? null} />
         <div className='stage solo'>
           <ConnectionRefused error={error}>
             {error?.code === 'wall_not_paired' && (
@@ -116,6 +116,7 @@ const Wall: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
 
   return (
     <main className='host-console-page wall-page'>
+      <RoomDocumentTitle game={view?.settings.game?.kind ?? null} />
       <header>
         {view?.round != null && view.phase !== 'finished' && (
           <p className='round-index'>

@@ -9,8 +9,9 @@ import { WallDoor } from '@/features/wall/wall-door'
 import { Button } from '@/presentation/components/button'
 import { Separator } from '@/presentation/components/separator'
 import { Spinner } from '@/presentation/components/spinner'
-import { useIndexedPageTitle } from '@/presentation/head/use-document-title'
-import { useTranslate } from '@/presentation/i18n/i18n-provider'
+import { PAGE_HEADS } from '@/presentation/head/document-head'
+import { DocumentTitle } from '@/presentation/head/document-title'
+import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
 import { gameNameKey, gameTaglineKey } from '@/presentation/i18n/translation'
 
 import { HeldRooms } from './held-rooms'
@@ -37,13 +38,13 @@ import './home-page.sass'
  * and the one the design system has not been asked for yet.
  */
 export const HomePage: React.FC = () => {
-  useIndexedPageTitle('home')
-
+  const { locale } = useI18n()
   const translate = useTranslate()
   const { isOpening, open, refusal } = useCreateRoom()
 
   return (
     <main className='home-page'>
+      <DocumentTitle>{PAGE_HEADS[locale].home.title}</DocumentTitle>
       <header>
         <p className='wordmark'>{translate('home.title')}</p>
         <h1>{translate('home.tagline')}</h1>

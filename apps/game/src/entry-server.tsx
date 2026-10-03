@@ -39,6 +39,44 @@ export type RenderedPage = PageHead & {
   html: string
 }
 
+const RENDERED_TITLE = /<title>([^<]*)<\/title>/g
+
+const unescapeText = (markup: string): string =>
+  markup
+    .replaceAll('&lt;', '<')
+    .replaceAll('&gt;', '>')
+    .replaceAll('&quot;', '"')
+    .replaceAll('&#x27;', "'")
+    .replaceAll('&amp;', '&')
+
+/**
+ * React hoists the `<title>` a page renders to the front of the markup, which
+ * here would land inside `#root` rather than in the head. It is lifted out as
+ * plain text so the build writes it where a crawler reads it, and the page stays
+ * the one place its tab is named.
+ */
+const takeTitle = ({
+  markup,
+  path
+}: {
+  markup: string
+  path: string
+}): { html: string; title: string } => {
+  const titles = [...markup.matchAll(RENDERED_TITLE)]
+  const title = titles[0]?.[1]
+
+  if (titles.length !== 1 || title === undefined) {
+    throw new Error(
+      `${path} rendered ${titles.length} <title> elements, expected exactly 1`
+    )
+  }
+
+  return {
+    html: markup.replace(RENDERED_TITLE, ''),
+    title: unescapeText(title)
+  }
+}
+
 /**
  * Re-exported so the build script reads the tags from the bundle Vite made for
  * it, rather than keeping a second copy of them: it needs a *sibling's* tag for
@@ -103,7 +141,7 @@ export const renderPage = async ({
   // `lazy` into. Handed the original, the router has no component to mount and
   // renders `HydrateFallback` instead — a loader, in all fourteen documents,
   // with nothing red anywhere.
-  const html = renderToStaticMarkup(
+  const markup = renderToStaticMarkup(
     <AppProviders locale={locale}>
       <StaticRouterProvider
         context={context}
@@ -113,9 +151,12 @@ export const renderPage = async ({
     </AppProviders>
   )
 
-  if (html.includes(ROUTE_FALLBACK_CLASS)) {
+  if (markup.includes(ROUTE_FALLBACK_CLASS)) {
     throw new Error(`${path} rendered the route fallback rather than a page`)
   }
 
-  return { ...PAGE_HEADS[locale][page], html }
+  return {
+    description: PAGE_HEADS[locale][page].description,
+    ...takeTitle({ markup, path })
+  }
 }

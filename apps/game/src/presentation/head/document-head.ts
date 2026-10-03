@@ -22,8 +22,9 @@ export type PageHead = {
  * product is where the screen says what to do next. On the home page the screen
  * says `Taverla` and `The tavern is open.`, and neither is a search result.
  *
- * Read twice. The build-time prerender writes it into fourteen documents, and
- * `useIndexedPageTitle` writes the tab after an in-app navigation. Typed over
+ * Read twice. Each page renders its title as `<title>`, which the build-time
+ * prerender lifts into the head of fourteen documents beside the description it
+ * writes itself, and React keeps in the tab after an in-app navigation. Typed over
  * `ShelvedGame`, so putting a game on the shelf stops compiling here until both
  * languages can introduce it to a stranger.
  */

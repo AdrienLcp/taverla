@@ -12,7 +12,7 @@ import { pairWallUrlFor, wallPathFor } from '@/infrastructure/router/navigation'
 import { writeHostToken } from '@/infrastructure/storage/session-storage'
 import { Button } from '@/presentation/components/button'
 import { CodeAndSquare } from '@/presentation/components/room-invitation'
-import { useDocumentTitle } from '@/presentation/head/use-document-title'
+import { DocumentTitle } from '@/presentation/head/document-title'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
 import { useIdleChrome } from '@/presentation/use-idle-chrome'
@@ -57,7 +57,6 @@ const PairingScreen: React.FC<{ onStale: () => void }> = ({ onStale }) => {
   const startOver = useEffectEvent(onStale)
 
   usePhaseField('lobby')
-  useDocumentTitle(translate('wall.pairing.documentTitle'))
   useIdleChrome(pairing.status === 'waiting')
 
   useEffect(() => {
@@ -132,6 +131,7 @@ const PairingScreen: React.FC<{ onStale: () => void }> = ({ onStale }) => {
   if (pairing.status === 'failed') {
     return (
       <main className='wall-pairing-page failed'>
+        <DocumentTitle>{translate('wall.pairing.documentTitle')}</DocumentTitle>
         <h1>{translate('wall.pairing.failed')}</h1>
         <Button onPress={onStale} variant='outlined'>
           {translate('wall.pairing.retry')}
@@ -142,6 +142,7 @@ const PairingScreen: React.FC<{ onStale: () => void }> = ({ onStale }) => {
 
   return (
     <main className='wall-pairing-page'>
+      <DocumentTitle>{translate('wall.pairing.documentTitle')}</DocumentTitle>
       <h1>{translate('wall.pairing.title')}</h1>
       {pairing.status === 'waiting' && (
         <CodeAndSquare

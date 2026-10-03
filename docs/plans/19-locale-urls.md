@@ -153,8 +153,10 @@ finished sending in one.
    other language's URL — and `og:image:alt` localized with it, which was the
    last English string a French unfurl would have read aloud.
 7. ~~**The document title, twice.**~~ **Done.** The head is written per document
-   at build time, and `useDocumentTitle` writes the tab on an in-app navigation
-   and on a language change. The copy lives in
+   at build time, and each page renders its own `<title>`, which React moves
+   into the head on an in-app navigation and on a language change — the
+   prerender lifts the same element out of the markup, so the served head and
+   the tab come from one render. The copy lives in
    `presentation/head/document-head.ts` rather than the dictionary — see below.
 8. ~~**The e2e journeys navigate URLs**~~ **Done.** `everyone-answers` goes to
    `/en` and asserts `/en/blindtest`, `dead-socket` expects the way out to land

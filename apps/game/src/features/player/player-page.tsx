@@ -34,7 +34,7 @@ import {
 } from '@/presentation/components/round-progress'
 import { TextField } from '@/presentation/components/text-field'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
-import { useRoomDocumentTitle } from '@/presentation/head/use-room-document-title'
+import { RoomDocumentTitle } from '@/presentation/head/room-document-title'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { protocolErrorKey } from '@/presentation/i18n/translation'
 import { useReportRoomActions } from '@/presentation/room-actions/room-actions-provider'
@@ -102,8 +102,6 @@ const PlayerScreen: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
     }
   }, [seatNickname])
 
-  useRoomDocumentTitle(view?.settings.game?.kind ?? null)
-
   useReportRoomActions({
     closeRoom: null,
     endGame: null,
@@ -129,15 +127,20 @@ const PlayerScreen: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
       ? connection.error.code
       : null
 
-  return nickname === null || rejection !== null ? (
-    <NicknameForm
-      onSubmit={setNickname}
-      refusedNickname={nickname}
-      rejection={rejection}
-      roomCode={roomCode}
-    />
-  ) : (
-    <Lobby connection={connection} roomCode={roomCode} />
+  return (
+    <>
+      <RoomDocumentTitle game={view?.settings.game?.kind ?? null} />
+      {nickname === null || rejection !== null ? (
+        <NicknameForm
+          onSubmit={setNickname}
+          refusedNickname={nickname}
+          rejection={rejection}
+          roomCode={roomCode}
+        />
+      ) : (
+        <Lobby connection={connection} roomCode={roomCode} />
+      )}
+    </>
   )
 }
 
