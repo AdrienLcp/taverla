@@ -58,12 +58,14 @@ export const JoinWithCode: React.FC = () => {
     setIsJoining(true)
     setCodeError(null)
 
-    const found = await roomExists(parsed.code)
+    const found = await roomExists({ code: parsed.code })
 
     setIsJoining(false)
 
     if (found.status === 'failure') {
-      setCodeError({ key: apiErrorKey(found.error) })
+      if (found.error !== 'aborted') {
+        setCodeError({ key: apiErrorKey(found.error) })
+      }
 
       return
     }

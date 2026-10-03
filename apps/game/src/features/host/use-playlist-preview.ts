@@ -1,5 +1,5 @@
 import type { Result } from '@adrienlcp/result'
-import { useRef, useState } from 'react'
+import { useEffect, useEffectEvent, useRef, useState } from 'react'
 
 import type { CatalogueTrack } from '@taverla/protocol/http'
 import type { TrackDifficulty, TrackSource } from '@taverla/protocol/track'
@@ -7,7 +7,7 @@ import type { TrackDifficulty, TrackSource } from '@taverla/protocol/track'
 import { whatTheRoomNames } from '@taverla/core/blindtest/typed-answer'
 
 import {
-  type ApiError,
+  type ApiFailure,
   fetchDecadeTracks,
   fetchFilmTracks,
   fetchPlaylistTracks,
@@ -71,20 +71,26 @@ const distinctNames = (tracks: readonly CatalogueTrack[]): string[] => {
 
 const catalogueFor = async ({
   difficulty,
+  signal,
   source
 }: {
   difficulty: TrackDifficulty
+  signal: AbortSignal
   source: PreviewableSource
-}): Promise<Result<CatalogueTrack[], ApiError>> => {
+}): Promise<Result<CatalogueTrack[], ApiFailure>> => {
   switch (source.kind) {
     case 'decade':
-      return fetchDecadeTracks({ decades: source.decades, difficulty })
+      return fetchDecadeTracks({ decades: source.decades, difficulty, signal })
     case 'film':
-      return fetchFilmTracks()
+      return fetchFilmTracks({ signal })
     case 'playlist':
-      return fetchPlaylistTracks({ difficulty, playlistId: source.playlistId })
+      return fetchPlaylistTracks({
+        difficulty,
+        playlistId: source.playlistId,
+        signal
+      })
     case 'search':
-      return searchTracks({ difficulty, query: source.query })
+      return searchTracks({ difficulty, query: source.query, signal })
   }
 }
 
@@ -99,32 +105,53 @@ const catalogueFor = async ({
  */
 export const usePlaylistPreview = (difficulty: TrackDifficulty) => {
   const [preview, setPreview] = useState<PlaylistPreview>({ status: 'idle' })
-  // The decade strip asks on every press, so two answers can be in flight at
-  // once and the slower one is not the older one. Unguarded, a stale result
-  // lands on top of a fresh one and the host reads a catalogue they left.
-  const latestAsked = useRef(0)
+  // The decade strip asks on every press, and the slower answer is not the
+  // older one: each new question aborts the last, so a catalogue the host left
+  // never lands on top of the one they are looking at.
+  const inFlight = useRef<AbortController | null>(null)
+  const previewed = useRef<PreviewableSource | null>(null)
+
+  const abortInFlight = (): void => {
+    inFlight.current?.abort()
+    inFlight.current = null
+  }
 
   const clear = (): void => {
-    latestAsked.current += 1
+    abortInFlight()
+    previewed.current = null
 
     setPreview({ status: 'idle' })
   }
 
-  const previewSource = async (source: PreviewableSource): Promise<void> => {
-    latestAsked.current += 1
+  const ask = async (
+    source: PreviewableSource,
+    askedDifficulty: TrackDifficulty
+  ): Promise<void> => {
+    abortInFlight()
 
-    const asked = latestAsked.current
+    const controller = new AbortController()
+
+    inFlight.current = controller
+    previewed.current = source
 
     setPreview({ status: 'previewing' })
 
-    const found = await catalogueFor({ difficulty, source })
+    const found = await catalogueFor({
+      difficulty: askedDifficulty,
+      signal: controller.signal,
+      source
+    })
 
-    if (asked !== latestAsked.current) {
+    if (controller.signal.aborted) {
       return
     }
 
+    inFlight.current = null
+
     if (found.status === 'failure') {
-      setPreview({ error: apiErrorKey(found.error), status: 'failed' })
+      if (found.error !== 'aborted') {
+        setPreview({ error: apiErrorKey(found.error), status: 'failed' })
+      }
 
       return
     }
@@ -144,6 +171,23 @@ export const usePlaylistPreview = (difficulty: TrackDifficulty) => {
       titles: distinctNames(found.data)
     })
   }
+
+  const previewSource = (source: PreviewableSource): Promise<void> =>
+    ask(source, difficulty)
+
+  // The difficulty floor decides what the pool holds, so a preview drawn under
+  // the old one is a count the round will not honour: ask again under the new.
+  const askAgainUnder = useEffectEvent((nextDifficulty: TrackDifficulty) => {
+    if (previewed.current !== null) {
+      void ask(previewed.current, nextDifficulty)
+    }
+  })
+
+  useEffect(() => {
+    askAgainUnder(difficulty)
+  }, [difficulty])
+
+  useEffect(() => () => inFlight.current?.abort(), [])
 
   return { clear, preview, previewSource }
 }

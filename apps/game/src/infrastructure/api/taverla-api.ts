@@ -28,11 +28,24 @@ import type { Locale } from '@taverla/protocol/locale'
 import { API_ROUTES, fillRoute } from '@taverla/protocol/routes'
 import type { TrackDecade, TrackDifficulty } from '@taverla/protocol/track'
 
+/** A failure the user is told about, through `apiErrorKey`. */
 export type ApiError =
   | 'unreachable'
   | 'unexpected_response'
   | 'rejected'
   | 'rate_limited'
+
+/**
+ * `aborted` is the caller's own signal answering, so it is kept out of
+ * `ApiError`: a superseded request is dropped without a word, and rendering it
+ * would blame the network for a request nobody wanted any more.
+ */
+export type ApiFailure = ApiError | 'aborted'
+
+type Cancellable = {
+  /** Aborts the request, which then fails with `aborted`. */
+  signal?: AbortSignal
+}
 
 const TOO_MANY_REQUESTS = 429
 
@@ -42,63 +55,72 @@ const TOO_MANY_REQUESTS = 429
  */
 export const createRoom = async ({
   game,
-  locale
-}: {
+  locale,
+  signal
+}: Cancellable & {
   /** Omitted by the shelf's own front door: the room is opened, then the table decides. */
   game?: ShelvedGame
   /** What the host reads, which is what a quiz opens on until they say otherwise. */
   locale: Locale
-}): Promise<Result<CreateRoomResponse, ApiError>> =>
+}): Promise<Result<CreateRoomResponse, ApiFailure>> =>
   request(API_ROUTES.rooms, createRoomResponseSchema, {
     body: JSON.stringify({ game, locale } satisfies CreateRoomRequest),
     headers: { 'content-type': 'application/json' },
-    method: 'POST'
+    method: 'POST',
+    signal
   })
 
-export const fetchHealth = async (): Promise<
-  Result<HealthResponse, ApiError>
-> => request(API_ROUTES.health, healthResponseSchema)
+export const fetchHealth = async ({
+  signal
+}: Cancellable = {}): Promise<Result<HealthResponse, ApiFailure>> =>
+  request(API_ROUTES.health, healthResponseSchema, { signal })
 
-export const roomExists = async (
-  code: RoomCode
-): Promise<Result<boolean, ApiError>> => {
-  const response = await request(
+export const roomExists = async ({
+  code,
+  signal
+}: Cancellable & { code: RoomCode }): Promise<Result<boolean, ApiFailure>> => {
+  const answer = await request(
     fillRoute(API_ROUTES.room, { code }),
-    roomExistsResponseSchema
+    roomExistsResponseSchema,
+    { signal }
   )
 
-  return response.status === 'failure'
-    ? response
-    : Result.success(response.data.exists)
+  return answer.status === 'failure'
+    ? answer
+    : Result.success(answer.data.exists)
 }
 
-export const openWallPairing = async (): Promise<
-  Result<OpenWallPairingResponse, ApiError>
-> =>
+export const openWallPairing = async ({
+  signal
+}: Cancellable = {}): Promise<Result<OpenWallPairingResponse, ApiFailure>> =>
   request(API_ROUTES.walls, openWallPairingResponseSchema, {
-    method: 'POST'
+    method: 'POST',
+    signal
   })
 
 export const pollWallPairing = async ({
   pairingCode,
-  secret
-}: {
+  secret,
+  signal
+}: Cancellable & {
   pairingCode: WallPairingCode
   secret: string
-}): Promise<Result<WallPairingPollResponse, ApiError>> =>
+}): Promise<Result<WallPairingPollResponse, ApiFailure>> =>
   request(
     withQuery(fillRoute(API_ROUTES.wall, { pairingCode }), {
       secret
     } satisfies WallPairingPollQuery),
-    wallPairingPollResponseSchema
+    wallPairingPollResponseSchema,
+    { signal }
   )
 
 /** Answers nothing on success, so there is no body to parse. */
 export const pairWall = async ({
   pairingCode,
+  signal,
   ...body
-}: PairWallRequest & { pairingCode: WallPairingCode }): Promise<
-  Result<void, ApiError>
+}: Cancellable & PairWallRequest & { pairingCode: WallPairingCode }): Promise<
+  Result<void, ApiFailure>
 > => {
   try {
     const response = await fetch(
@@ -106,85 +128,80 @@ export const pairWall = async ({
       {
         body: JSON.stringify(body satisfies PairWallRequest),
         headers: { 'content-type': 'application/json' },
-        method: 'POST'
+        method: 'POST',
+        signal
       }
     )
 
     return response.ok ? Result.success() : Result.failure('rejected')
   } catch {
-    return Result.failure('unreachable')
+    return Result.failure(signal?.aborted ? 'aborted' : 'unreachable')
   }
 }
 
 export const fetchPlaylistTracks = async ({
   difficulty,
-  playlistId
-}: {
+  playlistId,
+  signal
+}: Cancellable & {
   difficulty: TrackDifficulty
   playlistId: string
-}): Promise<Result<CatalogueTrack[], ApiError>> => {
-  const response = await request(
+}): Promise<Result<CatalogueTrack[], ApiFailure>> =>
+  requestTracks(
     withQuery(fillRoute(API_ROUTES.playlistTracks, { playlistId }), {
       difficulty
     } satisfies PlaylistPreviewQuery),
-    trackListResponseSchema
+    signal
   )
 
-  return response.status === 'failure'
-    ? response
-    : Result.success(response.data.tracks)
-}
-
 /** No query at all: the arm carries no choice, and it pins its own floor. */
-export const fetchFilmTracks = async (): Promise<
-  Result<CatalogueTrack[], ApiError>
-> => {
-  const response = await request(API_ROUTES.filmTracks, trackListResponseSchema)
-
-  return response.status === 'failure'
-    ? response
-    : Result.success(response.data.tracks)
-}
+export const fetchFilmTracks = async ({
+  signal
+}: Cancellable = {}): Promise<Result<CatalogueTrack[], ApiFailure>> =>
+  requestTracks(API_ROUTES.filmTracks, signal)
 
 export const fetchDecadeTracks = async ({
   decades,
-  difficulty
-}: {
+  difficulty,
+  signal
+}: Cancellable & {
   /** Empty is every decade, the same as it is on the wire. */
   decades: readonly TrackDecade[]
   difficulty: TrackDifficulty
-}): Promise<Result<CatalogueTrack[], ApiError>> => {
-  const response = await request(
+}): Promise<Result<CatalogueTrack[], ApiFailure>> =>
+  requestTracks(
     withQuery(API_ROUTES.decadeTracks, {
       decades: decades.join(DECADE_LIST_SEPARATOR),
       difficulty
     } satisfies DecadePreviewQuery),
-    trackListResponseSchema
+    signal
   )
-
-  return response.status === 'failure'
-    ? response
-    : Result.success(response.data.tracks)
-}
 
 export const searchTracks = async ({
   difficulty,
-  query
-}: {
+  query,
+  signal
+}: Cancellable & {
   difficulty: TrackDifficulty
   query: string
-}): Promise<Result<CatalogueTrack[], ApiError>> => {
-  const response = await request(
+}): Promise<Result<CatalogueTrack[], ApiFailure>> =>
+  requestTracks(
     withQuery(API_ROUTES.trackSearch, {
       difficulty,
       q: query
     } satisfies TrackSearchQuery),
-    trackListResponseSchema
+    signal
   )
 
-  return response.status === 'failure'
-    ? response
-    : Result.success(response.data.tracks)
+const requestTracks = async (
+  path: string,
+  signal: AbortSignal | undefined
+): Promise<Result<CatalogueTrack[], ApiFailure>> => {
+  const trackList = await request(path, trackListResponseSchema, { signal })
+
+  return trackList.status === 'failure'
+    ? trackList
+    : Result.success(trackList.data.tracks)
 }
 
 const withQuery = (
@@ -201,13 +218,13 @@ const request = async <TData>(
   path: string,
   schema: z.ZodType<TData>,
   init?: RequestInit
-): Promise<Result<TData, ApiError>> => {
+): Promise<Result<TData, ApiFailure>> => {
   let response: Response
 
   try {
     response = await fetch(path, init)
   } catch {
-    return Result.failure('unreachable')
+    return Result.failure(init?.signal?.aborted ? 'aborted' : 'unreachable')
   }
 
   // Told apart from a plain refusal because it is the one the caller can act
@@ -228,7 +245,9 @@ const request = async <TData>(
   try {
     body = await response.json()
   } catch {
-    return Result.failure('unexpected_response')
+    return Result.failure(
+      init?.signal?.aborted ? 'aborted' : 'unexpected_response'
+    )
   }
 
   const parsed = schema.safeParse(body)

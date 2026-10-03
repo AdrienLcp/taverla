@@ -71,7 +71,10 @@ const deezerTrackSchema = z.object({
   title: z.string()
 })
 
-const deezerListSchema = z.object({ data: z.array(deezerTrackSchema) })
+/** Deezer wraps every list in `{ data: [...] }`; the envelope stops here. */
+const deezerListSchema = z
+  .object({ data: z.array(deezerTrackSchema) })
+  .transform(({ data }) => data)
 
 type DeezerTrack = z.infer<typeof deezerTrackSchema>
 
@@ -86,12 +89,20 @@ type DeezerTrack = z.infer<typeof deezerTrackSchema>
  */
 export const fetchTracksFor = async ({
   difficulty,
+  signal,
   source
 }: {
   difficulty: TrackDifficulty
+  /**
+   * The browser's own request, so a preview the host has already moved past
+   * stops spending the Deezer quota on every path of its fan-out.
+   */
+  signal?: AbortSignal
   source: TrackSource
 }): Promise<Result<CatalogueTrack[], MusicSourceError>> => {
-  const fetched = await Promise.all(pathsFor(source).map(requestList))
+  const fetched = await Promise.all(
+    pathsFor(source).map((path) => requestList(path, signal))
+  )
   const reached = fetched.filter((list) => list.status === 'success')
 
   // One chart of several failing is a thinner pool, not a dead game. Only a
@@ -135,13 +146,13 @@ const withoutRepeats = (tracks: DeezerTrack[]): DeezerTrack[] => [
 export const fetchHostTrack = async (
   trackId: string
 ): Promise<Result<HostTrack, MusicSourceError>> => {
-  const response = await requestJson(`/track/${encodeURIComponent(trackId)}`)
+  const body = await requestJson(`/track/${encodeURIComponent(trackId)}`)
 
-  if (response.status === 'failure') {
-    return response
+  if (body.status === 'failure') {
+    return body
   }
 
-  const parsed = deezerTrackSchema.safeParse(response.data)
+  const parsed = deezerTrackSchema.safeParse(body.data)
 
   // The rank is not re-checked here: the pool already applied the floor, and a
   // single-track lookup is Deezer's own `/track` endpoint, which reports a
@@ -377,15 +388,16 @@ const toCatalogueTrack = (
 })
 
 const requestList = async (
-  path: string
+  path: string,
+  signal?: AbortSignal
 ): Promise<Result<DeezerTrack[], MusicSourceError>> => {
-  const response = await requestJson(path)
+  const body = await requestJson(path, signal)
 
-  if (response.status === 'failure') {
-    return response
+  if (body.status === 'failure') {
+    return body
   }
 
-  const parsed = deezerListSchema.safeParse(response.data)
+  const parsed = deezerListSchema.safeParse(body.data)
 
   if (!parsed.success) {
     logger.error('Deezer returned an unexpected list shape', { path })
@@ -393,15 +405,19 @@ const requestList = async (
     return Result.failure('music_source_unavailable')
   }
 
-  return Result.success(parsed.data.data)
+  return Result.success(parsed.data)
 }
 
 const requestJson = async (
-  path: string
+  path: string,
+  signal?: AbortSignal
 ): Promise<Result<unknown, MusicSourceError>> => {
+  const timeout = AbortSignal.timeout(REQUEST_TIMEOUT_MS)
+
   try {
     const response = await fetch(`${env.DEEZER_API_URL}${path}`, {
-      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS)
+      signal:
+        signal === undefined ? timeout : AbortSignal.any([signal, timeout])
     })
 
     if (!response.ok) {
@@ -433,6 +449,11 @@ const requestJson = async (
 
     return Result.success(body)
   } catch (cause) {
+    // Nobody is waiting for the answer, and nothing is wrong with Deezer.
+    if (signal?.aborted) {
+      return Result.failure('music_source_unavailable')
+    }
+
     logger.error('Deezer request threw', {
       path,
       reason: cause instanceof Error ? cause.name : 'unknown'

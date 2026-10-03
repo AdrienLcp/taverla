@@ -84,6 +84,16 @@ and the improvement is obvious on first read. A rename across dozens of call
 sites is still worth raising, as its own commit rather than a blocker on this
 one.
 
+## One `data`, never two
+
+A generic `data` is fine where the API is generic — `Result`'s, Zod's
+`safeParse`. Two stacked are not: the reader cannot tell which layer is which.
+An envelope (`{ data: … }`) is unwrapped in the adapter that receives it, in its
+schema with `.transform` when there is one (`deezerListSchema`). A variable
+holding a `Result` is named for what it carries — `const trackList = await
+request(…)`, then `trackList.data` — and `response` is kept for a `fetch`
+`Response`.
+
 ## `toSorted`, not a copy then `sort`
 
 `array.toSorted(…)` wherever it is available, which is everywhere here — Node

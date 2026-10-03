@@ -230,6 +230,36 @@ describe('fetchTracksFor', () => {
       status: 'failure'
     })
   })
+
+  it('[abort] cancels every path of the fan-out with the caller', async () => {
+    const signals: AbortSignal[] = []
+
+    vi.stubGlobal(
+      'fetch',
+      async (_url: string, init: RequestInit) =>
+        new Promise<Response>((_resolve, reject) => {
+          const { signal } = init
+
+          if (signal) {
+            signals.push(signal)
+            signal.addEventListener('abort', () => reject(signal.reason))
+          }
+        })
+    )
+
+    const caller = new AbortController()
+    const found = fetchTracksFor({
+      difficulty: 'wellKnown',
+      signal: caller.signal,
+      source: { decades: [], kind: 'decade' }
+    })
+
+    caller.abort()
+
+    await expect(found).resolves.toMatchObject({ status: 'failure' })
+    expect(signals).toHaveLength(trackDecades.length * 2)
+    expect(signals.every((signal) => signal.aborted)).toBe(true)
+  })
 })
 
 /**

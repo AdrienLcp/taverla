@@ -54,11 +54,11 @@ export const useCreateRoom = () => {
       const created = await createRoom({ game: door ?? undefined, locale })
 
       if (created.status === 'failure') {
-        setOpening({
-          door,
-          error: apiErrorKey(created.error),
-          status: 'refused'
-        })
+        setOpening(
+          created.error === 'aborted'
+            ? { status: 'idle' }
+            : { door, error: apiErrorKey(created.error), status: 'refused' }
+        )
 
         return
       }

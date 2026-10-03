@@ -225,6 +225,7 @@ export const registerHttpRoutes = (app: Hono): void => {
       const { difficulty, q } = context.req.valid('query')
       const found = await fetchTracksFor({
         difficulty,
+        signal: context.req.raw.signal,
         source: { kind: 'search', query: q }
       })
 
@@ -241,6 +242,7 @@ export const registerHttpRoutes = (app: Hono): void => {
       const { difficulty } = context.req.valid('query')
       const found = await fetchTracksFor({
         difficulty,
+        signal: context.req.raw.signal,
         source: {
           kind: 'playlist',
           playlistId: context.req.param('playlistId')
@@ -258,6 +260,7 @@ export const registerHttpRoutes = (app: Hono): void => {
     // setting this source overrules — see `FILM_SCORE_FLOOR`.
     const found = await fetchTracksFor({
       difficulty: 'mixed',
+      signal: context.req.raw.signal,
       source: { kind: 'film' }
     })
 
@@ -271,6 +274,7 @@ export const registerHttpRoutes = (app: Hono): void => {
       const { decades, difficulty } = context.req.valid('query')
       const found = await fetchTracksFor({
         difficulty,
+        signal: context.req.raw.signal,
         source: { decades, kind: 'decade' }
       })
 

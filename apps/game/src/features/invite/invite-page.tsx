@@ -62,12 +62,19 @@ export const InvitePage: React.FC = () => {
       return
     }
 
-    let isCurrent = true
+    const controller = new AbortController()
 
     const check = async (): Promise<void> => {
-      const found = await roomExists(roomCode)
+      const found = await roomExists({
+        code: roomCode,
+        signal: controller.signal
+      })
 
-      if (isCurrent && found.status === 'success' && !found.data) {
+      if (
+        !controller.signal.aborted &&
+        found.status === 'success' &&
+        !found.data
+      ) {
         setIsMissing(true)
       }
     }
@@ -75,7 +82,7 @@ export const InvitePage: React.FC = () => {
     void check()
 
     return () => {
-      isCurrent = false
+      controller.abort()
     }
   }, [roomCode])
 

@@ -69,6 +69,7 @@ other dev servers on the machine.
 `project-structure` (where a new file goes) · `abstraction-boundaries` (which
 module may import which library) · `i18n` (adding a string) · `locales` (adding
 a locale) · `react-components` (the compiler owns memoization, the `style` prop)
+· `data-fetching` (a superseded request is aborted)
 · `design-system` (wrapping a react-aria primitive) · `sass-architecture`
 (layers, tokens, both palettes, state attributes) · `code-style` ·
 `file-naming` · `comments` · `test-conventions` (tags, the socket harness) ·

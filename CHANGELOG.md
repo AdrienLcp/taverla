@@ -764,6 +764,14 @@ one part.
   standings, the final board and a player's round board take the room back as
   larger type. A stacked console's standings stop running 7% past their budget.
 
+- `[Game]` **A request the host has moved past is cancelled, not just
+  ignored.** Toggling decades, switching the source or leaving a page aborts
+  the track preview still in flight, and the server stops the Deezer calls
+  behind it instead of spending the quota on an answer nobody reads. A change
+  of difficulty asks the preview again, so the count beside it is the one the
+  round will draw from. The wall polls one request at a time, and opens one
+  pairing rather than two
+
 - `[Game]` **The slate's sheet is prepared on the lobby's stage.** How many
   things to guess, their names and the answer key are one fold under the
   game's pitch, summarised by what is ready, rather than inside the collapsed

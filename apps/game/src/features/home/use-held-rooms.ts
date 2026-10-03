@@ -34,23 +34,28 @@ export const useHeldRooms = (): HeldRoom[] => {
       return
     }
 
-    let isCurrent = true
+    const controller = new AbortController()
 
     const resolveEach = async (): Promise<void> => {
       const answers = await Promise.all(
         held.map(async (room) => ({
-          found: await roomExists(room.roomCode),
+          found: await roomExists({
+            code: room.roomCode,
+            signal: controller.signal
+          }),
           room
         }))
       )
 
+      // An answer that landed before the abort still prunes the store, which
+      // outlives this screen.
       for (const { found, room } of answers) {
         if (found.status === 'success' && !found.data) {
           forgetRoom(room.roomCode)
         }
       }
 
-      if (isCurrent) {
+      if (!controller.signal.aborted) {
         setStillOpen(
           answers
             .filter(({ found }) => found.status === 'failure' || found.data)
@@ -62,7 +67,7 @@ export const useHeldRooms = (): HeldRoom[] => {
     void resolveEach()
 
     return () => {
-      isCurrent = false
+      controller.abort()
     }
   }, [held])
 

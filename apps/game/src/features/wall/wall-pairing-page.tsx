@@ -60,12 +60,12 @@ const PairingScreen: React.FC<{ onStale: () => void }> = ({ onStale }) => {
   useIdleChrome(pairing.status === 'waiting')
 
   useEffect(() => {
-    let isCurrent = true
+    const controller = new AbortController()
 
     const open = async (): Promise<void> => {
-      const opened = await openWallPairing()
+      const opened = await openWallPairing({ signal: controller.signal })
 
-      if (isCurrent) {
+      if (!controller.signal.aborted) {
         setPairing(
           opened.status === 'success'
             ? { ...opened.data, status: 'waiting' }
@@ -77,7 +77,7 @@ const PairingScreen: React.FC<{ onStale: () => void }> = ({ onStale }) => {
     void open()
 
     return () => {
-      isCurrent = false
+      controller.abort()
     }
   }, [])
 
@@ -89,12 +89,25 @@ const PairingScreen: React.FC<{ onStale: () => void }> = ({ onStale }) => {
       return
     }
 
-    let isCurrent = true
+    const controller = new AbortController()
+    let timer: number | undefined
+
+    // The next poll waits for this one's answer, so a slow link or a waking
+    // instance never has two in flight to resolve out of order.
+    const pollLater = (): void => {
+      timer = window.setTimeout(() => {
+        void poll()
+      }, POLL_INTERVAL_MS)
+    }
 
     const poll = async (): Promise<void> => {
-      const polled = await pollWallPairing({ pairingCode, secret })
+      const polled = await pollWallPairing({
+        pairingCode,
+        secret,
+        signal: controller.signal
+      })
 
-      if (!isCurrent) {
+      if (controller.signal.aborted) {
         return
       }
 
@@ -104,6 +117,8 @@ const PairingScreen: React.FC<{ onStale: () => void }> = ({ onStale }) => {
       if (polled.status === 'failure') {
         if (polled.error === 'rejected') {
           startOver()
+        } else {
+          pollLater()
         }
 
         return
@@ -115,16 +130,18 @@ const PairingScreen: React.FC<{ onStale: () => void }> = ({ onStale }) => {
           roomCode: polled.data.roomCode
         })
         void navigate(wallPathFor(polled.data.roomCode), { replace: true })
+
+        return
       }
+
+      pollLater()
     }
 
-    const timer = window.setInterval(() => {
-      void poll()
-    }, POLL_INTERVAL_MS)
+    pollLater()
 
     return () => {
-      isCurrent = false
-      window.clearInterval(timer)
+      controller.abort()
+      window.clearTimeout(timer)
     }
   }, [navigate, pairingCode, secret])
 
