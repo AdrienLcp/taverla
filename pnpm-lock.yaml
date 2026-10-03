@@ -209,17 +209,17 @@ importers:
         specifier: ^0.1.1
         version: 0.1.1(react@19.3.0)
       '@adrienlcp/i18n':
-        specifier: ^0.1.2
-        version: 0.1.2
-      '@adrienlcp/react':
         specifier: ^0.2.0
-        version: 0.2.0(react@19.3.0)
+        version: 0.2.0
+      '@adrienlcp/react':
+        specifier: ^0.3.0
+        version: 0.3.0(react@19.3.0)
       '@adrienlcp/react-aria':
         specifier: ^0.1.0
         version: 0.1.0(react-aria-components@1.21.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(sass@1.105.0)
       '@adrienlcp/react-router':
-        specifier: ^0.1.0
-        version: 0.1.0(react-aria-components@1.21.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-router@8.4.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)
+        specifier: ^0.1.1
+        version: 0.1.1(react-aria-components@1.21.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-router@8.4.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)
       '@adrienlcp/result':
         specifier: ^0.1.0
         version: 0.1.0
@@ -227,8 +227,8 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0
       '@adrienlcp/styles':
-        specifier: ^0.2.0
-        version: 0.2.0(sass@1.105.0)
+        specifier: ^0.4.0
+        version: 0.4.0(sass@1.105.0)
       '@adrienlcp/theme-preference':
         specifier: ^0.3.0
         version: 0.3.0(react@19.3.0)(vite@8.3.1(@types/node@26.6.3)(esbuild@0.28.2)(sass@1.105.0)(tsx@4.23.15)(yaml@2.9.1))
@@ -372,8 +372,8 @@ packages:
       react:
         optional: true
 
-  '@adrienlcp/i18n@0.1.2':
-    resolution: {integrity: sha512-LrozEXxr9UbYZWzkwF+uwpbnghduk07jgPkaeO5JUJVeCOay1tlwrHrZjIU/2ajSRcB7bCtpywbqX4lB5JxyPQ==}
+  '@adrienlcp/i18n@0.2.0':
+    resolution: {integrity: sha512-7iqacwJUbahBP7rl/43EqdxKsVQDhsoIHsWtW7oaHkP3tUbG+DJDxFHF1jB3FvNXTvA587hjAcijt6xDhe4X/g==}
 
   '@adrienlcp/react-aria@0.1.0':
     resolution: {integrity: sha512-tIK5xmvKqM4T68pCeM5ZkAX3fut9GlBi/1JUhIsUWsvnP1c8iBcoCCQFSU2jqRlOammhj0+m5gu/Px965I6Y3Q==}
@@ -385,17 +385,17 @@ packages:
       sass:
         optional: true
 
-  '@adrienlcp/react-router@0.1.0':
-    resolution: {integrity: sha512-iUxdzMUJiZCpOxaWcYMVTlG+m2Ulo3xGNe/MhCgIXCWhtwqCuPCyrjGcEqNAscneP1dobumCZNDOndOPFbQVlQ==}
+  '@adrienlcp/react-router@0.1.1':
+    resolution: {integrity: sha512-rwX/aERfos3ESeMC1rFS9TMVr/lv1NB8aAMu0o0Jv40Z/UZBQqoLek46rNfQ1eL5BRV7PZftTAqcsfC2+marcA==}
     peerDependencies:
       react: '>=19'
       react-aria-components: '>=1.21.0'
       react-router: '>=8'
 
-  '@adrienlcp/react@0.2.0':
-    resolution: {integrity: sha512-Is157B8/SpM+aFwfLBR/Fgpfjdqbkh4iJp0o/baLSOxRxrXPMJrDXtFBSUX9Y8074yfmVHwyT/liXHigDyRgkw==}
+  '@adrienlcp/react@0.3.0':
+    resolution: {integrity: sha512-V9ARaVZGdqhzUFxghQf8Hdb+Rp85354SpIroHvsAR65VEvKTThMswjSAiWWLUxgRTy9qZaJAQceUZuqbumwiog==}
     peerDependencies:
-      react: '>=19'
+      react: '>=19.2'
 
   '@adrienlcp/result@0.1.0':
     resolution: {integrity: sha512-2LmABvoBLgB9bm+c0PKZApz4GXuyesb4m7zvZs+jn0efbdxxPc9ICFWXcDptiuy1LiBLxM6m/5WbenQx346GUA==}
@@ -403,8 +403,8 @@ packages:
   '@adrienlcp/safe-storage@0.1.0':
     resolution: {integrity: sha512-7bdnrjNQF3fedYJvYSDIpP+9Vb+csASYjS7b2zTTiqhxr91AZx75R3Ixxhl8i7y7V0SFyCNgqhyLMngcUahbTg==}
 
-  '@adrienlcp/styles@0.2.0':
-    resolution: {integrity: sha512-nbkdUjv7Q/8S5lr0fazkLvhqk/gotk/5hGtw9n5D9JULjl/HYen4edH4uzU8ANMJ8yDjH+nc8V+GNrT5fQPF2g==}
+  '@adrienlcp/styles@0.4.0':
+    resolution: {integrity: sha512-juBj7OjKG1K1cYJQnDEV5IA/GEXYk5ey+XF2iGA9ZiTf9cIIYv7hPmabMLPt2AM+0hpBo8uiPsBdXLd/spGHzg==}
     peerDependencies:
       sass: '>=1.80.0'
     peerDependenciesMeta:
@@ -3383,7 +3383,7 @@ snapshots:
     optionalDependencies:
       react: 19.3.0
 
-  '@adrienlcp/i18n@0.1.2': {}
+  '@adrienlcp/i18n@0.2.0': {}
 
   '@adrienlcp/react-aria@0.1.0(react-aria-components@1.21.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(sass@1.105.0)':
     dependencies:
@@ -3392,13 +3392,13 @@ snapshots:
     optionalDependencies:
       sass: 1.105.0
 
-  '@adrienlcp/react-router@0.1.0(react-aria-components@1.21.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-router@8.4.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)':
+  '@adrienlcp/react-router@0.1.1(react-aria-components@1.21.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-router@8.4.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)':
     dependencies:
       react: 19.3.0
       react-aria-components: 1.21.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       react-router: 8.4.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
 
-  '@adrienlcp/react@0.2.0(react@19.3.0)':
+  '@adrienlcp/react@0.3.0(react@19.3.0)':
     dependencies:
       react: 19.3.0
 
@@ -3408,7 +3408,7 @@ snapshots:
     dependencies:
       '@adrienlcp/result': 0.1.0
 
-  '@adrienlcp/styles@0.2.0(sass@1.105.0)':
+  '@adrienlcp/styles@0.4.0(sass@1.105.0)':
     optionalDependencies:
       sass: 1.105.0
 
