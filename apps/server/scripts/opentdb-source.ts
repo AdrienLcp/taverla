@@ -11,8 +11,8 @@ import {
   decoysOf,
   type IngestedQuestions
 } from './question-source'
-import { aliasesOf } from './wikidata-aliases'
 import { wait } from './wait'
+import { aliasesOf } from './wikidata-aliases'
 
 const API_URL = 'https://opentdb.com/api.php'
 const CATEGORY_URL = 'https://opentdb.com/api_category.php'
