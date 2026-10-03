@@ -1,5 +1,6 @@
-import { createNodeWebSocket } from '@hono/node-ws'
+import { upgradeWebSocket } from '@hono/node-server'
 import { Hono } from 'hono'
+import { WebSocketServer } from 'ws'
 
 import { ROOM_SOCKET_ROUTE } from '@taverla/protocol/routes'
 
@@ -8,13 +9,13 @@ import { registerStaticSite } from '@/infrastructure/http/static-site'
 import { createRoomSocketEvents } from '@/infrastructure/messaging/socket-handler'
 
 /**
- * Returned rather than served: `injectWebSocket` needs the Node server the app
- * is later handed to, and a test wants the same wiring on an ephemeral port
+ * Returned rather than served: `serve` needs the WebSocket server alongside
+ * the app's fetch, and a test wants the same wiring on an ephemeral port
  * without the process-level concerns `index.ts` owns.
  */
 export const createApp = () => {
   const app = new Hono()
-  const { injectWebSocket, upgradeWebSocket } = createNodeWebSocket({ app })
+  const websocket = { server: new WebSocketServer({ noServer: true }) }
 
   app.get(
     ROOM_SOCKET_ROUTE,
@@ -26,5 +27,5 @@ export const createApp = () => {
   registerHttpRoutes(app)
   registerStaticSite(app)
 
-  return { app, injectWebSocket }
+  return { app, websocket }
 }

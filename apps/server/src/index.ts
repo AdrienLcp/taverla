@@ -18,12 +18,11 @@ import { logger } from '@/infrastructure/logging/logger'
 import { hasConnections } from '@/infrastructure/messaging/connection-registry'
 import { startSeatSweeper } from '@/infrastructure/messaging/round-conductor'
 
-const { app, injectWebSocket } = createApp()
+const { app, websocket } = createApp()
 
-const server = serve({ fetch: app.fetch, port: env.PORT }, ({ port }) => {
+serve({ fetch: app.fetch, port: env.PORT, websocket }, ({ port }) => {
   logger.info(`Taverla server listening on http://localhost:${port}`)
 })
 
-injectWebSocket(server)
 startRoomSweeper(hasConnections)
 startSeatSweeper()

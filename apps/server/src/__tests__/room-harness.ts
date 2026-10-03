@@ -359,14 +359,12 @@ export const errorsIn = <TMessage extends { type: string }>(
  */
 export const startRoomHarness = async (): Promise<RoomHarness> => {
   const { createApp } = await import('@/app')
-  const { app, injectWebSocket } = createApp()
+  const { app, websocket } = createApp()
 
   const started = await new Promise<ReturnType<typeof serve>>((resolve) => {
-    const server = serve({ fetch: app.fetch, port: 0 }, () => {
+    const server = serve({ fetch: app.fetch, port: 0, websocket }, () => {
       resolve(server)
     })
-
-    injectWebSocket(server)
   })
 
   const address = started.address()
