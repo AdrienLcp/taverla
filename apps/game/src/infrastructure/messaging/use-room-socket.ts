@@ -23,6 +23,7 @@ import {
 } from '@taverla/core/time/clock-sync'
 
 import { socketOrigin } from '@/infrastructure/browser'
+import { nowMs } from '@/infrastructure/clock'
 import {
   ensureSessionId,
   forgetSessionId,
@@ -124,9 +125,7 @@ export const useRoomSocket = ({
 
     const ping = (socket: WebSocket): void => {
       if (socket.readyState === WebSocket.OPEN) {
-        socket.send(
-          encodeMessage({ clientSentAt: Date.now(), type: 'time.ping' })
-        )
+        socket.send(encodeMessage({ clientSentAt: nowMs(), type: 'time.ping' }))
       }
     }
 
@@ -194,7 +193,7 @@ export const useRoomSocket = ({
 
         if (control.message.type === 'time.pong') {
           recordPongAt({
-            clientReceivedAt: Date.now(),
+            clientReceivedAt: nowMs(),
             clientSentAt: control.message.clientSentAt,
             serverTime: control.message.serverTime
           })

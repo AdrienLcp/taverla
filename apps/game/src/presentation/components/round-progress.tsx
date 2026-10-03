@@ -5,6 +5,8 @@ import {
   millisecondsUntil
 } from '@taverla/core/time/clock-sync'
 
+import { nowMs } from '@/infrastructure/clock'
+
 import './round-progress.sass'
 
 type RoundProgressProps = {
@@ -63,7 +65,7 @@ type RevealHoldProps = {
  * cancels and restarts it along with the round — so this is where it becomes
  * the two numbers the bar draws with, once rather than on each screen.
  *
- * `Date.now()` in the render body is the point rather than an oversight: the
+ * `nowMs()` in the render body is the point rather than an oversight: the
  * reading is taken once per snapshot and the animation carries the drain in
  * between, which is the same bargain the round's bar makes with the server's
  * own count.
@@ -75,6 +77,6 @@ export const RevealHold: React.FC<RevealHoldProps> = ({
 }) => (
   <RoundProgress
     durationMs={holdMs}
-    elapsedMs={holdMs - millisecondsUntil(clock, advancesAt, Date.now())}
+    elapsedMs={holdMs - millisecondsUntil(clock, advancesAt, nowMs())}
   />
 )

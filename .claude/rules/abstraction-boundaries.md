@@ -32,12 +32,20 @@ paid on every read of the code.
 | the screen wake lock | `useScreenAwake` from `@adrienlcp/browser/react`, called by the host console, the player page and the wall — the package re-takes the lock on every `visibilitychange`. Each page holds it for as long as a game runs, lobby included, and lets go on an exit (a refusal, a finished board), never on a phase: a screen that sleeps through the lobby misses the countdown |
 | `AudioContext`, `Audio` | `apps/game/src/features/host/round-audio.ts` for the clip's element, `apps/game/src/presentation/audio/buzz-cue.ts` for the synthesised buzz cue — two capabilities rather than one library, armed by the same press and refused the same way outside a gesture |
 | `fetch` (browser) | `apps/game/src/infrastructure/api/taverla-api.ts` |
+| `Date`, the wall clock | `infrastructure/clock.ts` in each app, through `nowMs()` |
 | `react-router` | `apps/game/src/infrastructure/router/`, plus `useNavigate` in `presentation/app-shell.tsx` — which hands it to react-aria's `RouterProvider`, so components navigate through the design system's `Link` and never import react-router themselves |
 | `react-aria-components` | `apps/game/src/presentation/components/`, `presentation/i18n/i18n-provider.tsx` for `I18nProvider`, and a feature that genuinely needs a primitive the design system has not wrapped yet |
 
 An import of one of these anywhere else is a design bug. Fix it by moving the
 call behind the existing module, or by adding a missing one — never by adding a
 wrapper underneath.
+
+**Dates go through the clock.** `nowMs()` is the one reading of the wall clock,
+in epoch milliseconds because every deadline on the wire and every `setTimeout`
+is written in them. Domain functions take `now` as an argument, so a test sets
+the time by passing a number, never with fake timers. Nothing here parses date
+text or hands a `Date` to a library; the day one does, it gets a `dates.ts`
+beside the clock that returns a `Result`, and the value is a Temporal type.
 
 `zod` is the exception, and deliberately so: it is not an infrastructure detail
 here, it is the language the contract is written in. `packages/protocol` is

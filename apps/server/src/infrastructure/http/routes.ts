@@ -34,6 +34,7 @@ import {
   pairWall
 } from '@/domain/room/wall-pairing'
 import { env } from '@/env'
+import { nowMs } from '@/infrastructure/clock'
 import { limitRoomCreation } from '@/infrastructure/http/rate-limit'
 import {
   fetchTracksFor,
@@ -100,7 +101,7 @@ export const registerHttpRoutes = (app: Hono): void => {
     zValidator('json', createRoomRequestSchema),
     (context) => {
       const { game, locale } = context.req.valid('json')
-      const room = createRoom({ game: game ?? null, locale, now: Date.now() })
+      const room = createRoom({ game: game ?? null, locale, now: nowMs() })
 
       if (room === null) {
         const error: ApiErrorResponse = {
@@ -133,7 +134,7 @@ export const registerHttpRoutes = (app: Hono): void => {
   // room's token, and the wall collects the token by polling. Rate-limited with
   // room creation: a code is the same cheap allocation a room is.
   app.post(API_ROUTES.walls, limitRoomCreation, (context) => {
-    const opened = openWallPairing(Date.now())
+    const opened = openWallPairing(nowMs())
 
     if (opened === null) {
       const error: ApiErrorResponse = {
@@ -162,7 +163,7 @@ export const registerHttpRoutes = (app: Hono): void => {
       }
 
       const collected = collectWallPairing({
-        now: Date.now(),
+        now: nowMs(),
         pairingCode: pairingCode.data,
         secret: context.req.valid('query').secret
       })
@@ -203,7 +204,7 @@ export const registerHttpRoutes = (app: Hono): void => {
 
       const paired = pairWall({
         hostToken,
-        now: Date.now(),
+        now: nowMs(),
         pairingCode: pairingCode.data,
         roomCode
       })

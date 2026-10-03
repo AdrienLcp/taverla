@@ -30,6 +30,8 @@ import {
 } from '@taverla/protocol/server-message'
 import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
+import { nowMs } from '@/infrastructure/clock'
+
 /**
  * One catalogue for every socket suite. The anti-cheat assertion searches raw
  * frames for these exact strings, so a per-file copy that drifted would still
@@ -207,9 +209,9 @@ export const waitFor = async (
   label: string,
   timeoutMs = 2_000
 ): Promise<void> => {
-  const deadline = Date.now() + timeoutMs
+  const deadline = nowMs() + timeoutMs
 
-  while (Date.now() < deadline) {
+  while (nowMs() < deadline) {
     if (isReady()) {
       return
     }
@@ -393,7 +395,7 @@ export const startRoomHarness = async (): Promise<RoomHarness> => {
       frames.push({
         message: schema.parse(JSON.parse(raw)),
         raw,
-        receivedAt: Date.now()
+        receivedAt: nowMs()
       })
     })
 

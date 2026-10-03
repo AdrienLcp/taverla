@@ -5,6 +5,8 @@ import {
   millisecondsUntil
 } from '@taverla/core/time/clock-sync'
 
+import { nowMs } from '@/infrastructure/clock'
+
 /**
  * Whether the reflex race's screen has flipped, and the attribute that repaints
  * the document when it has.
@@ -42,7 +44,7 @@ export const useFlipField = ({
     // A frame callback rather than a timeout: the flip has to land on a paint,
     // and a timeout is free to fire between two of them and be shown late.
     const tick = (): void => {
-      if (millisecondsUntil(clock, flipsAt, Date.now()) === 0) {
+      if (millisecondsUntil(clock, flipsAt, nowMs()) === 0) {
         setFlippedFor(flipsAt)
 
         return

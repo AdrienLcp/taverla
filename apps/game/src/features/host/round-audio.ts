@@ -13,6 +13,7 @@ import {
 } from '@taverla/core/time/clock-sync'
 
 import { blindtestHostContent } from '@/helpers/round-content'
+import { nowMs } from '@/infrastructure/clock'
 
 /**
  * `setTimeout` is only accurate to a handful of milliseconds under load, which
@@ -110,7 +111,7 @@ export const useRoundAudio = ({
   // Every pong moves the clock estimate, and a dependency on it would re-arm
   // the clip — restarting a running one — several times a second.
   const millisecondsUntilStart = useEffectEvent((target: number): number =>
-    millisecondsUntil(clock, target, Date.now())
+    millisecondsUntil(clock, target, nowMs())
   )
 
   useEffect(() => {

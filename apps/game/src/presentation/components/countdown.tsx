@@ -6,6 +6,8 @@ import {
   millisecondsUntil
 } from '@taverla/core/time/clock-sync'
 
+import { nowMs } from '@/infrastructure/clock'
+
 import './countdown.sass'
 
 type CountdownProps = {
@@ -44,14 +46,14 @@ const useSecondsLeft = (
   target: number
 ): number => {
   const [seconds, setSeconds] = useState(() =>
-    toSeconds(millisecondsUntil(clock, target, Date.now()))
+    toSeconds(millisecondsUntil(clock, target, nowMs()))
   )
 
   useEffect(() => {
     let frame = 0
 
     const tick = (): void => {
-      setSeconds(toSeconds(millisecondsUntil(clock, target, Date.now())))
+      setSeconds(toSeconds(millisecondsUntil(clock, target, nowMs())))
       frame = requestAnimationFrame(tick)
     }
 

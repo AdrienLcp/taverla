@@ -24,6 +24,7 @@ import {
 
 import { elapsedRoundMs, flipsAtOf } from '@/domain/round/round-service'
 import { answerGroupsFor, blankPlayerIdsFor } from '@/domain/round/slate-round'
+import { nowMs } from '@/infrastructure/clock'
 
 import type { Participant, PlayerAttempts, Room, Round } from './room'
 
@@ -211,8 +212,7 @@ const toBaseView = ({
   phase: room.phase,
   players: [...room.players.values()].map(toPublicPlayer),
   round: room.round === null ? null : toRoundView({ round: room.round, youId }),
-  roundElapsedMs:
-    room.round === null ? 0 : elapsedRoundMs(room.round, Date.now()),
+  roundElapsedMs: room.round === null ? 0 : elapsedRoundMs(room.round, nowMs()),
   settings: room.settings,
   yourVerdict:
     youId === null

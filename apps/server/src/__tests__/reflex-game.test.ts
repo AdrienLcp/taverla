@@ -9,6 +9,8 @@ import {
 
 import { FALSE_START_FLOOR_MS } from '@taverla/core/reflex/reaction'
 
+import { nowMs } from '@/infrastructure/clock'
+
 import {
   errorsIn,
   hostView,
@@ -101,7 +103,7 @@ const untilTheFlipIsFair = async (
   await new Promise((resolve) =>
     setTimeout(
       resolve,
-      Math.max(0, flipsAt + FALSE_START_FLOOR_MS + 10 - Date.now())
+      Math.max(0, flipsAt + FALSE_START_FLOOR_MS + 10 - nowMs())
     )
   )
 }

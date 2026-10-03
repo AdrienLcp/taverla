@@ -44,6 +44,7 @@ import {
 } from '@/helpers/round-content'
 import { slateLabelsOf } from '@/helpers/slate-labels'
 import { buzzFeedback } from '@/infrastructure/browser'
+import { nowMs } from '@/infrastructure/clock'
 import { useRoomCodeParam } from '@/infrastructure/router/navigation'
 import { AskedQuestion } from '@/presentation/components/asked-question'
 import { Countdown } from '@/presentation/components/countdown'
@@ -569,7 +570,7 @@ const Revealed: React.FC<{
  *
  * Drained by a CSS animation off the server's deadline and re-keyed on each
  * snapshot, because the round's bar settled all of that already — see
- * `RoundProgress`. `Date.now()` in the render body is the bargain `RevealHold`
+ * `RoundProgress`. `nowMs()` in the render body is the bargain `RevealHold`
  * makes for the same reason: the reading is taken once per snapshot and the
  * animation carries it in between.
  */
@@ -582,7 +583,7 @@ const FloorDial: React.FC<{
   const remainingMs =
     buzz.expiresAt === null
       ? null
-      : millisecondsUntil(clock, buzz.expiresAt, Date.now())
+      : millisecondsUntil(clock, buzz.expiresAt, nowMs())
 
   return (
     <div className='floor-dial'>

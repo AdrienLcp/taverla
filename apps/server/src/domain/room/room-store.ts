@@ -6,6 +6,7 @@ import { generateHostToken } from '@taverla/core/room/host-token'
 import { generateRoomCode } from '@taverla/core/room/room-code'
 import { roomSettingsFor } from '@taverla/core/room/room-settings'
 
+import { nowMs } from '@/infrastructure/clock'
 import { logger } from '@/infrastructure/logging/logger'
 
 import type { Room } from './room'
@@ -108,7 +109,7 @@ export const startRoomSweeper = (
   hasConnections: (code: RoomCode) => boolean
 ): (() => void) => {
   const timer = setInterval(() => {
-    const removed = sweepAbandonedRooms({ hasConnections, now: Date.now() })
+    const removed = sweepAbandonedRooms({ hasConnections, now: nowMs() })
 
     if (removed > 0) {
       logger.info('Swept abandoned rooms', { remaining: rooms.size, removed })

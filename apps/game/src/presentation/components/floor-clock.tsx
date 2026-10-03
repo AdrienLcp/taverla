@@ -9,6 +9,8 @@ import {
   serverNow
 } from '@taverla/core/time/clock-sync'
 
+import { nowMs } from '@/infrastructure/clock'
+
 import './floor-clock.sass'
 
 type FloorClockProps = {
@@ -63,9 +65,9 @@ const floorSeconds = ({
   expiresAt === null
     ? Math.max(
         0,
-        Math.floor((serverNow(clock, Date.now()) - atServerTime) / 1_000)
+        Math.floor((serverNow(clock, nowMs()) - atServerTime) / 1_000)
       )
-    : Math.ceil(millisecondsUntil(clock, expiresAt, Date.now()) / 1_000)
+    : Math.ceil(millisecondsUntil(clock, expiresAt, nowMs()) / 1_000)
 
 const useFloorSeconds = (
   buzz: ActiveBuzz,

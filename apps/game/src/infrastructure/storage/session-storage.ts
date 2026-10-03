@@ -27,6 +27,8 @@ import {
   type SeatScope
 } from '@taverla/core/room/session-memory'
 
+import { nowMs } from '@/infrastructure/clock'
+
 import { readStoredWithSchema } from './read-stored-with-schema'
 
 const SEATS_KEY = 'taverla:seats'
@@ -81,7 +83,7 @@ export const ensureSessionId = (scope: SeatScope): SessionId => {
   writeSeats(
     rememberSeat({
       ...scope,
-      at: Date.now(),
+      at: nowMs(),
       nickname: remembered?.nickname ?? null,
       seats,
       sessionId
@@ -133,7 +135,7 @@ const keepSeatNickname = (
   writeSeats(
     rememberSeat({
       ...scope,
-      at: Date.now(),
+      at: nowMs(),
       nickname,
       seats,
       sessionId:
@@ -160,7 +162,7 @@ export const writeHostToken = ({
 }): void => {
   writeHostTokens(
     rememberHostToken({
-      at: Date.now(),
+      at: nowMs(),
       hostToken,
       roomCode,
       tokens: readHostTokens()
@@ -208,7 +210,7 @@ export const forgetRoom = (roomCode: RoomCode): void => {
  */
 const mintSessionId = (): SessionId =>
   crypto.randomUUID?.() ??
-  `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`
+  `${nowMs().toString(36)}-${Math.random().toString(36).slice(2, 12)}`
 
 /**
  * Called when a player gives their seat up on purpose, or when a host disbands

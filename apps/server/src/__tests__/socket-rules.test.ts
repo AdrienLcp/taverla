@@ -15,6 +15,8 @@ import {
   millisecondsUntil
 } from '@taverla/core/time/clock-sync'
 
+import { nowMs } from '@/infrastructure/clock'
+
 import {
   errorsIn,
   FAST_GAME,
@@ -41,7 +43,7 @@ const SLOW_COUNTDOWN = { ...FAST_GAME, countdownMs: 600 }
 
 /** A device on the wrong time zone offset, four seconds ahead of the server. */
 const DEVICE_SKEW_MS = 4_000
-const deviceNow = () => Date.now() + DEVICE_SKEW_MS
+const deviceNow = () => nowMs() + DEVICE_SKEW_MS
 
 let room: RoomHarness
 
@@ -358,7 +360,7 @@ describe('the rules every socket obeys', () => {
     )
 
     const startsAt = playerView(alice)?.round?.startsAt ?? 0
-    const trulyRemainingMs = startsAt - Date.now()
+    const trulyRemainingMs = startsAt - nowMs()
 
     expect(trulyRemainingMs).toBeGreaterThan(100)
     expect(millisecondsUntil(estimate, startsAt, deviceNow())).toBeCloseTo(

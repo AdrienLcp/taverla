@@ -4,6 +4,8 @@ import type { RoomSettings } from '@taverla/protocol/room'
 import { hostServerMessageSchema } from '@taverla/protocol/server-message'
 import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
+import { nowMs } from '@/infrastructure/clock'
+
 import {
   FAST_GAME,
   halves,
@@ -78,8 +80,8 @@ describe('the wait between a reveal and the round after it', () => {
     // than each device's: a duration would already have aged differently by the
     // time the two frames were read.
     expect(onTheConsole).toBe(playerView(player)?.round?.advancesAt)
-    expect(onTheConsole - Date.now()).toBeGreaterThan(HOLD_MS / 2)
-    expect(onTheConsole - Date.now()).toBeLessThanOrEqual(HOLD_MS)
+    expect(onTheConsole - nowMs()).toBeGreaterThan(HOLD_MS / 2)
+    expect(onTheConsole - nowMs()).toBeLessThanOrEqual(HOLD_MS)
   })
 
   it('[reveal-hold] says nothing at all when the host advances by hand', async () => {
@@ -130,7 +132,7 @@ describe('the wait between a reveal and the round after it', () => {
     // this parts company with the round clock beside it: the reveal is reading
     // time, and a room watching a console that had gone read none of it.
     expect(
-      (hostView(returned)?.round?.advancesAt ?? 0) - Date.now()
+      (hostView(returned)?.round?.advancesAt ?? 0) - nowMs()
     ).toBeGreaterThan(HOLD_MS - AWAY_FOR_MS / 2)
   })
 
@@ -151,7 +153,7 @@ describe('the wait between a reveal and the round after it', () => {
     // can change while the thing it governs is on screen — and the number they
     // just picked is the wait they expect to watch, counted from the change.
     expect(
-      (playerView(player)?.round?.advancesAt ?? 0) - Date.now()
+      (playerView(player)?.round?.advancesAt ?? 0) - nowMs()
     ).toBeGreaterThan(20_000)
   })
 })

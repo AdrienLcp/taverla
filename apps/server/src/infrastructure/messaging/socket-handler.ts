@@ -65,6 +65,7 @@ import {
   writeSlateLine
 } from '@/domain/round/slate-round'
 import { discardPoolIfStale } from '@/domain/round/track-pool'
+import { nowMs } from '@/infrastructure/clock'
 import { logger } from '@/infrastructure/logging/logger'
 
 import type { Connection, Outbound } from './connection'
@@ -217,7 +218,7 @@ export const createRoomSocketEvents = (
       resumeRoundForHost(room)
     }
 
-    sendWelcome(seated, { room, serverTime: Date.now(), sessionId })
+    sendWelcome(seated, { room, serverTime: nowMs(), sessionId })
     broadcastRoom(room)
     logger.info('Socket joined', { code, role: seated.role })
   }
@@ -279,7 +280,7 @@ export const createRoomSocketEvents = (
     const claimed = claimHost({
       hostToken: message.hostToken ?? null,
       isHostConnected: hostWasConnected,
-      now: Date.now(),
+      now: nowMs(),
       room,
       sessionId
     })
@@ -297,7 +298,7 @@ export const createRoomSocketEvents = (
         ? null
         : joinAsPlayer({
             nickname: message.nickname,
-            now: Date.now(),
+            now: nowMs(),
             room,
             sessionId
           })
@@ -349,7 +350,7 @@ export const createRoomSocketEvents = (
 
     const joined = joinAsPlayer({
       nickname: message.nickname,
-      now: Date.now(),
+      now: nowMs(),
       room,
       sessionId
     })
@@ -444,7 +445,7 @@ export const createRoomSocketEvents = (
           outbound,
           refusal: 'No item can be added now',
           result: addSlateItem({
-            now: Date.now(),
+            now: nowMs(),
             room,
             roundId: message.roundId
           }),
@@ -459,7 +460,7 @@ export const createRoomSocketEvents = (
           result: setSlateKey({
             itemIndex: message.itemIndex,
             key: message.key,
-            now: Date.now(),
+            now: nowMs(),
             room,
             roundId: message.roundId
           }),
@@ -473,7 +474,7 @@ export const createRoomSocketEvents = (
           refusal: 'That key cannot be revealed now',
           result: revealSlateKey({
             itemIndex: message.itemIndex,
-            now: Date.now(),
+            now: nowMs(),
             room,
             roundId: message.roundId
           }),
@@ -487,7 +488,7 @@ export const createRoomSocketEvents = (
           refusal: 'That item cannot be closed now',
           result: closeSlateItem({
             itemIndex: message.itemIndex,
-            now: Date.now(),
+            now: nowMs(),
             room,
             roundId: message.roundId
           }),
@@ -500,7 +501,7 @@ export const createRoomSocketEvents = (
           outbound,
           refusal: 'There is no open item to collect',
           result: collectSheets({
-            now: Date.now(),
+            now: nowMs(),
             room,
             roundId: message.roundId
           }),
@@ -514,7 +515,7 @@ export const createRoomSocketEvents = (
           refusal: 'That item cannot be shown now',
           result: showSlateItem({
             itemIndex: message.itemIndex,
-            now: Date.now(),
+            now: nowMs(),
             room,
             roundId: message.roundId
           }),
@@ -530,7 +531,7 @@ export const createRoomSocketEvents = (
             groupKey: message.groupKey,
             isCorrect: message.verdict.isCorrect,
             itemIndex: message.itemIndex,
-            now: Date.now(),
+            now: nowMs(),
             room,
             roundId: message.roundId
           }),
@@ -627,7 +628,7 @@ export const createRoomSocketEvents = (
       result: writeSlateLine({
         answer: message.answer,
         itemIndex: message.itemIndex,
-        now: Date.now(),
+        now: nowMs(),
         playerId: active.playerId,
         room,
         roundId: message.roundId
@@ -663,7 +664,7 @@ export const createRoomSocketEvents = (
     }
 
     const registered = registerBuzz({
-      now: Date.now(),
+      now: nowMs(),
       playerId: active.playerId,
       room,
       roundId
@@ -696,7 +697,7 @@ export const createRoomSocketEvents = (
     roundId: RoundId
   }): void => {
     const registered = registerReflexPress({
-      now: Date.now(),
+      now: nowMs(),
       playerId,
       room,
       roundId
@@ -723,9 +724,9 @@ export const createRoomSocketEvents = (
       })
     }
 
-    if (everyoneHasPressed(room, Date.now())) {
+    if (everyoneHasPressed(room, nowMs())) {
       abandonRound(room.code)
-      closeRound(room, Date.now())
+      closeRound(room, nowMs())
       broadcastRoom(room)
       armAutoAdvance(room)
 
@@ -740,7 +741,7 @@ export const createRoomSocketEvents = (
     outbound: Outbound,
     room: Room
   ): void => {
-    const cleared = clearLockouts({ now: Date.now(), room, roundId })
+    const cleared = clearLockouts({ now: nowMs(), room, roundId })
 
     if (cleared.status === 'failure') {
       sendError(outbound, {
@@ -806,7 +807,7 @@ export const createRoomSocketEvents = (
     room: Room
   ): void => {
     const judged = applyVerdict({
-      now: Date.now(),
+      now: nowMs(),
       playerId: message.playerId,
       room,
       roundId: message.roundId,
@@ -861,7 +862,7 @@ export const createRoomSocketEvents = (
     }
 
     abandonRound(room.code)
-    closeRound(room, Date.now())
+    closeRound(room, nowMs())
     broadcastRoom(room)
     armAutoAdvance(room)
   }
@@ -884,7 +885,7 @@ export const createRoomSocketEvents = (
 
     const registered = registerAnswer({
       attempt: message.answer,
-      now: Date.now(),
+      now: nowMs(),
       playerId: active.playerId,
       room,
       roundId: message.roundId
@@ -900,9 +901,9 @@ export const createRoomSocketEvents = (
       return
     }
 
-    if (everyoneIsDone(room, Date.now())) {
+    if (everyoneIsDone(room, nowMs())) {
       abandonRound(room.code)
-      closeRound(room, Date.now())
+      closeRound(room, nowMs())
       broadcastRoom(room)
       armAutoAdvance(room)
 
@@ -938,7 +939,7 @@ export const createRoomSocketEvents = (
 
   const end = (room: Room): void => {
     abandonRound(room.code)
-    finishGame(room, Date.now())
+    finishGame(room, nowMs())
     broadcastRoom(room)
   }
 
@@ -976,7 +977,7 @@ export const createRoomSocketEvents = (
     }
 
     abandonRound(room.code)
-    restartGame(room, Date.now())
+    restartGame(room, nowMs())
     broadcastRoom(room)
   }
 
@@ -986,8 +987,8 @@ export const createRoomSocketEvents = (
   // `toHostView` reads the seat off the connection.
   const unseat = (playerId: PlayerId, room: Room): void => {
     forgetSeat(room.code, playerId)
-    removePlayer(room, playerId, Date.now())
-    settle(releaseBuzz({ now: Date.now(), playerId, room }), room)
+    removePlayer(room, playerId, nowMs())
+    settle(releaseBuzz({ now: nowMs(), playerId, room }), room)
   }
 
   /**
@@ -1091,7 +1092,7 @@ export const createRoomSocketEvents = (
 
     const renamed = renameSeat({
       nickname,
-      now: Date.now(),
+      now: nowMs(),
       participant,
       room
     })
@@ -1160,7 +1161,7 @@ export const createRoomSocketEvents = (
       return
     }
 
-    const now = Date.now()
+    const now = nowMs()
     const previousGame = room.settings.game
     const previousHoldMs = room.settings.autoAdvanceMs
 
@@ -1231,11 +1232,11 @@ export const createRoomSocketEvents = (
       // game — and stamps `disconnectedAt` on a player the sweeper would then
       // drop ten minutes later, mid-game, score and all.
       if (playerId !== null && !isSeatConnected(roomCode, playerId)) {
-        markPlayerDisconnected(room, playerId, Date.now())
+        markPlayerDisconnected(room, playerId, nowMs())
 
         // A player who locks their screen while holding the buzzer would
         // otherwise hang the round on somebody who cannot answer.
-        settle(releaseBuzz({ now: Date.now(), playerId, room }), room)
+        settle(releaseBuzz({ now: nowMs(), playerId, room }), room)
       }
 
       if (connection.role === 'player') {
@@ -1254,7 +1255,7 @@ export const createRoomSocketEvents = (
       // round would freeze it for a screen nobody left.
       if (!isHostConnected(roomCode)) {
         holdRoundWhileHostIsAway(room)
-        markHostAway(room, Date.now())
+        markHostAway(room, nowMs())
       }
 
       broadcastRoom(room)
@@ -1297,7 +1298,7 @@ export const createRoomSocketEvents = (
       if (message.type === 'time.ping') {
         sendPong(outbound, {
           clientSentAt: message.clientSentAt,
-          serverTime: Date.now()
+          serverTime: nowMs()
         })
 
         return

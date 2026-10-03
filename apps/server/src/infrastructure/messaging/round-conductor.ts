@@ -25,6 +25,7 @@ import {
 } from '@/domain/round/round-timers'
 import { slateContent } from '@/domain/round/slate-round'
 import { drawPlayableTrack } from '@/domain/round/track-pool'
+import { nowMs } from '@/infrastructure/clock'
 import { logger } from '@/infrastructure/logging/logger'
 import {
   drawQuestion,
@@ -85,7 +86,7 @@ export const beginRound = async (
           : game.kind === 'reflex'
             ? reflexContent()
             : slateContent({ keys: slateKeys, settings: game }),
-      now: Date.now(),
+      now: nowMs(),
       room
     })
 
@@ -130,7 +131,7 @@ export const beginRound = async (
 
     const round = openRound({
       content: quizContent({ question: asked, room }),
-      now: Date.now(),
+      now: nowMs(),
       room
     })
 
@@ -173,7 +174,7 @@ export const beginRound = async (
 
     const round = openRound({
       content: blindtestContent({ room, track: drawn.data }),
-      now: Date.now(),
+      now: nowMs(),
       room
     })
 
@@ -196,7 +197,7 @@ export const beginRound = async (
  * what `remainingRoundMs` reconciles.
  */
 export const armRoundTimeout = (room: Room): void => {
-  const remaining = remainingRoundMs(room, Date.now())
+  const remaining = remainingRoundMs(room, nowMs())
 
   if (remaining === null) {
     cancelRoundTimer(room.code, 'round')
@@ -211,7 +212,7 @@ export const armRoundTimeout = (room: Room): void => {
     run: () => {
       // The round running out ends it the same way the last answer does,
       // scoring included: whoever did not answer simply did not.
-      closeRound(room, Date.now())
+      closeRound(room, nowMs())
 
       broadcastRoom(room)
       armAutoAdvance(room)
@@ -240,7 +241,7 @@ export const armAutoAdvance = (room: Room): void => {
 
   scheduleRoundTimer({
     code: room.code,
-    delayMs: Math.max(0, advancesAt - Date.now()),
+    delayMs: Math.max(0, advancesAt - nowMs()),
     kind: 'advance',
     run: () => {
       if (room.phase !== 'revealed') {
@@ -248,7 +249,7 @@ export const armAutoAdvance = (room: Room): void => {
       }
 
       if (isFinalRound(room)) {
-        finishGame(room, Date.now())
+        finishGame(room, nowMs())
         broadcastRoom(room)
 
         return
@@ -284,10 +285,10 @@ export const armAnswerWindow = (room: Room): void => {
 
   scheduleRoundTimer({
     code: room.code,
-    delayMs: expiresAt - Date.now(),
+    delayMs: expiresAt - nowMs(),
     kind: 'answer',
     run: () => {
-      const outcome = timeOutBuzz({ now: Date.now(), room, roundId })
+      const outcome = timeOutBuzz({ now: nowMs(), room, roundId })
 
       if (outcome === 'resumed') {
         armRoundTimeout(room)
@@ -322,12 +323,12 @@ export const holdRoundWhileHostIsAway = (room: Room): void => {
   cancelRoundTimer(room.code, 'answer')
   cancelRoundTimer(room.code, 'countdown')
   cancelRoundTimer(room.code, 'round')
-  holdRoundClock(room, Date.now())
+  holdRoundClock(room, nowMs())
 }
 
 /** The mirror, run when a host claims the room again. */
 export const resumeRoundForHost = (room: Room): void => {
-  const now = Date.now()
+  const now = nowMs()
 
   resumeRoundClock(room, now)
 
@@ -364,7 +365,7 @@ const armCountdown = ({
     delayMs: room.settings.countdownMs,
     kind: 'countdown',
     run: () => {
-      if (!startRoundClock({ now: Date.now(), room, roundId })) {
+      if (!startRoundClock({ now: nowMs(), room, roundId })) {
         return
       }
 
@@ -393,7 +394,7 @@ const SEAT_SWEEP_INTERVAL_MS = 60 * 1_000
  */
 export const startSeatSweeper = (): (() => void) => {
   const timer = setInterval(() => {
-    const now = Date.now()
+    const now = nowMs()
 
     for (const room of allRooms()) {
       const released = releaseAbandonedSeats(room, now)
