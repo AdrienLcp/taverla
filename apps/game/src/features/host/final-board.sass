@@ -151,8 +151,16 @@
       // reach — and then a row is one multiple of its own size and the divisor
       // means something. 2.8 is the tallest row's: the winner's numeral is
       // 1.9em, with 0.9em of padding under it.
+      //
+      // 2.42 once the figures are trimmed: the winner's row measured 2.80 with
+      // the leading on and 2.42 without it.
+      --tallest-row: 2.8
+
+      @supports (text-box: trim-both cap alphabetic)
+        --tallest-row: 2.42
+
       li
-        font-size: clamp(0.95rem, calc((var(--final-budget, 100rem) - var(--final-header, 0px)) / var(--board-rows, 8) / 2.8), 1.75rem)
+        font-size: clamp(0.95rem, calc((var(--final-budget, 100rem) - var(--final-header, 0px)) / var(--board-rows, 8) / var(--tallest-row)), 1.75rem)
         padding: 0.4em 0
 
         .nickname

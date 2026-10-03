@@ -52,6 +52,33 @@
   font-weight: 500
   line-height: 1.35
 
+/// A painted block of short text — a stamp, a segment, an error — trimmed to
+/// its capitals and its baseline, so symmetric padding centres the ink rather
+/// than a line box carrying half-leading above and descender room below.
+///
+/// The padding grows by exactly what the trim takes off, so the block keeps the
+/// size it had and nothing measured against it moves; a browser without
+/// `text-box` gets the old padding and the old line. `1lh` and `1cap` are both
+/// older than `text-box` in every engine, so the one guard covers all three.
+/// The block must be a block container: in a flex container the text is an
+/// anonymous item, and the trim never reaches it.
+@mixin trimmed-block($padding-block)
+  @supports (text-box: trim-both cap alphabetic)
+    padding-block: calc(#{$padding-block} + (1lh - 1cap) / 2)
+    text-box: trim-both cap alphabetic
+
+/// A figure on a line of its own, trimmed to its cap height and its baseline:
+/// the leading above and below a numeral is a row of nothing, and every
+/// `line-height: 1` here was a hand-picked way of losing most of it. Kept as
+/// the fallback outside the guard, where `text-box` is above the build targets.
+///
+/// It shrinks the row it sits in, so a board whose type is sized by dividing a
+/// height budget by its rows takes a smaller divisor under the same guard —
+/// measured on the rendered rows, never derived.
+@mixin trimmed-numeral
+  @supports (text-box: trim-both cap alphabetic)
+    text-box: trim-both cap alphabetic
+
 /// Small, wide, uppercase — for a label that names a control, never for prose.
 @mixin label
   font-size: clamp(0.75rem, 1.6vmin, 0.875rem)

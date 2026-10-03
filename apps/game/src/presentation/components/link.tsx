@@ -1,10 +1,12 @@
 import type React from 'react'
 import {
+  composeRenderProps,
   Link as ReactAriaLink,
   type LinkProps as ReactAriaLinkProps
 } from 'react-aria-components'
 
 import { type ControlAppearance, controlClassName } from './control-appearance'
+import { wrapLabelText } from './control-label'
 
 import './link.sass'
 
@@ -19,6 +21,7 @@ type LinkProps = ReactAriaLinkProps & ControlAppearance
  * no plain `<a>` in the product.
  */
 export const Link: React.FC<LinkProps> = ({
+  children,
   className,
   size,
   variant,
@@ -32,5 +35,7 @@ export const Link: React.FC<LinkProps> = ({
       size,
       variant
     })}
-  />
+  >
+    {composeRenderProps(children, wrapLabelText)}
+  </ReactAriaLink>
 )

@@ -127,6 +127,31 @@ primitive is the same trap one level up: `isHovered`, `isPressed` and
 they match nothing, the build stays green, and the control has stopped answering
 the pointer.
 
+## Single-line text in a box is trimmed, not squeezed
+
+`text-box: trim-both cap alphabetic` takes the half-leading and the descender
+room off a line, so symmetric padding centres the ink. It is above the build
+targets (Vite's `baseline-widely-available`), so every use degrades to today's
+rendering, and it **only reaches a block container** — the text of a flex
+container is an anonymous item no selector hits, which is why `Button`, `Link`
+and `ToggleButton` wrap each string child in a `.control-label` span.
+
+- **A label in a box whose height is a `min-height`** (a control, the menu
+  trigger): bare `text-box` on the label. Nothing moves but its centre.
+- **A painted stamp, segment or error**: `typography.trimmed-block($padding)`,
+  which grows the padding by exactly `(1lh - 1cap) / 2` under one `@supports`.
+  The block keeps its size to the pixel, so a reservation measured against it
+  (`.banked`, `.yours`) stays right.
+- **A figure on a line of its own**: `typography.trimmed-numeral`, keeping
+  `line-height: 1` as the fallback. It shrinks the row, so a board whose type is
+  a budget divided by its rows takes a smaller divisor under the same guard —
+  `--standings-row`, `--tallest-row`, `--board-row`, each measured on the
+  rendered rows.
+- **Prose and wrapping display type** keep their line-height: it sets the gap
+  *between* lines, which `text-box` never touches. An `overflow: hidden` box is
+  clipped to the trimmed height, so a trimmed line that ends in an ellipsis clips
+  across only (`overflow-x: clip`).
+
 ## A keyframe substitutes a custom property, it does not compute with one
 
 `var()` in a keyframe is fine on its own. **Wrapped in a `calc()` it is never

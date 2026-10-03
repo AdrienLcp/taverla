@@ -32,6 +32,7 @@
 
     .rank
       @include typography.numeric
+      @include typography.trimmed-numeral
 
       color: var(--ink-muted)
 
@@ -60,6 +61,7 @@
 
     .score
       @include typography.numeric
+      @include typography.trimmed-numeral
 
       font-size: clamp(1.5rem, 4vmin, 3rem)
       font-stretch: 125%

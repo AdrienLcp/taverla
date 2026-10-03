@@ -520,6 +520,7 @@
       // size a hundred would need is a dial that never fills.
       .floor-clock
         @include typography.billboard
+        @include typography.trimmed-numeral
 
         color: var(--ink)
         font-size: min(40cqi, calc(81cqi / var(--reading-length, 2)))

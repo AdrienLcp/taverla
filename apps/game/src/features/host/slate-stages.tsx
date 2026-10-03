@@ -339,7 +339,9 @@ export const SlateCorrectionStage: React.FC<SlateBoardProps> = ({
                   group.isCorrect === true && (
                     <span className='mark'>
                       <CheckIcon />
-                      {translate('slate.correct.judge')}
+                      <span className='mark-label'>
+                        {translate('slate.correct.judge')}
+                      </span>
                     </span>
                   )
                 ) : (

@@ -77,6 +77,8 @@
       font-weight: 700
       padding: var(--space-2xs) var(--space-s)
 
+      @include typography.trimmed-block(var(--space-2xs))
+
     // The one place the widened column earns two of something: three cards
     // stacked down a 900px page are a list pretending to be a shelf. `auto-fit`
     // does it without a second breakpoint, and the inner `min` is what stops a

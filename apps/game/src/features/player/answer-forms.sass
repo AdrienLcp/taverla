@@ -115,6 +115,8 @@
       color: var(--field)
       padding: var(--space-2xs) var(--space-s)
 
+      @include typography.trimmed-block(var(--space-2xs))
+
     // A guess that banked nothing is not an error — the field is still open and
     // the line under it still says so — so it takes the muted ink the reveal
     // panel gives a wrong answer, never the stamp of something held.

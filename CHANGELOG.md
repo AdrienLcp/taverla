@@ -756,6 +756,14 @@ one part.
 
 ### Improvements
 
+- `[Game]` **Labels, stamps and scores sit on their optical centre.** Where
+  the browser supports `text-box`, a control's label, a stamp, a segment, an
+  error and a single-line figure are trimmed to their capitals and baseline, so
+  an uppercase label no longer rides above the middle of its box. Stamps keep
+  their exact size; the boards lose the leading over their figures, and the
+  standings, the final board and a player's round board take the room back as
+  larger type. A stacked console's standings stop running 7% past their budget.
+
 - `[Game]` **The slate's sheet is prepared on the lobby's stage.** How many
   things to guess, their names and the answer key are one fold under the
   game's pitch, summarised by what is ready, rather than inside the collapsed

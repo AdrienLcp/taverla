@@ -108,6 +108,8 @@
     transition: background-color var(--transition-fast, 0) var(--timing, ease), color var(--transition-fast, 0) var(--timing, ease)
     white-space: nowrap
 
+    @include typography.trimmed-block(var(--space-2xs))
+
     &[data-hovered],
     &[data-pressed]
       color: var(--ink)

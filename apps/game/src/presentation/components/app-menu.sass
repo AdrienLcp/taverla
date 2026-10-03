@@ -72,6 +72,11 @@
         border-color: var(--ink)
         color: var(--ink)
 
+      // Held at 44px by its floor, so the trim only lowers the caps onto the
+      // centre the dot beside them already sits on.
+      .trigger-label
+        text-box: trim-both cap alphabetic
+
   // The field's own ground behind a heavy rule, rather than a die-cut block:
   // everything inside is a control drawn in `--ink` on `--field`, and a card
   // that swapped the ground would have to restate all four tokens to keep them

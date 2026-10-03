@@ -18,6 +18,13 @@
 @mixin box
   border: 3px solid transparent
 
+  // The height is the `min-height`, never the line, so trimming the label
+  // moves nothing but its centre: an uppercase label kept the descender room
+  // it never uses, and sat above the middle of the box. A browser without
+  // `text-box` drops the declaration and draws what it always drew.
+  .control-label
+    text-box: trim-both cap alphabetic
+
   // A step below the control voice, for an action that sits beside something
   // rather than under it — copying a code the room is already reading. Without
   // it every secondary action in the product was a 52px block, which is why

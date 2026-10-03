@@ -103,9 +103,14 @@
       &[data-pressed]
         transform: translateY(1px)
 
+      // One line always, in a square whose size the grid decides, so the trim
+      // only moves the numeral onto the tile's centre. Clipped across only:
+      // the trimmed box is a cap height tall, and a vertical clip would shave
+      // every round figure and accent standing proud of it.
       .text
         max-inline-size: 100%
-        overflow: hidden
+        overflow-x: clip
+        text-box: trim-both cap alphabetic
         text-overflow: ellipsis
         white-space: nowrap
 
@@ -188,6 +193,8 @@
       padding: var(--space-xs) var(--space-m)
       text-transform: uppercase
 
+      @include typography.trimmed-block(var(--space-xs))
+
       &.right
         background: var(--ink)
         color: var(--field)
@@ -254,6 +261,8 @@
         @include typography.label
 
         padding: var(--space-2xs) var(--space-s)
+
+        @include typography.trimmed-block(var(--space-2xs))
 
       .key
         flex: 1 1 100%

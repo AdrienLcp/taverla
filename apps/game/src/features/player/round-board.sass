@@ -4,6 +4,11 @@
   // Hairline-ruled rows straight on the field, the way every board in this
   // product is drawn: no cards, no fills, the field is already the surface.
   .round-board
+    // A row's height in its own `em`, which the budget is divided by: 3.32
+    // measured with the figures' leading on and 3.12 trimmed, the same headroom
+    // kept over each.
+    --board-row: 3.35
+
     // The rows are sized against this, not against the viewport: on a laptop
     // the reveal splits and this board is handed a fixed column while `vmin`
     // goes on growing with the screen behind it.
@@ -12,6 +17,9 @@
     flex-direction: column
     list-style: none
     width: 100%
+
+    @supports (text-box: trim-both cap alphabetic)
+      --board-row: 3.15
 
     // Every term of a row's height is a multiple of its own type, which is what
     // makes a divisor mean anything. It was furniture no formula could reach —
@@ -45,7 +53,7 @@
       // number at twelve pixels, and this row is meant to be read down.
       column-gap: var(--space-m)
       display: grid
-      font-size: min(clamp(1.25rem, min(3vmin, 6cqi), 1.75rem), max(1rem, calc(var(--board-budget, 100rem) / var(--board-rows, 5) / 3.35)))
+      font-size: min(clamp(1.25rem, min(3vmin, 6cqi), 1.75rem), max(1rem, calc(var(--board-budget, 100rem) / var(--board-rows, 5) / var(--board-row))))
       grid-template-columns: 1fr
       padding: 0.35em 0
       row-gap: 0.2em
@@ -61,6 +69,7 @@
 
     .rank
       @include typography.numeric
+      @include typography.trimmed-numeral
 
       color: var(--ink-muted)
       font-size: 0.8em
@@ -85,6 +94,7 @@
     // right edges.
     .points
       @include typography.numeric
+      @include typography.trimmed-numeral
 
       font-size: 0.8em
       // A numeral takes the reset's 1.5 until it is told otherwise, and half a
@@ -99,6 +109,7 @@
     // row set heavier than the name beside it.
     .score
       @include typography.numeric
+      @include typography.trimmed-numeral
 
       font-size: 1.15em
       font-stretch: 125%

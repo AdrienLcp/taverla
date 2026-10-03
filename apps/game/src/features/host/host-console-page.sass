@@ -5,6 +5,14 @@
   .host-console-page
     @include layout.stage
 
+    // A standings row's height in its own `em`, which is what the budget is
+    // divided by: 2.66 measured with the leading on, 2.35 with the figures
+    // trimmed, and the same headroom kept over each.
+    --standings-row: 2.8
+
+    @supports (text-box: trim-both cap alphabetic)
+      --standings-row: 2.47
+
     > header
       align-items: baseline
       display: flex
@@ -97,6 +105,8 @@
           padding: var(--space-2xs) var(--space-s)
           text-align: center
 
+          @include typography.trimmed-block(var(--space-2xs))
+
       // The reveal and the standings, which is the one moment the room asks
       // what the round did to the game — and stacked, the one stage that could
       // not deliver it: the reveal alone filled a 1080px screen, and the
@@ -153,9 +163,19 @@
           // formula can never reach, where an `em` makes a row one multiple of
           // its own size and the divisor mean something. The score goes with it or it is the
           // tallest thing in a row it was supposed to be sized by.
+          //
+          // Its own divisor, because a stacked row is not the wide one: 3.0em
+          // measured with the leading on, 2.08 trimmed, over the same headroom
+          // the wide board keeps. It shared the wide 2.8 until then, and ran
+          // 7% past its budget.
           .scoreboard li
-            font-size: clamp(0.9rem, calc(var(--stacked-budget) / var(--standings-rows, 8) / 2.8), 1.25rem)
+            --standings-row: 3.15
+
+            font-size: clamp(0.9rem, calc(var(--stacked-budget) / var(--standings-rows, 8) / var(--standings-row)), 1.25rem)
             padding: 0.35em 0
+
+            @supports (text-box: trim-both cap alphabetic)
+              --standings-row: 2.19
 
             .nickname
               font-size: 1em
@@ -211,7 +231,7 @@
           // `line-height` is the reset's 1.5 until it is said otherwise, which
           // on a numeral this size is half a row of nothing, ten times over.
           .scoreboard li
-            font-size: clamp(0.9rem, calc((100dvh - 31rem - var(--hold-bar)) / var(--standings-rows, 8) / 2.8), 1.75rem)
+            font-size: clamp(0.9rem, calc((100dvh - 31rem - var(--hold-bar)) / var(--standings-rows, 8) / var(--standings-row)), 1.75rem)
             padding: 0.45em 0
 
             .rank
@@ -373,6 +393,8 @@
         color: var(--danger-ink)
         font-weight: 700
         padding: var(--space-2xs) var(--space-s)
+
+        @include typography.trimmed-block(var(--space-2xs))
 
       // A line that belongs to the button above it rather than to the column:
       // the negative margin is what takes the footer's own gap back out, so the

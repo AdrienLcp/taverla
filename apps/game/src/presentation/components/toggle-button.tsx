@@ -1,10 +1,12 @@
 import type React from 'react'
 import {
+  composeRenderProps,
   ToggleButton as ReactAriaToggleButton,
   type ToggleButtonProps as ReactAriaToggleButtonProps
 } from 'react-aria-components'
 
 import { type ControlSize, controlClassName } from './control-appearance'
+import { wrapLabelText } from './control-label'
 
 import './toggle-button.sass'
 
@@ -19,6 +21,7 @@ type ToggleButtonProps = ReactAriaToggleButtonProps & {
  * without a second vocabulary.
  */
 export const ToggleButton: React.FC<ToggleButtonProps> = ({
+  children,
   className,
   size,
   ...props
@@ -31,5 +34,7 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
       size,
       variant: 'outlined'
     })}
-  />
+  >
+    {composeRenderProps(children, wrapLabelText)}
+  </ReactAriaToggleButton>
 )

@@ -6,6 +6,7 @@ import {
 } from 'react-aria-components'
 
 import { type ControlAppearance, controlClassName } from './control-appearance'
+import { wrapLabelText } from './control-label'
 import { Spinner } from './spinner'
 
 import './button.sass'
@@ -30,7 +31,7 @@ export const Button: React.FC<ButtonProps> = ({
   >
     {composeRenderProps(children, (resolved, { isPending }) => (
       <>
-        {resolved}
+        {wrapLabelText(resolved)}
         {isPending && <Spinner />}
       </>
     ))}

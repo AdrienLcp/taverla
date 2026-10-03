@@ -332,6 +332,11 @@
         gap: var(--space-xs)
         padding: var(--space-xs) var(--space-s)
 
+        // The check is 1.25em and holds the stamp's height on its own, so the
+        // trim changes no size and only centres the capitals on the glyph.
+        .mark-label
+          text-box: trim-both cap alphabetic
+
       // Passed without a press: wrong, and read as the lesser line.
       &.missed .text
         color: var(--ink-muted)

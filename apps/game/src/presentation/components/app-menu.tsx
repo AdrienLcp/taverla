@@ -442,7 +442,7 @@ export const AppMenu: React.FC = () => {
       >
         <ReactAriaButton className='trigger' ref={trigger}>
           {connection !== null && <ConnectionDot status={connection.status} />}
-          {translate('menu.label')}
+          <span className='trigger-label'>{translate('menu.label')}</span>
         </ReactAriaButton>
 
         <Popover className='app-menu-popover' placement='bottom end'>

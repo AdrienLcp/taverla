@@ -828,7 +828,9 @@ Three things it settled, each a rule this world now holds twice over:
   — larger than the name beside it — and the sentence under the name was carrying
   prose leading for a line that can never wrap. Putting the row's furniture in
   `em` and both line-heights at their real job takes a row from 78px to 63 at the
-  same size, before any budget exists.
+  same size, before any budget exists. Where `text-box` is supported the figures
+  are trimmed to their cap height on top of that, and the divisors shrink with
+  them — a standings row went from 2.66em to 2.35.
 - **A budget below a clamp's floor is the only one that ever fires.** On a phone
   3vmin of a 390px screen is 12px against a floor of 20, and a 768px-tall laptop
   above the split sits on that same floor — so the budget is a `min()` over the
