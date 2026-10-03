@@ -52,9 +52,9 @@
     // divisors rather than left to auto-fit. `auto-fit` lands on five columns
     // at laptop width, and five leaves three empty cells with the strip's
     // ground showing through where a genre should be. The steps are the widest
-    // count whose cell still holds `CHANSON FRANÇAISE`, the longest label
-    // either locale carries and the one that landed in a cell narrower than
-    // itself at 148px.
+    // count whose cell still holds the French `blindtest.genre.52`, the longest
+    // label either locale carries and the one that landed in a cell narrower
+    // than itself at 148px.
     .genres .segments
       grid-template-columns: repeat(2, 1fr)
 
@@ -72,10 +72,10 @@
 
     // Six is the whole list, stepped the same way and for the same reason.
     //
-    // `ANNÉES 2000` measures 120px with its padding, and at 414px the three
-    // columns it fell into gave it 119.5. Half a pixel is not a breakpoint, so
-    // each step carries a quarter of the label's width in headroom for the
-    // locale that arrives with a longer word for a decade.
+    // The French `blindtest.decade.2000s` measures 120px with its padding, and
+    // at 414px the three columns it fell into gave it 119.5. Half a pixel is
+    // not a breakpoint, so each step carries a quarter of the label's width in
+    // headroom for the locale that arrives with a longer word for a decade.
     .decades .segments
       grid-template-columns: repeat(2, 1fr)
 

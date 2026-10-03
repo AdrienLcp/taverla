@@ -323,7 +323,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
           The lobby is the one phase that excludes it, because the invitation
           is already the stage's larger half there. `finished` used to be
           excluded too and that was backwards: the final board is precisely
-          when somebody says *on en refait une, j'appelle Marc*, and the room
+          when somebody says *one more, I'll call Marc*, and the room
           still answers.
         */}
         {view !== null && view.phase !== 'lobby' && (

@@ -25,8 +25,8 @@ const widthOf = (run: string): number =>
  * The two measurements a stylesheet cannot take of a string it never sees, and
  * both decide whether the answer fits the column it is set in: how much there
  * is of it, and how wide its longest *unbreakable* run is. A hyphen and a space
- * are break opportunities, so `Maison-Blanche` is seven characters wide rather
- * than fourteen, and an answer of short words is long without holding any
+ * are break opportunities, so `Coca-Cola` is four characters wide rather
+ * than nine, and an answer of short words is long without holding any
  * single line hostage.
  *
  * **They are counted in different units, and that is the whole of what a word

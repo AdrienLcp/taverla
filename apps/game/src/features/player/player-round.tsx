@@ -626,7 +626,7 @@ const FloorDial: React.FC<{
  * ink reserved for what you cannot do.
  *
  * Folding the name into this slot is also what stops the room being told twice:
- * *Quelqu'un a été plus rapide* and *Bertrand a buzzé* are one fact twenty
+ * `buzz.blocked.someone_else_buzzed` and `buzz.theyBuzzed` are one fact twenty
  * pixels apart at one size, and the named one is strictly the better of them.
  * The anonymous one survives where it is not a duplicate — a buzzer whose seat
  * has gone leaves no nickname to name.

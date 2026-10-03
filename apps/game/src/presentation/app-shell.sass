@@ -13,8 +13,8 @@
     // `--menu-width` is its trigger measured — 98px in a room, narrower at a
     // front door where there is no connection dot in it, and a translated word
     // either way. The 116px this used to guess was 18px too much, which is what
-    // broke `TOURNÉE 1 SUR 10` onto two lines at 390. The literal survives as
-    // the fallback for the frame before the observer runs.
+    // broke the French `round.index` label onto two lines at 390. The literal
+    // survives as the fallback for the frame before the observer runs.
     --menu-inset: calc(var(--layout-padding) + var(--menu-width, 116px))
 
     // The same corner measured downwards, for a screen that leads with display

@@ -7,13 +7,14 @@
     display: flex
     // **The corner is one object wide and the sentence hangs below it.** The
     // two top-anchored headers reserve against this box, so anything laid out
-    // beside the trigger is width taken off the room's own code: `Reconnexion…`
-    // in the row took the corner from 98px to 245 and left a 390px header 97 —
-    // which is not a reservation that header can pay, so it drew the round and
-    // the code over each other. Downwards the sentence costs height the corner
-    // already owns and nothing at all sideways, at every width. The alert is
-    // the first child, so reversing is what puts the trigger back on top: it is
-    // what the corner is anchored to and the sentence is not.
+    // beside the trigger is width taken off the room's own code: the French
+    // `connection.closed` in the row took the corner from 98px to 245 and left
+    // a 390px header 97 — which is not a reservation that header can pay, so it
+    // drew the round and the code over each other. Downwards the sentence
+    // costs height the corner already owns and nothing at all sideways, at
+    // every width. The alert is the first child, so reversing is what puts the
+    // trigger back on top: it is what the corner is anchored to and the
+    // sentence is not.
     flex-direction: column-reverse
     inset-block-start: var(--layout-padding-block-start)
     // Fixed to the viewport, but never further out than the field it belongs
@@ -102,14 +103,15 @@
 
     // The control register is sized in `vmin` and this box is not: at a fixed
     // 320px, a host console on a television burst every one of these labels out
-    // of its block, and `Quitter le salon` was already doing it on a laptop.
-    // Same rule as the room code — what is sized against the viewport has to be
-    // sized against its container once the container stops being the viewport.
+    // of its block, and the French `menu.leaveRoom` was already doing it on a
+    // laptop. Same rule as the room code — what is sized against the viewport
+    // has to be sized against its container once the container stops being the
+    // viewport.
     //
     // The size alone was not enough, and the second half is the one every
     // control carries: `_control.sass` refuses a line break everywhere, so
-    // `Afficher le code de reprise` still ran eleven pixels past its own edge in
-    // French. A block whose width is a constant rather than its content's is the
+    // the French `host.recovery.reveal` still ran eleven pixels past its own
+    // edge. A block whose width is a constant rather than its content's is the
     // one place that refusal cannot hold.
     .button,
     .link
