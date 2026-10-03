@@ -1,6 +1,5 @@
 import type { Result } from '@adrienlcp/result'
 import type { WSContext, WSEvents } from 'hono/ws'
-import { nanoid } from 'nanoid'
 
 import {
   type ClientMessage,
@@ -66,6 +65,7 @@ import {
 } from '@/domain/round/slate-round'
 import { discardPoolIfStale } from '@/domain/round/track-pool'
 import { nowMs } from '@/infrastructure/clock'
+import { newPlayerId, newSessionId } from '@/infrastructure/ids'
 import { logger } from '@/infrastructure/logging/logger'
 
 import type { Connection, Outbound } from './connection'
@@ -192,7 +192,7 @@ export const createRoomSocketEvents = (
       return
     }
 
-    const sessionId = message.sessionId ?? nanoid(16)
+    const sessionId = message.sessionId ?? newSessionId()
     const hostWasConnected = isHostConnected(code)
     const seated =
       message.role === 'host'
@@ -297,6 +297,7 @@ export const createRoomSocketEvents = (
       message.nickname === undefined || hostMustJudge(room.settings)
         ? null
         : joinAsPlayer({
+            newPlayerId: newPlayerId(),
             nickname: message.nickname,
             now: nowMs(),
             room,
@@ -349,6 +350,7 @@ export const createRoomSocketEvents = (
     }
 
     const joined = joinAsPlayer({
+      newPlayerId: newPlayerId(),
       nickname: message.nickname,
       now: nowMs(),
       room,

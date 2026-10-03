@@ -26,6 +26,7 @@ import {
 import { slateContent } from '@/domain/round/slate-round'
 import { drawPlayableTrack } from '@/domain/round/track-pool'
 import { nowMs } from '@/infrastructure/clock'
+import { newRoundId } from '@/infrastructure/ids'
 import { logger } from '@/infrastructure/logging/logger'
 import {
   drawQuestion,
@@ -86,6 +87,7 @@ export const beginRound = async (
           : game.kind === 'reflex'
             ? reflexContent()
             : slateContent({ keys: slateKeys, settings: game }),
+      id: newRoundId(),
       now: nowMs(),
       room
     })
@@ -131,6 +133,7 @@ export const beginRound = async (
 
     const round = openRound({
       content: quizContent({ question: asked, room }),
+      id: newRoundId(),
       now: nowMs(),
       room
     })
@@ -174,6 +177,7 @@ export const beginRound = async (
 
     const round = openRound({
       content: blindtestContent({ room, track: drawn.data }),
+      id: newRoundId(),
       now: nowMs(),
       room
     })

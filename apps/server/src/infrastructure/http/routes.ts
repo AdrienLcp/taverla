@@ -36,6 +36,7 @@ import {
 import { env } from '@/env'
 import { nowMs } from '@/infrastructure/clock'
 import { limitRoomCreation } from '@/infrastructure/http/rate-limit'
+import { newWallSecret } from '@/infrastructure/ids'
 import {
   fetchTracksFor,
   type MusicSourceError
@@ -134,7 +135,7 @@ export const registerHttpRoutes = (app: Hono): void => {
   // room's token, and the wall collects the token by polling. Rate-limited with
   // room creation: a code is the same cheap allocation a room is.
   app.post(API_ROUTES.walls, limitRoomCreation, (context) => {
-    const opened = openWallPairing(nowMs())
+    const opened = openWallPairing({ now: nowMs(), secret: newWallSecret() })
 
     if (opened === null) {
       const error: ApiErrorResponse = {

@@ -1,5 +1,4 @@
 import { Result } from '@adrienlcp/result'
-import { nanoid } from 'nanoid'
 
 import type {
   HostToken,
@@ -33,11 +32,13 @@ export const touch = (room: Room, now: number): void => {
  * Wi-Fi blink undo a rename nobody asked to undo.
  */
 export const joinAsPlayer = ({
+  newPlayerId,
   nickname,
   now,
   room,
   sessionId
 }: {
+  newPlayerId: PlayerId
   nickname: Nickname
   now: number
   room: Room
@@ -66,7 +67,7 @@ export const joinAsPlayer = ({
 
   const participant: Participant = {
     disconnectedAt: null,
-    id: nanoid(12),
+    id: newPlayerId,
     isConnected: true,
     nickname,
     score: 0,

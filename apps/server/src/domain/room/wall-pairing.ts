@@ -1,5 +1,4 @@
 import { Result } from '@adrienlcp/result'
-import { nanoid } from 'nanoid'
 
 import {
   WALL_PAIRING_CODE_LENGTH,
@@ -39,9 +38,13 @@ const forgetExpired = (now: number): void => {
   }
 }
 
-export const openWallPairing = (
+export const openWallPairing = ({
+  now,
+  secret
+}: {
   now: number
-): { pairingCode: WallPairingCode; secret: string } | null => {
+  secret: string
+}): { pairingCode: WallPairingCode; secret: string } | null => {
   forgetExpired(now)
 
   for (let attempt = 0; attempt < MAX_CODE_ATTEMPTS; attempt++) {
@@ -52,8 +55,6 @@ export const openWallPairing = (
     })
 
     if (!pairings.has(pairingCode)) {
-      const secret = nanoid(24)
-
       pairings.set(pairingCode, {
         expiresAt: now + WALL_PAIRING_TTL_MS,
         paired: null,

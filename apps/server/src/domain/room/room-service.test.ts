@@ -20,7 +20,13 @@ const NOW = 1_786_215_000_000
 let room: Room
 
 const join = (nickname: string, sessionId: string) =>
-  joinAsPlayer({ nickname, now: NOW, room, sessionId })
+  joinAsPlayer({
+    newPlayerId: `player-${sessionId}`,
+    nickname,
+    now: NOW,
+    room,
+    sessionId
+  })
 
 beforeEach(() => {
   const created = createRoom({ game: 'blindtest', locale: 'fr', now: NOW })

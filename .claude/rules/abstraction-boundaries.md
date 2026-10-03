@@ -33,6 +33,7 @@ paid on every read of the code.
 | `AudioContext`, `Audio` | `apps/game/src/features/host/round-audio.ts` for the clip's element, `apps/game/src/presentation/audio/buzz-cue.ts` for the synthesised buzz cue — two capabilities rather than one library, armed by the same press and refused the same way outside a gesture |
 | `fetch` (browser) | `apps/game/src/infrastructure/api/taverla-api.ts` |
 | `Date`, the wall clock | `infrastructure/clock.ts` in each app, through `nowMs()` |
+| `nanoid` | `apps/server/src/infrastructure/ids.ts`, one function per kind of id with its length. The domain receives an id as an argument, the way it receives `now` |
 | `react-router` | `apps/game/src/infrastructure/router/`, plus `useNavigate` in `presentation/app-shell.tsx` — which hands it to react-aria's `RouterProvider`, so components navigate through the design system's `Link` and never import react-router themselves |
 | `react-aria-components` | `apps/game/src/presentation/components/`, `presentation/i18n/i18n-provider.tsx` for `I18nProvider`, and a feature that genuinely needs a primitive the design system has not wrapped yet |
 

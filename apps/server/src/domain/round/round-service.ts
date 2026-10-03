@@ -1,5 +1,4 @@
 import { Result } from '@adrienlcp/result'
-import { nanoid } from 'nanoid'
 
 import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
 import { locksOutOnMissIn, roundDurationMsOf } from '@taverla/protocol/game'
@@ -113,10 +112,12 @@ export const quizContent = ({
 
 export const openRound = ({
   content,
+  id,
   now,
   room
 }: {
   content: Round['content']
+  id: RoundId
   now: number
   room: Room
 }): Round => {
@@ -127,7 +128,7 @@ export const openRound = ({
     awards: [],
     content,
     elapsedMs: 0,
-    id: nanoid(10),
+    id,
     index: (room.round?.index ?? 0) + 1,
     lockedOutPlayerIds: new Set(),
     openedWithPlayerIds: null,

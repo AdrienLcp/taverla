@@ -10,7 +10,7 @@ import {
 const NOW = 1_786_215_000_000
 
 const opened = () => {
-  const pairing = openWallPairing(NOW)
+  const pairing = openWallPairing({ now: NOW, secret: 'wall-secret' })
 
   if (pairing === null) {
     throw new Error('the store refused to allocate a pairing code')
