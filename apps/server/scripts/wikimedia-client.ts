@@ -1,3 +1,5 @@
+import { wait } from './wait'
+
 export const SPARQL_URL = 'https://query.wikidata.org/sparql'
 
 /** Wikimedia asks that an automated client say who it is and where to complain. */
@@ -7,9 +9,6 @@ export const USER_AGENT =
 const REQUEST_INTERVAL_MS = 120
 const RETRY_BACKOFF_MS = 5_000
 const RETRIES = 4
-
-export const wait = async (milliseconds: number): Promise<void> =>
-  new Promise((resolve) => setTimeout(resolve, milliseconds))
 
 /**
  * Wikimedia's endpoints answer a burst with a refusal rather than a queue, and a
