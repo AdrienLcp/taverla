@@ -1,16 +1,13 @@
 import type React from 'react'
 import { useRouteError } from 'react-router'
 
+import { reloadPage } from '@/infrastructure/browser'
 import { homePathFor } from '@/infrastructure/router/navigation'
 import { Button } from '@/presentation/components/button'
 import { Link } from '@/presentation/components/link'
 import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import './error-screen.sass'
-
-const reload = (): void => {
-  window.location.reload()
-}
 
 /**
  * The root route's boundary, so anything that throws below it — a render, a
@@ -37,7 +34,7 @@ export const ErrorScreen: React.FC = () => {
       <h1>{translate('error.screen.title')}</h1>
       <p>{translate('error.screen.description')}</p>
       <div className='ways-out'>
-        <Button onPress={reload} size='large'>
+        <Button onPress={reloadPage} size='large'>
           {translate('error.screen.reload')}
         </Button>
         <Link href={homePathFor(locale)} variant='underlined'>
