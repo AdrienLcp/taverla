@@ -3,6 +3,7 @@ import {
   readCachedEntries,
   writeCachedEntries
 } from './question-source'
+import { SPARQL_URL, USER_AGENT, withRetries } from './wikimedia-client'
 
 /**
  * The Wikidata entity an English answer names, reached through the English
@@ -25,19 +26,10 @@ import {
  */
 const EN_WIKIPEDIA_API = 'https://en.wikipedia.org/w/api.php'
 const WIKIDATA_API = 'https://www.wikidata.org/w/api.php'
-const SPARQL_URL = 'https://query.wikidata.org/sparql'
-
-/** Wikimedia asks that an automated client say who it is and where to complain. */
-const USER_AGENT =
-  'TaverlaQuestionBank/1.0 (https://github.com/AdrienLcp/taverla)'
 
 /** Titles per action-API request, which is the anonymous limit on both wikis. */
 const TITLES_PER_REQUEST = 50
 const ENTITIES_PER_QUERY = 300
-
-const REQUEST_INTERVAL_MS = 120
-const RETRY_BACKOFF_MS = 5_000
-const RETRIES = 4
 
 /** How often what has been resolved is written back, in batches. */
 const SAVE_EVERY = 10
@@ -91,35 +83,6 @@ type SparqlBindings = {
       kinds?: { value: string }
       supers?: { value: string }
     }[]
-  }
-}
-
-const wait = async (milliseconds: number): Promise<void> =>
-  new Promise((resolve) => setTimeout(resolve, milliseconds))
-
-const withRetries = async <TBody>(
-  request: () => Promise<Response>
-): Promise<TBody> => {
-  for (let attempt = 1; ; attempt++) {
-    await wait(REQUEST_INTERVAL_MS)
-
-    try {
-      const response = await request()
-
-      if (response.ok) {
-        return (await response.json()) as TBody
-      }
-
-      if (attempt > RETRIES) {
-        throw new Error(`answered ${response.status}`)
-      }
-    } catch (failure) {
-      if (attempt > RETRIES) {
-        throw failure
-      }
-    }
-
-    await wait(RETRY_BACKOFF_MS * attempt)
   }
 }
 

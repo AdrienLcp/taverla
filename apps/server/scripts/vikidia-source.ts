@@ -15,6 +15,7 @@ import {
   readCachedEntries,
   writeCachedEntries
 } from './question-source'
+import { USER_AGENT } from './wikimedia-client'
 
 /**
  * Vikidia is the French encyclopedia written for eight-to-thirteens, and its
@@ -24,10 +25,6 @@ import {
  */
 const API_URL = 'https://fr.vikidia.org/w/api.php'
 const FRENCH_WIKIPEDIA_API = 'https://fr.wikipedia.org/w/api.php'
-
-/** Wikimedia asks that an automated client say who it is and where to complain. */
-const USER_AGENT =
-  'TaverlaQuestionBank/1.0 (https://github.com/AdrienLcp/taverla)'
 
 /** The namespace the wiki files its quizzes in, and the only one read here. */
 const QUIZ_NAMESPACE = 104

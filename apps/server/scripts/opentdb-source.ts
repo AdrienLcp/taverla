@@ -12,6 +12,7 @@ import {
   type IngestedQuestions
 } from './question-source'
 import { aliasesOf } from './wikidata-aliases'
+import { wait } from './wikimedia-client'
 
 const API_URL = 'https://opentdb.com/api.php'
 const CATEGORY_URL = 'https://opentdb.com/api_category.php'
@@ -104,9 +105,6 @@ const PAGE_SIZES = [LARGEST_PAGE, 10, 1] as const
 
 /** Their documented rate limit is one request every five seconds per address. */
 const REQUEST_INTERVAL_MS = 5_000
-
-const wait = async (milliseconds: number): Promise<void> =>
-  new Promise((resolve) => setTimeout(resolve, milliseconds))
 
 const getJson = async <TBody>(url: string): Promise<TBody> => {
   await wait(REQUEST_INTERVAL_MS)

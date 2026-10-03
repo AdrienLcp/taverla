@@ -3,6 +3,7 @@ import {
   readCachedEntries,
   writeCachedEntries
 } from './question-source'
+import { SPARQL_URL, USER_AGENT, withRetries } from './wikimedia-client'
 
 /**
  * How well known a Wikidata entity is to a French-speaking room, measured as the
@@ -15,12 +16,7 @@ import {
  * clears. Traffic is not bot-inflated, and it is what "the room has heard of it"
  * actually means.
  */
-const SPARQL_URL = 'https://query.wikidata.org/sparql'
 const FRENCH_WIKIPEDIA_API = 'https://fr.wikipedia.org/w/api.php'
-
-/** Wikimedia asks that an automated client say who it is and where to complain. */
-const USER_AGENT =
-  'TaverlaQuestionBank/1.0 (https://github.com/AdrienLcp/taverla)'
 
 /** Their documented ceiling on `prop=pageviews`, and the widest window it serves. */
 const PAGEVIEW_DAYS = 60
@@ -53,10 +49,6 @@ const TITLES_PER_REQUEST = 50
  */
 const ENTITIES_PER_QUERY = 600
 
-const REQUEST_INTERVAL_MS = 120
-const RETRY_BACKOFF_MS = 5_000
-const RETRIES = 4
-
 /** How often what has been resolved is written back, in batches. */
 const SAVE_EVERY = 20
 
@@ -75,41 +67,6 @@ type PageviewsPage = {
   query?: {
     normalized?: { from: string; to: string }[]
     pages?: { pageviews?: Record<string, number | null>; title: string }[]
-  }
-}
-
-const wait = async (milliseconds: number): Promise<void> =>
-  new Promise((resolve) => setTimeout(resolve, milliseconds))
-
-/**
- * Both endpoints answer a burst with a refusal rather than a queue, and a batch
- * dropped over one is a hole that reads exactly like an entity nobody has heard
- * of. Retried rather than dropped, and thrown from on the last attempt: a run
- * that silently banked half its notability would be worse than one that stopped.
- */
-const withRetries = async <TBody>(
-  request: () => Promise<Response>
-): Promise<TBody> => {
-  for (let attempt = 1; ; attempt++) {
-    await wait(REQUEST_INTERVAL_MS)
-
-    try {
-      const response = await request()
-
-      if (response.ok) {
-        return (await response.json()) as TBody
-      }
-
-      if (attempt > RETRIES) {
-        throw new Error(`answered ${response.status}`)
-      }
-    } catch (failure) {
-      if (attempt > RETRIES) {
-        throw failure
-      }
-    }
-
-    await wait(RETRY_BACKOFF_MS * attempt)
   }
 }
 

@@ -1,4 +1,5 @@
 import { readCachedEntries, writeCachedEntries } from './question-source'
+import { SPARQL_URL, USER_AGENT, withRetries } from './wikimedia-client'
 
 /**
  * The year a person was born, which is the one thing that tells a decoy the room
@@ -18,11 +19,6 @@ import { readCachedEntries, writeCachedEntries } from './question-source'
  * vocabulary is what makes that number — *romancier* against *écrivain* is not
  * a defect, and a rule firing on it would move decoys that were already fine.
  */
-const SPARQL_URL = 'https://query.wikidata.org/sparql'
-
-/** Wikimedia asks that an automated client say who it is and where to complain. */
-const USER_AGENT =
-  'TaverlaQuestionBank/1.0 (https://github.com/AdrienLcp/taverla)'
 
 /**
  * Entities per query. Smaller than the six hundred the title lookup asks for,
@@ -30,10 +26,6 @@ const USER_AGENT =
  * rather than a row per entity.
  */
 const ENTITIES_PER_QUERY = 300
-
-const REQUEST_INTERVAL_MS = 120
-const RETRY_BACKOFF_MS = 5_000
-const RETRIES = 4
 
 /** How often what has been resolved is written back, in batches. */
 const SAVE_EVERY = 10
@@ -47,35 +39,6 @@ type SparqlBindings = {
       birth?: { value: string }
       item: { value: string }
     }[]
-  }
-}
-
-const wait = (milliseconds: number): Promise<void> =>
-  new Promise((resolve) => setTimeout(resolve, milliseconds))
-
-const withRetries = async <TBody>(
-  request: () => Promise<Response>
-): Promise<TBody> => {
-  for (let attempt = 1; ; attempt++) {
-    await wait(REQUEST_INTERVAL_MS)
-
-    try {
-      const response = await request()
-
-      if (response.ok) {
-        return (await response.json()) as TBody
-      }
-
-      if (attempt > RETRIES) {
-        throw new Error(`answered ${response.status}`)
-      }
-    } catch (failure) {
-      if (attempt > RETRIES) {
-        throw failure
-      }
-    }
-
-    await wait(RETRY_BACKOFF_MS * attempt)
   }
 }
 
