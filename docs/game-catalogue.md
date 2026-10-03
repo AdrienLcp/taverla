@@ -108,7 +108,7 @@ still owe a rule. Ask what a game **measures** before trusting its appetite.
 The instinct is that a quiz needs a question bank, a bank needs storage, and
 storage means a database. The first two are true and the third is not: a few
 hundred questions are a **file in git**, reviewed in a merge request, loaded
-into memory at boot. `room-store.ts` already argues the same thing about rooms.
+into memory at boot. Rooms were held in memory on the same argument until a deploy ending every party in progress outweighed it — see stage 28.
 
 A database only becomes the answer when questions are **written from inside the
 app** — a host composing their own pack on their phone. That is a feature, not

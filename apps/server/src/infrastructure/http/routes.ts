@@ -27,7 +27,6 @@ import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
 import { normalizeRoomCode } from '@taverla/core/room/room-code'
 
-import { createRoom, findRoom } from '@/domain/room/room-store'
 import {
   collectWallPairing,
   openWallPairing,
@@ -41,6 +40,10 @@ import {
   fetchTracksFor,
   type MusicSourceError
 } from '@/infrastructure/music/deezer-client'
+import {
+  findRoomEngine,
+  openRoomInProcess
+} from '@/infrastructure/node/in-process-rooms'
 
 /**
  * A catalogue that matched nothing well-known enough to guess is an empty
@@ -102,9 +105,9 @@ export const registerHttpRoutes = (app: Hono): void => {
     zValidator('json', createRoomRequestSchema),
     (context) => {
       const { game, locale } = context.req.valid('json')
-      const room = createRoom({ game: game ?? null, locale, now: nowMs() })
+      const engine = openRoomInProcess({ game: game ?? null, locale })
 
-      if (room === null) {
+      if (engine === null) {
         const error: ApiErrorResponse = {
           code: 'internal_error',
           message: 'Could not allocate a room code'
@@ -114,8 +117,8 @@ export const registerHttpRoutes = (app: Hono): void => {
       }
 
       const body: CreateRoomResponse = {
-        code: room.code,
-        hostToken: room.hostToken
+        code: engine.room.code,
+        hostToken: engine.room.hostToken
       }
 
       return context.json(body, 201)
@@ -125,7 +128,7 @@ export const registerHttpRoutes = (app: Hono): void => {
   app.get(API_ROUTES.room, (context) => {
     const code = normalizeRoomCode(context.req.param('code'))
     const body: RoomExistsResponse = {
-      exists: code !== null && findRoom(code) !== null
+      exists: code !== null && findRoomEngine(code) !== null
     }
 
     return context.json(body)
@@ -192,7 +195,7 @@ export const registerHttpRoutes = (app: Hono): void => {
       }
 
       const { hostToken, roomCode } = context.req.valid('json')
-      const room = findRoom(roomCode)
+      const room = findRoomEngine(roomCode)?.room ?? null
 
       if (room === null || room.hostToken !== hostToken) {
         const error: ApiErrorResponse = {

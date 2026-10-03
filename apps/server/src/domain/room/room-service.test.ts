@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import type { HostToken } from '@taverla/protocol/identifiers'
 import { MAX_PLAYERS_PER_ROOM } from '@taverla/protocol/room'
 
+import { newRoom } from './new-room'
 import type { Room } from './room'
 import {
   claimHost,
@@ -12,7 +13,6 @@ import {
   removePlayer,
   renameSeat
 } from './room-service'
-import { createRoom, deleteRoom } from './room-store'
 import { toHostView, toPlayerView } from './room-view'
 
 const NOW = 1_786_215_000_000
@@ -29,13 +29,7 @@ const join = (nickname: string, sessionId: string) =>
   })
 
 beforeEach(() => {
-  const created = createRoom({ game: 'blindtest', locale: 'fr', now: NOW })
-
-  if (created === null) {
-    throw new Error('the store refused to allocate a room')
-  }
-
-  room = created
+  room = newRoom({ code: 'ABCD', game: 'blindtest', locale: 'fr', now: NOW })
 })
 
 describe('joinAsPlayer', () => {
@@ -321,25 +315,5 @@ describe('removePlayer', () => {
 
     expect(room.players.size).toBe(0)
     expect(join('Alice', 'session-carol').status).toBe('success')
-  })
-})
-
-describe('createRoom', () => {
-  it('[room] issues codes the wire schema accepts, and never reuses a live one', () => {
-    const codes = Array.from({ length: 50 }, () => {
-      const created = createRoom({ game: 'blindtest', locale: 'fr', now: NOW })
-
-      if (created === null) {
-        throw new Error('the store refused to allocate a room')
-      }
-
-      return created.code
-    })
-
-    expect(new Set(codes).size).toBe(codes.length)
-
-    for (const code of codes) {
-      deleteRoom(code)
-    }
   })
 })

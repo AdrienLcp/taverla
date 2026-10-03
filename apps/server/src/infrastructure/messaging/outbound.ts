@@ -12,13 +12,10 @@ import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
 import type { Room } from '@/domain/room/room'
 import { toHostView, toPlayerView, toWallView } from '@/domain/room/room-view'
-import {
-  connectionsIn,
-  isHostConnected,
-  isWallConnected
-} from '@/infrastructure/messaging/connection-registry'
 
 import type { Connection, Outbound } from './connection'
+import { isHostConnected, isWallConnected } from './room-connections'
+import type { RoomEngine } from './room-engine'
 
 export const sendError = (
   outbound: Outbound,
@@ -113,42 +110,35 @@ const encodeViewFor = (
 
 export const sendWelcome = (
   connection: Connection,
-  {
-    room,
-    serverTime,
-    sessionId
-  }: { room: Room; serverTime: number; sessionId: SessionId }
+  { engine, sessionId }: { engine: RoomEngine; sessionId: SessionId }
 ): void => {
   connection.send(
     encodeViewFor(connection, {
       envelope: {
         protocolVersion: PROTOCOL_VERSION,
-        serverTime,
+        serverTime: engine.now(),
         sessionId,
         type: 'welcome'
       },
-      isHostThere: isHostConnected(room.code),
-      isWallThere: isWallConnected(room.code),
-      room
+      isHostThere: isHostConnected(engine),
+      isWallThere: isWallConnected(engine),
+      room: engine.room
     })
   )
 }
 
-/**
- * Every state change ends here: each socket receives its whole role-scoped
- * view, never a delta.
- */
-export const broadcastRoom = (room: Room): void => {
-  const isHostThere = isHostConnected(room.code)
-  const isWallThere = isWallConnected(room.code)
+/** Each socket receives its whole role-scoped view, never a delta. */
+export const broadcastRoom = (engine: RoomEngine): void => {
+  const isHostThere = isHostConnected(engine)
+  const isWallThere = isWallConnected(engine)
 
-  for (const connection of connectionsIn(room.code)) {
+  for (const connection of engine.connections.all()) {
     connection.send(
       encodeViewFor(connection, {
         envelope: { type: 'room.updated' },
         isHostThere,
         isWallThere,
-        room
+        room: engine.room
       })
     )
   }

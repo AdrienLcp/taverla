@@ -1,7 +1,7 @@
 # Stage 28 — One Durable Object per room
 
-**To do.** Three sessions, A → B → C, each ending on a green tree. Render keeps
-serving until session C says otherwise.
+**In progress — session A done (2026-10-03).** Three sessions, A → B → C, each
+ending on a green tree. Render keeps serving until session C says otherwise.
 
 ## Why
 
@@ -94,6 +94,39 @@ Nothing is deployed differently at the end of it.
   a room restored from a snapshot mid-countdown, mid-answer-window and with a
   hold running must fire on time. That test is what session B's hibernation
   leans on.
+
+**Done, and where it diverged:**
+
+- The deadlines are **derived, not stored**. Every one of them was already a
+  field of the room (`startsAt`, `runningSince` + `elapsedMs`, `expiresAt`,
+  `advancesAt`, `disconnectedAt`, `lastActivityAt`), so
+  `domain/room/room-deadlines.ts` reads them off and the engine's single
+  `wakeAt` port is aimed at the earliest after every change. No timer state
+  exists to persist, and `round-timers.ts` is gone. In the object, `wakeAt` is
+  `ctx.storage.setAlarm` and `alarm()` is `wakeRoom`.
+- **The host-away freeze is a rule of the derivation**: no round deadline is
+  due while no console is attached. `holdRoundWhileHostIsAway` only freezes the
+  clock now.
+- `isDrawing` lives on the engine and is not persisted; while it is set the
+  reveal's hold is not due, and `beginRound` spends `advancesAt` up front —
+  otherwise a derived deadline already in the past re-fires on every wake.
+- The room's expiry now counts from the **last socket leaving** (a close
+  touches the room). With the old one-minute sweep it counted from the last
+  frame, so a host idle in the lobby for a quarter of an hour lost the room on
+  reload whenever the sweep fell in between.
+- Every state change ends in `publishRoom` (broadcast, persist, re-aim the
+  wake); the socket handler's functions are module-level and take the engine,
+  so session B can call them from `webSocketMessage` with the connection read
+  from the socket's attachment rather than from a closure.
+- Left for B: `forgetSeat` mutates `connection.playerId`, which in the object
+  must write the attachment back; `routes.ts` imports the in-process adapter
+  directly (`openRoomInProcess`, `findRoomEngine`) and becomes a call to the
+  object's stub; `room-view.ts` still reads `nowMs()` rather than the engine's
+  clock; wall pairing is still a module-global map.
+- Tests: `room-engine.test.ts` restores a snapshot mid-countdown, mid-floor and
+  mid-hold and fires each on time; `in-process-rooms.test.ts` keeps the
+  code-uniqueness check `room-store` used to own. The 18 socket suites and the
+  harness did not change.
 
 — cut here: engine extracted, `pnpm validate` green, Render deploy unchanged —
 

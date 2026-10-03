@@ -4,9 +4,12 @@ import { WebSocketServer } from 'ws'
 
 import { ROOM_SOCKET_ROUTE } from '@taverla/protocol/routes'
 
+import { normalizeRoomCode } from '@taverla/core/room/room-code'
+
 import { registerHttpRoutes } from '@/infrastructure/http/routes'
 import { registerStaticSite } from '@/infrastructure/http/static-site'
 import { createRoomSocketEvents } from '@/infrastructure/messaging/socket-handler'
+import { findRoomEngine } from '@/infrastructure/node/in-process-rooms'
 
 /**
  * Returned rather than served: `serve` needs the WebSocket server alongside
@@ -20,7 +23,12 @@ export const createApp = () => {
   app.get(
     ROOM_SOCKET_ROUTE,
     upgradeWebSocket((context) =>
-      createRoomSocketEvents(context.req.param('code'))
+      createRoomSocketEvents(() => {
+        const raw = context.req.param('code')
+        const code = raw === undefined ? null : normalizeRoomCode(raw)
+
+        return code === null ? null : findRoomEngine(code)
+      })
     )
   )
 

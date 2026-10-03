@@ -1,8 +1,5 @@
-import type { RoomCode, RoundId } from '@taverla/protocol/identifiers'
-
-import type { Room } from '@/domain/room/room'
+import type { RoomDeadlineKind } from '@/domain/room/room-deadlines'
 import { releaseAbandonedSeats } from '@/domain/room/room-service'
-import { allRooms, findRoom } from '@/domain/room/room-store'
 import {
   blindtestContent,
   closeRound,
@@ -13,19 +10,12 @@ import {
   quizContent,
   reflexContent,
   releaseBuzz,
-  remainingRoundMs,
   resumeRoundClock,
   startRoundClock,
   timeOutBuzz
 } from '@/domain/round/round-service'
-import {
-  cancelRoundTimer,
-  cancelRoundTimers,
-  scheduleRoundTimer
-} from '@/domain/round/round-timers'
 import { slateContent } from '@/domain/round/slate-round'
 import { drawPlayableTrack } from '@/domain/round/track-pool'
-import { nowMs } from '@/infrastructure/clock'
 import { newRoundId } from '@/infrastructure/ids'
 import { logger } from '@/infrastructure/logging/logger'
 import {
@@ -33,31 +23,40 @@ import {
   hostQuestionOf
 } from '@/infrastructure/questions/question-bank'
 
-import { forgetSeat, hostConnectionIn } from './connection-registry'
-import { broadcastRoom, sendError } from './outbound'
-
-/**
- * Resolving a track is a network call, and the host pressing "start" twice
- * before it answers would open two rounds over each other. The room code is
- * held for the duration of the draw rather than a phase being invented for it.
- */
-const roomsDrawing = new Set<RoomCode>()
+import { sendError } from './outbound'
+import { forgetSeat, hostConnectionIn } from './room-connections'
+import {
+  closeRoomEngine,
+  commitRoom,
+  deadlinesOf,
+  publishRoom,
+  type RoomEngine
+} from './room-engine'
 
 /**
  * The time-driven transitions live here rather than in the socket handler: a
  * countdown that lands, a round that runs out, and a reveal that moves on by
  * itself are not messages anyone sent, but they still end in a broadcast.
- */
-/**
+ *
  * `slateKeys` is what a host prepared before the evening, carried by the press
  * that opens the sheet; every path nobody pressed opens it with none.
  */
 export const beginRound = async (
-  room: Room,
+  engine: RoomEngine,
   { slateKeys = [] }: { slateKeys?: readonly (string | null)[] } = {}
 ): Promise<void> => {
-  if (roomsDrawing.has(room.code)) {
+  const { room } = engine
+
+  // Resolving a track is a network call, and the host pressing "start" twice
+  // before it answers would open two rounds over each other.
+  if (engine.isDrawing) {
     return
+  }
+
+  // Spent here whatever happens next: a hold left standing after an advance
+  // that opened nothing would be due again on the very next wake.
+  if (room.round !== null) {
+    room.round.advancesAt = null
   }
 
   const game = room.settings.game
@@ -67,6 +66,8 @@ export const beginRound = async (
   // read; this is the floor under the paths nobody pressed — an auto-advance,
   // or a game cleared between two rounds.
   if (game === null) {
+    publishRoom(engine)
+
     return
   }
 
@@ -78,9 +79,7 @@ export const beginRound = async (
     game.kind === 'reflex' ||
     game.kind === 'slate'
   ) {
-    cancelRoundTimer(room.code, 'advance')
-
-    const round = openRound({
+    openRound({
       content:
         game.kind === 'buzzer'
           ? { kind: 'buzzer' }
@@ -88,12 +87,11 @@ export const beginRound = async (
             ? reflexContent()
             : slateContent({ keys: slateKeys, settings: game }),
       id: newRoundId(),
-      now: nowMs(),
+      now: engine.now(),
       room
     })
 
-    broadcastRoom(room)
-    armCountdown({ room, roundId: round.id })
+    publishRoom(engine)
 
     return
   }
@@ -113,314 +111,207 @@ export const beginRound = async (
     })
 
     if (question === null) {
-      const host = hostConnectionIn(room.code)
-
-      if (host !== null) {
-        sendError(host, {
-          code: 'no_content_available',
-          fatal: false,
-          message: 'No unplayed question is left in those categories'
-        })
-      }
+      tellHost(engine, {
+        code: 'no_content_available',
+        message: 'No unplayed question is left in those categories'
+      })
+      publishRoom(engine)
 
       return
     }
 
-    cancelRoundTimer(room.code, 'advance')
     room.playedContentIds.add(question.id)
 
-    const asked = hostQuestionOf(question)
-
-    const round = openRound({
-      content: quizContent({ question: asked, room }),
+    openRound({
+      content: quizContent({ question: hostQuestionOf(question), room }),
       id: newRoundId(),
-      now: nowMs(),
+      now: engine.now(),
       room
     })
 
-    broadcastRoom(room)
-    armCountdown({ room, roundId: round.id })
+    publishRoom(engine)
 
     return
   }
 
-  cancelRoundTimer(room.code, 'advance')
-  roomsDrawing.add(room.code)
+  engine.isDrawing = true
 
-  try {
-    const drawn = await drawPlayableTrack({ room, settings: game })
-
-    if (drawn.status === 'failure') {
-      logger.error('Could not draw a track', {
-        code: room.code,
-        reason: drawn.error
-      })
-
-      const host = hostConnectionIn(room.code)
-
-      if (host !== null) {
-        sendError(host, {
-          code: drawn.error,
-          fatal: false,
-          message: 'Could not load a track from the music catalogue'
-        })
-      }
-
-      return
+  const drawn = await drawPlayableTrack({ room, settings: game }).finally(
+    () => {
+      engine.isDrawing = false
     }
+  )
 
-    // The draw took a network round trip, and the room can have been swept or
-    // the game ended in the meantime.
-    if (findRoom(room.code) === null) {
-      return
-    }
-
-    const round = openRound({
-      content: blindtestContent({ room, track: drawn.data }),
-      id: newRoundId(),
-      now: nowMs(),
-      room
-    })
-
-    broadcastRoom(room)
-    armCountdown({ room, roundId: round.id })
-  } finally {
-    roomsDrawing.delete(room.code)
+  // The draw took a network round trip, and the room can have been closed or
+  // swept in the meantime.
+  if (engine.isClosed) {
+    return
   }
-}
 
-/**
- * Re-armed rather than resumed: a miss consumed part of the round, and
- * `remainingRoundMs` is what stops the next player getting a fresh thirty
- * seconds out of someone else's wrong answer.
- *
- * A game with no clock cancels instead, and the bare buzzer is the only one:
- * it serves nothing, so there is nothing for the room to run out of and the
- * round waits for a press. The reflex race looks like it should be the second
- * and is not — its clock is the round's rather than the settings', which is
- * what `remainingRoundMs` reconciles.
- */
-export const armRoundTimeout = (room: Room): void => {
-  const remaining = remainingRoundMs(room, nowMs())
-
-  if (remaining === null) {
-    cancelRoundTimer(room.code, 'round')
+  if (drawn.status === 'failure') {
+    logger.error('Could not draw a track', {
+      code: room.code,
+      reason: drawn.error
+    })
+    tellHost(engine, {
+      code: drawn.error,
+      message: 'Could not load a track from the music catalogue'
+    })
+    publishRoom(engine)
 
     return
   }
 
-  scheduleRoundTimer({
-    code: room.code,
-    delayMs: remaining,
-    kind: 'round',
-    run: () => {
-      // The round running out ends it the same way the last answer does,
-      // scoring included: whoever did not answer simply did not.
-      closeRound(room, nowMs())
-
-      broadcastRoom(room)
-      armAutoAdvance(room)
-    }
+  openRound({
+    content: blindtestContent({ room, track: drawn.data }),
+    id: newRoundId(),
+    now: engine.now(),
+    room
   })
+
+  publishRoom(engine)
+}
+
+const tellHost = (
+  engine: RoomEngine,
+  {
+    code,
+    message
+  }: { code: Parameters<typeof sendError>[1]['code']; message: string }
+): void => {
+  const host = hostConnectionIn(engine)
+
+  if (host !== null) {
+    sendError(host, { code, fatal: false, message })
+  }
 }
 
 /**
- * Idempotent, and called from every path that reaches a reveal as well as from
- * the switch itself — a host who turns the mode on while a reveal is already on
- * screen expects that reveal to move on, not the one after it.
- *
- * It obeys `round.advancesAt` rather than the setting, which is what makes the
- * idempotence real: a second call re-aims the timer at the deadline the room is
- * already watching drain, where reading the setting again would hand it a fresh
- * full hold. `startAutoAdvanceHold` is the only thing that moves the deadline.
+ * Whatever the scheduler woke the room for is read again from the room rather
+ * than trusted: one deadline per wake, the earliest, and the commit that
+ * follows aims the next wake at whatever is due after it.
  */
-export const armAutoAdvance = (room: Room): void => {
-  const advancesAt = room.round?.advancesAt ?? null
-
-  if (room.phase !== 'revealed' || advancesAt === null) {
-    cancelRoundTimer(room.code, 'advance')
-
+export const wakeRoom = (engine: RoomEngine): void => {
+  if (engine.isClosed) {
     return
   }
 
-  scheduleRoundTimer({
-    code: room.code,
-    delayMs: Math.max(0, advancesAt - nowMs()),
-    kind: 'advance',
-    run: () => {
-      if (room.phase !== 'revealed') {
-        return
+  const now = engine.now()
+  const due = deadlinesOf(engine)
+    .filter((deadline) => deadline.at <= now)
+    .toSorted((first, second) => first.at - second.at)
+    .at(0)
+
+  if (due !== undefined) {
+    runDeadline(engine, due.kind, now)
+  }
+
+  commitRoom(engine)
+}
+
+const runDeadline = (
+  engine: RoomEngine,
+  kind: RoomDeadlineKind,
+  now: number
+): void => {
+  const { room } = engine
+  const roundId = room.round?.id
+
+  switch (kind) {
+    case 'countdown': {
+      if (roundId !== undefined) {
+        startRoundClock({ now, room, roundId })
       }
 
+      publishRoom(engine)
+
+      return
+    }
+
+    // The round running out ends it the same way the last answer does, scoring
+    // included: whoever did not answer simply did not.
+    case 'round': {
+      closeRound(room, now)
+      publishRoom(engine)
+
+      return
+    }
+
+    case 'answer': {
+      if (roundId !== undefined) {
+        timeOutBuzz({ now, room, roundId })
+      }
+
+      publishRoom(engine)
+
+      return
+    }
+
+    case 'advance': {
       if (isFinalRound(room)) {
-        finishGame(room, nowMs())
-        broadcastRoom(room)
+        finishGame(room, now)
+        publishRoom(engine)
 
         return
       }
 
-      void beginRound(room)
-    }
-  })
-}
+      void beginRound(engine)
 
-export const holdRoundTimeout = (code: RoomCode): void => {
-  cancelRoundTimer(code, 'round')
+      return
+    }
+
+    case 'seats': {
+      releaseSeats(engine, now)
+
+      return
+    }
+
+    case 'expiry': {
+      logger.info('Closed an abandoned room', { code: room.code })
+      closeRoomEngine(engine)
+
+      return
+    }
+  }
 }
 
 /**
- * The floor has a clock of its own, and it is the server's for the same reason
- * the countdown is: the host's tab is the one most likely to be in the
- * background, and a room watching someone say nothing should not depend on it.
- *
- * Idempotent, and a `null` window cancels rather than schedules — the screens
- * then count up and the host decides when to cut in.
+ * The floor is released with the seats: a room whose answer window is the
+ * host's own word can otherwise hold a buzz forever on behalf of a player who
+ * is long gone.
  */
-export const armAnswerWindow = (room: Room): void => {
-  const expiresAt = room.round?.activeBuzz?.expiresAt
+const releaseSeats = (engine: RoomEngine, now: number): void => {
+  const { room } = engine
+  const released = releaseAbandonedSeats(room, now)
 
-  if (room.phase !== 'buzzed' || expiresAt == null || room.round === null) {
-    cancelRoundTimer(room.code, 'answer')
-
-    return
+  for (const playerId of released) {
+    forgetSeat(engine, playerId)
+    releaseBuzz({ now, playerId, room })
   }
 
-  const roundId = room.round.id
-
-  scheduleRoundTimer({
-    code: room.code,
-    delayMs: expiresAt - nowMs(),
-    kind: 'answer',
-    run: () => {
-      const outcome = timeOutBuzz({ now: nowMs(), room, roundId })
-
-      if (outcome === 'resumed') {
-        armRoundTimeout(room)
-      }
-
-      if (outcome === 'revealed') {
-        abandonRound(room.code)
-      }
-
-      broadcastRoom(room)
-
-      if (outcome === 'revealed') {
-        armAutoAdvance(room)
-      }
-    }
+  logger.info('Released abandoned seats', {
+    released: released.length,
+    room: room.code
   })
+  publishRoom(engine)
 }
 
 /**
  * The host's browser is the room's speaker and its only judge, so a game that
  * carries on without them carries on in silence, unjudged, burning round time
- * nobody can hear. Everything time-driven stops instead, and the round keeps
- * the seconds it had left.
+ * nobody can hear. The round keeps the seconds it had left, and no round
+ * deadline falls due while no console is attached — see `roomDeadlines`.
  *
  * There is no grace period on purpose. Freezing costs nothing and undoes
  * itself, where waiting even five seconds spends five seconds of music on an
  * empty room — a host who drops off Wi-Fi for a moment loses the pause, not the
  * round.
  */
-export const holdRoundWhileHostIsAway = (room: Room): void => {
-  cancelRoundTimer(room.code, 'advance')
-  cancelRoundTimer(room.code, 'answer')
-  cancelRoundTimer(room.code, 'countdown')
-  cancelRoundTimer(room.code, 'round')
-  holdRoundClock(room, nowMs())
+export const holdRoundWhileHostIsAway = (engine: RoomEngine): void => {
+  holdRoundClock(engine.room, engine.now())
 }
 
 /** The mirror, run when a host claims the room again. */
-export const resumeRoundForHost = (room: Room): void => {
-  const now = nowMs()
-
-  resumeRoundClock(room, now)
-
-  if (room.phase === 'countdown' && room.round !== null) {
-    armCountdown({ room, roundId: room.round.id })
-
-    return
-  }
-
-  if (room.phase === 'playing') {
-    armRoundTimeout(room)
-
-    return
-  }
-
-  if (room.phase === 'buzzed') {
-    armAnswerWindow(room)
-
-    return
-  }
-
-  armAutoAdvance(room)
-}
-
-const armCountdown = ({
-  room,
-  roundId
-}: {
-  room: Room
-  roundId: RoundId
-}): void => {
-  scheduleRoundTimer({
-    code: room.code,
-    delayMs: room.settings.countdownMs,
-    kind: 'countdown',
-    run: () => {
-      if (!startRoundClock({ now: nowMs(), room, roundId })) {
-        return
-      }
-
-      broadcastRoom(room)
-      armRoundTimeout(room)
-    }
-  })
-}
-
-export const abandonRound = (code: RoomCode): void => {
-  cancelRoundTimers(code)
-}
-
-/** Coarse on purpose: the window it enforces is ten minutes wide. */
-const SEAT_SWEEP_INTERVAL_MS = 60 * 1_000
-
-/**
- * Gives up the seats nobody has been behind long enough to have gone, in every
- * room at once. It is here rather than beside the room sweeper for the reason
- * this file exists: the store has no business broadcasting, and a seat leaving
- * the roster is something every screen has to be told about.
- *
- * The floor is released with them. A room whose answer window is the host's own
- * word can otherwise hold a buzz forever on behalf of a player who is long
- * gone.
- */
-export const startSeatSweeper = (): (() => void) => {
-  const timer = setInterval(() => {
-    const now = nowMs()
-
-    for (const room of allRooms()) {
-      const released = releaseAbandonedSeats(room, now)
-
-      if (released.length === 0) {
-        continue
-      }
-
-      for (const playerId of released) {
-        forgetSeat(room.code, playerId)
-        releaseBuzz({ now, playerId, room })
-      }
-
-      logger.info('Released abandoned seats', {
-        released: released.length,
-        room: room.code
-      })
-      broadcastRoom(room)
-    }
-  }, SEAT_SWEEP_INTERVAL_MS)
-
-  return () => {
-    clearInterval(timer)
-  }
+export const resumeRoundForHost = (engine: RoomEngine): void => {
+  resumeRoundClock(engine.room, engine.now())
 }

@@ -39,8 +39,8 @@ DevTools.
 
 Socket.IO buys reconnection, rooms, fallbacks and an event API. This project
 needed the first two and already has them in twenty lines apiece — the
-reconnect loop in `use-room-socket.ts`, the room registry in
-`connection-registry.ts`. What it did not want was the event API: a stringly
+reconnect loop in `use-room-socket.ts`, each room's own
+sockets in `room-connections.ts`. What it did not want was the event API: a stringly
 typed `emit('buzz', payload)` on both ends, with the payload's shape agreed by
 convention.
 
@@ -61,20 +61,25 @@ The usual argument for splitting is bundle size, and lazy routes settle it: the
 player chunk is 5 kB, the host chunk 19 kB, and a player never downloads the QR
 renderer. The routes are lazy for that reason — keep them that way.
 
-## State lives in memory, on purpose
+## One engine per room
 
-`room-store.ts` is a `Map`, and a restart drops every room. That is a real
-limitation and it is still the right call: a game lasts an evening, everyone is
-in the same living room, and after a mid-game restart the host would have to
-re-share the code whether or not a database had survived. Persistence would buy
-a schema, a migration path and a deploy dependency in exchange for a recovery
-nobody would use.
+Each room is a `RoomEngine` (`infrastructure/messaging/room-engine.ts`): the
+room, its own sockets, a clock, one wake and a `persist` hook, with nothing
+process-wide underneath. On Node, `infrastructure/node/in-process-rooms.ts`
+keeps the engines in a `Map` and `persist` does nothing, so a restart still
+drops every room — the limitation stage 28 removes by giving each room a
+Durable Object whose storage `persist` writes to.
 
-A sweeper removes rooms nobody is connected to after ten minutes — long enough
-that a host who reloads keeps their game.
+Nothing a room waits for is a closure. The countdown, the round running out,
+the floor's window, the reveal's hold, a seat nobody came back to and the room
+itself expiring are all **read off the room** by `roomDeadlines`, and the one
+wake is aimed at the earliest after every change. A room restored from a
+snapshot therefore knows what it is waiting for with nothing else surviving,
+and no round deadline falls due while no console is attached — that is the
+whole of the freeze when the host walks away.
 
-Revisit if rooms ever need to outlive a deploy, or to span more than one server
-process.
+A room nobody is connected to is closed ten minutes after the last socket left
+— long enough that a host who reloads keeps their game.
 
 ## Time
 

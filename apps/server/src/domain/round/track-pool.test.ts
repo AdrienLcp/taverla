@@ -6,7 +6,7 @@ import {
 } from '@taverla/protocol/game'
 import type { TrackSource } from '@taverla/protocol/track'
 
-import { createRoom } from '@/domain/room/room-store'
+import { newRoom } from '@/domain/room/new-room'
 
 import { discardPoolIfStale } from './track-pool'
 
@@ -26,11 +26,12 @@ const poolSurvives = ({
   from: GameSettings | null
   to: GameSettings | null
 }): boolean => {
-  const room = createRoom({ game: 'blindtest', locale: 'en', now: 0 })
-
-  if (room === null) {
-    throw new Error('The store had no room code left to draw')
-  }
+  const room = newRoom({
+    code: 'ABCD',
+    game: 'blindtest',
+    locale: 'en',
+    now: 0
+  })
 
   room.settings.game = to
   room.trackPool = [

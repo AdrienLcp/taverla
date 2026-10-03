@@ -1434,6 +1434,11 @@ one part.
 
 ### Fixes
 
+- `[Server]` **A room nobody is connected to is kept ten minutes from the last
+  socket leaving**, not from the last frame anyone sent. A host who sat in the
+  lobby for a quarter of an hour and reloaded could lose the room whenever the
+  one-minute sweep fell between the close and the reconnect.
+
 - `[Game]` **Marking the slate keeps the way back to the list.** Once every
   sheet was collected, the console lost *Back to the sheets* and with it the
   only grid of items, so a host could not jump to one without ending the game.
@@ -2497,6 +2502,15 @@ one part.
   in turn
 
 ### Internal
+
+- `[Server]` **One engine per room, with nothing process-wide underneath**
+  (stage 28, session A). The room store, the round timers and the connection
+  registry are gone; a `RoomEngine` holds the room, its sockets, a clock, one
+  wake and a `persist` hook, and every deadline — countdown, round, floor,
+  reveal hold, abandoned seat, room expiry — is read off the room rather than
+  held in a closure, so a room restored from a snapshot fires on time. The two
+  one-minute sweepers become deadlines of the room they sweep. Node keeps the
+  engines in `in-process-rooms.ts` until the Durable Object replaces it.
 
 - `[Shared]` **Route paths are part of the contract.** `@taverla/protocol/routes`
   holds every HTTP path and the room socket's: the server registers the
