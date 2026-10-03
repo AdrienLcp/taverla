@@ -35,6 +35,11 @@ jobs:
       - name: Build
         run: pnpm build
 
+      # Each package's build type-checks it, but neither `e2e/` nor the root
+      # `vitest.config.ts` (`tsconfig.root.json`) belongs to a package.
+      - name: Typecheck
+        run: pnpm typecheck
+
       - name: Test with coverage
         run: pnpm test:coverage
 
@@ -87,3 +92,16 @@ jobs:
           cache-to: type=gha,mode=max
           context: .
           push: false
+
+  # Workflows break at run time: a typo in an expression or a context passes
+  # as plain YAML and only fails when the step is reached.
+  actionlint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Lint the workflows
+        uses: docker://rhysd/actionlint:1.7.12
+        with:
+          args: -color
