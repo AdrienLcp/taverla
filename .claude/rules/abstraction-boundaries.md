@@ -35,7 +35,8 @@ paid on every read of the code.
 | `AudioContext`, `Audio` | `apps/game/src/features/host/round-audio.ts` for the clip's element, `apps/game/src/presentation/audio/buzz-cue.ts` for the synthesised buzz cue — two capabilities rather than one library, armed by the same press and refused the same way outside a gesture |
 | `fetch` (browser) | `apps/game/src/infrastructure/api/taverla-api.ts` |
 | `Date`, the wall clock | `infrastructure/clock.ts` in each app, through `nowMs()` |
-| `nanoid` | `apps/server/src/infrastructure/ids.ts`, one function per kind of id with its length. The domain receives an id as an argument, the way it receives `now` |
+| Making an id (`nanoid`) | `infrastructure/ids.ts` in each app, one function per kind of id owning its length — `newSessionId()` on both sides. The domain receives an id as an argument, the way it receives `now`. `crypto.randomUUID` is used nowhere: it exists only in a secure context, and a room tried over plain HTTP on a LAN address is not one |
+| `crypto.getRandomValues` | `packages/core/src/room/random-code.ts` — `secureRandomIndex`, the rejection sampling that keeps a room code's alphabet uniform. A rule about the code's meaning, not an id library, so it stays in core and `ids.ts` calls it |
 | `react-router` | `apps/game/src/infrastructure/router/`, plus `useNavigate` in `presentation/app-shell.tsx` — which hands it to react-aria's `RouterProvider`, so components navigate through the design system's `Link` and never import react-router themselves |
 | `react-aria-components` | `apps/game/src/presentation/components/`, `presentation/i18n/i18n-provider.tsx` for `I18nProvider`, and a feature that genuinely needs a primitive the design system has not wrapped yet |
 
@@ -49,6 +50,10 @@ is written in them. Domain functions take `now` as an argument, so a test sets
 the time by passing a number, never with fake timers. Nothing here parses date
 text or hands a `Date` to a library; the day one does, it gets a `dates.ts`
 beside the clock that returns a `Result`, and the value is a Temporal type.
+`nowMs()` keeps reading `Date.now()` then, because fake timers move `Date` and
+never `Temporal.Now`; a timestamp written out keeps its millisecond fraction
+(`smallestUnit: 'millisecond'`), and a test compares two Temporal values with
+`.equals` — `toEqual` passes for any two, having no fields to walk.
 
 `zod` is the exception, and deliberately so: it is not an infrastructure detail
 here, it is the language the contract is written in. `packages/protocol` is

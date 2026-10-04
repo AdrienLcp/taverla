@@ -28,6 +28,7 @@ import {
 } from '@taverla/core/room/session-memory'
 
 import { nowMs } from '@/infrastructure/clock'
+import { newSessionId } from '@/infrastructure/ids'
 
 import { readStoredWithSchema } from './read-stored-with-schema'
 
@@ -78,7 +79,7 @@ const rememberedHostTokensSchema = z.array(
 export const ensureSessionId = (scope: SeatScope): SessionId => {
   const seats = readSeats()
   const remembered = rememberedSeatFor({ ...scope, seats })
-  const sessionId = remembered?.sessionId ?? mintSessionId()
+  const sessionId = remembered?.sessionId ?? newSessionId()
 
   writeSeats(
     rememberSeat({
@@ -139,7 +140,7 @@ const keepSeatNickname = (
       nickname,
       seats,
       sessionId:
-        rememberedSeatFor({ ...scope, seats })?.sessionId ?? mintSessionId()
+        rememberedSeatFor({ ...scope, seats })?.sessionId ?? newSessionId()
     })
   )
 }
@@ -198,19 +199,6 @@ export const forgetRoom = (roomCode: RoomCode): void => {
   forgetSessionId({ role: 'host', roomCode })
   forgetSessionId({ role: 'player', roomCode })
 }
-
-/**
- * `crypto.randomUUID` exists only in a secure context, and the obvious way to
- * try this on real phones — plain HTTP on a LAN address — is not one. There it
- * is `undefined`, and calling it would throw before anyone could take a seat.
- *
- * The fallback is not cryptographically strong and does not need to be: a
- * session id claims a seat in a room whose code is being read aloud in the same
- * living room.
- */
-const mintSessionId = (): SessionId =>
-  crypto.randomUUID?.() ??
-  `${nowMs().toString(36)}-${Math.random().toString(36).slice(2, 12)}`
 
 /**
  * Called when a player gives their seat up on purpose, or when a host disbands

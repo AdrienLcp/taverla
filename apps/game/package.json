@@ -11,6 +11,7 @@
     "@adrienlcp/theme-preference": "^0.3.0",
     "@taverla/core": "workspace:*",
     "@taverla/protocol": "workspace:*",
+    "nanoid": "^6.0.1",
     "qrcode.react": "^4.2.0",
     "react": "19.3.0",
     "react-aria-components": "1.21.1",

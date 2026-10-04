@@ -2616,6 +2616,12 @@ one part.
 
 ### Internal
 
+- `[Game]` **A session id is made in `infrastructure/ids.ts`**, by
+  `newSessionId()` on `nanoid` as the server's is, rather than inside the seat
+  storage with a `crypto.randomUUID` and a `Math.random` fallback for plain
+  HTTP. `crypto.getRandomValues` works in every context, so the fallback is
+  gone with it.
+
 - `[Server]` **One engine per room, with nothing process-wide underneath**
   (stage 28, session A). The room store, the round timers and the connection
   registry are gone; a `RoomEngine` holds the room, its sockets, a clock, one
