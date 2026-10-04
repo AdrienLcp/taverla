@@ -210,6 +210,15 @@ one part.
   viewports against the bank's worst rows, with nothing under 14px. The rest of
   the screens inherit the new ground and faces and are redrawn next.
 
+- `[Game]` **The player's buzzer is a piece from the box, and never
+  scrolls.** It is held to the viewport like the choice round, under the same
+  line of chrome: a thick coral token that sinks under the thumb, beneath the
+  question printed on a paper card — beside it lying down. A dead buzzer is the
+  empty socket it sits in. The floor stands its holder's pawn where the buzzer
+  was, with the clock on a paper token. The reflex race's buzzer waits paper
+  side up and turns coral on the flip, a player's time is printed on a card,
+  and a false start is a die-cut piece in the danger ink.
+
 - `[Server]` **356 more French questions, 96 of them science**, from Vikidia rows
   the wiki wrote with three candidates. Each takes a fourth written by hand
   against its own row, in `vikidia-fourth-decoys.json`, and ten keep their

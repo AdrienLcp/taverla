@@ -898,3 +898,167 @@ for (const screen of REFLEX_SCREENS) {
     expect(faults).toEqual([])
   })
 }
+
+/**
+ * The player's buzzer, held to the viewport the way the four tiles are: the
+ * question card over it, or the floor's pawn and clock in its place, or the
+ * reflex race's three outcomes, with the line under each.
+ */
+const buzzerView = ({
+  activeBuzz = null,
+  content,
+  game,
+  lockedOutPlayerIds = [],
+  phase = 'playing'
+}: {
+  activeBuzz?: object | null
+  content: object
+  game: object
+  lockedOutPlayerIds?: string[]
+  phase?: 'buzzed' | 'playing'
+}) => {
+  const view = choosingView(LONGEST_PROMPT)
+
+  return {
+    ...view,
+    phase,
+    round: { ...view.round, activeBuzz, content, lockedOutPlayerIds },
+    settings: {
+      ...view.settings,
+      game,
+      mode: { answerWindowMs: 10_000, kind: 'buzzer' }
+    }
+  }
+}
+
+const quizRound = choosingView(LONGEST_PROMPT).round.content
+const quizGame = choosingView(LONGEST_PROMPT).settings.game
+const reflexGame = { kind: 'reflex' }
+
+const PLAYER_BUZZER_SCREENS = [
+  {
+    name: 'the longest question over the buzzer',
+    ready: '.buzzer',
+    view: buzzerView({ content: quizRound, game: quizGame })
+  },
+  {
+    name: 'the floor taken under the longest question',
+    ready: '.taken-floor',
+    view: buzzerView({
+      activeBuzz: {
+        atServerTime: SERVER_TIME,
+        expiresAt: SERVER_TIME + 10_000,
+        playerId: 'p1'
+      },
+      content: quizRound,
+      game: quizGame,
+      phase: 'buzzed'
+    })
+  },
+  {
+    name: 'the reflex wait',
+    ready: '.buzzer.armed',
+    view: buzzerView({
+      content: { flipsAt: SERVER_TIME + 60_000, kind: 'reflex', presses: [] },
+      game: reflexGame
+    })
+  },
+  {
+    name: 'the reflex time',
+    ready: '.reaction',
+    view: buzzerView({
+      content: {
+        flipsAt: SERVER_TIME - 2_000,
+        kind: 'reflex',
+        presses: [{ atServerTime: SERVER_TIME - 1_766, playerId: 'p1' }]
+      },
+      game: reflexGame
+    })
+  },
+  {
+    name: 'the false start',
+    ready: '.false-start',
+    view: buzzerView({
+      content: { flipsAt: SERVER_TIME + 60_000, kind: 'reflex', presses: [] },
+      game: reflexGame,
+      lockedOutPlayerIds: ['p1']
+    })
+  }
+]
+
+const measurePress = (): Overflow => {
+  const root = document.scrollingElement ?? document.documentElement
+  const pieces = [
+    ...document.querySelectorAll<HTMLElement>(
+      '.asked-question, .buzzer, .taken-floor, .reaction, .false-start, .press > p'
+    )
+  ]
+  const prompts = [
+    ...document.querySelectorAll<HTMLElement>('.asked-question .prompt')
+  ]
+
+  return {
+    floor: Math.min(
+      ...prompts.map((prompt) =>
+        Number.parseFloat(getComputedStyle(prompt).fontSize)
+      )
+    ),
+    furthest: null,
+    page: Math.max(
+      root.scrollHeight - innerHeight,
+      root.scrollWidth - innerWidth,
+      0
+    ),
+    spills: pieces
+      .filter(
+        (piece) =>
+          piece.scrollHeight > piece.clientHeight + 1 ||
+          piece.scrollWidth > piece.clientWidth + 1
+      )
+      .map(
+        (piece) =>
+          `${piece.className} ${piece.scrollWidth}/${piece.clientWidth}×${piece.scrollHeight}/${piece.clientHeight}`
+      ),
+    strays: pieces
+      .filter((piece) => {
+        const box = piece.getBoundingClientRect()
+
+        return (
+          box.top < 0 ||
+          box.left < 0 ||
+          box.bottom > innerHeight + 0.5 ||
+          box.right > innerWidth + 0.5
+        )
+      })
+      .map((piece) => piece.className)
+  }
+}
+
+for (const screen of PLAYER_BUZZER_SCREENS) {
+  test(`[layout] player, ${screen.name}: never scrolls`, async ({ page }) => {
+    await serveRoom({ page, view: screen.view })
+    await page.setViewportSize({ height: 844, width: 390 })
+    await page.goto(`/play/${ROOM_CODE}`)
+    await expect(page.locator(screen.ready)).toBeVisible()
+
+    const faults: string[] = []
+
+    for (const [width, height] of VIEWPORTS) {
+      await page.setViewportSize({ height, width })
+      await page.evaluate(() => document.fonts.ready.then(() => {}))
+
+      const overflow = await page.evaluate(measurePress)
+
+      if (
+        overflow.floor < FLOOR_PX ||
+        overflow.page > 0 ||
+        overflow.spills.length > 0 ||
+        overflow.strays.length > 0
+      ) {
+        faults.push(`${width}×${height} ${JSON.stringify(overflow)}`)
+      }
+    }
+
+    expect(faults).toEqual([])
+  })
+}

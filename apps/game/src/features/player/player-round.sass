@@ -1,5 +1,7 @@
 @use '../../presentation/styles/focus'
 @use '../../presentation/styles/layout'
+@use '../../presentation/styles/piece'
+@use '../../presentation/styles/question-card'
 @use '../../presentation/styles/typography'
 
 @layer components
@@ -327,203 +329,152 @@
       max-width: 34ch
       text-wrap: balance
 
+  // The buzzer's screen is framed: the page gives it the box under the chrome
+  // and nothing in it may grow that box. Upright the question card sits over
+  // the well; lying down the page sets the card beside it.
   .buzzer-area
-    justify-content: center
+    --question-k: min(72cqi, 30cqh)
+    --question-cap: min(7cqi, 4cqh)
 
-    // The quiz's stimulus is the clip's equal and it is *on the screen*, where
-    // a clip is not — and this is the one composition where the circle was
-    // still sized as though nothing else were. Stacked, the two came to 535px
-    // of a 564px budget and the page scrolled at every width but one: 54px off
-    // a 1440x900, 82 off a 1440x700, 44 and 55 off a 1280x800 and a 1024x768,
-    // 155 off a 360x640. The bank's longest question takes all six past 138.
-    //
-    // A laptop is the screen with width to spare and none of the height, so
-    // this is the split the reveal and both lobbies already make, on the same
-    // shares: what you read takes the wide track, and the circle is
-    // bounded at 420px so it takes the narrow one.
-    //
-    // Read off the markup rather than off the width alone, for the reveal's
-    // reason: a blind test's screen carries no question, and a split there
-    // would draw the circle in one column against an empty one.
-    @include layout.wide
-      &:has(.asked-question)
-        align-items: center
-        column-gap: var(--space-xl)
-        display: grid
-        grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr)
+    display: grid
+    gap: clamp(8px, 2.2cqmin, 14px)
+    grid-template: 'card' auto 'press' minmax(0, 1fr) / minmax(0, 1fr)
+    min-height: 0
 
-    // Stacked, the question and the circle share one column and the screen
-    // pays for both, so what is left of the screen is the circle's ceiling.
-    // What the page keeps for itself measures 296px at 360x640 and at 390x844
-    // alike — the header, the clip's bar, the scoreline and the three gaps
-    // between them — and the rest of the subtraction is what stands between
-    // the question and the circle. The taken floor takes a number of its own,
-    // because it sets a nickname at billboard and a clock under it where a
-    // running round draws one caption line.
-    //
-    // The floor is what a phone on its side gets, where nothing fits at any
-    // legible size: a circle too small to press still beats a negative width
-    // drawn through the line under it.
-    @include layout.narrow
-      &:has(.asked-question)
-        --buzzer-headroom: max(7rem, calc(100dvh - 32.5rem))
+    @media (min-aspect-ratio: 13 / 10)
+      --question-k: min(31cqi, 66cqh)
+      --question-cap: min(3.6cqi, 7.4cqh)
 
-        &:has(.floor-dial)
-          --buzzer-headroom: max(7rem, calc(100dvh - 34rem))
+    .asked-question
+      @include question-card.card
 
-    // The circle and the two lines that answer to it, one child so the split
-    // above has two. No alignment of its own: centring would shrink-wrap the
-    // status line to its longest word, and that line is balanced across the
-    // column it is given.
+      grid-area: card
+
+    // With no card on top, the round's clock is drawn on the board itself, and
+    // the well starts under it.
+    &:not(:has(.asked-question))
+      padding-top: 18px
+
+    // The piece and the line under it, centred together in the box the page
+    // leaves, and what the piece is sized against: a size container, so the
+    // buzzer is the largest circle the box holds beside its line at any ratio.
     .press
+      align-items: center
+      container-type: size
       display: flex
       flex-direction: column
-      gap: var(--space-m)
+      gap: var(--space-s)
+      grid-area: press
+      justify-content: center
+      min-height: 0
 
-    // The one round object in the product, because it is the one thing that is
-    // a physical button. Pressed by someone watching the television, so it is
-    // sized by the hand and not by the layout.
+    // The one round piece in the box, punched thick: a coral token with a deep
+    // chipboard edge that sinks under the thumb, a keyline printed a margin in.
     .buzzer
       @include focus.ring
-      @include typography.monument
+
+      --buzzer-size: min(92cqw, calc(100cqh - 5rem), 26rem)
+      --buzzer-edge: calc(var(--buzzer-size) * 0.045)
 
       align-items: center
       aspect-ratio: 1
-      background: var(--ink)
-      border: none
+      background: var(--primary)
+      border: 0
       border-radius: var(--radius-full)
-      color: var(--field)
-      // What the word below is measured against, which is the whole reason
-      // it has a box of its own: a container cannot be asked about its own
-      // width.
-      container-type: inline-size
+      box-shadow: inset 0 0 0 calc(var(--buzzer-size) * 0.04) var(--primary), inset 0 0 0 calc(var(--buzzer-size) * 0.048) color-mix(in oklab, var(--on-primary) 55%, var(--primary)), 0 var(--buzzer-edge) 0 0 var(--primary-edge), 0 calc(var(--buzzer-edge) * 2) calc(var(--buzzer-edge) * 2.5) calc(var(--buzzer-edge) * -1) var(--shadow)
+      color: var(--on-primary)
       display: flex
-      font-size: clamp(2rem, 11vmin, 4rem)
       justify-content: center
-      margin: 0 auto
-      // Bounded by its own column as well as by the screen. Above the split
-      // the circle sits in a track narrower than 42vh, and a viewport term in
-      // a box that has stopped being the viewport is the fault this product
-      // keeps meeting — the aspect ratio is what turns the cap back into a
-      // height.
-      max-width: 100%
+      margin-bottom: var(--buzzer-edge)
       touch-action: manipulation
-      transition: transform var(--transition-fast, 0) var(--timing, ease)
-      // Four limits rather than three, because this is hit on a phone held in
-      // a hand and on a laptop across a table, and it now shares the screen
-      // with a question. `vw` alone leaves it tiny on a wide screen, `vh`
-      // alone taller than a short one, and neither of them knows what the
-      // stimulus above it took: that one is the stage's to say, and it says
-      // nothing where there is nothing above.
-      width: min(78vw, 42vh, 420px, var(--buzzer-headroom, 100dvh))
+      transition: transform var(--transition-fast, 0) var(--timing, ease), box-shadow var(--transition-fast, 0) var(--timing, ease)
+      width: var(--buzzer-size)
 
-      // Capped by the circle rather than by the screen, which is what the
-      // screen cannot answer: a word wider than the ink is drawn in the
-      // field's own colour on the field and simply vanishes. `BUZZ` sets at
-      // 0.8833 of its own font size per character — measured with a `Range`
-      // on the rendered node, letter-spacing included — so the word comes to
-      // 3.533 times the size, and `16.9cqi` is the widest share of the
-      // diameter this product already draws: the 0.598 a 378px circle at the
-      // clamp's own ceiling gives. `1em` is the circle's own term, so
-      // wherever the circle is large enough to hold the word the screen still
-      // decides the size and nothing moves.
-      //
-      // It carries the mixin again rather than inheriting the tracking,
-      // because **`letter-spacing` inherits as a computed length**: -0.035em
-      // of a 64px circle reaches a 20px word as -0.112em and folds it onto
-      // itself.
+      // `BUZZ` sets at about 2.6 times its size in the condensed display face,
+      // so a fifth of the diameter keeps it inside the keyline at any size.
       .word
         @include typography.monument
 
-        font-size: min(1em, 16.9cqi)
+        font-size: calc(var(--buzzer-size) * 0.22)
+        text-transform: uppercase
 
       &[data-pressed],
       &.claimed
-        transform: scale(0.92)
+        box-shadow: inset 0 0 0 calc(var(--buzzer-size) * 0.04) var(--primary), inset 0 0 0 calc(var(--buzzer-size) * 0.048) color-mix(in oklab, var(--on-primary) 55%, var(--primary)), 0 calc(var(--buzzer-edge) * 0.25) 0 0 var(--primary-edge), 0 2px 6px -2px var(--shadow)
+        transform: translateY(calc(var(--buzzer-edge) * 0.75))
 
+      // Nothing to press: the piece is out of the box, and what is left is the
+      // socket it sits in, so the word goes with it into the board's own ink.
       &[data-disabled]
-        background: transparent
-        border: 4px solid var(--rule)
-        color: var(--ink-muted)
+        background: var(--socket)
+        box-shadow: inset 0 3px 8px -2px var(--shadow), inset 0 0 0 2px var(--socket-line)
+        color: var(--board-muted)
         cursor: not-allowed
+        transform: translateY(var(--buzzer-edge))
 
-    // The same circle, for the length of the floor, and no longer a button:
-    // the ring it already had is the window, and the number the room is
-    // waiting on is inside it. It keeps the buzzer's own four limits because
-    // it is the same object and the hand is not what sizes it any more — what
-    // does is the question above it, which is what the headroom says.
-    //
-    // Grid rather than the flex column around it: the ring and the number are
-    // one object stacked on one cell, so neither takes height from the other
-    // and the number is centred on the dial rather than under it.
+    // Whoever holds the floor, stood up where the buzzer was: their pawn
+    // oversize, and the clock on a paper token at its foot.
+    .taken-floor
+      align-items: end
+      display: flex
+      gap: clamp(8px, 4cqmin, 28px)
+      justify-content: center
+
+      .pawn
+        filter: drop-shadow(0 4px 0 var(--chipboard-dark))
+        font-size: min(calc(46cqh - 2.5rem), 40cqw, 16rem)
+
+    // A round paper token with the window drawn as a groove around its edge,
+    // draining clockwise from twelve. A window nobody set spends nothing, so
+    // the groove is full ink and the number counts up inside it.
     .floor-dial
+      @include piece.card(50%)
+
       aspect-ratio: 1
       container-type: inline-size
       display: grid
-      font-size: clamp(2rem, 11vmin, 4rem)
-      margin: 0 auto
-      max-width: 100%
+      flex: none
       place-items: center
-      width: min(78vw, 42vh, 420px, var(--buzzer-headroom, 100dvh))
+      width: min(30cqh, 30cqw, 11rem)
 
       > *
         grid-area: 1 / 1
 
-      // Rotated so the window starts at twelve and drains clockwise back to
-      // it, which is the one place on a dial a reading is looked for.
       .ring
-        height: 100%
+        height: 84%
         transform: rotate(-90deg)
-        width: 100%
+        width: 84%
 
         circle
           fill: none
-          stroke-width: 5
+          stroke-linecap: round
+          stroke-width: 7
 
-        // The ring is the floor, and what has been spent of it goes faint: the
-        // ink says the floor is live and the fade says the time is gone.
-        //
-        // A window nobody set spends nothing, so there is no arc to draw over
-        // the track and the track *is* the ink. Drawn faint it read as a dial
-        // already run out, which is the opposite of what an untimed floor is —
-        // the one shape would have meant a thing and its contrary. Full ink
-        // whether it moves or not is the round bar's own rule, one screen up.
         .track
-          stroke: var(--ink)
+          stroke: var(--card-ink)
 
         .left
           animation: floor-drain var(--drain-duration, 0ms) linear forwards
-          stroke: var(--ink)
+          stroke: var(--card-ink)
           stroke-dasharray: 1
 
         &:has(.left) .track
-          stroke: var(--rule)
+          stroke: var(--card-rule)
 
-      // Still the measurement, minus the moving — the round bar's bargain, for
-      // the round bar's reason.
       @media (prefers-reduced-motion: reduce)
         .ring .left
           animation: none
           stroke-dashoffset: var(--drained, 0)
 
-      // One register inside the dial, where `FloorClock` carries two: muting
-      // the open direction is right in a column the console reads and wrong in
-      // an object whose only content it is.
-      //
-      // Sized by the ring and by how much there is to read, which is the
-      // question's own pair one screen over. A digit of `billboard` sets at
-      // 0.785 of its font size — measured with a `Range` on the rendered node,
-      // and exactly three times that for three, because the figures are
-      // tabular — so the ring's 89cqi of clear diameter holds `81cqi / n`. The
-      // ceiling is what two digits look like at that division and is where the
-      // common reading stops growing: a floor of five seconds drawn at the
-      // size a hundred would need is a dial that never fills.
+      // A digit of the display face sets at about 0.6 of its size, so the
+      // groove's clear diameter holds `58cqi / n`.
       .floor-clock
-        @include typography.billboard
+        @include typography.monument
+        @include typography.numeric
         @include typography.trimmed-numeral
 
-        color: var(--ink)
-        font-size: min(40cqi, calc(81cqi / var(--reading-length, 2)))
+        color: var(--card-ink)
+        font-size: min(40cqi, calc(58cqi / var(--reading-length, 2)))
         line-height: 1
 
     .blocker
@@ -534,19 +485,15 @@
       text-align: center
       text-wrap: balance
 
-      // Not a reason the buzzer is dead — the floor's own line, which is what
-      // this phase is. It takes the register the clock under it already has,
-      // and it is the one the console bills the same fact at: the size a host
-      // reads while looking up at the room. A nickname sets it, so it carries
-      // the guard every surface that sets one above `title` carries.
-      //
-      // No reserve of its own: the two-line one above exists so a blocker that
-      // wraps does not move the buzzer mid-round, and the same 2.5em at this
-      // size is 135px of held-open field.
+      // The floor's own line rather than a reason the buzzer is dead: what the
+      // phase is, at the size the console bills it. A nickname sets it, so it
+      // carries the guard every surface setting one above `title` carries.
       &.floor
         @include typography.billboard
 
         color: var(--ink)
+        font-size: clamp(1.5rem, min(8cqi, 6cqh), 3rem)
+        line-height: 1.2
         min-height: 0
         overflow-wrap: anywhere
 

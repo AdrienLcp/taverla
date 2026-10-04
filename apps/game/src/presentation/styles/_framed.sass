@@ -11,7 +11,8 @@
 /// picked by the ratio of what it is given and a 900px column on a laptop is a
 /// portrait screen it was never on.
 ///
-/// Three children: `.round-chrome`, `.card-clock` and `.choosing-round`.
+/// Three children: `.round-chrome`, `.card-clock` and the round — a
+/// `.choosing-round` or a `.buzzer-area`.
 @mixin page
   container: choosing / size
   // Not `flex: 1`: Chromium resolves a size container's queries against its
@@ -34,7 +35,8 @@
   @include layout.wide
     gap: clamp(8px, 1.6vmin, 14px)
 
-  > .choosing-round
+  > .choosing-round,
+  > .buzzer-area
     grid-area: round
 
   // Lying down, the chrome moves over the question and the tiles take the
@@ -43,15 +45,26 @@
   // round dissolves into this grid so its card and its tiles can be placed
   // apart. A media query rather than the container's, because this box is
   // the one the container is.
+  //
+  // A buzzer with no question has nothing to set beside it, and keeps the one
+  // column.
   @media (min-aspect-ratio: 13 / 10)
-    column-gap: clamp(10px, 2.4vmin, 18px)
-    grid-template: 'chrome choices' auto 'card choices' minmax(0, 1fr) 'status choices' auto / minmax(0, 0.82fr) minmax(0, 1.18fr)
+    &:has(> .choosing-round, > .buzzer-area .asked-question)
+      column-gap: clamp(10px, 2.4vmin, 18px)
+      grid-template: 'chrome choices' auto 'card choices' minmax(0, 1fr) 'status choices' auto / minmax(0, 0.82fr) minmax(0, 1.18fr)
+
+      > .choosing-round,
+      > .buzzer-area
+        display: contents
+
+      > .card-clock
+        grid-area: card
+
+      > .buzzer-area .press
+        grid-area: choices
 
     &:has([data-long-choices])
       grid-template-columns: minmax(0, 0.55fr) minmax(0, 1.45fr)
-
-    > .choosing-round
-      display: contents
 
   // Through the page's own class, to outrank the `> header` both pages style
   // for their unframed screens, which wraps and reserves a corner this line
@@ -122,9 +135,6 @@
     margin: clamp(8px, 1.6vmin, 12px) clamp(12px, 3.4cqmin, 24px) 0
     pointer-events: none
     z-index: 1
-
-    @media (min-aspect-ratio: 13 / 10)
-      grid-area: card
 
     .round-progress
       background: var(--socket)

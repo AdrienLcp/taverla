@@ -1,62 +1,72 @@
+@use '../../presentation/styles/piece'
 @use '../../presentation/styles/typography'
 
 @layer components
   .reflex-buzzer
-    // Armed, and not yet live. The buzzer keeps its shape and its place — a
-    // hand is already resting on it, which is the whole of what a player does
-    // during the wait — and gives up its ground until the screen flips. At the
-    // flip it fills, on the same frame the field inverts under it: two changes
-    // saying one thing, on the one object the hand is touching.
+    // Armed, and not yet live: the piece lies paper side up under the hand
+    // resting on it, and turns to its coral face on the frame the board flips.
+    // Two changes saying one thing, on the one object the hand is touching.
     .buzzer.armed
-      background: transparent
-      border: 6px solid var(--ink)
-      color: var(--ink)
+      background: var(--card)
+      box-shadow: inset 0 0 0 calc(var(--buzzer-size) * 0.04) var(--card), inset 0 0 0 calc(var(--buzzer-size) * 0.048) var(--card-rule), 0 var(--buzzer-edge) 0 0 var(--chipboard), 0 calc(var(--buzzer-edge) * 2) calc(var(--buzzer-edge) * 2.5) calc(var(--buzzer-edge) * -1) var(--shadow)
+      color: var(--card-ink)
 
-    // What a heat pays a player, in a game with no answer to reveal.
+    // What a heat pays a player, in a game with no answer to reveal: the time,
+    // printed on a paper card.
+    .reaction
+      @include piece.card
+
+      align-items: center
+      display: flex
+      flex-direction: column
+      gap: var(--space-xs)
+      padding: clamp(16px, 6cqmin, 40px) clamp(20px, 8cqmin, 56px)
+
+      .framing
+        @include typography.label
+
+        color: var(--card-muted)
+
     .your-reaction
       @include typography.monument
       @include typography.numeric
 
-      font-size: clamp(3rem, 20vmin, 9rem)
+      font-size: min(22cqw, 30cqh, 9rem)
+      white-space: nowrap
 
-    // What going early costs, under the button that can still do it. Same step
-    // down as the tally it shares the slot with, so the two states of this
-    // screen weigh the same.
-    .hint
+    // What going early costs, under the piece that can still do it. Same step
+    // as the tally it shares the slot with, so both states weigh the same.
+    .hint,
+    .landed
       @include typography.caption
 
       color: var(--ink-muted)
       margin-inline: auto
       max-width: 28ch
+      min-height: 2.5em
       text-align: center
       text-wrap: balance
 
-    // A step under the number it follows, because a race already over is not
-    // what this screen is about — it is what tells its owner whether the round
-    // still is.
-    .landed
-      @include typography.caption
-
-      color: var(--ink-muted)
-
-    // A stamped block rather than tinted words, because the field it lands on
-    // has just inverted and no ink derived from it clears 4.5:1 on both. Inside
-    // the block the contrast is fixed, which is why it is the same in both
-    // palettes.
+    // A die-cut piece in the danger ink rather than tinted words, because the
+    // board it lands on may have just flipped and no ink derived from it
+    // clears 4.5:1 on both faces. Inside the piece the contrast is fixed.
     .false-start
+      @include piece.piece(var(--radius-l), $nubs: false)
+
       background: var(--danger)
       color: var(--danger-ink)
-      padding: var(--space-m) var(--space-l)
+      max-width: min(100cqw, 30rem)
+      padding: clamp(16px, 6cqmin, 36px) clamp(20px, 7cqmin, 44px)
+      text-align: center
 
       .verdict
         @include typography.billboard
 
-        font-size: clamp(1.5rem, 7vmin, 3rem)
+        font-size: clamp(1.75rem, min(10cqw, 9cqh), 3.25rem)
         text-wrap: balance
 
       .detail
         @include typography.body
 
         margin-top: var(--space-xs)
-        max-width: 30ch
         text-wrap: balance

@@ -42,7 +42,8 @@ it covers that a socket test cannot; the answer is usually "nothing".
 the page (`page.routeWebSocket`) with a snapshot built in the spec, so the
 question on screen is the bank row under test, and measures the choice screen
 — a player's and a seated host's — at sixteen viewports: no scroll, every tile inside the viewport, nothing under
-the 14px floor. It measures every other stage of the room's console too, from
+the 14px floor — and the player's buzzer screens the same way, the reflex
+race's included. It measures every other stage of the room's console too, from
 900px wide — the reveal, the countdown, the verdict, the final board, the
 slate's two stages and the reflex race's wait, flip and finishing order: no
 scroll, and no row drawn past the list that holds it nor squeezed narrower than

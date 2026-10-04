@@ -243,6 +243,27 @@ new one is whole. This file is the brief: open a fresh session, run
   the same lid and shelf, and no longer names the device. Looked at muted at
   1280×760 (no scroll), 390×844 and 320×568, both palettes, both locales.
 
+- **The player's buzzer** is framed like the choice round (`isFramed` in
+  `player-page.tsx`): the same chrome line, the round's sand on the question's
+  paper card, and the buzzer in the box left under it — or beside it lying
+  down, through the framed page's two-column template, which now holds a
+  `.buzzer-area` as well as a `.choosing-round` and keeps one column when there
+  is no card. The card itself is `_question-card.sass`, shared with the choice
+  round, so `AskedQuestion`'s own `494cqi` (Archivo's width) still applies only
+  to the typed screen. The buzzer is a thick coral token with a keyline and a
+  chipboard edge that sinks under the thumb, sized as the largest circle the
+  `.press` size container holds beside its line; dead, it is the socket it sits
+  in. The floor stands the holder's pawn where the buzzer was with the clock on
+  a paper token whose groove drains. The reflex buzzer waits paper side up and
+  turns coral on the flip; the time is a paper card; a false start is a piece in
+  the danger ink. `choice-fits.spec.ts` measures five player screens (the
+  longest question over the buzzer, the floor taken under it, the reflex wait,
+  time and false start) over all sixteen viewports: no scroll, every piece and
+  the line inside the viewport and inside its own box, the question at 14px or
+  more. Broken on purpose once (the buzzer sized without its box's height). The
+  floor's line went red at every viewport first: the grave of *à* in Bricolage
+  rises past a `0.95` line, so it is set at `1.2`.
+
 Measured traps, so the next screen does not pay for them again: a `position:
 fixed` element inside the page is fixed to the page, not the viewport, because
 the entrance animation leaves a `transform` — the track renders beside `<main>`; `height` on the console's `<main>` does
@@ -256,11 +277,12 @@ page's entrance animation, whose leftover `translateY` is a 1px scroll.
 
 ## Next session
 
-1. The player's buzzer (`Buzzer`, `ReflexBuzzer`) and the rest of a player's
-   screens outside the choice round are still the old world and sit in §1's
-   inventory. `AskedQuestion`'s own sizing still carries Archivo's measured
-   width (`494cqi`) everywhere the playing card does not override it;
-   re-measure it on Bricolage with the first of those screens that shows it.
+1. The rest of a player's screens outside the framed rounds are still the old
+   world: the lobby, the countdown's surroundings, the typed round, the
+   reveal, the final board, the mid-round and host-away notices, and the
+   unframed header and scoreline they share. The typed round is the one that
+   still shows `AskedQuestion` on its own `494cqi` (Archivo's width): put it on
+   `_question-card.sass` or re-measure it on Bricolage there.
    `favicon.svg` and `apple-touch-icon.png` are still the old world's burnt
    orange T.
 2. §6.

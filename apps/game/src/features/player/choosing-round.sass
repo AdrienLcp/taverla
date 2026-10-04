@@ -1,4 +1,4 @@
-@use '../../presentation/styles/piece'
+@use '../../presentation/styles/question-card'
 @use '../../presentation/styles/typography'
 
 @layer components
@@ -23,38 +23,11 @@
     min-height: 0
 
     .asked-question
-      @include piece.card
+      @include question-card.card
 
-      --ground: var(--card)
+      --question-yield: min(1, sqrt(40 / var(--choice-length, 20)))
 
-      align-self: stretch
-      container-type: normal
-      gap: 0.35em
       grid-area: card
-      justify-content: center
-      // The top carries the round's clock, laid over it by the page.
-      padding: calc(clamp(10px, 3cqmin, 22px) + 10px) clamp(12px, 3.4cqmin, 24px) clamp(10px, 3cqmin, 22px)
-      text-align: start
-      width: auto
-
-      // The question yields to the tiles: past forty characters a choice
-      // takes height the card gives up, by the same square root it is sized by.
-      .prompt
-        --question-yield: min(1, sqrt(40 / var(--choice-length, 20)))
-
-        font-family: var(--font-base)
-        font-size: clamp(14px, min(var(--question-k) / sqrt(var(--prompt-length, 60)), var(--question-cap) * var(--question-yield)), var(--question-cap))
-        font-stretch: normal
-        font-variation-settings: normal
-        font-weight: 700
-        letter-spacing: 0
-        line-height: 1.26
-        text-wrap: pretty
-
-      .category
-        color: var(--tile-mark-3)
-        font-size: clamp(13px, 2.4cqmin, 16px)
-        order: -1
 
     .answer-form.choices
       display: grid

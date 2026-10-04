@@ -236,7 +236,7 @@ const Lobby: React.FC<{
     )
   }
 
-  if (view !== null && isChoosing(view)) {
+  if (view !== null && isFramed(view)) {
     return (
       <main className='player-page playing framed'>
         <RoundChrome
@@ -307,16 +307,18 @@ const Lobby: React.FC<{
 }
 
 /**
- * The one screen held to the viewport: a question and four tiles, all visible
- * at once on any screen at any ratio. Everything else on a player's screen may
- * scroll; this one may not, because the tile that scrolled away is the answer.
+ * The screens held to the viewport: four tiles, or the buzzer and the floor it
+ * hands over, visible at once on any screen at any ratio. Everything else on a
+ * player's screen may scroll; these may not, because the tile or the buzzer
+ * that scrolled away is the round.
  */
-const isChoosing = (view: PlayerRoomView): boolean =>
-  view.phase === 'playing' &&
-  view.settings.mode.kind === 'choice' &&
+const isFramed = (view: PlayerRoomView): boolean =>
   view.isHostConnected &&
   view.round !== null &&
-  !view.round.joinedAfterStart
+  !view.round.joinedAfterStart &&
+  ((view.phase === 'playing' && view.settings.mode.kind === 'choice') ||
+    ((view.phase === 'playing' || view.phase === 'buzzed') &&
+      view.settings.mode.kind === 'buzzer'))
 
 /**
  * The clock the console is showing, on the player's screen that is answering

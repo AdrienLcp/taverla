@@ -49,10 +49,12 @@ export const ReflexBuzzer: React.FC<ReflexBuzzerProps> = ({
   // to work out why.
   if (round.lockedOutPlayerIds.includes(youId)) {
     return (
-      <section className='player-round reflex-buzzer centred'>
-        <div className='false-start'>
-          <p className='verdict'>{translate('reflex.falseStart.title')}</p>
-          <p className='detail'>{translate('reflex.falseStart.detail')}</p>
+      <section className='player-round reflex-buzzer buzzer-area'>
+        <div className='press'>
+          <div className='false-start'>
+            <p className='verdict'>{translate('reflex.falseStart.title')}</p>
+            <p className='detail'>{translate('reflex.falseStart.detail')}</p>
+          </div>
         </div>
       </section>
     )
@@ -65,26 +67,30 @@ export const ReflexBuzzer: React.FC<ReflexBuzzerProps> = ({
   // game that has no answer to reveal.
   if (yourPress !== undefined && content?.flipsAt != null) {
     return (
-      <section className='player-round reflex-buzzer centred'>
-        <p className='framing'>{translate('reflex.pressed')}</p>
-        <p className='your-reaction'>
-          {translate('reflex.reaction', {
-            milliseconds: reactionMsOf({
-              flipsAt: content.flipsAt,
-              pressedAt: yourPress.atServerTime
-            })
-          })}
-        </p>
-        {/*
-          How much of the heat is still out there, which is the same count the
-          room's screen carries and the only thing this player can still learn.
-          It is on this screen alone: the two others are the wait before the
-          flip and the bench, and a tally ticking on either is how a table
-          counts the flip out loud.
-        */}
-        <p className='landed' role='status'>
-          {translate('reflex.landed', { count: content.presses.length })}
-        </p>
+      <section className='player-round reflex-buzzer buzzer-area'>
+        <div className='press'>
+          <div className='reaction'>
+            <p className='framing'>{translate('reflex.pressed')}</p>
+            <p className='your-reaction'>
+              {translate('reflex.reaction', {
+                milliseconds: reactionMsOf({
+                  flipsAt: content.flipsAt,
+                  pressedAt: yourPress.atServerTime
+                })
+              })}
+            </p>
+          </div>
+          {/*
+            How much of the heat is still out there, which is the same count the
+            room's screen carries and the only thing this player can still learn.
+            It is on this screen alone: the two others are the wait before the
+            flip and the bench, and a tally ticking on either is how a table
+            counts the flip out loud.
+          */}
+          <p className='landed' role='status'>
+            {translate('reflex.landed', { count: content.presses.length })}
+          </p>
+        </div>
       </section>
     )
   }
@@ -98,29 +104,31 @@ export const ReflexBuzzer: React.FC<ReflexBuzzerProps> = ({
         so here: the release costs tens of milliseconds in a race decided by
         exactly that.
       */}
-      <ReactAriaButton
-        className={`buzzer ${hasFlipped ? '' : 'armed'} ${isClaimed ? 'claimed' : ''}`}
-        onPressStart={() => {
-          setClaimedRoundId(round.id)
-          buzzFeedback('press')
-          onBuzz(round.id)
-        }}
-      >
-        {translate('buzz.action')}
-      </ReactAriaButton>
-      {/*
-        The one thing this screen has to say, and the only screen that was not
-        saying it: the button is live through the whole wait, so the game's own
-        trap is reachable by a player already poised over it. The room's screen
-        carries `reflex.waiting`; the player's screen carries what going early
-        costs, because that is the half a player cannot work out from a button.
+      <div className='press'>
+        <ReactAriaButton
+          className={`buzzer ${hasFlipped ? '' : 'armed'} ${isClaimed ? 'claimed' : ''}`}
+          onPressStart={() => {
+            setClaimedRoundId(round.id)
+            buzzFeedback('press')
+            onBuzz(round.id)
+          }}
+        >
+          <span className='word'>{translate('buzz.action')}</span>
+        </ReactAriaButton>
+        {/*
+          The one thing this screen has to say, and the only screen that was not
+          saying it: the button is live through the whole wait, so the game's own
+          trap is reachable by a player already poised over it. The room's screen
+          carries `reflex.waiting`; the player's screen carries what going early
+          costs, because that is the half a player cannot work out from a button.
 
-        It is the cost rather than *watch the screen*, so the line is true on
-        both sides of the flip and never has to change under a player waiting
-        on it — the field inverting is the signal, and a second one moving here
-        would be a way for the table to read the flip off somebody's screen.
-      */}
-      <p className='hint'>{translate('reflex.hold')}</p>
+          It is the cost rather than *watch the screen*, so the line is true on
+          both sides of the flip and never has to change under a player waiting
+          on it — the field inverting is the signal, and a second one moving here
+          would be a way for the table to read the flip off somebody's screen.
+        */}
+        <p className='hint'>{translate('reflex.hold')}</p>
+      </div>
     </section>
   )
 }

@@ -46,6 +46,7 @@ import { useRoomCodeParam } from '@/infrastructure/router/navigation'
 import { AskedQuestion } from '@/presentation/components/asked-question'
 import { Countdown } from '@/presentation/components/countdown'
 import { FloorClock } from '@/presentation/components/floor-clock'
+import { Pawn } from '@/presentation/components/pawn'
 import { ReactionBoard } from '@/presentation/components/reaction-board'
 import { RoomInvitation } from '@/presentation/components/room-invitation'
 import { Scoreboard } from '@/presentation/components/scoreboard'
@@ -427,30 +428,24 @@ const Buzzer: React.FC<{
     <section className='player-round buzzer-area'>
       <AskedQuestion prompt={quizContent(view.round)?.prompt ?? null} />
       {/*
-        The circle and the two lines that belong to it, grouped so a wide screen
-        can set them beside the question instead of under it — the reveal's own
-        move, for the reveal's own reason: a grid item told to span rows nobody
-        declared resolves back to the first one, so the grouping has to be in
-        the markup. Below the split it is one child of a column and nothing
-        about the spacing changes.
+        The buzzer and the line that belongs to it, grouped so a screen lying
+        down can set them beside the question card instead of under it.
       */}
       <div className='press'>
         {/*
-          Two objects in one place and never both at once: while the race is
-          open this is a button, and for the length of the floor it is the dial
-          timing it. Swapping rather than disabling is what takes `BUZZ` off a
-          circle nobody can press — a control still naming an action it refuses
-          was the one thing on this screen saying something untrue — and it
-          takes a dead button out of the tab order on the way.
-        */}
-        {floorBuzz === null ? (
-          /*
+            Two objects in one place and never both at once: while the race is
+            open this is a button, and for the length of the floor it is the
+            holder's pawn and the clock timing them. Swapping rather than
+            disabling is what takes `BUZZ` off a piece nobody can press, and it
+            takes a dead button out of the tab order on the way.
+
             `onPressStart`, not `onPress`: a buzzer has to fire the instant the
             thumb lands, and waiting for the release costs tens of milliseconds
             in a race that is decided by exactly that. react-aria normalises it
             across touch, mouse and keyboard, so the keyboard player is not
             penalised.
-          */
+          */}
+        {floorBuzz === null ? (
           <ReactAriaButton
             className={`buzzer ${isClaimed || isWon ? 'claimed' : ''}`}
             isDisabled={blocker !== null || roundId === null}
@@ -464,16 +459,10 @@ const Buzzer: React.FC<{
               setHasFailed(!onBuzz(roundId))
             }}
           >
-            {/*
-              A box of its own, because the circle has to be the container the
-              word is measured against and a container cannot be asked about
-              its own width. It is what keeps `BUZZ` inside the ink now that a
-              question can take height from the circle.
-            */}
             <span className='word'>{translate('buzz.action')}</span>
           </ReactAriaButton>
         ) : (
-          <FloorDial buzz={floorBuzz} clock={clock} />
+          <TakenFloor buzz={floorBuzz} clock={clock} players={view.players} />
         )}
 
         <p className={`blocker ${line.isFloor ? 'floor' : ''}`} role='status'>
@@ -551,7 +540,27 @@ const Revealed: React.FC<{
 }
 
 /**
- * The circle for the length of the floor, when it has stopped being a button:
+ * The floor, where the buzzer stood: the pawn of whoever holds it stood up
+ * oversize, the way the console draws it, with the clock on a token beside it.
+ * A buzzer whose seat has gone leaves no pawn to stand, and the token alone.
+ */
+const TakenFloor: React.FC<{
+  buzz: ActiveBuzz
+  clock: ClockEstimate | null
+  players: PlayerRoomView['players']
+}> = ({ buzz, clock, players }) => {
+  const seat = players.findIndex((player) => player.id === buzz.playerId)
+
+  return (
+    <div className='taken-floor'>
+      {seat !== -1 && <Pawn seat={seat} />}
+      <FloorDial buzz={buzz} clock={clock} />
+    </div>
+  )
+}
+
+/**
+ * The token for the length of the floor, when the buzzer has stopped being one:
  * the ring it already had becomes the window, and the number the whole room is
  * waiting on goes inside it. Three objects were stacked here — a dead button, a
  * name and a number — and only two of them were the phase.
