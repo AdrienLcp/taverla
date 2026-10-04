@@ -28,12 +28,12 @@ as its own document with its own `lang`, title and description. `/` carries no
 language: it negotiates from the browser's and redirects, which is what
 `hreflang="x-default"` points at.
 
-- [Home](https://taverla.onrender.com/en): open a room, or join one with a code.
-- [Blind test](https://taverla.onrender.com/en/blindtest)
-- [Buzzer](https://taverla.onrender.com/en/buzzer)
-- [Quiz](https://taverla.onrender.com/en/quiz)
-- [Reflex](https://taverla.onrender.com/en/reflex)
-- [Credits](https://taverla.onrender.com/en/credits)
+- [Home](https://taverla.adrienlcp.workers.dev/en): open a room, or join one with a code.
+- [Blind test](https://taverla.adrienlcp.workers.dev/en/blindtest)
+- [Buzzer](https://taverla.adrienlcp.workers.dev/en/buzzer)
+- [Quiz](https://taverla.adrienlcp.workers.dev/en/quiz)
+- [Reflex](https://taverla.adrienlcp.workers.dev/en/reflex)
+- [Credits](https://taverla.adrienlcp.workers.dev/en/credits)
 
 ## Notes
 

@@ -5,7 +5,7 @@ import { ROOM_SOCKET_ROUTE } from '@taverla/protocol/routes'
 
 import { normalizeRoomCode } from '@taverla/core/room/room-code'
 
-import { limitRoomCreationByBinding } from '@/infrastructure/http/binding-rate-limit'
+import { limitRoomCreationWith } from '@/infrastructure/http/rate-limit'
 import { registerHttpRoutes } from '@/infrastructure/http/routes'
 import {
   PRERENDER_MANIFEST,
@@ -26,7 +26,7 @@ const app = new Hono()
 
 registerHttpRoutes({
   app,
-  limitRoomCreation: limitRoomCreationByBinding,
+  limitRoomCreation: limitRoomCreationWith(env.ROOM_CREATION_LIMITER),
   rooms: durableRoomDoor,
   walls: durableWallPairings
 })

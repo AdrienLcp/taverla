@@ -101,20 +101,17 @@ More that cost time to learn:
   looks like, and it cost a full launch-to-reveal cycle before the URL was
   printed and read.
 
-- **A room dies whenever the dev server restarts, and a second session is
-  enough to restart it.** Rooms live in one process, so an edit landing in
-  `apps/server` — or in anything the server imports — takes every room on the
-  machine with it, and a pass driving the browser reads that as a player who was
-  refused rather than as a room that stopped existing. Two sessions in one
-  working tree is the ordinary case here: check `git status` for files this pass
-  did not touch before blaming the page, and reopen the room rather than
-  debugging the seat.
-
-  **Your own `pnpm build` does it too**, and that one is easy to fire without
-  thinking: it rewrites the `dist` of `packages/protocol` and `packages/core`,
-  the server watches both, and the room a nine-seat setup just paid for is gone
-  by the time the type-check comes back green. Build and validate *after* the
-  browser work, never beside it.
+- **A room outlives a dev server reload.** `pnpm dev` runs the Worker under
+  `wrangler dev`, and each room is a Durable Object whose state is kept in
+  `apps/server/.wrangler/state`: an edit in `apps/server`, a second session's
+  edit, or your own `pnpm build` reloads the Worker, every socket drops and
+  reconnects, and the room, its seats and its scores come back. Verified on a
+  lobby with a seated player across a reload (October 2026). What a reload
+  still costs is a blink: a reading taken during it sees a reconnecting
+  screen, so wait for the room's view before blaming the page. Two sessions in
+  one working tree is still the ordinary case — check `git status` for files
+  this pass did not touch, and the ports: a second `pnpm dev` finds 3100 and
+  5273 taken and a Vite on someone else's server answers instead of yours.
 
 - **A room can be opened without walking the front door.** `POST /api/rooms`
   from a page already on the app's origin answers `{ code, hostToken }`; write

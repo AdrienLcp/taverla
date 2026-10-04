@@ -7,11 +7,7 @@
     },
     "types": ["node"]
   },
-  "exclude": [
-    "src/worker.ts",
-    "src/infrastructure/worker",
-    "src/infrastructure/http/binding-rate-limit.ts"
-  ],
+  "exclude": ["src/worker.ts", "src/infrastructure/worker"],
   "extends": "../../tsconfig.json",
   "include": ["scripts", "src", "vitest.config.ts"]
 }

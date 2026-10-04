@@ -95,28 +95,19 @@ on every push to `main` and every pull request.
 
 ## Deploying
 
-One instance, one origin. [`render.yaml`](render.yaml) is a Render blueprint: it
-builds the workspace and starts the server with `SERVE_GAME_FROM` pointing at
-the app's `dist`, so Hono answers the static build, the API and the socket on a
-single port — which is what makes the QR code resolve for the phone that scans
-it.
+One Worker on Cloudflare, one origin. It serves the built app as static
+assets, the API, and the socket — which is what makes the QR code resolve for
+the phone that scans it — and every room is a Durable Object of its own, so a
+room keeps its state across a deploy and nothing sleeps between two evenings.
+[`apps/server/wrangler.jsonc`](apps/server/wrangler.jsonc) is the whole
+configuration.
 
-1. On Render, **New → Blueprint**, and pick this repository. It reads
-   `render.yaml`; there is nothing to fill in.
-2. Deploy, and wait for `/api/health` to go green.
-3. Open the URL, create a room, and scan the QR code from a phone on mobile
-   data rather than the Wi-Fi — that is the thing being tested.
+CI deploys every push to `main` once lint, tests and the end-to-end journeys are
+green, with the `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` repository
+secrets. It is live at `https://taverla.adrienlcp.workers.dev`.
 
-Pushes to `main` redeploy from then on.
-
-The instance count is pinned to one deliberately: rooms live in a `Map` in the
-process, so a second instance would hold half of them and a player would reach
-the wrong one. The free tier sleeps when idle, which costs a cold start on the
-first request and drops whatever rooms were open — fine for a party, not for a
-demo you are about to give.
-
-Fly.io and a small VPS fit the same shape. What rules a platform in or out is in
-[`docs/plans/08-deploy.md`](docs/plans/08-deploy.md).
+Why a Durable Object per room, and what Render cost before it, is in
+[`docs/plans/28-cloudflare.md`](docs/plans/28-cloudflare.md).
 
 ## Docs
 

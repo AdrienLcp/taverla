@@ -11,8 +11,8 @@
     },
     "collect": {
       "numberOfRuns": 3,
-      "startServerCommand": "pnpm --filter @taverla/server preview",
-      "startServerReadyPattern": "listening on",
+      "startServerCommand": "pnpm --filter @taverla/server dev",
+      "startServerReadyPattern": "Ready on",
       "url": [
         "http://localhost:3100/en",
         "http://localhost:3100/en/blindtest",

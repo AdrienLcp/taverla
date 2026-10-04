@@ -6,20 +6,23 @@ import { ROOM_SOCKET_ROUTE } from '@taverla/protocol/routes'
 
 import { normalizeRoomCode } from '@taverla/core/room/room-code'
 
-import { limitRoomCreation } from '@/infrastructure/http/rate-limit'
+import { limitRoomCreationWith } from '@/infrastructure/http/rate-limit'
 import { registerHttpRoutes } from '@/infrastructure/http/routes'
-import { registerStaticSite } from '@/infrastructure/http/static-site'
 import { createRoomSocketEvents } from '@/infrastructure/messaging/socket-handler'
+import { inProcessRoomCreationLimiter } from '@/infrastructure/node/in-process-rate-limit'
 import {
   findRoomEngine,
   inProcessRoomDoor
 } from '@/infrastructure/node/in-process-rooms'
 import { inProcessWallPairings } from '@/infrastructure/node/in-process-wall-pairings'
 
+/** What `http-routes.test.ts` spends to the last room before it is refused. */
+export const ROOMS_BEFORE_RATE_LIMIT = 30
+
 /**
- * Returned rather than served: `serve` needs the WebSocket server alongside
- * the app's fetch, and a test wants the same wiring on an ephemeral port
- * without the process-level concerns `index.ts` owns.
+ * The engine on one Node process, which is what the socket suites run: their
+ * `vi.mock` of the music client and the question bank only reaches code in the
+ * test's own process. Nothing deploys it — production is `worker.ts`.
  */
 export const createApp = () => {
   const app = new Hono()
@@ -39,11 +42,12 @@ export const createApp = () => {
 
   registerHttpRoutes({
     app,
-    limitRoomCreation,
+    limitRoomCreation: limitRoomCreationWith(
+      inProcessRoomCreationLimiter(ROOMS_BEFORE_RATE_LIMIT)
+    ),
     rooms: inProcessRoomDoor,
     walls: inProcessWallPairings
   })
-  registerStaticSite(app)
 
   return { app, websocket }
 }

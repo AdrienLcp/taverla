@@ -23,7 +23,9 @@ paid on every read of the code.
 | Deezer (via `fetch`) | `apps/server/src/infrastructure/music/deezer-client.ts` |
 | the question banks | `apps/server/src/infrastructure/questions/question-bank.ts` |
 | `hyparquet` | `apps/server/scripts/polyfact-source.ts` — one upstream ships its half-million rows as parquet and nothing else here reads a byte of it |
-| `hono`, `@hono/*`, `hono-rate-limiter` | `apps/server/src/infrastructure/http/`, `apps/server/src/index.ts` |
+| `hono`, `@hono/*` | `apps/server/src/infrastructure/http/`, `apps/server/src/worker.ts`, and `@hono/node-server` in `infrastructure/node/` |
+| `cloudflare:workers` | `apps/server/src/worker.ts`, `apps/server/src/infrastructure/worker/` |
+| `ws` | `apps/server/src/infrastructure/node/node-app.ts` — the Node process the socket suites run, which nothing deploys |
 | `WebSocket` (browser) | `apps/game/src/infrastructure/messaging/use-room-socket.ts` |
 | `hono/ws` (server) | `apps/server/src/infrastructure/messaging/` |
 | `localStorage`, `sessionStorage` | `apps/game/src/infrastructure/storage/`: `session-storage.ts` (seats, host tokens) and `preferences-storage.ts` (locale, nickname, volume, host setup) through `@adrienlcp/safe-storage`, with `read-stored-with-schema.ts` for a blob a Zod schema must transform; `prepared-keys-storage.ts` (the slate's key, per tab) on `sessionStorage` directly, which the package does not cover. The theme is `@adrienlcp/theme-preference`'s own |

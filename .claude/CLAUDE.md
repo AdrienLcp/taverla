@@ -44,7 +44,8 @@ built back to back and emit a byte-identical payload. See
 
 ## Commands
 
-`pnpm dev` runs the server (3100) and the app (5273) in parallel, `pnpm test`
+`pnpm dev` runs the Worker under `wrangler dev` (3100) and the app (5273) in
+parallel, `main` deploys from CI with `wrangler deploy`, `pnpm test`
 covers protocol, core and server, `pnpm test:core:watch` is the red-green loop,
 and `pnpm test:e2e` runs three Playwright journeys on ports of their own.
 **`pnpm validate`** is build, test and e2e together — run it before saying

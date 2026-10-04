@@ -358,7 +358,7 @@ export const errorsIn = <TMessage extends { type: string }>(
  * the app pulls its music client in.
  */
 export const startRoomHarness = async (): Promise<RoomHarness> => {
-  const { createApp } = await import('@/app')
+  const { createApp } = await import('@/infrastructure/node/node-app')
   const { app, websocket } = createApp()
 
   const started = await new Promise<ReturnType<typeof serve>>((resolve) => {

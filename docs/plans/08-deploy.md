@@ -1,5 +1,10 @@
 # Stage 08 — Somewhere friends can reach
 
+> **Superseded by [28](28-cloudflare.md).** The game left Render in October
+> 2026 for one Worker and a Durable Object per room. `render.yaml`, the
+> Dockerfile, the bundled Node server and `SERVE_GAME_FROM` are gone; what
+> follows is the record of the first host and why it was chosen.
+
 **Goal.** A URL that works from a phone that is not on your Wi-Fi.
 
 **Depends on** stage 04 at least — deploying a lobby is not worth the effort.
@@ -56,7 +61,7 @@ Verified locally by running the server with `SERVE_GAME_FROM` set: index served,
 `/host/YDEQ` resolving on a cold load, the API answering, the socket connecting
 on the same port, and the QR code encoding that origin.
 
-- **It is live at `taverla.onrender.com`**, redeployed from `main` by Render
+- **It was live at `taverla.onrender.com`** until stage 28 moved it, redeployed from `main` by Render
   itself. `/api/health` answers `{"build":…,"protocolVersion":…,"status":"ok"}`
   on a warm instance in well under a second.
 

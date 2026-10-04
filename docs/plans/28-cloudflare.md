@@ -185,3 +185,31 @@ Nothing is deployed differently at the end of it.
   `CLAUDE.md`'s commands and ports, `docs/browser-driving.md`.
 - Suspend the Render service only once Adrien has played an evening on the
   Worker; deleting it is his call.
+
+**Done, and where it diverged:**
+
+- `deploy` in `ci.yaml` runs after `validate` on a push to `main`, one at a
+  time and never cancelled, and stamps the commit with
+  `--var GIT_COMMIT:…` — `/api/health`'s `build` read `RENDER_GIT_COMMIT`
+  before. The token is the account-wide one in the password vault (`Cloudflare Pages
+  token`): its Pages name undersells it, a throwaway script proved it can write
+  Workers.
+- **The Node adapter stays, as the socket suites' server.** Their `vi.mock` of
+  the music client and the question bank only reaches code in the test's own
+  process, so `infrastructure/node/` — `node-app.ts`, the in-process rooms and
+  pairings, and an in-process stand-in for the rate-limit binding — keeps
+  running them. `@hono/node-server` and `ws` are devDependencies; nothing
+  deploys them. What went: `index.ts`, `tsdown`, `static-site.ts`,
+  `hono-rate-limiter`, `render.yaml`, the Dockerfile and its CI job,
+  `.env.preview`, and `PORT` / `SERVE_GAME_FROM` in `env.ts`.
+- `limitRoomCreationWith(limiter)` is the one middleware for both: the Worker
+  hands it `env.ROOM_CREATION_LIMITER`, the Node app a counter.
+- The server's `build` type-checks both tsconfigs and runs
+  `wrangler deploy --dry-run`, so the Worker is type-checked and bundled on
+  every CI run — before this nothing type-checked `worker.ts`. That dry-run
+  reads `apps/game/dist`, so `@taverla/game` is a devDependency of the server
+  purely to order `pnpm -r build`.
+- `pnpm dev` is `wrangler dev` on 3100; a room survives a reload of it.
+  Lighthouse runs against it too.
+- The canonical origin (`index.html`, `llms.txt`) moved to
+  `taverla.adrienlcp.workers.dev`.

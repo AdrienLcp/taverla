@@ -8,6 +8,17 @@ one part.
 
 ### Breaking Changes
 
+- `[Server]` **The game is served by one Cloudflare Worker, with a Durable
+  Object per room, and deploys from CI.** A push to `main` that passes lint,
+  tests and the journeys ships with `wrangler deploy`, to
+  `taverla.adrienlcp.workers.dev`. A room keeps its state across a deploy and
+  across a `wrangler dev` reload, and nothing sleeps between two evenings.
+  Render, `render.yaml`, the Dockerfile, the bundled Node server and
+  `SERVE_GAME_FROM` are gone; `/api/health`'s `build` reads `GIT_COMMIT`, and
+  room creation is limited to 10 a minute per address by the platform's
+  binding. `pnpm dev` runs the Worker on 3100, and the socket suites keep a
+  Node app of their own in `infrastructure/node/`.
+
 - `[Shared]` **Le Fake is off the shelf.** The game, its `/lefake` front door,
   its lobby card and its strings are gone, and with it the `voting` phase, the
   `lefake.submit` and `lefake.vote` frames and the `lie_is_the_answer` and
