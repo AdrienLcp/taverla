@@ -63,6 +63,11 @@ than a second harness: `buzzer-game.test.ts` is one file and no plumbing, and
 client, which also keeps eighteen hundred questions from being parsed on every
 run.
 
+`worker-object.test.ts` is the one suite that runs the Worker rather than the
+Node app: `harnessAt` takes the origin `unstable_startWorker` hands back, so it
+drives the Durable Object with the same peers. It costs ~35 s, because it
+restarts the runtime to prove a room outlives its object.
+
 `CATALOGUE` and `QUESTIONS` live in the harness because the anti-cheat assertion
 searches raw frames for those exact strings, and a per-file copy that drifted
 would still pass. That assertion is over **the whole round's transcript**, not

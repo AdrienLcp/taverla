@@ -164,8 +164,14 @@ Nothing is deployed differently at the end of it.
   startup with it, against a 1 s limit (Node: ~35 ms JSON, ~50 ms Zod cold).
 - Deployed by hand to `taverla.adrienlcp.workers.dev`; a two-screen buzzer game
   played there muted, reload of the console included.
-- Still owed: the socket harness on `@cloudflare/vitest-pool-workers` and the
-  hibernation test.
+- **The socket suites stay on Node.** `@cloudflare/vitest-pool-workers` 0.22
+  peers on vitest 4 and this repo is on 5. They exercise the engine, which is
+  the code the object runs; what only the object holds — attachments, storage,
+  the alarm — is `worker-object.test.ts`, which boots the Worker through
+  `unstable_startWorker` and restarts the runtime mid-room. That eviction is
+  harder than hibernation, since the sockets go too: the room, a seat's score
+  and a pending countdown all come back. Move the 18 suites over the day the
+  pool supports vitest 5; `harnessAt` already takes any origin.
 
 — cut here: the Worker serves a full game on workers.dev, `pnpm validate` green, Render still the address —
 

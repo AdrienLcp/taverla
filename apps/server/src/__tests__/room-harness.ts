@@ -373,7 +373,33 @@ export const startRoomHarness = async (): Promise<RoomHarness> => {
     throw new Error('The test server did not report a port')
   }
 
-  const origin = `localhost:${address.port}`
+  return harnessAt({
+    origin: `localhost:${address.port}`,
+    shutDown: async () => {
+      if ('closeAllConnections' in started) {
+        started.closeAllConnections()
+      }
+
+      await new Promise<void>((resolve) => {
+        started.close(() => {
+          resolve()
+        })
+      })
+    }
+  })
+}
+
+/**
+ * Every suite's view of a server, whichever process holds the rooms: the Node
+ * one above, or the Worker `worker-object.test.ts` starts.
+ */
+export const harnessAt = ({
+  origin,
+  shutDown
+}: {
+  origin: string
+  shutDown: () => Promise<void>
+}): RoomHarness => {
   const openSockets: WebSocket[] = []
 
   const connect = async <TMessage>(
@@ -498,16 +524,7 @@ export const startRoomHarness = async (): Promise<RoomHarness> => {
     }
 
     await sleep(10)
-
-    if ('closeAllConnections' in started) {
-      started.closeAllConnections()
-    }
-
-    await new Promise<void>((resolve) => {
-      started.close(() => {
-        resolve()
-      })
-    })
+    await shutDown()
   }
 
   return { connect, openRoom, origin, seat, stop }
