@@ -145,29 +145,6 @@
 
           color: var(--ink-muted)
 
-      // The result of a game rather than a phase of one, and the only stage
-      // whose footer is the two exits alone plus the line saying what the
-      // first of them replays — so the chrome here is smaller than anywhere
-      // else on this screen. Measured the way the reveal's `31rem` was: the
-      // page padding, the header, the two gaps and that footer came to 356px
-      // at 1024×768, 359 at 1280×800 and 370 at 1440×900, because the padding
-      // is fluid and the line's own caption is. The widest of those binds.
-      &.finished
-        --final-budget: calc(var(--track-room, 100dvh) - 23.25rem)
-
-        // Stacked, the board pays for its own header out of this, and the page
-        // padding it sits in is fluid: the same chrome measured 326px at
-        // 390×844 and 339px at 899×800. A budget takes the widest of a band it
-        // spans or it under-budgets at one end — which here is the end where
-        // the table has the most rows.
-        //
-        // The gap between the two arms narrowed rather than held: the longest
-        // summary a shelf can write — a blind test on film scores, buzzed, with
-        // no round limit — is one line above the split and two below it, so the
-        // narrow arm's smaller chrome buys back most of what the wrap costs.
-        @include layout.narrow
-          --final-budget: calc(var(--track-room, 100dvh) - 21.5rem)
-
       // The code and its square, beside the table being set. Above the split
       // the page itself lays the two out, so the launch can sit under the
       // table rather than across the whole screen.
@@ -515,6 +492,17 @@
 
       .countdown
         --token-size: clamp(4rem, min(56vmin, 100cqh - 5rem), 30rem)
+
+  // The final board held to the screen the ring leaves: the stage is a size
+  // container between the header and the two exits.
+  .host-console-page:has(> .stage.finished)
+    animation: none
+    display: grid
+    gap: clamp(var(--space-xs), 2vmin, var(--space-m))
+    grid-template-rows: auto minmax(min(18rem, 50dvh), 1fr) auto
+
+    > .stage.finished
+      container-type: size
 
   // The reveal held to the screen the ring leaves, like the round before it:
   // the stage is a size container between the header and the footer, and the

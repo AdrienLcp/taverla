@@ -461,7 +461,7 @@ const measureReveal = (): RevealOverflow => {
   const root = document.scrollingElement ?? document.documentElement
   const rows = [
     ...document.querySelectorAll<HTMLElement>(
-      '.stage.revealed .reveal-panel li, .stage.revealed .standings li'
+      '.stage.revealed .reveal-panel li, .stage:is(.revealed, .finished) .standings li'
     )
   ]
   const furthest = [...document.body.querySelectorAll<HTMLElement>('*')]
@@ -603,6 +603,63 @@ for (const screen of FLOOR_SCREENS) {
       const overflow = await page.evaluate(measureReveal)
 
       if (overflow.furthest !== null || overflow.page > 0) {
+        faults.push(`${width}×${height} ${JSON.stringify(overflow)}`)
+      }
+    }
+
+    expect(faults).toEqual([])
+  })
+}
+
+/**
+ * The final board on the screen the room reads: the winner's pawn and name
+ * beside the standings, with the two exits under them. The longest legal
+ * nickname winning alone, and three sharing first place.
+ */
+const finishedView = (scores: number[]) => {
+  const view = consoleView(LONGEST_PROMPT)
+
+  return {
+    ...view,
+    phase: 'finished',
+    players: table.map((player, seat) => ({
+      ...player,
+      score: scores[seat] ?? 0
+    })),
+    round: null
+  }
+}
+
+const FINALS = [
+  { name: 'a long name winning', scores: [30, 3, 6, 9, 12, 15, 18, 21] },
+  { name: 'a three-way tie', scores: [21, 21, 6, 9, 12, 15, 21, 0] }
+]
+
+for (const final of FINALS) {
+  test(`[layout] room, final board with ${final.name}: never scrolls above the split`, async ({
+    page
+  }) => {
+    await serveRoom({ page, view: finishedView(final.scores) })
+    await page.addInitScript(() => {
+      localStorage.setItem('taverla:locale', 'fr')
+    })
+    await page.setViewportSize({ height: 720, width: 1280 })
+    await page.goto(`/host/${ROOM_CODE}`)
+    await expect(page.locator('.final-board .standings li')).toHaveCount(8)
+
+    const faults: string[] = []
+
+    for (const [width, height] of WIDE_VIEWPORTS) {
+      await page.setViewportSize({ height, width })
+      await page.evaluate(() => document.fonts.ready.then(() => {}))
+
+      const overflow = await page.evaluate(measureReveal)
+
+      if (
+        overflow.furthest !== null ||
+        overflow.page > 0 ||
+        overflow.spills.length > 0
+      ) {
         faults.push(`${width}×${height} ${JSON.stringify(overflow)}`)
       }
     }

@@ -365,7 +365,7 @@ const YourRound: React.FC<{
 /**
  * Where this player finished, which the console only ever says for the winner.
  * Ties share a place, the way the board itself ranks them — a room of two on
- * the same score reads "1st" on both players' screens, and `host.final.tie` is
+ * the same score reads "1st" on both players' screens, and `host.final.tied` is
  * already saying so across the room.
  */
 const YourPlacing: React.FC<{ view: PlayerRoomView }> = ({ view }) => {

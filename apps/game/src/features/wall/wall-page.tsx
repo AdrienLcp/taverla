@@ -9,7 +9,7 @@ import { RoomStage } from '@/features/host/room-stage'
 import { useRoundAudio } from '@/features/host/round-audio'
 import { useSlateWall } from '@/features/host/use-slate-wall'
 import { NotFoundPage } from '@/features/not-found/not-found-page'
-import { floorHolderOf } from '@/helpers/round-content'
+import { trackInkHolderOf } from '@/helpers/track-ink-holder'
 import { useWallConnection } from '@/infrastructure/messaging/use-wall-connection'
 import {
   hostFromWallPathFor,
@@ -121,7 +121,7 @@ const Wall: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
     <>
       {view !== null && (
         <ScoreTrack
-          floorHolderId={floorHolderOf(view)}
+          inkHolderId={trackInkHolderOf(view)}
           players={view.players}
         />
       )}

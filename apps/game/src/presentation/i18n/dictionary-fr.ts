@@ -256,11 +256,22 @@ export const FR_DICTIONARY = defineDictionary({
     endGame: 'Terminer la partie',
     final: {
       nobody: 'Personne n’a marqué',
-      score: defineTranslation('{points:plural}', {
-        plural: { points: { one: '{?} point', other: '{?} points' } }
+      tied: defineTranslation('{points:plural}', {
+        plural: {
+          points: {
+            one: 'à égalité avec {?} point',
+            other: 'à égalité avec {?} points'
+          }
+        }
       }),
-      tie: 'Égalité',
-      winner: 'Le vainqueur'
+      wins: defineTranslation('{points:plural}', {
+        plural: {
+          points: {
+            one: 'gagne avec {?} point',
+            other: 'gagne avec {?} points'
+          }
+        }
+      })
     },
     game: {
       label: 'Quel jeu',

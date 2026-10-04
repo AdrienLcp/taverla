@@ -2,120 +2,63 @@
 @use '../../presentation/styles/typography'
 
 @layer components
+  // The winner and the standings inside the box the page grid leaves between
+  // the header and the two exits. `.stage.finished` is the size container, so
+  // every height here divides that box rather than the viewport.
   .final-board
-    // How much height the name may take. Stacked it sits above the table and
-    // every pixel it spends is one the rows lose; beside it the two no longer
-    // trade, so it takes the register the room code holds one screen earlier
-    // rather than half of it.
-    --winner-height-limit: 13vmin
-
-    // What the table gives up to whatever is above it: the label, the name at
-    // whatever the limit allowed it, the scoreline, the rule and the gap under
-    // the block. 7rem is the fixed part of that, measured twice rather than
-    // guessed — 163px against 164 at 390×844, and 216px against 214 at 899×800.
-    --final-header: calc(var(--winner-height-limit) + 7rem)
-
-    display: flex
-    flex: 1
-    flex-direction: column
-    gap: var(--space-xl)
-    justify-content: center
+    display: grid
+    gap: clamp(var(--space-m), 4vmin, var(--space-2xl))
+    grid-template: 'podium' auto 'standings' minmax(0, 1fr) / minmax(0, 1fr)
+    height: 100%
     min-height: 0
-    width: 100%
 
-    // A game nobody scored in draws no name and no scoreline, so the label, the
-    // rule and the gap are the whole of it.
-    &:not(:has(.winners))
-      --final-header: 6rem
+    @include layout.wide
+      align-items: center
+      grid-template: 'podium standings' minmax(0, 1fr) / minmax(0, 1.35fr) minmax(0, 1fr)
 
-    // The name is what the room is reading and the ranking is what each player
-    // checks for themselves, on a screen they are already holding — the lobby's
-    // two audiences, one stage on. Stacked, the table divided whatever the name
-    // had not already spent: nine players on a 1280×800 left it 237px and the
-    // rows read at 18px. Beside it the table divides the whole budget and reads
-    // at 46px, and the name gives up nothing to buy that.
-    //
-    // The wider track is the name, for the same reason it is the invitation in
-    // the lobby: it is the half the room is looking at.
-    //
-    // **It splits only where there is a name to put in one half.** A game
-    // nobody scored in has no second audience and no second object, and drawn
-    // in two columns it left a 13px label alone in 676px of field beside a list
-    // of names. One fact decides the composition, the subtraction above it and
-    // the sub-columns below, and it is the one the component already carries.
-    &:has(.winners)
-      @include layout.wide
-        --final-header: 0px
-        --winner-height-limit: 22vmin
+  .final-board .podium
+    align-items: center
+    container-type: inline-size
+    display: flex
+    flex-direction: column
+    gap: clamp(var(--space-2xs), 1.5vmin, var(--space-s))
+    grid-area: podium
+    min-width: 0
+    text-align: center
 
-        align-items: center
-        display: grid
-        gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
-        grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr)
-
-    > header
-      // The box the name is actually drawn in, which stops being the board the
-      // moment the table moves beside it: measured against the board, a 676px
-      // column would be sized as though it were 1216 and the name broken
-      // mid-word to fit a width it never had.
-      container-type: inline-size
+    // A shared win stands every winner's pawn, so the row shares the size one
+    // pawn would have had.
+    .pawns
       display: flex
-      flex-direction: column
-      gap: var(--space-2xs)
-      // A flex item's minimum is its content, so without this a name too wide
-      // for the screen widens the column instead of wrapping inside it.
-      min-width: 0
-      text-align: center
+      flex-wrap: wrap
+      gap: 0.15em
+      justify-content: center
 
-      // The flourish, and the only one this world has room for: a rule struck
-      // out from the middle as the name lands. A burst of particles would be a
-      // costume on a product made of hard edges and ink — this is the same
-      // gesture in the material the rest of the screen is drawn in.
-      &::after
-        align-self: center
-        background: var(--ink)
-        block-size: 3px
-        content: ''
-        inline-size: min(420px, 60%)
-        margin-block-start: var(--space-m)
+      font-size: clamp(2.5rem, calc(min(42cqh, 55cqi) / var(--winner-count, 1)), 20rem)
 
-        @media (prefers-reduced-motion: no-preference)
-          animation: winner-rule var(--transition-slow, 0) var(--timing, ease) both
+      @media (prefers-reduced-motion: no-preference)
+        .pawn
+          animation: pawn-lands 700ms cubic-bezier(0.16, 1, 0.3, 1) both
 
-    .label
-      @include typography.label
+          &:nth-child(2)
+            animation-delay: 90ms
 
-      color: var(--ink-muted)
+          &:nth-child(3)
+            animation-delay: 180ms
 
-    // The largest object on the screen, like the room code and the revealed
-    // title: a result is read from the far side of the room or it is not a
-    // result.
+    .pawn
+      filter: drop-shadow(0 0.06em 0 var(--chipboard-dark))
+
+    // Twenty characters is a legal nickname and `Wolfgangamadeusmozart` has
+    // nowhere to break: sized by its longest run against the column, the way a
+    // revealed title is.
     .winners
-      @include typography.monument
+      @include typography.billboard
 
-      // A viewport term alone is what this was, and the column stopped being the
-      // viewport the day the table moved beside it: `ZOÉ` was drawn at 104px in
-      // a 676px track it could have filled, and `Wolfgangamadeusmozart` was
-      // broken mid-word at that same size. What the name's longest unbreakable
-      // run needs is the other half, published by `answer-fitting.ts` the way a
-      // revealed title publishes it — and the constant is the same 106, because
-      // it is the same face.
-      font-size: clamp(2rem, min(var(--winner-height-limit, 13vmin), calc(106cqi / var(--longest-word-width, 6))), 11rem)
+      font-size: clamp(2rem, min(11cqh, calc(160cqi / var(--longest-word-width, 6))), 8rem)
       max-width: 100%
-      // Twenty characters is a legal nickname and `Wolfgangamadeusmozart` has
-      // nowhere to break, so at this size it left the screen and gave the page
-      // a sideways scrollbar. `anywhere` rather than `break-all`: a name with a
-      // space still breaks at the space, and a tie still breaks between names.
       overflow-wrap: anywhere
       text-wrap: balance
-
-      // `finished` is the one phase with no clock, which is the whole reason
-      // there is a budget for this: nothing inside a running round animates,
-      // because a screen that resettles while it is timing people reads as lag.
-      // The name is struck the way a second of the countdown is — the product
-      // already has that gesture, and a result deserves it more than a number.
-      @media (prefers-reduced-motion: no-preference)
-        animation: winner-strike var(--transition-slow, 0) var(--timing, ease) both
 
     .with
       @include typography.title
@@ -123,113 +66,69 @@
 
       color: var(--ink-muted)
 
-    // The box the table is drawn in, and the only honest container for the
-    // split below: the board is 1216px wide on a 1280 console whether or not
-    // the name sits beside the table, and the track the table actually gets is
-    // 500. Measured against the board, nine players were dealt into two 220px
-    // sub-columns inside it — the very truncation the threshold exists to
-    // prevent, one composition on.
-    .standings
-      container-type: inline-size
-      min-width: 0
+    .nobody
+      @include typography.billboard
 
-    // The podium, made of type rather than of blocks. Three rows that differed
-    // only by a muted numeral now say which three they are — keyed on the rank
-    // the server ranked and never on the row's position, because two players
-    // sharing first both wear it and the row under them is third. Ties are
-    // named rather than broken here too.
+      text-wrap: balance
+
+  // Upright the standings need the height, so the pawn stands beside the name
+  // rather than over it.
+  @include layout.narrow
+    .final-board .podium:has(.pawns)
+      column-gap: var(--space-m)
+      display: grid
+      grid-template: 'pawns name' auto 'pawns with' auto / auto minmax(0, 1fr)
+      justify-items: start
+      text-align: start
+
+      .pawns
+        font-size: clamp(2.5rem, calc(min(16cqh, 24cqi) / var(--winner-count, 1)), 8rem)
+        grid-area: pawns
+
+      .winners
+        font-size: clamp(1.25rem, min(7cqh, calc(120cqi / var(--longest-word-width, 6))), 4rem)
+        grid-area: name
+
+      .with
+        grid-area: with
+
+  // The same titled board as the reveal's, dividing its own box by its rows.
+  // Past about fourteen players the floor binds and the list scrolls inside it.
+  .final-board .standings
+    align-self: stretch
+    display: grid
+    gap: var(--space-xs)
+    grid-area: standings
+    grid-template-rows: auto minmax(0, 1fr)
+    min-height: 0
+
+    .standings-title
+      @include typography.label
+
+      color: var(--ink-muted)
+
     .scoreboard
-      // How many rows tall this board is, which stops being how many players
-      // there are the moment it deals into two — and only the container it is
-      // drawn in knows which of the two it did.
-      --board-rows: var(--scoreboard-count, 8)
-
-      // `finished` had no height budget where every other phase has one, so the
-      // rows kept the size they take in a lobby: a 32px numeral on 24px of fixed
-      // padding, 72px a row, nine of them. The furniture goes into `em` first —
-      // fixed padding is the part a formula that only shrinks type can never
-      // reach — and then a row is one multiple of its own size and the divisor
-      // means something. 2.8 is the tallest row's: the winner's numeral is
-      // 1.9em, with 0.9em of padding under it.
-      //
-      // 2.42 once the figures are trimmed: the winner's row measured 2.80 with
-      // the leading on and 2.42 without it.
-      --tallest-row: 2.8
-
-      @supports (text-box: trim-both cap alphabetic)
-        --tallest-row: 2.42
+      container-type: size
+      overflow-y: auto
 
       li
-        font-size: clamp(0.95rem, calc((var(--final-budget, 100rem) - var(--final-header, 0px)) / var(--board-rows, 8) / var(--tallest-row)), 1.75rem)
-        padding: 0.4em 0
+        font-size: clamp(14px, calc(100cqh / var(--standings-rows, 8) / 2.3), 1.75rem)
+        padding: 0.3em 0
+
+        .rank
+          font-size: 0.8em
 
         .nickname
           font-size: 1em
 
         .score
-          font-size: 1.6em
+          font-size: 1.4em
           line-height: 1
 
-      // Wider than the shared board's, because the numerals below step up and a
-      // 2ch column would clip the first of them.
-      &.ranked li
-        grid-template-columns: 4ch 1fr auto
-
-      li[data-rank='1'],
-      li[data-rank='2'],
-      li[data-rank='3']
-        .rank
-          color: var(--ink)
-          font-family: var(--font-display)
-          font-stretch: 85%
-          font-weight: 900
-          // The steps are read off the baseline they share with the names, so
-          // the half-leading over a 1.9em numeral is a row of nothing the
-          // budget would otherwise have to pay for.
-          line-height: 1
-
-      // The steps, and the whole podium: the rows are baseline-aligned, so a
-      // taller numeral grows upward off the line the names sit on rather than
-      // pushing its row about.
-      li[data-rank='1'] .rank
-        font-size: 1.9em
-
-      li[data-rank='2'] .rank
-        font-size: 1.45em
-
-      li[data-rank='3'] .rank
-        font-size: 1.15em
-
-      li[data-rank='1'] .nickname
-        font-family: var(--font-display)
-        font-stretch: 85%
-        font-weight: 900
-
-      // The board settles under the name rather than arriving with it, which is
-      // what makes the two one moment instead of two. Eight is what a column
-      // holds; past that a row lands with the block it is read as.
-      @media (prefers-reduced-motion: no-preference)
-        li
-          animation: page-enter var(--transition-base, 0) var(--timing, ease) both
-
-        @for $row from 1 through 8
-          li:nth-child(#{$row})
-            animation-delay: #{($row - 1) * 60}ms
-
-@keyframes winner-strike
+@keyframes pawn-lands
   from
-    letter-spacing: 0.1em
     opacity: 0
-    transform: scale(1.18)
-  60%
-    opacity: 1
+    transform: translateY(-0.5em) scale(1.06)
   to
-    letter-spacing: -0.035em
     opacity: 1
-    transform: scale(1)
-
-@keyframes winner-rule
-  from
-    transform: scaleX(0)
-  to
-    transform: scaleX(1)
+    transform: none

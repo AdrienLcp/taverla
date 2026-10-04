@@ -189,6 +189,8 @@
     --phase-ink: var(--good)
     --phase-on-ink: var(--on-spine)
 
+  // The winner's colour arrives from `ScoreTrack` itself; a shared win or a
+  // game nobody scored in keeps the track's own ink rather than one pawn's.
   \:root[data-phase='finished']
-    --phase-ink: var(--pawn-1)
-    --phase-on-ink: var(--on-spine)
+    --phase-ink: var(--track-five)
+    --phase-on-ink: var(--track-ink)

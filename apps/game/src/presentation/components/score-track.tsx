@@ -17,10 +17,10 @@ type TrackShape = { columns: number; rows: number }
 
 type ScoreTrackProps = {
   /**
-   * The player holding the floor, whose pawn's colour the track takes for as
-   * long as they do; `null` leaves it the phase's own ink.
+   * The player whose pawn's colour the track takes — the floor's holder, or
+   * the winner; `null` leaves it the phase's own ink.
    */
-  floorHolderId: string | null
+  inkHolderId: string | null
   /**
    * The room's roster in seat order, which is what picks each pawn's colour —
    * the same order every other screen names them in.
@@ -37,7 +37,7 @@ type ScoreTrackProps = {
  * words wherever the room is told the score.
  */
 export const ScoreTrack: React.FC<ScoreTrackProps> = ({
-  floorHolderId,
+  inkHolderId,
   players
 }) => {
   const translate = useTranslate()
@@ -86,7 +86,7 @@ export const ScoreTrack: React.FC<ScoreTrackProps> = ({
   }, [])
 
   const squareCount = shape === null ? 0 : perimeterOf(shape)
-  const holderSeat = players.findIndex((player) => player.id === floorHolderId)
+  const holderSeat = players.findIndex((player) => player.id === inkHolderId)
   const holderInks = holderSeat === -1 ? null : pawnInksOf(holderSeat)
 
   return (

@@ -2,7 +2,12 @@ import { describe, expect, it } from 'vitest'
 
 import type { PublicPlayer } from '@taverla/protocol/room'
 
-import { buildScoreboard, hasAnybodyScored, standingOf } from './scoreboard'
+import {
+  buildScoreboard,
+  hasAnybodyScored,
+  standingOf,
+  winnersOf
+} from './scoreboard'
 
 const playerOn = (nickname: string, score: number): PublicPlayer => ({
   id: nickname.toLowerCase(),
@@ -64,6 +69,28 @@ describe('hasAnybodyScored', () => {
 
   it('[scoring] is false for an empty room', () => {
     expect(hasAnybodyScored([])).toBe(false)
+  })
+})
+
+describe('winnersOf', () => {
+  it('[scoring] names the one player on top', () => {
+    const winners = winnersOf([playerOn('Alice', 1), playerOn('Bob', 5)])
+
+    expect(winners.map((player) => player.nickname)).toEqual(['Bob'])
+  })
+
+  it('[scoring] names every player sharing first place', () => {
+    const winners = winnersOf([
+      playerOn('Chloe', 5),
+      playerOn('Alice', 5),
+      playerOn('Bob', 2)
+    ])
+
+    expect(winners.map((player) => player.nickname)).toEqual(['Alice', 'Chloe'])
+  })
+
+  it('[scoring] names nobody while the whole room is on zero', () => {
+    expect(winnersOf([playerOn('Alice', 0), playerOn('Bob', 0)])).toEqual([])
   })
 })
 

@@ -26,7 +26,7 @@ import { withPreparedKey } from '@taverla/core/slate/prepared-keys'
 
 import { NotFoundPage } from '@/features/not-found/not-found-page'
 import { ChoosingRound } from '@/features/player/choosing-round'
-import { floorHolderOf } from '@/helpers/round-content'
+import { trackInkHolderOf } from '@/helpers/track-ink-holder'
 import { useHostConnection } from '@/infrastructure/messaging/use-host-connection'
 import {
   useCameFromWall,
@@ -376,7 +376,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
     <>
       {view !== null && (
         <ScoreTrack
-          floorHolderId={floorHolderOf(view)}
+          inkHolderId={trackInkHolderOf(view)}
           players={view.players}
         />
       )}

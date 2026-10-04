@@ -161,8 +161,8 @@ new one is whole. This file is the brief: open a fresh session, run
   between the header and the footer; over the recap it is a row of the
   reveal's grid. The buzzed stage is the buzzer's own pawn stood up oversize,
   the name, and the floor's clock on a smaller token — and **the track takes
-  that pawn's colour** for as long as they hold the floor (`floorHolderOf`,
-  `ScoreTrack`'s `floorHolderId`, `--on-pawn-N` beside each pawn; pawns 2 and 5
+  that pawn's colour** for as long as they hold the floor (`trackInkHolderOf`,
+  `ScoreTrack`'s `inkHolderId`, `--on-pawn-N` beside each pawn; pawns 2 and 5
   darkened two points to clear 4.5:1 under white). On the console the answer
   sits on the question's paper and the verdicts are pieces two by two, *right*
   in the reveal's green, *missed* a dashed plain piece. Lying down the pawn and
@@ -170,6 +170,21 @@ new one is whole. This file is the brief: open a fresh session, run
   keeps the pawn alone, larger. `choice-fits.spec.ts` measures both screens
   from 900px wide: no scroll — the verdict went red at 900×900 (278px) before
   the upright row existed.
+
+- **The final board** is the reference's *Fin*: the winner's pawn stood up
+  oversize, the name sized by its longest run (`answerFitting`), and *gagne
+  avec 30 points* under it (`host.final.wins` / `host.final.tied`) — the
+  `WINNER` label above the name went, an eyebrow the name never needed. A tie
+  stands every winner's pawn, sharing one pawn's size. The standings beside it
+  are the reveal's titled board, dividing their own box. **The track takes the
+  winner's colour** — `trackInkHolderOf` generalises the floor holder's rule to
+  the sole winner (`winnersOf` in core) — and a tie or a game nobody scored in
+  keeps the track's own ink: `finished` used to default to `--pawn-1`, which
+  told a tied room that player one had won. The page is a three-row grid at
+  every width with the stage a size container, so the `--final-budget` /
+  `--final-header` arithmetic is gone; upright the pawn stands beside the name.
+  `choice-fits.spec.ts` measures a 20-character winner and a three-way tie from
+  900px wide, in French; broken on purpose once (rows padded to 1.5em).
 
 Measured traps, so the next screen does not pay for them again: a `position:
 fixed` element inside the page is fixed to the page, not the viewport, because
@@ -184,8 +199,8 @@ page's entrance animation, whose leftover `translateY` is a 1px scroll.
 
 ## Next session
 
-1. The rest of §1's inventory screen by screen — final board, the slate's two
-   stages, reflex — each against
+1. The rest of §1's inventory screen by screen — the slate's two stages,
+   reflex — each against
    the ring's `--track-room` and measured at 1280×720, 1024×768 and 1920×1080;
    the front door last (Persuade), `og.png` redrawn, then §6.
    `AskedQuestion`'s own sizing still carries Archivo's measured width

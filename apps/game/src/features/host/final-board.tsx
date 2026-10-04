@@ -3,14 +3,13 @@ import type React from 'react'
 import type { PlayerId } from '@taverla/protocol/identifiers'
 import type { PublicPlayer } from '@taverla/protocol/room'
 
-import {
-  buildScoreboard,
-  hasAnybodyScored
-} from '@taverla/core/scoring/scoreboard'
+import { winnersOf } from '@taverla/core/scoring/scoreboard'
 
 import { answerFitting } from '@/helpers/answer-fitting'
-import { Scoreboard } from '@/presentation/components/scoreboard'
+import { Pawn } from '@/presentation/components/pawn'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
+
+import { Standings } from './standings'
 
 import './final-board.sass'
 
@@ -21,9 +20,8 @@ type FinalBoardProps = {
 }
 
 /**
- * A game ends on a name, not on a table. The list was already complete and
- * ranked — what was missing is that nothing on the screen said who won, so a
- * room of six read a scoreboard instead of hearing a result.
+ * A game ends on a name, not on a table: the winner's pawn stood up oversize
+ * and named, with the standings beside it for each player to find themselves.
  *
  * Ties are named rather than broken: competition ranking already shares first
  * place, and inventing a winner out of alphabetical order would be a lie the
@@ -31,39 +29,41 @@ type FinalBoardProps = {
  */
 export const FinalBoard: React.FC<FinalBoardProps> = ({ players, youId }) => {
   const translate = useTranslate()
-  const ranked = buildScoreboard(players)
-  const winners = ranked.filter((entry) => entry.rank === 1)
-  const topScore = winners[0]?.player.score ?? 0
-  const isWon = hasAnybodyScored(players)
-  const named = winners.map((entry) => entry.player.nickname).join(' · ')
+  const winners = winnersOf(players)
+  const topScore = winners[0]?.score ?? 0
+  const named = winners.map((winner) => winner.nickname).join(' · ')
 
   return (
-    <section className='final-board'>
-      <header>
-        <p className='label'>
-          {translate(
-            !isWon
-              ? 'host.final.nobody'
-              : winners.length > 1
-                ? 'host.final.tie'
-                : 'host.final.winner'
-          )}
-        </p>
-        {isWon && (
+    <section
+      className='final-board'
+      style={{ '--standings-rows': players.length }}
+    >
+      <div className='podium' style={{ '--winner-count': winners.length }}>
+        {winners.length === 0 ? (
+          <h1 className='nobody'>{translate('host.final.nobody')}</h1>
+        ) : (
           <>
+            <div className='pawns'>
+              {winners.map((winner) => (
+                <Pawn key={winner.id} seat={players.indexOf(winner)} />
+              ))}
+            </div>
             <h1 className='winners' style={answerFitting(named)}>
               {named}
             </h1>
             <p className='with'>
-              {translate('host.final.score', { points: topScore })}
+              {translate(
+                winners.length > 1 ? 'host.final.tied' : 'host.final.wins',
+                {
+                  points: topScore
+                }
+              )}
             </p>
           </>
         )}
-      </header>
-
-      <div className='standings'>
-        <Scoreboard isResult players={players} youId={youId} />
       </div>
+
+      <Standings players={players} youId={youId} />
     </section>
   )
 }

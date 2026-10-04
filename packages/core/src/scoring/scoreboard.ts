@@ -41,6 +41,18 @@ export const buildScoreboard = (
   })
 }
 
+/**
+ * Who won, or who shares the win: everyone on the top rank, in the board's
+ * order. Empty while nobody has scored, because first place on nought is not
+ * a win anybody can be told about.
+ */
+export const winnersOf = (players: readonly PublicPlayer[]): PublicPlayer[] =>
+  hasAnybodyScored(players)
+    ? buildScoreboard(players)
+        .filter((entry) => entry.rank === 1)
+        .map((entry) => entry.player)
+    : []
+
 export type Standing = {
   rank: number
   roomSize: number

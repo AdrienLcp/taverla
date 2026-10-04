@@ -1,7 +1,6 @@
 import type {
   HostRoomView,
   HostRoundContent,
-  RoomPhase,
   RoundContent,
   RoundView
 } from '@taverla/protocol/room'
@@ -31,13 +30,6 @@ export const slateContent = (
   round: RoundView | null | undefined
 ): Extract<RoundContent, { kind: 'slate' }> | null =>
   round?.content.kind === 'slate' ? round.content : null
-
-/** Who holds the floor, while somebody does. */
-export const floorHolderOf = (view: {
-  phase: RoomPhase
-  round: RoundView | null
-}): string | null =>
-  view.phase === 'buzzed' ? (view.round?.activeBuzz?.playerId ?? null) : null
 
 /** The same over the half only the host is sent. */
 export const blindtestHostContent = (
