@@ -7,6 +7,7 @@ import { generateRoomCode } from '@taverla/core/room/room-code'
 import { newRoom } from '@/domain/room/new-room'
 import type { Room } from '@/domain/room/room'
 import { nowMs } from '@/infrastructure/clock'
+import type { RoomDoor } from '@/infrastructure/http/http-ports'
 import { logger } from '@/infrastructure/logging/logger'
 import type { Connection } from '@/infrastructure/messaging/connection'
 import {
@@ -113,4 +114,17 @@ const drawUnusedCode = (): RoomCode | null => {
   logger.error('Exhausted room code attempts', { liveRooms: engines.size })
 
   return null
+}
+
+export const inProcessRoomDoor: RoomDoor = {
+  isHostedWith: async ({ code, hostToken }) =>
+    findRoomEngine(code)?.room.hostToken === hostToken,
+  openRoom: async (input) => {
+    const engine = openRoomInProcess(input)
+
+    return engine === null
+      ? null
+      : { code: engine.room.code, hostToken: engine.room.hostToken }
+  },
+  roomExists: async (code) => findRoomEngine(code) !== null
 }

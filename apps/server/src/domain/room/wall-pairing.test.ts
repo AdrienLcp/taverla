@@ -1,66 +1,70 @@
 import { describe, expect, it } from 'vitest'
 
 import {
-  collectWallPairing,
-  openWallPairing,
-  pairWall,
+  collectWall,
+  newWallPairing,
+  vouchForWall,
   WALL_PAIRING_TTL_MS
 } from './wall-pairing'
 
 const NOW = 1_786_215_000_000
+const SECRET = 'wall-secret'
 
-const opened = () => {
-  const pairing = openWallPairing({ now: NOW, secret: 'wall-secret' })
+const waiting = () => newWallPairing({ now: NOW, secret: SECRET })
 
-  if (pairing === null) {
-    throw new Error('the store refused to allocate a pairing code')
+const paired = () => {
+  const vouched = vouchForWall({
+    hostToken: 'ABCDEFGH',
+    now: NOW,
+    pairing: waiting(),
+    roomCode: 'K3M9'
+  })
+
+  if (vouched.status === 'failure') {
+    throw new Error('a live pairing refused a vouch')
   }
 
-  return pairing
+  return vouched.data
 }
 
 describe('wall pairing', () => {
   it('[wall-pairing] keeps a screen waiting until the host vouches for it', () => {
-    const { pairingCode, secret } = opened()
+    const pairing = waiting()
 
-    expect(collectWallPairing({ now: NOW, pairingCode, secret })).toEqual({
-      data: { status: 'waiting' },
+    expect(collectWall({ now: NOW, pairing, secret: SECRET })).toEqual({
+      data: { remaining: pairing, response: { status: 'waiting' } },
       status: 'success'
     })
   })
 
   it('[wall-pairing] hands the token over once, to the screen holding the secret', () => {
-    const { pairingCode, secret } = opened()
-
-    pairWall({ hostToken: 'ABCDEFGH', now: NOW, pairingCode, roomCode: 'K3M9' })
+    const pairing = paired()
 
     expect(
-      collectWallPairing({ now: NOW, pairingCode, secret: 'x'.repeat(24) })
-        .status
+      collectWall({ now: NOW, pairing, secret: 'x'.repeat(24) }).status
     ).toBe('failure')
-    expect(collectWallPairing({ now: NOW, pairingCode, secret })).toEqual({
-      data: { hostToken: 'ABCDEFGH', roomCode: 'K3M9', status: 'paired' },
+    expect(collectWall({ now: NOW, pairing, secret: SECRET })).toEqual({
+      data: {
+        remaining: null,
+        response: { hostToken: 'ABCDEFGH', roomCode: 'K3M9', status: 'paired' }
+      },
       status: 'success'
     })
-    expect(collectWallPairing({ now: NOW, pairingCode, secret }).status).toBe(
-      'failure'
-    )
   })
 
   it('[wall-pairing] forgets a code nobody paired in time', () => {
-    const { pairingCode, secret } = opened()
     const later = NOW + WALL_PAIRING_TTL_MS
 
     expect(
-      pairWall({
+      vouchForWall({
         hostToken: 'ABCDEFGH',
         now: later,
-        pairingCode,
+        pairing: waiting(),
         roomCode: 'K3M9'
       }).status
     ).toBe('failure')
-    expect(collectWallPairing({ now: later, pairingCode, secret }).status).toBe(
-      'failure'
-    )
+    expect(
+      collectWall({ now: later, pairing: waiting(), secret: SECRET }).status
+    ).toBe('failure')
   })
 })

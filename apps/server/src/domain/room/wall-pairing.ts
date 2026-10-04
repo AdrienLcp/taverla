@@ -1,17 +1,7 @@
 import { Result } from '@adrienlcp/result'
 
-import {
-  WALL_PAIRING_CODE_LENGTH,
-  type WallPairingCode,
-  type WallPairingPollResponse
-} from '@taverla/protocol/http'
-import {
-  type HostToken,
-  ROOM_CODE_ALPHABET,
-  type RoomCode
-} from '@taverla/protocol/identifiers'
-
-import { generateCode, secureRandomIndex } from '@taverla/core/room/random-code'
+import type { WallPairingPollResponse } from '@taverla/protocol/http'
+import type { HostToken, RoomCode } from '@taverla/protocol/identifiers'
 
 /**
  * Long enough to walk from the television to wherever the host's phone is, and
@@ -20,111 +10,83 @@ import { generateCode, secureRandomIndex } from '@taverla/core/room/random-code'
  */
 export const WALL_PAIRING_TTL_MS = 10 * 60 * 1000
 
-const MAX_CODE_ATTEMPTS = 20
-
-type Pairing = {
+/** One code shown on one waiting screen. Where pairings are kept is the runtime's. */
+export type WallPairing = {
   expiresAt: number
   paired: { hostToken: HostToken; roomCode: RoomCode } | null
   secret: string
 }
 
-const pairings = new Map<WallPairingCode, Pairing>()
-
-const forgetExpired = (now: number): void => {
-  for (const [code, pairing] of pairings) {
-    if (pairing.expiresAt <= now) {
-      pairings.delete(code)
-    }
-  }
-}
-
-export const openWallPairing = ({
+export const newWallPairing = ({
   now,
   secret
 }: {
   now: number
   secret: string
-}): { pairingCode: WallPairingCode; secret: string } | null => {
-  forgetExpired(now)
+}): WallPairing => ({
+  expiresAt: now + WALL_PAIRING_TTL_MS,
+  paired: null,
+  secret
+})
 
-  for (let attempt = 0; attempt < MAX_CODE_ATTEMPTS; attempt++) {
-    const pairingCode = generateCode({
-      alphabet: ROOM_CODE_ALPHABET,
-      length: WALL_PAIRING_CODE_LENGTH,
-      randomIndex: secureRandomIndex
-    })
-
-    if (!pairings.has(pairingCode)) {
-      pairings.set(pairingCode, {
-        expiresAt: now + WALL_PAIRING_TTL_MS,
-        paired: null,
-        secret
-      })
-
-      return { pairingCode, secret }
-    }
-  }
-
-  return null
-}
+export const isWallPairingLive = (pairing: WallPairing, now: number): boolean =>
+  pairing.expiresAt > now
 
 /**
  * The host's device vouching for a waiting screen. The token is checked by the
- * caller against the room, because the store knows no rooms; this only refuses
+ * caller against the room, because a pairing knows no rooms; this only refuses
  * a code that is not waiting. A second vouch overwrites the first, which is the
  * host correcting a wrong room before the screen collected it.
  */
-export const pairWall = ({
+export const vouchForWall = ({
   hostToken,
   now,
-  pairingCode,
+  pairing,
   roomCode
 }: {
   hostToken: HostToken
   now: number
-  pairingCode: WallPairingCode
+  pairing: WallPairing | null
   roomCode: RoomCode
-}): Result<void, 'unknown_pairing'> => {
-  forgetExpired(now)
-
-  const pairing = pairings.get(pairingCode)
-
-  if (pairing === undefined) {
-    return Result.failure('unknown_pairing')
-  }
-
-  pairing.paired = { hostToken, roomCode }
-
-  return Result.success()
-}
+}): Result<WallPairing, 'unknown_pairing'> =>
+  pairing === null || !isWallPairingLive(pairing, now)
+    ? Result.failure('unknown_pairing')
+    : Result.success({ ...pairing, paired: { hostToken, roomCode } })
 
 /**
- * Collected once: the token leaves the store on the read that hands it over,
+ * Collected once: `remaining` is `null` on the read that hands the token over,
  * so a screen that polls again afterwards is told the pairing is gone rather
  * than handed the token a second time.
  */
-export const collectWallPairing = ({
+export const collectWall = ({
   now,
-  pairingCode,
+  pairing,
   secret
 }: {
   now: number
-  pairingCode: WallPairingCode
+  pairing: WallPairing | null
   secret: string
-}): Result<WallPairingPollResponse, 'unknown_pairing'> => {
-  forgetExpired(now)
-
-  const pairing = pairings.get(pairingCode)
-
-  if (pairing === undefined || pairing.secret !== secret) {
+}): Result<
+  { remaining: WallPairing | null; response: WallPairingPollResponse },
+  'unknown_pairing'
+> => {
+  if (
+    pairing === null ||
+    !isWallPairingLive(pairing, now) ||
+    pairing.secret !== secret
+  ) {
     return Result.failure('unknown_pairing')
   }
 
   if (pairing.paired === null) {
-    return Result.success({ status: 'waiting' })
+    return Result.success({
+      remaining: pairing,
+      response: { status: 'waiting' }
+    })
   }
 
-  pairings.delete(pairingCode)
-
-  return Result.success({ ...pairing.paired, status: 'paired' })
+  return Result.success({
+    remaining: null,
+    response: { ...pairing.paired, status: 'paired' }
+  })
 }

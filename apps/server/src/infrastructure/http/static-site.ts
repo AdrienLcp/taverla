@@ -3,24 +3,21 @@ import { existsSync, readFileSync } from 'node:fs'
 import { serveStatic } from '@hono/node-server/serve-static'
 import type { Context, Hono } from 'hono'
 import { compress } from 'hono/compress'
-import { z } from 'zod'
 
 import { env } from '@/env'
+import {
+  PRERENDER_MANIFEST,
+  type PrerenderedDocument,
+  prerenderManifestSchema,
+  robotsTxt,
+  sitemapXml
+} from '@/infrastructure/http/site-index'
 import { logger } from '@/infrastructure/logging/logger'
 
 /** Where Vite writes every content-hashed file, and nothing else. */
 const HASHED_ASSETS = '/assets/'
 
 const ONE_YEAR_SECONDS = 31_536_000
-
-/** Written by the game's build, beside the documents it lists. */
-const PRERENDER_MANIFEST = 'prerendered.json'
-
-const prerenderManifestSchema = z.array(
-  z.object({ file: z.string(), url: z.string() })
-)
-
-type PrerenderedDocument = z.infer<typeof prerenderManifestSchema>[number]
 
 /**
  * A name carrying its own content hash can be kept forever, because changing
@@ -101,13 +98,6 @@ const originOf = (c: Context): string => {
   return `${forwarded ?? protocol.replace(':', '')}://${host}`
 }
 
-/**
- * The prerendered documents, listed for a crawler. It exists because the front
- * door stopped linking to them: a shelf card opens a room now rather than going
- * to that game's page, and a page nothing points at is a page nobody finds.
- * Built from the manifest for the same reason the routes are — a list kept by
- * hand goes stale the day a game reaches the shelf.
- */
 const registerSitemap = ({
   app,
   documents,
@@ -117,27 +107,18 @@ const registerSitemap = ({
   documents: readonly PrerenderedDocument[]
   root: string
 }): void => {
-  app.get('/sitemap.xml', (c) => {
-    const origin = originOf(c)
-    const entries = documents
-      .map(({ url }) => `  <url><loc>${origin}${url}</loc></url>`)
-      .join('\n')
+  app.get('/sitemap.xml', (c) =>
+    c.body(sitemapXml({ documents, origin: originOf(c) }), 200, {
+      'Cache-Control': 'no-cache',
+      'Content-Type': 'application/xml'
+    })
+  )
 
-    return c.body(
-      `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries}\n</urlset>\n`,
-      200,
-      { 'Cache-Control': 'no-cache', 'Content-Type': 'application/xml' }
-    )
-  })
-
-  // The file keeps its own prose; only the one line that needs an absolute URL
-  // is added here, because a static file cannot know which origin it was asked
-  // for.
   app.get('/robots.txt', (c) => {
     const path = `${root}/robots.txt`
-    const rules = existsSync(path) ? readFileSync(path, 'utf8').trimEnd() : ''
+    const rules = existsSync(path) ? readFileSync(path, 'utf8') : ''
 
-    return c.text(`${rules}\n\nSitemap: ${originOf(c)}/sitemap.xml\n`)
+    return c.text(robotsTxt({ origin: originOf(c), rules }))
   })
 }
 

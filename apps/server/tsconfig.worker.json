@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "lib": ["esnext"],
     "paths": {
       "@/*": ["./src/*"],
       "@taverla/core/*": ["../../packages/core/src/*"],
@@ -7,11 +8,7 @@
     },
     "types": ["node"]
   },
-  "exclude": [
-    "src/worker.ts",
-    "src/infrastructure/worker",
-    "src/infrastructure/http/binding-rate-limit.ts"
-  ],
   "extends": "../../tsconfig.json",
-  "include": ["scripts", "src", "vitest.config.ts"]
+  "files": ["worker-configuration.d.ts", "src/worker.ts"],
+  "include": []
 }

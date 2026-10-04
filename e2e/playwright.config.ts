@@ -1,3 +1,7 @@
+import { mkdtempSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+
 import { defineConfig, devices } from '@playwright/test'
 
 /**
@@ -9,11 +13,13 @@ const APP_PORT = 5274
 const SERVER_PORT = 3101
 const CATALOGUE_PORT = 3199
 
-// `127.0.0.1`, not `localhost`: the Node server binds IPv4 only, and the
+// `127.0.0.1`, not `localhost`: the Worker is bound to IPv4 only, and the
 // readiness probe resolves `localhost` to `::1` first and never falls back.
 const APP_URL = `http://127.0.0.1:${APP_PORT}`
 const CATALOGUE_URL = `http://127.0.0.1:${CATALOGUE_PORT}`
 const SERVER_URL = `http://127.0.0.1:${SERVER_PORT}`
+
+const WORKER_STATE = mkdtempSync(join(tmpdir(), 'taverla-e2e-'))
 
 export default defineConfig({
   expect: { timeout: 10_000 },
@@ -48,15 +54,18 @@ export default defineConfig({
       url: `${CATALOGUE_URL}/chart/0/tracks`
     },
     {
-      // `start`, not `dev`: nothing here edits server code, and the watcher
-      // `dev` wraps it in never comes up when Playwright spawns it detached.
-      command: 'pnpm --filter @taverla/server start',
-      env: {
-        ALLOWED_ORIGINS: APP_URL,
-        DEEZER_API_URL: CATALOGUE_URL,
-        PORT: String(SERVER_PORT)
-      },
+      // The Worker under the Workers runtime, so every journey crosses the
+      // Durable Object the deployed room lives in. A state directory of the
+      // run's own, or a room from the last run would still hold its code.
+      command: [
+        'pnpm --filter @taverla/server exec wrangler dev',
+        `--ip 127.0.0.1 --port ${SERVER_PORT}`,
+        `--persist-to ${WORKER_STATE}`,
+        `--var ALLOWED_ORIGINS:${APP_URL}`,
+        `--var DEEZER_API_URL:${CATALOGUE_URL}`
+      ].join(' '),
       reuseExistingServer: false,
+      timeout: 120_000,
       // Any room code answers `{ exists: false }`, which is all a probe needs.
       url: `${SERVER_URL}/api/rooms/AAAA`
     },

@@ -1,6 +1,6 @@
 import type { Result } from '@adrienlcp/result'
 import { zValidator } from '@hono/zod-validator'
-import type { Context, Hono } from 'hono'
+import type { Context, Hono, MiddlewareHandler } from 'hono'
 import { cors } from 'hono/cors'
 
 import type {
@@ -27,23 +27,12 @@ import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
 import { normalizeRoomCode } from '@taverla/core/room/room-code'
 
-import {
-  collectWallPairing,
-  openWallPairing,
-  pairWall
-} from '@/domain/room/wall-pairing'
 import { env } from '@/env'
-import { nowMs } from '@/infrastructure/clock'
-import { limitRoomCreation } from '@/infrastructure/http/rate-limit'
-import { newWallSecret } from '@/infrastructure/ids'
+import type { RoomDoor, WallPairings } from '@/infrastructure/http/http-ports'
 import {
   fetchTracksFor,
   type MusicSourceError
 } from '@/infrastructure/music/deezer-client'
-import {
-  findRoomEngine,
-  openRoomInProcess
-} from '@/infrastructure/node/in-process-rooms'
 
 /**
  * A catalogue that matched nothing well-known enough to guess is an empty
@@ -84,7 +73,18 @@ const pairingNotFound: ApiErrorResponse = {
  * one exists, browsing the catalogue. Everything that happens while people are
  * playing is a WebSocket frame.
  */
-export const registerHttpRoutes = (app: Hono): void => {
+export const registerHttpRoutes = ({
+  app,
+  limitRoomCreation,
+  rooms,
+  walls
+}: {
+  app: Hono
+  /** Each runtime counts by its own means: one process's memory, or the platform's binding. */
+  limitRoomCreation: MiddlewareHandler
+  rooms: RoomDoor
+  walls: WallPairings
+}): void => {
   // Only reached when the browser is not behind the Vite dev proxy; in dev the
   // app and the API share an origin, so nothing here fires.
   app.use(`${API_PREFIX}/*`, cors({ origin: env.allowedOrigins }))
@@ -103,11 +103,11 @@ export const registerHttpRoutes = (app: Hono): void => {
     API_ROUTES.rooms,
     limitRoomCreation,
     zValidator('json', createRoomRequestSchema),
-    (context) => {
+    async (context) => {
       const { game, locale } = context.req.valid('json')
-      const engine = openRoomInProcess({ game: game ?? null, locale })
+      const opened = await rooms.openRoom({ game: game ?? null, locale })
 
-      if (engine === null) {
+      if (opened === null) {
         const error: ApiErrorResponse = {
           code: 'internal_error',
           message: 'Could not allocate a room code'
@@ -116,19 +116,16 @@ export const registerHttpRoutes = (app: Hono): void => {
         return context.json(error, 503)
       }
 
-      const body: CreateRoomResponse = {
-        code: engine.room.code,
-        hostToken: engine.room.hostToken
-      }
+      const body: CreateRoomResponse = opened
 
       return context.json(body, 201)
     }
   )
 
-  app.get(API_ROUTES.room, (context) => {
+  app.get(API_ROUTES.room, async (context) => {
     const code = normalizeRoomCode(context.req.param('code'))
     const body: RoomExistsResponse = {
-      exists: code !== null && findRoomEngine(code) !== null
+      exists: code !== null && (await rooms.roomExists(code))
     }
 
     return context.json(body)
@@ -137,8 +134,8 @@ export const registerHttpRoutes = (app: Hono): void => {
   // A wall asks for a code to show, the host's device vouches for it with the
   // room's token, and the wall collects the token by polling. Rate-limited with
   // room creation: a code is the same cheap allocation a room is.
-  app.post(API_ROUTES.walls, limitRoomCreation, (context) => {
-    const opened = openWallPairing({ now: nowMs(), secret: newWallSecret() })
+  app.post(API_ROUTES.walls, limitRoomCreation, async (context) => {
+    const opened = await walls.open()
 
     if (opened === null) {
       const error: ApiErrorResponse = {
@@ -157,7 +154,7 @@ export const registerHttpRoutes = (app: Hono): void => {
   app.get(
     API_ROUTES.wall,
     zValidator('query', wallPairingPollQuerySchema),
-    (context) => {
+    async (context) => {
       const pairingCode = wallPairingCodeSchema.safeParse(
         context.req.param('pairingCode')
       )
@@ -166,8 +163,7 @@ export const registerHttpRoutes = (app: Hono): void => {
         return context.json(pairingNotFound, 404)
       }
 
-      const collected = collectWallPairing({
-        now: nowMs(),
+      const collected = await walls.collect({
         pairingCode: pairingCode.data,
         secret: context.req.valid('query').secret
       })
@@ -185,7 +181,7 @@ export const registerHttpRoutes = (app: Hono): void => {
   app.post(
     API_ROUTES.wallPair,
     zValidator('json', pairWallRequestSchema),
-    (context) => {
+    async (context) => {
       const pairingCode = wallPairingCodeSchema.safeParse(
         context.req.param('pairingCode')
       )
@@ -195,9 +191,8 @@ export const registerHttpRoutes = (app: Hono): void => {
       }
 
       const { hostToken, roomCode } = context.req.valid('json')
-      const room = findRoomEngine(roomCode)?.room ?? null
 
-      if (room === null || room.hostToken !== hostToken) {
+      if (!(await rooms.isHostedWith({ code: roomCode, hostToken }))) {
         const error: ApiErrorResponse = {
           code: 'wall_not_paired',
           message: 'Only the device hosting this room can pair a screen to it'
@@ -206,9 +201,8 @@ export const registerHttpRoutes = (app: Hono): void => {
         return context.json(error, 403)
       }
 
-      const paired = pairWall({
+      const paired = await walls.pair({
         hostToken,
-        now: nowMs(),
         pairingCode: pairingCode.data,
         roomCode
       })

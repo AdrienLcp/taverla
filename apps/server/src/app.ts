@@ -6,10 +6,15 @@ import { ROOM_SOCKET_ROUTE } from '@taverla/protocol/routes'
 
 import { normalizeRoomCode } from '@taverla/core/room/room-code'
 
+import { limitRoomCreation } from '@/infrastructure/http/rate-limit'
 import { registerHttpRoutes } from '@/infrastructure/http/routes'
 import { registerStaticSite } from '@/infrastructure/http/static-site'
 import { createRoomSocketEvents } from '@/infrastructure/messaging/socket-handler'
-import { findRoomEngine } from '@/infrastructure/node/in-process-rooms'
+import {
+  findRoomEngine,
+  inProcessRoomDoor
+} from '@/infrastructure/node/in-process-rooms'
+import { inProcessWallPairings } from '@/infrastructure/node/in-process-wall-pairings'
 
 /**
  * Returned rather than served: `serve` needs the WebSocket server alongside
@@ -32,7 +37,12 @@ export const createApp = () => {
     )
   )
 
-  registerHttpRoutes(app)
+  registerHttpRoutes({
+    app,
+    limitRoomCreation,
+    rooms: inProcessRoomDoor,
+    walls: inProcessWallPairings
+  })
   registerStaticSite(app)
 
   return { app, websocket }

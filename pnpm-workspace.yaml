@@ -5,6 +5,7 @@ packages:
 allowBuilds:
   '@parcel/watcher': true
   esbuild: true
+  workerd: true
 
 # Fail the install when a *dependency* declares an engine this machine cannot
 # satisfy. It says nothing about the root project's own "engines": pnpm 12

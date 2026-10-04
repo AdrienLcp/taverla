@@ -150,6 +150,23 @@ Nothing is deployed differently at the end of it.
 - Deploy to `taverla.<account>.workers.dev` by hand, play a room from two
   screens, muted.
 
+**Progress so far:**
+
+- `RoomObject` and `WallPairingObject` are written; `worker.ts` is the Worker
+  entry, and `routes.ts` takes a `RoomDoor` and a `WallPairings` port so the Node
+  and Worker entries share it. Seat identity rides the socket attachment and is
+  rewritten on every `persist`.
+- The runtime throws on `send()` or `close()` to a closed socket where `ws`
+  dropped it, and a client's ping can land after the room closed it — the
+  object only sends and closes while the socket is open.
+- e2e run on `wrangler dev`, each run with a state directory of its own: 4/4.
+- **The question bank stays bundled**: the deployed Worker reports a 71 ms
+  startup with it, against a 1 s limit (Node: ~35 ms JSON, ~50 ms Zod cold).
+- Deployed by hand to `taverla.adrienlcp.workers.dev`; a two-screen buzzer game
+  played there muted, reload of the console included.
+- Still owed: the socket harness on `@cloudflare/vitest-pool-workers` and the
+  hibernation test.
+
 — cut here: the Worker serves a full game on workers.dev, `pnpm validate` green, Render still the address —
 
 ## Session C — cutover

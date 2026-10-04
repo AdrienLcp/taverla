@@ -6,6 +6,10 @@
 
 *.tsbuildinfo
 
+# Wrangler's local state, and the types `wrangler types` writes on install.
+**/.wrangler
+worker-configuration.d.ts
+
 # Secrets are never committed. Public config lives in committed .env files
 # (Vite convention); anything private goes in a gitignored .env.local override.
 *.env.local

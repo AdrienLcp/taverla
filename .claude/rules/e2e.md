@@ -8,12 +8,12 @@ paths:
 
 ## Build before running them
 
-Playwright starts the server with `pnpm --filter @taverla/server start`, which is
-`node dist/index.mjs` — the bundle, not the sources the app is served from. A
-`pnpm test:e2e` after a server or protocol edit runs yesterday's server against
-today's client, and a `PROTOCOL_VERSION` bump turns every journey red at once
-with a refusal that has nothing to do with what they assert. `pnpm validate`
-builds first, which is the reason to prefer it.
+Playwright serves the server through `wrangler dev`, so the Worker itself is
+rebuilt from source on every run — but its static assets are `apps/game/dist`,
+which `wrangler dev` refuses to start without, and the app the journeys drive
+comes from Vite. `pnpm validate` builds first, which is the reason to prefer it.
+Each run gets a fresh `--persist-to` directory, so no room from a previous run
+still holds its code.
 
 ## Three journeys, and no fourth
 

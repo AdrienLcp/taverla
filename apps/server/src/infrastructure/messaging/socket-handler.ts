@@ -1,5 +1,5 @@
 import type { Result } from '@adrienlcp/result'
-import type { WSContext, WSEvents } from 'hono/ws'
+import type { WSEvents } from 'hono/ws'
 
 import {
   type ClientMessage,
@@ -60,7 +60,7 @@ import { nowMs } from '@/infrastructure/clock'
 import { newPlayerId, newSessionId } from '@/infrastructure/ids'
 import { logger } from '@/infrastructure/logging/logger'
 
-import type { Connection, Outbound } from './connection'
+import type { Connection, Outbound, Socket } from './connection'
 import { sendError, sendPong, sendWelcome } from './outbound'
 import {
   forgetSeat,
@@ -91,7 +91,7 @@ const HOST_CLAIM_REFUSALS: Record<HostClaimError, string> = {
 
 const reject = (
   outbound: Outbound,
-  ws: WSContext,
+  ws: Socket,
   code: Parameters<typeof sendError>[1]['code'],
   message: string
 ): void => {
@@ -143,7 +143,7 @@ const introduce = ({
   engine: RoomEngine | null
   message: HelloMessage
   outbound: Outbound
-  ws: WSContext
+  ws: Socket
 }): Connection | null => {
   if (message.protocolVersion !== PROTOCOL_VERSION) {
     reject(
@@ -215,7 +215,7 @@ const seatWall = ({
   message: HelloMessage
   outbound: Outbound
   sessionId: string
-  ws: WSContext
+  ws: Socket
 }): Connection | null => {
   if (message.hostToken !== engine.room.hostToken) {
     reject(
@@ -250,7 +250,7 @@ const seatHost = ({
   message: HelloMessage
   outbound: Outbound
   sessionId: string
-  ws: WSContext
+  ws: Socket
 }): Connection | null => {
   const { room } = engine
   const claimed = claimHost({
@@ -365,7 +365,7 @@ const dispatch = ({
   engine: RoomEngine
   message: RoomActionMessage
   outbound: Outbound
-  ws: WSContext
+  ws: Socket
 }): void => {
   if (HOST_ONLY_MESSAGE_TYPES.has(message.type) && active.role !== 'host') {
     sendError(outbound, {
@@ -1203,106 +1203,139 @@ const leave = (engine: RoomEngine, connection: Connection): void => {
   publishRoom(engine)
 }
 
+/** What a socket is once its `hello` has landed: who it is, and which room it joined. */
+export type JoinedSocket = { connection: Connection; engine: RoomEngine }
+
 /**
- * One of these exists per socket, and the closure is the connection's state:
- * `connection` is `null` until `hello` lands, which is what makes "the first
- * frame must introduce you" enforceable without a side table keyed on the
- * socket. The room is looked up on `hello` and held from then on, so a socket
- * whose room closed is never handed a new room that happens to share its code.
+ * One frame on one socket, whichever runtime holds it. `joined` is `null`
+ * until `hello` lands, which is what makes "the first frame must introduce you"
+ * enforceable; the caller keeps what this returns and hands it back with the
+ * next frame. The room is looked up on `hello` and held from then on, so a
+ * socket whose room closed is never handed a new room that shares its code.
  */
+export const receiveFrame = ({
+  findEngine,
+  joined,
+  raw,
+  socket
+}: {
+  findEngine: () => RoomEngine | null
+  joined: JoinedSocket | null
+  raw: unknown
+  socket: Socket
+}): JoinedSocket | null => {
+  if (typeof raw !== 'string') {
+    sendError(socket, {
+      code: 'invalid_message',
+      fatal: false,
+      message: 'Only text frames are accepted'
+    })
+
+    return joined
+  }
+
+  const decoded = decodeMessage(clientMessageSchema, raw)
+
+  if (decoded.status === 'failure') {
+    logger.warn('Rejected a socket frame', { reason: decoded.reason })
+    sendError(socket, {
+      code: 'invalid_message',
+      fatal: false,
+      message: decoded.reason
+    })
+
+    return joined
+  }
+
+  const message = decoded.message
+
+  // Answered before the handshake too, so a client can start estimating the
+  // clock offset while the player is still typing their nickname.
+  if (message.type === 'time.ping') {
+    sendPong(socket, {
+      clientSentAt: message.clientSentAt,
+      serverTime: joined?.engine.now() ?? nowMs()
+    })
+
+    return joined
+  }
+
+  if (joined === null) {
+    if (message.type !== 'hello') {
+      reject(
+        socket,
+        socket,
+        'invalid_message',
+        'The first frame must be a hello'
+      )
+
+      return null
+    }
+
+    const engine = findEngine()
+    const connection = introduce({
+      engine,
+      message,
+      outbound: socket,
+      ws: socket
+    })
+
+    return connection === null || engine === null
+      ? null
+      : { connection, engine }
+  }
+
+  if (message.type === 'hello') {
+    sendError(socket, {
+      code: 'invalid_message',
+      fatal: false,
+      message: 'This socket has already introduced itself'
+    })
+
+    return joined
+  }
+
+  dispatch({
+    active: joined.connection,
+    engine: joined.engine,
+    message,
+    outbound: socket,
+    ws: socket
+  })
+
+  return joined
+}
+
+export const closeSocket = (joined: JoinedSocket | null): void => {
+  if (joined !== null) {
+    leave(joined.engine, joined.connection)
+  }
+}
+
+/** The Node runtime's socket: the closure is where the joined state lives. */
 export const createRoomSocketEvents = (
   findEngine: () => RoomEngine | null
 ): WSEvents => {
-  let joined: { connection: Connection; engine: RoomEngine } | null = null
+  let joined: JoinedSocket | null = null
 
   return {
     onClose() {
-      if (joined !== null) {
-        leave(joined.engine, joined.connection)
-      }
+      closeSocket(joined)
     },
 
     onMessage(event, ws) {
-      const outbound: Outbound = {
-        send: (payload) => {
-          ws.send(payload)
+      joined = receiveFrame({
+        findEngine,
+        joined,
+        raw: event.data,
+        socket: {
+          close: (code, reason) => {
+            ws.close(code, reason)
+          },
+          send: (payload) => {
+            ws.send(payload)
+          }
         }
-      }
-
-      if (typeof event.data !== 'string') {
-        sendError(outbound, {
-          code: 'invalid_message',
-          fatal: false,
-          message: 'Only text frames are accepted'
-        })
-
-        return
-      }
-
-      const decoded = decodeMessage(clientMessageSchema, event.data)
-
-      if (decoded.status === 'failure') {
-        logger.warn('Rejected a socket frame', { reason: decoded.reason })
-        sendError(outbound, {
-          code: 'invalid_message',
-          fatal: false,
-          message: decoded.reason
-        })
-
-        return
-      }
-
-      const message = decoded.message
-
-      // Answered before the handshake too, so a client can start estimating the
-      // clock offset while the player is still typing their nickname.
-      if (message.type === 'time.ping') {
-        sendPong(outbound, {
-          clientSentAt: message.clientSentAt,
-          serverTime: joined?.engine.now() ?? nowMs()
-        })
-
-        return
-      }
-
-      if (joined === null) {
-        if (message.type !== 'hello') {
-          reject(
-            outbound,
-            ws,
-            'invalid_message',
-            'The first frame must be a hello'
-          )
-
-          return
-        }
-
-        const engine = findEngine()
-        const connection = introduce({ engine, message, outbound, ws })
-
-        if (connection !== null && engine !== null) {
-          joined = { connection, engine }
-        }
-
-        return
-      }
-
-      if (message.type === 'hello') {
-        sendError(outbound, {
-          code: 'invalid_message',
-          fatal: false,
-          message: 'This socket has already introduced itself'
-        })
-
-        return
-      }
-
-      dispatch({
-        active: joined.connection,
-        engine: joined.engine,
-        message,
-        outbound,
-        ws
       })
     }
   }

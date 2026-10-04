@@ -186,6 +186,8 @@
     "ENOENT",
     "enwiki",
     "EPERM",
+    "ratelimits",
+    "workerd",
     "Éric",
     "EROFS",
     "esbuild",
