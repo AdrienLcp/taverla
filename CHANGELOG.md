@@ -1434,6 +1434,15 @@ one part.
 
 ### Fixes
 
+- `[Game]` **Every reveal fits a 768px laptop, and a console held in a hand
+  reaches the next round without scrolling.** Above the split the reveal's
+  footer is one row — the next round, the way out, the hold strip — with the
+  settings fold under it, which gives the stage about 7rem back. The blind
+  test's list sits under the cover and the title together rather than beside
+  the cover, so it can take two columns, and a name in that list is cut only
+  when it alone is wider than its row. Stacked, the standings go under the
+  footer: every player already has them on their own screen.
+
 - `[Game]` **The quiz reveal fits a 1280×800 laptop again.** From five answers
   the list beside the answer flows into two columns, the hold bar's row only
   exists while a bar is drawn and sits a tighter gap under the stage, and the

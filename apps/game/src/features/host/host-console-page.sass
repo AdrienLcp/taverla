@@ -149,7 +149,15 @@
         @include layout.narrow
           --stacked-budget: calc(100dvh - 27rem - var(--hold-bar))
 
-          justify-content: center
+          // And so the standings go under the footer rather than above it. The
+          // stage hands its children to the page's own column, which is what
+          // lets `order` put the board after the actions: at 800×800 the next
+          // round ended 122px under the fold with a bar drawn. The board holds
+          // nothing to press, so the order a keyboard walks is unchanged.
+          display: contents
+
+          > .scoreboard
+            order: 1
 
           // Both lists divide the same budget by their own rows rather than
           // splitting it between them. They are the same length — one row per
@@ -192,9 +200,10 @@
         // Dividing the viewport keeps the worst case a scroll — which is what
         // this screen does below the split already — instead of a collision.
         //
-        // `31rem` is the chrome around the stage, measured rather than guessed:
-        // the header, the footer, the page padding and two gaps came to 494px
-        // at 1080 and 469px at 768.
+        // `24rem` is the chrome around the stage, measured rather than guessed:
+        // the header, the footer, the page padding and two gaps came to 379px
+        // at 1080 and 349px at 768. It read `31rem` while the footer was a
+        // stacked column; laid out as a row it gave the stage 7rem back.
         @include layout.wide
           display: grid
           gap: var(--reveal-gap)
@@ -234,7 +243,11 @@
           // and the panel's header have not already spent. The panel says what
           // its header costs, because that is the half it knows.
           .reveal-panel
-            --outcome-budget: calc(100dvh - var(--outcome-header, 44rem) - var(--hold-bar))
+            //
+            // `--outcome-header` was measured over the stacked footer and is
+            // shared with the countdown's recap, which still has one, so the
+            // 7rem the reveal's row returned is added back here.
+            --outcome-budget: calc(100dvh - var(--outcome-header, 44rem) + 7rem - var(--hold-bar))
 
           // The same bargain on the other side, and the reason this board does
           // not take the final board's two columns: halving the width truncated
@@ -245,7 +258,7 @@
           // `line-height` is the reset's 1.5 until it is said otherwise, which
           // on a numeral this size is half a row of nothing, ten times over.
           .scoreboard li
-            font-size: clamp(0.9rem, calc((100dvh - 31rem - var(--hold-bar)) / var(--standings-rows, 8) / var(--standings-row)), 1.75rem)
+            font-size: clamp(0.9rem, calc((100dvh - 24rem - var(--hold-bar)) / var(--standings-rows, 8) / var(--standings-row)), 1.75rem)
             padding: 0.45em 0
 
             .rank
@@ -446,6 +459,12 @@
       .auto-advance
         width: min(24rem, 100%)
 
+      .reveal-actions
+        align-items: center
+        display: flex
+        flex-direction: column
+        gap: var(--space-m)
+
       .setup-fold
         width: min(900px, 100%)
 
@@ -455,3 +474,29 @@
           @include typography.caption
 
           color: var(--ink-muted)
+
+    // The reveal is the one stage that has to fit beside its footer rather
+    // than above it: the answer, the list of what everyone said, the standings
+    // and a hold bar, under a header, on a 768px laptop. Stacked, the footer
+    // was 283px at 1280×800 — the next round, the way out under it, the hold
+    // strip under that and the fold — and it was that column, not the answer,
+    // that ran the page past the bottom. Side by side the three controls are
+    // one row and the fold the next, which gives the stage back about 120px
+    // without shrinking anything the room reads.
+    //
+    // The strip sits after the action it times, so the row reads *next round,
+    // or end it, in 25 seconds*. Where the three do not fit on one line they
+    // wrap, centred, rather than squeeze the strip into its stacked form.
+    > .stage.revealed ~ footer
+      @include layout.wide
+        column-gap: var(--space-xl)
+        flex-flow: row wrap
+        justify-content: center
+
+        .reveal-actions
+          flex-direction: row
+          gap: var(--space-l)
+
+        .setup-fold
+          flex-basis: 100%
+          max-width: 900px

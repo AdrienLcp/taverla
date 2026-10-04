@@ -53,9 +53,9 @@ export const RevealPanel: React.FC<RevealPanelProps> = ({ players, round }) => {
           <p className='title'>{whatTheRoomNames(track)}</p>
           <p className='artist'>{track.artist}</p>
           {cueOf(track) !== null && <p className='note'>{cueOf(track)}</p>}
-
-          <Outcome players={players} round={round} />
         </div>
+
+        <Outcome players={players} round={round} />
       </section>
     )
   }

@@ -20,20 +20,22 @@ export const RevealActions: React.FC<HostActionsProps> = ({
   // over. One control, named after what it opens.
   if (total !== null && (view.round?.index ?? 0) >= total) {
     return (
-      <Button
-        isDisabled={!isLive}
-        onPress={() => {
-          send({ type: 'host.nextRound' })
-        }}
-        size='large'
-      >
-        {translate('host.seeResults')}
-      </Button>
+      <div className='reveal-actions'>
+        <Button
+          isDisabled={!isLive}
+          onPress={() => {
+            send({ type: 'host.nextRound' })
+          }}
+          size='large'
+        >
+          {translate('host.seeResults')}
+        </Button>
+      </div>
     )
   }
 
   return (
-    <>
+    <div className='reveal-actions'>
       <Button
         isDisabled={!isLive}
         onPress={() => {
@@ -53,6 +55,6 @@ export const RevealActions: React.FC<HostActionsProps> = ({
       >
         {translate('host.endGame')}
       </Button>
-    </>
+    </div>
   )
 }
