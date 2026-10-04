@@ -1,7 +1,28 @@
 # Stage 29 — A new UI, from zero
 
-**Not started.** This file is the brief: open a fresh session, run
-`/impeccable` with the prompt below, and update this file as decisions land.
+**In progress — choosing a direction.** This file is the brief: open a fresh
+session, run `/impeccable` with the prompt below, and update this file as
+decisions land.
+
+## Decisions so far
+
+- **2026-10-04 — `PRODUCT.md` refreshed** (step 0): five games, three roles,
+  Cloudflare hosting, the bank's real size, the no-scroll rule as operating
+  context.
+- **Ruled out by Adrien**: the party-game app (near-black, one neon accent,
+  glows) and any period costume. The front door holds **two promises together**:
+  playing in seconds, and a whole evening on the shelf.
+- **Three directions, as example pages** in `.impeccable/directions/` (not
+  committed; seed key `0a5a42fb`): `chrono.html` — bibs and race timing, the
+  one the seed assigned; `boite.html` — the board-game shelf, impeccable's own
+  top pick; `embarquement.html` — boarding pass and departures board, the
+  challenger that held on product clarity. Declined challengers (star atlas,
+  bitmap specimen, centre-rail setting, split-flap) each donated one discipline
+  to `chrono`, written on its page.
+- **Worst real content, measured**: the 192-char fr prompt is
+  `mintaka-8db29866`; the 275-char choice is `vikidia-astronomie-2-1`; and
+  `vikidia-bravelands-13` is the harder realistic case — four choices up to
+  ~160 chars each, the stress row of every example page.
 
 ## The prompt
 

@@ -17,20 +17,21 @@ audiences that must both be served, confirmed as equally important:
   which is the stricter of the two constraints and the one that decides the
   tone.
 
-Nobody installs anything. One person runs the game on a screen; everyone else
-joins from whatever they have to hand — a phone by QR code, a laptop by typing
-the four characters on the host screen. **A phone is the common case, never the
+Nobody installs anything and nobody has an account. One screen opens the room;
+everyone else joins from whatever they have to hand — a phone by QR code, a
+laptop by typing the four characters. **A phone is the common case, never the
 contract**, and nothing user-facing may name the device.
 
-There are two distinct jobs:
+Three roles, never three devices:
 
-- **The host** sets the game up, starts each round, and judges answers. They are
-  on their feet as often as not, and looking up at the room as often as at the
-  screen.
-- **The players** wait, recognise a track, and answer. Their own screen is a
-  second screen rather than a remote control for the console — they read it as
-  much as they press it, and it is often the only screen they can see. They
-  read it standing, in glances, between a conversation and a drink.
+- **The host** opens the room, picks the game, starts each round and judges the
+  modes that need a judge. They may also take a seat and play. They are on their
+  feet as often as not, looking up at the room as often as at the screen.
+- **The wall** is the room's own screen, paired by the host's device: it shows
+  the game and plays the clip, and holds no answer, no control and no seat.
+- **The players** wait, recognise, and answer. Their own screen is a second
+  screen rather than a remote control for the console — they read it as much as
+  they press it, standing, in glances, between a conversation and a drink.
 
 ## Product Purpose
 
@@ -49,72 +50,91 @@ at a time and large enough to read in the dark, and never as a copy of the
 console. The one thing it is never sent is the answer while that answer can
 still be typed — anti-cheat, and permanent.
 
-The blind test is the first game, not the product. The product is the room: a
-code read aloud, a QR code scanned, seats that survive a locked screen, and a
-scoreboard everyone can see.
+The product is the room, not any one game: a code read aloud, a QR code
+scanned, seats that survive a locked screen, a scoreboard everyone can see, and
+a shelf of games played in it one after the other on the same evening.
 
 ## Positioning
 
-The whole game runs on one origin with no install, no account and no app store.
-A player who scans the QR code is playing four seconds later, and one whose
-screen locks comes back to the same seat with the same score.
+Two promises, held together on the front door (confirmed 2026-10-04): **the
+room is playing in seconds** — no install, no account, no app store; a player
+who scans the QR code is in four seconds later, and one whose screen locks
+comes back to the same seat with the same score — **and there is a whole
+evening on the shelf**, five games played in the same room without anyone
+joining twice.
 
 The order of a buzz is decided by the server on frame arrival, never by a
-timestamp the client sends. That is what makes the race honest, and it is the
-mechanism the whole catalogue of future games inherits.
+timestamp the client sends. That is what makes the race honest, and every game
+on the shelf inherits it.
 
 ## Operating Context
 
 - **The host screen is whatever is nearest** — a laptop on the coffee table, a
-  TV or projector across the room, or even a second phone. Confirmed: all three
-  must work. The reading distance therefore ranges from 40 cm to four metres,
-  and the layout has to hold at every width from a phone to a television.
+  TV or projector across the room, or a second phone. All three must work. The
+  reading distance ranges from 40 cm to four metres, and the layout has to hold
+  at every width and every aspect ratio, from a phone held sideways to an
+  ultrawide.
 - **The room is often dark.** Living-room lighting, evening, sometimes only the
   screen itself.
 - **A player's screen is read as much as it is pressed, and read in glances.**
-  In the dark, at reading distance, between two answers. So what is drawn around
-  the buzzer matters — a screen showing only a button sends its player looking
-  up at a screen that may not be there — and *how much* of it there is matters
-  exactly as much, because a screen showing everything is read by nobody.
+  What is drawn around the buzzer matters — a screen showing only a button sends
+  its player looking up at a screen that may not be there — and *how much* of it
+  there is matters exactly as much, because a screen showing everything is read
+  by nobody.
+- **A question and its four choices never scroll**, at any viewport, on a
+  player's screen or a seated host's console. The viewport is the frame.
 - **Party Wi-Fi is bad Wi-Fi.** Anything that blocks first paint costs a player
-  the first round.
-- **The cover art is the only real image in the product,** and it arrives from
-  Deezer at 250 px. Design around that resolution rather than fighting it.
+  the first round. The font is self-hosted.
+- **Cover art is the only real image in the product**, it belongs to the blind
+  test alone, and it arrives from Deezer at 250 px. Design around that
+  resolution rather than fighting it.
 
 ## Capabilities and Constraints
 
 - One room, a four-character code from an alphabet with no confusable glyphs,
-  up to 24 players.
-- One game today: the blind test, judged by the host after a buzz. **It is
-  planned to grow answer modes** — four multiple-choice answers, and a typed
-  answer scored by the server — so the game's own name has to survive more than
-  one way of answering.
-- More games are planned beyond it; the room, the roster, the seats, the clock
-  and the anti-cheat are the shared shell. See `docs/game-catalogue.md`.
-- Audio only ever plays on the host screen. Twelve phones playing the same clip
-  milliseconds apart is a mess, and this is deliberate and permanent.
-- Rooms live in one server process and do not survive a restart. Accepted: the
-  host would have to re-share the QR code anyway.
-- Tracks come from Deezer, filtered by a popularity floor so the room can
-  actually name what it hears. Thirty-second previews, signed with an expiry.
-- Two locales, English and French, and two themes, dark and light.
+  up to 24 players. Each room is a Cloudflare Durable Object and survives a
+  deploy; the app is served from `taverla.adrienlcp.workers.dev`, with no custom
+  domain yet.
+- **Five games**, each owning its name and its translation prefix:
+  - **Blind test** — a 30-second Deezer preview on the room's speaker; players
+    name title and artist, or the film for a score cue. Sources: genre charts,
+    decades (international and French), 47 film composers, any Deezer playlist,
+    a free search; a difficulty setting by popularity.
+  - **Quiz** — a bundled bank of 11 453 questions (7 016 French, 4 437 English)
+    over eight subjects: history, geography, science, arts, cinema, video games,
+    sport, everyday. Sources and licences are on the credits page.
+  - **Buzzer** — a bare race for the floor; the host brings the content.
+  - **Reflex** — a race against a screen about to change colour; a false start
+    costs the round.
+  - **Slate** — a private numbered answer sheet on every screen, marked by the
+    host item by item on the wall.
+- **Answer modes**: `typed` (scored by the server, with a speed bonus), `choice`
+  (four candidates, speed bonus), `buzzer` (one player, judged by the host).
+  Blind test and quiz offer all three; buzzer and reflex only `buzzer`; slate
+  is typed.
+- Phases every role walks through: lobby, countdown, playing, buzzed, revealed,
+  finished — plus connecting, reconnecting, host away, joined mid-round, removed
+  by host, room closed.
+- Audio only ever plays on the screen that is the room's speaker — the host's or
+  the wall's. Twelve phones playing the same clip milliseconds apart is a mess,
+  and this is deliberate and permanent.
+- Two locales, English and French (French runs longer), and two themes, dark and
+  light.
 
 ## Brand Commitments
 
-- **"Blind test" is the name of this game**, and it must keep working once the
-  game has several answer modes.
+- **Each game keeps its own name** — Blind test, Quiz, Buzzer, Reflex, Slate —
+  across every answer mode it offers.
 - **The product that hosts the games is called `Taverla`.** From *taverne* /
   *tavern*, a word both languages already own, and the place people have always
-  gathered to play. `taverla.com` and `taverla.fr` are both free as of
-  2026-08-09 and should be registered before anything is published under the
-  name. Known noise, judged not to be a conflict: a small Mexican candle maker
-  ("Velas Taverla") and a surname.
+  gathered to play. `taverla.com` and `taverla.fr` were free as of 2026-08-09;
+  nothing records them as registered since. Known noise, judged not to be a
+  conflict: a small Mexican candle maker ("Velas Taverla") and a surname.
 
-  **`Blind test` remains the name of the game.** The product name lives where
-  the shelf is addressed rather than where a game is played: the wordmark on the
-  home page, the document title, and what a shared link unfurls into. No game
-  screen carries it, and none should — a player who scanned a QR code is in a
-  blind test, not in Taverla.
+  The product name lives where the shelf is addressed rather than where a game
+  is played: the wordmark on the home page, the document title, and what a
+  shared link unfurls into. No game screen carries it, and none should — a game
+  screen names the game.
 
   Still owed before committing commercially: INPI and EUIPO. Everything below
   was a registry and web check, never a trademark clearance.
@@ -124,8 +144,8 @@ mechanism the whole catalogue of future games inherits.
   - two or three syllables;
   - easy to say and to take in for a French speaker *and* an English speaker.
     The spelling does not have to be identical in both languages; the ease does;
-  - **nothing sound- or music-derived.** Not every game on this shelf will have
-    audio, and a name that promises music would date on the second title;
+  - **nothing sound- or music-derived.** Not every game on this shelf has audio,
+    and a name that promises music would date on the second title;
   - not already taken;
   - **its `.com` must be free.** Added after `Kermo` turned out to be a singer
     and every shortlisted five-letter `.com` turned out to be registered.
@@ -147,13 +167,21 @@ mechanism the whole catalogue of future games inherits.
 - The tone must work with a grandparent and a drunk friend in the same room, so
   it is warm and federating rather than laddish. No in-jokes, no swearing, no
   content that would need explaining to a child.
+- **Two looks are ruled out** (confirmed 2026-10-04): the party-game app — a
+  near-black ground, one neon accent, glowing edges — and a period costume, any
+  pastiche of an era worn as a disguise rather than a world of its own.
 
 ## Evidence on Hand
 
-- A working game, deployed nowhere yet: lobby, QR join, round engine, buzzer,
-  host judging, reveal with cover art, scoreboard, final board.
-- Real catalogue data from Deezer, including cover art at 250 px.
-- No users, no testimonials, no usage numbers, no press. None may be invented.
+- A working, deployed product: five games, three answer modes, wall pairing,
+  held seats, host takeover, an invite poster (`/invite/:code`) and a credits
+  page.
+- Real content: the question bank, and Deezer catalogue data with 250 px cover
+  art.
+- Two playtests by people who had not built it (14 and 16 August 2026, on an
+  iPhone, a laptop and Android) and a family room that asked for a difficulty
+  control.
+- No testimonials, no usage numbers, no press. None may be invented.
 
 ## Product Principles
 
@@ -172,8 +200,9 @@ mechanism the whole catalogue of future games inherits.
    are never the client's opinion.
 4. **Nothing is installed and nothing is configured.** Every second between
    "let's play" and the first note is a second the product is failing.
-5. **This game is the first, not the last.** Anything built only for the blind
-   test stays in the blind test's own namespace.
+5. **No game is the product.** Anything built only for one game stays in that
+   game's own namespace; the room, the roster, the seats, the clock and the
+   anti-cheat are the shared shell.
 
 ## Accessibility & Inclusion
 
