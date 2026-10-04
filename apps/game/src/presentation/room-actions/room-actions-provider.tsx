@@ -29,6 +29,11 @@ export type RoomActions = {
   playsSound: boolean
   /** Changes the name the seat is held under, socket and round untouched. */
   rename: ((nickname: string) => void) | null
+  /**
+   * Ends the round in play and shows its answer. Offered only where the stage
+   * has no room for it: a seated host's four tiles fill the whole screen.
+   */
+  revealRound: (() => void) | null
   /** What the room calls this screen right now. `null` where no seat is held. */
   seatNickname: string | null
 }
@@ -40,6 +45,7 @@ const NO_ACTIONS: RoomActions = {
   playsSound: false,
   refusedNickname: null,
   rename: null,
+  revealRound: null,
   seatNickname: null
 }
 
@@ -99,6 +105,7 @@ export const useReportRoomActions = ({
   playsSound,
   refusedNickname,
   rename,
+  revealRound,
   seatNickname
 }: RoomActions) => {
   const { report } = useChannel()
@@ -111,6 +118,7 @@ export const useReportRoomActions = ({
       playsSound,
       refusedNickname,
       rename,
+      revealRound,
       seatNickname
     })
 
@@ -125,6 +133,7 @@ export const useReportRoomActions = ({
     refusedNickname,
     rename,
     report,
+    revealRound,
     seatNickname
   ])
 }

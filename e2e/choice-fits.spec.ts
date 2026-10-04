@@ -152,11 +152,35 @@ const choosingView = (question: Question) => ({
 })
 
 /**
- * Answers the player's socket the way the room would: a welcome carrying the
+ * The same round on a console whose host took the first seat. It is withheld
+ * the answer the way a player is, and a wall is the speaker, so nothing but the
+ * four tiles asks for the screen.
+ */
+const seatedHostView = (question: Question) => ({
+  ...choosingView(question),
+  currentContent: { kind: 'quiz', question: null },
+  isWallConnected: true,
+  remainingPoolSize: 40
+})
+
+type Seat = {
+  /** The route the screen is opened on. */
+  path: string
+  role: 'host' | 'player'
+  view: (question: Question) => object
+}
+
+const SEATS: Seat[] = [
+  { path: `/play/${ROOM_CODE}`, role: 'player', view: choosingView },
+  { path: `/host/${ROOM_CODE}`, role: 'host', view: seatedHostView }
+]
+
+/**
+ * Answers the screen's socket the way the room would: a welcome carrying the
  * snapshot to the hello, a pong to every ping. The protocol version is echoed
  * from the hello, so a bump never strands this check on a stale number.
  */
-const serveRoom = async (page: Page, question: Question) => {
+const serveRoom = async ({ page, view }: { page: Page; view: object }) => {
   await page.routeWebSocket(/\/ws\/rooms\//, (socket) => {
     socket.onMessage((raw) => {
       const message = JSON.parse(String(raw))
@@ -168,7 +192,7 @@ const serveRoom = async (page: Page, question: Question) => {
             serverTime: SERVER_TIME,
             sessionId: message.sessionId,
             type: 'welcome',
-            view: choosingView(question)
+            view
           })
         )
       }
@@ -263,35 +287,37 @@ test.beforeEach(async ({ context }) => {
   })
 })
 
-for (const question of WORST_CASES) {
-  test(`[layout] ${question.id}: the question and its four choices never scroll`, async ({
-    page
-  }) => {
-    await serveRoom(page, question)
-    await page.setViewportSize({ height: 844, width: 390 })
-    await page.goto(`/play/${ROOM_CODE}`)
-    await expect(page.locator('.answer-tile')).toHaveCount(4)
-    await page.evaluate(() => document.fonts.ready.then(() => {}))
-
-    const faults: string[] = []
-
-    for (const [width, height] of VIEWPORTS) {
-      await page.setViewportSize({ height, width })
+for (const seat of SEATS) {
+  for (const question of WORST_CASES) {
+    test(`[layout] ${seat.role}, ${question.id}: the question and its four choices never scroll`, async ({
+      page
+    }) => {
+      await serveRoom({ page, view: seat.view(question) })
+      await page.setViewportSize({ height: 844, width: 390 })
+      await page.goto(seat.path)
+      await expect(page.locator('.answer-tile')).toHaveCount(4)
       await page.evaluate(() => document.fonts.ready.then(() => {}))
 
-      const overflow = await page.evaluate(measure)
+      const faults: string[] = []
 
-      if (
-        overflow.floor < FLOOR_PX ||
-        overflow.furthest !== null ||
-        overflow.page > 0 ||
-        overflow.spills.length > 0 ||
-        overflow.strays.length > 0
-      ) {
-        faults.push(`${width}×${height} ${JSON.stringify(overflow)}`)
+      for (const [width, height] of VIEWPORTS) {
+        await page.setViewportSize({ height, width })
+        await page.evaluate(() => document.fonts.ready.then(() => {}))
+
+        const overflow = await page.evaluate(measure)
+
+        if (
+          overflow.floor < FLOOR_PX ||
+          overflow.furthest !== null ||
+          overflow.page > 0 ||
+          overflow.spills.length > 0 ||
+          overflow.strays.length > 0
+        ) {
+          faults.push(`${width}×${height} ${JSON.stringify(overflow)}`)
+        }
       }
-    }
 
-    expect(faults).toEqual([])
-  })
+      expect(faults).toEqual([])
+    })
+  }
 }

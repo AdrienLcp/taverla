@@ -28,13 +28,12 @@ import {
 import { forgetSessionId } from '@/infrastructure/storage/session-storage'
 import { Button } from '@/presentation/components/button'
 import { ConnectionRefused } from '@/presentation/components/connection-refused'
-import { Pawn } from '@/presentation/components/pawn'
+import { RoundChrome } from '@/presentation/components/round-chrome'
 import {
   RevealHold,
   RoundProgress
 } from '@/presentation/components/round-progress'
 import { TextField } from '@/presentation/components/text-field'
-import { VisuallyHidden } from '@/presentation/components/visually-hidden'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
 import { RoomDocumentTitle } from '@/presentation/head/room-document-title'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
@@ -114,6 +113,7 @@ const PlayerScreen: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
         ? requestedNickname
         : null,
     rename: seatNickname === null ? null : rename,
+    revealRound: null,
     seatNickname
   })
 
@@ -239,7 +239,12 @@ const Lobby: React.FC<{
   if (view !== null && isChoosing(view)) {
     return (
       <main className='player-page playing framed'>
-        <RoundChrome view={view} />
+        <RoundChrome
+          players={view.players}
+          roundCount={view.settings.roundCount}
+          roundIndex={view.round?.index ?? 0}
+          youId={view.youId}
+        />
         <div className='card-clock'>
           <RoundClock clock={clock} view={view} />
         </div>
@@ -312,63 +317,6 @@ const isChoosing = (view: PlayerRoomView): boolean =>
   view.isHostConnected &&
   view.round !== null &&
   !view.round.joinedAfterStart
-
-/**
- * The round and the player's own pawn and score, on the one line the menu
- * trigger ends — the whole of the chrome a screen of four tiles can afford.
- * The pips are the round as squares on a track, dropped when the line is too
- * narrow to hold them. The clock is not here: it drains along the question
- * card's top edge, which is where the eye already is.
- */
-const RoundChrome: React.FC<{ view: PlayerRoomView }> = ({ view }) => {
-  const translate = useTranslate()
-  const youSeat = view.players.findIndex((player) => player.id === view.youId)
-  const score = view.players[youSeat]?.score ?? 0
-  const index = view.round?.index ?? 0
-  const total = view.settings.roundCount
-
-  return (
-    <header className='round-chrome'>
-      <p className='round-index'>
-        <VisuallyHidden>
-          {total === null
-            ? translate('round.indexOpen', { index })
-            : translate('round.index', { index, total })}
-        </VisuallyHidden>
-        <span aria-hidden='true' className='figures'>
-          {total === null ? index : `${index}/${total}`}
-        </span>
-        {total !== null && total <= MOST_PIPS && (
-          <span aria-hidden='true' className='pips'>
-            {Array.from({ length: total }, (_, pip) => pip + 1).map(
-              (pipRound) => (
-                <i
-                  data-state={
-                    pipRound < index
-                      ? 'done'
-                      : pipRound === index
-                        ? 'now'
-                        : 'next'
-                  }
-                  key={pipRound}
-                />
-              )
-            )}
-          </span>
-        )}
-      </p>
-      <p className='you'>
-        <Pawn seat={Math.max(0, youSeat)} />
-        <span className='score'>{score}</span>
-        <VisuallyHidden>
-          {translate('player.points', { points: score })}
-        </VisuallyHidden>
-      </p>
-    </header>
-  )
-}
-
-const MOST_PIPS = 15
 
 /**
  * The clock the console is showing, on the player's screen that is answering

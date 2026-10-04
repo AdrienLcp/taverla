@@ -80,6 +80,7 @@ const Wall: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
     playsSound: true,
     refusedNickname: null,
     rename: null,
+    revealRound: null,
     seatNickname: null
   })
 

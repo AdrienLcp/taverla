@@ -10,10 +10,7 @@ import type {
   RoundView
 } from '@taverla/protocol/room'
 
-import {
-  type ClipRefusal,
-  isClipUnheard
-} from '@taverla/core/blindtest/clip-audio'
+import type { ClipRefusal } from '@taverla/core/blindtest/clip-audio'
 import type { HostPreferences } from '@taverla/core/room/host-preferences'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
@@ -22,13 +19,8 @@ import {
   type PlayerAnswer,
   TypedAnswer
 } from '@/features/player/answer-forms'
-import {
-  blindtestHostContent,
-  holdsTheAnswer,
-  quizContent
-} from '@/helpers/round-content'
+import { holdsTheAnswer, quizContent } from '@/helpers/round-content'
 import { AskedQuestion } from '@/presentation/components/asked-question'
-import { Button } from '@/presentation/components/button'
 import { Countdown } from '@/presentation/components/countdown'
 import { RoomInvitation } from '@/presentation/components/room-invitation'
 import {
@@ -37,8 +29,8 @@ import {
 } from '@/presentation/components/round-progress'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
-import { clipRefusalKey } from '@/presentation/i18n/translation'
 
+import { ClipOffer } from './clip-offer'
 import { FinalBoard } from './final-board'
 import { LobbyStage } from './lobby-stage'
 import { ReflexStage } from './reflex-stage'
@@ -128,29 +120,15 @@ export const RoomStage: React.FC<RoomStageProps> = ({
   const isSeated = controls !== null && view.youId !== null
   const youId = isSeated ? view.youId : null
 
-  // A silent round is *visually identical* to one that plays — the clip's
-  // progress comes from the server, buzzes work, the reveal lands — so this is
-  // the one thing on the speaker that has to be said out loud.
-  const clipOffer =
-    isSpeaker &&
-    isClipUnheard({
-      canPlay,
-      hasClip: blindtestHostContent(view)?.audioUrl != null,
-      phase: view.phase
-    }) ? (
-      <div className='muted-clip'>
-        <p>{translate('blindtest.audio.silent')}</p>
-        <Button onPress={onUnlockAudio} size='small' variant='outlined'>
-          {translate('blindtest.audio.start')}
-        </Button>
-        {/* Below the offer, because it is what the last one came back with. */}
-        {refusal !== null && (
-          <p className='refusal' role='alert'>
-            {translate(clipRefusalKey(refusal))}
-          </p>
-        )}
-      </div>
-    ) : null
+  const clipOffer = (
+    <ClipOffer
+      canPlay={canPlay}
+      isSpeaker={isSpeaker}
+      onUnlockAudio={onUnlockAudio}
+      refusal={refusal}
+      view={view}
+    />
+  )
 
   if (view.phase === 'countdown' && round?.startsAt != null) {
     // The round that just ran, still up while the next one counts in. It is the

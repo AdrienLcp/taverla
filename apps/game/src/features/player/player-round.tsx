@@ -24,12 +24,8 @@ import {
   millisecondsUntil
 } from '@taverla/core/time/clock-sync'
 
-import {
-  ChoiceAnswer,
-  longestChoiceLength,
-  type PlayerAnswer,
-  TypedAnswer
-} from '@/features/player/answer-forms'
+import { type PlayerAnswer, TypedAnswer } from '@/features/player/answer-forms'
+import { ChoosingRound } from '@/features/player/choosing-round'
 import { ReflexBuzzer } from '@/features/player/reflex-buzzer'
 import { RoundBoard } from '@/features/player/round-board'
 import {
@@ -69,13 +65,6 @@ import {
 import './player-round.sass'
 
 const ROUND_IS_RUNNING = new Set<RoomPhase>(['buzzed', 'countdown', 'playing'])
-
-/**
- * Past this a candidate is a sentence rather than a name, and four of them
- * read better as four full-width rows than as a grid of narrow columns, at any
- * ratio: the words per tile stay the same, the lines per tile halve.
- */
-const LONG_CHOICE_LENGTH = 60
 
 type PlayerRoundProps = {
   clock: ClockEstimate | null
@@ -255,21 +244,11 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
 
     if (view.settings.mode.kind === 'choice') {
       return (
-        <section
-          className='player-round choosing'
-          data-long-choices={
-            longestChoiceLength(round) > LONG_CHOICE_LENGTH || undefined
-          }
-          style={{ '--choice-length': longestChoiceLength(round) }}
-        >
-          <AskedQuestion prompt={prompt} />
-          <ChoiceAnswer
-            key={round.id}
-            onAnswer={answerWithRound}
-            round={round}
-            youId={view.youId}
-          />
-        </section>
+        <ChoosingRound
+          onAnswer={answerWithRound}
+          round={round}
+          youId={view.youId}
+        />
       )
     }
 

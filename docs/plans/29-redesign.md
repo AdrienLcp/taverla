@@ -50,10 +50,10 @@ new one is whole. This file is the brief: open a fresh session, run
 - **The shell.** `_tokens.sass` is the board world in `light-dark()` pairs:
   board, track squares, chipboard, paper, socket, four tile inks with their
   shape marks, five game spines, eight pawns, primary coral. `--field` / `--ink`
-  survive as the pair every unredrawn component reads, pointed at the board;
+  survive as the pair every component not yet redrawn reads, pointed at the board;
   the phase no longer repaints the ground and sets `--phase-ink` instead, for
   the track. Contrast measured in both palettes: worst text pair 5.93:1, worst
-  shape mark 3.37:1. Bricolage Grotesque (display, `wdth` 75–100) and Atkinson
+  shape mark 3.37:1. Bricolage Grotesque (display, width axis 75–100) and Atkinson
   Hyperlegible Next (read) are self-hosted in `public/fonts`; Archivo is
   deleted. `_piece.sass` is the die-cut material (`piece`, `pressable`,
   `card`), and `_control.sass` cuts `filled` as the coral token and `outlined`
@@ -68,12 +68,26 @@ new one is whole. This file is the brief: open a fresh session, run
   tiles the whole right column, the menu moved to the left. Choices over 60
   characters are four full-width rows at every ratio. The status line is one
   sentence, visually hidden under 600px of height.
+- **The seated host's choice screen** is the same screen: `host-console-page`
+  renders `framed` whenever its host holds a seat in a choice round, and the
+  header, footer, standings, hold strip and setup fold all leave for as long as
+  the round runs. The shared pieces moved to where both surfaces reach them —
+  `ChoosingRound` (`features/player/choosing-round.tsx`, the card and the four
+  tiles), `RoundChrome` (`presentation/components/round-chrome.tsx`) and the
+  frame itself as `framed.page` (`presentation/styles/_framed.sass`). The one
+  control a round in play offers, *give it away*, moved to the head of the
+  menu as `RoomActions.revealRound`, reported only while the screen is framed,
+  so it costs the tiles no row. A refused frame or a speaker the browser has
+  not let play takes a `.notice` row, which exists only while it has something
+  in it.
 - **The proof**: `e2e/choice-fits.spec.ts` answers the socket in the page with
-  a stub snapshot and measures sixteen viewports × four bank rows (the 192-char
+  a stub snapshot and measures two seats (a player, a seated host on
+  `/host/KWRH`) × sixteen viewports × four bank rows (the 192-char
   prompt, the 158-char choice, the most choice text, a long prompt over long
   choices): no document overflow, every tile and the card inside the viewport,
-  no words spilling their box, nothing under 14px. Broken on purpose once
-  (an 18px floor fails three rows).
+  no words spilling their box, nothing under 14px. Broken on purpose once per
+  seat (an 18px floor fails three rows; a host page without `framed.page` fails
+  all four).
 - **The 275-char choice was repaired**, as §2 asked: at the 14px floor it ran
   84px past a 320×568 screen and 83px past 568×320. It is 123 characters now,
   in `question-repairs.json` and the built bank.
@@ -85,15 +99,10 @@ page's entrance animation, whose leftover `translateY` is a 1px scroll.
 
 ## Next session
 
-1. **The seated host's choice screen** — the other half of §2. `room-stage.tsx`
-   renders `AskedQuestion` + `ChoiceAnswer` inside the console's header, stage
-   and footer; it needs the same framed treatment (share the choosing styles,
-   fold the footer while seated in a choice round), and `choice-fits.spec.ts`
-   a host case (a stubbed `HostRoomView` with `youId`).
-2. **The score track** around the console's edge, inked by `--phase-ink`, and
+1. **The score track** around the console's edge, inked by `--phase-ink`, and
    the console lobby from `boite.html` (code token, QR card, the shelf of boxes,
    roster with pawns, empty sockets).
-3. Then §1's inventory screen by screen, the front door last (Persuade), `og.png`
+2. Then §1's inventory screen by screen, the front door last (Persuade), `og.png`
    redrawn, and §6. `AskedQuestion`'s own sizing still carries Archivo's
    measured width (`494cqi`); re-measure it on Bricolage when the console's
    question is redrawn.

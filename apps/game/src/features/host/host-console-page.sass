@@ -1,3 +1,4 @@
+@use '../../presentation/styles/framed'
 @use '../../presentation/styles/layout'
 @use '../../presentation/styles/typography'
 
@@ -78,34 +79,6 @@
           // it and the gap that separates them.
           @include layout.wide
             --outcome-budget: calc(100dvh - var(--outcome-header, 44rem) - 11rem)
-
-      // The one screen in the product that admits to being silent, and it is a
-      // line and a press rather than a warning block: the round is running, the
-      // room is playing, and the only thing wrong is that this screen was never
-      // asked for permission to make a sound.
-      .muted-clip
-        align-items: center
-        align-self: center
-        display: flex
-        flex-direction: column
-        gap: var(--space-xs)
-
-        p
-          @include typography.caption
-
-          color: var(--ink-muted)
-
-        // A stamped block rather than tinted text, the same as the footer's
-        // error: this sits on the countdown's chrome yellow as often as on the
-        // playing teal, and red text against the first tops out at 4.0:1.
-        .refusal
-          background: var(--danger)
-          color: var(--danger-ink)
-          font-weight: 700
-          padding: var(--space-2xs) var(--space-s)
-          text-align: center
-
-          @include typography.trimmed-block(var(--space-2xs))
 
       // The reveal and the standings, which is the one moment the room asks
       // what the round did to the game — and stacked, the one stage that could
@@ -331,6 +304,34 @@
         align-items: center
         justify-content: center
 
+    // The one screen in the product that admits to being silent, and it is a
+    // line and a press rather than a warning block: the round is running, the
+    // room is playing, and the only thing wrong is that this screen was never
+    // asked for permission to make a sound.
+    .muted-clip
+      align-items: center
+      align-self: center
+      display: flex
+      flex-direction: column
+      gap: var(--space-xs)
+
+      p
+        @include typography.caption
+
+        color: var(--ink-muted)
+
+      // A stamped block rather than tinted text, the same as the footer's
+      // error: this sits on the countdown's chrome yellow as often as on the
+      // playing teal, and red text against the first tops out at 4.0:1.
+      .refusal
+        background: var(--danger)
+        color: var(--danger-ink)
+        font-weight: 700
+        padding: var(--space-2xs) var(--space-s)
+        text-align: center
+
+        @include typography.trimmed-block(var(--space-2xs))
+
     // The host's own column, beside the invitation the room is reading: what
     // they are about to play, and who has turned up for it.
     .host-side
@@ -407,21 +408,22 @@
     .playing .scoreboard
       width: min(900px, 100%)
 
+    > footer .error,
+    > .notice .error
+      @include typography.caption
+
+      background: var(--danger)
+      color: var(--danger-ink)
+      font-weight: 700
+      padding: var(--space-2xs) var(--space-s)
+
+      @include typography.trimmed-block(var(--space-2xs))
+
     > footer
       align-items: center
       display: flex
       flex-direction: column
       gap: var(--space-m)
-
-      .error
-        @include typography.caption
-
-        background: var(--danger)
-        color: var(--danger-ink)
-        font-weight: 700
-        padding: var(--space-2xs) var(--space-s)
-
-        @include typography.trimmed-block(var(--space-2xs))
 
       // A line that belongs to the button above it rather than to the column:
       // the negative margin is what takes the footer's own gap back out, so the
@@ -513,3 +515,32 @@
         .setup-fold
           flex-basis: 100%
           max-width: 900px
+
+  .host-console-page.framed
+    @include framed.page
+
+    // The seated host's one row of its own, and only while it has something
+    // to say: a refused frame, or a speaker the browser has not let play.
+    &:has(> .notice:not(:empty))
+      grid-template-areas: 'chrome' 'notice' 'round'
+      grid-template-rows: auto auto minmax(0, 1fr)
+
+      @media (min-aspect-ratio: 13 / 10)
+        grid-template-areas: 'chrome choices' 'notice choices' 'card choices' 'status choices'
+        grid-template-rows: auto auto minmax(0, 1fr) auto
+
+    > .notice
+      align-items: center
+      display: flex
+      flex-wrap: wrap
+      gap: var(--space-xs) var(--space-m)
+      grid-area: notice
+      justify-content: center
+
+      &:empty
+        display: none
+
+      .muted-clip
+        flex-direction: row
+        flex-wrap: wrap
+        justify-content: center

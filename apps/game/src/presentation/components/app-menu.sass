@@ -26,13 +26,13 @@
     transition: opacity var(--transition-base, 0) var(--timing, ease)
     z-index: 1
 
-    :root:has(.player-page.framed) &
+    :root:has(.player-page.framed, .host-console-page.framed) &
       inset-block-start: var(--framed-padding-block-start)
 
     // A screen of four tiles lying down gives the tiles the whole right-hand
     // column, so the menu moves to the start of the chrome over the question.
     @media (min-aspect-ratio: 13 / 10)
-      :root:has(.player-page.framed) &
+      :root:has(.player-page.framed, .host-console-page.framed) &
         align-items: flex-start
         inset-inline: max(var(--layout-padding-inline-start), calc(50% - var(--stage-max-width) / 2 + var(--layout-padding-inline-start))) auto
 

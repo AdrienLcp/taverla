@@ -402,7 +402,7 @@ export const AppMenu: React.FC = () => {
   const roomCode = useRoomCodeParam()
   // The console is the screen that can send the invitation somewhere else, and
   // `closeRoom` is what says a screen is one — the same test `RoomExit` makes.
-  const { closeRoom, playsSound } = useRoomActions()
+  const { closeRoom, playsSound, revealRound } = useRoomActions()
   const isOnCredits = useIsCurrentPath(creditsPathFor(locale))
   const { setVolume, volume } = useVolume()
   const [build, setBuild] = useState<string | null>(null)
@@ -456,6 +456,21 @@ export const AppMenu: React.FC = () => {
                     clock={connection.clock}
                     status={connection.status}
                   />
+                )}
+
+                {/* First, because it is the one thing a seated host opens the
+                    menu mid-round to press. */}
+                {revealRound !== null && (
+                  <Button
+                    isDisabled={connection?.status !== 'open'}
+                    onPress={() => {
+                      revealRound()
+                      close()
+                    }}
+                    variant='outlined'
+                  >
+                    {translate('host.reveal')}
+                  </Button>
                 )}
 
                 {/*

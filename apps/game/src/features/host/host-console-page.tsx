@@ -3,12 +3,17 @@ import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
+import { roundDurationMsOf } from '@taverla/protocol/game'
 import type {
   HostToken,
   PlayerId,
   RoomCode
 } from '@taverla/protocol/identifiers'
-import type { RoomSettings } from '@taverla/protocol/room'
+import type {
+  HostRoomView,
+  RoomSettings,
+  RoundView
+} from '@taverla/protocol/room'
 import type { TrackSource } from '@taverla/protocol/track'
 
 import { isJudgedByHost } from '@taverla/core/room/game-modes'
@@ -20,6 +25,7 @@ import { isGameInPlay } from '@taverla/core/room/room-phase'
 import { withPreparedKey } from '@taverla/core/slate/prepared-keys'
 
 import { NotFoundPage } from '@/features/not-found/not-found-page'
+import { ChoosingRound } from '@/features/player/choosing-round'
 import { useHostConnection } from '@/infrastructure/messaging/use-host-connection'
 import {
   useCameFromWall,
@@ -45,6 +51,8 @@ import {
 } from '@/infrastructure/storage/session-storage'
 import { unlockBuzzCue, useBuzzCue } from '@/presentation/audio/buzz-cue'
 import { useVolume } from '@/presentation/audio/volume-provider'
+import { RoundChrome } from '@/presentation/components/round-chrome'
+import { RoundProgress } from '@/presentation/components/round-progress'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
 import {
   reflexOutcome,
@@ -58,6 +66,7 @@ import { useMarkingField } from '@/presentation/theme/use-marking-field'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
 
 import { AutoAdvanceChoice } from './auto-advance-choice'
+import { ClipOffer } from './clip-offer'
 import { HostActions } from './host-actions'
 import { HostRefused } from './host-refused'
 import { JoinReminder } from './join-reminder'
@@ -254,6 +263,15 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   const seatedAs =
     view?.players.find((player) => player.id === view.youId)?.nickname ?? null
 
+  const choosing = view === null ? null : seatedChoosingRound(view)
+  const choosingRoundId = choosing?.round.id ?? null
+
+  const revealRound = useCallback(() => {
+    if (choosingRoundId !== null) {
+      send({ roundId: choosingRoundId, type: 'host.reveal' })
+    }
+  }, [choosingRoundId, send])
+
   useReportRoomActions({
     closeRoom,
     endGame: view !== null && isGameInPlay(view.phase) ? endGame : null,
@@ -264,6 +282,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
         ? requestedNickname
         : null,
     rename: seatedAs === null ? null : renameSeat,
+    revealRound: choosing === null ? null : revealRound,
     seatNickname: seatedAs
   })
 
@@ -300,6 +319,51 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
             hasOfferedToken={hasOfferedToken}
             onOfferToken={offerHostToken}
             onRetry={retry}
+          />
+        </div>
+      </main>
+    )
+  }
+
+  if (view !== null && choosing !== null) {
+    const roundDurationMs = roundDurationMsOf(view.settings.game)
+
+    return (
+      <main className='host-console-page framed'>
+        <RoomDocumentTitle game={view.settings.game?.kind ?? null} />
+        <RoundChrome
+          players={view.players}
+          roundCount={view.settings.roundCount}
+          roundIndex={choosing.round.index}
+          youId={choosing.youId}
+        />
+        <div className='card-clock'>
+          {roundDurationMs !== null && (
+            <RoundProgress
+              durationMs={roundDurationMs}
+              elapsedMs={view.roundElapsedMs}
+            />
+          )}
+        </div>
+        <ChoosingRound
+          onAnswer={(answer) =>
+            send({ answer, roundId: choosing.round.id, type: 'player.answer' })
+          }
+          round={choosing.round}
+          youId={choosing.youId}
+        />
+        <div className='notice'>
+          {error !== null && (
+            <p className='error' role='alert'>
+              {translate(protocolErrorKey(error.code))}
+            </p>
+          )}
+          <ClipOffer
+            canPlay={canPlay}
+            isSpeaker={isSpeaker}
+            onUnlockAudio={armAudio}
+            refusal={refusal}
+            view={view}
           />
         </div>
       </main>
@@ -431,3 +495,21 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
     </main>
   )
 }
+
+/**
+ * The seated host's four tiles, which take the screen the way a player's do:
+ * the header, the footer and the standings fold away for as long as the round
+ * runs, and the one control a round in play offers moves into the menu. A seat
+ * that arrived after the round opened is refused the round anyway, so it keeps
+ * the console's own screen.
+ */
+const seatedChoosingRound = (
+  view: HostRoomView
+): { round: RoundView; youId: PlayerId } | null =>
+  view.phase === 'playing' &&
+  view.settings.mode.kind === 'choice' &&
+  view.youId !== null &&
+  view.round !== null &&
+  !view.round.joinedAfterStart
+    ? { round: view.round, youId: view.youId }
+    : null
