@@ -18,6 +18,27 @@ type AnswerTileProps = Omit<ReactAriaButtonProps, 'children' | 'className'> & {
   title: string
 }
 
+type AnswerTileFaceProps = Pick<AnswerTileProps, 'index' | 'subtitle' | 'title'>
+
+/** What is printed on a tile, pressable or not: its shape and its candidate. */
+export const AnswerTileFace: React.FC<AnswerTileFaceProps> = ({
+  index,
+  subtitle,
+  title
+}) => (
+  <span className='face'>
+    <TileMark index={index} />
+    <span className='title'>{title}</span>
+    {subtitle !== null && <span className='subtitle'>{subtitle}</span>}
+  </span>
+)
+
+/** The ink and the shape-mark colour of one of the four tiles, by its index. */
+export const tileInks = (index: number) => ({
+  '--tile': `var(--tile-${(index % 4) + 1})`,
+  '--tile-mark': `var(--tile-mark-${(index % 4) + 1})`
+})
+
 /**
  * One of the four die-cut answer tiles: its own ink, its own shape, and the
  * candidate printed on it. Sized by the box it is dealt into, never by its
@@ -34,15 +55,8 @@ export const AnswerTile: React.FC<AnswerTileProps> = ({
     {...props}
     className='answer-tile'
     data-chosen={isChosen || undefined}
-    style={{
-      '--tile': `var(--tile-${(index % 4) + 1})`,
-      '--tile-mark': `var(--tile-mark-${(index % 4) + 1})`
-    }}
+    style={tileInks(index)}
   >
-    <span className='face'>
-      <TileMark index={index} />
-      <span className='title'>{title}</span>
-      {subtitle !== null && <span className='subtitle'>{subtitle}</span>}
-    </span>
+    <AnswerTileFace index={index} subtitle={subtitle} title={title} />
   </ReactAriaButton>
 )

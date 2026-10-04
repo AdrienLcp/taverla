@@ -1,0 +1,11 @@
+@layer components
+  .printed-choices
+    display: grid
+    gap: clamp(8px, 1.8cqmin, 16px)
+    grid-template-columns: minmax(0, 1fr)
+    grid-template-rows: repeat(4, minmax(min-content, 1fr))
+    list-style: none
+    min-height: 0
+
+    .answer-tile
+      cursor: default

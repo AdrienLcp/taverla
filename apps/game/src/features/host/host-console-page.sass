@@ -291,10 +291,6 @@
           --invitation-code-size: min(clamp(4rem, 21vmin, 16rem), calc(33cqi - 14px))
           --invitation-qr-max-width: clamp(140px, 24vmin, 240px)
 
-      &.playing
-        align-items: center
-        justify-content: center
-
     // The one screen in the product that admits to being silent, and it is a
     // line and a press rather than a warning block: the round is running, the
     // room is playing, and the only thing wrong is that this screen was never
@@ -467,16 +463,6 @@
 
       color: var(--ink-muted)
 
-    // On its own — "listen", "ask away" — this line is the whole screen and
-    // takes the billboard size. Under a question it is a status beside the
-    // thing being asked, and at the nominal size it shouts louder than the
-    // question does: the prompt is already a step below billboard.
-    .asked-question + .now
-      font-size: clamp(1.25rem, 3vmin, 2rem)
-
-    .playing .scoreboard
-      width: min(900px, 100%)
-
     > footer .error,
     > .notice .error
       @include typography.caption
@@ -584,6 +570,40 @@
         .setup-fold
           flex-basis: 100%
           max-width: 900px
+
+  // A round in play is held to the screen the ring leaves, like the framed
+  // seat: the stage takes what the header and the footer do not, and sizes its
+  // type to that. Its floor is what keeps the fold, opened, a scroll rather than
+  // a stage crushed to nothing.
+  .host-console-page:has(> .stage.playing)
+    animation: none
+    display: grid
+    gap: clamp(var(--space-xs), 2vmin, var(--space-m))
+    grid-template-rows: auto minmax(min(22rem, 45dvh), 1fr) auto
+
+    // A screen this short spends its rows on the round: the index is on the
+    // track's ink and the way in is in the menu.
+    @media (height < 36rem)
+      grid-template-rows: minmax(min(22rem, 45dvh), 1fr) auto
+
+      > header
+        display: none
+
+    // One row above the split, and on any screen lying down: the fold's
+    // trigger and the press that gives the answer away.
+    @media (width >= layout.$wide-screen), (min-aspect-ratio: 13 / 10)
+      > footer
+        column-gap: var(--space-l)
+        flex-flow: row wrap
+        justify-content: flex-end
+
+        .error
+          flex-basis: 100%
+
+        .setup-fold
+          flex: 1 1 12rem
+          order: -1
+          width: auto
 
   .host-console-page.framed
     @include framed.page

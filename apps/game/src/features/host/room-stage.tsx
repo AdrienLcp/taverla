@@ -2,7 +2,6 @@ import type React from 'react'
 import { useState } from 'react'
 
 import type { ClientMessage } from '@taverla/protocol/client-message'
-import { roundDurationMsOf } from '@taverla/protocol/game'
 import type { PlayerId, RoomCode } from '@taverla/protocol/identifiers'
 import type {
   HostRoomView,
@@ -14,25 +13,16 @@ import type { ClipRefusal } from '@taverla/core/blindtest/clip-audio'
 import type { HostPreferences } from '@taverla/core/room/host-preferences'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
-import {
-  ChoiceAnswer,
-  type PlayerAnswer,
-  TypedAnswer
-} from '@/features/player/answer-forms'
-import { holdsTheAnswer, quizContent } from '@/helpers/round-content'
-import { AskedQuestion } from '@/presentation/components/asked-question'
+import { holdsTheAnswer } from '@/helpers/round-content'
 import { Countdown } from '@/presentation/components/countdown'
 import { RoomInvitation } from '@/presentation/components/room-invitation'
-import {
-  RevealHold,
-  RoundProgress
-} from '@/presentation/components/round-progress'
+import { RevealHold } from '@/presentation/components/round-progress'
 import { Scoreboard } from '@/presentation/components/scoreboard'
-import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import { ClipOffer } from './clip-offer'
 import { FinalBoard } from './final-board'
 import { LobbyStage } from './lobby-stage'
+import { PlayingStage } from './playing-stage'
 import { ReflexStage } from './reflex-stage'
 import { RevealPanel } from './reveal-panel'
 import { SlateCorrectionStage, SlateWritingStage } from './slate-stages'
@@ -97,7 +87,6 @@ export const RoomStage: React.FC<RoomStageProps> = ({
   slateWall,
   view
 }) => {
-  const translate = useTranslate()
   const lastRevealed = useRoundStillBeingTalkedAbout(view)
 
   // The invitation is drawn from the code in the address bar and this origin,
@@ -176,60 +165,22 @@ export const RoomStage: React.FC<RoomStageProps> = ({
   }
 
   if (view.phase === 'playing' && round != null) {
-    const answerWithRound = (answer: PlayerAnswer): boolean =>
-      controls?.send({ answer, roundId: round.id, type: 'player.answer' }) ??
-      false
-
-    // The round's own content, not the settings: it is the game the round was
-    // opened on, where `settings.game` is only what the room is set to now.
-    const roundDurationMs = roundDurationMsOf(view.settings.game)
-
     return (
-      <div className='stage playing'>
-        {round.content.kind === 'quiz' && (
-          <AskedQuestion prompt={quizContent(round)?.prompt ?? null} />
-        )}
-        {(round.content.kind === 'blindtest' ||
-          round.content.kind === 'buzzer') && (
-          <p className='now'>
-            {translate(
-              round.content.kind === 'buzzer'
-                ? 'buzzer.running'
-                : 'blindtest.listening'
-            )}
-          </p>
-        )}
-        {roundDurationMs !== null && (
-          <RoundProgress
-            durationMs={roundDurationMs}
-            elapsedMs={view.roundElapsedMs}
-          />
-        )}
-        {isSeated && view.settings.mode.kind === 'choice' && (
-          <ChoiceAnswer
-            key={round.id}
-            onAnswer={answerWithRound}
-            round={round}
-            youId={view.youId}
-          />
-        )}
-        {isSeated && view.settings.mode.kind === 'typed' && (
-          <TypedAnswer
-            // A seated console is withheld the answer the same way a player
-            // is, so it reads what the round asks for off the settings too.
-            asksForAFilm={
-              view.settings.game?.kind === 'blindtest' &&
-              view.settings.game.source.kind === 'film'
-            }
-            key={round.id}
-            onAnswer={answerWithRound}
-            round={round}
-            verdict={view.yourVerdict}
-          />
-        )}
-        {clipOffer}
-        <Scoreboard players={view.players} youId={youId} />
-      </div>
+      <PlayingStage
+        clipOffer={clipOffer}
+        onAnswer={
+          isSeated
+            ? (answer) =>
+                controls.send({
+                  answer,
+                  roundId: round.id,
+                  type: 'player.answer'
+                })
+            : null
+        }
+        round={round}
+        view={view}
+      />
     )
   }
 

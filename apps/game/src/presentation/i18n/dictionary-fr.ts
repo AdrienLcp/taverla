@@ -233,6 +233,9 @@ export const FR_DICTIONARY = defineDictionary({
     title: 'Taverla'
   },
   host: {
+    answered: defineTranslation('{count:plural} sur {total:number}', {
+      plural: { count: { one: '{?} réponse', other: '{?} réponses' } }
+    }),
     answerMode: {
       buzzer: 'Le premier qui buzze',
       choice: 'Quatre propositions',

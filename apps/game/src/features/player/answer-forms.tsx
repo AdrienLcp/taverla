@@ -41,14 +41,14 @@ export type PlayerAnswer =
  * quiz candidate is a single claim; the blind test's is a track, and a title
  * with no artist under it is not one of four distinguishable answers.
  */
-type Candidate = {
+export type Candidate = {
   key: string
   /** The blind test's second line, and `null` for a candidate that is one line. */
   subtitle: string | null
   title: string
 }
 
-const candidatesIn = (round: RoundView): Candidate[] => {
+export const candidatesIn = (round: RoundView): Candidate[] => {
   const content = round.content
 
   switch (content.kind) {

@@ -1,0 +1,39 @@
+@use '../../presentation/styles/typography'
+
+@layer components
+  .answered-pawns
+    align-items: center
+    display: flex
+    flex-wrap: wrap
+    gap: var(--space-2xs) var(--space-m)
+    min-width: 0
+
+    .count
+      @include typography.numeric
+
+      font-size: clamp(1.125rem, 3.4cqmin, 1.75rem)
+      white-space: nowrap
+
+    ul
+      display: flex
+      flex-wrap: wrap
+      gap: clamp(4px, 1cqmin, 10px)
+      list-style: none
+      min-width: 0
+
+    // Lifted off the board when its answer lands, which is the one movement
+    // on this screen and the one the room is waiting to see.
+    li
+      display: grid
+      font-size: clamp(1.5rem, 5cqmin, 2.5rem)
+      transition: transform var(--transition-fast, 0) var(--timing, ease)
+
+      &:not([data-answered]) .pawn
+        fill: none
+        filter: none
+        stroke: var(--socket-line)
+        stroke-dasharray: 2.5 2
+        stroke-width: 1.4
+
+      &[data-answered]
+        transform: translateY(-3px)

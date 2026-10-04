@@ -117,24 +117,43 @@ new one is whole. This file is the brief: open a fresh session, run
   Measured at 1280×720, 1024×768 and 1920×1080: no overflow, empty or with
   eight seated; only a 20-character name truncates.
 
+- **The console's playing stage** (`features/host/playing-stage.tsx`) is the
+  paper question card with the round's sand along its top, the four tiles
+  *printed* (`PrintedChoices`, an `<ol>` of the same faces — nobody picks on
+  this screen, so they are not buttons), and `AnsweredPawns`: the table's pawns,
+  standing for an answer in, dashed for one owed — *that*, never *what*. The
+  standings left: the ring already carries them. Lying down the card sits
+  beside the tiles, or beside a seated host's typing field; upright it is one
+  column. The page is a three-row grid (header, stage, footer) whose stage is a
+  size container, and the footer is one row above the split or lying down: the
+  fold and *give it away*. The hold strip is the reveal's alone now — it was a
+  row of a screen the tiles could not spare. Under 576px of height the header
+  goes; under 352px the pawns do too. The wall shares all of it.
+  `choice-fits.spec.ts` measures it as a third seat (`room`: eight players,
+  three in) over the sixteen viewports and four bank rows: 0px over everywhere,
+  where it was 327px at 1280×720. Broken on purpose once (an 18px question
+  floor fails two rows).
+
 Measured traps, so the next screen does not pay for them again: a `position:
 fixed` element inside the page is fixed to the page, not the viewport, because
-the entrance animation leaves a `transform` — the track renders beside `<main>`;
+the entrance animation leaves a `transform` — the track renders beside `<main>`; `height` on the console's `<main>` does
+nothing, because it is a `flex: 1` item of the app shell and that is what holds
+it to the viewport; a folded `Disclosure` panel keeps its contents laid out
+under `content-visibility: hidden`, so an overflow scan must skip what
+`checkVisibility()` says nobody can see;
 a size container with `flex: 1` answers its queries against a zero-height box in
 Chromium (`flex: none` + an explicit height); a framed screen must not run the
 page's entrance animation, whose leftover `translateY` is a 1px scroll.
 
 ## Next session
 
-1. **The console's playing stage overflows**: 327px at 1280×720 and 145px at
-   1920×1080 with eight players on a choice round — the question, the eight
-   roster rows, *give it away*, the hold strip and the fold. It was already
-   about 250px over before the ring took its padding. Redraw it first, with a
-   height budget the way the reveal has one, then the rest of §1's inventory
-   screen by screen, the front door last (Persuade), `og.png` redrawn, and §6.
+1. The rest of §1's inventory screen by screen — countdown, buzzed (the verdict
+   panel), reveal, final board, the slate's two stages, reflex — each against
+   the ring's `--track-room` and measured at 1280×720, 1024×768 and 1920×1080;
+   the front door last (Persuade), `og.png` redrawn, then §6.
    `AskedQuestion`'s own sizing still carries Archivo's measured width
-   (`494cqi`); re-measure it on Bricolage when the console's question is
-   redrawn.
+   (`494cqi`) everywhere the playing card does not override it; re-measure it
+   on Bricolage when the next screen that shows it is redrawn.
 
 ## The prompt
 

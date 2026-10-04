@@ -1,0 +1,162 @@
+@use '../../presentation/styles/piece'
+@use '../../presentation/styles/typography'
+
+@layer components
+  // A round in play, held to the box the page leaves it: every size is a share
+  // of that box divided by the square root of how much there is to say, the
+  // way the player's own screen does it, so the question and four tiles never
+  // push the launch under the fold.
+  //
+  // Upright it is a column — the card, the tiles, the pawns. Lying down with
+  // four tiles, or a seat's own answer field, it is the card beside them,
+  // because that is the side with room.
+  .stage.playing
+    --question-k: min(72cqi, 30cqh)
+    --question-cap: min(6.4cqi, 4.6cqh)
+    --choice-k: min(34cqi, 15cqh)
+    --choice-cap: min(5.6cqi, 3.8cqh)
+
+    container: playing / size
+    display: flex
+    flex-direction: column
+    gap: clamp(10px, 2.2cqmin, 20px)
+    min-height: 0
+
+    // With nothing but the card, it takes the room the tiles would have had.
+    &:not([data-choices])
+      --question-k: min(80cqi, 90cqh)
+      --question-cap: min(6.4cqi, 12cqh)
+
+      > .round-card
+        align-self: center
+        flex: 0 1 auto
+        margin-block: auto
+        width: min(100%, 72rem)
+
+    &[data-choices] > .printed-choices
+      flex: 1 1 0
+
+    > .muted-clip,
+    > .answered-pawns,
+    > .answer-form
+      align-self: center
+      flex: none
+
+    @media (min-aspect-ratio: 13 / 10)
+      &[data-answering],
+      &[data-choices]
+        --question-k: min(42cqi, 80cqh)
+        --question-cap: min(3.4cqi, 7.6cqh)
+        --choice-k: min(16cqi, 30cqh)
+        --choice-cap: min(2.8cqi, 6cqh)
+
+        column-gap: clamp(16px, 3cqi, 40px)
+        display: grid
+        grid-template: 'card choices' minmax(0, 1fr) 'tally tally' auto / minmax(0, 0.85fr) minmax(0, 1.15fr)
+
+        &[data-long-choices]
+          grid-template-columns: minmax(0, 0.6fr) minmax(0, 1.4fr)
+
+        // A phone held sideways as the console: the tiles have height to
+        // spare and the question has none, so the two halves even out.
+        // And the pawns give their row back: the count is on every player's
+        // screen, and the round is not.
+        @media (height < 22rem)
+          grid-template-rows: minmax(0, 1fr) 0
+
+          &:not([data-long-choices])
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr)
+
+          &[data-long-choices]
+            grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr)
+
+          > .answered-pawns
+            display: none
+
+        &:has(> .muted-clip)
+          grid-template: 'notice notice' auto 'card choices' minmax(0, 1fr) 'tally tally' auto / minmax(0, 0.85fr) minmax(0, 1.15fr)
+
+        > .muted-clip
+          grid-area: notice
+
+        > .round-card
+          grid-area: card
+
+        > .printed-choices
+          grid-area: choices
+
+        > .answer-form
+          align-self: center
+          grid-area: choices
+
+        > .answered-pawns
+          grid-area: tally
+          justify-self: start
+
+    // Four candidates under forty characters sit two by two once the box is
+    // wide enough for two columns; sentences stay four rows at every ratio.
+    &:not([data-long-choices]) .printed-choices
+      @container playing (width >= 560px)
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+        grid-template-rows: repeat(2, minmax(min-content, 1fr))
+
+    .printed-choices .answer-tile
+      font-size: clamp(14px, calc(var(--choice-k) / sqrt(var(--choice-length, 20))), var(--choice-cap))
+
+    // The question card, with the round's sand draining along its top edge —
+    // the clock sits where every eye in the room already is.
+    .round-card
+      @include piece.card
+
+      --ground: var(--card)
+
+      display: flex
+      flex-direction: column
+      justify-content: safe center
+      min-height: 0
+      padding: calc(clamp(10px, 3cqmin, 28px) + 12px) clamp(14px, 3.4cqmin, 36px) clamp(10px, 3cqmin, 28px)
+      position: relative
+
+      > .round-progress
+        background: var(--socket)
+        border: 0
+        border-radius: 3px
+        height: 6px
+        inset: clamp(10px, 2cqmin, 16px) clamp(16px, 3.4cqmin, 36px) auto
+        overflow: hidden
+        position: absolute
+        width: auto
+
+        &::after
+          background: var(--card-muted)
+
+      .asked-question
+        container-type: normal
+        gap: 0.4em
+        text-align: start
+        width: auto
+
+        .prompt
+          --question-yield: min(1, sqrt(40 / var(--choice-length, 20)))
+
+          font-family: var(--font-base)
+          font-size: clamp(14px, min(var(--question-k) / sqrt(var(--prompt-length, 60)), var(--question-cap) * var(--question-yield)), var(--question-cap))
+          font-stretch: normal
+          font-variation-settings: normal
+          font-weight: 700
+          letter-spacing: 0
+          line-height: 1.24
+          text-wrap: pretty
+
+        .category
+          color: var(--card-muted)
+          font-size: clamp(14px, 2.4cqmin, 20px)
+          order: -1
+
+      .now
+        @include typography.billboard
+
+        color: var(--card-ink)
+        font-size: clamp(1.75rem, min(5cqi, 14cqh), 5.5rem)
+        text-align: center
+        text-wrap: balance

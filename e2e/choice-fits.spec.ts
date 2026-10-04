@@ -163,16 +163,55 @@ const seatedHostView = (question: Question) => ({
   remainingPoolSize: 40
 })
 
+const table = [
+  'Wolfgangamadeusmozar',
+  'Mamie Jo',
+  'Théo',
+  'Zoé',
+  'Bertrand',
+  'Inès',
+  'Anne-Charlotte',
+  'Marc'
+].map((nickname, seat) => ({
+  id: `p${seat + 1}`,
+  isConnected: true,
+  nickname,
+  score: seat * 3
+}))
+
+/**
+ * The same round on a console nobody sat down at, which is the screen the room
+ * reads: the four tiles printed, a full table of pawns, three of them in. It
+ * has a header and a footer the other two do not, and the same rule.
+ */
+const consoleView = (question: Question) => {
+  const view = seatedHostView(question)
+
+  return {
+    ...view,
+    players: table,
+    round: {
+      ...view.round,
+      answers: ['p2', 'p3', 'p6'].map((playerId) => ({
+        atServerTime: SERVER_TIME - 1_000,
+        playerId
+      }))
+    },
+    youId: null
+  }
+}
+
 type Seat = {
   /** The route the screen is opened on. */
   path: string
-  role: 'host' | 'player'
+  role: 'host' | 'player' | 'room'
   view: (question: Question) => object
 }
 
 const SEATS: Seat[] = [
   { path: `/play/${ROOM_CODE}`, role: 'player', view: choosingView },
-  { path: `/host/${ROOM_CODE}`, role: 'host', view: seatedHostView }
+  { path: `/host/${ROOM_CODE}`, role: 'host', view: seatedHostView },
+  { path: `/host/${ROOM_CODE}`, role: 'room', view: consoleView }
 ]
 
 /**
@@ -228,10 +267,16 @@ type Overflow = {
 const measure = (): Overflow => {
   const root = document.scrollingElement ?? document.documentElement
   const pieces = [
-    ...document.querySelectorAll<HTMLElement>('.answer-tile, .asked-question')
+    ...document.querySelectorAll<HTMLElement>(
+      '.answer-tile, .asked-question, .round-card'
+    )
   ]
 
+  // A folded panel keeps its contents laid out under `content-visibility:
+  // hidden`, which still reports a box; nobody can see it, so it reaches
+  // nowhere.
   const furthest = [...document.body.querySelectorAll<HTMLElement>('*')]
+    .filter((element) => element.checkVisibility())
     .map((element) => ({
       bottom: element.getBoundingClientRect().bottom,
       element

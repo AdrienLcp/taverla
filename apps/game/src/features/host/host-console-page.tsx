@@ -472,7 +472,13 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
             */}
               {view.phase !== 'finished' && (
                 <>
-                  {view.phase !== 'lobby' &&
+                  {/*
+                    The reveal's alone, because the reveal is what it holds:
+                    under a round in play it was a row of a screen the question
+                    and its four tiles could not spare, for a choice the reveal
+                    puts back in reach the moment it applies.
+                  */}
+                  {view.phase === 'revealed' &&
                     view.settings.game?.kind !== 'slate' && (
                       <AutoAdvanceChoice
                         isLive={isLive}
