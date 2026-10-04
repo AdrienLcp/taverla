@@ -31,9 +31,27 @@
       // The product's one breakpoint, where this read `860px` — a hand-written
       // pixel forty short of it, which left a forty-pixel band drawing the
       // panel in two columns inside a stage that had already stacked.
+      //
+      // Below it the panel wraps rather than stacks: the cover and the words
+      // share a line wherever the words keep 16rem beside it, which a console
+      // at 800 does and a phone does not. Stacked at 800×800 the cover spent
+      // 148px above a title that had the room beside it, and the next round
+      // ended 6px above the bottom of the screen.
       @include layout.narrow
         align-items: start
-        grid-template-columns: minmax(0, 1fr)
+        display: flex
+        flex-wrap: wrap
+
+        > .identity
+          flex: 1 1 16rem
+
+        // A zero floor, or the list is as wide as its longest answer, which
+        // never wraps: two answers ran a phone 45px wide of its screen.
+        > .nobody,
+        > .said,
+        > .scorers
+          flex-basis: 100%
+          min-width: 0
 
       // The list goes under the cover and the words together rather than
       // under the words alone. Beside the cover it had the narrower of the two
@@ -120,7 +138,15 @@
       // left, which on a landscape screen is the one `9vmin` already reads. It
       // only differs while the host console draws a bar: the list beside it is
       // on its floor by then, so the answer is the one thing left to pay.
-      --answer-size: clamp(2rem, min(9vmin, calc((100dvh - var(--hold-bar, 0px)) * 0.09), calc(128rem / var(--answer-length, 10)), calc(106cqi / var(--longest-word-width, 10))), 7rem)
+      //
+      // `128rem` holds an answer to two lines in a column of the viewport's
+      // proportions, and the column beside a cover stopped being one when the
+      // standings took a third of the stage: at 1280 it is 446px, and
+      // `...Baby One More Time` came down in four lines. `260cqi` is the same
+      // sentence against the column the answer is actually set in — the mean
+      // glyph of 0.898 em with room for the ragged end of each line — so it
+      // binds only past about sixteen characters, which a short title never is.
+      --answer-size: clamp(2rem, min(9vmin, calc((100dvh - var(--hold-bar, 0px)) * 0.09), calc(128rem / var(--answer-length, 10)), calc(260cqi / var(--answer-length, 10)), calc(106cqi / var(--longest-word-width, 10))), 7rem)
 
       .title
         @include typography.monument

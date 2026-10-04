@@ -488,14 +488,27 @@
     // or end it, in 25 seconds*. Where the three do not fit on one line they
     // wrap, centred, rather than squeeze the strip into its stacked form.
     > .stage.revealed ~ footer
+      //
+      // The French row is 1 056px — *Tournée suivante*, *Terminer la partie*
+      // and the strip — so between the split and a footer that wide it
+      // wrapped, and a wrapped footer is 245px against the 156 the `24rem`
+      // above is measured on: a long answer ran 47px past a 1024×768 screen.
+      // There the way out goes under the next round instead, beside the
+      // strip, which keeps it one row of about 200px. A narrower strip was
+      // the other way to buy the width, and it broke its own label in two.
       @include layout.wide
-        column-gap: var(--space-xl)
+        column-gap: var(--space-l)
+        container: reveal-footer / inline-size
         flex-flow: row wrap
         justify-content: center
 
         .reveal-actions
           flex-direction: row
-          gap: var(--space-l)
+          gap: var(--space-m)
+
+          @container reveal-footer (width < 66rem)
+            flex-direction: column
+            gap: var(--space-s)
 
         .setup-fold
           flex-basis: 100%

@@ -1441,7 +1441,12 @@ one part.
   test's list sits under the cover and the title together rather than beside
   the cover, so it can take two columns, and a name in that list is cut only
   when it alone is wider than its row. Stacked, the standings go under the
-  footer: every player already has them on their own screen.
+  footer: every player already has them on their own screen. Where the
+  footer's row cannot fit — French at 1024px — the way out goes under the next
+  round rather than wrapping the row; a long answer is sized against the column
+  it is set in, so a title past sixteen characters no longer comes down in four
+  lines beside a cover; and below the split the cover sits beside the title
+  wherever the title keeps 16rem.
 
 - `[Game]` **The quiz reveal fits a 1280×800 laptop again.** From five answers
   the list beside the answer flows into two columns, the hold bar's row only
