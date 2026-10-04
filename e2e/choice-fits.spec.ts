@@ -42,15 +42,17 @@ type Question = {
  * 275-character choice is not here: it was repaired to 123 in
  * `question-repairs.json`, because no screen could hold it at the floor.
  */
+const LONGEST_PROMPT: Question = {
+  // The longest French prompt: 192 characters.
+  category: 'geography',
+  choices: ['France', 'Portugal', 'République populaire de Chine', 'Brésil'],
+  id: 'mintaka-8db29866',
+  prompt:
+    'Quel pays nous a donné la Statue de la Liberté en mille huit cent soixante-seize, pour marquer le centenaire de la Déclaration d’indépendance des États-Unis de mille sept cent soixante-seize ?'
+}
+
 const WORST_CASES: Question[] = [
-  {
-    // The longest French prompt: 192 characters.
-    category: 'geography',
-    choices: ['France', 'Portugal', 'République populaire de Chine', 'Brésil'],
-    id: 'mintaka-8db29866',
-    prompt:
-      'Quel pays nous a donné la Statue de la Liberté en mille huit cent soixante-seize, pour marquer le centenaire de la Déclaration d’indépendance des États-Unis de mille sept cent soixante-seize ?'
-  },
+  LONGEST_PROMPT,
   {
     // Four long choices at once, up to 160 characters each.
     category: 'arts',
@@ -365,4 +367,162 @@ for (const seat of SEATS) {
       expect(faults).toEqual([])
     })
   }
+}
+
+/**
+ * The reveal on the screen the room reads, above the split: the answer, a chip
+ * for everything the table said, the standings and the hold bar, all inside the
+ * viewport at once. Below the split a console is held in a hand, and scrolls.
+ */
+const WIDE_VIEWPORTS = VIEWPORTS.filter(([width]) => width >= 900)
+
+const said = [
+  'France',
+  'République populaire de Chine',
+  'France',
+  'Portugal',
+  'France',
+  'Brésil',
+  'France',
+  'Portugal'
+]
+
+const revealedView = (content: object) => {
+  const view = consoleView(LONGEST_PROMPT)
+  const revealedAnswers = table.map(({ id }, seat) => ({
+    atServerTime: SERVER_TIME - 1_000,
+    isCorrect: said[seat] === 'France',
+    playerId: id,
+    said: said[seat]
+  }))
+
+  return {
+    ...view,
+    phase: 'revealed',
+    round: {
+      ...view.round,
+      advancesAt: SERVER_TIME + 20_000,
+      awards: revealedAnswers
+        .filter((answer) => answer.isCorrect)
+        .map(({ playerId }, order) => ({
+          playerId,
+          points: 3 + Math.max(0, 3 - order),
+          speedBonus: Math.max(0, 3 - order),
+          verdict: { isCorrect: true, kind: 'single' }
+        })),
+      content,
+      revealedAnswers
+    },
+    settings: { ...view.settings, autoAdvanceMs: 25_000 }
+  }
+}
+
+const REVEALS = [
+  {
+    content: {
+      choices: LONGEST_PROMPT.choices,
+      kind: 'quiz',
+      prompt: {
+        category: LONGEST_PROMPT.category,
+        id: LONGEST_PROMPT.id,
+        prompt: LONGEST_PROMPT.prompt
+      },
+      revealedQuestion: {
+        answer: 'France',
+        note: 'Offerte par la France pour le centenaire de la Déclaration d’indépendance, elle fut inaugurée à New York en 1886, dix ans après la date prévue.'
+      }
+    },
+    name: 'quiz with a note'
+  },
+  {
+    content: {
+      choices: [],
+      kind: 'blindtest',
+      revealedTrack: {
+        artist: 'Jean-Jacques Goldman',
+        coverUrl: null,
+        film: null,
+        id: 't1',
+        title: '...Baby One More Time (Radio Edit)'
+      }
+    },
+    name: 'blind test'
+  }
+]
+
+type RevealOverflow = {
+  furthest: string | null
+  page: number
+  /** Every row drawn past the bottom of the list that holds it. */
+  spills: string[]
+}
+
+const measureReveal = (): RevealOverflow => {
+  const root = document.scrollingElement ?? document.documentElement
+  const rows = [
+    ...document.querySelectorAll<HTMLElement>(
+      '.stage.revealed .reveal-panel li, .stage.revealed .standings li'
+    )
+  ]
+  const furthest = [...document.body.querySelectorAll<HTMLElement>('*')]
+    .filter((element) => element.checkVisibility())
+    .map((element) => ({
+      bottom: element.getBoundingClientRect().bottom,
+      element
+    }))
+    .filter(({ bottom }) => bottom > innerHeight + 0.5)
+    .toSorted((a, b) => b.bottom - a.bottom)[0]
+
+  return {
+    furthest:
+      furthest === undefined
+        ? null
+        : `${furthest.element.tagName.toLowerCase()}.${furthest.element.className} @${Math.round(furthest.bottom)}`,
+    page: Math.max(
+      root.scrollHeight - innerHeight,
+      root.scrollWidth - innerWidth,
+      0
+    ),
+    spills: rows
+      .filter(
+        (row) =>
+          row.getBoundingClientRect().bottom >
+          (row.parentElement?.getBoundingClientRect().bottom ?? 0) + 0.5
+      )
+      .map((row) => row.textContent?.slice(0, 24) ?? '')
+  }
+}
+
+for (const reveal of REVEALS) {
+  test(`[layout] room, ${reveal.name}: the reveal and the standings never scroll above the split`, async ({
+    page
+  }) => {
+    await serveRoom({ page, view: revealedView(reveal.content) })
+    // French runs longer, on the footer's controls most of all.
+    await page.addInitScript(() => {
+      localStorage.setItem('taverla:locale', 'fr')
+    })
+    await page.setViewportSize({ height: 720, width: 1280 })
+    await page.goto(`/host/${ROOM_CODE}`)
+    await expect(page.locator('.reveal-panel .said li')).toHaveCount(8)
+
+    const faults: string[] = []
+
+    for (const [width, height] of WIDE_VIEWPORTS) {
+      await page.setViewportSize({ height, width })
+      await page.evaluate(() => document.fonts.ready.then(() => {}))
+
+      const overflow = await page.evaluate(measureReveal)
+
+      if (
+        overflow.furthest !== null ||
+        overflow.page > 0 ||
+        overflow.spills.length > 0
+      ) {
+        faults.push(`${width}×${height} ${JSON.stringify(overflow)}`)
+      }
+    }
+
+    expect(faults).toEqual([])
+  })
 }

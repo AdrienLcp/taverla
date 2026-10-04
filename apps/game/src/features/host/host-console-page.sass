@@ -6,14 +6,6 @@
   .host-console-page
     @include layout.stage
 
-    // A standings row's height in its own `em`, which is what the budget is
-    // divided by: 2.66 measured with the leading on, 2.35 with the figures
-    // trimmed, and the same headroom kept over each.
-    --standings-row: 2.8
-
-    @supports (text-box: trim-both cap alphabetic)
-      --standings-row: 2.47
-
     > header
       align-items: baseline
       display: flex
@@ -72,83 +64,60 @@
           flex: 0
           width: 100%
 
-          // The recap is the reveal the room has already read, and it inherits
-          // the reveal's overflow with it: eight players ran past the bottom
-          // and ten made 1 291px of a 1080px screen. Same arithmetic, one
-          // column instead of two, and `11rem` more spent — the countdown above
-          // it and the gap that separates them.
-          @include layout.wide
-            --outcome-budget: calc(var(--track-room, 100dvh) - var(--outcome-header, 44rem) - 11rem)
-
       // The reveal and the standings, which is the one moment the room asks
-      // what the round did to the game — and stacked, the one stage that could
-      // not deliver it: the reveal alone filled a 1080px screen, and the
-      // standings, the half the room had actually asked for, sat below the
-      // fold on a screen nobody walks over to scroll.
-      //
-      // So above the split they sit side by side: the wide column is the
-      // reveal, because that is the half the room is looking at. The standings
-      // take the place the question had.
+      // what the round did to the game. Above the split they sit side by side
+      // inside the box the page leaves the stage, and both divide that box by
+      // their own rows — see `.host-console-page:has(> .stage.revealed)`.
       &.revealed
-        // Hoisted out of the split below, because the row the hold bar spends
-        // is its own height plus one of these gaps.
-        --reveal-gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
-        // What that row costs the three height formulas below, and nothing at
-        // all when no bar is drawn — a host advancing by hand, or one whose
-        // screen has gone. `28px` is the bar's own height, measured off
-        // `round-progress.sass` the way `31rem` was measured off this screen.
+        --reveal-gap: clamp(var(--space-m), 3.6vmin, var(--space-2xl))
+        // What the hold bar's row costs the stacked budget below, and nothing
+        // when no bar is drawn. `10px` is the bar's own height.
         --hold-bar: 0px
 
         &.holding
-          --hold-bar: calc(28px + var(--reveal-gap))
+          --hold-bar: calc(10px + var(--reveal-gap))
 
-        // Above the split each half divides the whole screen, because they sit
-        // side by side. Stacked they share one column and the screen pays for
-        // both — a cover, an answer, one row per player who spoke and one per
-        // player in the room — which at 390×844 is 410px of budget against
-        // content that wants more than twice it. So this arithmetic is not
-        // asked for a fit and cannot deliver one: what it buys is that the type
-        // stops growing once the page is already scrolling, which is what keeps
-        // the answer and the next round above the fold at a full table.
-        //
-        // That is the right bargain here and not above the split. A console
-        // this narrow is held in a hand rather than read across a room, so
-        // scrolling is a gesture it has — and the standings, the half that
+          @include layout.wide
+            --hold-bar: calc(10px + var(--space-s))
+
+        // The wait before the next round, as a groove draining in the track's
+        // own ink rather than a block of ink: it is the screen's own clock.
+        > .round-progress
+          background: var(--socket)
+          border: 0
+          border-radius: var(--radius-full)
+          height: 10px
+          overflow: hidden
+
+          &::after
+            background: var(--phase-ink)
+
+        // Stacked, a console is held in a hand rather than read across a room,
+        // so scrolling is a gesture it has — and the standings, the half that
         // would otherwise bury the launch, are the one thing every player
-        // already has on their own screen.
+        // already has on their own screen. The arithmetic here only stops the
+        // type growing once the page is already scrolling, which keeps the
+        // answer and the next round above the fold at a full table.
         //
-        // `27rem` is the chrome, measured the way `31rem` was: at 390×844 the
-        // header, the footer, the page padding and two gaps came to 434px.
+        // `27rem` is the chrome, measured: at 390×844 the header, the footer,
+        // the page padding and two gaps came to 434px.
         @include layout.narrow
           --stacked-budget: calc(var(--track-room, 100dvh) - 27rem - var(--hold-bar))
 
-          // And so the standings go under the footer rather than above it. The
-          // stage hands its children to the page's own column, which is what
-          // lets `order` put the board after the actions: at 800×800 the next
-          // round ended 122px under the fold with a bar drawn. The board holds
-          // nothing to press, so the order a keyboard walks is unchanged.
+          // The standings go under the footer rather than above it: the stage
+          // hands its children to the page's column, so `order` can put the
+          // board after the actions. It holds nothing to press, so the order a
+          // keyboard walks is unchanged.
           display: contents
 
-          > .scoreboard
+          > .standings
             order: 1
 
-          // Both lists divide the same budget by their own rows rather than
-          // splitting it between them. They are the same length — one row per
-          // player either way — so a ratio would only be a number to defend,
-          // and at the table sizes where it would bite both clamps are already
-          // on their floor.
           .reveal-panel
             --outcome-budget: var(--stacked-budget)
 
-          // The furniture before the type: 12px of fixed padding is 24px a
-          // formula can never reach, where an `em` makes a row one multiple of
-          // its own size and the divisor mean something. The score goes with it or it is the
-          // tallest thing in a row it was supposed to be sized by.
-          //
-          // Its own divisor, because a stacked row is not the wide one: 3.0em
-          // measured with the leading on, 2.08 trimmed, over the same headroom
-          // the wide board keeps. It shared the wide 2.8 until then, and ran
-          // 7% past its budget.
+          // 3.0em measured with the leading on, 2.08 trimmed, over the same
+          // headroom the wide board keeps.
           .scoreboard li
             --standings-row: 3.15
 
@@ -164,89 +133,17 @@
             .score
               font-size: 1.5em
 
-        // Both halves divide the screen rather than a box of their own. A
-        // container query is the more precise instrument and it was the first
-        // answer here, but `container-type: size` also *contains* the overflow:
-        // on a 768px laptop, where ten lines do not fit at any legible size, the
-        // board ran out of its box and the launch button was drawn straight
-        // through it.
-        // Dividing the viewport keeps the worst case a scroll — which is what
-        // this screen does below the split already — instead of a collision.
-        //
-        // `24rem` is the chrome around the stage, measured rather than guessed:
-        // the header, the footer, the page padding and two gaps came to 379px
-        // at 1080 and 349px at 768. It read `31rem` while the footer was a
-        // stacked column; laid out as a row it gave the stage 7rem back.
-        @include layout.wide
-          display: grid
-          gap: var(--reveal-gap)
-          grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr)
-          grid-template-rows: minmax(0, 1fr)
-
-          // The bar's row only exists while a bar is drawn. An explicit empty
-          // track still takes its gap, so a host advancing by hand paid 40px
-          // at 1280×800 that `--hold-bar` had already called nothing.
-          //
-          // And a tighter gap above it than beside the halves: at 1280×800 the
-          // list under a two-line answer is already on its floor, so the full
-          // `--reveal-gap` was 40px nothing else could give back, and the page
-          // ran 31px past the bottom for as long as the bar was drawn.
-          &.holding
-            --hold-bar: calc(28px + var(--space-s))
-
-            grid-template-rows: minmax(0, 1fr) auto
-            row-gap: var(--space-s)
-
-          // Under both halves rather than beside either: it is the screen's own
-          // clock, not the reveal's or the standings'. And the whole width,
-          // against the component's own 900px ceiling — that ceiling is a
-          // measure for a bar inside one column, and a screen this wide read it
-          // as an object stopping short of nothing rather than as the stage
-          // counting itself down.
-          .round-progress
-            grid-column: 1 / -1
-            width: 100%
-
-          // One divisor for a reveal that is an answer and then one row per
-          // player who spoke. Two columns brought
-          // the quiz from 2 080px to 1 157px at 1080, which is a screen that
-          // still loses its last row — the arithmetic is what closes it.
-          //
-          // How much screen the panel's own list gets: everything the chrome
-          // and the panel's header have not already spent. The panel says what
-          // its header costs, because that is the half it knows.
-          .reveal-panel
-            //
-            // `--outcome-header` was measured over the stacked footer and is
-            // shared with the countdown's recap, which still has one, so the
-            // 7rem the reveal's row returned is added back here.
-            --outcome-budget: calc(var(--track-room, 100dvh) - var(--outcome-header, 44rem) + 7rem - var(--hold-bar))
-
-          // The same bargain on the other side, and the reason this board does
-          // not take the final board's two columns: halving the width truncated
-          // `Anne-Charlotte` to `Anne-Charl…` on a screen whose whole job at
-          // this moment is to say who is winning. One column keeps every name
-          // whole, and keeps the ranking read downwards.
-          //
-          // `line-height` is the reset's 1.5 until it is said otherwise, which
-          // on a numeral this size is half a row of nothing, ten times over.
-          .scoreboard li
-            font-size: clamp(0.9rem, calc((var(--track-room, 100dvh) - 24rem - var(--hold-bar)) / var(--standings-rows, 8) / var(--standings-row)), 1.75rem)
-            padding: 0.45em 0
-
-            .rank
-              font-size: 0.8em
-
-            .nickname
-              font-size: 1em
-
-            .score
-              font-size: 1.6em
-              line-height: 1
-
-        .scoreboard
+        .standings
           align-self: center
+          display: flex
+          flex-direction: column
+          gap: var(--space-xs)
           width: min(900px, 100%)
+
+        .standings-title
+          @include typography.label
+
+          color: var(--ink-muted)
 
       // The result of a game rather than a phase of one, and the only stage
       // whose footer is the two exits alone plus the line saying what the
@@ -604,6 +501,89 @@
           flex: 1 1 12rem
           order: -1
           width: auto
+
+  // The reveal held to the screen the ring leaves, like the round before it:
+  // the stage is a size container between the header and the footer, and the
+  // answer, what the table said and the standings each divide the box they
+  // are given rather than a viewport arithmetic of the chrome around them.
+  //
+  // The countdown's recap is the same reveal under the number, held the same
+  // way: the number takes its row and the panel divides the rest.
+  .host-console-page:has(> .stage:is(.revealed, .counting-in))
+    @include layout.wide
+      animation: none
+      display: grid
+      gap: clamp(var(--space-xs), 2vmin, var(--space-m))
+      grid-template-rows: auto minmax(min(16rem, 40dvh), 1fr) auto
+
+      @media (height < 36rem)
+        grid-template-rows: minmax(min(16rem, 40dvh), 1fr) auto
+
+        > header
+          display: none
+
+      > .stage.counting-in
+        container: reveal / size
+        display: grid
+        gap: var(--space-m)
+        grid-template: auto minmax(0, 1fr) / minmax(0, 1fr)
+        justify-items: center
+
+        .countdown
+          font-size: clamp(3rem, min(18vmin, 20cqh), 12rem)
+
+        > .reveal-panel
+          align-self: stretch
+          justify-self: stretch
+
+      > .stage.revealed
+        container: reveal / size
+        display: grid
+        gap: var(--reveal-gap)
+        grid-template: 'panel standings' minmax(0, 1fr) / minmax(0, 1.75fr) minmax(0, 1fr)
+
+        &.holding
+          grid-template: 'panel standings' minmax(0, 1fr) 'hold hold' auto / minmax(0, 1.75fr) minmax(0, 1fr)
+          row-gap: var(--space-s)
+
+        > .round-progress
+          grid-area: hold
+          max-width: none
+          width: 100%
+
+        > .reveal-panel
+          grid-area: panel
+
+        > .standings
+          align-self: stretch
+          display: grid
+          grid-area: standings
+          grid-template-rows: auto minmax(0, 1fr)
+          min-height: 0
+          width: auto
+
+          // A row measured 2.14 of its own size with the score, the rule and
+          // the padding in it; the board divides its box by its rows over that
+          // and a little headroom.
+          // Past about fourteen players the floor binds and a full table runs
+          // longer than its box; it scrolls there rather than over the bar.
+          .scoreboard
+            container-type: size
+            overflow-y: auto
+
+            li
+              font-size: clamp(14px, calc(100cqh / var(--standings-rows, 8) / 2.3), 1.75rem)
+              padding: 0.3em 0
+
+              .rank
+                font-size: 0.8em
+
+              .nickname
+                font-size: 1em
+
+              .score
+                font-size: 1.4em
+                line-height: 1
 
   .host-console-page.framed
     @include framed.page

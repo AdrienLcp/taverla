@@ -1,181 +1,109 @@
 @use '../../presentation/styles/layout'
+@use '../../presentation/styles/piece'
 @use '../../presentation/styles/typography'
 
 @layer components
   .reveal-panel
-    align-items: center
-    display: grid
-    flex: 1
-    gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
-    grid-template-columns: minmax(0, 1fr)
+    display: flex
+    flex-direction: column
+    gap: var(--space-m)
+    min-width: 0
 
     @media (prefers-reduced-motion: no-preference)
       animation: card-strike var(--transition-slow, 0) var(--timing, ease) both
 
-    // Only the blind test has anything to print beside its words. A quiz
-    // answers in text and the bare buzzer answers in nothing at all.
-    //
-    // It declares the container the cover is measured from, because this is the
-    // box the two of them share: what the block takes is what the words lose.
-    &.with-cover
-      container-type: inline-size
-      grid-template-columns: auto minmax(0, 1fr)
-      // The rows take the list's own `--space-m` rather than the columns'
-      // gap: the cover, the words and what the table said are one card, and
-      // at 1366×768 the wider gap was the 17px the page ran over by. Packed
-      // in the middle, or a panel stretched to the standings' height opens
-      // the slack between the cover and the list instead.
-      align-content: center
-      row-gap: var(--space-m)
+    &[data-game='blindtest']
+      --spine: var(--spine-blindtest)
 
-      // The product's one breakpoint, where this read `860px` — a hand-written
-      // pixel forty short of it, which left a forty-pixel band drawing the
-      // panel in two columns inside a stage that had already stacked.
-      //
-      // Below it the panel wraps rather than stacks: the cover and the words
-      // share a line wherever the words keep 16rem beside it, which a console
-      // at 800 does and a phone does not. Stacked at 800×800 the cover spent
-      // 148px above a title that had the room beside it, and the next round
-      // ended 6px above the bottom of the screen.
+    &[data-game='quiz']
+      --spine: var(--spine-quiz)
+
+    > .head
+      align-items: center
+      display: flex
+      gap: clamp(var(--space-m), 3vmin, var(--space-xl))
+      min-width: 0
+
+      // Below the split the cover and the words share a line wherever the
+      // words keep 16rem beside it, and wrap where they do not.
       @include layout.narrow
         align-items: start
-        display: flex
         flex-wrap: wrap
 
-        > .identity
-          flex: 1 1 16rem
-
-        // A zero floor, or the list is as wide as its longest answer, which
-        // never wraps: two answers ran a phone 45px wide of its screen.
-        > .nobody,
-        > .said,
-        > .scorers
-          flex-basis: 100%
-          min-width: 0
-
-      // The list goes under the cover and the words together rather than
-      // under the words alone. Beside the cover it had the narrower of the two
-      // columns, where a two-column list cut `Anne-Charlotte` to
-      // `Anne-Char…`, and one column ran the page past the bottom instead.
-      > .nobody,
-      > .said,
-      > .scorers
-        grid-column: 1 / -1
-        margin-top: 0
-
-    // Deezer serves covers at 250 px and nothing larger, so the frame is built
-    // around that rather than discovering the ceiling at the end. It is die-cut
-    // on the field with a hard border — printed on the card, not floating.
-    //
-    // Three ceilings, and only the last one is the asset's. `vmin` is the height
-    // it may not eat. `cqi` is the share of the panel it may not take from the
-    // answer beside it, and it is the one the split made necessary: a panel is a
-    // fraction of the stage rather than the screen, so on a square viewport
-    // `34vmin` came to 306px of a 472px panel and left the answer 121 — where
-    // `Pocahontas` broke into eight pieces 680px tall and the stage ran 502px
-    // past the bottom of a 900×900 screen. The floor went with it: it was the
-    // one term that could never fire above the split, and the arm below has its
-    // own.
+    // Deezer serves covers at 250 px and nothing larger, so that is the
+    // ceiling: the print is mounted on a paper card rather than floating, the
+    // way the box's own photographs are.
     .cover
-      background: var(--cut)
-      border: 6px solid var(--cut)
-      height: min(34vmin, 32cqi, 320px)
-      object-fit: cover
-      width: min(34vmin, 32cqi, 320px)
+      --cover-size: min(34vmin, 250px)
 
-      // `vmin` is the *width* on a portrait screen, so the floor written to
-      // keep this from vanishing on a wide one is the only thing that ever
-      // fires on a phone: 34vmin of 390 is 133px and the cover is drawn at
-      // 180 — a fifth of an 844px screen, spent on a 250px thumbnail, in the
-      // one composition where height is the axis under pressure. Stacked it
-      // answers the height instead, which is the axis it is competing for.
+      border: 6px solid var(--card)
+      border-radius: var(--radius-s)
+      box-shadow: 0 3px 0 var(--chipboard), 0 12px 20px -10px var(--shadow)
+      flex: none
+      height: var(--cover-size)
+      object-fit: cover
+      width: var(--cover-size)
+
+      // `vmin` is the width on a portrait screen, where height is the axis
+      // under pressure, so stacked it answers the height instead.
       @include layout.narrow
-        height: clamp(96px, 16dvh, 180px)
-        width: clamp(96px, 16dvh, 180px)
+        --cover-size: clamp(96px, 16dvh, 180px)
 
       &.placeholder
-        opacity: 0.25
+        background: repeating-linear-gradient(135deg, var(--track-a) 0 10px, var(--track-b) 10px 20px)
 
     // It declares a container of its own because the title is measured against
     // this column and not against the one the cover shares with it.
     .identity
       container-type: inline-size
+      flex: 1 1 16rem
       min-width: 0
 
       // A catalogue writes these, not the product, so their length is nobody's
-      // decision — and at this size one long word is wider than the screen.
-      // `min-width: 0` on `.identity` is only half of it: a flex item stops
-      // growing, an unbreakable word does not.
-      //
-      // Length is the other half, and it is the one fact CSS cannot reach, so
-      // the component publishes it. The bank's answers run to 83 characters —
-      // *"A Fistful of Dollars", "For a Few Dollars More", …* — which at the
-      // ceiling is six lines and 490px of a 587px screen before a single player
-      // is listed. `128rem` is what holds any answer to two lines in the
-      // narrower of the two columns, the one with a cover beside it: the median
-      // of 9 characters and the 90th percentile of 17 both still clamp to the
-      // full size, and only the last five per cent read smaller.
-      //
-      // And the longest *word* is the fact the length cannot stand in for, now
-      // that the column can be 276px wide: `9vmin` is the screen's shorter axis
-      // and this column stopped being it the day the reveal split, so a
-      // ten-letter answer was set at 81px in 276px and came down as
-      // `POC / AHO / NTAS`.
-      //
-      // `106cqi` is measured by the method the room code's `20cqi` was, and
-      // against the same worst case rather than an average: the widest word of
-      // a fifty-title sample takes 0.943 of its own font size per unit of
-      // width, so `100 / 0.943 = 106cqi` divided by that width holds any of
-      // them on one line. The width is what `answer-fitting.ts` publishes in
-      // place of a character count, and it is the half of this that changed.
-      // The constant read `111` off the face's *mean* of 0.898, which is the
-      // number a paragraph is sized by and a coin flip on a single word: it
-      // held on fifty-eight per cent of that sample and drew `WONDERWALL` as
-      // `WONDERWAL / L` in a 509px column. It is the player's `116cqi` one
-      // register up, the same rule against the wider face.
-      //
-      // The `dvh` term is that same 9 per cent of the height a hold bar has
-      // left, which on a landscape screen is the one `9vmin` already reads. It
-      // only differs while the host console draws a bar: the list beside it is
-      // on its floor by then, so the answer is the one thing left to pay.
-      //
-      // `128rem` holds an answer to two lines in a column of the viewport's
-      // proportions, and the column beside a cover stopped being one when the
-      // standings took a third of the stage: at 1280 it is 446px, and
-      // `...Baby One More Time` came down in four lines. `260cqi` is the same
-      // sentence against the column the answer is actually set in — the mean
-      // glyph of 0.898 em with room for the ragged end of each line — so it
-      // binds only past about sixteen characters, which a short title never is.
+      // decision, and `answer-fitting.ts` publishes the two facts CSS cannot
+      // read off a string. `106cqi` over the longest word's width holds any
+      // word whole on one line, measured against the widest of a fifty-title
+      // sample; `260cqi` over the length holds an answer to about two lines in
+      // the column it is set in. The `dvh` term is the height a hold bar leaves.
       --answer-size: clamp(2rem, min(9vmin, calc((100dvh - var(--hold-bar, 0px)) * 0.09), calc(128rem / var(--answer-length, 10)), calc(260cqi / var(--answer-length, 10)), calc(106cqi / var(--longest-word-width, 10))), 7rem)
+
+      .framing
+        @include typography.label
+
+        align-items: center
+        color: var(--ink-muted)
+        display: flex
+        gap: 0.6em
+        margin-bottom: 0.5em
+
+        &::before
+          background: var(--spine, var(--ink-muted))
+          border-radius: 3px
+          content: ''
+          flex: none
+          height: 0.8em
+          width: 0.8em
 
       .title
         @include typography.monument
 
         font-size: var(--answer-size)
         overflow-wrap: anywhere
+        text-wrap: balance
 
       // Off the answer's own size rather than the screen's, because the two are
-      // one line read together and only one of them knows how much room the
-      // answer needed: `4vmin` alone put `PLK` at 36px over a `POCAHONTAS` the
-      // column had already pushed to 32. `0.6` is looser than the ratio the two
-      // hold anywhere the column is not the binding term — 0.41 at 1920 — so it
-      // is a floor on the hierarchy and never a resize of it.
+      // one line read together and only the answer knows how much room it
+      // needed. `0.6` is a floor on the hierarchy, never a resize of it.
       .artist
         @include typography.billboard
 
-        color: var(--ink-muted)
         font-size: min(clamp(1.25rem, 4vmin, 2.5rem), calc(var(--answer-size) * 0.6))
-        margin-top: var(--space-xs)
+        font-weight: 600
+        margin-top: 0.3em
         overflow-wrap: anywhere
 
-      .framing
-        @include typography.label
-
-        color: var(--ink-muted)
-        margin-bottom: var(--space-s)
-
-      // What the room is told once the answer is public — the only prose on a
-      // screen read from across the room, so it is capped at a measure.
+      // The only prose on a screen read from across the room, so it is capped
+      // at a measure.
       .note
         @include typography.body
 
@@ -183,206 +111,159 @@
         margin-top: var(--space-s)
         max-width: 60ch
 
-    .nobody,
+    // The question card turned over: the same paper, now carrying its answer.
+    &[data-game='quiz'] .identity
+      @include piece.card
+
+      --ink-muted: var(--card-muted)
+
+      flex: 1 1 auto
+      padding: clamp(14px, 3vmin, 32px) clamp(16px, 3.4vmin, 40px)
+
+    // What the table said, one chip per player, dealt down then across.
+    // Filled for a right answer, an empty outline for a wrong one — the shape
+    // tells them apart as much as the ink, and the points only ever stand on
+    // the filled ones.
     .said,
     .scorers
-      margin-top: var(--space-m)
-
-    // What everyone answered is most of what a room wants to see at a reveal,
-    // so it is a list of sentences rather than a table of results. Right and
-    // wrong are told apart by the ink, since the answer is on the same screen.
-    .said
-      display: flex
-      flex-direction: column
+      display: grid
+      gap: var(--space-2xs) var(--space-s)
+      grid-auto-flow: column
+      grid-template-columns: repeat(var(--outcome-columns, 1), minmax(0, 1fr))
+      grid-template-rows: repeat(var(--outcome-rows, 1), auto)
       list-style: none
+
+      @include layout.narrow
+        grid-auto-flow: row
+        grid-template-columns: minmax(0, 1fr)
+        grid-template-rows: none
 
       li
         @include typography.title
 
-        border-top: 2px solid var(--rule)
+        align-items: center
+        background: var(--track-a)
+        border-radius: var(--radius-s)
+        box-shadow: 0 2px 0 var(--chipboard)
+        color: var(--board-ink)
         display: flex
-        // Once the answer fills the row the gap is the only thing left
-        // holding the two apart, and it is sized in `em` for the same reason
-        // the padding is: this row's size is divided out of a screen budget.
-        gap: 1em
-        padding: var(--space-xs) 0
-
-        // Both halves are unbreakable text of a length nobody here decides —
-        // twenty characters a player chose, and a catalogue's title *and*
-        // artist. Two `auto` items shrink in proportion to their content, so
-        // a 57-character track ate the name beside it: `Zoé` was drawn as
-        // `Z…` in a row with 250px to spare at the other end.
-        //
-        // A name is atomic where a title is not — half a nickname names
-        // nobody, half a title still reads — so the name is sized on its own
-        // text and the answer takes what is left, down to nothing but its
-        // ellipsis. It held half the row once, and in a two-column list that
-        // drew `Anne-Char…` beside `the bea…`: the row had cut both halves to
-        // keep one of them. The name is only ever cut when it alone is wider
-        // than the row.
-        .nickname
-          flex: 0 1 auto
-          min-width: 0
-          overflow: hidden
-          text-overflow: ellipsis
-          white-space: nowrap
+        gap: 0.5em
+        min-width: 0
+        padding: 0.22em 0.6em
 
         &.wrong
+          background: transparent
+          box-shadow: inset 0 0 0 2px var(--rule)
           color: var(--ink-muted)
 
-      .words
-        // A zero basis is what makes it the one that gives way: it asks for
-        // nothing, so the name and the points are laid out first.
-        flex: 1 1 0
+      // A name is atomic where a title is not — half a nickname names nobody,
+      // half a title still reads — so the name is sized on its own text and
+      // the answer takes what is left, down to nothing but its ellipsis.
+      .nickname
+        flex: 0 1 auto
         min-width: 0
         overflow: hidden
-        text-align: right
         text-overflow: ellipsis
         white-space: nowrap
 
-      // What the round paid, and the only column here the room reads *down*
-      // rather than across — so it holds one width whatever it carries. The
-      // widest form is four figures wide (`3 +3`), and a row that paid
-      // nothing keeps the box empty rather than dropping it, or the answers
-      // above and below it end on two different right edges.
+      // A zero basis is what makes it the one that gives way: it asks for
+      // nothing, so the name and the points are laid out first.
+      .words
+        flex: 1 1 0
+        font-family: var(--font-base)
+        font-size: 0.8em
+        font-stretch: normal
+        font-weight: 400
+        min-width: 0
+        overflow: hidden
+        text-align: end
+        text-overflow: ellipsis
+        white-space: nowrap
+
+      // The only column read *down*, so it holds one width whatever it
+      // carries: the widest form is four figures (`3 +3`).
       .points
         @include typography.numeric
 
         flex: none
         min-width: 4.5ch
-        text-align: right
+        text-align: end
+
+    .scorers li
+      justify-content: space-between
+
+      .nickname
+        flex: 1 1 auto
 
     .nobody
       @include typography.title
 
       color: var(--ink-muted)
 
-    .scorers
-      display: flex
-      flex-direction: column
-      list-style: none
-
-      li
-        @include typography.title
-
-        border-top: 2px solid var(--rule)
-        display: flex
-        gap: var(--space-s)
-        justify-content: space-between
-        padding: var(--space-xs) 0
-
-        // A nickname is twenty characters somebody chose and nothing makes
-        // them breakable, so without this the row grows until the number at
-        // the end of it is off the screen — which is the half of the row the
-        // room is reading.
-        .nickname
-          overflow: hidden
-          text-overflow: ellipsis
-          white-space: nowrap
-
-      // What the ellipsis on the nickname is for, and it only holds if the
-      // number itself refuses to shrink.
-      .points
-        @include typography.numeric
-
-        flex: none
-
-    // What this panel's own header costs the list under it, published for the
-    // stage to subtract — the panel knows what it draws, the stage knows how
-    // much screen there is, and neither can answer the other's half. Two of the
-    // three headers carry a line the arithmetic cannot see through, and both
-    // are worth about six rows: the artist the blind test always prints under
-    // its title, and the quiz's note, which exists on a fifth of the bank and
-    // all of it French. `:has()` reads the second off the markup rather than
-    // asking the component for a fact the markup already carries.
-    //
-    // The budget has no fallback worth honouring, so its default is a number so
-    // large the clamp lands on its ceiling: a phase that sets none — every one
-    // but the reveal and the count-in — gets the size it always had.
+    // Below the split a console scrolls, and the list divides the budget the
+    // stage hands it only so its type stops growing once the page does.
     &:not(.bare)
-      --outcome-header: 44rem
-
-      &.with-cover,
-      &:has(.note)
-        --outcome-header: 50rem
-
-      // A film's reveal is the first to carry both — the composer under the
-      // film, and the cue under the composer — so it pays for the two.
-      &.with-cover:has(.note)
-        --outcome-header: 56rem
-
-      // The floor is lower than the standings' beside it, because the two are
-      // not read the same way. Nobody reads ten of these from across the room —
-      // you find your own line, and the board next to it is what the room is
-      // looking at together. The padding goes with the type rather than staying
-      // at a fixed 8px, so a row is one multiple of its own size and the divisor
-      // means something.
-      @include layout.wide
-        .said li,
-        .scorers li
-          font-size: clamp(1rem, calc(var(--outcome-budget, 100rem) / var(--outcome-rows, 5) / 1.75), 1.75rem)
-          padding: 0.28em 0
-
-        // The floor is what a laptop hits first, and a floor that binds is a
-        // list that no longer fits: at 1280×800 a row cannot go under 28px,
-        // and under an answer and its note five of them already ran the page
-        // past the bottom. So from five the list flows into two columns, read
-        // down then across, and the budget is divided by the rows of one
-        // column instead — `+ 1` is the ceiling on an odd count. Every row
-        // already gives up its answer to an ellipsis before its name, so half
-        // the width costs the half of the row that still reads when it is cut.
-        .said:has(> li:nth-child(5))
-          column-gap: var(--space-l)
-          columns: 2
-          display: block
-
-          li
-            break-inside: avoid
-            font-size: clamp(1rem, calc(var(--outcome-budget, 100rem) / ((var(--outcome-rows, 5) + 1) / 2) / 1.75), 1.75rem)
-
-      // The same rule against a budget that is not the same size. Above the
-      // split this list has a column of its own and takes a row of it each;
-      // stacked it is the third thing down a single column, under the cover
-      // and the answer and above the standings, so the share it can ask for
-      // is a third of what it divides rather than all of it — which is the
-      // whole of the difference between the two divisors. The ceiling is
-      // where `typography.title` already sits at this width, so a table of
-      // three reads exactly as it did and only a full one reads smaller.
       @include layout.narrow
         .said li,
         .scorers li
-          font-size: clamp(0.9rem, calc(var(--outcome-budget, 100rem) / var(--outcome-rows, 5) / 5), 1.25rem)
-          padding: 0.28em 0
+          font-size: clamp(0.9rem, calc(var(--outcome-budget, 100rem) / (var(--outcome-rows, 5) * var(--outcome-columns, 1)) / 5), 1.25rem)
 
     // A game whose question the room owns reveals nothing, so the scoreline is
     // the whole panel rather than the line under an answer.
-    //
-    // Last in the file because it has to be. `.reveal-panel.bare .scorers li`
-    // and `.reveal-panel .identity .scorers li` weigh exactly the same, so the
-    // one written later wins — and written above `.identity` this one lost in
-    // silence, leaving the buzzer's whole screen carrying a single 28px line
-    // smaller than the standings beside it.
     &.bare
+      justify-content: center
+
       .nobody,
       .scorers li
         @include typography.billboard
 
-      // The other bare panel lists whoever scored, which is one line and a name.
-      // A heat lists everyone who moved — up to a full table — so this one buys
-      // its height by dividing its box the way the panels with a header do. What
-      // it subtracts is almost nothing, because it has almost no header: the
-      // board is the whole reveal, and the room reads it as a finishing order.
-      &:has(.reaction-board)
-        --outcome-header: 6rem
+      @include layout.narrow
+        .reaction-board li
+          font-size: clamp(1rem, calc(var(--outcome-budget, 100rem) / var(--outcome-rows, 5) / 1.75), 1.75rem)
 
-        @include layout.wide
-          .reaction-board li
-            font-size: clamp(1rem, calc(var(--outcome-budget, 100rem) / var(--outcome-rows, 5) / 1.75), 3rem)
+  // Above the split, on the reveal's own stage: the panel is the box the grid
+  // gives it, and each part divides it rather than the viewport. The head
+  // takes what the answer needs; the list takes the rest, as a size container
+  // its rows divide by their count.
+  .stage:is(.revealed, .counting-in) > .reveal-panel
+    @include layout.wide
+      display: grid
+      grid-template-rows: auto minmax(0, 1fr)
+      min-height: 0
 
-        // Stacked this board is the whole reveal rather than the third thing
-        // down the column, so it keeps the divisor the wide arm has and gives
-        // up only its ceiling — a finishing order read from a hand does not
-        // need the 48px a room four metres away does.
-        @include layout.narrow
-          .reaction-board li
-            font-size: clamp(1rem, calc(var(--outcome-budget, 100rem) / var(--outcome-rows, 5) / 1.75), 1.75rem)
+      .cover
+        --cover-size: min(250px, 34cqh, 22cqi)
+
+      .identity
+        --answer-size: clamp(1.75rem, min(12cqh, calc(106cqi / var(--longest-word-width, 10)), calc(260cqi / var(--answer-length, 10))), 6rem)
+
+        // The note is read up close or not at all, so beside a full table it
+        // gives way before the chips do.
+        .note
+          font-size: clamp(14px, 3.4cqh, 1.25rem)
+          margin-top: 0.5em
+
+      &[data-game='quiz'] .identity
+        padding: clamp(10px, 3cqh, 32px) clamp(16px, 3.4cqi, 40px)
+
+      &:not(.bare) > .said,
+      &:not(.bare) > .scorers
+        align-content: start
+        container-type: size
+        overflow-y: auto
+
+        // A chip is its pawn's 1.15em, which stands taller than the line, and
+        // 0.44em of padding, with the gap between rows on top.
+        li
+          font-size: clamp(14px, calc((100cqh - (var(--outcome-rows, 1) - 1) * var(--space-2xs)) / var(--outcome-rows, 1) / 1.7), 1.75rem)
+
+      &.bare
+        align-content: center
+        grid-template-rows: minmax(0, 1fr)
+
+        .reaction-board
+          align-self: stretch
+          container-type: size
+
+          li
+            font-size: clamp(14px, calc(100cqh / var(--outcome-rows, 5) / 1.9), 3rem)

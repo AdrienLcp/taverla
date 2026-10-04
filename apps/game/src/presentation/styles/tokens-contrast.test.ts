@@ -72,6 +72,12 @@ describe('colour tokens', () => {
           background: '--socket',
           foreground: '--socket-line',
           minimum: WCAG_AA.nonText
+        },
+        // The reveal's hold bar drains in the phase's ink along a socket.
+        {
+          background: '--socket',
+          foreground: '--good',
+          minimum: WCAG_AA.nonText
         }
       ])
     ).toEqual([])

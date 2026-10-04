@@ -348,6 +348,7 @@ export const EN_DICTIONARY = defineDictionary({
       label: 'Settings',
       roundInPlay: 'Some of these wait until the round is over'
     },
+    standings: 'Standings',
     startGame: 'Gather round',
     verdict: {
       right: 'Right',

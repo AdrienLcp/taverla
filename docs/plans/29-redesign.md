@@ -134,6 +134,26 @@ new one is whole. This file is the brief: open a fresh session, run
   where it was 327px at 1280×720. Broken on purpose once (an 18px question
   floor fails two rows).
 
+- **The console's reveal** is the box world's results card. A blind test's
+  cover is a print mounted on paper; a quiz's answer is printed on the same
+  paper card the question was, the card turned over. What the table said is a
+  chip per player — the pawn, the name, the words, the points — filled for a
+  right answer and an empty outline for a wrong one, dealt down then across in
+  one, two or three columns (`dealtRows`). The standings sit beside it under a
+  title (`Standings`, `host.standings`) with their pawns, and the hold is a
+  groove draining in the phase's ink along the foot of the stage rather than a
+  block of ink. Above the split the page is the playing stage's three-row grid,
+  the stage a size container (`reveal`), and every list divides its own box by
+  its rows — the `--outcome-header` / `24rem` / `--hold-bar` viewport budgets
+  the old reveal carried are gone above the split. The countdown's recap is the
+  same panel under the number and is held the same way. `choice-fits.spec.ts`
+  measures it (`room`, a quiz with a note and a blind test, eight players, in
+  French) over every viewport from 900px wide: no scroll, and no row drawn past
+  the list holding it — the second check went red at 1024×768 before the chips
+  were tightened, which a page-scroll check alone never sees inside a size
+  container. Past about fourteen players a list scrolls in its own box rather
+  than over the bar.
+
 Measured traps, so the next screen does not pay for them again: a `position:
 fixed` element inside the page is fixed to the page, not the viewport, because
 the entrance animation leaves a `transform` — the track renders beside `<main>`; `height` on the console's `<main>` does
@@ -147,8 +167,9 @@ page's entrance animation, whose leftover `translateY` is a 1px scroll.
 
 ## Next session
 
-1. The rest of §1's inventory screen by screen — countdown, buzzed (the verdict
-   panel), reveal, final board, the slate's two stages, reflex — each against
+1. The rest of §1's inventory screen by screen — countdown (its recap is done,
+   the number is not), buzzed (the verdict panel), final board, the slate's two
+   stages, reflex — each against
    the ring's `--track-room` and measured at 1280×720, 1024×768 and 1920×1080;
    the front door last (Persuade), `og.png` redrawn, then §6.
    `AskedQuestion`'s own sizing still carries Archivo's measured width

@@ -42,7 +42,10 @@ it covers that a socket test cannot; the answer is usually "nothing".
 the page (`page.routeWebSocket`) with a snapshot built in the spec, so the
 question on screen is the bank row under test, and measures the choice screen
 — a player's and a seated host's — at sixteen viewports: no scroll, every tile inside the viewport, nothing under
-the 14px floor. A geometry claim, for the same reason as the one below.
+the 14px floor. It measures the room's console at the reveal too, from 900px
+wide: no scroll, and no row drawn past the list that holds it — a size
+container keeps its overflow off the page, so a scroll check alone never sees a
+chip under the hold bar. A geometry claim, for the same reason as the one below.
 
 `strip-rows.spec.ts` plays nothing either. It opens one room, walks every game in both
 locales, and asserts that no choice strip ever holds rows of two different

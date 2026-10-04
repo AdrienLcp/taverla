@@ -313,6 +313,7 @@ export const FR_DICTIONARY = defineDictionary({
       label: 'Réglages',
       roundInPlay: 'Certains de ces réglages attendent la fin de la tournée'
     },
+    standings: 'Classement',
     startGame: 'À table\u00a0!',
     verdict: {
       right: 'Bonne réponse',

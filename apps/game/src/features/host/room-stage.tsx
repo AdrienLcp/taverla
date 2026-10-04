@@ -17,7 +17,6 @@ import { holdsTheAnswer } from '@/helpers/round-content'
 import { Countdown } from '@/presentation/components/countdown'
 import { RoomInvitation } from '@/presentation/components/room-invitation'
 import { RevealHold } from '@/presentation/components/round-progress'
-import { Scoreboard } from '@/presentation/components/scoreboard'
 
 import { ClipOffer } from './clip-offer'
 import { FinalBoard } from './final-board'
@@ -26,6 +25,7 @@ import { PlayingStage } from './playing-stage'
 import { ReflexStage } from './reflex-stage'
 import { RevealPanel } from './reveal-panel'
 import { SlateCorrectionStage, SlateWritingStage } from './slate-stages'
+import { Standings } from './standings'
 import type { SlateWall } from './use-slate-wall'
 import { VerdictPanel } from './verdict-panel'
 
@@ -251,7 +251,7 @@ export const RoomStage: React.FC<RoomStageProps> = ({
         style={{ '--standings-rows': view.players.length }}
       >
         <RevealPanel players={view.players} round={round} />
-        <Scoreboard players={view.players} youId={youId} />
+        <Standings players={view.players} youId={youId} />
         {hold !== null && <RevealHold clock={clock} {...hold} />}
       </div>
     )
