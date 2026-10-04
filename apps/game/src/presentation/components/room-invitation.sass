@@ -1,21 +1,20 @@
+@use '../styles/piece'
 @use '../styles/typography'
 
 @layer components
-  // The stack, the gaps, the square and the address line — everything that is
-  // true of the invitation wherever it is drawn. How *large* it is belongs to
-  // the stage that draws it, through the two custom properties below: the same
-  // object is read from four metres on a console, from a 280px popover, and
-  // from across a room off a projector.
+  // Everything that is true of the invitation wherever it is drawn. How
+  // *large* it is belongs to the stage that draws it, through the two custom
+  // properties below: the same object is read from four metres on a console,
+  // from a 280px popover, and from across a room off a projector.
   //
-  // `container-type` is declared here so the pairing cannot be split. `21cqi`
-  // written by any stage resolves against this box, because a container unit is
-  // evaluated on the element that consumes it — which is what stops the size
-  // silently re-basing onto whatever box the stage happens to sit in.
+  // `container-type` is declared here so the pairing cannot be split. `20cqi`
+  // written by any stage resolves against this box, because a container unit
+  // is evaluated on the element that consumes it.
   .room-invitation
-    --invitation-code-size: min(clamp(2.75rem, 14vmin, 9rem), 21cqi)
+    --invitation-code-size: min(clamp(2.75rem, 14vmin, 9rem), 20cqi)
     --invitation-qr-max-width: 256px
 
-    align-items: flex-start
+    align-items: stretch
     container-type: inline-size
     display: flex
     flex-direction: column
@@ -24,45 +23,74 @@
     min-width: 0
     width: 100%
 
-    // The code and the button that copies it are one object, so they sit
-    // closer to each other than to the QR card below them.
+    // The code is a token punched out of the box: the one saffron piece on
+    // the board, read from the far side of the room.
     .code
-      align-items: flex-start
+      @include piece.piece(var(--radius-l))
+
+      --ground: var(--field)
+
+      align-items: center
+      background: var(--tile-2)
+      color: var(--tile-ink)
       display: flex
       flex-direction: column
-      gap: var(--space-s)
-      width: 100%
+      gap: var(--space-xs)
+      padding: var(--space-s) var(--space-m) var(--space-m)
+      text-align: center
+
+      .button
+        --ground: var(--tile-2)
 
     // Selectable against the reset, along with the URL below: the copy button
-    // is the fast path, and someone reading the code to a laptop still wants to
-    // be able to grab it by hand.
+    // is the fast path, and someone reading the code to a laptop still wants
+    // to be able to grab it by hand.
     .room-code
       @include typography.monument
 
       font-size: var(--invitation-code-size)
+      letter-spacing: 0.02em
       user-select: text
-      width: 100%
       word-break: break-all
 
+    .code-caption
+      font-size: clamp(0.9375rem, 2.2vmin, 1.25rem)
+      font-weight: 700
+      line-height: 1.2
+
+    // The square on a white card in both palettes: a scanner reads dark
+    // modules on light paper, and the inverse fails on half the cameras in a
+    // room.
     .qr
-      color: var(--ink)
-      display: flex
-      flex-direction: column
-      gap: var(--space-xs)
-      max-width: var(--invitation-qr-max-width)
-      width: 100%
+      align-items: center
+      display: grid
+      gap: var(--space-s) var(--space-m)
+      grid-template-columns: minmax(0, var(--invitation-qr-max-width))
+
+      @container (width >= 21rem)
+        grid-template-columns: minmax(0, min(var(--invitation-qr-max-width), 45cqi)) minmax(0, 1fr)
+
+    .qr-card
+      @include piece.card(var(--radius-m))
+
+      padding: clamp(8px, 4%, 14px)
 
       svg
+        display: block
         height: auto
         width: 100%
 
-    // The room code is named by the button that copies it. Nothing named the QR
-    // card, and an address is not a verb — the URL below says where, not that
-    // scanning is what you do with it.
-    .invite
-      @include typography.label
+    .qr-words
+      display: flex
+      flex-direction: column
+      gap: var(--space-2xs)
+      min-width: 0
 
-      color: var(--ink-muted)
+    .invite
+      font-size: clamp(1rem, 2.2vmin, 1.25rem)
+      font-weight: 700
+      line-height: 1.3
+      text-wrap: pretty
 
     .join-url
       @include typography.caption

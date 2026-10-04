@@ -53,6 +53,7 @@ import { unlockBuzzCue, useBuzzCue } from '@/presentation/audio/buzz-cue'
 import { useVolume } from '@/presentation/audio/volume-provider'
 import { RoundChrome } from '@/presentation/components/round-chrome'
 import { RoundProgress } from '@/presentation/components/round-progress'
+import { ScoreTrack } from '@/presentation/components/score-track'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
 import {
   reflexOutcome,
@@ -371,90 +372,92 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   }
 
   return (
-    <main className='host-console-page'>
-      <RoomDocumentTitle game={view?.settings.game?.kind ?? null} />
-      <header>
-        {view?.round != null && view.phase !== 'finished' && (
-          <p className='round-index'>
-            {view.settings.roundCount === null
-              ? translate('round.indexOpen', { index: view.round.index })
-              : translate('round.index', {
-                  index: view.round.index,
-                  total: view.settings.roundCount
-                })}
-          </p>
-        )}
-        {/*
+    <>
+      {view !== null && <ScoreTrack players={view.players} />}
+      <main className='host-console-page'>
+        <RoomDocumentTitle game={view?.settings.game?.kind ?? null} />
+        <header>
+          {view?.round != null && view.phase !== 'finished' && (
+            <p className='round-index'>
+              {view.settings.roundCount === null
+                ? translate('round.indexOpen', { index: view.round.index })
+                : translate('round.index', {
+                    index: view.round.index,
+                    total: view.settings.roundCount
+                  })}
+            </p>
+          )}
+          {/*
           The lobby is the one phase that excludes it, because the invitation
           is already the stage's larger half there. `finished` used to be
           excluded too and that was backwards: the final board is precisely
           when somebody says *one more, I'll call Marc*, and the room
           still answers.
         */}
-        {view !== null && view.phase !== 'lobby' && (
-          <JoinReminder roomCode={roomCode} />
-        )}
-      </header>
+          {view !== null && view.phase !== 'lobby' && (
+            <JoinReminder roomCode={roomCode} />
+          )}
+        </header>
 
-      <RoomStage
-        canPlay={canPlay}
-        clock={clock}
-        controls={{
-          isAnswerFolded: cameFromWall,
-          isLive,
-          onRememberSlateKey: rememberPreparedKey,
-          onRemovePlayer: removePlayer,
-          onSettingsChange: changeSettings,
-          onTakeSeat: takeSeat,
-          preferences,
-          preparedSlateKeys: preparedKeys,
-          send
-        }}
-        isSpeaker={isSpeaker}
-        onUnlockAudio={armAudio}
-        refusal={refusal}
-        roomCode={roomCode}
-        slateWall={slateWall}
-        view={view}
-      />
+        <RoomStage
+          canPlay={canPlay}
+          clock={clock}
+          controls={{
+            isAnswerFolded: cameFromWall,
+            isLive,
+            onRememberSlateKey: rememberPreparedKey,
+            onRemovePlayer: removePlayer,
+            onSettingsChange: changeSettings,
+            onTakeSeat: takeSeat,
+            preferences,
+            preparedSlateKeys: preparedKeys,
+            send
+          }}
+          isSpeaker={isSpeaker}
+          onUnlockAudio={armAudio}
+          refusal={refusal}
+          roomCode={roomCode}
+          slateWall={slateWall}
+          view={view}
+        />
 
-      <footer>
-        {error !== null && (
-          <p className='error' role='alert'>
-            {translate(protocolErrorKey(error.code))}
-          </p>
-        )}
-        {view !== null && (
-          <>
-            <HostActions
-              draftSource={draftSource}
-              isLive={isLive}
-              onOpenRound={() => {
-                // Inside the press, never in an effect: the autoplay policy
-                // grants permission only from a real gesture, and it cannot be
-                // asked for later when the track arrives.
-                armAudio()
+        <footer>
+          {error !== null && (
+            <p className='error' role='alert'>
+              {translate(protocolErrorKey(error.code))}
+            </p>
+          )}
+          {view !== null && (
+            <>
+              <HostActions
+                draftSource={draftSource}
+                isLive={isLive}
+                onOpenRound={() => {
+                  // Inside the press, never in an effect: the autoplay policy
+                  // grants permission only from a real gesture, and it cannot be
+                  // asked for later when the track arrives.
+                  armAudio()
 
-                // What the picker is showing is what the host chose, and a
-                // round about to be drawn is the moment that means something —
-                // which is why every control that opens one comes through here
-                // rather than the launch alone. Re-sending an unchanged source
-                // is free: the server drops the pool only when it differs.
-                const game = view.settings.game
+                  // What the picker is showing is what the host chose, and a
+                  // round about to be drawn is the moment that means something —
+                  // which is why every control that opens one comes through here
+                  // rather than the launch alone. Re-sending an unchanged source
+                  // is free: the server drops the pool only when it differs.
+                  const game = view.settings.game
 
-                if (draftSource !== null && game?.kind === 'blindtest') {
-                  changeSettings({
-                    ...view.settings,
-                    game: { ...game, source: draftSource }
-                  })
-                }
-              }}
-              send={send}
-              slateKeys={preparedSlateKeys}
-              slateWall={slateWall}
-              view={view}
-            />
-            {/*
+                  if (draftSource !== null && game?.kind === 'blindtest') {
+                    changeSettings({
+                      ...view.settings,
+                      game: { ...game, source: draftSource }
+                    })
+                  }
+                }}
+                send={send}
+                slateKeys={preparedSlateKeys}
+                slateWall={slateWall}
+                view={view}
+              />
+              {/*
               `finished` is not a phase of a game, it is the result of one, and
               both of these act on a game in flight: how long a reveal is held
               before the room is moved on, and the settings the next round is
@@ -467,32 +470,34 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
               was overflowing by: nine players on a 1280×800 put the replay
               half under the fold and the way back entirely below it.
             */}
-            {view.phase !== 'finished' && (
-              <>
-                {view.settings.game?.kind !== 'slate' && (
-                  <AutoAdvanceChoice
+              {view.phase !== 'finished' && (
+                <>
+                  {view.phase !== 'lobby' &&
+                    view.settings.game?.kind !== 'slate' && (
+                      <AutoAdvanceChoice
+                        isLive={isLive}
+                        onSettingsChange={changeSettings}
+                        settings={view.settings}
+                      />
+                    )}
+                  <SetupFold
+                    draftSource={draftSource}
                     isLive={isLive}
+                    onDraftSource={setDraftSource}
+                    onRememberSlateKey={rememberPreparedKey}
                     onSettingsChange={changeSettings}
-                    settings={view.settings}
+                    onTakeSeat={takeSeat}
+                    preferences={preferences}
+                    preparedSlateKeys={preparedKeys}
+                    view={view}
                   />
-                )}
-                <SetupFold
-                  draftSource={draftSource}
-                  isLive={isLive}
-                  onDraftSource={setDraftSource}
-                  onRememberSlateKey={rememberPreparedKey}
-                  onSettingsChange={changeSettings}
-                  onTakeSeat={takeSeat}
-                  preferences={preferences}
-                  preparedSlateKeys={preparedKeys}
-                  view={view}
-                />
-              </>
-            )}
-          </>
-        )}
-      </footer>
-    </main>
+                </>
+              )}
+            </>
+          )}
+        </footer>
+      </main>
+    </>
   )
 }
 

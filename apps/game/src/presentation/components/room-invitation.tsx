@@ -55,6 +55,7 @@ export const RoomInvitation: React.FC<RoomInvitationProps> = ({
     <CodeAndSquare
       caption={translate('invite.title')}
       code={roomCode}
+      codeCaption={translate('invite.typeIt')}
       isUnattended={isUnattended}
       url={playUrlFor(roomCode)}
     />
@@ -66,6 +67,8 @@ type CodeAndSquareProps = {
   caption: string
   /** Read aloud and typed — the short form of what the square encodes. */
   code: string
+  /** What to do with the code, under it. Omitted where the code is not typed by anyone. */
+  codeCaption?: string
   /** As on `RoomInvitation`: no copy control on a screen nobody is at. */
   isUnattended?: boolean
   /** What the square encodes, printed under it for whoever cannot scan. */
@@ -80,12 +83,16 @@ type CodeAndSquareProps = {
 export const CodeAndSquare: React.FC<CodeAndSquareProps> = ({
   caption,
   code,
+  codeCaption,
   isUnattended,
   url
 }) => (
   <section className='room-invitation'>
     <div className='code'>
       <p className='room-code'>{code}</p>
+      {codeCaption !== undefined && (
+        <p className='code-caption'>{codeCaption}</p>
+      )}
       {!isUnattended && <CopyButton value={code} />}
     </div>
     <div className='qr'>
@@ -99,16 +106,20 @@ export const CodeAndSquare: React.FC<CodeAndSquareProps> = ({
         shortcut its listener has no way to take, ahead of the address that
         is the way in.
       */}
-      <QRCodeSVG
-        aria-hidden='true'
-        bgColor='transparent'
-        fgColor='currentColor'
-        marginSize={0}
-        size={256}
-        value={url}
-      />
-      <p className='invite'>{caption}</p>
-      <p className='join-url'>{url}</p>
+      <div className='qr-card'>
+        <QRCodeSVG
+          aria-hidden='true'
+          bgColor='transparent'
+          fgColor='currentColor'
+          marginSize={0}
+          size={256}
+          value={url}
+        />
+      </div>
+      <div className='qr-words'>
+        <p className='invite'>{caption}</p>
+        <p className='join-url'>{url}</p>
+      </div>
     </div>
   </section>
 )

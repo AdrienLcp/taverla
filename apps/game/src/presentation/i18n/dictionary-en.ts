@@ -295,7 +295,6 @@ export const EN_DICTIONARY = defineDictionary({
     playAgain: 'Play again',
     players: {
       empty: 'Nobody yet. That will not last.',
-      remove: 'Remove',
       removeNamed: 'Remove {nickname}',
       title: 'The table'
     },
@@ -368,6 +367,7 @@ export const EN_DICTIONARY = defineDictionary({
     joinLate: 'The door is open',
     project: 'Show the QR code, big',
     title: 'Scan and pull up a chair',
+    typeIt: 'Type it to walk in',
     unknown: {
       description:
         'That code opens no table. It may have been cleared, or read wrong.',
@@ -563,7 +563,10 @@ export const EN_DICTIONARY = defineDictionary({
   },
   room: {
     documentTitle: '{game} — Taverla',
-    documentTitleLobby: 'Taverla'
+    documentTitleLobby: 'Taverla',
+    track: {
+      start: 'Start'
+    }
   },
   round: {
     answer: {

@@ -78,7 +78,7 @@
           // column instead of two, and `11rem` more spent — the countdown above
           // it and the gap that separates them.
           @include layout.wide
-            --outcome-budget: calc(100dvh - var(--outcome-header, 44rem) - 11rem)
+            --outcome-budget: calc(var(--track-room, 100dvh) - var(--outcome-header, 44rem) - 11rem)
 
       // The reveal and the standings, which is the one moment the room asks
       // what the round did to the game — and stacked, the one stage that could
@@ -120,7 +120,7 @@
         // `27rem` is the chrome, measured the way `31rem` was: at 390×844 the
         // header, the footer, the page padding and two gaps came to 434px.
         @include layout.narrow
-          --stacked-budget: calc(100dvh - 27rem - var(--hold-bar))
+          --stacked-budget: calc(var(--track-room, 100dvh) - 27rem - var(--hold-bar))
 
           // And so the standings go under the footer rather than above it. The
           // stage hands its children to the page's own column, which is what
@@ -220,7 +220,7 @@
             // `--outcome-header` was measured over the stacked footer and is
             // shared with the countdown's recap, which still has one, so the
             // 7rem the reveal's row returned is added back here.
-            --outcome-budget: calc(100dvh - var(--outcome-header, 44rem) + 7rem - var(--hold-bar))
+            --outcome-budget: calc(var(--track-room, 100dvh) - var(--outcome-header, 44rem) + 7rem - var(--hold-bar))
 
           // The same bargain on the other side, and the reason this board does
           // not take the final board's two columns: halving the width truncated
@@ -231,7 +231,7 @@
           // `line-height` is the reset's 1.5 until it is said otherwise, which
           // on a numeral this size is half a row of nothing, ten times over.
           .scoreboard li
-            font-size: clamp(0.9rem, calc((100dvh - 24rem - var(--hold-bar)) / var(--standings-rows, 8) / var(--standings-row)), 1.75rem)
+            font-size: clamp(0.9rem, calc((var(--track-room, 100dvh) - 24rem - var(--hold-bar)) / var(--standings-rows, 8) / var(--standings-row)), 1.75rem)
             padding: 0.45em 0
 
             .rank
@@ -256,7 +256,7 @@
       // at 1024×768, 359 at 1280×800 and 370 at 1440×900, because the padding
       // is fluid and the line's own caption is. The widest of those binds.
       &.finished
-        --final-budget: calc(100dvh - 23.25rem)
+        --final-budget: calc(var(--track-room, 100dvh) - 23.25rem)
 
         // Stacked, the board pays for its own header out of this, and the page
         // padding it sits in is fluid: the same chrome measured 326px at
@@ -269,36 +269,27 @@
         // no round limit — is one line above the split and two below it, so the
         // narrow arm's smaller chrome buys back most of what the wrap costs.
         @include layout.narrow
-          --final-budget: calc(100dvh - 21.5rem)
+          --final-budget: calc(var(--track-room, 100dvh) - 21.5rem)
 
+      // The code and its square, beside the table being set. Above the split
+      // the page itself lays the two out, so the launch can sit under the
+      // table rather than across the whole screen.
       &.lobby
         display: grid
         gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
-        grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr)
+        grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.5fr)
 
         @include layout.narrow
           grid-template-columns: minmax(0, 1fr)
 
         // The room code is the one thing read from four metres, so it is the
-        // largest object in the product and nothing shares its line. The
-        // component owns everything but this number, because how much room
-        // there is only this column knows.
-        //
-        // `vmin` alone sizes it against the *viewport*, which stopped being the
-        // width it gets the day the stage grew a ceiling: on a 21:9 display the
-        // code was 302px tall in a 930px column and broke across two lines. The
-        // container unit is the sentence the comment above makes — as large as
-        // its column allows. It resolves against the invitation's own box,
-        // which declares the container it is measured from.
-        //
-        // `20cqi` is where that sentence actually lands, measured on the page:
-        // four `W` — the widest glyph the code alphabet holds — set in
-        // `monument` come to 4.78 times their own font size, so one line holds
-        // up to `100 / 4.78 = 20.9cqi`. This read `21` on the estimate that
-        // four characters need every bit of it, and `WWWW` is the one code in
-        // six hundred thousand that number breaks in half.
+        // largest object in the product and nothing shares its line.
+        // The fit is measured, not chosen: four `W`, the widest glyph the code
+        // alphabet holds, set in `monument` come to 2.98 times their own size,
+        // and the token's padding takes 40px of the column.
         .room-invitation
-          --invitation-code-size: min(clamp(4.5rem, 21vmin, 20rem), 20cqi)
+          --invitation-code-size: min(clamp(4rem, 21vmin, 16rem), calc(33cqi - 14px))
+          --invitation-qr-max-width: clamp(140px, 24vmin, 240px)
 
       &.playing
         align-items: center
@@ -335,9 +326,10 @@
     // The host's own column, beside the invitation the room is reading: what
     // they are about to play, and who has turned up for it.
     .host-side
+      container-type: inline-size
       display: flex
       flex-direction: column
-      gap: clamp(var(--space-l), 4vmin, var(--space-2xl))
+      gap: clamp(var(--space-s), 2.4vmin, var(--space-xl))
       min-width: 0
 
     // The one decision a freshly opened room is waiting on, so it is on the
@@ -368,11 +360,24 @@
       gap: var(--space-m)
       min-width: 0
 
+    // Who has sat down, each beside their pawn, and a socket for every pawn
+    // still in the box. The two lists are one grid, so the sockets carry on
+    // from the last seat rather than starting a row of their own.
     .roster
-      display: flex
-      flex-direction: column
-      gap: var(--space-m)
+      align-content: start
+      display: grid
+      gap: var(--space-xs) var(--space-s)
+      grid-template-columns: minmax(0, 1fr)
       min-width: 0
+
+      @container (width >= 22rem)
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+
+      @container (width >= 30rem)
+        grid-template-columns: repeat(3, minmax(0, 1fr))
+
+      > :not(.scoreboard, .sockets)
+        grid-column: 1 / -1
 
       h2
         @include typography.label
@@ -384,14 +389,78 @@
 
         color: var(--ink-muted)
 
-      // The list closes itself on the same hairline, so the seat's own would be
-      // a second one thirty pixels below it with nothing in between — a band
-      // rather than a boundary. Here the two are one region and the section's
-      // gap is what says so: this is the roster's action, not a section beside
-      // it. In the fold it is a section beside others and keeps the rule.
+      .scoreboard,
+      .sockets
+        display: contents
+
+      .scoreboard li,
+      .socket
+        border-radius: var(--radius-m)
+        min-height: clamp(40px, 5.6vmin, 56px)
+
+      .scoreboard li
+        align-items: center
+        background: var(--track-a)
+        border: none
+        box-shadow: 0 2px 0 color-mix(in oklch, var(--edge) 55%, var(--field))
+        padding: var(--space-2xs) var(--space-xs) var(--space-2xs) var(--space-s)
+
+        .nickname
+          align-items: center
+          font-size: clamp(1rem, 2.4vmin, 1.375rem)
+          gap: var(--space-xs)
+
+        .pawn
+          font-size: 1.3em
+
+        .remove
+          min-height: 32px
+          padding: 0 var(--space-2xs)
+
+      .socket
+        background: var(--socket)
+        box-shadow: inset 0 3px 6px -2px var(--shadow)
+        display: grid
+        place-items: center
+
+        .pawn
+          fill: none
+          filter: none
+          font-size: clamp(1.5rem, 3.4vmin, 2rem)
+          stroke: var(--socket-line)
+          stroke-dasharray: 2.5 2
+          stroke-width: 1.4
+
+      // The seat form closes the table rather than sitting under a rule of its
+      // own: taking a seat is joining this list. One line, the name and the
+      // press beside it, because the table above it is what the room reads.
       .host-seat
         border-top: none
-        padding-top: 0
+        padding-top: var(--space-xs)
+
+        .react-aria-Form
+          align-items: center
+          column-gap: var(--space-s)
+          display: grid
+          grid-template-areas: 'label label' 'input press' 'note note'
+          grid-template-columns: minmax(0, 1fr) auto
+          row-gap: var(--space-2xs)
+
+        .text-field
+          display: contents
+
+          .react-aria-Label
+            grid-area: label
+
+          .react-aria-Input
+            grid-area: input
+
+          [slot='description'],
+          .react-aria-FieldError
+            grid-area: note
+
+        .button
+          grid-area: press
 
     .now
       @include typography.billboard
@@ -544,3 +613,72 @@
         flex-direction: row
         flex-wrap: wrap
         justify-content: center
+
+  // Above the split the lobby is one composition across the page: the
+  // invitation down the left, and the shelf, the table and the launch stacked
+  // on the right, under the strip the corner menu keeps for itself.
+  //
+  // Not on the wall, whose header carries the press that arms its sound.
+  .host-console-page:not(.wall-page):has(> .stage.lobby)
+    @include layout.wide
+      column-gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
+      display: grid
+      grid-template-areas: 'invite side' 'invite footer'
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.5fr)
+      grid-template-rows: minmax(0, 1fr) auto
+      row-gap: var(--space-s)
+
+      // Nothing in the header at this phase; the shelf's label keeps the corner
+      // clear for the menu instead.
+      > header
+        display: none
+
+      // On a console under 800px tall the lids keep their names alone: the
+      // tagline is what the table can spare, and the launch under it is not.
+      @media (height < 50rem)
+        .game-picker .description
+          display: none
+
+        .game-picker .box
+          min-height: 0
+
+      .game-choice .box-shelf > .react-aria-Label
+        align-items: center
+        display: flex
+        min-height: 44px
+        padding-inline-end: var(--menu-inset)
+
+      > .stage.lobby
+        display: contents
+
+        > .room-invitation
+          align-self: center
+          grid-area: invite
+
+        > .host-side
+          grid-area: side
+
+      > footer
+        align-items: center
+        display: grid
+        gap: var(--space-2xs) var(--space-l)
+        grid-area: footer
+        grid-template-areas: 'error error' 'fold start' 'fold reason'
+        grid-template-columns: minmax(0, 1fr) auto
+
+        .error
+          grid-area: error
+
+        > .button
+          grid-area: start
+          justify-self: end
+
+        .reason
+          grid-area: reason
+          margin-top: 0
+          text-align: end
+
+        .setup-fold
+          align-self: start
+          grid-area: fold
+          width: 100%

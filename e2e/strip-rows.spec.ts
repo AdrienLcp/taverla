@@ -180,7 +180,7 @@ test('[layout] no strip on the console ever holds rows of two different lengths'
   await homePage(page).createRoom.click()
   await expect(page).toHaveURL(/\/host\/[A-Z0-9]{4}$/)
 
-  const games = page.locator('.game-picker .segment')
+  const games = page.locator('.game-picker .box')
 
   await expect(games.first()).toBeVisible()
 

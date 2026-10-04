@@ -11,6 +11,8 @@ import {
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import { Button } from './button'
+import { CrossIcon } from './cross-icon'
+import { Pawn } from './pawn'
 import { VisuallyHidden } from './visually-hidden'
 
 import './scoreboard.sass'
@@ -38,6 +40,13 @@ type ScoreboardProps = {
    */
   label?: string
   /**
+   * Stands each player's pawn beside their name, coloured by their seat — the
+   * roster's order as given, before the board ranks it. Off by default, because
+   * a board whose type is a height budget divided by its rows was measured
+   * without one.
+   */
+  hasPawns?: boolean
+  /**
    * Gives each row a way to drop that player. Omitted everywhere the board is
    * something to *read* — the room's screen mid-round, a player's screen, the
    * final board — and passed only by the host's own roster, which is the one
@@ -57,6 +66,7 @@ type ScoreboardProps = {
 
 export const Scoreboard: React.FC<ScoreboardProps> = ({
   className,
+  hasPawns,
   isResult,
   label,
   onRemove,
@@ -108,6 +118,11 @@ export const Scoreboard: React.FC<ScoreboardProps> = ({
         >
           {isRanked && <span className='rank'>{rank}</span>}
           <span className='nickname'>
+            {hasPawns === true && (
+              <Pawn
+                seat={players.findIndex((seated) => seated.id === player.id)}
+              />
+            )}
             <span className='name'>{player.nickname}</span>
             {/*
               A seat whose screen has gone. It used to be the row's opacity and
@@ -128,13 +143,14 @@ export const Scoreboard: React.FC<ScoreboardProps> = ({
               aria-label={translate('host.players.removeNamed', {
                 nickname: player.nickname
               })}
+              className='remove'
               onPress={() => {
                 onRemove(player.id)
               }}
               size='small'
-              variant='underlined'
+              variant='outlined'
             >
-              {translate('host.players.remove')}
+              <CrossIcon />
             </Button>
           )}
         </li>

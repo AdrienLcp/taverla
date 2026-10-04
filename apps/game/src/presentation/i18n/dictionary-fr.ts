@@ -270,7 +270,6 @@ export const FR_DICTIONARY = defineDictionary({
     playAgain: 'Rejouer',
     players: {
       empty: 'Encore personne. Ça ne va pas durer.',
-      remove: 'Retirer',
       removeNamed: 'Retirer {nickname}',
       title: 'La tablée'
     },
@@ -333,6 +332,7 @@ export const FR_DICTIONARY = defineDictionary({
     joinLate: 'La porte est ouverte',
     project: 'Afficher le QR code en grand',
     title: 'Scanne et prends place',
+    typeIt: 'Tape-le pour entrer',
     unknown: {
       description:
         'Ce code n’ouvre aucune table. Elle a peut-être été levée, ou le code mal lu.',
@@ -510,7 +510,10 @@ export const FR_DICTIONARY = defineDictionary({
   },
   room: {
     documentTitle: '{game} — Taverla',
-    documentTitleLobby: 'Taverla'
+    documentTitleLobby: 'Taverla',
+    track: {
+      start: 'Départ'
+    }
   },
   round: {
     answer: {

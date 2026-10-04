@@ -1,0 +1,115 @@
+@use '../styles/focus'
+@use '../styles/piece'
+@use '../styles/typography'
+
+@layer components
+  .box-shelf
+    container-type: inline-size
+    display: flex
+    flex-direction: column
+    gap: var(--space-s)
+    min-width: 0
+
+    > .react-aria-Label
+      @include typography.label
+
+      color: var(--ink-muted)
+
+    // Five lids on one shelf when they fit with their names whole; a column of
+    // lids otherwise, since five never divide into even rows.
+    .boxes
+      display: grid
+      gap: var(--space-xs)
+      grid-template-columns: minmax(0, 1fr)
+      padding-top: var(--space-xs)
+
+      @container (width >= 30rem)
+        gap: clamp(var(--space-xs), 1.2cqi, var(--space-s))
+        grid-template-columns: repeat(5, minmax(0, 1fr))
+
+    .box-field
+      display: contents
+
+    .box
+      @include piece.piece(var(--radius-m))
+      @include piece.pressable
+      @include focus.ring
+
+      --ground: var(--field)
+
+      background: var(--card)
+      color: var(--card-ink)
+      cursor: pointer
+      display: grid
+      grid-template-columns: minmax(0, 1fr) auto
+      grid-template-rows: auto minmax(0, 1fr)
+      min-width: 0
+      text-align: start
+
+      @container (width >= 30rem)
+        min-height: clamp(5.5rem, 13cqi, 8.5rem)
+
+      &[data-disabled]
+        cursor: not-allowed
+
+        &:not([data-selected])
+          opacity: 0.55
+
+      // Pulled forward out of the row, the way a box is taken off a shelf.
+      &[data-selected]
+        box-shadow: 0 0 0 3px var(--spine), 0 9px 0 0 var(--chipboard), 0 18px 22px -10px var(--shadow)
+        transform: translateY(-6px)
+
+    .band
+      background: var(--spine)
+      border-radius: var(--radius-m) var(--radius-m) 0 0
+      grid-column: 1 / -1
+      height: clamp(8px, 1.4cqi, 16px)
+
+    .lid
+      display: flex
+      flex-direction: column
+      gap: var(--space-2xs)
+      justify-content: space-between
+      min-width: 0
+      padding: var(--space-xs) var(--space-s) var(--space-s)
+
+      @container (width < 30rem)
+        align-items: baseline
+        flex-flow: row wrap
+        gap: var(--space-2xs) var(--space-s)
+        justify-content: flex-start
+
+    .name
+      font-family: var(--font-display)
+      font-size: clamp(1.25rem, 3.4cqi, 1.75rem)
+      font-stretch: 85%
+      font-weight: 800
+      line-height: 1
+
+      @container (width < 30rem)
+        font-size: 1.25rem
+
+    .description
+      color: var(--card-muted)
+      font-size: clamp(0.8125rem, 1.6cqi, 0.9375rem)
+      line-height: 1.25
+      text-wrap: pretty
+
+    .tick
+      align-self: center
+      background: var(--card-ink)
+      border-radius: var(--radius-full)
+      color: var(--card)
+      display: none
+      font-size: 0.85rem
+      margin-inline-end: var(--space-s)
+      padding: 0.3em
+
+      [data-selected] &
+        display: grid
+
+      @container (width >= 30rem)
+        inset: -0.7em -0.5em auto auto
+        margin: 0
+        position: absolute

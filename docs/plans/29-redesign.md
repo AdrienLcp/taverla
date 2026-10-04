@@ -92,20 +92,49 @@ new one is whole. This file is the brief: open a fresh session, run
   84px past a 320×568 screen and 83px past 568×320. It is 123 characters now,
   in `question-repairs.json` and the built bank.
 
-Measured traps, so the next screen does not pay for them again: a size
-container with `flex: 1` answers its queries against a zero-height box in
+- **The score track** (`presentation/components/score-track.tsx`) rings the
+  console and the wall above the split: a fixed grid whose band is
+  `clamp(34px, 6.5vmin, 76px)`, its square count measured from the viewport
+  (`ResizeObserver` on a probe the band's width), square nought the start and
+  every fifth printed heavier. Each pawn stands on `score % squares`, keyed on
+  its square so a move lands rather than teleports. The lobby keeps the printed
+  blues; every other phase mixes `--phase-ink` into them. Below the split it is
+  a 5px frame in the phase ink and nothing else. It raises `--layout-padding`,
+  so the page and the fixed menu clear it, and publishes `--track-room` — the
+  viewport less what it added — which every `100dvh - chrome` budget on the
+  console now divides instead.
+- **The console lobby**: above the split the page is the grid, the invitation
+  down the left, the shelf, the table and the launch on the right (the wall
+  keeps the old two columns, because its header carries the sound press). The
+  code is a saffron token (`2.98em` for `WWWW` in Bricolage, measured), the QR
+  sits on a white card in both palettes (an inverted square fails cameras), the
+  game picker is `BoxShelf` (five lids, the chosen one pulled forward; the
+  tagline goes under 800px of height), the roster is seats with pawns plus a
+  socket for every pawn still in the box, the seat form is one line, and the
+  launch sits beside the setup fold. The long pitch is the wall's alone now —
+  the lids carry the promise — and the hold strip leaves the lobby: there is no
+  reveal yet to hold. Removing a player is a ✕ named `Remove {nickname}`.
+  Measured at 1280×720, 1024×768 and 1920×1080: no overflow, empty or with
+  eight seated; only a 20-character name truncates.
+
+Measured traps, so the next screen does not pay for them again: a `position:
+fixed` element inside the page is fixed to the page, not the viewport, because
+the entrance animation leaves a `transform` — the track renders beside `<main>`;
+a size container with `flex: 1` answers its queries against a zero-height box in
 Chromium (`flex: none` + an explicit height); a framed screen must not run the
 page's entrance animation, whose leftover `translateY` is a 1px scroll.
 
 ## Next session
 
-1. **The score track** around the console's edge, inked by `--phase-ink`, and
-   the console lobby from `boite.html` (code token, QR card, the shelf of boxes,
-   roster with pawns, empty sockets).
-2. Then §1's inventory screen by screen, the front door last (Persuade), `og.png`
-   redrawn, and §6. `AskedQuestion`'s own sizing still carries Archivo's
-   measured width (`494cqi`); re-measure it on Bricolage when the console's
-   question is redrawn.
+1. **The console's playing stage overflows**: 327px at 1280×720 and 145px at
+   1920×1080 with eight players on a choice round — the question, the eight
+   roster rows, *give it away*, the hold strip and the fold. It was already
+   about 250px over before the ring took its padding. Redraw it first, with a
+   height budget the way the reveal has one, then the rest of §1's inventory
+   screen by screen, the front door last (Persuade), `og.png` redrawn, and §6.
+   `AskedQuestion`'s own sizing still carries Archivo's measured width
+   (`494cqi`); re-measure it on Bricolage when the console's question is
+   redrawn.
 
 ## The prompt
 

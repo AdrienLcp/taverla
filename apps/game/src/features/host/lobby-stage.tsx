@@ -5,6 +5,7 @@ import type { HostRoomView } from '@taverla/protocol/room'
 
 import { isShelvedGame } from '@taverla/core/room/shelved-game'
 
+import { Pawn } from '@/presentation/components/pawn'
 import { RoomInvitation } from '@/presentation/components/room-invitation'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
@@ -18,6 +19,9 @@ import { GamePicker } from './game-picker'
 import { HostSeat } from './host-seat'
 import type { StageControls } from './room-stage'
 import { SlatePreparation } from './slate-preparation'
+
+/** As many pawns as a box holds: the roster shows an empty socket for each one still in it. */
+const PAWNS_IN_THE_BOX = 8
 
 type LobbyStageProps = {
   /** `null` on the wall, which shows who has arrived and what they will play. */
@@ -86,11 +90,13 @@ export const LobbyStage: React.FC<LobbyStageProps> = ({
             <p className='empty'>{translate('host.players.empty')}</p>
           ) : (
             <Scoreboard
+              hasPawns
               onRemove={controls?.onRemovePlayer}
               players={view.players}
               youId={youId}
             />
           )}
+          <EmptySockets seated={view.players.length} />
 
           {/*
             Inside the count rather than beside it, because taking a seat is
@@ -110,10 +116,9 @@ export const LobbyStage: React.FC<LobbyStageProps> = ({
 }
 
 /**
- * The same pitch a game's own front door shows, under the control that chose
- * it. A room reached through that door arrives with it already answered; one
- * opened from the shelf's front page arrives with nothing chosen, and this is
- * where the host reads what each of them is before deciding.
+ * What the chosen game is and what a round of it pays. On the console the lids
+ * of the shelf carry the promise, so only the wall — which has no shelf — adds
+ * the pitch a game's own front door shows.
  *
  * The pitch alone was half of it. Every player in the room is told what the
  * round pays — `UpNext` prints it while the table fills up — and the one screen
@@ -138,7 +143,9 @@ const GamePitch: React.FC<{ isUnattended: boolean; view: HostRoomView }> = ({
 
   return (
     <>
-      <p className='pitch'>{translate(gameDescriptionKey(game.kind))}</p>
+      {isUnattended && (
+        <p className='pitch'>{translate(gameDescriptionKey(game.kind))}</p>
+      )}
       <p className='scoring'>
         {translate(
           scoringKey({
@@ -150,5 +157,25 @@ const GamePitch: React.FC<{ isUnattended: boolean; view: HostRoomView }> = ({
         )}
       </p>
     </>
+  )
+}
+
+const EmptySockets: React.FC<{ seated: number }> = ({ seated }) => {
+  const empty = Math.max(0, PAWNS_IN_THE_BOX - seated)
+
+  if (empty === 0) {
+    return null
+  }
+
+  return (
+    <ul aria-hidden='true' className='sockets'>
+      {Array.from({ length: empty }, (_, offset) => seated + offset).map(
+        (seat) => (
+          <li className='socket' key={seat}>
+            <Pawn seat={seat} />
+          </li>
+        )
+      )}
+    </ul>
   )
 }

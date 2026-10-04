@@ -20,6 +20,7 @@ import { useVolume } from '@/presentation/audio/volume-provider'
 import { Button } from '@/presentation/components/button'
 import { ConnectionRefused } from '@/presentation/components/connection-refused'
 import { Link } from '@/presentation/components/link'
+import { ScoreTrack } from '@/presentation/components/score-track'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
 import { RoomDocumentTitle } from '@/presentation/head/room-document-title'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
@@ -116,58 +117,61 @@ const Wall: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   }
 
   return (
-    <main className='host-console-page wall-page'>
-      <RoomDocumentTitle game={view?.settings.game?.kind ?? null} />
-      <header>
-        {view?.round != null && view.phase !== 'finished' && (
-          <p className='round-index'>
-            {view.settings.roundCount === null
-              ? translate('round.indexOpen', { index: view.round.index })
-              : translate('round.index', {
-                  index: view.round.index,
-                  total: view.settings.roundCount
-                })}
-          </p>
-        )}
-        {!canPlay && (
-          <Button
-            className='sound-offer'
-            onPress={armAudio}
-            size='small'
-            variant='outlined'
-          >
-            {translate('wall.sound')}
-          </Button>
-        )}
-        {view !== null && view.phase !== 'lobby' && (
-          <JoinReminder roomCode={roomCode} />
-        )}
-      </header>
+    <>
+      {view !== null && <ScoreTrack players={view.players} />}
+      <main className='host-console-page wall-page'>
+        <RoomDocumentTitle game={view?.settings.game?.kind ?? null} />
+        <header>
+          {view?.round != null && view.phase !== 'finished' && (
+            <p className='round-index'>
+              {view.settings.roundCount === null
+                ? translate('round.indexOpen', { index: view.round.index })
+                : translate('round.index', {
+                    index: view.round.index,
+                    total: view.settings.roundCount
+                  })}
+            </p>
+          )}
+          {!canPlay && (
+            <Button
+              className='sound-offer'
+              onPress={armAudio}
+              size='small'
+              variant='outlined'
+            >
+              {translate('wall.sound')}
+            </Button>
+          )}
+          {view !== null && view.phase !== 'lobby' && (
+            <JoinReminder roomCode={roomCode} />
+          )}
+        </header>
 
-      {isHostAway && (
-        <aside className='host-away'>
-          <p>{translate('wall.hostAway.title')}</p>
-          <Link
-            href={hostFromWallPathFor(roomCode)}
-            size='small'
-            variant='outlined'
-          >
-            {translate('wall.hostAway.takeOver')}
-          </Link>
-        </aside>
-      )}
+        {isHostAway && (
+          <aside className='host-away'>
+            <p>{translate('wall.hostAway.title')}</p>
+            <Link
+              href={hostFromWallPathFor(roomCode)}
+              size='small'
+              variant='outlined'
+            >
+              {translate('wall.hostAway.takeOver')}
+            </Link>
+          </aside>
+        )}
 
-      <RoomStage
-        canPlay={canPlay}
-        clock={clock}
-        controls={null}
-        isSpeaker
-        onUnlockAudio={armAudio}
-        refusal={refusal}
-        roomCode={roomCode}
-        slateWall={slateWall}
-        view={view}
-      />
-    </main>
+        <RoomStage
+          canPlay={canPlay}
+          clock={clock}
+          controls={null}
+          isSpeaker
+          onUnlockAudio={armAudio}
+          refusal={refusal}
+          roomCode={roomCode}
+          slateWall={slateWall}
+          view={view}
+        />
+      </main>
+    </>
   )
 }

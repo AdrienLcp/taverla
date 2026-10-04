@@ -10,11 +10,9 @@ import {
 import { movedToGame } from '@taverla/core/room/room-settings'
 import { isShelvedGame } from '@taverla/core/room/shelved-game'
 
-import { SegmentedControl } from '@/presentation/components/segmented-control'
+import { BoxShelf } from '@/presentation/components/box-shelf'
 import { useI18n } from '@/presentation/i18n/i18n-provider'
-import { gameNameKey } from '@/presentation/i18n/translation'
-
-import './game-picker.sass'
+import { gameNameKey, gameTaglineKey } from '@/presentation/i18n/translation'
 
 type GamePickerProps = {
   /** The socket is closed, or a round is under way and the server would refuse the switch. */
@@ -40,7 +38,7 @@ export const GamePicker: React.FC<GamePickerProps> = ({
   const { locale, translate } = useI18n()
 
   return (
-    <SegmentedControl
+    <BoxShelf
       className='game-picker'
       isDisabled={isDisabled}
       label={translate('host.game.label')}
@@ -60,7 +58,9 @@ export const GamePicker: React.FC<GamePickerProps> = ({
         }
       }}
       options={shelvedGames.map((game) => ({
+        description: translate(gameTaglineKey(game)),
         label: translate(gameNameKey(game)),
+        spine: `var(--spine-${game})`,
         value: game
       }))}
       value={settings.game?.kind ?? null}
