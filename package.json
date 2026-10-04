@@ -30,7 +30,7 @@
     "lint": "biome check --write",
     "lint:ci": "biome ci",
     "spell": "cspell --no-progress --gitignore \"**\"",
-    "test": "pnpm --filter @taverla/protocol --filter @taverla/core --filter @taverla/server test",
+    "test": "pnpm --filter @taverla/protocol --filter @taverla/core --filter @taverla/server --filter @taverla/game test",
     "test:core:watch": "pnpm --filter @taverla/core test:watch",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "tsc --noEmit -p e2e && playwright test -c e2e",

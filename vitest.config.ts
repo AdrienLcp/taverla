@@ -9,6 +9,7 @@ export default defineConfig({
       reporter: ['text', 'html', 'json-summary']
     },
     projects: [
+      'apps/game/vitest.config.ts',
       'apps/server/vitest.config.ts',
       'packages/core/vitest.config.ts',
       'packages/protocol/vitest.config.ts'

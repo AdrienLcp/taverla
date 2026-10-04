@@ -7,5 +7,5 @@
     }
   },
   "extends": "../../tsconfig.json",
-  "include": ["scripts", "src", "vite.config.ts"]
+  "include": ["scripts", "src", "vite.config.ts", "vitest.config.ts"]
 }
