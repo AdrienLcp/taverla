@@ -1,6 +1,6 @@
 # Stage 29 — A new UI, from zero
 
-**In progress — choosing a direction.** This file is the brief: open a fresh
+**In progress — direction chosen, build not started.** This file is the brief: open a fresh
 session, run `/impeccable` with the prompt below, and update this file as
 decisions land.
 
@@ -23,6 +23,33 @@ decisions land.
   `mintaka-8db29866`; the 275-char choice is `vikidia-astronomie-2-1`; and
   `vikidia-bravelands-13` is the harder realistic case — four choices up to
   ~160 chars each, the stress row of every example page.
+- **2026-10-04 — Adrien chose `boite`, the board-game shelf.** Its page,
+  `.impeccable/directions/boite.html` (local, uncommitted, French copy), is the
+  reference the build reproduces and the finish review is judged against; its
+  contract is the comment at the top of `<body>`:
+  - THESIS: Taverla is a shelf of game boxes on a table; every screen is a
+    printed piece from that box, never an app panel of rounded cards on a dark
+    ground.
+  - WORLD: matte printed board, pale sky by day and slate blue by evening; four
+    inks (coral, saffron, sky, leaf) on die-cut answer tiles with a 3 px
+    chipboard edge, sprue nubs and a shape each (circle, triangle, square,
+    diamond) so colour is never the only cue; paper question cards; eight pawn
+    colours; a 50-square score track around every console edge, inked by the
+    phase so the room reads the phase from across it; the room code on a
+    saffron token; the five games as boxes on a shelf.
+  - TYPE: Bricolage Grotesque, condensed axis, for lid titles and figures;
+    Atkinson Hyperlegible Next for everything read. Both to be self-hosted.
+  - Measured on the page: 0 px overflow at 390×844, 812×375 and 320×568 (long
+    choices at the 14 px floor). Known gaps: the landscape question sits at
+    17.9 px with room to spare; the reveal ranking was not re-checked with a
+    20-character nickname.
+
+## Next session
+
+Build the chosen world into `apps/game` (code-led: no image generation here),
+screen by screen per §1's inventory, starting with the shell — tokens in both
+palettes, fonts, the score-track frame, the answer tiles — then the quiz choice
+screen and its Playwright no-scroll check (§2) before anything else; then §6.
 
 ## The prompt
 
