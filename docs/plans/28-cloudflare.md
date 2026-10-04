@@ -184,7 +184,7 @@ Nothing is deployed differently at the end of it.
 - Rewrite what describes the old host: [08](08-deploy.md)'s *live at*,
   `CLAUDE.md`'s commands and ports, `docs/browser-driving.md`.
 - Suspend the Render service only once Adrien has played an evening on the
-  Worker; deleting it is his call.
+  Worker; deleting it is his call. He played it and asked: deleted.
 
 **Done, and where it diverged:**
 
