@@ -186,7 +186,9 @@ export const RoomStage: React.FC<RoomStageProps> = ({
 
   if (view.phase === 'buzzed' && round?.activeBuzz != null) {
     const buzzerId = round.activeBuzz.playerId
-    const buzzer = view.players.find((player) => player.id === buzzerId)
+    const buzzerSeat = view.players.findIndex(
+      (player) => player.id === buzzerId
+    )
     const content = view.currentContent
 
     // The console judges, and has to hold the answer to; the wall only says who
@@ -208,7 +210,7 @@ export const RoomStage: React.FC<RoomStageProps> = ({
           content={judging?.content ?? null}
           isAnswerFolded={judging?.controls.isAnswerFolded ?? false}
           key={round.activeBuzz.atServerTime}
-          nickname={buzzer?.nickname ?? '—'}
+          nickname={view.players[buzzerSeat]?.nickname ?? '—'}
           onJudge={
             judging === null
               ? null
@@ -221,6 +223,7 @@ export const RoomStage: React.FC<RoomStageProps> = ({
                   })
                 }
           }
+          seat={Math.max(buzzerSeat, 0)}
         />
       </div>
     )

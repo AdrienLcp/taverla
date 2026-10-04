@@ -1,52 +1,116 @@
-@use '../../presentation/styles/layout'
+@use '../../presentation/styles/piece'
 @use '../../presentation/styles/typography'
 
 @layer components
+  // Who has the floor, and — on the console — the answer and the four presses
+  // beside them. Lying down the two sit side by side, because the host reads
+  // the name, looks up at the room, and comes back to the presses; upright
+  // they stack.
   .verdict-panel
+    align-items: center
+    display: grid
+    gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
+    justify-items: center
+    text-align: center
+    width: min(1200px, 100%)
+
+    &:has(> .judging)
+      gap: clamp(var(--space-m), 3.5vmin, var(--space-xl))
+
+      @media (min-aspect-ratio: 13/10)
+        gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
+        grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr)
+
+  // The buzzer's own pawn, stood up oversize: the one thing on the screen a
+  // room reads from four metres before a single word.
+  .verdict-panel .holder
+    align-items: center
     display: flex
     flex-direction: column
-    gap: var(--space-l)
-    text-align: center
-    width: min(1100px, 100%)
+    gap: clamp(var(--space-xs), 2vmin, var(--space-m))
+    min-width: 0
 
-    // Who has the floor, at the size the host reads while looking up at the
-    // room rather than down at the screen.
+    .pawn
+      filter: drop-shadow(0 6px 0 var(--chipboard-dark))
+      font-size: clamp(4.5rem, 24vmin, 15rem)
+
     // Carries a nickname, so it carries whatever twenty characters someone
-    // typed. Same guard as the winner's name: a word with nowhere to break is
-    // what puts a sideways scrollbar under a host running the room on a phone.
+    // typed: a word with nowhere to break is what puts a sideways scrollbar
+    // under a host running the room on a phone.
     h2
       @include typography.billboard
 
       overflow-wrap: anywhere
       text-wrap: balance
 
-    // The answer is die-cut onto the field, and this is one of only two places
-    // it appears — which is what lets the screen face the room the rest of the
-    // time.
-    .answer
-      @include layout.cut
+    // A window running out is struck on the countdown's token, so the room
+    // reads it as a clock and never as somebody's score. Counting up stays a
+    // line: nobody is under that pressure.
+    .floor-clock.closing
+      @include piece.card(50%)
 
-      padding: var(--space-l)
+      aspect-ratio: 1
+      display: grid
+      font-size: clamp(1.75rem, 5.5vmin, 3.5rem)
+      place-items: center
+      width: 2em
+
+  // Upright, the answer and the presses need the height, so the pawn stands
+  // beside the name rather than over it.
+  @media (max-aspect-ratio: 13/10)
+    .verdict-panel:has(> .judging) .holder
+      column-gap: var(--space-m)
+      display: grid
+      grid-template: 'pawn name' auto 'pawn clock' auto / auto minmax(0, auto)
+      justify-items: start
+      text-align: start
+
+      .pawn
+        font-size: clamp(3.5rem, 13vmin, 8rem)
+        grid-area: pawn
+
+      h2
+        grid-area: name
+
+      .floor-clock
+        grid-area: clock
+
+  // The wall holds no answer and no press, so the pawn has the screen.
+  .verdict-panel:not(:has(> .judging)) .holder .pawn
+    font-size: clamp(6rem, 36vmin, 22rem)
+
+  .verdict-panel .judging
+    display: flex
+    flex-direction: column
+    gap: clamp(var(--space-s), 3vmin, var(--space-l))
+    min-width: 0
+    width: 100%
+
+    // The answer printed on the question's own paper, the card turned over.
+    .answer
+      @include piece.card
+
+      padding: clamp(var(--space-m), 3.5vmin, var(--space-xl))
 
       .title
         @include typography.billboard
 
         font-size: clamp(1.5rem, 5vmin, 3.5rem)
+        overflow-wrap: anywhere
+        text-wrap: balance
 
       .artist
         @include typography.title
 
+        color: var(--card-muted)
         margin-top: var(--space-2xs)
-        opacity: 0.7
 
-      // The cue, for a host judging a name the clip itself never says. Told
-      // apart from the artist by size alone: the ink is already as far from the
-      // paper as this surface takes it.
+      // The cue, for a host judging a name the clip itself never says.
       .note
         @include typography.caption
 
+        color: var(--card-muted)
         margin-top: var(--space-2xs)
-        opacity: 0.7
 
     // Folded on a console the room can read, and one press from the host away.
     .show-answer
@@ -55,7 +119,7 @@
     .choices
       display: grid
       gap: var(--space-s)
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr))
+      grid-template-columns: repeat(2, minmax(0, 1fr))
 
     // Four verdicts have to sit side by side and their labels are sentences,
     // so these are the one control in the product allowed to wrap.
@@ -64,9 +128,16 @@
       text-wrap: balance
       white-space: normal
 
-    // The one destructive answer is the only outlined block among three filled
-    // ones. Shape rather than a red tint, because a red that survives on the
-    // oxblood field is the field, and because the difference then survives
-    // colour blindness too.
+    // Right is the reveal's green, so the press reads as the outcome it
+    // grants.
+    .choice.win
+      --control-ink: var(--on-spine)
+
+      background: var(--good)
+      box-shadow: 0 4px 0 var(--good-edge), 0 12px 18px -10px var(--shadow)
+
+    // The one destructive answer is the only plain piece among filled ones,
+    // and dashed, so the difference survives colour blindness.
     .choice.miss
-      border-style: dashed
+      outline: 2px dashed var(--edge)
+      outline-offset: -6px

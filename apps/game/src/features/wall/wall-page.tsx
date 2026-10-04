@@ -9,6 +9,7 @@ import { RoomStage } from '@/features/host/room-stage'
 import { useRoundAudio } from '@/features/host/round-audio'
 import { useSlateWall } from '@/features/host/use-slate-wall'
 import { NotFoundPage } from '@/features/not-found/not-found-page'
+import { floorHolderOf } from '@/helpers/round-content'
 import { useWallConnection } from '@/infrastructure/messaging/use-wall-connection'
 import {
   hostFromWallPathFor,
@@ -118,7 +119,12 @@ const Wall: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
 
   return (
     <>
-      {view !== null && <ScoreTrack players={view.players} />}
+      {view !== null && (
+        <ScoreTrack
+          floorHolderId={floorHolderOf(view)}
+          players={view.players}
+        />
+      )}
       <main className='host-console-page wall-page'>
         <RoomDocumentTitle game={view?.settings.game?.kind ?? null} />
         <header>

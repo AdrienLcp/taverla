@@ -26,6 +26,7 @@ import { withPreparedKey } from '@taverla/core/slate/prepared-keys'
 
 import { NotFoundPage } from '@/features/not-found/not-found-page'
 import { ChoosingRound } from '@/features/player/choosing-round'
+import { floorHolderOf } from '@/helpers/round-content'
 import { useHostConnection } from '@/infrastructure/messaging/use-host-connection'
 import {
   useCameFromWall,
@@ -373,7 +374,12 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
 
   return (
     <>
-      {view !== null && <ScoreTrack players={view.players} />}
+      {view !== null && (
+        <ScoreTrack
+          floorHolderId={floorHolderOf(view)}
+          players={view.players}
+        />
+      )}
       <main className='host-console-page'>
         <RoomDocumentTitle game={view?.settings.game?.kind ?? null} />
         <header>

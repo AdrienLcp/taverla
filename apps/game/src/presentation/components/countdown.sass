@@ -1,28 +1,41 @@
+@use '../styles/piece'
 @use '../styles/typography'
 
 @layer components
-  // The one authored moment of the product: each second lands as a stamp,
-  // struck oversize and settling into place, rather than a number fading into
-  // another number. The component re-keys on the value, so the animation
-  // restarts on every tick.
+  // A round token from the box with the second printed on it. `--token-size`
+  // is the one dial a surface turns; the numeral is sized from it, so a token
+  // never holds a figure wider than itself.
   .countdown
-    @include typography.monument
-    @include typography.numeric
+    @include piece.card(50%)
 
-    font-size: clamp(8rem, 42vmin, 32rem)
-    text-align: center
+    --token-size: clamp(8rem, 56vmin, 30rem)
 
+    aspect-ratio: 1
+    display: grid
+    flex: none
+    place-items: center
+    width: var(--token-size)
+
+    .numeral
+      @include typography.monument
+      @include typography.numeric
+
+      font-size: calc(var(--token-size) * 0.66)
+      line-height: 1
+
+    // The one authored moment of the product: each second is struck onto the
+    // token oversize and settles into place. The numeral re-keys on the value,
+    // so the strike restarts on every tick while the token stays put.
     @media (prefers-reduced-motion: no-preference)
-      animation: countdown-strike 900ms var(--timing, ease) both
+      .numeral
+        animation: countdown-strike 900ms var(--timing, ease) both
 
 @keyframes countdown-strike
   from
-    letter-spacing: 0.12em
     opacity: 0
     transform: scale(1.35)
   60%
     opacity: 1
   to
-    letter-spacing: -0.035em
     opacity: 1
     transform: scale(1)

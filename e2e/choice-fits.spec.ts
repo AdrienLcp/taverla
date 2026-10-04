@@ -526,3 +526,87 @@ for (const reveal of REVEALS) {
     expect(faults).toEqual([])
   })
 }
+
+const blindTestRound = (phase: 'buzzed' | 'countdown') => {
+  const view = consoleView(LONGEST_PROMPT)
+  const track = {
+    artist: 'Jean-Jacques Goldman',
+    coverUrl: null,
+    film: null,
+    id: 't1',
+    previewUrl: 'https://example.com/clip.mp3',
+    title: 'Quand la musique est bonne'
+  }
+
+  return {
+    ...view,
+    currentContent: { audioUrl: null, kind: 'blindtest', track },
+    phase,
+    round: {
+      ...view.round,
+      activeBuzz:
+        phase === 'buzzed'
+          ? {
+              atServerTime: SERVER_TIME,
+              expiresAt: SERVER_TIME + 10_000,
+              playerId: 'p7'
+            }
+          : null,
+      content: { choices: [], kind: 'blindtest', revealedTrack: null },
+      startsAt:
+        phase === 'countdown' ? SERVER_TIME + 3_000 : view.round.startsAt
+    },
+    settings: {
+      ...view.settings,
+      game: {
+        difficulty: 'mixed',
+        kind: 'blindtest',
+        roundDurationMs: 30_000,
+        source: { genreIds: [], kind: 'chart' }
+      },
+      mode: { answerWindowMs: 10_000, kind: 'buzzer' }
+    }
+  }
+}
+
+const FLOOR_SCREENS = [
+  {
+    name: 'countdown',
+    ready: '.stage.solo .countdown',
+    view: blindTestRound('countdown')
+  },
+  {
+    name: 'verdict',
+    ready: '.verdict-panel .choice',
+    view: blindTestRound('buzzed')
+  }
+]
+
+for (const screen of FLOOR_SCREENS) {
+  test(`[layout] room, ${screen.name}: the stage never scrolls above the split`, async ({
+    page
+  }) => {
+    await serveRoom({ page, view: screen.view })
+    await page.addInitScript(() => {
+      localStorage.setItem('taverla:locale', 'fr')
+    })
+    await page.setViewportSize({ height: 720, width: 1280 })
+    await page.goto(`/host/${ROOM_CODE}`)
+    await expect(page.locator(screen.ready).first()).toBeVisible()
+
+    const faults: string[] = []
+
+    for (const [width, height] of WIDE_VIEWPORTS) {
+      await page.setViewportSize({ height, width })
+      await page.evaluate(() => document.fonts.ready.then(() => {}))
+
+      const overflow = await page.evaluate(measureReveal)
+
+      if (overflow.furthest !== null || overflow.page > 0) {
+        faults.push(`${width}×${height} ${JSON.stringify(overflow)}`)
+      }
+    }
+
+    expect(faults).toEqual([])
+  })
+}

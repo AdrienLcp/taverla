@@ -69,19 +69,30 @@
 
     // Eight pawns, as many as a box holds; a ninth player reuses the first.
     --pawn-1: oklch(58% 0.19 28)
-    --pawn-2: oklch(58% 0.15 258)
+    --pawn-2: oklch(55% 0.15 258)
     --pawn-3: oklch(84% 0.15 90)
     --pawn-4: oklch(64% 0.14 152)
-    --pawn-5: oklch(58% 0.16 310)
+    --pawn-5: oklch(56% 0.16 310)
     --pawn-6: oklch(74% 0.15 58)
     --pawn-7: oklch(76% 0.12 355)
     --pawn-8: oklch(67% 0.1 200)
+    // What prints on a pawn's colour where the track takes it: the buzzer's
+    // own ink while they hold the floor.
+    --on-pawn-1: var(--on-spine)
+    --on-pawn-2: var(--on-spine)
+    --on-pawn-3: var(--on-spine-light)
+    --on-pawn-4: var(--on-spine-light)
+    --on-pawn-5: var(--on-spine)
+    --on-pawn-6: var(--on-spine-light)
+    --on-pawn-7: var(--on-spine-light)
+    --on-pawn-8: var(--on-spine-light)
 
     --primary: oklch(55% 0.19 30)
     --primary-edge: oklch(40% 0.14 30)
     --on-primary: oklch(99% 0.005 95)
     --focus: light-dark(oklch(50% 0.2 262), oklch(82% 0.13 88))
     --good: oklch(52% 0.13 155)
+    --good-edge: oklch(38% 0.1 155)
     --good-soft: light-dark(oklch(86% 0.09 155), oklch(75% 0.11 155))
 
     // An error is a stamped block, never tinted text: inside its own block the

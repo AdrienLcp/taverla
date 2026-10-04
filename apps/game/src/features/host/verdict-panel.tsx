@@ -10,6 +10,7 @@ import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
 import { Button } from '@/presentation/components/button'
 import { FloorClock } from '@/presentation/components/floor-clock'
+import { Pawn } from '@/presentation/components/pawn'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import type { PlainTranslationKey } from '@/presentation/i18n/translation'
 
@@ -92,6 +93,8 @@ type VerdictPanelProps = {
   nickname: string
   /** `null` on the wall, which draws who has the floor and judges nothing. */
   onJudge: ((verdict: Verdict) => void) | null
+  /** The buzzer's place in the roster, which picks their pawn's colour. */
+  seat: number
 }
 
 export const VerdictPanel: React.FC<VerdictPanelProps> = ({
@@ -100,32 +103,37 @@ export const VerdictPanel: React.FC<VerdictPanelProps> = ({
   content,
   isAnswerFolded,
   nickname,
-  onJudge
+  onJudge,
+  seat
 }) => {
   const translate = useTranslate()
   const [isAnswerShown, setIsAnswerShown] = useState(!isAnswerFolded)
 
   return (
     <section className='verdict-panel'>
-      <h2>{translate('buzz.theyBuzzed', { nickname })}</h2>
-      <FloorClock buzz={buzz} clock={clock} />
+      <div className='holder'>
+        <Pawn seat={seat} />
+        <h2>{translate('buzz.theyBuzzed', { nickname })}</h2>
+        <FloorClock buzz={buzz} clock={clock} />
+      </div>
 
-      {content !== null &&
-        (isAnswerShown ? (
-          <Answer content={content} />
-        ) : (
-          <Button
-            className='show-answer'
-            onPress={() => setIsAnswerShown(true)}
-            size='small'
-            variant='underlined'
-          >
-            {translate('host.verdict.showAnswer')}
-          </Button>
-        ))}
+      {content !== null && (
+        <div className='judging'>
+          {isAnswerShown ? (
+            <Answer content={content} />
+          ) : (
+            <Button
+              className='show-answer'
+              onPress={() => setIsAnswerShown(true)}
+              size='small'
+              variant='underlined'
+            >
+              {translate('host.verdict.showAnswer')}
+            </Button>
+          )}
 
-      {content !== null && onJudge !== null && (
-        <Choices content={content} onJudge={onJudge} />
+          {onJudge !== null && <Choices content={content} onJudge={onJudge} />}
+        </div>
       )}
     </section>
   )

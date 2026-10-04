@@ -12,13 +12,21 @@ type PawnProps = {
   seat: number
 }
 
+const pawnNumberOf = (seat: number): number => (seat % PAWN_COLOURS) + 1
+
+/** The colour a seat's pawn is printed in, and the ink that reads on it. */
+export const pawnInksOf = (seat: number): { ink: string; onInk: string } => ({
+  ink: `var(--pawn-${pawnNumberOf(seat)})`,
+  onInk: `var(--on-pawn-${pawnNumberOf(seat)})`
+})
+
 /** A player's piece: the same colour on every screen that names them. */
 export const Pawn: React.FC<PawnProps> = ({ seat }) => (
   <svg
     aria-hidden='true'
     className='pawn'
     focusable='false'
-    style={{ '--pawn': `var(--pawn-${(seat % PAWN_COLOURS) + 1})` }}
+    style={{ '--pawn': pawnInksOf(seat).ink }}
     viewBox='0 0 24 28'
   >
     <circle cx='12' cy='6.5' r='5.5' />

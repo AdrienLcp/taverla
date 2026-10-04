@@ -31,12 +31,10 @@ export const Countdown: React.FC<CountdownProps> = ({
   const seconds = useSecondsLeft(clock, target)
 
   return (
-    <p
-      aria-live='polite'
-      className={`countdown ${className ?? ''}`}
-      key={seconds}
-    >
-      {seconds}
+    <p aria-live='polite' className={`countdown ${className ?? ''}`}>
+      <span className='numeral' key={seconds}>
+        {seconds}
+      </span>
     </p>
   )
 }

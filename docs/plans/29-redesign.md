@@ -154,6 +154,23 @@ new one is whole. This file is the brief: open a fresh session, run
   container. Past about fourteen players a list scrolls in its own box rather
   than over the bar.
 
+- **The countdown and the floor.** The countdown is a round paper token with
+  the second struck onto it (`--token-size` is the one dial; the numeral is
+  two thirds of it, and only the numeral re-keys, so the token stays put while
+  each second strikes). Alone it is sized against a size-container stage
+  between the header and the footer; over the recap it is a row of the
+  reveal's grid. The buzzed stage is the buzzer's own pawn stood up oversize,
+  the name, and the floor's clock on a smaller token — and **the track takes
+  that pawn's colour** for as long as they hold the floor (`floorHolderOf`,
+  `ScoreTrack`'s `floorHolderId`, `--on-pawn-N` beside each pawn; pawns 2 and 5
+  darkened two points to clear 4.5:1 under white). On the console the answer
+  sits on the question's paper and the verdicts are pieces two by two, *right*
+  in the reveal's green, *missed* a dashed plain piece. Lying down the pawn and
+  the presses share a row; upright the pawn stands beside the name. The wall
+  keeps the pawn alone, larger. `choice-fits.spec.ts` measures both screens
+  from 900px wide: no scroll — the verdict went red at 900×900 (278px) before
+  the upright row existed.
+
 Measured traps, so the next screen does not pay for them again: a `position:
 fixed` element inside the page is fixed to the page, not the viewport, because
 the entrance animation leaves a `transform` — the track renders beside `<main>`; `height` on the console's `<main>` does
@@ -167,8 +184,7 @@ page's entrance animation, whose leftover `translateY` is a 1px scroll.
 
 ## Next session
 
-1. The rest of §1's inventory screen by screen — countdown (its recap is done,
-   the number is not), buzzed (the verdict panel), final board, the slate's two
+1. The rest of §1's inventory screen by screen — final board, the slate's two
    stages, reflex — each against
    the ring's `--track-room` and measured at 1280×720, 1024×768 and 1920×1080;
    the front door last (Persuade), `og.png` redrawn, then §6.

@@ -5,7 +5,7 @@ import type { PublicPlayer } from '@taverla/protocol/room'
 
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
-import { Pawn } from './pawn'
+import { Pawn, pawnInksOf } from './pawn'
 
 import './score-track.sass'
 
@@ -16,6 +16,11 @@ const MIN_ROWS = 4
 type TrackShape = { columns: number; rows: number }
 
 type ScoreTrackProps = {
+  /**
+   * The player holding the floor, whose pawn's colour the track takes for as
+   * long as they do; `null` leaves it the phase's own ink.
+   */
+  floorHolderId: string | null
   /**
    * The room's roster in seat order, which is what picks each pawn's colour —
    * the same order every other screen names them in.
@@ -31,7 +36,10 @@ type ScoreTrackProps = {
  * Decorative to assistive technology: the standings say the same thing in
  * words wherever the room is told the score.
  */
-export const ScoreTrack: React.FC<ScoreTrackProps> = ({ players }) => {
+export const ScoreTrack: React.FC<ScoreTrackProps> = ({
+  floorHolderId,
+  players
+}) => {
   const translate = useTranslate()
   const trackRef = useRef<HTMLDivElement>(null)
   const bandRef = useRef<HTMLSpanElement>(null)
@@ -78,20 +86,24 @@ export const ScoreTrack: React.FC<ScoreTrackProps> = ({ players }) => {
   }, [])
 
   const squareCount = shape === null ? 0 : perimeterOf(shape)
+  const holderSeat = players.findIndex((player) => player.id === floorHolderId)
+  const holderInks = holderSeat === -1 ? null : pawnInksOf(holderSeat)
 
   return (
     <div
       aria-hidden='true'
       className='score-track'
       ref={trackRef}
-      style={
-        shape === null
-          ? undefined
-          : {
-              '--track-inner-columns': shape.columns - 2,
-              '--track-inner-rows': shape.rows - 2
-            }
-      }
+      style={{
+        ...(shape !== null && {
+          '--track-inner-columns': shape.columns - 2,
+          '--track-inner-rows': shape.rows - 2
+        }),
+        ...(holderInks !== null && {
+          '--phase-ink': holderInks.ink,
+          '--phase-on-ink': holderInks.onInk
+        })
+      }}
     >
       <span className='band-probe' ref={bandRef} />
       {shape !== null &&

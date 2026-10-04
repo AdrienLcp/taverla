@@ -52,7 +52,7 @@
         justify-content: center
 
         .countdown
-          font-size: clamp(4rem, 18vmin, 12rem)
+          --token-size: clamp(6rem, 24vmin, 14rem)
 
           // The strike is the countdown's own moment, once per tick. The panel
           // under it struck when the answer landed and is the same panel, so
@@ -502,6 +502,20 @@
           order: -1
           width: auto
 
+  // The countdown with nothing to recap is the token alone, sized against the
+  // box the header and the footer leave it rather than the viewport, which
+  // those two would push off the bottom.
+  .host-console-page:has(> .stage.solo > .countdown)
+    animation: none
+    display: grid
+    grid-template-rows: auto minmax(0, 1fr) auto
+
+    > .stage
+      container-type: size
+
+      .countdown
+        --token-size: clamp(4rem, min(56vmin, 100cqh - 5rem), 30rem)
+
   // The reveal held to the screen the ring leaves, like the round before it:
   // the stage is a size container between the header and the footer, and the
   // answer, what the table said and the standings each divide the box they
@@ -530,7 +544,7 @@
         justify-items: center
 
         .countdown
-          font-size: clamp(3rem, min(18vmin, 20cqh), 12rem)
+          --token-size: clamp(4.5rem, min(26vmin, 30cqh), 15rem)
 
         > .reveal-panel
           align-self: stretch

@@ -7,6 +7,8 @@ const TOKENS = readFileSync(new URL('_tokens.sass', import.meta.url), 'utf8')
 
 const TILES = [1, 2, 3, 4] as const
 
+const PAWNS = [1, 2, 3, 4, 5, 6, 7, 8] as const
+
 const PHASE_MARKS = [
   { background: '--track-five', foreground: '--track-ink' },
   { background: '--spine-reflex', foreground: '--on-spine-light' },
@@ -56,6 +58,11 @@ describe('colour tokens', () => {
           minimum: WCAG_AA.text
         },
         ...PHASE_MARKS.map((pair) => ({ ...pair, minimum: WCAG_AA.text })),
+        ...PAWNS.map((pawn) => ({
+          background: `--pawn-${pawn}`,
+          foreground: `--on-pawn-${pawn}`,
+          minimum: WCAG_AA.text
+        })),
         ...TILES.flatMap((tile) => [
           {
             background: `--tile-${tile}`,
