@@ -23,6 +23,9 @@ import './game-home-page.sass'
  * It is a page with a button rather than a link that opens a room, because a
  * GET that mutates is a link preview in a group chat opening rooms.
  *
+ * The lid of that game's box alone, banded in its colour the way the spine
+ * on the shelf is.
+ *
  * One component for every game, because they have the same shape: a name, a
  * pitch and one button. Split it when one genuinely needs something the others
  * do not, and not to pre-empt that.
@@ -41,12 +44,10 @@ const GameHome: React.FC<{ game: ShelvedGame }> = ({ game }) => {
   return (
     <main className='game-home-page'>
       <DocumentTitle>{PAGE_HEADS[locale][game].title}</DocumentTitle>
-      <header>
+      <section className='lid' style={lidStyle(game)}>
+        <span aria-hidden='true' className='band' />
         <p className='wordmark'>{translate(gameNameKey(game))}</p>
         <h1>{translate(gameTaglineKey(game))}</h1>
-      </header>
-
-      <div className='actions'>
         <p className='pitch'>{translate(gameDescriptionKey(game))}</p>
 
         <div className='start'>
@@ -60,14 +61,17 @@ const GameHome: React.FC<{ game: ShelvedGame }> = ({ game }) => {
             {translate('join.host.action')}
           </Button>
           <p className='aside'>{translate('join.host.description')}</p>
+          {refusal !== null && (
+            <p className='error' role='alert'>
+              {translate(refusal.error)}
+            </p>
+          )}
         </div>
-
-        {refusal !== null && (
-          <p className='error' role='alert'>
-            {translate(refusal.error)}
-          </p>
-        )}
-      </div>
+      </section>
     </main>
   )
 }
+
+const lidStyle = (game: ShelvedGame): React.CSSProperties => ({
+  '--spine': `var(--spine-${game})`
+})

@@ -1,44 +1,63 @@
+@use '../../presentation/styles/box-lid'
 @use '../../presentation/styles/layout'
 @use '../../presentation/styles/typography'
 
 @layer components
   .game-home-page
     @include layout.screen
-    @include layout.poster
 
     justify-content: center
+    max-width: 44rem
     padding-block-start: var(--menu-block-inset)
 
-    > header
-      display: flex
-      flex-direction: column
-      gap: var(--space-xs)
+    .lid
+      @include box-lid.box-lid
 
-    .actions
+      container-type: inline-size
       display: flex
       flex-direction: column
-      gap: var(--space-l)
+      gap: var(--space-m)
+      overflow: clip
+      padding: calc(clamp(var(--space-l), 7vw, 3.25rem) + var(--space-s)) clamp(var(--space-l), 7vw, 3.5rem) clamp(var(--space-l), 7vw, 3.25rem)
+
+    // The game's colour printed across the top of its lid, above the keyline.
+    .band
+      background: var(--spine)
+      height: var(--space-s)
+      inset: 0 0 auto
+      position: absolute
 
     .wordmark
-      @include typography.label
-
-      color: var(--ink-muted)
+      font-family: var(--font-display)
+      font-size: clamp(3rem, 17cqi, 7rem)
+      font-stretch: 78%
+      font-variation-settings: 'opsz' 96
+      font-weight: 800
+      letter-spacing: -0.03em
+      line-height: 0.86
 
     h1
-      @include typography.billboard
-
+      font-family: var(--font-display)
+      font-size: clamp(1.5rem, 6cqi, 2.5rem)
+      font-weight: 700
+      letter-spacing: -0.015em
+      line-height: 1.05
+      max-width: 18ch
       text-wrap: balance
 
     .pitch
-      @include typography.body
-
       color: var(--ink-muted)
+      font-size: clamp(1.0625rem, 3.4cqi, 1.25rem)
+      line-height: 1.4
       max-width: 46ch
+      text-wrap: pretty
 
     .start
+      align-items: start
       display: flex
       flex-direction: column
       gap: var(--space-xs)
+      padding-block-start: var(--space-s)
 
     .aside
       @include typography.caption

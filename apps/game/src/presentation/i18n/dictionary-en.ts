@@ -254,7 +254,13 @@ export const EN_DICTIONARY = defineDictionary({
       player: 'Your seat',
       title: 'Where you were'
     },
-    tagline: 'The tavern is open.',
+    oneRoom:
+      'One table for all of them: switch games without anyone joining twice.',
+    pitch: {
+      lead: 'Playing in seconds.',
+      rest: 'Nothing to install, no accounts: one code, one QR code, and the whole table is seated.'
+    },
+    promise: 'A shelf of games for the whole evening.',
     title: 'Taverla'
   },
   host: {

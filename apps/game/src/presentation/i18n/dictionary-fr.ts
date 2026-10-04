@@ -229,7 +229,13 @@ export const FR_DICTIONARY = defineDictionary({
       player: 'Votre place',
       title: 'Où vous étiez'
     },
-    tagline: 'La taverne est ouverte.',
+    oneRoom:
+      'Une seule table pour tous : on change de jeu sans rejoindre deux fois.',
+    pitch: {
+      lead: 'On joue en quelques secondes.',
+      rest: 'Rien à installer, aucun compte : un code, un QR code, et toute la table est assise.'
+    },
+    promise: 'Une étagère de jeux pour toute la soirée.',
     title: 'Taverla'
   },
   host: {

@@ -1,0 +1,105 @@
+@use '../../presentation/styles/focus'
+@use '../../presentation/styles/piece'
+@use '../../presentation/styles/typography'
+
+@layer components
+  .game-spines
+    container-type: inline-size
+    display: flex
+    flex-direction: column
+    gap: var(--space-s)
+    min-width: 0
+
+    h2
+      @include typography.title
+
+    .stack
+      display: grid
+      gap: var(--space-xs)
+
+    .spine
+      @include piece.piece(var(--radius-s))
+      @include piece.pressable
+      @include focus.ring
+
+      --ground: var(--field)
+
+      align-items: center
+      background: var(--spine)
+      color: var(--spine-ink)
+      cursor: pointer
+      display: grid
+      font: inherit
+      gap: var(--space-2xs) var(--space-m)
+      grid-template-columns: minmax(0, 1fr)
+      min-height: 4.5rem
+      min-width: 0
+      padding: var(--space-s) var(--space-m)
+      text-align: start
+
+      // The box stays down for as long as its room is opening, because that is
+      // what the press did.
+      &[data-pending]
+        box-shadow: 0 1px 0 0 var(--chipboard), 0 4px 8px -6px var(--shadow)
+        cursor: progress
+        transform: translateY(2px)
+
+      @container (width >= 26rem)
+        grid-template-columns: minmax(0, 1fr) auto
+        min-height: clamp(4.75rem, 15cqi, 5.75rem)
+        padding-inline: clamp(var(--space-m), 4.5cqi, 1.75rem)
+
+    // Boxes put back by hand, never squared up: the stack only leans once it
+    // is wide enough that a lean costs no box its tagline.
+    @container (width >= 26rem)
+      .spine:nth-of-type(1)
+        margin-inline-end: 5cqi
+
+      .spine:nth-of-type(2)
+        margin-inline-start: 3cqi
+
+      .spine:nth-of-type(3)
+        margin-inline-end: 2cqi
+
+      .spine:nth-of-type(4)
+        margin-inline-start: 6cqi
+
+      .spine:nth-of-type(5)
+        margin-inline-end: 7cqi
+
+    .name
+      align-items: center
+      display: flex
+      font-family: var(--font-display)
+      font-size: clamp(1.75rem, 9cqi, 2.5rem)
+      font-stretch: 82%
+      font-weight: 800
+      gap: var(--space-xs)
+      letter-spacing: -0.01em
+      line-height: 1
+
+    .tagline
+      font-size: 1rem
+      font-weight: 700
+      line-height: 1.2
+      text-wrap: balance
+
+      @container (width >= 26rem)
+        max-width: 21ch
+        text-align: end
+
+    .error
+      @include typography.caption
+
+      background: var(--danger)
+      color: var(--danger-ink)
+      font-weight: 700
+      padding: var(--space-2xs) var(--space-s)
+
+      @include typography.trimmed-block(var(--space-2xs))
+
+    .one-room
+      @include typography.body
+
+      color: var(--ink-muted)
+      text-wrap: pretty

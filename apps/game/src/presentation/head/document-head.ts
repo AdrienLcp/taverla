@@ -62,7 +62,7 @@ export const PAGE_HEADS: Record<Locale, Record<IndexedPage, PageHead>> = {
     },
     slate: {
       description:
-        'Numbered things to guess and a private answer sheet on every phone. Nobody copies the loudest voice; the host marks the papers one number at a time on the big screen.',
+        'Numbered things to guess and a private answer sheet on every screen. Nobody copies the loudest voice; the host marks the papers one number at a time on the big screen.',
       title: 'Slate — Taverla'
     }
   },
@@ -99,7 +99,7 @@ export const PAGE_HEADS: Record<Locale, Record<IndexedPage, PageHead>> = {
     },
     slate: {
       description:
-        "Des choses numérotées à deviner et une feuille de réponses privée sur chaque téléphone. Personne ne copie la voix la plus forte ; l'hôte corrige les copies numéro par numéro sur le grand écran.",
+        "Des choses numérotées à deviner et une feuille de réponses privée sur chaque écran. Personne ne copie la voix la plus forte ; l'hôte corrige les copies numéro par numéro sur le grand écran.",
       title: "L'Ardoise — Taverla"
     }
   }

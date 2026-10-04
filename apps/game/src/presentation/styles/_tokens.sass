@@ -41,6 +41,8 @@
     --card: light-dark(oklch(99.5% 0.003 95), oklch(90% 0.016 95))
     --card-ink: oklch(21% 0.03 255)
     --card-muted: oklch(42% 0.03 255)
+    // The keyline printed inside a box lid, a margin in from its edge.
+    --card-rule: color-mix(in oklab, var(--card-ink) 14%, var(--card))
 
     // A recess a piece sits in when the box is empty.
     --socket: light-dark(oklch(88% 0.03 218), oklch(25% 0.035 226))
@@ -66,6 +68,13 @@
     --spine-slate: oklch(50% 0.09 185)
     --on-spine: oklch(99% 0.005 95)
     --on-spine-light: oklch(20% 0.03 255)
+    // What each lid's name is printed in: every spine is dark enough for the
+    // pale ink but reflex's saffron, which takes the dark one.
+    --on-spine-blindtest: var(--on-spine)
+    --on-spine-quiz: var(--on-spine)
+    --on-spine-buzzer: var(--on-spine)
+    --on-spine-reflex: var(--on-spine-light)
+    --on-spine-slate: var(--on-spine)
 
     // Eight pawns, as many as a box holds; a ninth player reuses the first.
     --pawn-1: oklch(58% 0.19 28)

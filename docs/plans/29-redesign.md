@@ -227,6 +227,22 @@ new one is whole. This file is the brief: open a fresh session, run
   reflex screen waits for the buzzer's redraw; its reveal already shows the new
   chips.
 
+- **The front door** (Persuade). `/:locale` is the box's lid beside the shelf
+  it came off: a paper lid (`_box-lid.sass` — a card with a keyline printed a
+  margin in, re-pointing the board's inks at the paper's so a field or a
+  heading written for the board prints correctly on it) carrying the wordmark
+  with its coral dot, the two promises — *a shelf of games for the whole
+  evening* as the heading, *playing in seconds* leading the pitch — and the two
+  doors at its foot, the code and its button on one row and stacked once the
+  lid is under 17rem. Beside it from 960px, under it below, the five games are
+  boxes seen by their spines (`game-spines.tsx`), each in its own colour with
+  its name in the display face and its tagline, leaning by hand once the stack
+  is wider than 26rem; a spine opens the room for that game, and a refusal
+  lands under the spine that earned it. `/:locale/:game` is that game's lid
+  alone, banded across the top in its spine colour. `og.png` is redrawn from
+  the same lid and shelf, and no longer names the device. Looked at muted at
+  1280×760 (no scroll), 390×844 and 320×568, both palettes, both locales.
+
 Measured traps, so the next screen does not pay for them again: a `position:
 fixed` element inside the page is fixed to the page, not the viewport, because
 the entrance animation leaves a `transform` — the track renders beside `<main>`; `height` on the console's `<main>` does
@@ -240,12 +256,14 @@ page's entrance animation, whose leftover `translateY` is a 1px scroll.
 
 ## Next session
 
-1. The front door last (Persuade), `og.png` redrawn, then §6. The player's
-   buzzer (`Buzzer`, `ReflexBuzzer`) and the rest of a player's screens outside
-   the choice round are still the old world and sit in §1's inventory.
-   `AskedQuestion`'s own sizing still carries Archivo's measured width
-   (`494cqi`) everywhere the playing card does not override it; re-measure it
-   on Bricolage when the next screen that shows it is redrawn.
+1. The player's buzzer (`Buzzer`, `ReflexBuzzer`) and the rest of a player's
+   screens outside the choice round are still the old world and sit in §1's
+   inventory. `AskedQuestion`'s own sizing still carries Archivo's measured
+   width (`494cqi`) everywhere the playing card does not override it;
+   re-measure it on Bricolage with the first of those screens that shows it.
+   `favicon.svg` and `apple-touch-icon.png` are still the old world's burnt
+   orange T.
+2. §6.
 
 ## The prompt
 

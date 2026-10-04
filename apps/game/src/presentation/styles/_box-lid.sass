@@ -1,0 +1,32 @@
+// Pure module: mixins only, no top-level CSS.
+
+@use './piece'
+
+/// The lid of a game box: a printed card with a keyline a margin in from its
+/// edge, the way a box top frames its title. The front doors are drawn on it.
+///
+/// It re-points the board's inks at the paper's, so a component written for
+/// the board — a field, a heading, a hairline — prints correctly on the lid.
+/// `--rule` and `--edge` are mixed again here because a custom property is
+/// resolved where it is declared, and the root's mix was of the board.
+@mixin box-lid
+  @include piece.card(var(--radius-l))
+
+  --cut: var(--card)
+  --cut-ink: var(--card-ink)
+  --field: var(--card)
+  --ground: var(--card)
+  --ink: var(--card-ink)
+  --ink-muted: var(--card-muted)
+  --rule: color-mix(in oklab, var(--card-ink) 22%, var(--card))
+  --edge: color-mix(in oklab, var(--card-ink) 60%, var(--card))
+
+  position: relative
+
+  &::before
+    border: 2px solid var(--card-rule)
+    border-radius: calc(var(--radius-l) - var(--space-xs))
+    content: ''
+    inset: var(--space-s)
+    pointer-events: none
+    position: absolute

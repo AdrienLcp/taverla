@@ -79,3 +79,6 @@ export const useCreateRoom = () => {
     refusal: opening.status === 'refused' ? opening : null
   }
 }
+
+/** What `useCreateRoom` hands a front door, for the pieces of it that press. */
+export type CreateRoom = ReturnType<typeof useCreateRoom>
