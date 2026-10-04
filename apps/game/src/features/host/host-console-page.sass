@@ -199,7 +199,21 @@
           display: grid
           gap: var(--reveal-gap)
           grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr)
-          grid-template-rows: minmax(0, 1fr) auto
+          grid-template-rows: minmax(0, 1fr)
+
+          // The bar's row only exists while a bar is drawn. An explicit empty
+          // track still takes its gap, so a host advancing by hand paid 40px
+          // at 1280×800 that `--hold-bar` had already called nothing.
+          //
+          // And a tighter gap above it than beside the halves: at 1280×800 the
+          // list under a two-line answer is already on its floor, so the full
+          // `--reveal-gap` was 40px nothing else could give back, and the page
+          // ran 31px past the bottom for as long as the bar was drawn.
+          &.holding
+            --hold-bar: calc(28px + var(--space-s))
+
+            grid-template-rows: minmax(0, 1fr) auto
+            row-gap: var(--space-s)
 
           // Under both halves rather than beside either: it is the screen's own
           // clock, not the reveal's or the standings'. And the whole width,

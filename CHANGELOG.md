@@ -1434,6 +1434,12 @@ one part.
 
 ### Fixes
 
+- `[Game]` **The quiz reveal fits a 1280×800 laptop again.** From five answers
+  the list beside the answer flows into two columns, the hold bar's row only
+  exists while a bar is drawn and sits a tighter gap under the stage, and the
+  answer gives up the height the bar takes. A full table with a two-line answer
+  and a 25s hold no longer runs the page past the bottom.
+
 - `[Server]` **A room nobody is connected to is kept ten minutes from the last
   socket leaving**, not from the last frame anyone sent. A host who sat in the
   lobby for a quarter of an hour and reloaded could lose the room whenever the

@@ -98,7 +98,12 @@
       // held on fifty-eight per cent of that sample and drew `WONDERWALL` as
       // `WONDERWAL / L` in a 509px column. It is the player's `116cqi` one
       // register up, the same rule against the wider face.
-      --answer-size: clamp(2rem, min(9vmin, calc(128rem / var(--answer-length, 10)), calc(106cqi / var(--longest-word-width, 10))), 7rem)
+      //
+      // The `dvh` term is that same 9 per cent of the height a hold bar has
+      // left, which on a landscape screen is the one `9vmin` already reads. It
+      // only differs while the host console draws a bar: the list beside it is
+      // on its floor by then, so the answer is the one thing left to pay.
+      --answer-size: clamp(2rem, min(9vmin, calc((100dvh - var(--hold-bar, 0px)) * 0.09), calc(128rem / var(--answer-length, 10)), calc(106cqi / var(--longest-word-width, 10))), 7rem)
 
       .title
         @include typography.monument
@@ -268,6 +273,23 @@
         .scorers li
           font-size: clamp(1rem, calc(var(--outcome-budget, 100rem) / var(--outcome-rows, 5) / 1.75), 1.75rem)
           padding: 0.28em 0
+
+        // The floor is what a laptop hits first, and a floor that binds is a
+        // list that no longer fits: at 1280×800 a row cannot go under 28px,
+        // and under an answer and its note five of them already ran the page
+        // past the bottom. So from five the list flows into two columns, read
+        // down then across, and the budget is divided by the rows of one
+        // column instead — `+ 1` is the ceiling on an odd count. Every row
+        // already gives up its answer to an ellipsis before its name, so half
+        // the width costs the half of the row that still reads when it is cut.
+        .said:has(> li:nth-child(5))
+          column-gap: var(--space-l)
+          columns: 2
+          display: block
+
+          li
+            break-inside: avoid
+            font-size: clamp(1rem, calc(var(--outcome-budget, 100rem) / ((var(--outcome-rows, 5) + 1) / 2) / 1.75), 1.75rem)
 
       // The same rule against a budget that is not the same size. Above the
       // split this list has a column of its own and takes a row of it each;
