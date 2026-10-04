@@ -526,6 +526,16 @@
       .countdown
         --token-size: clamp(4rem, min(56vmin, 100cqh - 5rem), 30rem)
 
+  // The reflex race the same way: its card, its signal and the pawns landing
+  // under it are sized against the box the header and the footer leave.
+  .host-console-page:has(> .stage.solo > .reflex-stage)
+    animation: none
+    display: grid
+    grid-template-rows: auto minmax(0, 1fr) auto
+
+    > .stage
+      container-type: size
+
   // The final board held to the screen the ring leaves: the stage is a size
   // container between the header and the two exits.
   .host-console-page:has(> .stage.finished)

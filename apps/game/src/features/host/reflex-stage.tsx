@@ -3,13 +3,14 @@ import { useState } from 'react'
 import { Button as ReactAriaButton } from 'react-aria-components'
 
 import type { PlayerId } from '@taverla/protocol/identifiers'
-import type { RoundView } from '@taverla/protocol/room'
+import type { PublicPlayer, RoundView } from '@taverla/protocol/room'
 
 import { reactionMsOf } from '@taverla/core/reflex/reaction'
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
 import { reflexContent } from '@/helpers/round-content'
 import { buzzFeedback } from '@/infrastructure/browser'
+import { Pawn } from '@/presentation/components/pawn'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { useFlipField } from '@/presentation/theme/use-flip-field'
 
@@ -19,6 +20,8 @@ type ReflexStageProps = {
   clock: ClockEstimate | null
   /** `false` from the socket means the frame was never written. */
   onBuzz: (roundId: string) => boolean
+  /** Needed to stand each press's pawn up as it lands. */
+  players: readonly PublicPlayer[]
   round: RoundView
   /** The seat this console holds, and `null` when it is only running the room. */
   youId: PlayerId | null
@@ -42,6 +45,7 @@ type ReflexStageProps = {
 export const ReflexStage: React.FC<ReflexStageProps> = ({
   clock,
   onBuzz,
+  players,
   round,
   youId
 }) => {
@@ -64,6 +68,19 @@ export const ReflexStage: React.FC<ReflexStageProps> = ({
       {hasFlipped ? (
         <>
           <p className='signal'>{translate('reflex.flip')}</p>
+          {/* The presses in the order they landed, a pawn each: the count
+              under them is what a screen reader hears. */}
+          <ol aria-hidden='true' className='pressed-pawns'>
+            {content?.presses.map((press) => (
+              <li key={press.playerId}>
+                <Pawn
+                  seat={players.findIndex(
+                    (player) => player.id === press.playerId
+                  )}
+                />
+              </li>
+            ))}
+          </ol>
           <p className='landed' role='status'>
             {translate('reflex.landed', {
               count: content?.presses.length ?? 0

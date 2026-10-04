@@ -4,38 +4,87 @@
   .reaction-board
     display: flex
     flex-direction: column
+    gap: var(--space-2xs)
     list-style: none
     text-align: start
     width: 100%
 
+    // A press is a chip of the box, as a said answer is at any other reveal:
+    // the place struck on a token, the pawn, the name, the time.
     li
       @include typography.title
 
-      border-top: 2px solid var(--rule)
+      align-items: center
+      background: var(--track-a)
+      border-radius: var(--radius-s)
+      box-shadow: 0 2px 0 var(--chipboard)
+      color: var(--board-ink)
       display: flex
-      gap: var(--space-s)
-      justify-content: space-between
+      gap: 0.5em
+      min-width: 0
       // In `em` rather than at a fixed step, so a row is one multiple of its
       // own size and a formula dividing a box by a row count means something.
-      padding: 0.28em 0
+      padding: 0.22em 0.6em 0.22em 0.3em
 
-      // A nickname is twenty characters somebody chose and nothing makes them
-      // breakable, so without this the row grows until the time at the end of
-      // it is off the screen — which is the half the room is reading.
-      .nickname
-        overflow: hidden
-        text-overflow: ellipsis
-        white-space: nowrap
+    // Round and struck like the countdown's token, so the place reads as a
+    // piece of the box rather than a list marker the browser drew.
+    .place
+      @include typography.numeric
 
-      // Tabular, because the room is comparing the column downwards and a
-      // 248 that sits left of a 301 is a race the type decided.
-      .reaction
-        @include typography.numeric
+      align-items: center
+      background: var(--card)
+      border-radius: 50%
+      box-shadow: 0 1.5px 0 var(--chipboard)
+      color: var(--card-ink)
+      display: inline-flex
+      flex: none
+      font-size: 0.8em
+      height: 1.6em
+      justify-content: center
+      width: 1.6em
 
-        flex: none
+    // A nickname is twenty characters somebody chose and nothing makes them
+    // breakable, so it gives way to its ellipsis before the time does — the
+    // time is the half the room is reading.
+    .nickname
+      flex: 1 1 0
+      min-width: 0
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
 
-    // Who went before the screen changed. It is words where every row above is
-    // a number, so the difference survives being read at a glance and does not
-    // rest on the ink alone.
+    // Tabular, because the room is comparing the column downwards and a 248
+    // that sits left of a 301 is a race the type decided.
+    .reaction
+      @include typography.numeric
+
+      flex: none
+      text-align: end
+
+    // Who took the round, in the reveal's green: the one point this heat paid.
+    li.first
+      background: var(--good)
+      box-shadow: 0 2px 0 var(--good-edge)
+      color: var(--on-spine)
+
+      .place
+        background: var(--spine-reflex)
+        color: var(--on-spine-light)
+
+    // Who went before the screen changed: an empty outline with no place, and
+    // words where every row above is a number, so it survives a glance and does
+    // not rest on the ink alone.
     li.jumped
+      background: transparent
+      box-shadow: inset 0 0 0 2px var(--rule)
       color: var(--ink-muted)
+
+      .place
+        background: transparent
+        box-shadow: inset 0 0 0 2px var(--rule)
+
+      .reaction
+        font-family: var(--font-base)
+        font-size: 0.8em
+        font-stretch: normal
+        font-weight: 400

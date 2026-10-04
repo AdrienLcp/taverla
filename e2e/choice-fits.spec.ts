@@ -453,7 +453,10 @@ const REVEALS = [
 type RevealOverflow = {
   furthest: string | null
   page: number
-  /** Every row drawn past the bottom of the list that holds it. */
+  /**
+   * Every row drawn past the bottom of the list that holds it, or whose own
+   * contents run past its sides.
+   */
   spills: string[]
 }
 
@@ -487,7 +490,8 @@ const measureReveal = (): RevealOverflow => {
       .filter(
         (row) =>
           row.getBoundingClientRect().bottom >
-          (row.parentElement?.getBoundingClientRect().bottom ?? 0) + 0.5
+            (row.parentElement?.getBoundingClientRect().bottom ?? 0) + 0.5 ||
+          row.scrollWidth > row.clientWidth + 1
       )
       .map((row) => row.textContent?.slice(0, 24) ?? '')
   }
@@ -767,6 +771,103 @@ const SLATE_SCREENS = [
 
 for (const screen of SLATE_SCREENS) {
   test(`[layout] room, slate, ${screen.name}: never scrolls above the split`, async ({
+    page
+  }) => {
+    await serveRoom({ page, view: screen.view })
+    await page.addInitScript(() => {
+      localStorage.setItem('taverla:locale', 'fr')
+    })
+    await page.setViewportSize({ height: 720, width: 1280 })
+    await page.goto(`/host/${ROOM_CODE}`)
+    await expect(page.locator(screen.ready).first()).toBeVisible()
+
+    const faults: string[] = []
+
+    for (const [width, height] of WIDE_VIEWPORTS) {
+      await page.setViewportSize({ height, width })
+      await page.evaluate(() => document.fonts.ready.then(() => {}))
+
+      const overflow = await page.evaluate(measureReveal)
+
+      if (
+        overflow.furthest !== null ||
+        overflow.page > 0 ||
+        overflow.spills.length > 0
+      ) {
+        faults.push(`${width}×${height} ${JSON.stringify(overflow)}`)
+      }
+    }
+
+    expect(faults).toEqual([])
+  })
+}
+
+/**
+ * The reflex race on the screen the room stares at: the wait, the flip with six
+ * presses in, and the heat's finishing order with two false starts under them.
+ */
+const reflexView = (phase: 'playing' | 'revealed', flipsAt: number) => {
+  const view = consoleView(LONGEST_PROMPT)
+  const presses =
+    flipsAt < SERVER_TIME
+      ? ['p3', 'p6', 'p1', 'p8', 'p2', 'p4'].map((playerId, order) => ({
+          atServerTime: flipsAt + 212 + order * 37,
+          playerId
+        }))
+      : []
+
+  return {
+    ...view,
+    currentContent: { kind: 'reflex' },
+    phase,
+    round: {
+      ...view.round,
+      advancesAt: phase === 'revealed' ? SERVER_TIME + 20_000 : null,
+      answers: [],
+      awards:
+        phase === 'revealed'
+          ? [
+              {
+                playerId: 'p3',
+                points: 1,
+                speedBonus: 0,
+                verdict: { isCorrect: true, kind: 'single' }
+              }
+            ]
+          : [],
+      content: { flipsAt, kind: 'reflex', presses },
+      lockedOutPlayerIds: phase === 'revealed' ? ['p5', 'p7'] : []
+    },
+    settings: {
+      ...view.settings,
+      autoAdvanceMs: phase === 'revealed' ? 25_000 : null,
+      game: { kind: 'reflex' },
+      mode: { answerWindowMs: 10_000, kind: 'buzzer' }
+    }
+  }
+}
+
+const REFLEX_SCREENS = [
+  {
+    name: 'the wait',
+    ready: '.reflex-stage .waiting',
+    // Past any clock this run can hold, so the screen never flips under it.
+    view: reflexView('playing', SERVER_TIME * 2)
+  },
+  {
+    name: 'the flip',
+    ready: '.reflex-stage .signal',
+    view: reflexView('playing', 0)
+  },
+  {
+    name: 'the finishing order',
+    ready: '.stage.revealed .standings li',
+    view: reflexView('revealed', SERVER_TIME - 5_000)
+  }
+]
+
+for (const screen of REFLEX_SCREENS) {
+  test(`[layout] room, reflex, ${screen.name}: never scrolls above the split`, async ({
     page
   }) => {
     await serveRoom({ page, view: screen.view })

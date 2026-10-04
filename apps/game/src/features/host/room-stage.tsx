@@ -149,6 +149,7 @@ export const RoomStage: React.FC<RoomStageProps> = ({
           onBuzz={(roundId) =>
             controls?.send({ roundId, type: 'player.buzz' }) ?? false
           }
+          players={view.players}
           round={round}
           youId={youId}
         />

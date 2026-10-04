@@ -207,6 +207,26 @@ new one is whole. This file is the brief: open a fresh session, run
   in French, with the spill check over the items, the sheets and the chips —
   red before the redesign at every viewport (397px of scroll at 1280×720).
 
+- **The reflex race**, on the console and the wall. The wait is a paper card
+  lying face up under the reflex lid's saffron band, *Guette l'écran.* struck
+  on it in the display face — and no groove, because a round card's groove is
+  its clock and this round must show none. The flip takes the card with the
+  board: *VAS-Y* on the inverted ground, and each press stood up as a pawn in
+  the order it landed, over the count a screen reader hears. The finishing
+  order is a chip per player like every reveal's — the place struck on a round
+  token, the pawn, the name, the time — the round's taker on the reveal's green
+  with a saffron token, a false start an empty outline with no place. Above the
+  split the stage is a size container between the header and the footer, as
+  the countdown's is. The board had been drawn **0px wide** above the split
+  since the reveal's grid landed — an `auto` track centred by `justify-content`
+  is sized to its content, and a size container has none — so no name ever
+  showed; `choice-fits.spec.ts` now also fails a row whose contents run past its
+  sides, and went red on all eight rows at every viewport with the column
+  removed. Measured: wait, flip with six presses, finishing order with two false
+  starts, from 900px wide in French, both palettes looked at. The player's own
+  reflex screen waits for the buzzer's redraw; its reveal already shows the new
+  chips.
+
 Measured traps, so the next screen does not pay for them again: a `position:
 fixed` element inside the page is fixed to the page, not the viewport, because
 the entrance animation leaves a `transform` — the track renders beside `<main>`; `height` on the console's `<main>` does
@@ -220,9 +240,9 @@ page's entrance animation, whose leftover `translateY` is a 1px scroll.
 
 ## Next session
 
-1. The rest of §1's inventory screen by screen — reflex — against
-   the ring's `--track-room` and measured at 1280×720, 1024×768 and 1920×1080;
-   the front door last (Persuade), `og.png` redrawn, then §6.
+1. The front door last (Persuade), `og.png` redrawn, then §6. The player's
+   buzzer (`Buzzer`, `ReflexBuzzer`) and the rest of a player's screens outside
+   the choice round are still the old world and sit in §1's inventory.
    `AskedQuestion`'s own sizing still carries Archivo's measured width
    (`494cqi`) everywhere the playing card does not override it; re-measure it
    on Bricolage when the next screen that shows it is redrawn.

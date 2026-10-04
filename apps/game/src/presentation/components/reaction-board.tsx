@@ -5,12 +5,13 @@ import type { PublicPlayer, RoundView } from '@taverla/protocol/room'
 import { buildReactionBoard } from '@taverla/core/reflex/reaction-board'
 
 import { reflexContent } from '@/helpers/round-content'
+import { Pawn } from '@/presentation/components/pawn'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import './reaction-board.sass'
 
 type ReactionBoardProps = {
-  /** Needed to turn the presses' player ids into names. */
+  /** Needed to turn the presses' player ids into names and pawns. */
   players: readonly PublicPlayer[]
   round: RoundView
 }
@@ -18,7 +19,8 @@ type ReactionBoardProps = {
 /**
  * What a heat turned out to be, and the whole of its reveal: this is the one
  * game where the answer was never a secret, so there is nothing to give away
- * and the times are the payout. Fastest first, then whoever went early.
+ * and the times are the payout. Fastest first, each on a chip with its place
+ * struck on a token, then whoever went early as an empty outline.
  */
 export const ReactionBoard: React.FC<ReactionBoardProps> = ({
   players,
@@ -40,12 +42,24 @@ export const ReactionBoard: React.FC<ReactionBoardProps> = ({
   const nameOf = (playerId: string): string =>
     players.find((player) => player.id === playerId)?.nickname ?? '—'
 
+  const seatOf = (playerId: string): number =>
+    players.findIndex((player) => player.id === playerId)
+
   return (
     // Ordered rather than a bare list, and for once the numbering is the
     // content: the room is reading a finishing order, not a set of names.
     <ol className='reaction-board' style={{ '--outcome-rows': rows.length }}>
-      {rows.map((row) => (
-        <li className={row.kind} key={row.playerId}>
+      {rows.map((row, place) => (
+        <li
+          className={
+            row.kind === 'jumped' ? 'jumped' : place === 0 ? 'first' : 'pressed'
+          }
+          key={row.playerId}
+        >
+          <span aria-hidden='true' className='place'>
+            {row.kind === 'jumped' ? null : place + 1}
+          </span>
+          <Pawn seat={seatOf(row.playerId)} />
           <span className='nickname'>{nameOf(row.playerId)}</span>
           <span className='reaction'>
             {row.kind === 'jumped'

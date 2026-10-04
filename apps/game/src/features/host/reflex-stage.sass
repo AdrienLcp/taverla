@@ -1,4 +1,5 @@
 @use '../../presentation/styles/focus'
+@use '../../presentation/styles/piece'
 @use '../../presentation/styles/typography'
 
 @layer components
@@ -18,25 +19,54 @@
     // rule rather than a default: the field inverting *is* the event, and a
     // second thing arriving beside it would be a second thing to look at. The
     // wait carries no motion at all, because motion is a clock.
+    //
+    // The wait is a card lying face up on the board, under the reflex lid's
+    // band, and it carries no groove: a round card's groove is its clock, and
+    // this round has none to show. The board flipping takes the card with it.
     .waiting
-      @include typography.title
+      @include piece.card
 
-      color: var(--ink-muted)
+      background: linear-gradient(var(--spine-reflex) 0 clamp(8px, 1.6cqmin, 14px), var(--card) 0)
+      font-family: var(--font-display)
+      font-size: clamp(2rem, 13cqmin, 7.5rem)
+      font-stretch: 80%
+      font-variation-settings: 'opsz' 96
+      font-weight: 800
+      letter-spacing: -0.01em
+      line-height: 0.95
+      max-width: 100%
+      padding: 0.55em 0.7em 0.45em
       text-wrap: balance
 
     .signal
       @include typography.monument
 
-      font-size: clamp(4rem, 22vmin, 16rem)
+      font-size: clamp(4rem, 34cqmin, 16rem)
 
-    // What the room watches resolve in the three seconds the flip opens. It is
-    // the only thing that changes on this screen after the flip, so it is a live
-    // region rather than a number that quietly moves.
+    // Each press stood up as it lands, in arrival order — the first is the
+    // round's. The row holds a pawn's height from the flip on, so the first
+    // landing does not lift the signal over it.
+    .pressed-pawns
+      display: flex
+      flex-wrap: wrap
+      font-size: clamp(1.75rem, 8cqmin, 4rem)
+      gap: 0.2em
+      justify-content: center
+      list-style: none
+      margin-top: var(--space-s)
+      max-width: 13em
+      min-height: 1.15em
+
+      li
+        display: flex
+
+    // The pawns above, counted: the live region a screen reader hears, since
+    // the pawns are drawn for the eye alone.
     .landed
       @include typography.title
 
       color: var(--ink-muted)
-      margin-top: var(--space-s)
+      margin-top: var(--space-xs)
 
     // This console's own heat, when it holds a seat — subordinate to both lines
     // above, because the room is not reading it. Its height is held from the

@@ -257,13 +257,18 @@
         li
           font-size: clamp(14px, calc((100cqh - (var(--outcome-rows, 1) - 1) * var(--space-2xs)) / var(--outcome-rows, 1) / 1.7), 1.75rem)
 
+      // A track of its own width: an `auto` one is sized to its content and
+      // centred, and a size container has none, so the board drew 0px wide.
       &.bare
         align-content: center
+        grid-template-columns: minmax(0, 1fr)
         grid-template-rows: minmax(0, 1fr)
 
         .reaction-board
           align-self: stretch
           container-type: size
 
+          // A chip is its place token's 1.28em and 0.44em of padding, with
+          // the gap between rows on top — and the cap the reveal's chips share.
           li
-            font-size: clamp(14px, calc(100cqh / var(--outcome-rows, 5) / 1.9), 3rem)
+            font-size: clamp(14px, calc((100cqh - (var(--outcome-rows, 5) - 1) * var(--space-2xs)) / var(--outcome-rows, 5) / 1.8), 1.75rem)
