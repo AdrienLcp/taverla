@@ -24,9 +24,11 @@
       @include focus.ring
       @include typography.title
 
-      background: var(--cut)
-      border: 3px solid var(--ink)
-      color: var(--cut-ink)
+      background: var(--card)
+      border: 0
+      border-radius: var(--radius-m)
+      box-shadow: inset 0 2px 5px -1px var(--shadow), inset 0 0 0 2px var(--edge)
+      color: var(--card-ink)
       min-height: 52px
       padding: 0 var(--space-s)
       width: 100%
@@ -34,11 +36,10 @@
       // Measured on the tighter of the two grounds — the dark palette's cream,
       // where 0.6 lands at 4.65:1 and 0.55 falls under 4.5:1.
       &::placeholder
-        color: var(--cut-ink)
-        opacity: 0.6
+        color: var(--card-muted)
 
     &[data-invalid] .react-aria-Input
-      border-color: var(--danger)
+      box-shadow: inset 0 2px 5px -1px var(--shadow), inset 0 0 0 3px var(--danger)
 
     .react-aria-Text[slot='description']
       @include typography.caption

@@ -1,0 +1,67 @@
+@use '../styles/typography'
+
+@layer components
+  .round-chrome
+    align-items: center
+    container-type: inline-size
+    display: flex
+    flex: none
+    flex-wrap: nowrap
+    font-weight: 700
+    gap: clamp(10px, 3vmin, 20px)
+    justify-content: space-between
+    min-height: 44px
+    // The menu trigger is fixed over this line and costs no row of its own.
+    padding-inline-end: calc(var(--menu-width, 56px) + var(--space-xs))
+    white-space: nowrap
+
+    .round-index,
+    .you
+      align-items: center
+      display: flex
+      gap: var(--space-xs)
+      min-width: 0
+
+    .figures,
+    .score
+      @include typography.numeric
+
+      font-size: clamp(1.125rem, 2.6vmin, 1.5rem)
+
+    // Selectable against the reset: it is the way in a seated screen can pass
+    // to the one beside it, and a code you cannot lift is a code you retype.
+    .room
+      @include typography.label
+
+      color: var(--ink-muted)
+      flex: none
+      user-select: text
+      white-space: nowrap
+
+    .name
+      overflow: hidden
+      text-overflow: ellipsis
+
+    .pips
+      display: flex
+      gap: 3px
+
+      i
+        background: var(--track-b)
+        border-radius: 2px
+        box-shadow: 0 1.5px 0 var(--chipboard)
+        height: 12px
+        width: 8px
+
+        &[data-state='done']
+          background: var(--board-muted)
+
+        &[data-state='now']
+          background: var(--phase-ink)
+
+      @container (width < 300px)
+        display: none
+
+    .you .pawn
+      flex: none
+      font-size: 1.4rem

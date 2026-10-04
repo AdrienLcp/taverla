@@ -4,15 +4,11 @@ import { type FormEvent, useCallback, useEffect, useState } from 'react'
 import { Form } from 'react-aria-components'
 
 import type { ProtocolErrorCode } from '@taverla/protocol/error-code'
-import { roundDurationMsOf } from '@taverla/protocol/game'
 import {
   NICKNAME_MAX_LENGTH,
   type RoomCode
 } from '@taverla/protocol/identifiers'
 import type { PlayerRoomView } from '@taverla/protocol/room'
-
-import { standingOf } from '@taverla/core/scoring/scoreboard'
-import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
 import { NotFoundPage } from '@/features/not-found/not-found-page'
 import { slateContent } from '@/helpers/round-content'
@@ -29,10 +25,6 @@ import { forgetSessionId } from '@/infrastructure/storage/session-storage'
 import { Button } from '@/presentation/components/button'
 import { ConnectionRefused } from '@/presentation/components/connection-refused'
 import { RoundChrome } from '@/presentation/components/round-chrome'
-import {
-  RevealHold,
-  RoundProgress
-} from '@/presentation/components/round-progress'
 import { TextField } from '@/presentation/components/text-field'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
 import { RoomDocumentTitle } from '@/presentation/head/room-document-title'
@@ -43,6 +35,7 @@ import { useMarkingField } from '@/presentation/theme/use-marking-field'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
 
 import { PlayerRound } from './player-round'
+import { RoundClock } from './round-clock'
 
 import './player-page.sass'
 
@@ -179,34 +172,36 @@ const NicknameForm: React.FC<{
   }
 
   return (
-    <main className='player-page'>
-      <header>
-        <h1>{translate('player.nickname.title')}</h1>
-        <p className='room'>{translate('player.room', { code: roomCode })}</p>
-      </header>
-      <Form onSubmit={submit}>
-        <TextField
-          autoComplete='nickname'
-          errorMessage={
-            isRefused && rejection !== null
-              ? translate(protocolErrorKey(rejection))
-              : undefined
-          }
-          isInvalid={isRefused}
-          label={translate('player.nickname.label')}
-          maxLength={NICKNAME_MAX_LENGTH}
-          name='nickname'
-          onChange={setDraft}
-          value={draft}
-        />
-        <Button
-          isDisabled={draft.trim().length === 0}
-          size='large'
-          type='submit'
-        >
-          {translate('player.nickname.action')}
-        </Button>
-      </Form>
+    <main className='player-page nickname-form'>
+      <div className='lid'>
+        <header>
+          <h1>{translate('player.nickname.title')}</h1>
+          <p className='room'>{translate('player.room', { code: roomCode })}</p>
+        </header>
+        <Form onSubmit={submit}>
+          <TextField
+            autoComplete='nickname'
+            errorMessage={
+              isRefused && rejection !== null
+                ? translate(protocolErrorKey(rejection))
+                : undefined
+            }
+            isInvalid={isRefused}
+            label={translate('player.nickname.label')}
+            maxLength={NICKNAME_MAX_LENGTH}
+            name='nickname'
+            onChange={setDraft}
+            value={draft}
+          />
+          <Button
+            isDisabled={draft.trim().length === 0}
+            size='large'
+            type='submit'
+          >
+            {translate('player.nickname.action')}
+          </Button>
+        </Form>
+      </div>
     </main>
   )
 }
@@ -265,30 +260,23 @@ const Lobby: React.FC<{
 
   return (
     <main className='player-page playing'>
-      <header>
-        <p className='room'>{translate('player.room', { code: roomCode })}</p>
-
-        {/* In the chrome rather than inside the round, because it is true at
-            every phase — and the player who needs it is the one who cannot
-            see the screen that has been carrying it all evening. */}
-        {view?.round != null && view.phase !== 'finished' && (
-          <p className='round-index'>
-            {view.settings.roundCount === null
-              ? translate('round.indexOpen', { index: view.round.index })
-              : translate('round.index', {
-                  index: view.round.index,
-                  total: view.settings.roundCount
-                })}
-          </p>
-        )}
-      </header>
-
       {view === null ? (
         <p className='waiting'>{translate('player.seating')}</p>
       ) : (
         <>
-          <Scoreline view={view} />
-          <RoundClock clock={clock} view={view} />
+          <RoundChrome
+            players={view.players}
+            roomCode={roomCode}
+            roundCount={view.settings.roundCount}
+            roundIndex={
+              view.round === null ||
+              view.phase === 'lobby' ||
+              view.phase === 'finished'
+                ? null
+                : view.round.index
+            }
+            youId={view.youId}
+          />
           <PlayerRound
             clock={clock}
             onAnswer={(answer, roundId) =>
@@ -319,74 +307,3 @@ const isFramed = (view: PlayerRoomView): boolean =>
   ((view.phase === 'playing' && view.settings.mode.kind === 'choice') ||
     ((view.phase === 'playing' || view.phase === 'buzzed') &&
       view.settings.mode.kind === 'buzzer'))
-
-/**
- * The clock the console is showing, on the player's screen that is answering
- * against it — and then the wait until the next round, which is the same
- * question one phase later. One bar in one place rather than two: a measure
- * that moved when the phase turned would read as a second object arriving.
- *
- * Absent whenever nothing is counting. For the round that is the host being
- * away, because the server has it frozen and a bar still draining would be
- * timing nobody; for the hold `advancesAt` says the same thing on its own,
- * covering a host who advances by hand and a host who has gone at once.
- */
-const RoundClock: React.FC<{
-  clock: ClockEstimate | null
-  view: PlayerRoomView
-}> = ({ clock, view }) => {
-  const holdMs = view.settings.autoAdvanceMs
-  const advancesAt = view.round?.advancesAt ?? null
-
-  if (view.phase === 'revealed' && advancesAt !== null && holdMs !== null) {
-    return <RevealHold advancesAt={advancesAt} clock={clock} holdMs={holdMs} />
-  }
-
-  const durationMs = roundDurationMsOf(view.settings.game)
-
-  if (
-    durationMs === null ||
-    view.phase !== 'playing' ||
-    !view.isHostConnected
-  ) {
-    return null
-  }
-
-  return (
-    <RoundProgress durationMs={durationMs} elapsedMs={view.roundElapsedMs} />
-  )
-}
-
-/**
- * The one thing this screen carries between rounds, and the reason the reveal
- * does not have to: a place among the room costs the same line the room's size
- * was already spending, and says the thing that line never did. Before the
- * first point there is nothing to place, so it falls back to the count — every
- * ranked surface in the product goes quiet at the same threshold.
- */
-const Scoreline: React.FC<{ view: PlayerRoomView }> = ({ view }) => {
-  const translate = useTranslate()
-  const you = view.players.find((player) => player.id === view.youId)
-  const score = you?.score ?? 0
-  const standing = standingOf({ players: view.players, youId: view.youId })
-
-  return (
-    <section className='scoreline'>
-      <p className='you'>{you?.nickname ?? translate('player.you')}</p>
-      <p className='score'>
-        <span className='value'>{score}</span>
-        <span className='unit'>
-          {translate('player.points', { points: score })}
-        </span>
-      </p>
-      <p className='others'>
-        {standing === null
-          ? translate('player.roomSize', { count: view.players.length })
-          : translate('player.standing.ofRoom', {
-              count: standing.roomSize,
-              rank: standing.rank
-            })}
-      </p>
-    </section>
-  )
-}

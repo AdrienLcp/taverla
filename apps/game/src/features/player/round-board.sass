@@ -1,71 +1,62 @@
 @use '../../presentation/styles/typography'
 
 @layer components
-  // Hairline-ruled rows straight on the field, the way every board in this
-  // product is drawn: no cards, no fills, the field is already the surface.
+  // A chip per player, dealt in the order the round left them: filled where
+  // they answered right, an empty outline where they did not, the way the
+  // console's reveal tells the two apart by shape as much as by ink.
   .round-board
-    // A row's height in its own `em`, which the budget is divided by: 3.32
-    // measured with the figures' leading on and 3.12 trimmed, the same headroom
-    // kept over each.
+    // A row's height in its own `em`, which the budget is divided by: the
+    // chip's padding, the name, the line under it and the gap between chips.
     --board-row: 3.35
 
-    // The rows are sized against this, not against the viewport: on a laptop
-    // the reveal splits and this board is handed a fixed column while `vmin`
-    // goes on growing with the screen behind it.
+    // The rows are sized against this, not the viewport: on a laptop the
+    // reveal splits and this board is handed a column while `vmin` goes on
+    // growing with the screen behind it.
     container-type: inline-size
     display: flex
     flex-direction: column
+    gap: var(--space-2xs)
     list-style: none
     width: 100%
 
     @supports (text-box: trim-both cap alphabetic)
       --board-row: 3.15
 
-    // Every term of a row's height is a multiple of its own type, which is what
-    // makes a divisor mean anything. It was furniture no formula could reach —
-    // 8px of padding, a 4px gap and a score at a flat `1.5rem` — and nine of
-    // those rows came to 707px on a screen that had 604 to give.
-    //
-    // The size is the stage's to answer, because a component cannot: how tall a
-    // row may be is how much screen there is divided by how many players are in
-    // the room. `3.35` is what one row costs in multiples of its own size, read
-    // off the rendered row rather than added up from the stylesheet, and rounded
-    // up from the 3.33 it reaches once the sentence under the name has hit a
-    // floor the name has not. The default is large enough that the clamp lands
-    // on its ceiling, so a screen publishing no budget draws what it always drew.
-    //
-    // The budget is a `min()` over the clamp, so it only ever takes size away: a
-    // table of four reads at the size it always did — `6cqi`, the term that
-    // keeps a fourteen-character name inside a column a third of the screen wide
-    // — and only a room big enough to fill the screen goes under it.
-    //
-    // Which is why it carries a floor of its own, below the clamp's. The clamp's
-    // floor is the only term that fires on a phone — 3vmin of a 390px screen is
-    // 12px against a floor of 20 — and a 768px-tall laptop sits on the same one,
-    // so a budget that could not go below it would never fire at all. That is
-    // the shape the question's own length term met, and it dropped its floor for
-    // the same reason.
+    // How tall a row may be is the stage's to answer: the screen divided by
+    // the players in the room. The budget is a `min()` over the clamp, so it
+    // only ever takes size away, and it carries a floor of its own below the
+    // clamp's, because on a phone the clamp's floor is the only term that
+    // fires and a budget that could not go under it would never fire at all.
     li
-      align-items: baseline
-      border-top: 2px solid var(--rule)
-      // Wider than the page's ordinary gap because the two columns it holds
-      // apart are both numbers: `3 +1` beside a total of `4` reads as one
-      // number at twelve pixels, and this row is meant to be read down.
-      column-gap: var(--space-m)
+      align-items: center
+      background: var(--track-a)
+      border-radius: var(--radius-s)
+      box-shadow: 0 2px 0 var(--chipboard)
+      color: var(--board-ink)
+      column-gap: 0.6em
       display: grid
       font-size: min(clamp(1.25rem, min(3vmin, 6cqi), 1.75rem), max(1rem, calc(var(--board-budget, 100rem) / var(--board-rows, 5) / var(--board-row))))
-      grid-template-columns: 1fr
-      padding: 0.35em 0
-      row-gap: 0.2em
+      grid-template-columns: minmax(0, 1fr)
+      padding: 0.3em 0.6em
+      row-gap: 0.15em
 
-      &:last-child
-        border-bottom: 2px solid var(--rule)
+      &:is(.wrong, .silent)
+        background: transparent
+        box-shadow: inset 0 0 0 2px var(--rule)
+
+      // Your own chip, held in a keyline of the ink rather than restamped:
+      // the payout above already said what it paid.
+      &.you
+        box-shadow: inset 0 0 0 3px var(--ink), 0 2px 0 var(--chipboard)
+
+        &:is(.wrong, .silent)
+          box-shadow: inset 0 0 0 3px var(--ink)
 
     &.ranked li
-      grid-template-columns: 2ch 1fr auto
+      grid-template-columns: 2ch minmax(0, 1fr) auto
 
     &.ranked.paying li
-      grid-template-columns: 2ch 1fr auto auto
+      grid-template-columns: 2ch minmax(0, 1fr) auto auto
 
     .rank
       @include typography.numeric
@@ -75,69 +66,56 @@
       font-size: 0.8em
 
     // Twenty unbreakable characters somebody chose, in a column sized by what
-    // is left: a name is atomic where an answer is not, so this is the one that
-    // gets cut last and the sentence under it is the one that gets cut first.
+    // is left: a name is atomic where an answer is not, so this is cut last.
     .nickname
       @include typography.title
 
-      // The row's own size, because the row is what the screen budgets. The
-      // shared step and the column's own cap both live on the row now, so a
-      // phone and a narrow window still read it at the size they always did.
+      align-items: center
+      display: flex
       font-size: 1em
+      gap: 0.4em
+      min-width: 0
+
+      .pawn
+        font-size: 1em
+
+    .name
       overflow: hidden
       text-overflow: ellipsis
       white-space: nowrap
 
     // What the round paid, held to one width whatever it carries — the widest
-    // form is four figures (`3 +2`), and a row that paid nothing keeps the box
-    // empty rather than dropping it, or the rows around it end on two different
-    // right edges.
+    // form is four figures (`3 +2`) — so the rows end on one right edge.
     .points
       @include typography.numeric
       @include typography.trimmed-numeral
 
       font-size: 0.8em
-      // A numeral takes the reset's 1.5 until it is told otherwise, and half a
-      // row of nothing above and below a figure is what set this row's height
-      // rather than the name in it.
       line-height: 1
       min-width: 4.5ch
       text-align: end
 
-    // Where that leaves them, which is the column the whole board is ordered
-    // by: it is read *down* rather than across, so it is the one thing on the
-    // row set heavier than the name beside it.
+    // Where that leaves them, the column the whole board is ordered by, so
+    // it is set heavier than the name beside it.
     .score
       @include typography.numeric
       @include typography.trimmed-numeral
 
-      font-size: 1.15em
       font-family: var(--font-display)
+      font-size: 1.15em
       font-stretch: 85%
       font-weight: 900
       line-height: 1
 
-    // What they typed or picked, under their own name rather than beside it.
-    // The first line of a row is read down as three columns of numbers, and a
-    // sentence of somebody else's length dropped into it is what stops that
-    // being true.
+    // What they typed or picked, under their own name: the first line is read
+    // down as columns of numbers, and a sentence dropped into it stops that.
+    // Prose keeps the caption's floor whatever the row is sized at.
     .words
       @include typography.caption
 
       color: var(--ink-muted)
-      // A fraction of the name above it rather than the shared caption step:
-      // this line is read as the second half of that row, and a row sized by
-      // the screen cannot hold one line that answers to the screen instead.
-      //
-      // With a floor of its own, and it is the caption's. What a player typed is
-      // the only prose on this board, and prose has a floor the row it sits in
-      // does not get to argue with — a grandparent and a child are both expected
-      // to read it.
       font-size: max(0.875rem, 0.75em)
       grid-column: 1 / -1
-      // Leading is for prose that wraps, and this line cannot: it is one
-      // ellipsised row, and the caption's 1.35 is half a line of nothing under
-      // every name on the board.
       line-height: 1.2
       overflow: hidden
       text-overflow: ellipsis
@@ -146,20 +124,5 @@
     &.ranked .words
       grid-column: 2 / -1
 
-    // Right and wrong told apart by the ink, the way the room's own screen
-    // tells them apart: the answer is on the same screen, so nothing here has
-    // to say *wrong* to be read as one.
     .right .words
-      color: var(--ink)
-
-    // The same stamp the final board gives this player their own row — the ink
-    // itself rather than a shade of it, which is what makes it survive all six
-    // fields, and it bleeds its padding to the left so the name stays flush
-    // with the column the other rows align on.
-    .you .nickname
-      background: var(--ink)
-      color: var(--field)
-      margin-inline-start: calc(var(--space-2xs) * -1)
-      max-width: 100%
-      padding-inline: var(--space-2xs)
-      width: fit-content
+      color: var(--board-ink)

@@ -1,4 +1,5 @@
 @use '../../presentation/styles/framed'
+@use '../../presentation/styles/seat-grid'
 @use '../../presentation/styles/layout'
 @use 'boxed-standings'
 @use '../../presentation/styles/typography'
@@ -7,7 +8,7 @@
   .host-console-page
     @include layout.stage
 
-    > header
+    > header:not(.round-chrome)
       align-items: baseline
       display: flex
       gap: var(--space-m)
@@ -231,24 +232,9 @@
       gap: var(--space-m)
       min-width: 0
 
-    // Who has sat down, each beside their pawn, and a socket for every pawn
-    // still in the box. The two lists are one grid, so the sockets carry on
-    // from the last seat rather than starting a row of their own.
+    // Who has sat down, and a socket for every pawn still in the box.
     .roster
-      align-content: start
-      display: grid
-      gap: var(--space-xs) var(--space-s)
-      grid-template-columns: minmax(0, 1fr)
-      min-width: 0
-
-      @container (width >= 22rem)
-        grid-template-columns: repeat(2, minmax(0, 1fr))
-
-      @container (width >= 30rem)
-        grid-template-columns: repeat(3, minmax(0, 1fr))
-
-      > :not(.scoreboard, .sockets)
-        grid-column: 1 / -1
+      @include seat-grid.seat-grid
 
       h2
         @include typography.label
@@ -260,47 +246,9 @@
 
         color: var(--ink-muted)
 
-      .scoreboard,
-      .sockets
-        display: contents
-
-      .scoreboard li,
-      .socket
-        border-radius: var(--radius-m)
-        min-height: clamp(40px, 5.6vmin, 56px)
-
-      .scoreboard li
-        align-items: center
-        background: var(--track-a)
-        border: none
-        box-shadow: 0 2px 0 color-mix(in oklch, var(--edge) 55%, var(--field))
-        padding: var(--space-2xs) var(--space-xs) var(--space-2xs) var(--space-s)
-
-        .nickname
-          align-items: center
-          font-size: clamp(1rem, 2.4vmin, 1.375rem)
-          gap: var(--space-xs)
-
-        .pawn
-          font-size: 1.3em
-
-        .remove
-          min-height: 32px
-          padding: 0 var(--space-2xs)
-
-      .socket
-        background: var(--socket)
-        box-shadow: inset 0 3px 6px -2px var(--shadow)
-        display: grid
-        place-items: center
-
-        .pawn
-          fill: none
-          filter: none
-          font-size: clamp(1.5rem, 3.4vmin, 2rem)
-          stroke: var(--socket-line)
-          stroke-dasharray: 2.5 2
-          stroke-width: 1.4
+      .scoreboard li .remove
+        min-height: 32px
+        padding: 0 var(--space-2xs)
 
       // The seat form closes the table rather than sitting under a rule of its
       // own: taking a seat is joining this list. One line, the name and the

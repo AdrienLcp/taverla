@@ -264,6 +264,34 @@ new one is whole. This file is the brief: open a fresh session, run
   floor's line went red at every viewport first: the grave of *à* in Bricolage
   rises past a `0.95` line, so it is set at `1.2`.
 
+- **The rest of the player's screens.** `RoundChrome` owns its stylesheet now
+  (`round-chrome.sass`; `_framed.sass` keeps only its area and the lying-down
+  wrap) and is the top line of every player screen: outside a game's rounds it
+  carries the room's code and the seat's name instead of a round and a score.
+  The scoreline went with the old header — the place among the room moved to
+  the reveal, beside the payout. The lobby is the chosen game's lid
+  (`.up-next`, banded in `--spine-*`; a socket while the table decides), the
+  invitation, and the seats: the console's roster grid is a mixin now
+  (`_seat-grid.sass`) beside `EmptySockets`, and its own seat wears a keyline
+  rather than the stamp, on both surfaces. The typed round puts
+  `AskedQuestion` on `_question-card.sass` with the sand groove laid over its
+  top (`RoundClock` moved to `round-clock.tsx`, rendered by the round where it
+  belongs), and the field follows the card instead of floating mid-screen. The
+  reveal is the card turned over (`.answer-card`, a cover mounted on it), the
+  payout struck on a token (green, or a socket for nothing) beside the
+  standing, and `RoundBoard` as a chip per player — filled right, outlined
+  wrong or silent, the player's own in a keyline. The final board stands the
+  player's pawn beside their place. Every wait is a `NoticeCard`. The kicker
+  labels (*La réponse*, *Tu vas jouer à*, *Tu finis*) became visually hidden
+  prefixes. The nickname form is on a box lid, and `TextField`'s input is a
+  paper slot everywhere. `choice-fits.spec.ts` measures four player pages
+  (lobby, the longest typed question, a full table's reveal, its final board)
+  over the sixteen viewports for nothing run off the side and no name spilling
+  its chip, and the reveal for no scroll from 900px wide. Broken on purpose
+  once: an untruncated name and 1.2em chip padding turned both red. A name
+  overflowing into the score column stays inside the chip, so the check reads
+  `.nickname` as well as the row.
+
 Measured traps, so the next screen does not pay for them again: a `position:
 fixed` element inside the page is fixed to the page, not the viewport, because
 the entrance animation leaves a `transform` — the track renders beside `<main>`; `height` on the console's `<main>` does
@@ -277,14 +305,10 @@ page's entrance animation, whose leftover `translateY` is a 1px scroll.
 
 ## Next session
 
-1. The rest of a player's screens outside the framed rounds are still the old
-   world: the lobby, the countdown's surroundings, the typed round, the
-   reveal, the final board, the mid-round and host-away notices, and the
-   unframed header and scoreline they share. The typed round is the one that
-   still shows `AskedQuestion` on its own `494cqi` (Archivo's width): put it on
-   `_question-card.sass` or re-measure it on Bricolage there.
-   `favicon.svg` and `apple-touch-icon.png` are still the old world's burnt
-   orange T.
+1. The player's slate sheet (`slate-sheet.sass`) is the last player screen
+   still in the old world. `favicon.svg` and `apple-touch-icon.png` are still
+   the old world's burnt orange T. `AskedQuestion`'s own `494cqi` now serves
+   only the console's playing stage, which overrides it — check and drop it.
 2. §6.
 
 ## The prompt

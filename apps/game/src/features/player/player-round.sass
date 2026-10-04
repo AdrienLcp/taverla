@@ -2,6 +2,7 @@
 @use '../../presentation/styles/layout'
 @use '../../presentation/styles/piece'
 @use '../../presentation/styles/question-card'
+@use '../../presentation/styles/seat-grid'
 @use '../../presentation/styles/typography'
 
 @layer components
@@ -10,96 +11,128 @@
     flex: 1
     flex-direction: column
     gap: var(--space-m)
+    min-width: 0
 
-    &.centred
-      align-items: center
-      justify-content: center
-      text-align: center
+    // The round's sand, a groove pressed into whatever it lies on. On the
+    // board it takes the phase's ink, the one the track is wearing.
+    .round-progress
+      background: var(--socket)
+      border: 0
+      border-radius: 3px
+      box-shadow: inset 0 1px 2px var(--shadow)
+      height: 6px
+      overflow: hidden
+      width: 100%
 
-      // Everything else on this screen is one centred thing; a board is rows,
-      // and rows want the column. `align-items: center` shrink-wraps a child to
-      // its min-content, and a nickname's is *zero* — `overflow: hidden` is what
-      // buys the ellipsis — so the final board handed every player one letter
-      // and a full stop.
-      //
-      // The invitation joins them for the second half of that sentence: its own
-      // box is already `width: 100%`, but a centred `text-align` inherits into
-      // a code that is left-aligned in its box and an address that wraps, so
-      // the two would disagree about where the line starts.
-      .room-invitation,
-      .round-board,
-      .scoreboard
-        text-align: start
-        width: 100%
+      &::after
+        background: var(--phase-ink)
+        border-radius: inherit
 
-    // The box the final board is dealt in, and this section is it: nothing
-    // stands beside the board at this phase, where the console has the winner's
-    // name in the track next to it and so measures `.standings` instead. Nine
-    // players ran 270px off a 1440×900 in one column, with only six of them
-    // above the fold on the screen that says where the evening left everybody.
-    &.finished
-      container-type: inline-size
+  // A wait with nothing to press: one object, centred in the screen the chrome
+  // leaves — a paper card, or the countdown's token.
+  .player-round.notice
+    align-items: center
+    justify-content: center
 
-    // The lobby is the only phase that draws it, and the register is a player's
-    // rather than a console's: this screen is held at forty centimetres and the
-    // code shares it with the pitch above and the roster below. `vmin` is what
-    // keeps it from swallowing a short screen in landscape, and the container
-    // unit is what keeps it honest in the column the split below gives it.
-    //
-    // It is `20cqi` and not the `24` it carried, which is the console's own
-    // measurement and for the console's own reason: four `W` — the widest glyph
-    // the room alphabet holds — set in `monument` come to 4.78 times their font
-    // size, so one line holds `100 / 4.78 = 20.9cqi`. The wrong number never
-    // showed because it never fired: measured at seven widths from 320 to 1920,
-    // the clamp binds at every one of them and `24cqi` is 65px where the clamp
-    // says 40. The split is what makes the term live — a 293px column at the
-    // breakpoint, where `24cqi` asks for 70px of type in 293px of room and a
-    // code of four `W` lands as `WW / WW`.
+  .notice-card
+    @include piece.card
+
+    display: flex
+    flex-direction: column
+    gap: var(--space-s)
+    max-width: 30rem
+    padding: clamp(24px, 6vmin, 48px) clamp(20px, 6vmin, 44px)
+    text-align: center
+    width: 100%
+
+    .notice-title
+      @include typography.billboard
+
+      font-size: clamp(1.75rem, 7vmin, 3rem)
+      line-height: 1.1
+      overflow-wrap: anywhere
+      text-wrap: balance
+
+    .notice-detail
+      @include typography.body
+
+      color: var(--card-muted)
+      text-wrap: balance
+
+  // What this player is about to play, on the game's own lid: the spine's
+  // colour banded across the top, its name under it, and what a round of it
+  // pays. Before the table decides there is no lid yet, only its recess.
+  .up-next
+    @include piece.card
+
+    --band: clamp(10px, 2.2vmin, 16px)
+
+    background: linear-gradient(var(--spine, var(--card-muted)) 0 var(--band), var(--card) var(--band))
+    display: flex
+    flex-direction: column
+    gap: var(--space-s)
+    padding: calc(var(--band) + clamp(16px, 4vmin, 32px)) clamp(18px, 4.4vmin, 36px) clamp(18px, 4vmin, 32px)
+
+    &[data-game='blindtest']
+      --spine: var(--spine-blindtest)
+
+    &[data-game='buzzer']
+      --spine: var(--spine-buzzer)
+
+    &[data-game='quiz']
+      --spine: var(--spine-quiz)
+
+    &[data-game='reflex']
+      --spine: var(--spine-reflex)
+
+    &[data-game='slate']
+      --spine: var(--spine-slate)
+
+    .game-name
+      @include typography.monument
+
+      font-size: clamp(2.5rem, 12vmin, 5rem)
+      overflow-wrap: anywhere
+
+    .how-it-scores
+      @include typography.body
+
+      color: var(--card-muted)
+      max-width: 40ch
+      text-wrap: pretty
+
+    &.undecided
+      background: var(--socket)
+      box-shadow: inset 0 3px 8px -2px var(--shadow), inset 0 0 0 2px var(--socket-line)
+      color: var(--board-muted)
+      padding: clamp(20px, 5vmin, 36px)
+
+      .game-name
+        @include typography.title
+
+        font-size: clamp(1.25rem, 4vmin, 1.75rem)
+        text-wrap: balance
+
+  // The invitation sized for the column it is given rather than the console's
+  // screen: four `W` in the display face come to 4.78 times their size.
+  .player-round.lobby
     .room-invitation
       --invitation-code-size: min(clamp(2.5rem, 12vmin, 5rem), 20cqi)
 
-    // One object above the split, where it shares a column with the roster —
-    // and one that will not be shrink-wrapped below it, because `.centred`
-    // takes every child to its min-content and a paragraph's is its longest
-    // word.
-    .pitch
-      display: flex
-      flex-direction: column
-      gap: var(--space-m)
-      width: 100%
+    .table
+      container-type: inline-size
 
-    // Two audiences, a column each — the console's own lobby, one screen down.
-    // What this player is waiting on is the pitch and the roster; the
-    // invitation is the way in for the person beside them, who has no screen in
-    // the room yet. Stacked on a laptop that is 1219px of content in 900px of
-    // screen, with the QR square and the whole roster under the fold and 570px
-    // of the column unused beside a 256px square.
-    //
-    // The ratio is the console's inverted, and deliberately: there the
-    // invitation takes the *wider* track because it is what the room reads from
-    // four metres, and here nobody reads this screen but the hand holding it.
-    // What the invitation costs is bounded — a 256px square and four characters
-    // — so it takes the narrow track and the player's own two texts take what
-    // is left.
-    //
-    // Areas rather than a span, because naming a row is what declares it:
-    // `grid-row: 1 / -1` over rows nobody declared resolves back to row one,
-    // which is the poster mixin's trap and the reveal's below. And read off the
-    // markup rather than the width alone, for the reveal's other reason — a
-    // room whose code the address bar could not answer would split two items
-    // across two columns and leave one of them empty.
-    //
-    // **The rows are declared for a second reason: a spanning item hands its
-    // surplus to every row it spans.** The invitation is the taller half at any
-    // table under nine, and on `auto auto` the 408px it had over the column
-    // beside it were shared equally — so a lobby nobody has joined yet, with a
-    // host still choosing, drew one line of pitch and then two hundred pixels
-    // of nothing before the roster. `1fr` is what names where the surplus goes:
-    // the roster keeps its place under the pitch, and the void falls below it.
+    .seats
+      @include seat-grid.seat-grid
+
+    // Two audiences, a column each — the console's own lobby, one screen
+    // down. What this player waits on is the lid and the table; the invitation
+    // is the way in for the person beside them, so it takes the narrow track.
+    // Areas rather than a span, because naming a row is what declares it, and
+    // `1fr` names where the spanning invitation's surplus goes.
     @include layout.wide
-      &.lobby:has(.room-invitation)
+      &:has(.room-invitation)
         align-content: center
-        align-items: start
         column-gap: var(--space-xl)
         display: grid
         grid-template-areas: 'pitch invitation' 'table invitation'
@@ -107,227 +140,249 @@
         grid-template-rows: auto 1fr
         row-gap: var(--space-l)
 
-        .pitch
+        > :first-child
           grid-area: pitch
 
         .room-invitation
+          align-self: start
           grid-area: invitation
 
-        .scoreboard
+        .table
           grid-area: table
 
-    // What the round was and what it paid this player: one half of the reveal,
-    // and one child, so the other half can sit beside it.
-    //
-    // **The card is struck, and the screen it arrived on is not.** This
-    // animation was on `.centred` — every phase but `playing`, which is the
-    // lobby, the countdown, the reveal, the final board and two notices — so a
-    // 1.06 scale settling over `slow` moved *the whole screen* on each of them:
-    // 877px down to 827 over 450ms on a laptop, right under a press that had
-    // just landed, which is a reflow rather than a payoff. It reads as a bug
-    // and it was reported as one. The strike belongs to the thing the round
-    // pays out, which is this card; the board under it is a reading, and the
-    // other five phases have the field's own colour change as their moment —
-    // the one authored motion per event this world allows.
-    &.revealed .outcome
-      align-items: center
+  // The question on its paper card with the round's sand along its top, the
+  // way the framed rounds print it — and with no question, the groove alone.
+  .player-round.typed-round
+    --question-k: min(72cqi, 30dvh)
+    --question-cap: min(7cqi, 4.4dvh, 2.5rem)
 
-      @media (prefers-reduced-motion: no-preference)
-        animation: card-strike var(--transition-slow, 0) var(--timing, ease) both
+    container-type: inline-size
 
-      // What the answer is sized against: on a laptop this is a column of a
-      // fixed share, and `vmin` there is the size of a screen this half of it
-      // never gets.
-      container-type: inline-size
+    // The field follows the card it answers rather than floating to the
+    // middle of what is left: a keyboard is about to take the bottom half.
+    .answer-form
+      flex: none
+      justify-content: flex-start
+
+    .round-card
+      display: grid
+
+      > *
+        grid-area: 1 / 1
+
+      .asked-question
+        @include question-card.card
+
+      .asked-question + .round-progress
+        align-self: start
+        margin: clamp(8px, 1.6vmin, 12px) clamp(12px, 3.4cqmin, 24px) 0
+        width: auto
+
+        &::after
+          background: var(--card-muted)
+
+  // What the round was, what it paid this player, and where it left the room.
+  .player-round.revealed
+    .outcome
       display: flex
       flex-direction: column
       gap: var(--space-m)
-      width: 100%
+      min-width: 0
 
-    // Not every player is on a phone, and a laptop is the one screen here with
-    // width to spare and none of the height: the answer, the cover and the
-    // payout filled it on their own and left the board — the half a player who
-    // cannot see the room's screen came for — under the fold. The room's own
-    // screen splits this same moment in two for the same reason.
+      // The strike belongs to the thing the round pays out, never the screen
+      // it arrived on: a whole-screen settle under a press reads as a reflow.
+      @media (prefers-reduced-motion: no-preference)
+        animation: card-strike var(--transition-slow, 0) var(--timing, ease) both
+
+    .hold:empty
+      display: none
+
+    // A round before the first point, or one whose question the room owned,
+    // leaves the payout alone on the screen: one object, centred.
+    &:not(:has(.round-board, .answer-card, .reaction-board))
+      align-items: center
+      justify-content: center
+
+    // A laptop is the one screen with width to spare and none of the height,
+    // so the answer and the board sit side by side, each dividing the screen.
+    // Read off the markup: a round before the first point withholds the board.
     //
-    // Both tracks divide the screen rather than being sized by what is in
-    // them: `1fr` is `minmax(auto, 1fr)`, so the answer's own min-content — one
-    // unbreakable word at ninety-six pixels — claimed the whole row and left
-    // the board on its 15rem floor at every desktop width, which is a phone's
-    // width carrying a laptop's type. `Adrien 2` was drawn as `Adr…`.
-    //
-    // `RoundBoard` withholds itself where a round paid nobody and nobody typed,
-    // which is every round before the first point, so the split is read off the
-    // markup rather than off the width alone. Left on the width, round one drew
-    // the answer in the `1fr` track with three hundred and forty-seven pixels of
-    // nothing beside it, and the whole reveal two hundred pixels left of the
-    // screen it looks centred on.
-    //
-    // A component says what it costs and a stage says how much there is, and
-    // this phase was the one that said neither: nine rows of a board whose
-    // every term was fixed came to 707px beside an outcome of 219, so the taller
-    // half decided the screen on its own and ran 104px off a 1440x900, 174 off a
-    // 1280x800 and 198 off a 1024x768.
-    //
-    // `18.5rem` is the chrome, measured the way the console's `31rem` was: the
-    // header, the scoreline, the page padding and the two gaps came to 296px at
-    // 1440x900 and 283 at 1024x768. A budget takes the widest of the band it
-    // spans or it under-budgets at one end — and the end that matters is the one
-    // with the most rows.
+    // `17rem` is the chrome, the page's padding, the gaps and the hold's
+    // groove, measured at 1440x900 and 1024x768 and taken at the wider.
     @include layout.wide
-      &.revealed:has(.round-board)
-        --board-budget: calc(100dvh - 18.5rem)
+      &:has(.round-board)
+        --board-budget: calc(100dvh - 17rem)
 
-        align-items: center
+        align-items: start
         column-gap: var(--space-xl)
         display: grid
-        grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.8fr)
+        grid-template-areas: 'outcome board' 'hold hold'
+        grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.9fr)
 
-    // Stacked is not the same arithmetic made smaller. Above the split the two
-    // halves sit side by side and the board divides the whole screen; here they
-    // share one column and the screen pays for both, so what the payout costs
-    // comes off the board's budget as well. `28rem` is that whole subtraction,
-    // measured at 390x844 the way the wide arm's `18.5rem` was at 1440x900: the
-    // page chrome came to 254px, the payout to 173 and the gap between them to
-    // 20.
-    //
-    // It is not asked to make the reveal fit and it does not: a payout, nine
-    // names and nine sentences want more than a phone has at any size a
-    // grandparent can read. What it buys is that the board stops growing once
-    // the page is already scrolling, which is the console's own bargain one
-    // storey up.
+        .outcome
+          grid-area: outcome
+
+        .round-board
+          grid-area: board
+
+        .hold
+          grid-area: hold
+
+    // Stacked, the payout and the answer come off the board's budget too. It
+    // is not asked to make a phone's reveal fit, only to stop growing once the
+    // page is already scrolling.
     @include layout.narrow
-      &.revealed:has(.round-board)
-        --board-budget: calc(100dvh - 28rem)
+      &:has(.round-board)
+        --board-budget: calc(100dvh - 26rem)
 
-        // The one game whose payout carries a picture, read off the markup the
-        // way the console's reveal panel reads its own header: a cover and the
-        // gap over it are 147px more of the same column, measured at 390x844
-        // where the quiz's payout came to 173 and the blind test's to 320. It
-        // does its work at the middling table rather than the full one — nine
-        // rows are on the row's own floor either way, and five are what a phone
-        // can still be asked to fit.
         &:has(.cover)
-          --board-budget: calc(100dvh - 37rem)
+          --board-budget: calc(100dvh - 32rem)
 
-    // The product's only real image, die-cut on the field the way the QR code
-    // is: a block edged in its own paper, no radius and no shadow. Well under
-    // the size the room's screen gives it — that panel sets it beside the
-    // answer and this is a column, where every pixel it takes is a pixel the
-    // board under the answer does not get.
+  // The card the round was played on, turned over: the answer on its back,
+  // and a track's cover mounted on it beside the words.
+  .answer-card
+    @include piece.card
+
+    --ink-muted: var(--card-muted)
+
+    align-items: center
+    display: flex
+    flex-wrap: wrap
+    gap: clamp(var(--space-s), 3vmin, var(--space-m))
+    padding: clamp(16px, 4vmin, 32px) clamp(18px, 4.4vmin, 36px)
+
+    // Deezer serves covers at 250px and nothing larger, so it stays well
+    // under; pasted onto the paper with the shallow edge a print has.
     .cover
-      background: var(--cut)
-      border: 4px solid var(--cut)
-      height: clamp(140px, 26vmin, 180px)
+      border-radius: var(--radius-s)
+      box-shadow: 0 0 0 1px var(--card-rule), 0 6px 12px -8px var(--shadow)
+      flex: none
+      height: clamp(96px, 22vmin, 160px)
       object-fit: cover
-      width: clamp(140px, 26vmin, 180px)
+      width: clamp(96px, 22vmin, 160px)
 
-    // Bigger than the shared billboard step: this is the payoff, and on a
-    // screen held at arm's length the shared size lands at twenty-eight pixels.
-    //
-    // Two facts the viewport cannot answer, so the component publishes both,
-    // and once this screen splits in two the column is what has to answer them
-    // rather than the screen behind it. How much there is to say holds the
-    // answer to about two lines — the bank runs to 83 characters. How *wide*
-    // its longest unbreakable run is holds every one of them to a whole word:
-    // `anywhere` is the guard against a word leaving the column, and a guard
-    // that fires reads `Maiso / n- / Blanch / e`.
-    //
-    // A width rather than a count, and `116cqi` rather than `120`, for the
-    // reason the console's `106cqi` carries in full: the constant is a
-    // guarantee, so it is taken off the widest word of a measured sample and
-    // not off the face's mean. This register reads the catalogue's own casing
-    // where the console's is uppercased, which is a face of its own and a
-    // sample of its own — `Mamma` at 1.009 is the word that sets it.
+    // A container of its own, because the answer is measured against this
+    // column and not the one the cover shares with it. `116cqi` over the
+    // longest word's width holds any word whole on its line; `240cqi` over the
+    // length holds the answer to about two lines.
+    .identity
+      container-type: inline-size
+      display: flex
+      flex: 1 1 14rem
+      flex-direction: column
+      gap: 0.3em
+      min-width: 0
+
     .revealed-title
       @include typography.billboard
 
-      font-size: clamp(2.5rem, min(11vmin, calc(240cqi / var(--answer-length, 10)), calc(116cqi / var(--longest-word-width, 10))), 6rem)
+      font-size: clamp(2rem, min(10vmin, calc(240cqi / var(--answer-length, 10)), calc(116cqi / var(--longest-word-width, 10))), 5rem)
+      line-height: 1.02
       overflow-wrap: anywhere
+      text-wrap: balance
 
     .revealed-artist
       @include typography.title
 
-      color: var(--ink-muted)
+      color: var(--card-muted)
+      overflow-wrap: anywhere
 
-    // What this player is about to play, and when: the lobby names the game,
-    // and a player who walked in on a round names the round they get instead.
-    .next-round,
-    .up-next
-      @include typography.billboard
-
-      font-size: clamp(2rem, 9vmin, 4.5rem)
-
-    .framing
-      @include typography.label
-
-      color: var(--ink-muted)
-
-    // What the room is told once the answer is public. Prose on a player's
-    // screen, so it is the one thing here set at reading size.
     .note
       @include typography.body
 
-      color: var(--ink-muted)
+      color: var(--card-muted)
+      margin-top: var(--space-2xs)
       text-wrap: pretty
 
-    // The number and the two footnotes under it, siblings rather than nested on
-    // purpose: `letter-spacing` inherits as a computed length, so `monument`'s
-    // -0.035em of a 12rem number reaches a caption as nearly seven pixels of
-    // negative tracking and folds it onto itself.
-    .your-round
-      align-items: center
-      display: flex
-      flex-direction: column
-      gap: var(--space-2xs)
+  // What the round paid this player, struck on a round token: a gain on the
+  // reveal's green, nothing as the empty socket a token would sit in — a
+  // result rather than a warning, so never the danger ink.
+  .your-round
+    align-items: center
+    display: flex
+    gap: clamp(var(--space-s), 3vmin, var(--space-m))
 
-    // A step down from the size it held while it was the whole of what a player
-    // was told: the board under it now says this number again, in the row that
-    // is this player's, so it stays the loudest thing on the screen without
-    // being the only thing on it.
-    .you-scored
+    .payout
       @include typography.monument
       @include typography.numeric
 
-      font-size: clamp(3rem, 16vmin, 5.5rem)
+      --token: clamp(4.5rem, 17vmin, 6.5rem)
 
-    // Nowhere near the size of a gain, and muted rather than stamped: a round
-    // that paid nothing is a result, not a warning, and the same ink the reveal
-    // gives a wrong answer is what says so without shouting it across a table.
+      align-items: center
+      aspect-ratio: 1
+      border-radius: 50%
+      display: grid
+      flex: none
+      font-size: calc(var(--token) * 0.42)
+      justify-items: center
+      line-height: 1
+      width: var(--token)
+
+    &.scored .payout
+      background: var(--good)
+      box-shadow: inset 0 0 0 calc(var(--token) * 0.05) var(--good), inset 0 0 0 calc(var(--token) * 0.065) color-mix(in oklab, var(--on-spine) 50%, var(--good)), 0 4px 0 var(--good-edge), 0 10px 16px -8px var(--shadow)
+      color: var(--on-spine)
+
+    &.missed .payout
+      background: var(--socket)
+      box-shadow: inset 0 3px 8px -2px var(--shadow), inset 0 0 0 2px var(--socket-line)
+      color: var(--board-muted)
+
+    .payout-words
+      display: flex
+      flex-direction: column
+      gap: var(--space-2xs)
+      min-width: 0
+
+    .standing,
     .you-missed
       @include typography.title
 
+    .you-missed
       color: var(--ink-muted)
 
-    // The footnote that settles the argument about why two players who both got
-    // it right did not get the same.
     .speed-bonus
       @include typography.caption
 
       color: var(--ink-muted)
 
-    // A step under `.you-scored`, because the ordinal carries a suffix: "1er"
-    // sets three glyphs where "+3" sets two, and the board has to follow it.
-    .your-rank
-      @include typography.monument
-      @include typography.numeric
+  // Where the evening left this player: their pawn stood up oversize beside
+  // the place, the way the console stands the winner's.
+  .player-round.finished
+    container-type: inline-size
 
-      font-size: clamp(3rem, 20vmin, 8rem)
+    .your-placing
+      align-items: end
+      column-gap: clamp(var(--space-s), 4vmin, var(--space-l))
+      display: grid
+      grid-template: 'pawn rank' auto 'pawn total' auto / auto 1fr
+      padding-block: var(--space-s)
 
-    .paused,
-    .waiting
-      @include typography.title
+      .pawn
+        filter: drop-shadow(0 4px 0 var(--chipboard-dark))
+        font-size: clamp(4.5rem, 20vmin, 9rem)
+        grid-area: pawn
 
-      color: var(--ink-muted)
-      text-wrap: balance
+      .your-rank
+        @include typography.monument
+        @include typography.numeric
 
-    .how-it-scores,
-    .seat-kept
-      @include typography.body
+        font-size: clamp(3.5rem, 18vmin, 8rem)
+        grid-area: rank
 
-      color: var(--ink-muted)
-      max-width: 34ch
-      text-wrap: balance
+      .your-total
+        @include typography.title
+
+        color: var(--ink-muted)
+        grid-area: total
+
+        .value
+          @include typography.numeric
+
+          color: var(--ink)
+
+    .scoreboard .pawn
+      font-size: 1.1em
 
   // The buzzer's screen is framed: the page gives it the box under the chrome
   // and nothing in it may grow that box. Upright the question card sits over

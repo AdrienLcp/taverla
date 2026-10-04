@@ -219,6 +219,21 @@ one part.
   side up and turns coral on the flip, a player's time is printed on a card,
   and a false start is a die-cut piece in the danger ink.
 
+- `[Game]` **The rest of a player's screens are pieces of the box too.** The
+  round's chrome line replaces the old header and scoreline on every phase —
+  the table's code and the seat's name in the lobby and on the final board —
+  so it never moves between screens. The lobby is the chosen game's lid,
+  banded in its spine colour (the recess it will sit in while the table
+  decides), the invitation, and the table's seats with a socket per pawn still
+  in the box. The typed round prints its question on the paper card with the
+  sand along its top. The reveal turns that card over to print the answer, a
+  cover mounted on it; what the round paid is struck on a green token, or an
+  empty socket for nothing, beside the player's place; and the room's board is
+  a chip per player, filled for a right answer. The final board stands the
+  player's own pawn beside their place. Waits — the host away, a seat that
+  arrived mid-round, between two rounds — are a paper card lying face up, the
+  nickname form sits on the box's lid, and a text field is a paper slot.
+
 - `[Server]` **356 more French questions, 96 of them science**, from Vikidia rows
   the wiki wrote with three candidates. Each takes a fourth written by hand
   against its own row, in `vikidia-fourth-decoys.json`, and ten keep their

@@ -5,7 +5,7 @@ import type { HostRoomView } from '@taverla/protocol/room'
 
 import { isShelvedGame } from '@taverla/core/room/shelved-game'
 
-import { Pawn } from '@/presentation/components/pawn'
+import { EmptySockets } from '@/presentation/components/empty-sockets'
 import { RoomInvitation } from '@/presentation/components/room-invitation'
 import { Scoreboard } from '@/presentation/components/scoreboard'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
@@ -21,8 +21,6 @@ import type { StageControls } from './room-stage'
 import { SlatePreparation } from './slate-preparation'
 
 /** As many pawns as a box holds: the roster shows an empty socket for each one still in it. */
-const PAWNS_IN_THE_BOX = 8
-
 type LobbyStageProps = {
   /** `null` on the wall, which shows who has arrived and what they will play. */
   controls: StageControls | null
@@ -157,25 +155,5 @@ const GamePitch: React.FC<{ isUnattended: boolean; view: HostRoomView }> = ({
         )}
       </p>
     </>
-  )
-}
-
-const EmptySockets: React.FC<{ seated: number }> = ({ seated }) => {
-  const empty = Math.max(0, PAWNS_IN_THE_BOX - seated)
-
-  if (empty === 0) {
-    return null
-  }
-
-  return (
-    <ul aria-hidden='true' className='sockets'>
-      {Array.from({ length: empty }, (_, offset) => seated + offset).map(
-        (seat) => (
-          <li className='socket' key={seat}>
-            <Pawn seat={seat} />
-          </li>
-        )
-      )}
-    </ul>
   )
 }

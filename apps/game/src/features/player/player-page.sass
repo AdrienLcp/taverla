@@ -1,3 +1,4 @@
+@use '../../presentation/styles/box-lid'
 @use '../../presentation/styles/framed'
 @use '../../presentation/styles/layout'
 @use '../../presentation/styles/typography'
@@ -8,126 +9,61 @@
 
     justify-content: center
 
-    > header
-      align-items: baseline
+    .waiting
+      @include typography.title
+
+      color: var(--ink-muted)
+      margin-block: auto
+      text-align: center
+
+    // In game the column widens: a phone is the common case but not the only
+    // one, and on a laptop a 620px ribbon down the middle of the screen wastes
+    // the room every phase wants.
+    &.playing
+      gap: clamp(var(--space-s), 2.4vmin, var(--space-l))
+      justify-content: flex-start
+      max-width: 900px
+
+  // The door into the table, printed on the box's lid like the front door:
+  // the question, the field and the press on one paper card.
+  .player-page.nickname-form
+    align-items: center
+
+    .lid
+      @include box-lid.box-lid
+
       display: flex
-      flex-wrap: wrap
-      gap: var(--space-s)
-      justify-content: space-between
+      flex-direction: column
+      gap: var(--space-l)
+      max-width: 34rem
+      padding: clamp(36px, 8vmin, 64px) clamp(32px, 7vmin, 60px)
+      width: 100%
+
+    header
+      display: flex
+      flex-direction: column
+      gap: var(--space-xs)
 
       h1
         @include typography.billboard
 
-        flex-basis: 100%
+        font-size: clamp(2rem, 7vmin, 3.5rem)
+        text-wrap: balance
 
       // Under the question, not above it: the code confirms which room the
-      // player landed in, it does not introduce the heading.
-      //
-      // Selectable against the reset, for the reason the console's own code is:
-      // this line is on the player's screen at every phase, so it is the way in
-      // that a phone can pass to the laptop beside it — and a code you cannot
-      // lift is a code you have to retype.
+      // player landed in, it does not introduce the heading. Selectable
+      // against the reset, because it is the way in a phone can pass to the
+      // laptop beside it.
       .room
         @include typography.label
 
         color: var(--ink-muted)
-        flex-basis: 100%
         user-select: text
 
     .react-aria-Form
       display: flex
       flex-direction: column
-      gap: var(--space-l)
-
-    // Anyone can play from a laptop — the code is on the host screen precisely
-    // so it can be typed rather than scanned. Left-aligned in a 620px ribbon
-    // this read as a phone screenshot dropped in the middle of the display, so
-    // on a wide one it becomes what the rest of the product already is: a title
-    // card, centred, sized to the screen it is on.
-    @include layout.wide
-      &:not(.playing)
-        align-items: center
-        max-width: 760px
-        text-align: center
-
-        > header h1
-          font-size: clamp(2.75rem, 7vmin, 5rem)
-
-        .react-aria-Form
-          width: 100%
-
-    .waiting
-      color: var(--ink-muted)
-      text-align: center
-
-    // In game the column widens: a phone is the common case but not the only
-    // one, and on a laptop a 620px ribbon down the middle of the screen wastes
-    // the room the buzzer wants.
-    &.playing
-      gap: var(--space-xl)
-      justify-content: space-between
-      max-width: 900px
-
-      > header
-        min-height: 44px
-        padding-inline-end: var(--menu-inset)
-
-        // Two ends of one line, the way the room's own screen carries the same
-        // pair: the code says which table this is, the number says how far into
-        // the evening it is. The code gives up the whole line it claims under a
-        // heading, because in a round there is no heading above it.
-        .room
-          flex-basis: auto
-
-        .round-index
-          @include typography.label
-
-          color: var(--ink-muted)
-
-      // The clock belongs to the scoreline it hangs under, not to the round
-      // below it — the page's own gap would leave it adrift between the two.
-      > .round-progress
-        margin-top: calc(var(--space-s) - var(--space-xl))
-
-    // The player's own score, ruled off from the field. It is glanced at
-    // between rounds and never read carefully, so it is three lines and no box.
-    .scoreline
-      align-items: baseline
-      border-bottom: 3px solid var(--ink)
-      display: flex
-      flex-wrap: wrap
-      gap: var(--space-s)
-      justify-content: space-between
-      padding-bottom: var(--space-xs)
-
-      .you
-        @include typography.title
-
-      .score
-        align-items: baseline
-        display: flex
-        gap: var(--space-2xs)
-
-        .value
-          @include typography.numeric
-          @include typography.trimmed-numeral
-
-          font-size: 2.5rem
-          font-family: var(--font-display)
-          font-stretch: 85%
-          font-weight: 900
-          line-height: 1
-
-        .unit
-          @include typography.label
-
-          color: var(--ink-muted)
-
-      .others
-        @include typography.caption
-
-        color: var(--ink-muted)
-        flex-basis: 100%
+      gap: var(--space-m)
 
   .player-page.framed
     @include framed.page

@@ -7,6 +7,7 @@ import {
   hasAnybodyScored
 } from '@taverla/core/scoring/scoreboard'
 
+import { Pawn } from '@/presentation/components/pawn'
 import { VisuallyHidden } from '@/presentation/components/visually-hidden'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
@@ -29,8 +30,9 @@ type RoundBoardProps = {
  * centimetres can hold, and it exists because the console is often somebody
  * else's.
  *
- * Your own row is stamped rather than repeated: the receipt above is the
- * moment, this is the room, and the two say the same number once each.
+ * Each row is a chip, filled where the round was answered right and an empty
+ * outline where it was not; your own carries a keyline rather than a repeat of
+ * the payout above it.
  */
 export const RoundBoard: React.FC<RoundBoardProps> = ({ round, view }) => {
   const translate = useTranslate()
@@ -68,7 +70,11 @@ export const RoundBoard: React.FC<RoundBoardProps> = ({ round, view }) => {
           <li
             className={[
               player.id === view.youId && 'you',
-              answer?.isCorrect === true && 'right'
+              answer === undefined
+                ? 'silent'
+                : answer.isCorrect
+                  ? 'right'
+                  : 'wrong'
             ]
               .filter(Boolean)
               .join(' ')}
@@ -76,7 +82,12 @@ export const RoundBoard: React.FC<RoundBoardProps> = ({ round, view }) => {
           >
             {isRanked && <span className='rank'>{rank}</span>}
             <span className='nickname'>
-              {player.nickname}
+              <Pawn
+                seat={view.players.findIndex(
+                  (seated) => seated.id === player.id
+                )}
+              />
+              <span className='name'>{player.nickname}</span>
               {player.id === view.youId && (
                 <VisuallyHidden elementType='span'>
                   {` (${translate('player.you')})`}

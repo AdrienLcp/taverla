@@ -417,21 +417,23 @@ const revealedView = (content: object) => {
   }
 }
 
+const QUIZ_WITH_A_NOTE = {
+  choices: LONGEST_PROMPT.choices,
+  kind: 'quiz',
+  prompt: {
+    category: LONGEST_PROMPT.category,
+    id: LONGEST_PROMPT.id,
+    prompt: LONGEST_PROMPT.prompt
+  },
+  revealedQuestion: {
+    answer: 'France',
+    note: 'Offerte par la France pour le centenaire de la Déclaration d’indépendance, elle fut inaugurée à New York en 1886, dix ans après la date prévue.'
+  }
+}
+
 const REVEALS = [
   {
-    content: {
-      choices: LONGEST_PROMPT.choices,
-      kind: 'quiz',
-      prompt: {
-        category: LONGEST_PROMPT.category,
-        id: LONGEST_PROMPT.id,
-        prompt: LONGEST_PROMPT.prompt
-      },
-      revealedQuestion: {
-        answer: 'France',
-        note: 'Offerte par la France pour le centenaire de la Déclaration d’indépendance, elle fut inaugurée à New York en 1886, dix ans après la date prévue.'
-      }
-    },
+    content: QUIZ_WITH_A_NOTE,
     name: 'quiz with a note'
   },
   {
@@ -634,8 +636,10 @@ const finishedView = (scores: number[]) => {
   }
 }
 
+const LONG_NAME_WINNING = [30, 3, 6, 9, 12, 15, 18, 21]
+
 const FINALS = [
-  { name: 'a long name winning', scores: [30, 3, 6, 9, 12, 15, 18, 21] },
+  { name: 'a long name winning', scores: LONG_NAME_WINNING },
   { name: 'a three-way tie', scores: [21, 21, 6, 9, 12, 15, 21, 0] }
 ]
 
@@ -1062,3 +1066,123 @@ for (const screen of PLAYER_BUZZER_SCREENS) {
     expect(faults).toEqual([])
   })
 }
+
+const typedChoosing = choosingView(LONGEST_PROMPT)
+
+const fullTableReveal = {
+  ...revealedView(QUIZ_WITH_A_NOTE),
+  youId: 'p1',
+  yourVerdict: null
+}
+
+/**
+ * The player's screens outside the framed rounds may scroll down — a lobby's
+ * invitation and table are taller than a phone — but never sideways, and no
+ * piece is drawn narrower than its own contents.
+ */
+const PLAYER_PAGE_SCREENS = [
+  {
+    name: 'the lobby',
+    ready: '.up-next',
+    view: { ...typedChoosing, phase: 'lobby', round: null }
+  },
+  {
+    name: 'the typed round under the longest question',
+    ready: '.typed-round .asked-question',
+    view: {
+      ...typedChoosing,
+      settings: { ...typedChoosing.settings, mode: { kind: 'typed' } }
+    }
+  },
+  {
+    name: 'the reveal of a full table',
+    ready: '.round-board',
+    view: fullTableReveal
+  },
+  {
+    name: 'the final board of a full table',
+    ready: '.your-placing',
+    view: { ...finishedView(LONG_NAME_WINNING), youId: 'p1', yourVerdict: null }
+  }
+]
+
+const measurePage = (): { page: number; spills: string[] } => {
+  const root = document.scrollingElement ?? document.documentElement
+  const pieces = [
+    ...document.querySelectorAll<HTMLElement>(
+      '.round-chrome, .up-next, .room-invitation, .seats li, .asked-question, .answer-form, .answer-card, .your-round, .round-board li, .round-board .nickname, .your-placing, .scoreboard li, .scoreboard .nickname'
+    )
+  ]
+
+  return {
+    page: root.scrollWidth - innerWidth,
+    spills: pieces
+      .filter((piece) => {
+        const box = piece.getBoundingClientRect()
+
+        return (
+          box.left < -0.5 ||
+          box.right > innerWidth + 0.5 ||
+          piece.scrollWidth > piece.clientWidth + 1
+        )
+      })
+      .map(
+        (piece) =>
+          `${piece.className} ${piece.scrollWidth}/${piece.clientWidth}`
+      )
+  }
+}
+
+for (const screen of PLAYER_PAGE_SCREENS) {
+  test(`[layout] player, ${screen.name}: never runs off the side`, async ({
+    page
+  }) => {
+    await serveRoom({ page, view: screen.view })
+    await page.setViewportSize({ height: 844, width: 390 })
+    await page.goto(`/play/${ROOM_CODE}`)
+    await expect(page.locator(screen.ready).first()).toBeVisible()
+
+    const faults: string[] = []
+
+    for (const [width, height] of VIEWPORTS) {
+      await page.setViewportSize({ height, width })
+      await page.evaluate(() => document.fonts.ready.then(() => {}))
+
+      const overflow = await page.evaluate(measurePage)
+
+      if (overflow.page > 0 || overflow.spills.length > 0) {
+        faults.push(`${width}×${height} ${JSON.stringify(overflow)}`)
+      }
+    }
+
+    expect(faults).toEqual([])
+  })
+}
+
+test('[layout] player, the reveal of a full table: never scrolls above the split', async ({
+  page
+}) => {
+  await serveRoom({ page, view: fullTableReveal })
+  await page.setViewportSize({ height: 900, width: 1440 })
+  await page.goto(`/play/${ROOM_CODE}`)
+  await expect(page.locator('.round-board')).toBeVisible()
+
+  const faults: string[] = []
+
+  for (const [width, height] of WIDE_VIEWPORTS) {
+    await page.setViewportSize({ height, width })
+    await page.evaluate(() => document.fonts.ready.then(() => {}))
+
+    const overflow = await page.evaluate(() => {
+      const root = document.scrollingElement ?? document.documentElement
+
+      return root.scrollHeight - innerHeight
+    })
+
+    if (overflow > 0) {
+      faults.push(`${width}×${height} ${overflow}px`)
+    }
+  }
+
+  expect(faults).toEqual([])
+})

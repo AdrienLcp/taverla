@@ -17,7 +17,8 @@ import {
 } from '@taverla/core/round/buzz-eligibility'
 import {
   buildScoreboard,
-  hasAnybodyScored
+  hasAnybodyScored,
+  standingOf
 } from '@taverla/core/scoring/scoreboard'
 import {
   type ClockEstimate,
@@ -28,6 +29,7 @@ import { type PlayerAnswer, TypedAnswer } from '@/features/player/answer-forms'
 import { ChoosingRound } from '@/features/player/choosing-round'
 import { ReflexBuzzer } from '@/features/player/reflex-buzzer'
 import { RoundBoard } from '@/features/player/round-board'
+import { RoundClock } from '@/features/player/round-clock'
 import {
   SlateOnTheWall,
   SlateSheet,
@@ -45,11 +47,13 @@ import { nowMs } from '@/infrastructure/clock'
 import { useRoomCodeParam } from '@/infrastructure/router/navigation'
 import { AskedQuestion } from '@/presentation/components/asked-question'
 import { Countdown } from '@/presentation/components/countdown'
+import { EmptySockets } from '@/presentation/components/empty-sockets'
 import { FloorClock } from '@/presentation/components/floor-clock'
 import { Pawn } from '@/presentation/components/pawn'
 import { ReactionBoard } from '@/presentation/components/reaction-board'
 import { RoomInvitation } from '@/presentation/components/room-invitation'
 import { Scoreboard } from '@/presentation/components/scoreboard'
+import { VisuallyHidden } from '@/presentation/components/visually-hidden'
 import {
   floorOutcome,
   reflexOutcome,
@@ -106,8 +110,8 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
     ROUND_IS_RUNNING.has(view.phase)
   ) {
     return (
-      <section className='player-round centred'>
-        <p className='paused'>{translate('buzz.blocked.host_away')}</p>
+      <section className='player-round notice'>
+        <NoticeCard title={translate('buzz.blocked.host_away')} />
       </section>
     )
   }
@@ -125,17 +129,12 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
   // thing the player is waiting on.
   if (view.phase === 'lobby') {
     return (
-      <section className='player-round centred lobby'>
-        {/* Grouped here for the reason the reveal below groups its own half,
-            and for one more: above the split the pitch shares a column with the
-            roster, and three loose paragraphs would be three grid items. */}
-        <div className='pitch'>
-          {view.isHostConnected ? (
-            <UpNext view={view} />
-          ) : (
-            <p className='paused'>{translate('buzz.blocked.host_away')}</p>
-          )}
-        </div>
+      <section className='player-round lobby'>
+        {view.isHostConnected ? (
+          <UpNext view={view} />
+        ) : (
+          <NoticeCard title={translate('buzz.blocked.host_away')} />
+        )}
         {/*
           The way in, on the screen of somebody who is already through it. The
           room's code is on the console — which is allowed to be a phone in one
@@ -145,18 +144,26 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
         */}
         {roomCode !== null && <RoomInvitation roomCode={roomCode} />}
 
-        <Scoreboard
-          label={translate('player.table')}
-          players={view.players}
-          youId={view.youId}
-        />
+        {/* The seats are a grid counted against the box around them, which a
+            container query can only read from an ancestor. */}
+        <div className='table'>
+          <div className='seats'>
+            <Scoreboard
+              hasPawns
+              label={translate('player.table')}
+              players={view.players}
+              youId={view.youId}
+            />
+            <EmptySockets seated={view.players.length} />
+          </div>
+        </div>
       </section>
     )
   }
 
   if (view.phase === 'countdown' && round?.startsAt != null) {
     return (
-      <section className='player-round centred'>
+      <section className='player-round notice'>
         <Countdown clock={clock} target={round.startsAt} />
       </section>
     )
@@ -164,7 +171,7 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
 
   if (view.phase === 'revealed' && round != null) {
     return (
-      <section className='player-round centred revealed'>
+      <section className='player-round revealed'>
         {/* Grouped here rather than placed in the stylesheet, because the wide
             screen lays the two halves side by side and a grid item spanning
             rows it never declared silently resolves back to the first one. */}
@@ -173,15 +180,23 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
           <YourRound round={round} view={view} />
         </div>
         <RoundBoard round={round} view={view} />
+        <div className='hold'>
+          <RoundClock clock={clock} view={view} />
+        </div>
       </section>
     )
   }
 
   if (view.phase === 'finished') {
     return (
-      <section className='player-round centred finished'>
+      <section className='player-round finished'>
         <YourPlacing view={view} />
-        <Scoreboard isResult players={view.players} youId={view.youId} />
+        <Scoreboard
+          hasPawns
+          isResult
+          players={view.players}
+          youId={view.youId}
+        />
       </section>
     )
   }
@@ -192,9 +207,11 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
   // frame it could send — a field that cannot be submitted is worse than a wait.
   if (round?.joinedAfterStart === true) {
     return (
-      <section className='player-round centred'>
-        <p className='next-round'>{translate('player.midRound.title')}</p>
-        <p className='seat-kept'>{translate('player.midRound.detail')}</p>
+      <section className='player-round notice'>
+        <NoticeCard
+          detail={translate('player.midRound.detail')}
+          title={translate('player.midRound.title')}
+        />
       </section>
     )
   }
@@ -255,8 +272,11 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
 
     if (view.settings.mode.kind === 'typed') {
       return (
-        <section className='player-round'>
-          <AskedQuestion prompt={prompt} />
+        <section className='player-round typed-round'>
+          <div className='round-card'>
+            <AskedQuestion prompt={prompt} />
+            <RoundClock clock={clock} view={view} />
+          </div>
           <TypedAnswer
             // The player is never sent the track, so the settings are the
             // only place it can read what the round is asking for.
@@ -278,8 +298,8 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
   // shown a dead buzzer, which is a promise the round will not keep.
   if (view.settings.mode.kind !== 'buzzer') {
     return (
-      <section className='player-round centred'>
-        <p className='waiting'>{translate('buzz.blocked.round_not_running')}</p>
+      <section className='player-round notice'>
+        <NoticeCard title={translate('buzz.blocked.round_not_running')} />
       </section>
     )
   }
@@ -299,13 +319,21 @@ const UpNext: React.FC<{ view: PlayerRoomView }> = ({ view }) => {
   const game = view.settings.game
 
   if (game === null || !isShelvedGame(game.kind)) {
-    return <p className='waiting'>{translate('player.choosingGame')}</p>
+    return (
+      <div className='up-next undecided'>
+        <p className='game-name'>{translate('player.choosingGame')}</p>
+      </div>
+    )
   }
 
   return (
-    <>
-      <p className='framing'>{translate('player.upNext')}</p>
-      <p className='up-next'>{translate(gameNameKey(game.kind))}</p>
+    <div className='up-next' data-game={game.kind}>
+      <p className='game-name'>
+        <VisuallyHidden elementType='span'>
+          {`${translate('player.upNext')} `}
+        </VisuallyHidden>
+        {translate(gameNameKey(game.kind))}
+      </p>
       <p className='how-it-scores'>
         {translate(
           scoringKey({
@@ -316,9 +344,23 @@ const UpNext: React.FC<{ view: PlayerRoomView }> = ({ view }) => {
           })
         )}
       </p>
-    </>
+    </div>
   )
 }
+
+/**
+ * A wait printed on a paper card lying face up on the board: the one thing
+ * this screen has to say while nothing on it can be pressed.
+ */
+const NoticeCard: React.FC<{ detail?: string; title: string }> = ({
+  detail,
+  title
+}) => (
+  <div className='notice-card'>
+    <p className='notice-title'>{title}</p>
+    {detail !== undefined && <p className='notice-detail'>{detail}</p>}
+  </div>
+)
 
 /**
  * What the round did to this player — the moment, above the board that holds
@@ -342,23 +384,33 @@ const YourRound: React.FC<{
 }> = ({ round, view }) => {
   const translate = useTranslate()
   const award = round.awards.find((entry) => entry.playerId === view.youId)
+  const points = award?.points ?? 0
+  const speedBonus = award?.speedBonus ?? 0
+  const standing = standingOf({ players: view.players, youId: view.youId })
 
   return (
-    <div className='your-round'>
-      {award != null && award.points > 0 ? (
-        <>
-          <p className='you-scored'>
-            {translate('round.scored', { points: award.points })}
+    <div className={`your-round ${points > 0 ? 'scored' : 'missed'}`}>
+      <p className='payout'>
+        {points > 0 ? translate('round.scored', { points }) : '0'}
+      </p>
+      <div className='payout-words'>
+        {points === 0 && (
+          <p className='you-missed'>{translate('round.missed')}</p>
+        )}
+        {speedBonus > 0 && (
+          <p className='speed-bonus'>
+            {translate('round.speedBonus', { points: speedBonus })}
           </p>
-          {award.speedBonus > 0 && (
-            <p className='speed-bonus'>
-              {translate('round.speedBonus', { points: award.speedBonus })}
-            </p>
-          )}
-        </>
-      ) : (
-        <p className='you-missed'>{translate('round.missed')}</p>
-      )}
+        )}
+        {standing !== null && (
+          <p className='standing'>
+            {translate('player.standing.ofRoom', {
+              count: standing.roomSize,
+              rank: standing.rank
+            })}
+          </p>
+        )}
+      </div>
     </div>
   )
 }
@@ -376,6 +428,7 @@ const YourPlacing: React.FC<{ view: PlayerRoomView }> = ({ view }) => {
     return null
   }
 
+  const seat = view.players.findIndex((player) => player.id === view.youId)
   const yours = buildScoreboard(view.players).find(
     (entry) => entry.player.id === view.youId
   )
@@ -385,12 +438,19 @@ const YourPlacing: React.FC<{ view: PlayerRoomView }> = ({ view }) => {
   }
 
   return (
-    <>
-      <p className='framing'>{translate('player.final.placing')}</p>
+    <div className='your-placing'>
+      <Pawn seat={Math.max(0, seat)} />
       <p className='your-rank'>
+        <VisuallyHidden elementType='span'>
+          {`${translate('player.final.placing')} `}
+        </VisuallyHidden>
         {translate('player.final.rank', { rank: yours.rank })}
       </p>
-    </>
+      <p className='your-total'>
+        <span className='value'>{yours.player.score}</span>{' '}
+        {translate('player.points', { points: yours.player.score })}
+      </p>
+    </div>
   )
 }
 
@@ -499,9 +559,11 @@ const Revealed: React.FC<{
     return <ReactionBoard players={view.players} round={round} />
   }
 
+  // The card the round was played on, turned over: the answer printed on its
+  // back, and a track's cover mounted on it beside the words.
   if (track !== null) {
     return (
-      <>
+      <div className='answer-card' data-game='blindtest'>
         {track.coverUrl !== null && (
           <img
             alt=''
@@ -511,28 +573,36 @@ const Revealed: React.FC<{
             width={250}
           />
         )}
-        <p className='framing'>{translate('blindtest.reveal.title')}</p>
-        <p
-          className='revealed-title'
-          style={answerFitting(whatTheRoomNames(track))}
-        >
-          {whatTheRoomNames(track)}
-        </p>
-        <p className='revealed-artist'>{track.artist}</p>
-        {cueOf(track) !== null && <p className='note'>{cueOf(track)}</p>}
-      </>
+        <div className='identity'>
+          <p
+            className='revealed-title'
+            style={answerFitting(whatTheRoomNames(track))}
+          >
+            <VisuallyHidden elementType='span'>
+              {`${translate('blindtest.reveal.title')} `}
+            </VisuallyHidden>
+            {whatTheRoomNames(track)}
+          </p>
+          <p className='revealed-artist'>{track.artist}</p>
+          {cueOf(track) !== null && <p className='note'>{cueOf(track)}</p>}
+        </div>
+      </div>
     )
   }
 
   if (question !== null) {
     return (
-      <>
-        <p className='framing'>{translate('quiz.reveal.title')}</p>
-        <p className='revealed-title' style={answerFitting(question.answer)}>
-          {question.answer}
-        </p>
-        {question.note !== null && <p className='note'>{question.note}</p>}
-      </>
+      <div className='answer-card' data-game='quiz'>
+        <div className='identity'>
+          <p className='revealed-title' style={answerFitting(question.answer)}>
+            <VisuallyHidden elementType='span'>
+              {`${translate('quiz.reveal.title')} `}
+            </VisuallyHidden>
+            {question.answer}
+          </p>
+          {question.note !== null && <p className='note'>{question.note}</p>}
+        </div>
+      </div>
     )
   }
 
