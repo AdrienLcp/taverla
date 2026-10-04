@@ -8,16 +8,6 @@
     gap: var(--space-m)
     justify-content: center
 
-    // What the form does not otherwise say, read before the answering rather
-    // than after it. Same step down as the status line under it, because the
-    // two are the same voice at opposite ends of one screen.
-    .hint
-      @include typography.caption
-
-      color: var(--ink-muted)
-      text-align: center
-      text-wrap: balance
-
     .status
       @include typography.caption
 
@@ -25,61 +15,6 @@
       min-height: 2.5em
       text-align: center
       text-wrap: balance
-
-  // A modifier of the section above and nested as one, which is also what buys
-  // the class the box below needs — see the `.medium` there.
-  .answer-form.choices
-    ul
-      display: flex
-      flex-direction: column
-      gap: var(--space-s)
-      list-style: none
-
-    // Sized by the press rather than by the words: four of these are the whole
-    // screen during a round, and they are hit while looking at the console.
-    // `touch-action` is the buzzer's, for the same reason: it keeps WebKit from
-    // waiting on a second tap, which is the gesture that leaves a stray
-    // `pointerenter` behind.
-    // A candidate is content, not a verb: `_control.sass` refuses a line break
-    // on every control because a label is two or three words somebody chose,
-    // and none of these was chosen — a track title is as long as it is. The
-    // verdict panel is the other control allowed to wrap, for the same reason.
-    //
-    // Wrapping rather than ellipsising, which is what the scoreboard does one
-    // screen away: a row is a fixed height and the name is only being read,
-    // where these four are being *told apart* and the tail is often what does
-    // it. `min-height` and vertical padding are what let the box grow.
-    //
-    // **`.medium` is load-bearing, and so is the nesting above.** `box` is
-    // included *inside* `&.outlined`, so a control's height and padding land on
-    // `.button.outlined.medium` — three classes. A two-class selector here
-    // loses to it and nothing says so: these drew at the ordinary 52px with no
-    // block padding at all, and a candidate long enough to wrap put its second
-    // line against the edge. Four classes is what it takes to win, and any
-    // other component overriding a control's box needs the same count.
-    .button.medium
-      align-items: flex-start
-      display: flex
-      flex-direction: column
-      gap: var(--space-2xs)
-      min-height: 72px
-      overflow-wrap: anywhere
-      padding-block: var(--space-s)
-      text-align: left
-      touch-action: manipulation
-      white-space: normal
-      width: 100%
-
-    .title
-      @include typography.title
-
-      text-wrap: pretty
-
-    .subtitle
-      @include typography.caption
-
-      color: var(--ink-muted)
-      text-wrap: pretty
 
   .typed
     .react-aria-Form

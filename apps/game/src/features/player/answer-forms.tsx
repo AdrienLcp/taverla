@@ -14,6 +14,7 @@ import {
 } from '@taverla/core/scoring/verdict'
 
 import { bankedHalves } from '@/helpers/round-content'
+import { AnswerTile } from '@/presentation/components/answer-tile'
 import { Button } from '@/presentation/components/button'
 import { TextField } from '@/presentation/components/text-field'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
@@ -78,10 +79,23 @@ type ChoiceAnswerProps = AnswerFormProps & {
 }
 
 /**
+ * How long the longest candidate is, which is what the four tiles are sized
+ * by — together, so no tile's words are a different size from its neighbour's —
+ * and what the question beside them yields to.
+ */
+export const longestChoiceLength = (round: RoundView): number =>
+  Math.max(
+    1,
+    ...candidatesIn(round).map(
+      (candidate) => candidate.title.length + (candidate.subtitle?.length ?? 0)
+    )
+  )
+
+/**
  * One pick and the round waits for the others — it takes no floor the way a
  * buzz does, and the music keeps running under everyone.
  *
- * Mounted under `key={round.id}`, so `hasSent` is about this round and nothing
+ * Mounted under `key={round.id}`, so the pick is about this round and nothing
  * else.
  */
 export const ChoiceAnswer: React.FC<ChoiceAnswerProps> = ({
@@ -90,53 +104,50 @@ export const ChoiceAnswer: React.FC<ChoiceAnswerProps> = ({
   youId
 }) => {
   const translate = useTranslate()
-  const [hasSent, setHasSent] = useState(false)
+  const [chosenIndex, setChosenIndex] = useState<number | null>(null)
 
   if (round === null) {
     return null
   }
 
-  // The server's answer is what survives a reload; the local half is only there
+  // The server's answer is what survives a reload; the local pick is there
   // because the round trip is 20–80 ms and a grid that stays live that long
   // takes a second press the server then refuses in silence.
   const hasAnswered =
-    hasSent || round.answers.some((answer) => answer.playerId === youId)
+    chosenIndex !== null ||
+    round.answers.some((answer) => answer.playerId === youId)
+  const candidates = candidatesIn(round)
 
   return (
     <section className='answer-form choices'>
-      {/*
-        The typed field has said *as many goes as you like* since it existed;
-        the grid beside it said nothing at all, and it is the harder of the two
-        to guess — four buttons look like a thing you can try. It is also the
-        mode the quiz now opens on, so it is the first form most players meet.
-
-        Above the grid rather than under it: it changes which button a press
-        commits to, so it is read before the choosing and not after.
-      */}
-      <p className='hint'>{translate('round.answer.oneShot')}</p>
       <ul>
-        {candidatesIn(round).map((candidate, index) => (
+        {candidates.map((candidate, index) => (
           <li key={candidate.key}>
-            <Button
+            <AnswerTile
+              index={index}
+              isChosen={chosenIndex === index}
               isDisabled={hasAnswered}
               onPress={() => {
-                setHasSent(onAnswer({ choiceIndex: index, kind: 'choice' }))
+                if (onAnswer({ choiceIndex: index, kind: 'choice' })) {
+                  setChosenIndex(index)
+                }
               }}
-              variant='outlined'
-            >
-              <span className='title'>{candidate.title}</span>
-              {candidate.subtitle !== null && (
-                <span className='subtitle'>{candidate.subtitle}</span>
-              )}
-            </Button>
+              subtitle={candidate.subtitle}
+              title={candidate.title}
+            />
           </li>
         ))}
       </ul>
-      <AnswerStatus
-        doneKey='round.answer.locked'
-        hasAnswered={hasAnswered}
-        round={round}
-      />
+      {/*
+        One line for both moments: before the pick it says the pick is final,
+        which changes which tile a press commits to; after it, that the room is
+        waiting. A second line is height the four tiles cannot spare.
+      */}
+      <p className='status' role='status'>
+        {translate(
+          hasAnswered ? 'round.answer.locked' : 'round.answer.oneShot'
+        )}
+      </p>
     </section>
   )
 }

@@ -141,8 +141,8 @@
       // in `playing`, so its pair is the one to reverse, and the derived three
       // are mixed again here because the root's arrive already resolved.
       &.closed
-        --field: var(--ink-playing)
-        --ink: var(--field-playing)
+        --field: var(--board-ink)
+        --ink: var(--board)
         --ink-muted: color-mix(in oklab, var(--ink) 85%, var(--field))
         --rule: color-mix(in oklab, var(--ink) 32%, var(--field))
         --edge: color-mix(in oklab, var(--ink) 60%, var(--field))

@@ -1,0 +1,67 @@
+@use '../styles/focus'
+@use '../styles/piece'
+
+@layer components
+  .answer-tile
+    @include focus.ring
+    @include piece.piece
+    @include piece.pressable
+
+    align-items: center
+    background: var(--tile)
+    color: var(--tile-ink)
+    cursor: pointer
+    display: flex
+    font: inherit
+    font-weight: 700
+    height: 100%
+    hyphens: auto
+    line-height: 1.18
+    overflow-wrap: anywhere
+    padding: 0.35em 0.7em
+    text-align: start
+    // A press has to land the moment the thumb does; this keeps WebKit from
+    // holding it back to see whether a second tap makes it a zoom.
+    touch-action: manipulation
+    width: 100%
+
+    .face
+      display: block
+      width: 100%
+
+    // Floated rather than given a column: it costs the width of the first
+    // line only, and a tile's last line is where a long candidate runs out.
+    .tile-mark
+      color: var(--tile-mark)
+      float: inline-start
+      height: 1.1em
+      margin-block-start: 0.11em
+      margin-inline-end: 0.45em
+      width: 1.1em
+
+    .title,
+    .subtitle
+      display: block
+      text-wrap: pretty
+
+    .subtitle
+      font-weight: 400
+      margin-block-start: 0.15em
+
+    // Spent rather than dead: the tile the player took stays in its ink and
+    // the other three go flat into the board, so the screen keeps saying what
+    // was chosen while it waits on everyone else.
+    &[data-disabled]
+      box-shadow: none
+      cursor: default
+      transform: none
+
+    &[data-disabled]:not([data-chosen])
+      background: var(--socket)
+      color: var(--board-muted)
+
+      .tile-mark
+        color: var(--socket-line)
+
+    &[data-chosen]
+      box-shadow: 0 0 0 3px var(--board-ink), 0 3px 0 3px var(--chipboard)

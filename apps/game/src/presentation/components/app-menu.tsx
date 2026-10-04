@@ -57,6 +57,7 @@ import {
 } from './connection-status'
 import { Disclosure } from './disclosure'
 import { Link } from './link'
+import { MenuIcon } from './menu-icon'
 import { RoomInvitation } from './room-invitation'
 import { SegmentedControl } from './segmented-control'
 import { Slider } from './slider'
@@ -442,6 +443,7 @@ export const AppMenu: React.FC = () => {
       >
         <ReactAriaButton className='trigger' ref={trigger}>
           {connection !== null && <ConnectionDot status={connection.status} />}
+          <MenuIcon />
           <span className='trigger-label'>{translate('menu.label')}</span>
         </ReactAriaButton>
 

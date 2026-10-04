@@ -36,9 +36,15 @@ out, so the landing is awaited between the two clicks.
 Playwright is the slowest tool available. Before adding a fourth spec, ask what
 it covers that a socket test cannot; the answer is usually "nothing".
 
-## One spec that is not a journey
+## Two specs that are not journeys
 
-`strip-rows.spec.ts` plays nothing. It opens one room, walks every game in both
+`choice-fits.spec.ts` plays nothing: it answers the player's socket in
+the page (`page.routeWebSocket`) with a snapshot built in the spec, so the
+question on screen is the bank row under test, and measures the choice screen
+at sixteen viewports — no scroll, every tile inside the viewport, nothing under
+the 14px floor. A geometry claim, for the same reason as the one below.
+
+`strip-rows.spec.ts` plays nothing either. It opens one room, walks every game in both
 locales, and asserts that no choice strip ever holds rows of two different
 lengths — the defect where a wrap leaves a short row, `flex: 1` stretches it,
 and an unselected stamp ends up wearing the shape of a selected one.

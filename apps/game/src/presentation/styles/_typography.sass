@@ -1,33 +1,37 @@
 // Pure module: mixins only, no top-level CSS. Safe to @use from any component.
 //
-// One face, two widths. Width 125 is the title-card lettering and belongs to
-// anything the room reads from across it; width 100 is for the screen in
-// someone's hand. There is no third register — a title card has one voice.
+// Two faces. Bricolage Grotesque, condensed, is what is printed on the box —
+// anything the room reads from across it, and every figure. Atkinson
+// Hyperlegible Next is everything read up close, and the default.
 
 /// The room code, the countdown, the revealed title. Sized in `vmin` rather
 /// than `vw` so a phone in portrait and a television in landscape both land on
 /// something readable, and capped so it stops growing on a projector.
 @mixin monument
+  font-family: var(--font-display)
   font-size: clamp(3.5rem, 17vmin, 15rem)
-  font-stretch: 125%
-  font-weight: 900
-  letter-spacing: -0.035em
-  line-height: 0.84
-  text-transform: uppercase
+  font-stretch: 80%
+  font-variation-settings: 'opsz' 96
+  font-weight: 800
+  letter-spacing: -0.01em
+  line-height: 0.9
 
 /// One step down: the track title at a reveal, the name of whoever buzzed.
 @mixin billboard
+  font-family: var(--font-display)
   font-size: clamp(1.75rem, 6vmin, 4.5rem)
-  font-stretch: 125%
-  font-weight: 900
-  letter-spacing: -0.03em
-  line-height: 0.94
+  font-stretch: 85%
+  font-variation-settings: 'opsz' 96
+  font-weight: 800
+  letter-spacing: -0.02em
+  line-height: 0.95
 
 @mixin title
+  font-family: var(--font-display)
   font-size: clamp(1.25rem, 3vmin, 1.75rem)
-  font-stretch: 112%
-  font-weight: 800
-  letter-spacing: -0.015em
+  font-stretch: 90%
+  font-weight: 700
+  letter-spacing: -0.005em
   line-height: 1.05
 
 /// The three small registers below, and the reason they carry a viewport term
@@ -44,7 +48,7 @@
 /// widening — the two grow together, and then both stop.
 @mixin body
   font-size: clamp(1rem, 2vmin, 1.125rem)
-  font-weight: 450
+  font-weight: 400
   line-height: 1.45
 
 @mixin caption
@@ -79,16 +83,16 @@
   @supports (text-box: trim-both cap alphabetic)
     text-box: trim-both cap alphabetic
 
-/// Small, wide, uppercase — for a label that names a control, never for prose.
+/// Sentence case and the read face: a grandparent reads a label too, and
+/// tracked capitals at twelve pixels are the hardest line on any screen.
 @mixin label
-  font-size: clamp(0.75rem, 1.6vmin, 0.875rem)
-  font-stretch: 112%
+  font-size: clamp(0.875rem, 1.7vmin, 1rem)
   font-weight: 700
-  letter-spacing: 0.16em
-  text-transform: uppercase
+  letter-spacing: 0.005em
 
 /// Tabular figures stop the layout twitching as a score goes from one digit to
 /// two, which on this screen would be a visible jolt rather than a detail.
 @mixin numeric
+  font-family: var(--font-display)
   font-variant-numeric: tabular-nums
   font-weight: 800

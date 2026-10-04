@@ -5,17 +5,17 @@
     <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
 
     <!--
-      The two lobby grounds, because the lobby is what a cold load paints
-      before React decides anything. They are `--field-lobby` in each palette:
-      if that token moves, these move with it.
+      The board, in each palette, because it is what a cold load paints before
+      React decides anything. They are `--board`: if that token moves, these
+      move with it.
     -->
-    <meta content="#a8330d" data-scheme="dark" media="(prefers-color-scheme: dark)" name="theme-color" />
-    <meta content="#ff7a3d" data-scheme="light" media="(prefers-color-scheme: light)" name="theme-color" />
+    <meta content="#132f3b" data-scheme="dark" media="(prefers-color-scheme: dark)" name="theme-color" />
+    <meta content="#d3ebf3" data-scheme="light" media="(prefers-color-scheme: light)" name="theme-color" />
 
     <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
     <!-- iOS ignores an SVG icon outright, and a phone is where this is added to a home screen. -->
     <link href="/apple-touch-icon.png" rel="apple-touch-icon" />
-    <link as="font" crossorigin href="/fonts/archivo-latin.woff2" rel="preload" type="font/woff2" />
+    <link as="font" crossorigin href="/fonts/atkinson-hyperlegible-next-latin.woff2" rel="preload" type="font/woff2" />
 
     <!--
       The page says "the tavern is open" and nothing else; a tab, a search
@@ -73,21 +73,22 @@
   </head>
   <body>
     <!--
-      THESIS: the screen is a title card, not a page — one saturated field, one
-      idea, replaced wholesale between phases. It refuses the dark dashboard
-      with a neon accent that every party-game app ships.
-      OWN-WORLD: French TV variety title cards, 1972-81. Six full-bleed fields,
-      one per phase (burnt orange, chrome yellow, deep teal, oxblood,
-      aubergine, forest). Archivo at width 125 and weight 900, set enormous and
-      tight in caps. Hard edges, no glow, no rounded cards; the cover art and
-      the QR code are the only rectangles, die-cut white on the field.
-      STORY: the room reads the code from four metres, scans it, and from then
-      on the screen says exactly one thing at a time.
-      FIRST VIEWPORT: burnt-orange field edge to edge. The room code in
-      expanded black caps at clamp(4rem, 20vw, 18rem), the QR a white die-cut
-      square beside it, the join URL small beneath. "Start" is a hard-edged
-      block on the field, bottom left.
-      FORM: title card; candidate 3 of the ordered grounded list; seed 189afed2.
+      THESIS: Taverla is a shelf of game boxes on a table; every screen is a
+      printed piece from that box, never an app panel of rounded cards on a
+      dark ground.
+      OWN-WORLD: a matte printed board, pale sky by day and slate blue by
+      evening; four inks (coral, saffron, sky, leaf) on die-cut answer tiles
+      with a 3px chipboard edge, sprue nubs and a shape each; paper question
+      cards; eight pawns; a score track around the console's edge, inked by
+      the phase; the room code on a saffron token. Bricolage Grotesque
+      condensed for what is printed on the box, Atkinson Hyperlegible Next for
+      what is read.
+      STORY: the visitor sees five boxes and a lid promising seconds-to-play;
+      the room sees its pawns move along the track; a player taps a tile like
+      taking a token.
+      FIRST VIEWPORT: the lid left (wordmark, two promises, the coral "create a
+      room" token), five stacked spines right.
+      FORM: game-box production system, 1st of 3; seed key 0a5a42fb.
       FINISH: unreviewed and undocumented is unfinished; this build ends with
       the finish review, the verdict, and DESIGN.md.
     -->

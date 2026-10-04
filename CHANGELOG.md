@@ -196,6 +196,20 @@ one part.
 
 ### Features
 
+- `[Game]` **The board-game shelf, first pieces: a new shell and a choice
+  screen that never scrolls.** Every screen now stands on a matte printed
+  board — pale sky by day, slate blue by evening — in Bricolage Grotesque and
+  Atkinson Hyperlegible Next, both self-hosted; Archivo is gone, and so is the
+  phase painting the whole field, which now inks a `--phase-ink` for the score
+  track still to come. Controls are die-cut pieces with a chipboard edge. A
+  player's choice round is held to the viewport: one line of chrome (round,
+  pawn and score, the menu as an icon), the clock draining along the question
+  card, and four answer tiles in four inks with a shape each, sized from their
+  own length and the screen's ratio — four rows upright, two by two when wide,
+  beside the question lying down. `e2e/choice-fits.spec.ts` holds it at sixteen
+  viewports against the bank's worst rows, with nothing under 14px. The rest of
+  the screens inherit the new ground and faces and are redrawn next.
+
 - `[Server]` **356 more French questions, 96 of them science**, from Vikidia rows
   the wiki wrote with three candidates. Each takes a fourth written by hand
   against its own row, in `vikidia-fourth-decoys.json`, and ten keep their
@@ -1444,6 +1458,12 @@ one part.
   and the extra width is only void
 
 ### Fixes
+
+- `[Server]` **The bank's one 275-character choice is repaired.**
+  `vikidia-astronomie-2-1` ran three sentences together without a space,
+  misspelt half of them and dated the Moon's impact at 5 billion years; it is
+  123 characters now, and was the one choice no screen could show beside its
+  question and three decoys at a 14px floor.
 
 - `[Game]` **Every reveal fits a 768px laptop, and a console held in a hand
   reaches the next round without scrolling.** Above the split the reveal's

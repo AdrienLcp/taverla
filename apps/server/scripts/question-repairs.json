@@ -1266,6 +1266,10 @@
     "drop": true,
     "why": "the subject lived in the quiz page title, so the row names nobody once it is dealt alone"
   },
+  "vikidia-astronomie-2-1": {
+    "answer": "Une planète de la taille de Mars, Theia, a percuté la Terre, et les débris projetés se sont rassemblés pour former la Lune.",
+    "why": "the source runs three sentences together without a space, misspells half of them and dates the impact at 5 billion years; at 275 characters it was also the one choice in the bank no screen could show beside its question and three decoys at the 14px floor"
+  },
   "vikidia-blob-2": {
     "answer": "Avoine",
     "why": "a laboratory blob is fed oat flakes, which the row printed as a wrong answer"

@@ -1,8 +1,9 @@
 # Stage 29 — A new UI, from zero
 
-**In progress — direction chosen, build not started.** This file is the brief: open a fresh
-session, run `/impeccable` with the prompt below, and update this file as
-decisions land.
+**In progress — the shell and the player's choice screen are built**, on the
+`stage-29-redesign` branch so `main` keeps deploying the old world until the
+new one is whole. This file is the brief: open a fresh session, run
+`/impeccable` with the prompt below, and update this file as decisions land.
 
 ## Decisions so far
 
@@ -44,12 +45,58 @@ decisions land.
     17.9 px with room to spare; the reveal ranking was not re-checked with a
     20-character nickname.
 
+## Built so far (2026-10-04)
+
+- **The shell.** `_tokens.sass` is the board world in `light-dark()` pairs:
+  board, track squares, chipboard, paper, socket, four tile inks with their
+  shape marks, five game spines, eight pawns, primary coral. `--field` / `--ink`
+  survive as the pair every unredrawn component reads, pointed at the board;
+  the phase no longer repaints the ground and sets `--phase-ink` instead, for
+  the track. Contrast measured in both palettes: worst text pair 5.93:1, worst
+  shape mark 3.37:1. Bricolage Grotesque (display, `wdth` 75–100) and Atkinson
+  Hyperlegible Next (read) are self-hosted in `public/fonts`; Archivo is
+  deleted. `_piece.sass` is the die-cut material (`piece`, `pressable`,
+  `card`), and `_control.sass` cuts `filled` as the coral token and `outlined`
+  as a plain piece. The menu trigger and popover are pieces too.
+- **The choice screen**, player side: `player-page` renders `framed` (held to
+  `100dvh`, no scroll) whenever `isChoosing`. One chrome line (round + pips,
+  pawn + score), the menu as an icon, the clock as a strip draining along the
+  question card, four `AnswerTile`s (`presentation/components/answer-tile.tsx`,
+  `TileMark`, `Pawn`). Sizes are `k / sqrt(length)` between a 14px floor and a
+  box cap, with the question yielding to long choices. Upright: four rows, 2×2
+  when ≥560px wide; lying down (≥13/10): the chrome and the question left, the
+  tiles the whole right column, the menu moved to the left. Choices over 60
+  characters are four full-width rows at every ratio. The status line is one
+  sentence, visually hidden under 600px of height.
+- **The proof**: `e2e/choice-fits.spec.ts` answers the socket in the page with
+  a stub snapshot and measures sixteen viewports × four bank rows (the 192-char
+  prompt, the 158-char choice, the most choice text, a long prompt over long
+  choices): no document overflow, every tile and the card inside the viewport,
+  no words spilling their box, nothing under 14px. Broken on purpose once
+  (an 18px floor fails three rows).
+- **The 275-char choice was repaired**, as §2 asked: at the 14px floor it ran
+  84px past a 320×568 screen and 83px past 568×320. It is 123 characters now,
+  in `question-repairs.json` and the built bank.
+
+Measured traps, so the next screen does not pay for them again: a size
+container with `flex: 1` answers its queries against a zero-height box in
+Chromium (`flex: none` + an explicit height); a framed screen must not run the
+page's entrance animation, whose leftover `translateY` is a 1px scroll.
+
 ## Next session
 
-Build the chosen world into `apps/game` (code-led: no image generation here),
-screen by screen per §1's inventory, starting with the shell — tokens in both
-palettes, fonts, the score-track frame, the answer tiles — then the quiz choice
-screen and its Playwright no-scroll check (§2) before anything else; then §6.
+1. **The seated host's choice screen** — the other half of §2. `room-stage.tsx`
+   renders `AskedQuestion` + `ChoiceAnswer` inside the console's header, stage
+   and footer; it needs the same framed treatment (share the choosing styles,
+   fold the footer while seated in a choice round), and `choice-fits.spec.ts`
+   a host case (a stubbed `HostRoomView` with `youId`).
+2. **The score track** around the console's edge, inked by `--phase-ink`, and
+   the console lobby from `boite.html` (code token, QR card, the shelf of boxes,
+   roster with pawns, empty sockets).
+3. Then §1's inventory screen by screen, the front door last (Persuade), `og.png`
+   redrawn, and §6. `AskedQuestion`'s own sizing still carries Archivo's
+   measured width (`494cqi`); re-measure it on Bricolage when the console's
+   question is redrawn.
 
 ## The prompt
 

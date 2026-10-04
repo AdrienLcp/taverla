@@ -1,13 +1,16 @@
 // Side-effect module: emits top-level CSS. Loaded once, from globals.sass.
 //
-// Archivo, SIL Open Font License 1.1, self-hosted. One variable file carries
-// both axes the world needs: width 125 for the title-card lettering and width
-// 100 for everything read at arm's length. Party Wi-Fi is the reason it is
-// subset, preloaded from index.html, and set to `swap` — a blocking face costs
-// a player the first round.
+// Two faces, SIL Open Font License 1.1, self-hosted. Bricolage Grotesque is the
+// lettering printed on the box — a lid title, a room code, a score — and its
+// width axis is what lets a game's name sit condensed on a spine. Atkinson
+// Hyperlegible Next is everything read, chosen for the grandparent at the
+// table. Party Wi-Fi is why both are subset, the read face preloaded from
+// index.html, and both set to `swap`.
 
 @use '@adrienlcp/styles/fonts'
 
 @layer base
-  @include fonts.font-face('Archivo', '/fonts/archivo-latin.woff2', fonts.$latin, $weight: 100 900, $stretch: 62% 125%)
-  @include fonts.font-face('Archivo', '/fonts/archivo-latin-ext.woff2', fonts.$latin-ext, $weight: 100 900, $stretch: 62% 125%)
+  @include fonts.font-face('Bricolage Grotesque', '/fonts/bricolage-grotesque-latin.woff2', fonts.$latin, $weight: 200 800, $stretch: 75% 100%)
+  @include fonts.font-face('Bricolage Grotesque', '/fonts/bricolage-grotesque-latin-ext.woff2', fonts.$latin-ext, $weight: 200 800, $stretch: 75% 100%)
+  @include fonts.font-face('Atkinson Hyperlegible Next', '/fonts/atkinson-hyperlegible-next-latin.woff2', fonts.$latin, $weight: 200 800)
+  @include fonts.font-face('Atkinson Hyperlegible Next', '/fonts/atkinson-hyperlegible-next-latin-ext.woff2', fonts.$latin-ext, $weight: 200 800)

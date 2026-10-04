@@ -112,7 +112,8 @@
           @include typography.trimmed-numeral
 
           font-size: 2.5rem
-          font-stretch: 125%
+          font-family: var(--font-display)
+          font-stretch: 85%
           font-weight: 900
           line-height: 1
 
@@ -126,3 +127,132 @@
 
         color: var(--ink-muted)
         flex-basis: 100%
+
+  // The choosing screen is held to the viewport: the page does not scroll, the
+  // type fits the box, and the box never grows to fit the type. It takes the
+  // stage's width rather than the column's, because the layout below is picked
+  // by the ratio of what it is given and a 900px column on a laptop is a
+  // portrait screen it was never on.
+  .player-page.framed
+    container: choosing / size
+    // Not `flex: 1`: Chromium resolves a size container's queries against its
+    // flex base size, and a basis of zero under size containment read as a box
+    // zero pixels tall — every query for a landscape box fired on a phone held
+    // upright. The height is explicit instead.
+    //
+    // And no entrance: it arrives mid-round, and nothing inside a running round
+    // moves — the slide put the whole screen under a thumb aiming at a tile.
+    animation: none
+    display: grid
+    flex: none
+    gap: clamp(8px, 1.6vmin, 14px)
+    grid-template: 'chrome' auto 'round' minmax(0, 1fr) / minmax(0, 1fr)
+    height: 100dvh
+    max-width: var(--stage-max-width)
+    overflow: hidden
+    padding-block: var(--framed-padding-block-start) var(--framed-padding-block-end)
+
+    @include layout.wide
+      gap: clamp(8px, 1.6vmin, 14px)
+
+    > .player-round
+      grid-area: round
+
+    // Lying down, the chrome moves over the question and the tiles take the
+    // whole height of their column: on a phone held sideways the chrome's row
+    // was a fifth of the screen, and it is the tiles that run out of it. The
+    // round dissolves into this grid so its card and its tiles can be placed
+    // apart. A media query rather than the container's, because this box is
+    // the one the container is.
+    @media (min-aspect-ratio: 13 / 10)
+      column-gap: clamp(10px, 2.4vmin, 18px)
+      grid-template: 'chrome choices' auto 'card choices' minmax(0, 1fr) 'status choices' auto / minmax(0, 0.82fr) minmax(0, 1.18fr)
+
+      &:has([data-long-choices])
+        grid-template-columns: minmax(0, 0.55fr) minmax(0, 1.45fr)
+
+      > .player-round
+        display: contents
+
+  // Three classes, to outrank `.playing > header`, which wraps and reserves a
+  // corner this line handles itself.
+  .player-page.framed > .round-chrome
+    align-items: center
+    container-type: inline-size
+    display: flex
+    flex: none
+    flex-wrap: nowrap
+    font-weight: 700
+    gap: clamp(10px, 3vmin, 20px)
+    grid-area: chrome
+    min-height: 44px
+    // The menu trigger is fixed over this line and costs no row of its own.
+    padding-inline-end: calc(var(--menu-width, 56px) + var(--space-xs))
+    white-space: nowrap
+
+    // Lying down, the menu has moved to the line's start, over the question,
+    // and the column can be narrower than the line: the score wraps under the
+    // round, in the height the question's column has to spare.
+    @media (min-aspect-ratio: 13 / 10)
+      flex-wrap: wrap
+      padding-inline: calc(var(--menu-width, 56px) + var(--space-xs)) 0
+      row-gap: var(--space-2xs)
+
+    .round-index,
+    .you
+      align-items: center
+      display: flex
+      gap: var(--space-xs)
+
+    .figures,
+    .score
+      @include typography.numeric
+
+      font-size: clamp(1.125rem, 2.6vmin, 1.5rem)
+
+    .pips
+      display: flex
+      gap: 3px
+
+      i
+        background: var(--track-b)
+        border-radius: 2px
+        box-shadow: 0 1.5px 0 var(--chipboard)
+        height: 12px
+        width: 8px
+
+        &[data-state='done']
+          background: var(--board-muted)
+
+        &[data-state='now']
+          background: var(--phase-ink)
+
+      @container (width < 300px)
+        display: none
+
+    .you .pawn
+      font-size: 1.4rem
+
+  // The round's sand: a strip draining along the top of the question card,
+  // laid over the card's own area so it moves with whatever the ratio does
+  // to the card.
+  .player-page.framed > .card-clock
+    align-self: start
+    grid-area: round
+    margin: clamp(8px, 1.6vmin, 12px) clamp(12px, 3.4cqmin, 24px) 0
+    pointer-events: none
+    z-index: 1
+
+    @media (min-aspect-ratio: 13 / 10)
+      grid-area: card
+
+    .round-progress
+      background: var(--socket)
+      border: 0
+      border-radius: 3px
+      height: 6px
+      overflow: hidden
+      width: 100%
+
+      &::after
+        background: var(--card-muted)

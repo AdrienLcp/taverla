@@ -3,69 +3,95 @@
 // It may `@use` a pure module, and does: the wide-column ceiling is the
 // breakpoint that reveals it, and `_layout.sass` owns that number.
 //
-// The surface IS the colour, and the colour is the phase. Six fields, each with
-// the ink that survives on it — measured, not eyeballed: every pair clears
-// 4.5:1, worst 5.65 on the light buzzed pair, and `--ink-muted` mixes back
-// toward the field only as far as 85%, which is where that pair still clears it.
+// The world is a game box on a table: a matte printed board, paper cards, four
+// die-cut inks, eight pawns. Each token is one `light-dark()` — pale sky by
+// day, slate blue by evening — read off `color-scheme`, which is all
+// `@adrienlcp/theme-preference/color-scheme.css` sets.
 //
-// Each pair is one `light-dark()`, read as the row DESIGN.md tabulates it as:
-// light beside dark, which is what you compare when you tune one. It also means
-// the palette is declared once instead of in both places a theme can be decided
-// from — `@adrienlcp/theme-preference/color-scheme.css` sets nothing but
-// `color-scheme`, which is what `light-dark()` reads.
-//
-// Every value is an exact conversion of the hex it replaces: all twenty-nine
-// round-trip to the same 8-bit sRGB colour, so this moved the notation and
-// nothing a room can see. What it buys is the two mixes at the bottom, which
-// are perceptual now — the worst `--ink-muted` pair went from 4.61:1 to 4.81:1
-// on the same 85%.
-//
-// `light-dark()` is the newest thing here and costs nothing, because
-// LightningCSS lowers it for Vite's default target: what ships is a pair of
-// custom properties toggled between a space and `initial`, attached to the
-// `color-scheme` rules, which works anywhere `var()` does. `oklch()` and
-// `color-mix()` are inside that target and ship as written. So the authored
-// floor is Baseline 2024 and the shipped one is far older — check the built
-// CSS rather than this comment before assuming either.
+// Measured in both palettes at the size used: every ink on its ground clears
+// 4.5:1, the worst being the muted board ink on the dark track at 5.93; every
+// tile's shape mark clears the 3:1 a non-text cue owes, worst 3.37 on the dark
+// coral. Paper and tiles stay light in the dark palette — they are printed
+// pieces, and a card does not change colour when the lights go down — so the
+// ink on them is the same in both.
 
 @use 'layout'
 
 @layer tokens
   \:root
-    --field-lobby: light-dark(oklch(72.58% 0.1782 43.19), oklch(49.27% 0.1593 36.32))
-    --ink-lobby: light-dark(oklch(20.74% 0.0556 49.07), oklch(96.81% 0.0212 65.32))
+    // The printed board everything is laid on.
+    --board: light-dark(oklch(92.5% 0.028 218), oklch(29% 0.04 226))
+    --board-ink: light-dark(oklch(24% 0.035 250), oklch(95% 0.012 230))
+    --board-muted: light-dark(oklch(43% 0.035 245), oklch(79% 0.025 230))
 
-    --field-countdown: light-dark(oklch(85.37% 0.1572 84.13), oklch(67.94% 0.1424 76.48))
-    --ink-countdown: light-dark(oklch(24.70% 0.0505 87.71), oklch(18.89% 0.0260 77.50))
+    // The squares of the score track, alternating, with every fifth one
+    // printed heavier the way a real track counts in fives.
+    --track-a: light-dark(oklch(97.5% 0.012 218), oklch(34.5% 0.042 226))
+    --track-b: light-dark(oklch(88.5% 0.04 218), oklch(26.5% 0.035 226))
+    --track-five: light-dark(oklch(83% 0.06 218), oklch(41% 0.06 226))
+    --track-ink: light-dark(oklch(32% 0.04 245), oklch(86% 0.02 226))
 
-    --field-playing: light-dark(oklch(71.12% 0.1094 181.26), oklch(37.38% 0.0605 183.56))
-    --ink-playing: light-dark(oklch(23.21% 0.0371 183.02), oklch(97.42% 0.0190 176.45))
+    // The raw edge of a die-cut piece: grey-brown chipboard showing under the
+    // print, drawn as a hard 3px shadow rather than a soft one.
+    --chipboard: light-dark(oklch(60% 0.035 68), oklch(47% 0.035 68))
+    --chipboard-dark: light-dark(oklch(48% 0.035 68), oklch(36% 0.03 68))
+    --shadow: light-dark(oklch(30% 0.05 250 / 0.22), oklch(8% 0.02 250 / 0.55))
 
-    --field-buzzed: light-dark(oklch(66.75% 0.1909 14.92), oklch(41.29% 0.1550 19.08))
-    --ink-buzzed: light-dark(oklch(19.16% 0.0766 14.32), oklch(96.09% 0.0197 9.78))
+    // Paper: question cards, the QR card, the cover's mount.
+    --card: light-dark(oklch(99.5% 0.003 95), oklch(90% 0.016 95))
+    --card-ink: oklch(21% 0.03 255)
+    --card-muted: oklch(42% 0.03 255)
 
-    --field-revealed: light-dark(oklch(67.20% 0.1218 320.21), oklch(30.84% 0.1081 322.47))
-    --ink-revealed: light-dark(oklch(20.11% 0.0774 320.77), oklch(95.11% 0.0287 320.58))
+    // A recess a piece sits in when the box is empty.
+    --socket: light-dark(oklch(88% 0.03 218), oklch(25% 0.035 226))
+    --socket-line: light-dark(oklch(62% 0.05 225), oklch(55% 0.05 226))
 
-    --field-finished: light-dark(oklch(72.94% 0.1308 152.72), oklch(39.25% 0.0896 152.54))
-    --ink-finished: light-dark(oklch(23.04% 0.0550 151.40), oklch(97.15% 0.0246 156.74))
+    // The four answer inks, in the order the tiles are dealt. Each carries a
+    // shape as well, so colour is never the only way to tell two apart.
+    --tile-ink: oklch(20% 0.03 255)
+    --tile-1: light-dark(oklch(75% 0.14 32), oklch(71% 0.14 32))
+    --tile-2: light-dark(oklch(87% 0.13 88), oklch(81% 0.13 88))
+    --tile-3: light-dark(oklch(77% 0.1 240), oklch(72% 0.1 240))
+    --tile-4: light-dark(oklch(81% 0.12 155), oklch(75% 0.12 155))
+    --tile-mark-1: oklch(42% 0.16 30)
+    --tile-mark-2: oklch(45% 0.11 75)
+    --tile-mark-3: oklch(40% 0.14 255)
+    --tile-mark-4: oklch(42% 0.12 155)
 
-    // The die-cut ground the cover art and the QR code are stamped on. Its ink
-    // is the one colour both palettes share: what sits on the cut is a
-    // rectangle rather than a field, and the rectangle is the same either way.
-    --cut: light-dark(oklch(100% 0 0), oklch(95.93% 0.0143 84.58))
-    --cut-ink: oklch(18.95% 0.0133 77.82)
+    // Each game's box, the colour of its spine on the shelf.
+    --spine-blindtest: oklch(50% 0.16 345)
+    --spine-quiz: oklch(50% 0.15 262)
+    --spine-buzzer: oklch(55% 0.19 30)
+    --spine-reflex: oklch(82% 0.15 85)
+    --spine-slate: oklch(50% 0.09 185)
+    --on-spine: oklch(99% 0.005 95)
+    --on-spine-light: oklch(20% 0.03 255)
 
-    // An error is a stamped block, never tinted text, and that is a contrast
-    // decision rather than a stylistic one: a red that reads on the aubergine
-    // field is invisible on the chrome-yellow one, and text tinted from the ink
-    // tops out at 4.0:1 against the worst field. Inside its own block the
-    // contrast is fixed and total, so the stamp is the same in both palettes.
-    --danger: oklch(48.30% 0.1958 25.03)
-    --danger-ink: oklch(97.13% 0.0140 17.40)
+    // Eight pawns, as many as a box holds; a ninth player reuses the first.
+    --pawn-1: oklch(64% 0.19 28)
+    --pawn-2: oklch(58% 0.15 258)
+    --pawn-3: oklch(84% 0.15 90)
+    --pawn-4: oklch(64% 0.14 152)
+    --pawn-5: oklch(58% 0.16 310)
+    --pawn-6: oklch(74% 0.15 58)
+    --pawn-7: oklch(76% 0.12 355)
+    --pawn-8: oklch(67% 0.1 200)
 
-    // Hard edges everywhere. The buzzer is the one round thing in the product,
-    // because it is the one thing that is a physical button.
+    --primary: oklch(55% 0.19 30)
+    --primary-edge: oklch(40% 0.14 30)
+    --on-primary: oklch(99% 0.005 95)
+    --focus: light-dark(oklch(50% 0.2 262), oklch(82% 0.13 88))
+    --good: oklch(52% 0.13 155)
+    --good-soft: light-dark(oklch(86% 0.09 155), oklch(75% 0.11 155))
+
+    // An error is a stamped block, never tinted text: inside its own block the
+    // contrast is fixed, so the stamp is the same in both palettes.
+    --danger: oklch(48.3% 0.1958 25.03)
+    --danger-ink: oklch(97.13% 0.014 17.4)
+
+    --radius-s: 8px
+    --radius-m: 12px
+    --radius-l: 18px
     --radius-full: 999px
 
     --space-2xs: 4px
@@ -76,113 +102,82 @@
     --space-xl: 48px
     --space-2xl: 72px
 
-    --transition-fast: 110ms
+    --transition-fast: 140ms
     --transition-base: 260ms
     --transition-slow: 520ms
-    // Exponential ease-out: everything arrives fast and settles, which is how
-    // a card flips rather than how a panel slides.
+    // A piece set down: fast, then settled, never bounced.
     --timing: cubic-bezier(0.16, 1, 0.3, 1)
 
-    --font-base: 'Archivo', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif
+    --font-display: 'Bricolage Grotesque', 'Atkinson Hyperlegible Next', system-ui, sans-serif
+    --font-base: 'Atkinson Hyperlegible Next', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif
 
     --layout-padding: clamp(16px, 4vmin, 56px)
 
     // The same padding per side, because `viewport-fit=cover` in `index.html`
     // lays the page out under the sensor housing, the rounded corners and the
-    // home indicator. `max()` of the two rather than a sum: in portrait the
-    // padding is what the composition wants and the inset is nothing, in
-    // landscape the inset is 59px on whichever side the housing is and the
-    // padding is 16px. Only the larger of the two is right at both.
-    //
-    // Every one falls back to `0px`. An `env()` a browser does not know, with
-    // no fallback, is invalid at computed-value time — the whole declaration
-    // goes, and the page loses its padding rather than keeping the current one.
-    //
-    // `env()` names physical sides, so the two inline tokens read a
-    // left-to-right locale. Both of ours are; a right-to-left one swaps which
-    // inset each of them takes.
+    // home indicator. `max()` of the two rather than a sum: only the larger is
+    // right in both orientations. Every `env()` falls back to `0px`, because an
+    // unknown one with no fallback voids the whole declaration.
     --layout-padding-block-start: max(var(--layout-padding), env(safe-area-inset-top, 0px))
 
-    // The bottom is the one side that moves. Android's bottom bar retracts on
-    // scroll and animates `safe-area-inset-bottom` as it goes, so a page that
-    // reserves space against the live value re-lays itself out while somebody
-    // is reading it. `safe-area-max-inset-bottom` is that value's static
-    // ceiling, and where it is not known the nested fallback is the live one.
+    // Android's bottom bar retracts on scroll and animates the live inset, so
+    // the static ceiling is read where it exists.
     --layout-padding-block-end: max(var(--layout-padding), env(safe-area-max-inset-bottom, env(safe-area-inset-bottom, 0px)))
 
     --layout-padding-inline-start: max(var(--layout-padding), env(safe-area-inset-left, 0px))
     --layout-padding-inline-end: max(var(--layout-padding), env(safe-area-inset-right, 0px))
 
-    // The widest the host's field is allowed to get. Type here is sized in
-    // `vmin`, so it stops growing with the *shorter* axis — past this, extra
-    // width is void between two columns rather than a bigger title card, and on
-    // a 21:9 display it left a thousand pixels of it. Set to what a 1920 screen
-    // already gave the console, which is the width its two-column lobby was
-    // designed and verified at.
-    --stage-max-width: 1800px
+    // The top and bottom of a screen held to the viewport, tighter than a page's
+    // because every pixel of it is taken from the four tiles. The menu reads it
+    // too, so its trigger stays on that screen's chrome line.
+    --framed-padding-block-start: max(clamp(8px, 2vmin, 16px), env(safe-area-inset-top, 0px))
+    --framed-padding-block-end: max(clamp(8px, 2vmin, 16px), env(safe-area-max-inset-bottom, env(safe-area-inset-bottom, 0px)))
 
-    // A column, and how wide it may get once the screen is not a narrow one.
-    // The wide one is `$wide-screen` itself: the column reaches its ceiling
-    // exactly where the console splits its lobby in two and the player's screen
-    // widens for the buzzer, and one number is what keeps those three the same
-    // moment.
+    --stage-max-width: 1800px
     --column-max-width: 620px
     --column-wide-max-width: #{layout.$wide-screen}
 
-    // The active pair. Every surface reads these two and nothing else; the
-    // shell swaps which phase they point at, and that swap is the design.
-    --field: var(--field-lobby)
-    --ink: var(--ink-lobby)
-    // Mixed in oklab rather than srgb, which is where gamma-encoded
-    // interpolation goes muddy at the midpoint. This one is read as text, so
-    // the gain is measured: the worst pair clears 4.81:1 where srgb gave 4.61.
-    --ink-muted: color-mix(in oklab, var(--ink) 85%, var(--field))
-    // Two weights of the same hairline, and the split is what each one is asked
-    // to say. `--rule` separates two regions and carries nothing on its own, so
-    // 32% — 1.84:1 on the worst pair — is all it needs. `--edge` is a control's
-    // own boundary, which WCAG 1.4.11 asks 3:1 of, and 60% is where the worst
-    // pair reaches it: 55% gives 2.90. It stops there rather than going to
-    // `--ink-muted`, because a shelf of cards bordered at 85% reads as heavy as
-    // the two doors above it and the front page loses its order.
-    --rule: color-mix(in oklab, var(--ink) 32%, var(--field))
+    // The pair every component reads. The board is the ground on every screen
+    // at every phase: the phase is said by the track's ink, never by repainting
+    // the room.
+    --field: var(--board)
+    --ink: var(--board-ink)
+    --ink-muted: var(--board-muted)
+    // `--rule` separates two regions and owes nothing; `--edge` is a control's
+    // own boundary, which WCAG 1.4.11 asks 3:1 of.
+    --rule: color-mix(in oklab, var(--ink) 22%, var(--field))
     --edge: color-mix(in oklab, var(--ink) 60%, var(--field))
+    --cut: var(--card)
+    --cut-ink: var(--card-ink)
 
-  // `usePhaseField` stamps the attribute on the root element, so the field
-  // survives an overscroll bounce — what shows there is the document's
-  // background, not any component's.
+    // What the score track is inked in for the phase the room is in, read from
+    // across it. The lobby leaves the track its own colours.
+    --phase-ink: var(--track-five)
+    --phase-on-ink: var(--track-ink)
+
   \:root[data-phase='countdown']
-    --field: var(--field-countdown)
-    --ink: var(--ink-countdown)
+    --phase-ink: var(--spine-reflex)
+    --phase-on-ink: var(--on-spine-light)
 
   \:root[data-phase='playing']
-    --field: var(--field-playing)
-    --ink: var(--ink-playing)
+    --phase-ink: var(--spine-quiz)
+    --phase-on-ink: var(--on-spine)
 
-  // The reflex race's stimulus, and the one field change that is not a phase:
-  // `playing`'s pair simply trades places. It is the largest luminance jump
-  // either palette holds — which is what a room catches in peripheral vision
-  // from four metres — and it costs no seventh colour, so both palettes are
-  // right by construction and the contrast is the pair's own, reversed.
-  //
-  // Named against `playing` rather than against the active pair because that is
-  // the only phase it ever happens in, and a generic swap would need a third
-  // token standing between every surface and its colour.
+  // The reflex race's stimulus: the board and its ink trade places, which is
+  // the largest luminance jump either palette holds and costs no new colour.
   \:root[data-flipped]
-    --field: var(--ink-playing)
-    --ink: var(--field-playing)
+    --field: var(--board-ink)
+    --ink: var(--board)
+    --ink-muted: color-mix(in oklab, var(--board) 85%, var(--board-ink))
 
-  // The slate's marking is the same act as a buzz being judged — the host
-  // deciding, the room waiting on the verdict — so it wears the same pair
-  // rather than falling back to the lobby's, which read as the game ending.
-  // It shares `playing` with the writing, so `useMarkingField` says which.
   \:root:is([data-phase='buzzed'], [data-phase='playing'][data-marking])
-    --field: var(--field-buzzed)
-    --ink: var(--ink-buzzed)
+    --phase-ink: var(--primary)
+    --phase-on-ink: var(--on-primary)
 
   \:root[data-phase='revealed']
-    --field: var(--field-revealed)
-    --ink: var(--ink-revealed)
+    --phase-ink: var(--good)
+    --phase-on-ink: var(--on-spine)
 
   \:root[data-phase='finished']
-    --field: var(--field-finished)
-    --ink: var(--ink-finished)
+    --phase-ink: var(--pawn-1)
+    --phase-on-ink: var(--on-spine)

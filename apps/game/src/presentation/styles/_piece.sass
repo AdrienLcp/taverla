@@ -1,0 +1,56 @@
+// Pure module: mixins only, no top-level CSS.
+
+/// A piece punched out of the box's card sheet: printed face, rounded corners,
+/// the 3px of raw chipboard a die-cut leaves showing under its print, and the
+/// two sprue nubs where it was held in the sheet. Lifts under a pointer, sinks
+/// under a press — the only motion a piece has in life.
+///
+/// The nubs are notches of the ground the piece sits on, so they read
+/// `--ground` and a piece on paper says so with `--ground: var(--card)`. They
+/// take `::before` and `::after`; a piece needing either for something else
+/// passes `$nubs: false`.
+@mixin piece($radius: var(--radius-m), $nubs: true)
+  border: 0
+  border-radius: $radius
+  box-shadow: 0 3px 0 0 var(--chipboard), 0 8px 14px -6px var(--shadow)
+  position: relative
+  transition: transform var(--transition-fast, 0) var(--timing, ease), box-shadow var(--transition-fast, 0) var(--timing, ease)
+
+  @if $nubs
+    &::before,
+    &::after
+      background: var(--ground, var(--board))
+      content: ''
+      height: 3px
+      inset-inline-start: 50%
+      margin-inline-start: -5px
+      position: absolute
+      width: 10px
+
+    &::before
+      border-radius: 0 0 3px 3px
+      top: 0
+
+    &::after
+      border-radius: 3px 3px 0 0
+      bottom: 0
+
+/// The lift and the press, for a piece that is a control. Kept apart from the
+/// material because a printed card is a piece and is never pressed.
+@mixin pressable
+  &:not([data-disabled])[data-pressed]
+    box-shadow: 0 1px 0 0 var(--chipboard), 0 4px 8px -6px var(--shadow)
+    transform: translateY(2px)
+
+  @media (hover: hover) and (pointer: fine)
+    &:not([data-disabled])[data-hovered]:not([data-pressed])
+      box-shadow: 0 5px 0 0 var(--chipboard), 0 12px 18px -8px var(--shadow)
+      transform: translateY(-2px)
+
+/// A printed card: paper, no sprue, a shallow edge. Question cards, the QR
+/// card, a cover's mount.
+@mixin card($radius: var(--radius-l))
+  background: var(--card)
+  border-radius: $radius
+  box-shadow: 0 3px 0 var(--chipboard), 0 10px 18px -10px var(--shadow)
+  color: var(--card-ink)

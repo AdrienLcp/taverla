@@ -1,55 +1,44 @@
 // Pure module: mixins only.
 
 @use './focus'
+@use './piece'
 @use './typography'
 
-/// The box a control is *stamped* as: the edge that reserves the same room in
-/// every material, the height a press aims at, and the padding that holds the
-/// label off it.
-///
-/// A mixin the variants opt into rather than a rule the root applies, because
-/// one of them has no box at all. Written as an exclusion it would have been a
-/// `min-height: unset` and a `padding: 0` in `underlined` undoing three rules
-/// above it — and the first size added would have had to be undone there too.
-///
-/// The transparent border is the box, not decoration: `outlined` paints it and
-/// the other two reserve it, which is what makes the three materials the same
-/// size. A variant that draws no edge does not need the room for one.
+/// The box a control is *cut* as: the height a press aims at and the padding
+/// that holds the label off its edge. A mixin the two pieces opt into rather
+/// than a rule the root applies, because `underlined` has no box at all.
 @mixin box
-  border: 3px solid transparent
-
   // The height is the `min-height`, never the line, so trimming the label
-  // moves nothing but its centre: an uppercase label kept the descender room
-  // it never uses, and sat above the middle of the box. A browser without
-  // `text-box` drops the declaration and draws what it always drew.
+  // moves nothing but its centre. A browser without `text-box` drops the
+  // declaration and draws what it always drew.
   .control-label
     text-box: trim-both cap alphabetic
 
-  // A step below the control voice, for an action that sits beside something
-  // rather than under it — copying a code the room is already reading. Without
-  // it every secondary action in the product was a 52px block, which is why
-  // they all read as second primary actions.
   &.small
+    border-radius: var(--radius-s)
     min-height: 40px
     padding: 0 var(--space-s)
 
   &.medium
+    border-radius: var(--radius-m)
     min-height: 52px
     padding: 0 var(--space-m)
 
   &.large
+    border-radius: var(--radius-m)
     min-height: 72px
-    padding: 0 var(--space-xl)
+    padding: 0 var(--space-l)
 
-/// The shell shared by `Button` and `Link` — everything that makes an element
-/// look and behave like a control, minus the tag it renders and minus the box.
-/// Sizes and variants stay classes rather than mixin arguments, so both
-/// components read the same class list and neither has to know the other exists.
+/// The shell shared by `Button`, `Link` and `ToggleButton` — everything that
+/// makes an element look and behave like a control, minus the tag it renders.
+/// Sizes and variants stay classes rather than mixin arguments, so all three
+/// read the same class list.
 ///
-/// A control in this world is a hard-edged block stamped on the field, not a
-/// pill floating above it. `--control-ink` is the foreground of the current
-/// variant, exposed as a token because the pending spinner has to paint itself
-/// in it while the label's own `color` is turned transparent.
+/// A control is a piece punched out of the box: `filled` is the coral token
+/// that says *go*, `outlined` a plain card piece, `underlined` a printed line
+/// with no piece under it. `--control-ink` is the foreground of the current
+/// variant, exposed because the pending spinner paints itself in it while the
+/// label's own `color` is turned transparent.
 @mixin control
   @include focus.ring
   @include typography.title
@@ -60,13 +49,9 @@
   justify-content: center
   position: relative
   text-decoration: none
-  text-transform: uppercase
-  transition: background-color var(--transition-fast, 0) var(--timing, ease), color var(--transition-fast, 0) var(--timing, ease), transform var(--transition-fast, 0) var(--timing, ease)
+  transition: background-color var(--transition-fast, 0) var(--timing, ease), color var(--transition-fast, 0) var(--timing, ease), transform var(--transition-fast, 0) var(--timing, ease), box-shadow var(--transition-fast, 0) var(--timing, ease)
   white-space: nowrap
 
-  // The size's voice, which every variant takes — as opposed to its box, which
-  // only the two that have one do. `medium` is the unqualified default, so a
-  // call site that passes no size still lands on it.
   &.small
     font-size: 1rem
     gap: var(--space-2xs)
@@ -74,47 +59,39 @@
   &.large
     font-size: clamp(1.25rem, 2.6vmin, 2rem)
 
-  // A press paints whatever a hover paints, always. A variant that changed
-  // colour only on hover left every press with the 2px nudge below as its
-  // entire feedback, under a finger that covers the control.
-  //
-  // Every state is guarded on `:not([data-disabled])` because a variant selector
-  // outranks the bare `[data-disabled]` below: without it, a state left painted
-  // at the moment the control was disabled stays painted, and the four choice
-  // buttons found it on a player's screen — one of them stood white for a
-  // whole round.
+  // Every state is guarded on `:not([data-disabled])` because a variant
+  // selector outranks the bare `[data-disabled]` below: without it a state left
+  // painted when the control was disabled stays painted.
   &.filled
     @include box
+    @include piece.piece($nubs: false)
+    @include piece.pressable
 
-    --control-ink: var(--field)
+    --control-ink: var(--on-primary)
 
-    background: var(--ink)
+    background: var(--primary)
+    box-shadow: 0 4px 0 var(--primary-edge), 0 12px 18px -10px var(--shadow)
     color: var(--control-ink)
 
     &:not([data-disabled])[data-pressed]
-      background: var(--ink-muted)
+      box-shadow: 0 1px 0 var(--primary-edge), 0 4px 8px -6px var(--shadow)
+
+    @media (hover: hover) and (pointer: fine)
+      &:not([data-disabled])[data-hovered]:not([data-pressed])
+        box-shadow: 0 6px 0 var(--primary-edge), 0 14px 20px -10px var(--shadow)
 
   &.outlined
     @include box
+    @include piece.piece($nubs: false)
+    @include piece.pressable
 
-    --control-ink: var(--ink)
+    --control-ink: var(--board-ink)
 
-    border-color: var(--ink)
+    background: var(--track-a)
     color: var(--control-ink)
 
-    &:not([data-disabled])[data-pressed]
-      background: var(--ink)
-      color: var(--field)
-
-  // No ground, no edge — and therefore no box: an action drawn as nothing but
-  // its own label has no reason to reserve 52px of height, and the inline
-  // padding was worse than the height, holding the underline in from the column
-  // every other line of the panel starts at.
-  //
-  // The block padding stays and does not scale, because it is not the box
-  // coming back: it is the room a press needs. A `title` line is 1.05em tall
-  // and the pending spinner is 1.1em, so with none at all the smallest one is
-  // under the 24px a target owes and the spinner sits a hair proud of it.
+  // No piece and therefore no box. The block padding stays because it is the
+  // room a press needs, not the box coming back.
   &.underlined
     --control-ink: var(--ink-muted)
 
@@ -127,36 +104,28 @@
     &:not([data-disabled])[data-pressed]
       --control-ink: var(--ink)
 
-  // The other half of the stuck white button, and the half a fix in the
-  // cascade could not reach: a screen with no pointer has no business painting
-  // a hover at all. iOS fires a second `pointerenter` as `pointerType: 'mouse'`
-  // and react-aria guards it with a 500 ms window armed on a touch `pointerup`
-  // — miss that window and `isHovered` latches with nothing to lower it. The
-  // press stays unconditional, because it is the whole of a touch's feedback.
-  @media (hover: hover) and (pointer: fine)
-    &.filled:not([data-disabled])[data-hovered]
-      background: var(--ink-muted)
+    @media (hover: hover) and (pointer: fine)
+      &:not([data-disabled])[data-hovered]
+        --control-ink: var(--ink)
 
-    &.outlined:not([data-disabled])[data-hovered]
-      background: var(--ink)
-      color: var(--field)
+  &.underlined[data-pressed]
+    transform: translateY(1px)
 
-    &.underlined:not([data-disabled])[data-hovered]
-      --control-ink: var(--ink)
-
-  &[data-pressed]
-    transform: translateY(2px)
-
-  // Ruled rather than dimmed. Fading a filled block takes its label's contrast
-  // down with it, and "disabled" is exactly the state a host squints at from
-  // across the room wondering why nothing happens.
+  // A disabled piece is pressed flat into the board: no edge, the board's own
+  // recess colour, and the label still at full contrast, because "disabled" is
+  // the state a host squints at from across the room wondering why nothing
+  // happens.
   &[data-disabled]
-    --control-ink: var(--ink-muted)
+    --control-ink: var(--board-muted)
 
-    background: transparent
-    border-color: var(--rule)
     color: var(--control-ink)
     cursor: not-allowed
+
+  &.filled[data-disabled],
+  &.outlined[data-disabled]
+    background: var(--socket)
+    box-shadow: inset 0 2px 4px -2px var(--shadow)
+    transform: none
 
   // After the variants on purpose: same specificity, so source order is what
   // lets the pending state blank a label the variant just coloured.
