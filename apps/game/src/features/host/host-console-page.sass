@@ -1,5 +1,6 @@
 @use '../../presentation/styles/framed'
 @use '../../presentation/styles/layout'
+@use 'boxed-standings'
 @use '../../presentation/styles/typography'
 
 @layer components
@@ -479,6 +480,38 @@
           order: -1
           width: auto
 
+  // The slate held to the screen the ring leaves, like a round in play: the
+  // board of items and the marking each divide the box between the header and
+  // the footer, so sixty items or a full table never push the presses down.
+  .host-console-page:has(> .stage:is(.slate-writing, .slate-correcting))
+    @include layout.wide
+      animation: none
+      display: grid
+      gap: clamp(var(--space-xs), 2vmin, var(--space-m))
+      grid-template-rows: auto minmax(min(20rem, 50dvh), 1fr) auto
+
+      @media (height < 36rem)
+        grid-template-rows: minmax(min(20rem, 50dvh), 1fr) auto
+
+        > header
+          display: none
+
+      > .stage
+        container: slate / size
+
+      > footer
+        column-gap: var(--space-l)
+        flex-flow: row wrap
+        justify-content: flex-end
+
+        .error
+          flex-basis: 100%
+
+        .setup-fold
+          flex: 1 1 12rem
+          order: -1
+          width: auto
+
   // The countdown with nothing to recap is the token alone, sized against the
   // box the header and the footer leave it rather than the viewport, which
   // those two would push off the bottom.
@@ -557,35 +590,10 @@
           grid-area: panel
 
         > .standings
-          align-self: stretch
-          display: grid
+          @include boxed-standings.dividing-its-box
+
           grid-area: standings
-          grid-template-rows: auto minmax(0, 1fr)
-          min-height: 0
           width: auto
-
-          // A row measured 2.14 of its own size with the score, the rule and
-          // the padding in it; the board divides its box by its rows over that
-          // and a little headroom.
-          // Past about fourteen players the floor binds and a full table runs
-          // longer than its box; it scrolls there rather than over the bar.
-          .scoreboard
-            container-type: size
-            overflow-y: auto
-
-            li
-              font-size: clamp(14px, calc(100cqh / var(--standings-rows, 8) / 2.3), 1.75rem)
-              padding: 0.3em 0
-
-              .rank
-                font-size: 0.8em
-
-              .nickname
-                font-size: 1em
-
-              .score
-                font-size: 1.4em
-                line-height: 1
 
   .host-console-page.framed
     @include framed.page

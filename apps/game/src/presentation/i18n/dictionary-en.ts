@@ -630,6 +630,7 @@ export const EN_DICTIONARY = defineDictionary({
       close: 'Collect',
       closeItem: 'Collect {item} and mark it now',
       markItem: 'Mark {item}',
+      sheets: 'The sheets',
       show: 'Mark',
       state: {
         closed: 'To mark',

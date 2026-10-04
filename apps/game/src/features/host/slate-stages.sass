@@ -1,201 +1,196 @@
+@use '../../presentation/styles/focus'
 @use '../../presentation/styles/layout'
+@use '../../presentation/styles/piece'
 @use '../../presentation/styles/typography'
+@use 'boxed-standings'
 
 @layer components
   .host-console-page .stage
     &.slate-writing,
     &.slate-correcting
       display: grid
-      gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
+      gap: clamp(var(--space-m), 3vmin, var(--space-xl))
       grid-template-columns: minmax(0, 1fr)
 
-    // The board is the wall and takes every column it can; the progress and
-    // the two folds are the host's, read between presses. Beside the board
-    // only from the poster width, so the board keeps five cards across: at
-    // 1024 a side column left it three, nine rows deep.
+    // Above the split the console page makes the stage a size container
+    // (`slate`), and everything here divides that box rather than the viewport.
     &.slate-writing
       align-content: start
 
-      @include layout.poster-wide
-        align-items: start
-        grid-template-columns: minmax(0, 1fr) clamp(20rem, 22vw, 28rem)
+      @include layout.wide
+        align-content: stretch
+        grid-template: 'board side' minmax(0, 1fr) / minmax(0, 1fr) clamp(15rem, 25cqi, 24rem)
 
-    // The item is what the room reads; the standings are what the host glances
-    // at between two presses, so they take the narrower column.
     &.slate-correcting
       align-content: start
 
       @include layout.wide
-        align-items: start
-        grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr)
+        align-content: stretch
+        grid-template: 'marking standings' minmax(0, 1fr) / minmax(0, 1.75fr) minmax(0, 1fr)
 
   .slate-writing
     .item-board
-      display: flex
-      flex-direction: column
-      gap: var(--space-m)
+      display: grid
+      gap: var(--space-s)
+      grid-template-rows: auto minmax(0, 1fr)
       min-width: 0
 
+      @include layout.wide
+        grid-area: board
+
       > header
+        align-items: baseline
         display: flex
-        flex-direction: column
-        gap: var(--space-s)
+        flex-wrap: wrap
+        gap: var(--space-2xs) var(--space-m)
+
+        .button
+          margin-inline-start: auto
 
       .now
         @include typography.title
 
-        max-inline-size: 24ch
+        font-size: clamp(1.125rem, 4.2cqh, 1.75rem)
         text-wrap: balance
-
-      .size
-        align-items: center
-        display: flex
-        flex-wrap: wrap
-        gap: var(--space-s) var(--space-m)
 
       .count-label
         @include typography.label
 
         color: var(--ink-muted)
 
-    // The three states are three materials, so they read from across a room
-    // with no word: open is outlined like a field still to fill, closed is
-    // solid ink because it is what the wall owes the room next, and marked
-    // recedes to the rule colour because nothing is left to do on it.
-    // `9.875rem` is the widest press measured, not guessed: `slate.board.close`
-    // is 105px of text at the small size in French, 85 in English. Around it
-    // the small box's own `--space-s` and edge, then the card's `--space-xs`
-    // and edge — 157px, which is two across a 390px phone, five at 1024 and
-    // seven beside the side column at 1920. The small size is set in `rem`, so
-    // the floor scales with the text it was measured on.
+    // The column count and the side are dealt by `useFittedGrid` from the
+    // box itself; under the floor sixty items scroll in their own box rather
+    // than shrink past reading. `1.06` is the piece's aspect, as dealt.
     .items
+      align-content: start
       display: grid
-      gap: var(--space-s)
-      grid-template-columns: repeat(auto-fill, minmax(min(9.875rem, 100%), 1fr))
+      gap: clamp(6px, 1.2cqmin, 14px)
+      grid-auto-rows: calc(clamp(4.25rem, var(--fitted-side, 6.5rem), 10rem) * 1.06)
+      grid-template-columns: repeat(var(--fitted-columns, 6), minmax(0, 1fr))
       list-style: none
+      min-height: 0
+      overflow-y: auto
 
-    // Three fixed rows, so the press sits at the same height on every card
-    // whatever its label says. The label's row is one numeral tall and a word
-    // is set at half a numeral over two lines at most, which is the same
-    // height: renaming `1` to `Glass twelve` used to swap a 59px line for a
-    // 36px one and lift the button 24px under the host's finger.
+      @include layout.narrow
+        grid-auto-rows: 6.9rem
+        grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr))
+        overflow: visible
+
     .item
-      --numeral: clamp(2.25rem, 7vmin, 3.5rem)
+      container-type: size
+      min-width: 0
+
+    // Numeral, then what the item is waiting on, then — on the console — the
+    // verb the whole piece performs. Three rows at fixed shares, so a press
+    // lands on the same place on every piece whatever its label says.
+    .face
+      --ground: var(--board)
 
       align-items: center
-      border: 3px solid var(--edge)
+      block-size: 100%
+      border-radius: var(--radius-m)
       display: grid
-      gap: var(--space-2xs)
-      grid-template-rows: calc(var(--numeral) * 1.05) auto auto
+      gap: 2cqh
+      grid-template-rows: minmax(0, 1fr) auto auto
+      inline-size: 100%
       justify-items: center
-      min-width: 0
-      padding: var(--space-xs)
+      padding: 6cqh 6cqi 8cqh
       text-align: center
 
-      .label
-        @include typography.monument
-        @include typography.numeric
+      &:is(button)
+        @include focus.ring
+        @include piece.pressable
 
-        font-size: var(--numeral)
-        line-height: 1.05
-        max-inline-size: 100%
-        overflow: hidden
-        text-overflow: ellipsis
-        white-space: nowrap
+        cursor: pointer
+        font: inherit
 
-        &.long
-          @include typography.title
+        &[data-disabled]
+          cursor: default
 
-          -webkit-box-orient: vertical
-          display: -webkit-box
-          font-size: calc(var(--numeral) / 2)
-          -webkit-line-clamp: 2
-          line-clamp: 2
-          line-height: 1.05
-          overflow-wrap: anywhere
-          white-space: normal
+    .label
+      @include typography.monument
+      @include typography.numeric
 
-      // Read from across the room beside the numeral, so a step up from the
-      // caption it started as — and one line always, so it cannot move the
-      // press either.
-      .state
-        @include typography.caption
-        @include typography.numeric
+      font-size: clamp(1.25rem, min(44cqh, 52cqi), 4.25rem)
+      line-height: 1
+      max-inline-size: 100%
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
 
-        align-items: center
-        display: inline-flex
-        font-size: clamp(0.875rem, 2.2vmin, 1.25rem)
-        gap: var(--space-2xs)
-        max-inline-size: 100%
-        white-space: nowrap
-
-        svg
-          block-size: 1em
-          flex: none
-          inline-size: 1em
-
-      .button
-        justify-self: stretch
-
-      // The flip's own swap, scoped to one item: the sheets are only on screen
-      // in `playing`, so its pair is the one to reverse, and the derived three
-      // are mixed again here because the root's arrive already resolved.
-      &.closed
-        --field: var(--board-ink)
-        --ink: var(--board)
-        --ink-muted: color-mix(in oklab, var(--ink) 85%, var(--field))
-        --rule: color-mix(in oklab, var(--ink) 32%, var(--field))
-        --edge: color-mix(in oklab, var(--ink) 60%, var(--field))
-
-        background: var(--field)
-        border-color: var(--field)
-        color: var(--ink)
-
-      &.marked
-        border-color: var(--rule)
-        color: var(--ink-muted)
-
-    .progress
-      display: flex
-      flex-direction: column
-      list-style: none
-
-      // The bar is the row's own ground: a hairline rule under every name,
-      // inked as far as that sheet is filled.
-      li
+      &.long
         @include typography.title
 
-        align-items: baseline
-        border-block-end: 1px solid var(--rule)
-        display: flex
-        gap: var(--space-m)
-        justify-content: space-between
-        padding-block: var(--space-xs) var(--space-s)
-        position: relative
-
-        &::after
-          background: var(--ink)
-          block-size: 4px
-          content: ''
-          inline-size: calc(var(--filled, 0) * 100%)
-          inset-block-end: -1px
-          inset-inline-start: 0
-          position: absolute
-          transition: inline-size var(--transition-base, 0) var(--timing, ease)
-
-      .nickname
-        min-width: 0
+        -webkit-box-orient: vertical
+        display: -webkit-box
+        font-size: clamp(0.875rem, min(19cqh, 15cqi), 1.75rem)
+        -webkit-line-clamp: 2
+        line-clamp: 2
+        line-height: 1.05
         overflow-wrap: anywhere
+        white-space: normal
 
-      .tally
-        @include typography.numeric
+    .filling,
+    .state,
+    .verb
+      @include typography.numeric
 
-        flex-shrink: 0
+      font-size: clamp(0.75rem, min(13cqh, 11cqi), 1.125rem)
+      font-weight: 600
+      line-height: 1.15
+      max-inline-size: 100%
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
 
-  // Under the board and still wider than a column needs, the progress takes
-  // one half and the two folds stack in the other; beside the board, and on
-  // a phone, all three are one column. Two classes deep so it outranks the
-  // lobby's `.host-side`, which the console page declares at the same weight.
+    // The count sits on its own groove: the socket the length of the card,
+    // inked as far as the table has written.
+    .filling
+      background: linear-gradient(var(--card-ink) 0 0) left bottom / calc(var(--filled, 0) * 100%) 0.28em no-repeat, linear-gradient(var(--socket) 0 0) left bottom / 100% 0.28em no-repeat
+      justify-self: stretch
+      padding-block-end: 0.45em
+
+    .state
+      align-items: center
+      display: inline-flex
+      gap: 0.3em
+
+      svg
+        block-size: 1em
+        flex: none
+        inline-size: 1em
+
+    .verb
+      @include typography.label
+
+      font-size: clamp(0.75rem, min(12cqh, 10cqi), 1rem)
+
+    // Three states, three materials of the box, legible without a word: paper
+    // still being written on, a saffron token collected and owed to the wall,
+    // and the empty socket it leaves once marked.
+    .item.open .face
+      @include piece.card(var(--radius-m))
+
+    .item.closed .face
+      @include piece.piece
+
+      background: var(--tile-2)
+      color: var(--tile-ink)
+
+    .item.marked .face
+      background: var(--socket)
+      box-shadow: inset 0 2px 0 var(--socket-line)
+      color: var(--ink-muted)
+
+      @media (hover: hover) and (pointer: fine)
+        &:is(button)[data-hovered]
+          box-shadow: inset 0 2px 0 var(--socket-line), 0 0 0 2px var(--socket-line)
+          transform: none
+
+      &:is(button)[data-pressed]
+        box-shadow: inset 0 3px 0 var(--socket-line)
+        transform: none
+
   .stage.slate-writing > .host-side
     align-content: start
     display: grid
@@ -203,149 +198,298 @@
     min-width: 0
 
     @include layout.wide
-      align-items: start
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr)
+      align-content: stretch
+      grid-area: side
+      gap: var(--space-s)
+      grid-template-rows: minmax(min(9rem, 45cqh), 1fr)
+      grid-auto-rows: auto
+      min-height: 0
+      overflow-y: auto
 
-      .progress
-        grid-row: span 2
+  .slate-writing .sheets
+    display: grid
+    gap: var(--space-xs)
+    grid-template-rows: auto minmax(0, 1fr)
+    min-height: 0
 
-    @include layout.poster-wide
-      grid-template-columns: minmax(0, 1fr)
+    .sheets-title
+      @include typography.label
 
-      .progress
-        grid-row: auto
+      color: var(--ink-muted)
 
-  .slate-correcting
-    .item
-      display: flex
-      flex-direction: column
-      gap: clamp(var(--space-m), 4vmin, var(--space-xl))
-      min-width: 0
-
-      > header
-        align-items: center
-        display: flex
-        gap: clamp(var(--space-m), 4vmin, var(--space-xl))
-
-      .label
-        @include typography.monument
-        @include typography.numeric
-
-        flex: none
-        max-inline-size: 50%
-        overflow-wrap: anywhere
-
-        &.long
-          @include typography.billboard
-
-      .naming
-        align-items: flex-start
-        display: flex
-        flex-direction: column
-        gap: var(--space-xs)
-        min-width: 0
-
-      .of
-        @include typography.label
-
-        color: var(--ink-muted)
-
-      // The answer the room is waiting on, stamped in the field's own ink so
-      // it reads from the back of the room as the one solid thing on the wall.
-      .key
-        --ink-muted: color-mix(in oklab, var(--field) 85%, var(--ink))
-
-        background: var(--ink)
-        color: var(--field)
-        display: flex
-        flex-direction: column
-        gap: var(--space-2xs)
-        padding: clamp(var(--space-s), 3vmin, var(--space-l)) clamp(var(--space-m), 4vmin, var(--space-xl))
-
-        @media (prefers-reduced-motion: no-preference)
-          animation: key-stamp 280ms cubic-bezier(0.16, 1, 0.3, 1)
-
-      .key-title
-        @include typography.label
-
-        color: var(--ink-muted)
-
-      .key-text
-        @include typography.billboard
-
-        font-size: clamp(2rem, 8vmin, 5.5rem)
-        overflow-wrap: anywhere
-        text-wrap: balance
-
-      // Held back until the host decides, and sized as the one press on the
-      // item: the answers are judged against it, so it is not a footnote.
-      .reveal-key
-        align-self: stretch
-
-
-    .groups
+    .progress
       display: flex
       flex-direction: column
       list-style: none
 
-    .group
-      align-items: center
-      border-block-start: 1px solid var(--rule)
-      display: flex
-      gap: var(--space-m)
-      justify-content: space-between
-      padding-block: var(--space-s)
+      // The row's own ground is a groove, inked as far as that sheet is filled.
+      li
+        @include typography.title
 
-      &:last-child
-        border-block-end: 1px solid var(--rule)
+        align-items: center
+        background: linear-gradient(var(--ink) 0 0) left bottom / calc(var(--filled, 0) * 100%) 4px no-repeat, linear-gradient(var(--socket) 0 0) left bottom / 100% 4px no-repeat
+        display: flex
+        gap: 0.5em
+        padding-block: 0.3em 0.45em
+
+        .pawn
+          block-size: 1.15em
+          flex: none
+          inline-size: auto
+
+      .nickname
+        flex: 1 1 auto
+        font-size: 1em
+        min-width: 0
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
+
+      .tally
+        @include typography.numeric
+
+        flex: none
+
+      // After the row's own type, which sets a size of its own.
+      @include layout.wide
+        container-type: size
+        overflow-y: auto
+
+        li
+          font-size: clamp(14px, calc(100cqh / var(--sheets, 8) / 2.35), 1.5rem)
+
+  .slate-correcting
+    .marking
+      display: flex
+      flex-direction: column
+      gap: clamp(var(--space-s), 3cqh, var(--space-l))
+      min-width: 0
+
+      @include layout.wide
+        display: grid
+        grid-area: marking
+        grid-template-rows: auto minmax(0, 1fr)
+        min-height: 0
+
+      > header
+        align-items: center
+        display: flex
+        gap: clamp(var(--space-m), 3cqi, var(--space-xl))
+        min-width: 0
+
+    // The item collected, stood on the wall as the round saffron token the
+    // board showed it as.
+    .token
+      --token-size: clamp(4.5rem, min(24cqh, 18cqi), 9.5rem)
+
+      align-items: center
+      background: var(--tile-2)
+      block-size: var(--token-size)
+      border-radius: 50%
+      box-shadow: 0 4px 0 var(--chipboard), 0 12px 20px -10px var(--shadow)
+      color: var(--tile-ink)
+      display: grid
+      flex: none
+      inline-size: var(--token-size)
+      justify-items: center
+      padding: 0.6rem
+
+      .token-label
+        @include typography.monument
+        @include typography.numeric
+
+        font-size: calc(var(--token-size) * 0.5)
+        line-height: 1
+        max-inline-size: 100%
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
+
+      &.long .token-label
+        @include typography.title
+
+        -webkit-box-orient: vertical
+        display: -webkit-box
+        font-size: calc(var(--token-size) * 0.17)
+        -webkit-line-clamp: 3
+        line-clamp: 3
+        line-height: 1.05
+        overflow-wrap: anywhere
+        text-align: center
+        white-space: normal
+
+    .naming
+      align-items: flex-start
+      display: flex
+      flex: 1 1 auto
+      flex-direction: column
+      gap: var(--space-xs)
+      min-width: 0
+
+    .of
+      @include typography.label
+
+      color: var(--ink-muted)
+
+    // What the host noted, printed on the paper card the room has been
+    // waiting to see turned over.
+    .key
+      @include piece.card
+
+      --ink-muted: var(--card-muted)
+
+      align-self: stretch
+      display: flex
+      flex-direction: column
+      gap: var(--space-2xs)
+      padding: clamp(10px, 2.4cqh, 24px) clamp(16px, 3cqi, 36px)
+
+      @media (prefers-reduced-motion: no-preference)
+        animation: key-stamp 280ms cubic-bezier(0.16, 1, 0.3, 1)
+
+    .key-title
+      @include typography.label
+
+      color: var(--ink-muted)
+
+    .key-text
+      @include typography.billboard
+
+      font-size: clamp(1.5rem, min(9cqh, 5.5cqi), 4.5rem)
+      overflow-wrap: anywhere
+      text-wrap: balance
+
+    .groups
+      display: flex
+      flex-direction: column
+      gap: var(--space-xs)
+      list-style: none
+
+      @include layout.wide
+        container-type: size
+        display: grid
+        grid-auto-rows: max-content
+        overflow-y: auto
+        padding-block-end: 4px
+
+        .group
+          font-size: clamp(14px, calc((100cqh - (var(--groups, 1) - 1) * var(--space-xs)) / var(--groups, 1) / 2.85), 2.75rem)
+
+    // One chip per distinct answer, in the reveal's vocabulary: paper while
+    // it waits on the host, the reveal's green once it is right, and an empty
+    // dashed outline once the wall has passed it unvalidated.
+    .group
+      @include piece.card(var(--radius-m))
+
+      align-items: center
+      display: flex
+      gap: 0.6em
+      justify-content: space-between
+      padding: 0.35em 0.4em 0.35em 0.7em
+
+      &.right
+        background: var(--good-soft)
+        color: var(--tile-ink)
+
+      // A blank line is nobody's answer, so it is dashed like a pass and
+      // printed only as who.
+      &.missed,
+      &.blank
+        background: transparent
+        box-shadow: none
+        color: var(--ink-muted)
+        outline: 2px dashed var(--rule)
+        outline-offset: -2px
+
+      &.blank
+        justify-content: start
+
+        .writers
+          font-size: max(14px, 0.6em)
 
       .said
         display: flex
+        flex: 1 1 auto
         flex-direction: column
-        gap: var(--space-2xs)
+        gap: 0.15em
         min-width: 0
 
       .text
         @include typography.billboard
 
-        font-size: clamp(1.5rem, 5vmin, 3.5rem)
-        overflow-wrap: anywhere
+        font-size: 1em
+        line-height: 1.1
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
 
       .writers
+        align-items: center
+        display: flex
+        font-size: max(14px, 0.5em)
+        gap: 0.5em
+        min-width: 0
+
+      .pawns
+        display: flex
+        flex: none
+        gap: 0.1em
+
+        .pawn
+          block-size: 1.2em
+          inline-size: auto
+
+      .names
         @include typography.caption
 
-        color: var(--ink-muted)
+        font-size: 1em
+        min-width: 0
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
 
+      // Sized with the row it judges, so a wall-sized answer is not judged
+      // by a footnote of a press.
       .toggle-button
         flex-shrink: 0
+        font-size: clamp(1rem, 0.5em, 1.375rem)
+        min-height: 2.5em
 
-      // The wall's copy of a pressed toggle: the same words, stamped in the
-      // selected block's ink ground, and nothing to press.
+        &[data-selected]
+          --control-ink: var(--on-spine)
+
+          background: var(--good)
+          box-shadow: 0 3px 0 var(--good-edge)
+          color: var(--on-spine)
+
+      // The wall's copy of a validated answer: the same words on the same
+      // green, and nothing to press.
       .mark
         @include typography.title
 
         align-items: center
-        background: var(--ink)
-        color: var(--field)
+        background: var(--good)
+        border-radius: var(--radius-s)
+        color: var(--on-spine)
         display: inline-flex
         flex-shrink: 0
+        font-size: max(1rem, 0.55em)
         gap: var(--space-xs)
         padding: var(--space-xs) var(--space-s)
 
-        // The check is 1.25em and holds the stamp's height on its own, so the
-        // trim changes no size and only centres the capitals on the glyph.
         .mark-label
           text-box: trim-both cap alphabetic
 
-      // Passed without a press: wrong, and read as the lesser line.
-      &.missed .text
-        color: var(--ink-muted)
-
-    .nobody,
-    .blanks
+    .nobody
       @include typography.body
 
       color: var(--ink-muted)
+
+    > .standings
+      @include layout.wide
+        @include boxed-standings.dividing-its-box
+
+        grid-area: standings
 
   // The press that moves the marking on, the one that steps back, and the way
   // to the sheets as a quieter third: at 390px they wrap rather than push the
@@ -362,6 +506,11 @@
 
     .button.aside
       flex: 0 0 100%
+
+    @include layout.wide
+      .button,
+      .button.aside
+        flex: 0 0 auto
 
 @keyframes key-stamp
   from

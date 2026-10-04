@@ -1,0 +1,37 @@
+// Pure module: mixins only, no top-level CSS.
+@use '../../presentation/styles/typography'
+
+/// The titled standings dividing the box a stage gives them by their rows,
+/// beside the reveal, the final board and the slate's marking. A row measured
+/// 2.14 of its own size with the score, the rule and the padding in it; the
+/// board divides its box by its rows over that and a little headroom. Past
+/// about fourteen players the floor binds and the list scrolls inside its box.
+@mixin dividing-its-box
+  align-self: stretch
+  display: grid
+  gap: var(--space-xs)
+  grid-template-rows: auto minmax(0, 1fr)
+  min-height: 0
+
+  .standings-title
+    @include typography.label
+
+    color: var(--ink-muted)
+
+  .scoreboard
+    container-type: size
+    overflow-y: auto
+
+    li
+      font-size: clamp(14px, calc(100cqh / var(--standings-rows, 8) / 2.3), 1.75rem)
+      padding: 0.3em 0
+
+      .rank
+        font-size: 0.8em
+
+      .nickname
+        font-size: 1em
+
+      .score
+        font-size: 1.4em
+        line-height: 1

@@ -186,6 +186,27 @@ new one is whole. This file is the brief: open a fresh session, run
   `choice-fits.spec.ts` measures a 20-character winner and a three-way tie from
   900px wide, in French; broken on purpose once (rows padded to 1.5em).
 
+- **The slate's two stages.** While the sheets are open every item is a piece
+  of the box, and on the console the whole piece is the press: a paper card
+  with its count on a groove inked as far as the table has written, a saffron
+  token once collected and owed to the wall (a lock and *Corriger* on the
+  console, *À corriger* on the wall), and the empty socket it leaves once
+  marked. The column count and the side are dealt by `useFittedGrid` from the
+  board's own box (`helpers/fitted-grid.ts`): a square root of the area per
+  cell picks the wrong grid — twenty-six cells at 900×900 ran a row past the
+  box — so every column count is tried and its rows paid for. Past the floor,
+  sixty items scroll in their own box. The sheets beside it are a pawn, a name
+  and a groove per player, under a title, dividing their box. The marking is
+  the item's saffron token beside the key printed on the paper card, a chip
+  per distinct answer (paper while it waits, the reveal's green once right, an
+  empty dashed outline once passed, the writers' pawns under the words), and
+  the blanks as a last dashed chip rather than a footnote. The standings
+  beside it are the reveal's, and the titled board that divides its box is a
+  mixin now (`_boxed-standings.sass`), shared by the reveal, the final board
+  and the marking. `choice-fits.spec.ts` measures both stages from 900px wide
+  in French, with the spill check over the items, the sheets and the chips —
+  red before the redesign at every viewport (397px of scroll at 1280×720).
+
 Measured traps, so the next screen does not pay for them again: a `position:
 fixed` element inside the page is fixed to the page, not the viewport, because
 the entrance animation leaves a `transform` — the track renders beside `<main>`; `height` on the console's `<main>` does
@@ -199,8 +220,7 @@ page's entrance animation, whose leftover `translateY` is a 1px scroll.
 
 ## Next session
 
-1. The rest of §1's inventory screen by screen — the slate's two stages,
-   reflex — each against
+1. The rest of §1's inventory screen by screen — reflex — against
    the ring's `--track-room` and measured at 1280×720, 1024×768 and 1920×1080;
    the front door last (Persuade), `og.png` redrawn, then §6.
    `AskedQuestion`'s own sizing still carries Archivo's measured width

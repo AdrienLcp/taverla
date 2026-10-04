@@ -1,4 +1,6 @@
 import type React from 'react'
+import { useId, useRef } from 'react'
+import { Button as ReactAriaButton } from 'react-aria-components'
 
 import type { ClientMessage } from '@taverla/protocol/client-message'
 import type { HostRoomView, PublicPlayer } from '@taverla/protocol/room'
@@ -6,6 +8,7 @@ import { MAX_SLATE_ITEMS, type SlateItemState } from '@taverla/protocol/slate'
 
 import { slateContent, slateHostContent } from '@/helpers/round-content'
 import {
+  type SlateItemName,
   slateItemIndexes,
   slateItemName,
   slateLabelsOf
@@ -13,13 +16,15 @@ import {
 import { Button } from '@/presentation/components/button'
 import { CheckIcon } from '@/presentation/components/check-icon'
 import { LockIcon } from '@/presentation/components/lock-icon'
-import { Scoreboard } from '@/presentation/components/scoreboard'
+import { Pawn } from '@/presentation/components/pawn'
 import { ToggleButton } from '@/presentation/components/toggle-button'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import type { StageControls } from './room-stage'
 import { SlateKeyEditor } from './slate-key-editor'
 import { SlateLabelsEditor } from './slate-labels-editor'
+import { Standings } from './standings'
+import { useFittedGrid } from './use-fitted-grid'
 import type { SlateWall } from './use-slate-wall'
 
 import './slate-stages.sass'
@@ -51,6 +56,92 @@ type SlateBoardProps = {
   view: HostRoomView
 }
 
+type ItemPieceProps = {
+  /** How many sheets have something on this item; read only while it is open. */
+  filled: number
+  name: SlateItemName
+  /** `null` on the wall, where the piece is printed and nothing presses it. */
+  onPress: (() => void) | null
+  /** Disabled while the socket is down: every press sends a frame. */
+  isDisabled: boolean
+  /** The press's whole outcome, spoken — the verb printed on the piece names no item. */
+  pressLabel: string
+  seatCount: number
+  state: SlateItemState
+}
+
+/**
+ * One item as a piece of the box: a paper card while it is written on, a
+ * saffron token once collected and owed to the wall, an empty socket once
+ * marked. On the console the whole piece is the press.
+ */
+const ItemPiece: React.FC<ItemPieceProps> = ({
+  filled,
+  isDisabled,
+  name,
+  onPress,
+  pressLabel,
+  seatCount,
+  state
+}) => {
+  const translate = useTranslate()
+  const face = (
+    <>
+      <span
+        aria-hidden
+        className={name.isShort ? 'label' : 'label long'}
+        title={name.label}
+      >
+        {name.label}
+      </span>
+      {state === 'open' ? (
+        <span
+          className='filling'
+          style={{ '--filled': seatCount === 0 ? 0 : filled / seatCount }}
+        >
+          {translate('slate.board.state.open', { count: seatCount, filled })}
+        </span>
+      ) : state === 'closed' && onPress !== null ? (
+        <span className='state'>
+          <LockIcon />
+        </span>
+      ) : (
+        <span className='state'>
+          {state === 'closed' ? <LockIcon /> : <CheckIcon />}
+          {translate(
+            state === 'closed'
+              ? 'slate.board.state.closed'
+              : 'slate.board.state.marked'
+          )}
+        </span>
+      )}
+      {onPress !== null && state !== 'marked' && (
+        <span aria-hidden className='verb'>
+          {translate(
+            state === 'open' ? 'slate.board.close' : 'slate.board.show'
+          )}
+        </span>
+      )}
+    </>
+  )
+
+  return onPress === null ? (
+    <div className='face'>{face}</div>
+  ) : (
+    <ReactAriaButton
+      aria-label={pressLabel}
+      className='face'
+      isDisabled={isDisabled}
+      onPress={onPress}
+    >
+      {face}
+    </ReactAriaButton>
+  )
+}
+
+/** How much taller than wide a piece is: the numeral, its count and its verb. */
+const ITEM_ASPECT = 1.06
+
 /**
  * The room's screen while the sheets are open. It shows how far along everyone
  * is and never a word of what they wrote: every item with how many sheets have
@@ -61,10 +152,18 @@ export const SlateWritingStage: React.FC<SlateBoardProps> = ({
   view
 }) => {
   const translate = useTranslate()
+  const sheetsTitleId = useId()
+  const itemsGrid = useRef<HTMLOListElement>(null)
   const round = view.round
   const content = slateHostContent(view)
   const roundContent = slateContent(round)
   const game = view.settings.game
+
+  useFittedGrid({
+    aspect: ITEM_ASPECT,
+    count: roundContent?.itemCount ?? 0,
+    grid: itemsGrid
+  })
 
   if (round === null || content === null || roundContent === null) {
     return null
@@ -76,9 +175,21 @@ export const SlateWritingStage: React.FC<SlateBoardProps> = ({
   const labels = slateLabelsOf(view.settings)
   const spokenName = (itemIndex: number): string =>
     labels[itemIndex] ?? translate('slate.item', { index: itemIndex + 1 })
+  const pressOf = (itemIndex: number, state: SlateItemState) =>
+    controls === null
+      ? null
+      : () =>
+          controls.send(
+            state === 'open'
+              ? { itemIndex, roundId: round.id, type: 'host.closeItem' }
+              : { itemIndex, roundId: round.id, type: 'host.showItem' }
+          )
 
   return (
-    <div className='stage slate-writing'>
+    <div
+      className='stage slate-writing'
+      style={{ '--items': itemCount, '--sheets': view.players.length }}
+    >
       <section className='item-board'>
         <header>
           <h2 className='now'>
@@ -86,94 +197,47 @@ export const SlateWritingStage: React.FC<SlateBoardProps> = ({
               hasOpenItem ? 'slate.wall.filling' : 'slate.wall.allCollected'
             )}
           </h2>
-          <div className='size'>
-            <p className='count-label'>
-              {translate('slate.items.summary', { count: itemCount })}
-            </p>
-            {controls !== null && (
-              <Button
-                isDisabled={isDisabled || itemCount >= MAX_SLATE_ITEMS}
-                onPress={() =>
-                  controls.send({ roundId: round.id, type: 'host.addItem' })
-                }
-                size='small'
-                variant='outlined'
-              >
-                {translate('slate.items.add')}
-              </Button>
-            )}
-          </div>
+          <p className='count-label'>
+            {translate('slate.items.summary', { count: itemCount })}
+          </p>
+          {controls !== null && (
+            <Button
+              isDisabled={isDisabled || itemCount >= MAX_SLATE_ITEMS}
+              onPress={() =>
+                controls.send({ roundId: round.id, type: 'host.addItem' })
+              }
+              size='small'
+              variant='outlined'
+            >
+              {translate('slate.items.add')}
+            </Button>
+          )}
         </header>
 
-        <ol aria-label={translate('slate.items.label')} className='items'>
+        <ol
+          aria-label={translate('slate.items.label')}
+          className='items'
+          ref={itemsGrid}
+        >
           {slateItemIndexes(itemCount).map((itemIndex) => {
             const state = itemStates[itemIndex] ?? 'open'
-            const name = slateItemName({ itemIndex, labels })
 
             return (
               <li className={`item ${state}`} key={`${round.id}:${itemIndex}`}>
-                <span
-                  aria-hidden
-                  className={name.isShort ? 'label' : 'label long'}
-                  title={name.label}
-                >
-                  {name.label}
-                </span>
-                <span className='state'>
-                  {state === 'open' ? (
-                    translate('slate.board.state.open', {
-                      count: view.players.length,
-                      filled: content.filledCounts[itemIndex] ?? 0
-                    })
-                  ) : (
-                    <>
-                      {state === 'closed' ? <LockIcon /> : <CheckIcon />}
-                      {translate(
-                        state === 'closed'
-                          ? 'slate.board.state.closed'
-                          : 'slate.board.state.marked'
-                      )}
-                    </>
+                <ItemPiece
+                  filled={content.filledCounts[itemIndex] ?? 0}
+                  isDisabled={isDisabled}
+                  name={slateItemName({ itemIndex, labels })}
+                  onPress={pressOf(itemIndex, state)}
+                  pressLabel={translate(
+                    state === 'open'
+                      ? 'slate.board.closeItem'
+                      : 'slate.board.markItem',
+                    { item: spokenName(itemIndex) }
                   )}
-                </span>
-                {controls !== null &&
-                  (state === 'open' ? (
-                    <Button
-                      aria-label={translate('slate.board.closeItem', {
-                        item: spokenName(itemIndex)
-                      })}
-                      isDisabled={isDisabled}
-                      onPress={() =>
-                        controls.send({
-                          itemIndex,
-                          roundId: round.id,
-                          type: 'host.closeItem'
-                        })
-                      }
-                      size='small'
-                      variant='outlined'
-                    >
-                      {translate('slate.board.close')}
-                    </Button>
-                  ) : (
-                    <Button
-                      aria-label={translate('slate.board.markItem', {
-                        item: spokenName(itemIndex)
-                      })}
-                      isDisabled={isDisabled}
-                      onPress={() =>
-                        controls.send({
-                          itemIndex,
-                          roundId: round.id,
-                          type: 'host.showItem'
-                        })
-                      }
-                      size='small'
-                      variant='outlined'
-                    >
-                      {translate('slate.board.show')}
-                    </Button>
-                  ))}
+                  seatCount={view.players.length}
+                  state={state}
+                />
               </li>
             )
           })}
@@ -181,25 +245,36 @@ export const SlateWritingStage: React.FC<SlateBoardProps> = ({
       </section>
 
       <div className='host-side'>
-        <ul className='progress'>
-          {view.players.map((player) => {
-            const filled =
-              content.progress.find((entry) => entry.playerId === player.id)
-                ?.filledCount ?? 0
+        <section aria-labelledby={sheetsTitleId} className='sheets'>
+          <h2 className='sheets-title' id={sheetsTitleId}>
+            {translate('slate.board.sheets')}
+          </h2>
+          <ul className='progress'>
+            {view.players.map((player, seat) => {
+              const filled =
+                content.progress.find((entry) => entry.playerId === player.id)
+                  ?.filledCount ?? 0
 
-            return (
-              <li
-                key={player.id}
-                style={{ '--filled': itemCount === 0 ? 0 : filled / itemCount }}
-              >
-                <span className='nickname'>{player.nickname}</span>
-                <span className='tally'>
-                  {translate('slate.progress', { count: itemCount, filled })}
-                </span>
-              </li>
-            )
-          })}
-        </ul>
+              return (
+                <li
+                  key={player.id}
+                  style={{
+                    '--filled': itemCount === 0 ? 0 : filled / itemCount
+                  }}
+                >
+                  <Pawn seat={seat} />
+                  <span className='nickname'>{player.nickname}</span>
+                  <span className='tally'>
+                    {translate('slate.progress', {
+                      count: itemCount,
+                      filled
+                    })}
+                  </span>
+                </li>
+              )
+            })}
+          </ul>
+        </section>
 
         {controls !== null && (
           <SlateKeyEditor
@@ -237,11 +312,19 @@ export const SlateWritingStage: React.FC<SlateBoardProps> = ({
   )
 }
 
+const groupClassName = (isCorrect: boolean | null): string =>
+  isCorrect === true
+    ? 'group right'
+    : isCorrect === false
+      ? 'group missed'
+      : 'group'
+
 /**
- * The papers marked in front of the room, one item at a time: its label, the
- * key the host noted if they choose to show it, every distinct answer with who
- * wrote it, and one press per answer. The standings beside it move with each
- * press. The wall draws the marks and not the presses.
+ * The papers marked in front of the room, one item at a time: its token, the
+ * key the host noted printed on a card once they show it, every distinct
+ * answer with the pawns of who wrote it, and one press per answer. The
+ * standings beside it move with each press. The wall draws the marks and not
+ * the presses.
  */
 export const SlateCorrectionStage: React.FC<SlateBoardProps> = ({
   controls,
@@ -271,16 +354,24 @@ export const SlateCorrectionStage: React.FC<SlateBoardProps> = ({
     itemIndex,
     labels: slateLabelsOf(view.settings)
   })
+  const seatOf = (playerId: string): number =>
+    view.players.findIndex((player) => player.id === playerId)
 
   return (
     <div
       className='stage slate-correcting'
-      style={{ '--standings-rows': view.players.length }}
+      style={{
+        '--groups': Math.max(
+          groups.length + (blankPlayerIds.length > 0 ? 1 : 0),
+          1
+        ),
+        '--standings-rows': view.players.length
+      }}
     >
-      <section className='item'>
+      <section className='marking'>
         <header>
-          <p aria-hidden className={name.isShort ? 'label' : 'label long'}>
-            {name.label}
+          <p aria-hidden className={name.isShort ? 'token' : 'token long'}>
+            <span className='token-label'>{name.label}</span>
           </p>
           <div className='naming'>
             <h2 className='of'>
@@ -289,50 +380,54 @@ export const SlateCorrectionStage: React.FC<SlateBoardProps> = ({
                 index: itemIndex + 1
               })}
             </h2>
+
+            {revealedKey !== null ? (
+              <p className='key' key={itemIndex}>
+                <span className='key-title'>
+                  {translate('slate.correct.key.title')}
+                </span>
+                <span className='key-text'>{revealedKey}</span>
+              </p>
+            ) : (
+              controls !== null &&
+              key !== null && (
+                <Button
+                  className='reveal-key'
+                  isDisabled={isDisabled}
+                  onPress={() =>
+                    controls.send({
+                      itemIndex,
+                      roundId: round.id,
+                      type: 'host.revealItemKey'
+                    })
+                  }
+                  variant='outlined'
+                >
+                  {translate('slate.correct.key.reveal')}
+                </Button>
+              )
+            )}
           </div>
         </header>
 
-        {revealedKey !== null ? (
-          <p className='key' key={itemIndex}>
-            <span className='key-title'>
-              {translate('slate.correct.key.title')}
-            </span>
-            <span className='key-text'>{revealedKey}</span>
-          </p>
-        ) : (
-          controls !== null &&
-          key !== null && (
-            <Button
-              className='reveal-key'
-              isDisabled={isDisabled}
-              onPress={() =>
-                controls.send({
-                  itemIndex,
-                  roundId: round.id,
-                  type: 'host.revealItemKey'
-                })
-              }
-              size='large'
-              variant='outlined'
-            >
-              {translate('slate.correct.key.reveal')}
-            </Button>
-          )
-        )}
-
-        {groups.length === 0 ? (
+        {groups.length === 0 && (
           <p className='nobody'>{translate('slate.correct.nobody')}</p>
-        ) : (
+        )}
+        {groups.length + blankPlayerIds.length > 0 && (
           <ul className='groups'>
             {groups.map((group) => (
-              <li
-                className={group.isCorrect === false ? 'group missed' : 'group'}
-                key={group.key}
-              >
+              <li className={groupClassName(group.isCorrect)} key={group.key}>
                 <div className='said'>
                   <span className='text'>{group.text}</span>
                   <span className='writers'>
-                    {nicknamesOf(view.players, group.playerIds)}
+                    <span aria-hidden className='pawns'>
+                      {group.playerIds.map((playerId) => (
+                        <Pawn key={playerId} seat={seatOf(playerId)} />
+                      ))}
+                    </span>
+                    <span className='names'>
+                      {nicknamesOf(view.players, group.playerIds)}
+                    </span>
                   </span>
                 </div>
                 {controls === null ? (
@@ -357,6 +452,7 @@ export const SlateCorrectionStage: React.FC<SlateBoardProps> = ({
                         verdict: { isCorrect, kind: 'single' }
                       })
                     }
+                    size='small'
                   >
                     <CheckIcon />
                     {translate('slate.correct.judge')}
@@ -364,19 +460,27 @@ export const SlateCorrectionStage: React.FC<SlateBoardProps> = ({
                 )}
               </li>
             ))}
+            {blankPlayerIds.length > 0 && (
+              <li className='group blank'>
+                <span className='writers'>
+                  <span aria-hidden className='pawns'>
+                    {blankPlayerIds.map((playerId) => (
+                      <Pawn key={playerId} seat={seatOf(playerId)} />
+                    ))}
+                  </span>
+                  <span className='names'>
+                    {translate('slate.correct.blanks', {
+                      names: nicknamesOf(view.players, blankPlayerIds)
+                    })}
+                  </span>
+                </span>
+              </li>
+            )}
           </ul>
-        )}
-
-        {blankPlayerIds.length > 0 && (
-          <p className='blanks'>
-            {translate('slate.correct.blanks', {
-              names: nicknamesOf(view.players, blankPlayerIds)
-            })}
-          </p>
         )}
       </section>
 
-      <Scoreboard players={view.players} />
+      <Standings players={view.players} youId={null} />
     </div>
   )
 }

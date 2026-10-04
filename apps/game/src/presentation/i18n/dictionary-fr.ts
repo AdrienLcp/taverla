@@ -557,6 +557,7 @@ export const FR_DICTIONARY = defineDictionary({
       close: 'Ramasser',
       closeItem: 'Ramasser {item} et le corriger maintenant',
       markItem: 'Corriger {item}',
+      sheets: 'Les feuilles',
       show: 'Corriger',
       state: {
         closed: 'À corriger',

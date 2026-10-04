@@ -461,7 +461,7 @@ const measureReveal = (): RevealOverflow => {
   const root = document.scrollingElement ?? document.documentElement
   const rows = [
     ...document.querySelectorAll<HTMLElement>(
-      '.stage.revealed .reveal-panel li, .stage:is(.revealed, .finished) .standings li'
+      '.stage.revealed .reveal-panel li, .stage:is(.revealed, .finished, .slate-correcting) .standings li, .slate-correcting .groups li, .slate-writing :is(.items, .progress) li'
     )
   ]
   const furthest = [...document.body.querySelectorAll<HTMLElement>('*')]
@@ -646,6 +646,136 @@ for (const final of FINALS) {
     await page.setViewportSize({ height: 720, width: 1280 })
     await page.goto(`/host/${ROOM_CODE}`)
     await expect(page.locator('.final-board .standings li')).toHaveCount(8)
+
+    const faults: string[] = []
+
+    for (const [width, height] of WIDE_VIEWPORTS) {
+      await page.setViewportSize({ height, width })
+      await page.evaluate(() => document.fonts.ready.then(() => {}))
+
+      const overflow = await page.evaluate(measureReveal)
+
+      if (
+        overflow.furthest !== null ||
+        overflow.page > 0 ||
+        overflow.spills.length > 0
+      ) {
+        faults.push(`${width}×${height} ${JSON.stringify(overflow)}`)
+      }
+    }
+
+    expect(faults).toEqual([])
+  })
+}
+
+const SLATE_ITEMS = 26
+
+const slateItemStates = Array.from({ length: SLATE_ITEMS }, (_, index) =>
+  index < 3 ? 'marked' : index < 5 ? 'closed' : 'open'
+)
+
+/**
+ * A chip tasting on the screen the room reads: twenty-six cups, three marked,
+ * two waiting on the wall, the rest still being written on eight sheets.
+ */
+const slateView = ({
+  currentItemIndex
+}: {
+  currentItemIndex: number | null
+}) => {
+  const view = consoleView(LONGEST_PROMPT)
+
+  return {
+    ...view,
+    currentContent: {
+      correction:
+        currentItemIndex === null
+          ? null
+          : {
+              blankPlayerIds: ['p8'],
+              groups: [
+                {
+                  isCorrect: true,
+                  key: 'paprika',
+                  playerIds: ['p1', 'p3', 'p5'],
+                  text: 'Paprika'
+                },
+                {
+                  isCorrect: null,
+                  key: 'barbecue',
+                  playerIds: ['p2', 'p4'],
+                  text: 'Barbecue'
+                },
+                {
+                  isCorrect: false,
+                  key: 'poulet thym citron',
+                  playerIds: ['p6'],
+                  text: 'Poulet rôti, thym et citron de Menton'
+                },
+                {
+                  isCorrect: null,
+                  key: 'sel vinaigre',
+                  playerIds: ['p7'],
+                  text: 'Sel et vinaigre'
+                }
+              ]
+            },
+      filledCounts: slateItemStates.map((_, index) => (index * 5) % 9),
+      keys: slateItemStates.map((_, index) =>
+        index === 3 ? 'Paprika fumé' : null
+      ),
+      kind: 'slate',
+      progress: table.map(({ id }, seat) => ({
+        filledCount: (seat * 7) % 27,
+        playerId: id
+      }))
+    },
+    round: {
+      ...view.round,
+      answers: [],
+      content: {
+        currentItemIndex,
+        itemCount: SLATE_ITEMS,
+        itemStates: slateItemStates,
+        kind: 'slate',
+        revealedKeys: slateItemStates.map((_, index) =>
+          index === 3 ? 'Paprika fumé' : null
+        ),
+        yourSheet: null
+      }
+    },
+    settings: {
+      ...view.settings,
+      game: { itemCount: SLATE_ITEMS, kind: 'slate', labels: [] },
+      mode: { kind: 'typed' }
+    }
+  }
+}
+
+const SLATE_SCREENS = [
+  {
+    name: 'the sheets being written',
+    ready: '.slate-writing .items li',
+    view: slateView({ currentItemIndex: null })
+  },
+  {
+    name: 'an item marked on the wall',
+    ready: '.slate-correcting .groups li',
+    view: slateView({ currentItemIndex: 3 })
+  }
+]
+
+for (const screen of SLATE_SCREENS) {
+  test(`[layout] room, slate, ${screen.name}: never scrolls above the split`, async ({
+    page
+  }) => {
+    await serveRoom({ page, view: screen.view })
+    await page.addInitScript(() => {
+      localStorage.setItem('taverla:locale', 'fr')
+    })
+    await page.setViewportSize({ height: 720, width: 1280 })
+    await page.goto(`/host/${ROOM_CODE}`)
+    await expect(page.locator(screen.ready).first()).toBeVisible()
 
     const faults: string[] = []
 
