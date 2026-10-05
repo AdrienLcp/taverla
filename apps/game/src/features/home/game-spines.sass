@@ -108,3 +108,15 @@
       flex: none
       height: 0.8em
       width: 0.8em
+
+    // Out of the flow: a name that just fits ("Blind test") would wrap under it.
+    .name
+      position: relative
+      width: fit-content
+
+      .spinner
+        height: 0.55em
+        inset-inline-start: calc(100% + var(--space-s))
+        margin: 0
+        position: absolute
+        width: 0.55em

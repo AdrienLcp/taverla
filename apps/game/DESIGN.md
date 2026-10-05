@@ -613,7 +613,7 @@ saffron band, with no groove — this round must show no clock.
 The order of preference before any spinner: draw what is already known (the
 console's code, QR and address come from the address bar before the socket
 answers); say it in words; reserve the box and let content arrive (cover art).
-`Loader` — a turning square and a **required** named line — is the last rung,
+`Loader` — a turning ring and a **required** named line — is the last rung,
 today the cold load of a route. It waits 250ms before appearing and mounts its
 `role='status'` empty, filling it after, so a screen reader hears the change.
 `Spinner` is decorative geometry, only ever composed.

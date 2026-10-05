@@ -1,12 +1,15 @@
 @layer components
   .spinner
     animation: spinner-turn 700ms linear infinite
-    border: var(--stroke-bold) solid color-mix(in srgb, var(--control-ink, currentColor) 30%, transparent)
+    border: 0.14em solid color-mix(in srgb, var(--control-ink, currentColor) 30%, transparent)
+    border-radius: var(--radius-full)
     border-top-color: var(--control-ink, currentColor)
-    height: 1.1em
-    width: 1.1em
+    flex: none
+    height: 0.8em
+    margin-inline-start: var(--space-2xs)
+    width: 0.8em
 
-  // Frozen it is still a square with one heavier edge, which reads as an
+  // Frozen it is still a ring with one heavier arc, which reads as an
   // indicator rather than as nothing.
   @media (prefers-reduced-motion: reduce)
     .spinner
