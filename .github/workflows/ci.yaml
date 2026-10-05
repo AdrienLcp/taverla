@@ -6,8 +6,10 @@ on:
   pull_request:
 
 concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  # Each push runs in a group of its own: GitHub cancels a run left waiting
+  # behind another of its group, and mails every cancelled run.
+  group: ci-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   validate:
@@ -85,11 +87,6 @@ jobs:
     needs: validate
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    # One at a time and never cancelled: a deploy cut in half leaves the Worker
-    # on whichever half landed.
-    concurrency:
-      group: deploy
-      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v7
 
@@ -105,7 +102,16 @@ jobs:
       - name: Build
         run: pnpm build
 
+      # Deploys are not queued in a concurrency group: GitHub cancels, and mails,
+      # a run left waiting there. An older commit skips its deploy instead.
+      - name: Check this commit is still the head of main
+        id: head
+        run: |
+          head=$(git ls-remote origin refs/heads/main | cut -f1)
+          echo "is-head=$([ "$head" = "$GITHUB_SHA" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
       - name: Deploy
+        if: steps.head.outputs.is-head == 'true'
         run: pnpm --filter @taverla/server exec wrangler deploy --var "GIT_COMMIT:${GITHUB_SHA}"
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
