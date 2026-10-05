@@ -51,6 +51,12 @@ its own contents — a size container keeps its overflow off the page, so a
 scroll check alone never sees a chip under the hold bar, nor a board drawn 0px
 wide. A geometry claim, for the same reason as the one below.
 
+It runs under `reducedMotion: 'reduce'`. Every page arrives on `page-enter`,
+8px low for 260ms, and the first viewport is measured inside that window: a
+slow CI runner caught a full-height page one or two pixels under the fold, a
+failure Windows never reproduced. A transform still counts as overflow, which is
+also why `#root` clips its block axis.
+
 `strip-rows.spec.ts` plays nothing either. It opens one room, walks every game in both
 locales, and asserts that no choice strip ever holds rows of two different
 lengths — the defect where a wrap leaves a short row, `flex: 1` stretches it,

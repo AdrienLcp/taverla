@@ -11,6 +11,11 @@ import { expect, type Page, test } from '@playwright/test'
  * the server deals, and nothing waits on a countdown.
  */
 
+// Every page arrives on `page-enter`, 8px low for 260ms, and the first viewport
+// is measured inside that window: a slow runner caught the page a pixel or two
+// under the fold. The geometry under test is the settled one.
+test.use({ reducedMotion: 'reduce' })
+
 const VIEWPORTS = [
   [320, 568],
   [360, 640],

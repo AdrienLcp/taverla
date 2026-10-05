@@ -23,8 +23,13 @@
   html
     scrollbar-gutter: stable
 
+  // `page-enter` lowers a page that already fills the viewport, and a
+  // transform still counts as scrollable overflow: unclipped, every arrival
+  // makes the document scroll by a few pixels until it settles. `clip`, not
+  // `hidden`, so the root never becomes a scroller and `sticky` keeps working.
   #root
     min-height: 100dvh
+    overflow-y: clip
 
   // No gradient, no glow: the field is one flat colour, and the transition
   // between phases is the only thing that moves on it.
