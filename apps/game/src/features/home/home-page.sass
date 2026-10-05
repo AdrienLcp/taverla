@@ -135,11 +135,13 @@ $side-by-side: 960px
 
       @include typography.trimmed-block(var(--space-2xs))
 
+    // Columns fixed by the row, not by what is open: sized to content, an
+    // opened panel's paragraph widened its door and pushed the other one down.
     .more
       align-items: start
-      display: flex
-      flex-wrap: wrap
+      display: grid
       gap: var(--space-s) var(--space-l)
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr))
 
     .project-with-code
       .react-aria-Form
