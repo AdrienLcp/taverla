@@ -274,6 +274,16 @@ inside existing keys (both dictionaries); a new key is added only for a string
 that did not exist (e.g. a coaster's ring text). The no-scroll contract of
 stage 29 §2 and `e2e/choice-fits.spec.ts` stay and are the gate.
 
+**The copy no longer speaks tavern.** On 2026-10-05 the shipped dictionaries were
+moved off the tavern vocabulary to match the box world: *l'aubergiste* /
+*the innkeeper* became *l'hôte* / *the host*, *la tournée* became *la manche*,
+the doors (*pousser la porte*, *walk in*, *pull up a chair*) became *rejoindre* /
+*join*, and *lever la table* / *clear the table* became *fermer* / *close*. The
+table stays, as the people playing. So the copy this stage wants is part of its
+presentation work: re-wording those keys, in both dictionaries and the voice
+table of `.claude/rules/i18n.md`, is in scope here — and open question 1 decides
+how far it goes.
+
 Stage 29's structural work is kept: `framed.page`, `ChoosingRound`,
 `RoundChrome`, the size-container stages, `useFittedGrid`, `answerFitting`, the
 `k / sqrt(length)` sizing, `trackInkHolderOf` / `winnersOf` as rules. What is

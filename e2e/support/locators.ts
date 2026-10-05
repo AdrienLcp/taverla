@@ -60,14 +60,14 @@ export const hostConsole = (page: Page) => ({
   theyBuzzed: (nickname: string) =>
     page.getByRole('heading', { name: `${nickname} buzzed` }),
   verdictBoth: page.getByRole('button', { name: 'Title + artist' }),
-  wayOut: page.getByRole('link', { name: 'Back to the tavern' })
+  wayOut: page.getByRole('link', { name: 'Back to the games' })
 })
 
 export const playerScreen = (page: Page) => ({
   /** One field for either half — the server decides which one a guess was. */
   answerGuess: page.getByRole('textbox', { name: 'Your answer' }),
   buzz: page.getByRole('button', { name: 'Buzz' }),
-  join: page.getByRole('button', { name: 'Pull up a chair' }),
+  join: page.getByRole('button', { exact: true, name: 'Join' }),
   nickname: page.getByRole('textbox', { name: 'Nickname' }),
   scored: (points: number) => page.getByText(`+${points}`),
   sendAnswer: page.getByRole('button', { name: 'Send it' })

@@ -104,7 +104,7 @@ export const EN_DICTIONARY = defineDictionary({
     },
     scoring: {
       buzzer:
-        'First to buzz answers out loud. The innkeeper judges the title and the artist, a point each — a wrong answer sits you out for the rest of the round.',
+        'First to buzz answers out loud. The host judges the title and the artist, a point each — a wrong answer sits you out for the rest of the round.',
       choice:
         'Four answers over the same clip, everyone at once. The right one scores a point, and the earlier you find it the more the clock adds — up to double.',
       typed:
@@ -112,7 +112,7 @@ export const EN_DICTIONARY = defineDictionary({
     },
     scoringFilm: {
       buzzer:
-        'First to buzz answers out loud. The innkeeper judges the film and the composer, a point each — a wrong answer sits you out for the rest of the round.',
+        'First to buzz answers out loud. The host judges the film and the composer, a point each — a wrong answer sits you out for the rest of the round.',
       typed:
         'Everyone types, over the same clip. Film and composer score a point each and both together score three, and the earlier you get it the more the clock adds — up to double.'
     },
@@ -152,8 +152,8 @@ export const EN_DICTIONARY = defineDictionary({
   buzz: {
     action: 'Buzz',
     blocked: {
-      host_away: 'The innkeeper stepped away. Everything is on hold.',
-      round_not_running: 'Waiting for the innkeeper',
+      host_away: 'The host stepped away. Everything is on hold.',
+      round_not_running: 'Waiting for the host',
       someone_else_buzzed: 'Someone got there first',
       you_already_missed: 'You are out for this round',
       your_answer_is_pending: 'Say your answer out loud'
@@ -164,7 +164,7 @@ export const EN_DICTIONARY = defineDictionary({
     won: 'You are in. Say it out loud'
   },
   buzzer: {
-    clearLockouts: 'Let the table back in',
+    clearLockouts: 'Let everyone back in',
     home: {
       description:
         'You bring the questions — a charade, a quiz off a sheet of paper, a lesson, whatever the table is up for. Only one thing gets settled here: who was in first. And that is never in doubt.'
@@ -173,7 +173,7 @@ export const EN_DICTIONARY = defineDictionary({
     name: 'Buzzer',
     running: 'Ask away',
     scoring:
-      'First in answers out loud, and the innkeeper says right or wrong. A point for right — and a wrong answer sits you out until they let you back in.',
+      'First in answers out loud, and the host says right or wrong. A point for right — and a wrong answer sits you out until they let you back in.',
     tagline: 'Your questions, and a race to the buzzer.'
   },
   connection: {
@@ -193,7 +193,7 @@ export const EN_DICTIONARY = defineDictionary({
     mintaka:
       'It supplies questions and no wrong answers at all, so the three candidates beside each right one were built here, out of entities Wikidata files under the same kind as the answer and that are read about roughly as much in French. Five of its eight rubrics were kept and mapped onto the eight subjects used here, along with four of its nine question shapes — the others name their own candidates in the question, accept more answers than they record, or ask in two hops. Questions that name the present were left behind, the corpus being fixed at October 2021. Of what remained, only the ones whose answer and whose subject have a French Wikipedia article people actually read were banked, and no answer comes up more than five times in one subject.',
     openquizzdb:
-      'Its rubrics were mapped onto the eight subjects used here, its anecdotes kept as the line shown once an answer is public, and its adult-rated questions marked so an innkeeper can leave them out. Questions that did not carry exactly three wrong answers were left behind, as were the ones whose wrong answers cannot be told from the right one once written down. One answer spelled against its own anecdote was corrected.',
+      'Its rubrics were mapped onto the eight subjects used here, its anecdotes kept as the line shown once an answer is public, and its adult-rated questions marked so the host can leave them out. Questions that did not carry exactly three wrong answers were left behind, as were the ones whose wrong answers cannot be told from the right one once written down. One answer spelled against its own anecdote was corrected.',
     opentdb:
       'Its text arrives HTML-encoded and was decoded, its categories were mapped onto the eight subjects used here, and questions that did not carry exactly three wrong answers were left behind, as were the ones whose wrong answers cannot be told from the right one once written down.',
     polyfact:
@@ -211,14 +211,14 @@ export const EN_DICTIONARY = defineDictionary({
       rate_limited: 'That is a lot of tables. Wait a minute and retry.',
       rejected: 'That did not go through. Try again.',
       unexpected_response: 'We did not know what to make of that. Try again.',
-      unreachable: 'We cannot reach the tavern. Try again in a moment.'
+      unreachable: 'We cannot reach Taverla. Try again in a moment.'
     },
     false_start: 'Too soon. Wait for the change.',
-    host_already_connected: 'Someone is already keeping this table.',
-    host_away: 'The innkeeper stepped away. The round is waiting for them.',
-    host_only_action: 'Only the innkeeper can do that.',
+    host_already_connected: 'Someone is already running this table.',
+    host_away: 'The host stepped away. The round is waiting for them.',
+    host_only_action: 'Only the host can do that.',
     host_reconnecting:
-      'This table has just lost its innkeeper, and is waiting for them.',
+      'This table has just lost its host, and is waiting for them.',
     internal_error: 'Something broke on our side. Try again.',
     invalid_message: 'We did not understand that. Try again.',
     joined_mid_round: 'You are in from the next round.',
@@ -232,8 +232,8 @@ export const EN_DICTIONARY = defineDictionary({
     player_locked_out: 'You are out for this round.',
     protocol_version_mismatch: 'This page is out of date. Reload it.',
     rate_limited: 'That is a lot of tables. Wait a minute and retry.',
-    removed_by_host: 'The innkeeper removed you from the table.',
-    room_closed: 'The innkeeper cleared the table.',
+    removed_by_host: 'The host removed you from the table.',
+    room_closed: 'The host closed the table.',
     room_full: 'That table is full.',
     room_not_found: 'No table under that code.',
     screen: {
@@ -244,7 +244,7 @@ export const EN_DICTIONARY = defineDictionary({
     },
     stale_round: 'That round is already over.',
     wall_not_paired:
-      'This screen is not paired. Pair it from the device keeping the table.',
+      'This screen is not paired. Pair it from the device running the table.',
     wrong_phase: 'Too late, the game has moved on.'
   },
   home: {
@@ -279,9 +279,9 @@ export const EN_DICTIONARY = defineDictionary({
     autoAdvance: 'Time before the next round',
     backToRoom: 'Back to the table',
     closeRoom: {
-      confirm: 'Yes, clear it',
-      label: 'Clear the table',
-      warning: 'The whole table is sent out, and the code stops working.'
+      confirm: 'Yes, close it',
+      label: 'Close the table',
+      warning: 'Everyone is sent out, and the code stops working.'
     },
     countdown: 'Countdown',
     endGame: 'End the game',
@@ -313,13 +313,13 @@ export const EN_DICTIONARY = defineDictionary({
     players: {
       empty: 'Nobody yet. That will not last.',
       removeNamed: 'Remove {nickname}',
-      title: 'The table'
+      title: 'The players'
     },
     recovery: {
-      action: 'Keep the table from here',
-      description: 'It is in the innkeeper’s own menu.',
+      action: 'Run the table from here',
+      description: 'It is in the host’s own menu.',
       field: 'Recovery code',
-      hint: 'Type it elsewhere to take the table over from there.',
+      hint: 'Type it elsewhere to run the table from there.',
       invalid: 'That is not a recovery code.',
       refused: 'That code does not match this table.',
       retry: 'Try again',
@@ -379,16 +379,16 @@ export const EN_DICTIONARY = defineDictionary({
       action: 'Show it',
       description:
         'It grants nothing: no seat, no game, and no way to run the table. It draws what the table is already showing.',
-      label: 'Show a table’s invitation',
+      label: 'Show the code to join',
       summary: 'The code and the square, on a screen of their own'
     },
-    joinLate: 'The door is open',
+    joinLate: 'Join any time',
     project: 'Show the QR code, big',
-    title: 'Scan and pull up a chair',
-    typeIt: 'Type it to walk in',
+    title: 'Scan to play',
+    typeIt: 'Type it to join',
     unknown: {
       description:
-        'That code opens no table. It may have been cleared, or read wrong.',
+        'That code opens no table. It may have been closed, or read wrong.',
       title: 'No table here'
     }
   },
@@ -396,14 +396,14 @@ export const EN_DICTIONARY = defineDictionary({
     divider: 'or',
     host: {
       action: 'Open a table',
-      description: 'You keep the table. The others just have to walk in.'
+      description: 'You run the table. The others just have to join.'
     },
     player: {
-      action: 'Pull up a chair',
-      title: 'Walk in'
+      action: 'Join',
+      title: 'Join a table'
     },
     roomCode: {
-      description: 'The innkeeper has it in front of them.',
+      description: 'The host has it in front of them.',
       label: 'Table code',
       unknown: 'No table under that code.',
       unsupportedCharacters: 'A table code never contains {characters}.',
@@ -445,7 +445,7 @@ export const EN_DICTIONARY = defineDictionary({
    * and one destination is named one way or the product has three fronts.
    */
   navigation: {
-    back: 'Back to the tavern'
+    back: 'Back to the games'
   },
   notFound: {
     description: 'That game is over, or the code was mistyped.',
@@ -455,7 +455,7 @@ export const EN_DICTIONARY = defineDictionary({
   player: {
     /** A seat whose screen has gone quiet — beside that name, on every board. */
     away: 'away',
-    choosingGame: 'The innkeeper is choosing a game',
+    choosingGame: 'The host is choosing a game',
     final: {
       placing: 'You finished',
       rank: defineTranslation('{rank:plural}', {
@@ -475,7 +475,7 @@ export const EN_DICTIONARY = defineDictionary({
       title: 'Next round'
     },
     nickname: {
-      action: 'Pull up a chair',
+      action: 'Join',
       label: 'Nickname',
       title: 'What should we call you?'
     },
@@ -543,7 +543,7 @@ export const EN_DICTIONARY = defineDictionary({
     },
     scoring: {
       buzzer:
-        'First to buzz answers out loud, and the innkeeper says right or wrong. A point for right — and a wrong answer sits you out for the rest of the round.',
+        'First to buzz answers out loud, and the host says right or wrong. A point for right — and a wrong answer sits you out for the rest of the round.',
       choice:
         'Four answers, everyone at once. The right one scores a point, and the earlier you find it the more the clock adds — up to double.',
       typed:
@@ -658,7 +658,7 @@ export const EN_DICTIONARY = defineDictionary({
     },
     home: {
       description:
-        'Numbered things to guess — cups to taste, photos, prices — and everyone writes on a sheet nobody else can see, in any order they like. Then the innkeeper marks the papers one number at a time, and every answer they accept is worth a point.'
+        'Numbered things to guess — cups to taste, photos, prices — and everyone writes on a sheet nobody else can see, in any order they like. Then the host marks the papers one number at a time, and every answer they accept is worth a point.'
     },
     item: 'No. {index:number}',
     itemOf: 'No. {index:number} of {count:number}',
@@ -702,7 +702,7 @@ export const EN_DICTIONARY = defineDictionary({
     },
     progress: '{filled:number}/{count:number}',
     scoring:
-      'Everyone fills in their own sheet in private, then the innkeeper marks it: one point per answer they accept.',
+      'Everyone fills in their own sheet in private, then the host marks it: one point per answer they accept.',
     sheet: {
       blank: 'Left blank',
       closedBeforeYou: 'Collected before you arrived',
@@ -712,7 +712,7 @@ export const EN_DICTIONARY = defineDictionary({
       next: 'Next',
       previous: 'Previous',
       saved:
-        'Saved as you write. You can change an answer until the innkeeper collects it.',
+        'Saved as you write. You can change an answer until the host collects it.',
       tile: {
         empty: '{item}, empty',
         filled: '{item}: {answer}',
@@ -721,7 +721,7 @@ export const EN_DICTIONARY = defineDictionary({
     },
     tagline: 'Everyone writes. Nobody peeks.',
     verdict: {
-      pending: 'Waiting for the innkeeper…',
+      pending: 'Waiting for the host…',
       right: 'Accepted',
       wrong: 'Not this time'
     },
@@ -739,15 +739,15 @@ export const EN_DICTIONARY = defineDictionary({
   },
   wall: {
     door: {
-      action: 'Show a table here',
+      action: 'Show the game here',
       description:
-        'For the screen the whole table can see. It shows a code, whoever keeps the table confirms it, and the game appears here — with no answers and nothing to press.',
-      label: 'Show a table on this screen',
+        'For the screen the whole table can see. It shows a code, the host confirms it, and the game appears here — with no answers and nothing to press.',
+      label: 'Show the game on this screen',
       summary: 'The game, big, with nothing to run'
     },
     hostAway: {
-      takeOver: 'Keep the table from here',
-      title: 'The innkeeper stepped away. The game is waiting for them.'
+      takeOver: 'Run the table from here',
+      title: 'The host stepped away. The game is waiting for them.'
     },
     menu: {
       description:
@@ -768,7 +768,7 @@ export const EN_DICTIONARY = defineDictionary({
         'That did not go through. The code may have expired — the screen shows a new one.',
       nothingHeld: {
         description:
-          'Only the screen keeping a table can show it somewhere else. Scan the square from that one.',
+          'Only the screen running a table can show it somewhere else. Scan the square from that one.',
         title: 'No table to show'
       },
       show: 'Show table {room}',
@@ -777,9 +777,9 @@ export const EN_DICTIONARY = defineDictionary({
     pairAgain: 'Pair this screen',
     pairing: {
       caption:
-        'Scan from the screen keeping the table, or type this code in its menu',
+        'Scan from the screen running the table, or type this code in its menu',
       documentTitle: 'Waiting for a table — Taverla',
-      failed: 'We cannot reach the tavern for a code.',
+      failed: 'We cannot reach Taverla for a code.',
       retry: 'Try again',
       title: 'This screen is waiting for its table'
     },

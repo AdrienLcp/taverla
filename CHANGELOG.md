@@ -805,6 +805,16 @@ one part.
 
 ### Improvements
 
+- `[Game]` **The words match the box: the host is the host, a round is a
+  round.** The copy left the tavern behind with the board-game redesign —
+  *l'aubergiste* / *the innkeeper* is *l'hôte* / *the host*, *la tournée* is
+  *la manche*, the doors to push and chairs to pull up are a plain *Rejoindre* /
+  *Join*, closing a room says *Fermer la table* / *Close the table*, and the way
+  back from the credits and dead ends is *Retour aux jeux* / *Back to the
+  games*. The front door's two folded panels say what they show: *Afficher la
+  partie sur cet écran* and *Afficher le code pour rejoindre*. The table stays,
+  as the people playing round it.
+
 - `[Game]` **Labels, stamps and scores sit on their optical centre.** Where
   the browser supports `text-box`, a control's label, a stamp, a segment, an
   error and a single-line figure are trimmed to their capitals and baseline, so

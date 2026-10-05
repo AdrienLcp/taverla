@@ -71,7 +71,7 @@ export const FR_DICTIONARY = defineDictionary({
     },
     home: {
       description:
-        'Trois notes suffisent parfois, et toute la tablée cherche déjà. Titre, artiste, ou les deux : le plus rapide à savoir rafle la tournée.'
+        'Trois notes suffisent parfois, et toute la table cherche déjà. Titre, artiste, ou les deux : le plus rapide à savoir rafle la manche.'
     },
     listening: 'À l’écoute…',
     name: 'Blind test',
@@ -80,7 +80,7 @@ export const FR_DICTIONARY = defineDictionary({
     },
     scoring: {
       buzzer:
-        'Le premier qui buzze répond à voix haute. L’aubergiste juge le titre et l’artiste, 1 point chacun — une mauvaise réponse te met hors-jeu pour le reste de la tournée.',
+        'Le premier qui buzze répond à voix haute. L’hôte juge le titre et l’artiste, 1 point chacun — une mauvaise réponse te met hors-jeu pour le reste de la manche.',
       choice:
         'Quatre propositions sur le même extrait, et tout le monde répond. La bonne rapporte 1 point, et plus tu la trouves tôt, plus la montre ajoute — jusqu’au double.',
       typed:
@@ -88,7 +88,7 @@ export const FR_DICTIONARY = defineDictionary({
     },
     scoringFilm: {
       buzzer:
-        'Le premier qui buzze répond à voix haute. L’aubergiste juge le film et le compositeur, 1 point chacun — une mauvaise réponse te met hors-jeu pour le reste de la tournée.',
+        'Le premier qui buzze répond à voix haute. L’hôte juge le film et le compositeur, 1 point chacun — une mauvaise réponse te met hors-jeu pour le reste de la manche.',
       typed:
         'Tout le monde tape, sur le même extrait. Film et compositeur rapportent 1 point chacun, les deux ensemble 3, et plus tu trouves tôt, plus la montre ajoute — jusqu’au double.'
     },
@@ -131,10 +131,10 @@ export const FR_DICTIONARY = defineDictionary({
   buzz: {
     action: 'Buzz',
     blocked: {
-      host_away: 'L’aubergiste a décroché. Tout est en pause.',
-      round_not_running: 'En attente de l’aubergiste',
+      host_away: 'L’hôte a décroché. Tout est en pause.',
+      round_not_running: 'En attente de l’hôte',
       someone_else_buzzed: 'Quelqu’un a été plus rapide',
-      you_already_missed: 'Tu es hors-jeu pour cette tournée',
+      you_already_missed: 'Tu es hors-jeu pour cette manche',
       your_answer_is_pending: 'Donne ta réponse à voix haute'
     },
     ready: 'Appuie dès que tu sais',
@@ -143,16 +143,16 @@ export const FR_DICTIONARY = defineDictionary({
     won: 'C’est à toi. Annonce\u00a0!'
   },
   buzzer: {
-    clearLockouts: 'Remettre la tablée en jeu',
+    clearLockouts: 'Remettre tout le monde en jeu',
     home: {
       description:
-        'Les questions, c’est toi qui les apportes — une charade, un quiz sur une feuille, une leçon, ce que la tablée veut. Ici on ne tranche qu’une chose : qui a été le plus rapide. Et là-dessus, jamais de discussion.'
+        'Les questions, c’est toi qui les apportes — une charade, un quiz sur une feuille, une leçon, ce que la table veut. Ici on ne tranche qu’une chose : qui a été le plus rapide. Et là-dessus, jamais de discussion.'
     },
     lockout: 'Une mauvaise réponse met hors-jeu',
     name: 'Buzzer',
     running: 'Pose ta question',
     scoring:
-      'Le plus rapide répond à voix haute, et l’aubergiste dit si c’est bon. 1 point si c’est juste — et une mauvaise réponse te met hors-jeu jusqu’à ce qu’il te remette en jeu.',
+      'Le plus rapide répond à voix haute, et l’hôte dit si c’est bon. 1 point si c’est juste — et une mauvaise réponse te met hors-jeu jusqu’à ce qu’il te remette en jeu.',
     tagline: 'Tes questions, et une course au buzz.'
   },
   connection: {
@@ -166,7 +166,7 @@ export const FR_DICTIONARY = defineDictionary({
     mintaka:
       'Elle fournit des questions et aucune mauvaise réponse : les trois propositions posées à côté de la bonne ont été construites ici, à partir d’entités que Wikidata range dans la même famille que la réponse et qu’on lit à peu près autant en français. Cinq de ses huit rubriques ont été retenues et rattachées aux huit sujets utilisés ici, ainsi que quatre de ses neuf formes de question — les autres nomment leurs propres propositions dans l’énoncé, acceptent plus de réponses qu’elles n’en enregistrent, ou demandent deux détours. Les questions qui nomment le présent ont été écartées, le corpus étant arrêté à octobre 2021. Parmi ce qui restait, seules celles dont la réponse et le sujet ont un article de Wikipédia en français réellement lu ont été gardées, et aucune réponse ne revient plus de cinq fois dans un même sujet.',
     openquizzdb:
-      'Ses rubriques ont été rattachées aux huit sujets utilisés ici, ses anecdotes conservées comme la ligne affichée une fois la réponse dévoilée, et ses questions classées adulte signalées pour qu’un aubergiste puisse les laisser de côté. Les questions qui ne portaient pas exactement trois mauvaises réponses ont été écartées, comme celles dont une mauvaise réponse ne se distingue plus de la bonne une fois écrite. Une réponse mal orthographiée par rapport à sa propre anecdote a été corrigée.',
+      'Ses rubriques ont été rattachées aux huit sujets utilisés ici, ses anecdotes conservées comme la ligne affichée une fois la réponse dévoilée, et ses questions classées adulte signalées pour que l’hôte puisse les laisser de côté. Les questions qui ne portaient pas exactement trois mauvaises réponses ont été écartées, comme celles dont une mauvaise réponse ne se distingue plus de la bonne une fois écrite. Une réponse mal orthographiée par rapport à sa propre anecdote a été corrigée.',
     opentdb:
       'Son texte arrive encodé en HTML et a été décodé, ses catégories ont été rattachées aux huit sujets utilisés ici, et les questions qui ne portaient pas exactement trois mauvaises réponses ont été écartées, comme celles dont une mauvaise réponse ne se distingue plus de la bonne une fois écrite.',
     polyfact:
@@ -186,17 +186,17 @@ export const FR_DICTIONARY = defineDictionary({
       rejected: 'Ça n’est pas passé. Réessaie.',
       unexpected_response: 'On n’a pas su quoi en faire. Réessaie.',
       unreachable:
-        'On n’arrive pas à joindre la taverne. Réessaie dans un instant.'
+        'On n’arrive pas à joindre Taverla. Réessaie dans un instant.'
     },
     false_start: 'Trop tôt. Attends que ça change.',
     host_already_connected: 'Quelqu’un tient déjà cette table.',
-    host_away: 'L’aubergiste a décroché. La tournée attend son retour.',
-    host_only_action: 'Seul l’aubergiste peut faire ça.',
+    host_away: 'L’hôte a décroché. La manche attend son retour.',
+    host_only_action: 'Seul l’hôte peut faire ça.',
     host_reconnecting:
-      'Cette table vient de perdre son aubergiste, et l’attend encore.',
+      'Cette table vient de perdre son hôte, et l’attend encore.',
     internal_error: 'Ça a cassé de notre côté. Réessaie.',
     invalid_message: 'On n’a pas compris. Réessaie.',
-    joined_mid_round: 'Tu joues à partir de la prochaine tournée.',
+    joined_mid_round: 'Tu joues à partir de la prochaine manche.',
     music_source_unavailable:
       'La musique ne répond plus. Réessaie dans un instant.',
     nickname_taken: 'Ce pseudo est déjà pris.',
@@ -204,11 +204,11 @@ export const FR_DICTIONARY = defineDictionary({
     no_game_chosen: 'Choisis d’abord un jeu.',
     pairing_not_found:
       'Ce code d’écran a expiré. Rouvre l’écran pour en avoir un nouveau.',
-    player_locked_out: 'Tu es hors-jeu pour cette tournée.',
+    player_locked_out: 'Tu es hors-jeu pour cette manche.',
     protocol_version_mismatch: 'Cette page n’est plus à jour. Recharge-la.',
     rate_limited: 'Ça fait beaucoup de tables. Attends une minute et réessaie.',
-    removed_by_host: 'L’aubergiste t’a retiré de la table.',
-    room_closed: 'L’aubergiste a levé la table.',
+    removed_by_host: 'L’hôte t’a retiré de la table.',
+    room_closed: 'L’hôte a fermé la table.',
     room_full: 'Cette table est complète.',
     room_not_found: 'Aucune table sous ce code.',
     screen: {
@@ -217,7 +217,7 @@ export const FR_DICTIONARY = defineDictionary({
       reload: 'Recharger la page',
       title: 'Quelque chose a cassé'
     },
-    stale_round: 'Cette tournée est déjà terminée.',
+    stale_round: 'Cette manche est déjà terminée.',
     wall_not_paired:
       'Cet écran n’est pas appairé. Appaire-le depuis l’appareil qui tient la table.',
     wrong_phase: 'Trop tard, la partie est passée à autre chose.'
@@ -251,12 +251,12 @@ export const FR_DICTIONARY = defineDictionary({
     answerWindow: {
       label: 'Temps pour répondre après un buzz'
     },
-    autoAdvance: 'Temps avant la tournée suivante',
+    autoAdvance: 'Temps avant la manche suivante',
     backToRoom: 'Retour à la table',
     closeRoom: {
-      confirm: 'Oui, on lève',
-      label: 'Lever la table',
-      warning: 'Toute la tablée sort, et le code cesse de fonctionner.'
+      confirm: 'Oui, on ferme',
+      label: 'Fermer la table',
+      warning: 'Tout le monde sort, et le code cesse de fonctionner.'
     },
     countdown: 'Décompte',
     endGame: 'Terminer la partie',
@@ -286,16 +286,16 @@ export const FR_DICTIONARY = defineDictionary({
     hostDecides: 'Tu décides',
     needsGame: 'Choisis à quoi la table joue',
     needsPlayer: 'Il faut au moins quelqu’un à table',
-    nextRound: 'Tournée suivante',
+    nextRound: 'Manche suivante',
     playAgain: 'Rejouer',
     players: {
       empty: 'Encore personne. Ça ne va pas durer.',
       removeNamed: 'Retirer {nickname}',
-      title: 'La tablée'
+      title: 'Les joueurs'
     },
     recovery: {
       action: 'Tenir la table d’ici',
-      description: 'Il est dans le menu, chez l’aubergiste.',
+      description: 'Il est dans le menu de l’hôte.',
       field: 'Code de reprise',
       hint: 'À saisir ailleurs pour reprendre la table depuis là-bas.',
       invalid: 'Ce n’est pas un code de reprise.',
@@ -308,10 +308,10 @@ export const FR_DICTIONARY = defineDictionary({
       open: 'Sans fin',
       openSummary: 'Jusqu’à ce que tu arrêtes',
       summary: defineTranslation('{count:plural}', {
-        plural: { count: { one: '{?} tournée', other: '{?} tournées' } }
+        plural: { count: { one: '{?} manche', other: '{?} manches' } }
       })
     },
-    rounds: 'Tournées',
+    rounds: 'Manches',
     seat: {
       action: 'Prendre place',
       cost: {
@@ -328,7 +328,7 @@ export const FR_DICTIONARY = defineDictionary({
     seeResults: 'Voir les résultats',
     setup: {
       label: 'Réglages',
-      roundInPlay: 'Certains de ces réglages attendent la fin de la tournée'
+      roundInPlay: 'Certains de ces réglages attendent la fin de la manche'
     },
     standings: 'Classement',
     startGame: 'À table\u00a0!',
@@ -346,17 +346,17 @@ export const FR_DICTIONARY = defineDictionary({
     door: {
       action: 'Afficher',
       description:
-        'Elle ne donne rien : pas de place, pas de partie, aucun moyen de tenir la table. Elle montre ce que la table affiche déjà.',
-      label: 'Afficher l’invitation d’une table',
+        'Ça ne donne rien : ni place, ni partie, ni la main sur la table. Ça montre ce que la table affiche déjà.',
+      label: 'Afficher le code pour rejoindre',
       summary: 'Le code et le carré, sur un écran à part'
     },
-    joinLate: 'La porte est ouverte',
+    joinLate: 'Rejoins quand tu veux',
     project: 'Afficher le QR code en grand',
-    title: 'Scanne et prends place',
-    typeIt: 'Tape-le pour entrer',
+    title: 'Scanne pour jouer',
+    typeIt: 'Tape-le pour rejoindre',
     unknown: {
       description:
-        'Ce code n’ouvre aucune table. Elle a peut-être été levée, ou le code mal lu.',
+        'Ce code n’ouvre aucune table. Elle a peut-être été fermée, ou le code mal lu.',
       title: 'Aucune table ici'
     }
   },
@@ -365,14 +365,14 @@ export const FR_DICTIONARY = defineDictionary({
     host: {
       action: 'Ouvrir une table',
       description:
-        'C’est toi qui tiens la table. Les autres n’ont plus qu’à pousser la porte.'
+        'C’est toi qui tiens la table. Les autres n’ont plus qu’à rejoindre.'
     },
     player: {
-      action: 'Prendre place',
-      title: 'Pousser la porte'
+      action: 'Rejoindre',
+      title: 'Rejoindre une table'
     },
     roomCode: {
-      description: 'L’aubergiste l’a sous les yeux.',
+      description: 'L’hôte l’a sous les yeux.',
       label: 'Code de la table',
       unknown: 'Aucune table sous ce code.',
       unsupportedCharacters:
@@ -400,16 +400,16 @@ export const FR_DICTIONARY = defineDictionary({
     }
   },
   navigation: {
-    back: 'Retour à la taverne'
+    back: 'Retour aux jeux'
   },
   notFound: {
     description: 'La partie est finie, ou le code a été mal tapé.',
-    documentTitle: 'La salle est vide — Taverla',
-    title: 'La salle est vide'
+    documentTitle: 'Personne ici — Taverla',
+    title: 'Personne ici'
   },
   player: {
     away: 'plus là',
-    choosingGame: 'L’aubergiste choisit un jeu',
+    choosingGame: 'L’hôte choisit un jeu',
     final: {
       placing: 'Tu finis',
       rank: defineTranslation('{rank:plural}', {
@@ -423,11 +423,11 @@ export const FR_DICTIONARY = defineDictionary({
       })
     },
     midRound: {
-      detail: 'Ta place est gardée — cette\u00a0tournée a commencé sans toi.',
-      title: 'À la prochaine tournée'
+      detail: 'Ta place est gardée — cette\u00a0manche a commencé sans toi.',
+      title: 'À la prochaine manche'
     },
     nickname: {
-      action: 'Prendre place',
+      action: 'Rejoindre',
       label: 'Pseudo',
       title: 'On t’appelle comment\u00a0?'
     },
@@ -482,7 +482,7 @@ export const FR_DICTIONARY = defineDictionary({
     duration: 'Temps par question',
     home: {
       description:
-        'De l’histoire, des sciences, du sport, et des questions que personne ne voit venir. Tout le monde répond en même temps, et la bonne réponse la plus rapide rafle la tournée.'
+        'De l’histoire, des sciences, du sport, et des questions que personne ne voit venir. Tout le monde répond en même temps, et la bonne réponse la plus rapide rafle la manche.'
     },
     language: 'Langue des questions',
     name: 'Quiz',
@@ -491,7 +491,7 @@ export const FR_DICTIONARY = defineDictionary({
     },
     scoring: {
       buzzer:
-        'Le premier qui buzze répond à voix haute, et l’aubergiste dit si c’est bon. 1 point si c’est juste — et une mauvaise réponse te met hors-jeu pour le reste de la tournée.',
+        'Le premier qui buzze répond à voix haute, et l’hôte dit si c’est bon. 1 point si c’est juste — et une mauvaise réponse te met hors-jeu pour le reste de la manche.',
       choice:
         'Quatre propositions, et tout le monde répond en même temps. La bonne rapporte 1 point, et plus tu la trouves tôt, plus la montre ajoute — jusqu’au double.',
       typed:
@@ -509,10 +509,10 @@ export const FR_DICTIONARY = defineDictionary({
       title: 'Parti avant que l’écran change.'
     },
     flip: 'VAS-Y',
-    hold: 'Appuie avant qu’il change et tu passes la tournée.',
+    hold: 'Appuie avant qu’il change et tu passes la manche.',
     home: {
       description:
-        'Rien à savoir, rien à dire. L’écran reste immobile, puis il change — et le plus rapide rafle la tournée. Pars avant qu’il change et celle-là, tu la regardes depuis le banc.'
+        'Rien à savoir, rien à dire. L’écran reste immobile, puis il change — et le plus rapide rafle la manche. Pars avant qu’il change et celle-là, tu la regardes depuis le banc.'
     },
     landed: defineTranslation('{count:plural}', {
       plural: {
@@ -524,7 +524,7 @@ export const FR_DICTIONARY = defineDictionary({
     pressed: 'C’est pris.',
     reaction: '{milliseconds:number} ms',
     scoring:
-      'L’écran change, et le plus rapide prend le point. Pars avant qu’il change et tu passes la tournée sur le banc.',
+      'L’écran change, et le plus rapide prend le point. Pars avant qu’il change et tu passes la manche sur le banc.',
     tagline: 'L’écran change. Le plus rapide gagne.',
     tooEarly: 'parti trop tôt',
     waiting: 'Guette l’écran.'
@@ -551,8 +551,8 @@ export const FR_DICTIONARY = defineDictionary({
     },
     award: '{points:number}',
     awardWithSpeed: '{answer:number} +{speed:number}',
-    index: 'Tournée {index:number} sur {total:number}',
-    indexOpen: 'Tournée {index:number}',
+    index: 'Manche {index:number} sur {total:number}',
+    indexOpen: 'Manche {index:number}',
     missed: 'Rien cette fois.',
     nobody: 'Personne n’a trouvé',
     scored: '+{points:number}',
@@ -585,7 +585,7 @@ export const FR_DICTIONARY = defineDictionary({
     },
     home: {
       description:
-        'Des choses numérotées à deviner — des verres à goûter, des photos, des prix — et chacun écrit sur une feuille que personne ne voit, dans l’ordre qu’il veut. Puis l’aubergiste corrige les copies numéro par numéro, et chaque réponse qu’il accepte vaut un point.'
+        'Des choses numérotées à deviner — des verres à goûter, des photos, des prix — et chacun écrit sur une feuille que personne ne voit, dans l’ordre qu’il veut. Puis l’hôte corrige les copies numéro par numéro, et chaque réponse qu’il accepte vaut un point.'
     },
     item: 'N° {index:number}',
     itemOf: 'N° {index:number} sur {count:number}',
@@ -631,7 +631,7 @@ export const FR_DICTIONARY = defineDictionary({
     },
     progress: '{filled:number}/{count:number}',
     scoring:
-      'Chacun remplit sa feuille sans rien montrer, puis l’aubergiste corrige : un point par réponse qu’il accepte.',
+      'Chacun remplit sa feuille sans rien montrer, puis l’hôte corrige : un point par réponse qu’il accepte.',
     sheet: {
       blank: 'Rien écrit',
       closedBeforeYou: 'Ramassé avant ton arrivée',
@@ -641,7 +641,7 @@ export const FR_DICTIONARY = defineDictionary({
       next: 'Suivant',
       previous: 'Précédent',
       saved:
-        'Enregistré au fil de l’eau. Tu peux changer une réponse jusqu’à ce que l’aubergiste la ramasse.',
+        'Enregistré au fil de l’eau. Tu peux changer une réponse jusqu’à ce que l’hôte la ramasse.',
       tile: {
         empty: '{item}, vide',
         filled: '{item} : {answer}',
@@ -650,7 +650,7 @@ export const FR_DICTIONARY = defineDictionary({
     },
     tagline: 'Chacun écrit. Personne ne copie.',
     verdict: {
-      pending: 'L’aubergiste corrige…',
+      pending: 'L’hôte corrige…',
       right: 'Accepté',
       wrong: 'Pas cette fois'
     },
@@ -669,15 +669,15 @@ export const FR_DICTIONARY = defineDictionary({
   },
   wall: {
     door: {
-      action: 'Afficher une table ici',
+      action: 'Afficher la partie ici',
       description:
-        'Pour l’écran que toute la tablée voit. Il affiche un code, celui qui tient la table le confirme, et la partie apparaît ici — sans les réponses et sans rien à presser.',
-      label: 'Afficher une table sur cet écran',
+        'Pour l’écran que toute la table voit. Il affiche un code, l’hôte le confirme, et la partie apparaît ici — sans les réponses et sans rien à presser.',
+      label: 'Afficher la partie sur cet écran',
       summary: 'La partie en grand, sans rien à tenir'
     },
     hostAway: {
       takeOver: 'Tenir la table d’ici',
-      title: 'L’aubergiste a décroché. La partie attend son retour.'
+      title: 'L’hôte a décroché. La partie attend son retour.'
     },
     menu: {
       description:
@@ -709,7 +709,7 @@ export const FR_DICTIONARY = defineDictionary({
       caption:
         'Scanne depuis l’écran qui tient la table, ou tape ce code dans son menu',
       documentTitle: 'En attente d’une table — Taverla',
-      failed: 'On n’arrive pas à joindre la taverne pour avoir un code.',
+      failed: 'On n’arrive pas à joindre Taverla pour avoir un code.',
       retry: 'Réessayer',
       title: 'Cet écran attend sa table'
     },

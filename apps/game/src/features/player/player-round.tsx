@@ -125,7 +125,7 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
   //
   // The host being away replaces the pitch rather than the screen. A lobby has
   // nothing to block — who is at the table stays true while the console is
-  // gone — but *the innkeeper is choosing a game* would be a lie about the one
+  // gone — but *the host is choosing a game* would be a lie about the one
   // thing the player is waiting on.
   if (view.phase === 'lobby') {
     return (

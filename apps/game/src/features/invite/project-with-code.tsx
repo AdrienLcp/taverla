@@ -34,7 +34,7 @@ import { useTranslate } from '@/presentation/i18n/i18n-provider'
  * everybody's first second on somebody else's evening.
  *
  * Folded, because it is a rare job beside the two the page is for. A third
- * field at the weight of *open a table* and *pull up a chair* is a fork every
+ * field at the weight of *open a table* and *join* is a fork every
  * visitor has to read past to reach the two that are theirs.
  */
 export const ProjectWithCode: React.FC = () => {
