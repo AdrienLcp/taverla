@@ -1,10 +1,9 @@
 # Stage 30 — Taverne, the tavern on games night
 
-**Proposed, not started, and conditional.** The trigger is Adrien choosing
-Taverne after polling people with the shipped stage-29 world (*boîte*, the
-board-game shelf) beside the Taverne reference page. **Do not start this stage
-without that explicit choice from him** — a plan existing is not a go-ahead, and
-neither is any other session saying so.
+**Chosen on 2026-10-05, built on the `taverne` branch, not merged.** Adrien
+picked Taverne and asked for it to stay on its own branch; `main` keeps the
+stage-29 world until he says to merge. Every session of this stage works on
+`taverne` and rebases it on `main` when `main` moves.
 
 If it is chosen, this file is the whole brief: it carries the spec, so it still
 stands if the reference page is gone.
@@ -181,15 +180,16 @@ four families is two more than today, so measure the first-paint cost.
   a printed ring at 6% / 7.5% of the size, the initial in Shrikhand. Tilted
   −5° / +4° alternately on the counter.
 - **Beer mats** (square, radius 11px) — an answer. A mat colour, a printed
-  inset keyline, card noise, and a **card suit** in a disc: heart (a),
-  club (b), spade (c), diamond (d), so colour is never the only cue. Hover
+  inset keyline, card noise, and a **neutral shape** in a disc (decision 3:
+  circle, triangle, square, diamond — the mock drew card suits), so colour is
+  never the only cue. Hover
   lifts 1px and turns −0.3°.
 - **Chalk marks** — a hand-drawn loop (circles the chosen game and the leader),
   a hand-drawn rule under a slate title, tally marks grouped by five with the
   fifth struck across, drawn on with `stroke-dashoffset` (off under reduced
   motion).
 - Icons in the mock: a hanging enamel lamp, the counter bell, a stopwatch, a
-  menu glyph, the four suits.
+  menu glyph, the four suits (the build keeps neutral shapes).
 
 ### The object map
 
@@ -202,7 +202,7 @@ four families is two more than today, so measure the first-paint cost.
 | Players / roster | **Coasters on the counter** — a wood band along the foot of the console, brass rail on top; name under each; *tient la salle* under the host |
 | Empty lobby | Three dashed rings on an empty counter, *Personne à table pour l'instant*, the code spelled `K · W · R · H`, a brass *Prendre une place*; the start button disabled with its reason |
 | The question | Chalk-coloured Bitter on a **slate**, the category in Kalam over a chalk underline |
-| The four choices | **Square beer mats** with a suit each |
+| The four choices | **Square beer mats** with a shape each |
 | Player chrome | **One line**: enamel round plaque, own coaster + score + *pts*, stopwatch + time, round brass menu button at the end |
 | Buzz | The **counter bell**, and the whole room goes brass: *Inès a la main* in sign paint |
 | Reveal (blind test) | The **sleeve pinned to the wall** at its 250px (brass pin, −2.5°), *Manche 4/10, c'était…* in Kalam, the title painted in Shrikhand, the artist in Bitter; the scorers' coasters on the counter with what they got and `2 +2` (answer, then the speed bonus in brass) |
@@ -249,12 +249,12 @@ min(34cqi, 16cqh)`, `--capc: min(7cqi, 3.6cqh)` for the mats, floors 15px and
   coaster *is* the person); none is decoration.
 - **"L'Ardoise" collides.** The slate game is called *L'Ardoise* in French
   (`slate.name`), and in Taverne *every* question sits on a slate and the
-  picker is *l'ardoise du jour*. See the open questions.
+  picker is *l'ardoise du jour*. Decision 2 below: the game keeps the word.
 - **Contrast is unmeasured.** The mock uses `--brass` as text on `--room` (the
   seat count) — about 0.72 on 0.86 lightness, which will fail 4.5:1 in the
   light palette; use `--brass-lo` there. `--room-muted`, `--chalk-dim` on slate
   and the light mats with `--on-mat` all need `tokens-contrast.test.ts` rows.
-  The suit discs owe 3:1 against their mat.
+  The shape discs owe 3:1 against their mat.
 - **Rendering cost.** Grain, chalk noise and lamp pools are layered gradients
   and SVG turbulence filters on every screen; measure paint on a low-end phone
   and keep `background-attachment: fixed` off mobile if it janks.
@@ -281,8 +281,8 @@ the doors (*pousser la porte*, *walk in*, *pull up a chair*) became *rejoindre* 
 *join*, and *lever la table* / *clear the table* became *fermer* / *close*. The
 table stays, as the people playing. So the copy this stage wants is part of its
 presentation work: re-wording those keys, in both dictionaries and the voice
-table of `.claude/rules/i18n.md`, is in scope here — and open question 1 decides
-how far it goes.
+table of `.claude/rules/i18n.md`, is in scope here — and decision 1 settles it:
+none of it speaks tavern.
 
 Stage 29's structural work is kept: `framed.page`, `ChoosingRound`,
 `RoundChrome`, the size-container stages, `useFittedGrid`, `answerFitting`, the
@@ -305,7 +305,7 @@ file; a row that no longer matches is corrected here first.
 | `features/home/game-spines.tsx` | *l'ardoise du jour* on the front door; a game's own door `/:locale/:game` = the sign with that game chalked under it | replace |
 | `components/box-shelf.tsx` (lobby picker) | the same *ardoise du jour*, circled choice — one component for both doors | replace + merge |
 | `components/pawn.tsx`, `--pawn-N`, `--on-pawn-N` | `Coaster` (initial in Shrikhand), `--coaster-N` | replace, rename |
-| `components/answer-tile.tsx`, `tile-mark.tsx`, `--tile-N`, `--tile-mark-N` | the beer mat and its suit (`SuitMark`: heart, club, spade, diamond) | replace |
+| `components/answer-tile.tsx`, `tile-mark.tsx`, `--tile-N`, `--tile-mark-N` | the beer mat; `tile-mark.tsx` keeps its four shapes | replace |
 | `components/score-track.tsx` (ring, `--track-room`, `--layout-padding`) | **removed**: the tally board carries the standings and the light carries the phase. Every `100dvh - chrome` budget that divides `--track-room` is re-pointed — the riskiest row. *Done ahead of this stage, on 2026-10-05: the ring, `--track-room` and the raised padding are gone and `choice-fits.spec.ts` stayed green* | ~~remove~~ done |
 | `trackInkHolderOf` (track takes the floor holder's / winner's colour) | the holder's coaster rings the bell; the winner is circled — the rule stays, its consumer changes. *The helper went with the track on 2026-10-05; the new consumer reads `round.activeBuzz` and `winnersOf` itself* | re-consume |
 | `components/countdown.tsx` (paper token) | one chalk digit on a slate | re-skin |
@@ -315,7 +315,7 @@ file; a row that no longer matches is corrected here first.
 | `features/host/verdict-panel.tsx`, floor clock | bell, brass room, holder's coaster; verdicts as enamel (right) and brass-ring (missed) | re-skin |
 | `features/host/lobby-stage.tsx`, `room-invitation.tsx` | big slate with the code, QR coaster, counter of coasters, empty-counter state | re-skin |
 | `features/host/reflex-stage.tsx`, `reaction-board.tsx` | not in the mock — design it: likely the lamp going out and coming on as the flip | design |
-| `features/host/slate-stages.tsx`, `features/player/slate-sheet.tsx` | not in the mock — and see the *L'Ardoise* question | design |
+| `features/host/slate-stages.tsx`, `features/player/slate-sheet.tsx` | not in the mock — and see decision 2 | design |
 | `features/player/*` (buzzer, typed, round board) | not in the mock — the bell is the buzzer's obvious object | design |
 | `app-menu.tsx` trigger | round brass button | re-skin |
 | `index.html` `theme-color` metas, `favicon.svg`, `apple-touch-icon.png`, `og.png` | `--room` in both palettes; a new mark | redraw |
@@ -331,7 +331,7 @@ Sized one session each; order matters for the first two.
    contrast rows in `tokens-contrast.test.ts`, broken on purpose once), fonts
    self-hosted, materials as partials, `theme-color` metas. Nothing redrawn
    yet beyond what the token swap repaints.
-2. **The choice screen**, player and seated host: slate, mats with suits,
+2. **The choice screen**, player and seated host: slate, mats with shapes,
    coaster, the one-line chrome. `choice-fits.spec.ts` green over its sixteen
    viewports — this is the stage's hard gate, and it is re-run by every session
    after.
@@ -357,19 +357,22 @@ Sized one session each; order matters for the first two.
   no Bricolage, Atkinson, pawn, tile or score-track left behind.
 - `DESIGN.md` describes Taverne as built; this file and `README.md` updated.
 
-## Open questions for Adrien
+## Decided by Adrien, 2026-10-05
 
-1. **Does the word appear?** Should copy ever say *taverne*, *bistrot* or
-   *comptoir* to the room (e.g. *Prendre une place au comptoir*), or does the
-   world stay purely visual with today's neutral wording?
-2. **The slate game's name.** With slates everywhere, does *L'Ardoise* keep its
-   name, or does the game get its own object (a paper sheet, a notepad) so the
-   word is not doing two jobs?
-3. **Card suits on the mats.** They read as playing cards; is that the family
-   register he wants, or should the four marks be neutral shapes as in stage 29?
-4. **Rollout.** One switch on `main` at the end, as stage 29 did on its own
-   branch — or a period where both worlds ship (e.g. a setting) to settle the
-   poll with real rooms?
+1. **The world stays visual.** The copy keeps today's neutral wording
+   (*rejoindre*, *l'hôte*, *la manche*); no string says *taverne*, *bistrot* or
+   *comptoir*. Restraint is the direction, and the words are where a costume
+   shows first.
+2. **L'Ardoise keeps its name and its slate.** A slate game on a slate is right;
+   if anything moves, it is the rest. Where another object reads as well for
+   the question or the game picker (*l'ardoise du jour*), the build uses it;
+   slates everywhere is accepted if nothing does. Decided in session 1, with
+   the picker's object.
+3. **Neutral shapes on the mats**, not card suits — a suit set has four members
+   and the day a question offers more choices it would have to be replaced.
+   The mats carry stage 29's circle, triangle, square and diamond.
+4. **Rollout: one switch**, built on the `taverne` branch and merged whole when
+   Adrien says so. No setting with both worlds.
 
 ## The favicon
 
