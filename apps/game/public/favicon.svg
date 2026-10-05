@@ -1,8 +1,12 @@
 <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
   <title>Taverla</title>
-  <rect fill="#831b11" height="28" rx="6" width="30" x="1" y="3" />
-  <rect fill="#c83122" height="28" rx="6" width="30" x="1" y="1" />
-  <rect fill="#fefdfb" height="5.5" width="16" x="5.5" y="7" />
-  <rect fill="#fefdfb" height="17" width="6.5" x="10.25" y="7" />
-  <circle cx="25" cy="21" fill="#fefdfb" r="3" />
+  <rect fill="#132f3b" height="32" rx="7" width="32" />
+  <rect fill="#f98a74" height="12.3" rx="3" width="12.3" x="3" y="3" />
+  <circle cx="9.15" cy="9.15" fill="#901308" r="3.3" />
+  <rect fill="#f8cf68" height="12.3" rx="3" width="12.3" x="16.7" y="3" />
+  <path d="M22.85 5.6l3.6 6.2h-7.2z" fill="#784a00" />
+  <rect fill="#76bdee" height="12.3" rx="3" width="12.3" x="3" y="16.7" />
+  <rect fill="#004590" height="6" rx="0.6" width="6" x="6.15" y="19.85" />
+  <rect fill="#7dd89f" height="12.3" rx="3" width="12.3" x="16.7" y="16.7" />
+  <path d="M22.85 18.9l3.95 3.95-3.95 3.95-3.95-3.95z" fill="#005f2e" />
 </svg>

@@ -812,6 +812,11 @@ one part.
 
 ### Improvements
 
+- `[Game]` **The favicon is the four answer tokens** — coral circle, saffron
+  triangle, sky square, leaf diamond on the night board — where the coral piece
+  with a *T* still read as the old orange square in a tab. The touch icon is the
+  same four, inset on the board.
+
 - `[Game]` **The setup's controls wear the box's rounded corners**: the choice
   strips, the switches, the number steppers and the sliders were still square
   from the previous world, and the pending spinner is a ring.
@@ -1540,6 +1545,11 @@ one part.
   and the extra width is only void
 
 ### Fixes
+
+- `[Game]` **The launch follows an opened setup down the page.** *À table !*
+  and the reason it refuses are one object, under the setup and pinned to the
+  screen's bottom edge until the setup ends: scrolled to the last setting, the
+  press sat off the top of the screen and its reason at the far end.
 
 - `[Game]` **A healthy room no longer reads as reconnecting.** When a screen's
   socket was replaced — a nickname change, or React mounting twice in

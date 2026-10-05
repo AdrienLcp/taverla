@@ -370,3 +370,24 @@ Sized one session each; order matters for the first two.
 4. **Rollout.** One switch on `main` at the end, as stage 29 did on its own
    branch — or a period where both worlds ship (e.g. a setting) to settle the
    poll with real rooms?
+
+## The favicon
+
+Drawn on 2026-10-05 beside the shipped mark, on the comparison page
+https://claude.ai/artifact/NqneHs5Dmu5RtHfvLLbZoN (local copy
+`.impeccable/directions/favicons.html`). The recommendation is **the coaster**:
+the one round silhouette in a tab bar, and the object every player has under
+their hand. Its touch icon centres it on `--walnut` (`#30180a`).
+
+```svg
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <title>Taverla</title>
+  <circle cx="16" cy="16.8" fill="#5c1a1b" r="15" />
+  <circle cx="16" cy="15.6" fill="#972e2f" r="15" />
+  <circle cx="16" cy="15.6" fill="none" r="12" stroke="#f9f5ea" stroke-dasharray="2 1.6" stroke-width="1.1" />
+  <path d="M9.5 8.4h13v4.2h-4.4v10.3h-4.2V12.6H9.5z" fill="#f9f5ea" />
+</svg>
+```
+
+The slate (a chalk *T* in an oak frame) and the counter bell on the green
+enamel plaque are on the same page, if the coaster loses.

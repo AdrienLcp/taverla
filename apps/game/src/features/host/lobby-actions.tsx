@@ -17,7 +17,7 @@ export const LobbyActions: React.FC<HostActionsProps> = ({
   const hasNoGame = view.settings.game === null
 
   return (
-    <>
+    <div className='launch'>
       <Button
         isDisabled={!isLive || isRoomEmpty || hasNoGame}
         onPress={() => {
@@ -38,6 +38,6 @@ export const LobbyActions: React.FC<HostActionsProps> = ({
       ) : (
         isRoomEmpty && <p className='reason'>{translate('host.needsPlayer')}</p>
       )}
-    </>
+    </div>
   )
 }

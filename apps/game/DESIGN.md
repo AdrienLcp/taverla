@@ -196,8 +196,7 @@ A cool printed board under warm, saturated die-cut inks, every value one
 
 ### Primary
 - **Go Coral** (`--primary`, edge `--primary-edge`, label `--on-primary`): the
-  one colour that says *go* — the `filled` button, the player's buzzer, the
-  favicon. Same value in both palettes; its darker edge is the piece's
+  one colour that says *go* — the `filled` button, the player's buzzer. Same value in both palettes; its darker edge is the piece's
   chipboard.
 
 ### Secondary
@@ -496,10 +495,11 @@ units, where 3.5 closes up the question mark's counter. The folded doors on the
 front page carry one each, the screen and the QR code. A glyph never travels alone: it sits
 beside the word, or its control carries the name.
 
-**The mark** (`public/favicon.svg`) is the coral piece — `#c83122` face on a
-darker `#831b11` die-cut edge offset 2 units down — with the wordmark's *T.* in
-paper (`#fefdfb`). `public/apple-touch-icon.png` is the same mark full-bleed at
-180×180, since iOS rounds it itself. `og.png` is drawn from the front door's lid
+**The mark** (`public/favicon.svg`) is the four answer tokens in dealing
+order — `--tile-1..4` faces with their `--tile-mark-1..4` shapes — on a
+rounded square of the dark `--board`, in hex since a favicon reads no token.
+`public/apple-touch-icon.png` is the same mark inset at 75% on a full-bleed
+board at 180×180, since iOS rounds it itself. `og.png` is drawn from the front door's lid
 and shelf.
 
 ## Components
