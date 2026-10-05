@@ -1,4 +1,4 @@
-import { Result } from '@adrienlcp/result'
+import { type FailureResult, Result } from '@adrienlcp/result'
 import { z } from 'zod'
 
 import type { CatalogueTrack } from '@taverla/protocol/http'
@@ -17,11 +17,21 @@ import {
 import { shuffled } from '@taverla/core/helpers/random'
 
 import { env } from '@/env'
-import { logger } from '@/infrastructure/logging/logger'
+import {
+  type CataloguePool,
+  type MusicSourceFailure,
+  type MusicSourceFault,
+  NOTHING_PLAYABLE
+} from '@/infrastructure/music/music-source'
 
-export type MusicSourceError =
-  | 'music_source_unavailable'
-  | 'no_content_available'
+const failed = (fault: MusicSourceFault): FailureResult<MusicSourceFailure> =>
+  Result.failure({
+    code:
+      fault.kind === 'not_found'
+        ? 'no_content_available'
+        : 'music_source_unavailable',
+    faults: [fault]
+  })
 
 const REQUEST_TIMEOUT_MS = 6_000
 const POOL_SIZE = 100
@@ -99,23 +109,29 @@ export const fetchTracksFor = async ({
    */
   signal?: AbortSignal
   source: TrackSource
-}): Promise<Result<CatalogueTrack[], MusicSourceError>> => {
+}): Promise<Result<CataloguePool, MusicSourceFailure>> => {
   const fetched = await Promise.all(
     pathsFor(source).map((path) => requestList(path, signal))
   )
   const reached = fetched.filter((list) => list.status === 'success')
+  const failures = fetched.flatMap((list) =>
+    list.status === 'failure' ? [list.error] : []
+  )
+  const faults = failures.flatMap((failure) => failure.faults)
 
   // One chart of several failing is a thinner pool, not a dead game. Only a
   // source that answered nothing at all is worth refusing the round over.
   if (reached.length === 0) {
-    const everyPathHeldNothing = fetched.every(
-      (list) =>
-        list.status === 'failure' && list.error === 'no_content_available'
+    const everyPathHeldNothing = failures.every(
+      (failure) => failure.code === 'no_content_available'
     )
 
-    return Result.failure(
-      everyPathHeldNothing ? 'no_content_available' : 'music_source_unavailable'
-    )
+    return Result.failure({
+      code: everyPathHeldNothing
+        ? 'no_content_available'
+        : 'music_source_unavailable',
+      faults
+    })
   }
 
   const playable = catalogued({
@@ -125,8 +141,8 @@ export const fetchTracksFor = async ({
   })
 
   return playable.length === 0
-    ? Result.failure('no_content_available')
-    : Result.success(playable)
+    ? Result.failure({ ...NOTHING_PLAYABLE, faults })
+    : Result.success({ faults, tracks: playable })
 }
 
 /**
@@ -145,7 +161,7 @@ const withoutRepeats = (tracks: DeezerTrack[]): DeezerTrack[] => [
  */
 export const fetchHostTrack = async (
   trackId: string
-): Promise<Result<HostTrack, MusicSourceError>> => {
+): Promise<Result<HostTrack, MusicSourceFailure>> => {
   const body = await requestJson(`/track/${encodeURIComponent(trackId)}`)
 
   if (body.status === 'failure') {
@@ -158,7 +174,7 @@ export const fetchHostTrack = async (
   // single-track lookup is Deezer's own `/track` endpoint, which reports a
   // different score than the list did.
   if (!parsed.success || parsed.data.preview.length === 0) {
-    return Result.failure('no_content_available')
+    return Result.failure(NOTHING_PLAYABLE)
   }
 
   return Result.success({
@@ -390,7 +406,7 @@ const toCatalogueTrack = (
 const requestList = async (
   path: string,
   signal?: AbortSignal
-): Promise<Result<DeezerTrack[], MusicSourceError>> => {
+): Promise<Result<DeezerTrack[], MusicSourceFailure>> => {
   const body = await requestJson(path, signal)
 
   if (body.status === 'failure') {
@@ -400,9 +416,7 @@ const requestList = async (
   const parsed = deezerListSchema.safeParse(body.data)
 
   if (!parsed.success) {
-    logger.error('Deezer returned an unexpected list shape', { path })
-
-    return Result.failure('music_source_unavailable')
+    return failed({ detail: null, kind: 'unexpected_shape', path })
   }
 
   return Result.success(parsed.data)
@@ -411,7 +425,7 @@ const requestList = async (
 const requestJson = async (
   path: string,
   signal?: AbortSignal
-): Promise<Result<unknown, MusicSourceError>> => {
+): Promise<Result<unknown, MusicSourceFailure>> => {
   const timeout = AbortSignal.timeout(REQUEST_TIMEOUT_MS)
 
   try {
@@ -421,9 +435,11 @@ const requestJson = async (
     })
 
     if (!response.ok) {
-      logger.error('Deezer request failed', { path, status: response.status })
-
-      return Result.failure('music_source_unavailable')
+      return failed({
+        detail: String(response.status),
+        kind: 'http_error',
+        path
+      })
     }
 
     const body: unknown = await response.json()
@@ -436,29 +452,24 @@ const requestJson = async (
       // deserve different answers — on screen, and in the log a real outage
       // has to be findable in. Every other declared type — quota, permission,
       // a malformed query — really is the catalogue refusing us.
-      if (type === RESOURCE_NOT_FOUND) {
-        logger.warn('Deezer knows nothing at that path', { path })
-
-        return Result.failure('no_content_available')
-      }
-
-      logger.error('Deezer reported an error', { path, type })
-
-      return Result.failure('music_source_unavailable')
+      return failed({
+        detail: type,
+        kind: type === RESOURCE_NOT_FOUND ? 'not_found' : 'declared_error',
+        path
+      })
     }
 
     return Result.success(body)
   } catch (cause) {
     // Nobody is waiting for the answer, and nothing is wrong with Deezer.
     if (signal?.aborted) {
-      return Result.failure('music_source_unavailable')
+      return Result.failure({ code: 'music_source_unavailable', faults: [] })
     }
 
-    logger.error('Deezer request threw', {
-      path,
-      reason: cause instanceof Error ? cause.name : 'unknown'
+    return failed({
+      detail: cause instanceof Error ? cause.name : null,
+      kind: 'request_threw',
+      path
     })
-
-    return Result.failure('music_source_unavailable')
   }
 }

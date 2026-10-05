@@ -1,5 +1,6 @@
 import type { PlayerId } from '@taverla/protocol/identifiers'
 
+import { compareText } from '../helpers/collation'
 import { normalizeAnswer } from '../round/answer-matching'
 
 export type SheetAnswer = {
@@ -55,7 +56,7 @@ export const groupAnswers = (
     .toSorted(
       (one, other) =>
         other.playerIds.length - one.playerIds.length ||
-        one.text.localeCompare(other.text)
+        compareText(one.text, other.text)
     )
 }
 

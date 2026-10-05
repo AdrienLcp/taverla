@@ -1,5 +1,13 @@
+import { z } from 'zod'
+
 import { readCachedEntries, writeCachedEntries } from './question-source'
-import { SPARQL_URL, USER_AGENT, withRetries } from './wikimedia-client'
+import {
+  bindingValue,
+  SPARQL_URL,
+  sparqlBindingsSchema,
+  USER_AGENT,
+  withRetries
+} from './wikimedia-client'
 
 /**
  * What kind of thing an entity is, which is the only thing that makes a decoy
@@ -52,16 +60,12 @@ const NOT_A_KIND = new Set(['class:Q5'])
 /** Wikidata's *human*, which is read here for what an entity is and never as a kind of its own. */
 const HUMAN = 'class:Q5'
 
-type SparqlBindings = {
-  results: {
-    bindings: {
-      classes?: { value: string }
-      item: { value: string }
-      occupations?: { value: string }
-      sports?: { value: string }
-    }[]
-  }
-}
+const kindsBindingsSchema = sparqlBindingsSchema({
+  classes: bindingValue.optional(),
+  item: bindingValue,
+  occupations: bindingValue.optional(),
+  sports: bindingValue.optional()
+})
 
 /**
  * Every value of each property rather than one, and sorted rather than taken in
@@ -112,7 +116,7 @@ const kindsOfBatch = async (
     'GROUP BY ?item'
   ].join('\n')
 
-  const body = await withRetries<SparqlBindings>(async () =>
+  const body = await withRetries(kindsBindingsSchema, async () =>
     fetch(SPARQL_URL, {
       body: new URLSearchParams({ query }),
       headers: {
@@ -163,7 +167,7 @@ export const kindsOf = async ({
 }: {
   entityIds: readonly string[]
 }): Promise<Map<string, string[]>> => {
-  const cached = await readCachedEntries<string[]>(KINDS_CACHE)
+  const cached = await readCachedEntries(KINDS_CACHE, z.array(z.string()))
   const missing = [
     ...new Set(entityIds.filter((entityId) => !(entityId in cached)))
   ]

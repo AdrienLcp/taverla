@@ -12,9 +12,13 @@ import { pickRandom, shuffled } from '@taverla/core/helpers/random'
 import type { Room } from '@/domain/room/room'
 import {
   fetchHostTrack,
-  fetchTracksFor,
-  type MusicSourceError
+  fetchTracksFor
 } from '@/infrastructure/music/deezer-client'
+import {
+  type MusicSourceFailure,
+  type MusicSourceFault,
+  NOTHING_PLAYABLE
+} from '@/infrastructure/music/music-source'
 
 /**
  * A drawn candidate can still turn out to have no preview in this country, and
@@ -29,18 +33,30 @@ export const drawPlayableTrack = async ({
 }: {
   room: Room
   settings: BlindtestSettings
-}): Promise<Result<HostTrack, MusicSourceError>> => {
+}): Promise<
+  Result<
+    { faults: readonly MusicSourceFault[]; track: HostTrack },
+    MusicSourceFailure
+  >
+> => {
+  const faults: MusicSourceFault[] = []
+
   for (let attempt = 0; attempt < MAX_DRAW_ATTEMPTS; attempt++) {
     const refilled = await refillWhenEmpty({ room, settings })
 
     if (refilled.status === 'failure') {
-      return refilled
+      return Result.failure({
+        ...refilled.error,
+        faults: [...faults, ...refilled.error.faults]
+      })
     }
+
+    faults.push(...refilled.data)
 
     const candidate = pickRandom(room.trackPool)
 
     if (candidate === null) {
-      return Result.failure('no_content_available')
+      return Result.failure({ ...NOTHING_PLAYABLE, faults })
     }
 
     room.trackPool.splice(room.trackPool.indexOf(candidate), 1)
@@ -53,11 +69,16 @@ export const drawPlayableTrack = async ({
       // The film is a fact about how the track was *found*, not about the
       // track: `/track/{id}` is asked for the preview URL and knows nothing of
       // the composer table the pool was drawn from.
-      return Result.success({ ...resolved.data, film: candidate.film })
+      return Result.success({
+        faults,
+        track: { ...resolved.data, film: candidate.film }
+      })
     }
+
+    faults.push(...resolved.error.faults)
   }
 
-  return Result.failure('no_content_available')
+  return Result.failure({ ...NOTHING_PLAYABLE, faults })
 }
 
 /**
@@ -131,9 +152,9 @@ const refillWhenEmpty = async ({
 }: {
   room: Room
   settings: BlindtestSettings
-}): Promise<Result<void, MusicSourceError>> => {
+}): Promise<Result<readonly MusicSourceFault[], MusicSourceFailure>> => {
   if (room.trackPool.length > 0) {
-    return Result.success()
+    return Result.success([])
   }
 
   const fetched = await fetchTracksFor({
@@ -145,17 +166,17 @@ const refillWhenEmpty = async ({
     return fetched
   }
 
-  const unplayed = fetched.data.filter(
+  const unplayed = fetched.data.tracks.filter(
     (track) => !room.playedContentIds.has(track.id)
   )
 
   if (unplayed.length === 0) {
-    return Result.failure('no_content_available')
+    return Result.failure({ ...NOTHING_PLAYABLE, faults: fetched.data.faults })
   }
 
   room.trackPool = unplayed
 
-  return Result.success()
+  return Result.success(fetched.data.faults)
 }
 
 /** Four is the shape of the question: enough to be a guess, few enough to read. */

@@ -7,8 +7,8 @@ import { hasJoinedAfterStart, isExpectedInRound } from './round-roster'
 
 const NOW = 1_700_000_000_000
 
-const ANNA = 'anna' as PlayerId
-const LATECOMER = 'latecomer' as PlayerId
+const ANNA: PlayerId = 'anna'
+const LATECOMER: PlayerId = 'latecomer'
 
 const opened = new Set([ANNA])
 

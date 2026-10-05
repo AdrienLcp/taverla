@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { type TrackDifficulty, trackDecades } from '@taverla/protocol/track'
 
 import { fetchTracksFor } from './deezer-client'
+import { isOutage } from './music-source'
 
 /**
  * The ranks are the ones the floors were measured against, spelled out rather
@@ -75,7 +76,7 @@ const titlesDrawnAt = async (difficulty: TrackDifficulty) => {
   })
 
   return found.status === 'success'
-    ? found.data.map((track) => track.title)
+    ? found.data.tracks.map((track) => track.title)
     : []
 }
 
@@ -138,7 +139,7 @@ describe('fetchTracksFor', () => {
     })
 
     expect(
-      found.status === 'success' && found.data.map((t) => t.title)
+      found.status === 'success' && found.data.tracks.map((t) => t.title)
     ).toEqual(['Pop one', 'Both', 'Rock one'])
     expect(requested()).toHaveLength(2)
   })
@@ -154,7 +155,7 @@ describe('fetchTracksFor', () => {
     })
 
     expect(
-      found.status === 'success' && found.data.map((t) => t.title)
+      found.status === 'success' && found.data.tracks.map((t) => t.title)
     ).toEqual(['Everything'])
     expect(requested()).toEqual(['/chart/0/tracks?limit=100'])
   })
@@ -168,7 +169,7 @@ describe('fetchTracksFor', () => {
     })
 
     expect(
-      found.status === 'success' && found.data.map((t) => t.title)
+      found.status === 'success' && found.data.tracks.map((t) => t.title)
     ).toEqual(['Rock one'])
   })
 
@@ -184,7 +185,7 @@ describe('fetchTracksFor', () => {
     })
 
     expect(
-      found.status === 'success' && found.data.map((t) => t.title)
+      found.status === 'success' && found.data.tracks.map((t) => t.title)
     ).toEqual(['Wannabe', 'Alors regarde'])
     expect(requested()).toHaveLength(2)
   })
@@ -200,7 +201,7 @@ describe('fetchTracksFor', () => {
     })
 
     expect(
-      found.status === 'success' && found.data.map((t) => t.title)
+      found.status === 'success' && found.data.tracks.map((t) => t.title)
     ).toEqual(['Wannabe'])
   })
 
@@ -217,6 +218,24 @@ describe('fetchTracksFor', () => {
     expect(requested()).toHaveLength(trackDecades.length * 2)
   })
 
+  it('[genres] keeps the charts that answered, and names the one that did not', async () => {
+    catalogueByPath({ '/chart/132/tracks': [trackAtRank(CLASSIC_RANK)] })
+
+    const found = await fetchTracksFor({
+      difficulty: 'wellKnown',
+      source: { genreIds: [132, 152], kind: 'chart' }
+    })
+
+    expect(found.status === 'success' && found.data.tracks).toHaveLength(1)
+    expect(found.status === 'success' && found.data.faults).toEqual([
+      {
+        detail: '502',
+        kind: 'http_error',
+        path: '/chart/152/tracks?limit=100'
+      }
+    ])
+  })
+
   it('[genres] refuses the round when every chart is down', async () => {
     catalogueByPath({})
 
@@ -226,9 +245,58 @@ describe('fetchTracksFor', () => {
     })
 
     expect(found).toEqual({
-      error: 'music_source_unavailable',
+      error: {
+        code: 'music_source_unavailable',
+        faults: [
+          {
+            detail: '502',
+            kind: 'http_error',
+            path: '/chart/132/tracks?limit=100'
+          },
+          {
+            detail: '502',
+            kind: 'http_error',
+            path: '/chart/152/tracks?limit=100'
+          }
+        ]
+      },
       status: 'failure'
     })
+  })
+
+  it('[playlist] reads an id Deezer does not know as a typo, not an outage', async () => {
+    vi.stubGlobal(
+      'fetch',
+      async () =>
+        new Response(
+          JSON.stringify({
+            error: { code: 800, message: 'no data', type: 'DataException' }
+          }),
+          { headers: { 'content-type': 'application/json' }, status: 200 }
+        )
+    )
+
+    const found = await fetchTracksFor({
+      difficulty: 'wellKnown',
+      source: { kind: 'playlist', playlistId: '404' }
+    })
+
+    expect(found).toEqual({
+      error: {
+        code: 'no_content_available',
+        faults: [
+          {
+            detail: 'DataException',
+            kind: 'not_found',
+            path: '/playlist/404/tracks?limit=100'
+          }
+        ]
+      },
+      status: 'failure'
+    })
+    expect(found.status === 'failure' && isOutage(found.error.faults)).toBe(
+      false
+    )
   })
 
   it('[abort] cancels every path of the fan-out with the caller', async () => {
@@ -294,7 +362,7 @@ const filmPoolOf = async (tracks: unknown[]) => {
     source: { kind: 'film' }
   })
 
-  return found.status === 'success' ? found.data : []
+  return found.status === 'success' ? found.data.tracks : []
 }
 
 describe('the film source', () => {

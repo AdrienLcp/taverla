@@ -123,18 +123,24 @@ const sweepShapes = ({
     '.segmented-control, .toggle-group'
   )) {
     const label = strip.querySelector('.react-aria-Label')?.textContent ?? ''
-    let box: Element = strip
+    let styled = strip instanceof HTMLElement ? strip : null
 
     for (let el: Element | null = strip; el !== null; el = el.parentElement) {
-      if (getComputedStyle(el).containerType === 'inline-size') {
-        box = el
+      if (
+        el instanceof HTMLElement &&
+        getComputedStyle(el).containerType === 'inline-size'
+      ) {
+        styled = el
         break
       }
     }
 
     seen.push(label)
 
-    const styled = box as HTMLElement
+    if (styled === null) {
+      continue
+    }
+
     const restore = styled.style.width
 
     for (let width = floors[label] ?? 0; width <= widest; width += step) {

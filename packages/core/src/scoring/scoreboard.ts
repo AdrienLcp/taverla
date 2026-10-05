@@ -1,6 +1,8 @@
 import type { PlayerId } from '@taverla/protocol/identifiers'
 import type { PublicPlayer } from '@taverla/protocol/room'
 
+import { compareText } from '../helpers/collation'
+
 export type ScoreboardEntry = {
   player: PublicPlayer
   /** Standard competition ranking: two players on 5 points are both 2nd, and the next is 4th. */
@@ -25,7 +27,7 @@ export const buildScoreboard = (
 ): ScoreboardEntry[] => {
   const ordered = players.toSorted(
     (left, right) =>
-      right.score - left.score || left.nickname.localeCompare(right.nickname)
+      right.score - left.score || compareText(left.nickname, right.nickname)
   )
 
   let currentRank = 0

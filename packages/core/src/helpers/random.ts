@@ -22,3 +22,7 @@ export const shuffled = <TItem>(items: readonly TItem[]): TItem[] => {
 
 export const pickRandom = <TItem>(items: readonly TItem[]): TItem | null =>
   items[Math.floor(Math.random() * items.length)] ?? null
+
+/** Inclusive at both ends, like the range a rule states. */
+export const randomIntBetween = (min: number, max: number): number =>
+  min + Math.floor(Math.random() * (max - min + 1))

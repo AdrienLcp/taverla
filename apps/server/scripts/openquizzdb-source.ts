@@ -1,6 +1,9 @@
+import { z } from 'zod'
+
 import type { QuestionCategory } from '@taverla/protocol/question'
 
 import { frenchViewsOfTitles, isWellKnownInFrench } from './frwiki-notability'
+import { parseJson } from './json-file'
 import {
   type Attribution,
   type BankedQuestion,
@@ -100,21 +103,25 @@ const firstRiddleIn = (prompt: string): string | null => {
   return firstRiddle === undefined ? null : `${firstRiddle}.`
 }
 
-type UpstreamQuestion = {
-  anecdote?: string
-  id: number
-  propositions: string[]
-  question: string
-  réponse: string
-  wikipédia?: string
-}
+const upstreamQuestionSchema = z.object({
+  anecdote: z.string().optional(),
+  id: z.number(),
+  propositions: z.array(z.string()),
+  question: z.string(),
+  réponse: z.string(),
+  wikipédia: z.string().optional()
+})
 
-type UpstreamPack = {
-  licence?: string
-  quizz: UpstreamQuestion[]
-  rédacteur?: string
-  thème?: string
-}
+type UpstreamQuestion = z.infer<typeof upstreamQuestionSchema>
+
+const upstreamPackSchema = z.object({
+  licence: z.string().optional(),
+  quizz: z.array(upstreamQuestionSchema),
+  rédacteur: z.string().optional(),
+  thème: z.string().optional()
+})
+
+type UpstreamPack = z.infer<typeof upstreamPackSchema>
 
 const packIdsByRubric = (listing: string): Map<string, number[]> => {
   const byRubric = new Map<string, number[]>()
@@ -201,11 +208,9 @@ const fetchPack = async (packId: number): Promise<UpstreamPack | null> => {
     return response.text()
   })
 
-  try {
-    return JSON.parse(withoutRawControls(body)) as UpstreamPack
-  } catch {
-    return null
-  }
+  const pack = parseJson(withoutRawControls(body), upstreamPackSchema)
+
+  return pack.status === 'success' ? pack.data : null
 }
 
 /**

@@ -14,6 +14,7 @@ import type { Locale } from '@taverla/protocol/locale'
 import { newRoom } from '@/domain/room/new-room'
 import type { Room } from '@/domain/room/room'
 import { nowMs } from '@/infrastructure/clock'
+import { newHostToken } from '@/infrastructure/ids'
 import type { Connection } from '@/infrastructure/messaging/connection'
 import {
   commitRoom,
@@ -111,7 +112,15 @@ export class RoomObject extends DurableObject<Env> {
       return null
     }
 
-    const engine = this.engineFor(newRoom({ code, game, locale, now: nowMs() }))
+    const engine = this.engineFor(
+      newRoom({
+        code,
+        game,
+        hostToken: newHostToken(),
+        locale,
+        now: nowMs()
+      })
+    )
 
     this.engine = engine
     commitRoom(engine)

@@ -13,6 +13,7 @@ import {
   sessionIdSchema
 } from '@taverla/protocol/identifiers'
 
+import { newSessionId } from '@taverla/core/room/session-id'
 import {
   forgetSeat,
   type HeldRoom,
@@ -28,7 +29,6 @@ import {
 } from '@taverla/core/room/session-memory'
 
 import { nowMs } from '@/infrastructure/clock'
-import { newSessionId } from '@/infrastructure/ids'
 
 import { readStoredWithSchema } from './read-stored-with-schema'
 

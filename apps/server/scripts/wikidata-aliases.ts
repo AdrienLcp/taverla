@@ -1,7 +1,15 @@
+import { z } from 'zod'
+
 import type { QuestionLanguage } from '@taverla/protocol/question'
 
 import { readCachedEntries, writeCachedEntries } from './question-source'
-import { SPARQL_URL, USER_AGENT, withRetries } from './wikimedia-client'
+import {
+  bindingValue,
+  SPARQL_URL,
+  sparqlBindingsSchema,
+  USER_AGENT,
+  withRetries
+} from './wikimedia-client'
 
 /**
  * The other names Wikidata holds for an entity **in one language**, which is
@@ -41,14 +49,10 @@ const SAVE_EVERY = 10
 const cacheOf = (language: QuestionLanguage): string =>
   `wikidata-aliases-${language}.json`
 
-type SparqlBindings = {
-  results: {
-    bindings: {
-      aliases?: { value: string }
-      item: { value: string }
-    }[]
-  }
-}
+const aliasesBindingsSchema = sparqlBindingsSchema({
+  aliases: bindingValue.optional(),
+  item: bindingValue
+})
 
 /**
  * A newline separates the names, because every other candidate appears inside
@@ -77,7 +81,7 @@ const aliasesOfBatch = async ({
     'GROUP BY ?item'
   ].join('\n')
 
-  const body = await withRetries<SparqlBindings>(async () =>
+  const body = await withRetries(aliasesBindingsSchema, async () =>
     fetch(SPARQL_URL, {
       body: new URLSearchParams({ query }),
       headers: {
@@ -124,7 +128,7 @@ export const aliasesOf = async ({
   language: QuestionLanguage
 }): Promise<Map<string, string[]>> => {
   const cache = cacheOf(language)
-  const cached = await readCachedEntries<string[]>(cache)
+  const cached = await readCachedEntries(cache, z.array(z.string()))
   const missing = [
     ...new Set(entityIds.filter((entityId) => !(entityId in cached)))
   ]

@@ -1,6 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import type { ApiErrorResponse } from '@taverla/protocol/http'
+import {
+  type ApiErrorResponse,
+  apiErrorResponseSchema
+} from '@taverla/protocol/http'
 import { API_ROUTES } from '@taverla/protocol/routes'
 
 import { ROOMS_BEFORE_RATE_LIMIT } from '@/infrastructure/node/node-app'
@@ -44,7 +47,7 @@ describe('http routes', () => {
       statuses.push(response.status)
 
       if (response.status === 429) {
-        lastBody = (await response.json()) as ApiErrorResponse
+        lastBody = apiErrorResponseSchema.parse(await response.json())
       }
     }
 

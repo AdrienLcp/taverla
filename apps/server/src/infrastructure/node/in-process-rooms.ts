@@ -8,6 +8,7 @@ import { newRoom } from '@/domain/room/new-room'
 import type { Room } from '@/domain/room/room'
 import { nowMs } from '@/infrastructure/clock'
 import type { RoomDoor } from '@/infrastructure/http/http-ports'
+import { newHostToken } from '@/infrastructure/ids'
 import { logger } from '@/infrastructure/logging/logger'
 import type { Connection } from '@/infrastructure/messaging/connection'
 import {
@@ -42,7 +43,15 @@ export const openRoomInProcess = ({
     return null
   }
 
-  const engine = engineFor(newRoom({ code, game, locale, now: nowMs() }))
+  const engine = engineFor(
+    newRoom({
+      code,
+      game,
+      hostToken: newHostToken(),
+      locale,
+      now: nowMs()
+    })
+  )
 
   engines.set(code, engine)
   commitRoom(engine)

@@ -6,7 +6,7 @@ import { buildReactionBoard } from './reaction-board'
 
 const FLIPS_AT = 1_700_000_000_000
 
-const playerId = (name: string): PlayerId => name as PlayerId
+const playerId = (name: string): PlayerId => name
 
 describe('the board a heat leaves behind', () => {
   it('[reflex] keeps arrival order, because it is already reaction order', () => {

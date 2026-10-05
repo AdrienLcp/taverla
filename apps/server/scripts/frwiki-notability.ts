@@ -1,9 +1,17 @@
+import { z } from 'zod'
+
 import {
   chunked,
   readCachedEntries,
   writeCachedEntries
 } from './question-source'
-import { SPARQL_URL, USER_AGENT, withRetries } from './wikimedia-client'
+import {
+  bindingValue,
+  SPARQL_URL,
+  sparqlBindingsSchema,
+  USER_AGENT,
+  withRetries
+} from './wikimedia-client'
 
 /**
  * How well known a Wikidata entity is to a French-speaking room, measured as the
@@ -56,19 +64,33 @@ const SAVE_EVERY = 20
 const TITLES_CACHE = 'frwiki-titles.json'
 const VIEWS_CACHE = 'frwiki-views.json'
 
-type SparqlBindings = {
-  results: { bindings: { item: { value: string }; title: { value: string } }[] }
-}
+const titlesBindingsSchema = sparqlBindingsSchema({
+  item: bindingValue,
+  title: bindingValue
+})
 
-type Continuation = Record<string, string>
+const continuationSchema = z.record(z.string(), z.string())
 
-type PageviewsPage = {
-  continue?: Continuation
-  query?: {
-    normalized?: { from: string; to: string }[]
-    pages?: { pageviews?: Record<string, number | null>; title: string }[]
-  }
-}
+type Continuation = z.infer<typeof continuationSchema>
+
+const pageviewsPageSchema = z.object({
+  continue: continuationSchema.optional(),
+  query: z
+    .object({
+      normalized: z
+        .array(z.object({ from: z.string(), to: z.string() }))
+        .optional(),
+      pages: z
+        .array(
+          z.object({
+            pageviews: z.record(z.string(), z.number().nullable()).optional(),
+            title: z.string()
+          })
+        )
+        .optional()
+    })
+    .optional()
+})
 
 /**
  * The French article title of every entity that has one. Asked for through
@@ -88,7 +110,7 @@ const titlesOf = async (
     '}'
   ].join('\n')
 
-  const body = await withRetries<SparqlBindings>(async () =>
+  const body = await withRetries(titlesBindingsSchema, async () =>
     fetch(SPARQL_URL, {
       body: new URLSearchParams({ query }),
       headers: {
@@ -140,7 +162,7 @@ const viewsOf = async (
       ...continuation
     })
 
-    const page = await withRetries<PageviewsPage>(async () =>
+    const page = await withRetries(pageviewsPageSchema, async () =>
       fetch(`${FRENCH_WIKIPEDIA_API}?${parameters}`, {
         headers: { 'user-agent': USER_AGENT }
       })
@@ -185,7 +207,7 @@ export const frenchViewsOfTitles = async ({
   label: string
   titles: readonly string[]
 }): Promise<Map<string, number>> => {
-  const views = await readCachedEntries<number>(VIEWS_CACHE)
+  const views = await readCachedEntries(VIEWS_CACHE, z.number())
 
   const asked = [...new Set(titles)]
   const wanted = asked.filter((title) => !(title in views))
@@ -225,7 +247,7 @@ export const frenchViewsOf = async ({
   entityIds: readonly string[]
   label: string
 }): Promise<Map<string, number>> => {
-  const titles = await readCachedEntries<string | null>(TITLES_CACHE)
+  const titles = await readCachedEntries(TITLES_CACHE, z.string().nullable())
 
   const asked = [...new Set(entityIds)]
   const unresolved = asked.filter((entityId) => !(entityId in titles))

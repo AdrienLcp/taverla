@@ -1,3 +1,5 @@
+import { randomIntBetween } from '../helpers/random'
+
 /**
  * How long `playing` runs before the screen flips, drawn afresh every round.
  * Long enough that anticipating it does not pay, short enough that nobody looks
@@ -8,8 +10,7 @@ export const MIN_FLIP_DELAY_MS = 2_000
 export const MAX_FLIP_DELAY_MS = 6_000
 
 export const drawFlipDelayMs = (): number =>
-  MIN_FLIP_DELAY_MS +
-  Math.floor(Math.random() * (MAX_FLIP_DELAY_MS - MIN_FLIP_DELAY_MS + 1))
+  randomIntBetween(MIN_FLIP_DELAY_MS, MAX_FLIP_DELAY_MS)
 
 /**
  * How long the room has to answer the flip. The round closes the moment

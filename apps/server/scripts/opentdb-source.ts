@@ -1,8 +1,11 @@
 import { createHash } from 'node:crypto'
 
+import { z } from 'zod'
+
 import type { QuestionCategory } from '@taverla/protocol/question'
 
 import { entitiesOfLabels, namedEntitiesOfLabels } from './enwiki-entities'
+import { jsonOf, orStop, parseJson } from './json-file'
 import {
   type Attribution,
   acceptedOf,
@@ -72,19 +75,28 @@ const CATEGORY_OF_RUBRIC: Record<string, QuestionCategory> = {
  * not banked, because nothing would read them — they stay in `.cache/`, one
  * rebuild away, for the day a hard mode has somewhere to work.
  */
-type UpstreamDifficulty = 'easy' | 'hard' | 'medium'
+const upstreamQuestionSchema = z.object({
+  correct_answer: z.string(),
+  difficulty: z.enum(['easy', 'hard', 'medium']),
+  incorrect_answers: z.array(z.string()),
+  question: z.string()
+})
 
-type UpstreamQuestion = {
-  correct_answer: string
-  difficulty: UpstreamDifficulty
-  incorrect_answers: string[]
-  question: string
-}
+type UpstreamQuestion = z.infer<typeof upstreamQuestionSchema>
 
-type UpstreamPage = {
-  response_code: number
-  results?: UpstreamQuestion[]
-}
+const upstreamPageSchema = z.object({
+  response_code: z.number(),
+  results: z.array(upstreamQuestionSchema).optional()
+})
+
+const tokenAnswerSchema = z.object({
+  response_code: z.number(),
+  token: z.string().optional()
+})
+
+const categoryListingSchema = z.object({
+  trivia_categories: z.array(z.object({ id: z.number(), name: z.string() }))
+})
 
 const SUCCESS = 0
 const NO_RESULTS = 1
@@ -106,12 +118,15 @@ const PAGE_SIZES = [LARGEST_PAGE, 10, 1] as const
 /** Their documented rate limit is one request every five seconds per address. */
 const REQUEST_INTERVAL_MS = 5_000
 
-const getJson = async <TBody>(url: string): Promise<TBody> => {
+const getJson = async <TSchema extends z.ZodType>(
+  url: string,
+  schema: TSchema
+): Promise<z.infer<TSchema>> => {
   await wait(REQUEST_INTERVAL_MS)
 
   const response = await fetch(url)
 
-  return (await response.json()) as TBody
+  return jsonOf(schema).parse(await response.text())
 }
 
 /**
@@ -134,9 +149,7 @@ const pageUrl = ({
   `${API_URL}?amount=${amount}&category=${categoryId}&type=multiple&encode=url3986&token=${token}`
 
 const requestToken = async (): Promise<string | null> => {
-  const body = await getJson<{ response_code: number; token?: string }>(
-    `${TOKEN_URL}?command=request`
-  )
+  const body = await getJson(`${TOKEN_URL}?command=request`, tokenAnswerSchema)
 
   return body.response_code === SUCCESS ? (body.token ?? null) : null
 }
@@ -157,8 +170,9 @@ const drainRubric = async ({
 
   for (const amount of PAGE_SIZES) {
     for (;;) {
-      const page = await getJson<UpstreamPage>(
-        pageUrl({ amount, categoryId, token })
+      const page = await getJson(
+        pageUrl({ amount, categoryId, token }),
+        upstreamPageSchema
       )
 
       if (page.response_code === RATE_LIMITED) {
@@ -280,8 +294,9 @@ export const ingestOpenTdb = async (): Promise<IngestedQuestions> => {
     return response.text()
   })
 
-  const rubrics = (
-    JSON.parse(listing) as { trivia_categories: { id: number; name: string }[] }
+  const rubrics = orStop(
+    parseJson(listing, categoryListingSchema),
+    'opentdb-categories.json'
   ).trivia_categories
 
   const questions: BankedQuestion[] = []
@@ -308,7 +323,10 @@ export const ingestOpenTdb = async (): Promise<IngestedQuestions> => {
 
     let kept = 0
 
-    for (const question of JSON.parse(drained) as UpstreamQuestion[]) {
+    for (const question of orStop(
+      parseJson(drained, z.array(upstreamQuestionSchema)),
+      `opentdb-${rubric.id}.json`
+    )) {
       const candidate = toBankedQuestion({
         category,
         question,

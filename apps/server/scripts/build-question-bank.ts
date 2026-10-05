@@ -1,11 +1,13 @@
-import { readFileSync } from 'node:fs'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import { z } from 'zod'
+
 import { gradeQuizGuess } from '@taverla/core/quiz/question-answer'
 import { normalizeAnswer } from '@taverla/core/round/answer-matching'
 
+import { orStop, readJsonFile } from './json-file'
 import { ingestMintaka } from './mintaka-source'
 import { ingestOpenQuizzDb } from './openquizzdb-source'
 import { ingestOpenTdb } from './opentdb-source'
@@ -64,18 +66,20 @@ const BANK_PATH = join(
  * was repaired for, so a later reader can disagree with the judgement rather
  * than guess at it.
  */
-type QuestionRepair = {
-  answer?: string
-  decoys?: [string, string, string]
-  drop?: boolean
-  isAdult?: boolean
-  note?: string | null
-  prompt?: string
-  why: string
-}
+const questionRepairSchema = z.object({
+  answer: z.string().optional(),
+  decoys: z.tuple([z.string(), z.string(), z.string()]).optional(),
+  drop: z.boolean().optional(),
+  isAdult: z.boolean().optional(),
+  note: z.string().nullable().optional(),
+  prompt: z.string().optional(),
+  why: z.string()
+})
 
-const repairs: Record<string, QuestionRepair> = JSON.parse(
-  readFileSync(join(HERE, 'question-repairs.json'), 'utf8')
+const REPAIRS_PATH = join(HERE, 'question-repairs.json')
+const repairs = orStop(
+  readJsonFile(REPAIRS_PATH, z.record(z.string(), questionRepairSchema)),
+  REPAIRS_PATH
 )
 
 /**
@@ -99,11 +103,11 @@ const repairs: Record<string, QuestionRepair> = JSON.parse(
  * the two are read together — a rule where one exists, a reading everywhere
  * else.
  */
-const choiceOnlyIds = new Set<string>(
-  (
-    JSON.parse(
-      readFileSync(join(HERE, 'choice-only-questions.json'), 'utf8')
-    ) as ReadonlyArray<{ id: string }>
+const CHOICE_ONLY_PATH = join(HERE, 'choice-only-questions.json')
+const choiceOnlyIds = new Set(
+  orStop(
+    readJsonFile(CHOICE_ONLY_PATH, z.array(z.object({ id: z.string() }))),
+    CHOICE_ONLY_PATH
   ).map(({ id }) => id)
 )
 

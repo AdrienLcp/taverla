@@ -1,5 +1,13 @@
+import { z } from 'zod'
+
 import { readCachedEntries, writeCachedEntries } from './question-source'
-import { SPARQL_URL, USER_AGENT, withRetries } from './wikimedia-client'
+import {
+  bindingValue,
+  SPARQL_URL,
+  sparqlBindingsSchema,
+  USER_AGENT,
+  withRetries
+} from './wikimedia-client'
 
 /**
  * The year a person was born, which is the one thing that tells a decoy the room
@@ -33,14 +41,10 @@ const SAVE_EVERY = 10
 /** Where a year is remembered, `null` meaning Wikidata holds none. */
 const YEARS_CACHE = 'wikidata-years.json'
 
-type SparqlBindings = {
-  results: {
-    bindings: {
-      birth?: { value: string }
-      item: { value: string }
-    }[]
-  }
-}
+const yearsBindingsSchema = sparqlBindingsSchema({
+  birth: bindingValue.optional(),
+  item: bindingValue
+})
 
 /**
  * `-0384-01-01T00:00:00Z` as well as `1948-04-28T00:00:00Z`, so the sign is part
@@ -64,7 +68,7 @@ const birthYearsOfBatch = async (
     '}'
   ].join('\n')
 
-  const body = await withRetries<SparqlBindings>(async () =>
+  const body = await withRetries(yearsBindingsSchema, async () =>
     fetch(SPARQL_URL, {
       body: new URLSearchParams({ query }),
       headers: {
@@ -100,7 +104,7 @@ export const birthYearsOf = async ({
 }: {
   entityIds: readonly string[]
 }): Promise<Map<string, number>> => {
-  const cached = await readCachedEntries<number | null>(YEARS_CACHE)
+  const cached = await readCachedEntries(YEARS_CACHE, z.number().nullable())
   const missing = [
     ...new Set(entityIds.filter((entityId) => !(entityId in cached)))
   ]

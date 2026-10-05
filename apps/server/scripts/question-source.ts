@@ -2,6 +2,8 @@ import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import { z } from 'zod'
+
 import type {
   QuestionCategory,
   QuestionLanguage
@@ -9,6 +11,8 @@ import type {
 
 import { gradeQuizGuess } from '@taverla/core/quiz/question-answer'
 import { normalizeAnswer } from '@taverla/core/round/answer-matching'
+
+import { orStop, parseJson } from './json-file'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const CACHE_DIRECTORY = join(HERE, '.cache')
@@ -142,16 +146,16 @@ export const cachedFile = async ({
  * learnt, keyed by the thing itself instead of by its position in a queue that
  * the next rule change would renumber.
  */
-export const readCachedEntries = async <TValue>(
-  name: string
-): Promise<Record<string, TValue>> => {
-  try {
-    return JSON.parse(
-      await readFile(join(CACHE_DIRECTORY, name), 'utf8')
-    ) as Record<string, TValue>
-  } catch {
-    return {}
-  }
+export const readCachedEntries = async <TValue extends z.ZodType>(
+  name: string,
+  valueSchema: TValue
+): Promise<Record<string, z.infer<TValue>>> => {
+  const path = join(CACHE_DIRECTORY, name)
+  const text = await readFile(path, 'utf8').catch(() => null)
+
+  return text === null
+    ? {}
+    : orStop(parseJson(text, z.record(z.string(), valueSchema)), path)
 }
 
 export const writeCachedEntries = async <TValue>({

@@ -113,5 +113,16 @@ value with the absence spelled out, and `Result.failure(undefined)` builds a
 failure whose error *is* `undefined` — never the unknown error, which is what
 writing it almost always meant.
 
+## A failure is logged once
+
+On the server, an adapter reports a failure and never logs it: the Deezer
+client's failure carries each fault's path, detail and kind. The handler that
+decides what to do logs it once, with the context only it holds — the round
+conductor names the room — at the level the kind calls for: an id nobody knows
+(`not_found`) is a host's typo and a `warn`, an outage an `error`. A success
+reached past failing paths — one chart of several down — carries its faults
+too, and the handler logs them the same way. Nothing logs
+then rethrows. Startup lines are `console.info`.
+
 **`Result` is not this repository's code.** `@adrienlcp/result` is installed
 from npm and lives in `github.com/AdrienLcp/packages`; change its shape there.

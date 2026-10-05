@@ -8,7 +8,8 @@
 apps/server         → Hono + native WebSocket. Authoritative game state.
 apps/game           → One Vite SPA serving both surfaces, by route.
 packages/protocol   → The wire contract (Zod). Depends on nothing but zod.
-packages/core       → Pure domain rules. Depends on protocol for types.
+packages/core       → Pure domain rules. Depends on protocol for types, and on
+                      nanoid for the session id both apps mint.
 docs/plans/         → The staged build plan; each file is one session's work.
 ```
 

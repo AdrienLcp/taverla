@@ -18,6 +18,7 @@ import { slateContent } from '@/domain/round/slate-round'
 import { drawPlayableTrack } from '@/domain/round/track-pool'
 import { newRoundId } from '@/infrastructure/ids'
 import { logger } from '@/infrastructure/logging/logger'
+import { isOutage } from '@/infrastructure/music/music-source'
 import {
   drawQuestion,
   hostQuestionOf
@@ -149,12 +150,15 @@ export const beginRound = async (
   }
 
   if (drawn.status === 'failure') {
-    logger.error('Could not draw a track', {
+    const log = isOutage(drawn.error.faults) ? logger.error : logger.warn
+
+    log('Could not draw a track', {
       code: room.code,
-      reason: drawn.error
+      faults: drawn.error.faults,
+      reason: drawn.error.code
     })
     tellHost(engine, {
-      code: drawn.error,
+      code: drawn.error.code,
       message: 'Could not load a track from the music catalogue'
     })
     publishRoom(engine)
@@ -162,8 +166,17 @@ export const beginRound = async (
     return
   }
 
+  if (drawn.data.faults.length > 0) {
+    const log = isOutage(drawn.data.faults) ? logger.error : logger.warn
+
+    log('Drew a track past failing catalogue paths', {
+      code: room.code,
+      faults: drawn.data.faults
+    })
+  }
+
   openRound({
-    content: blindtestContent({ room, track: drawn.data }),
+    content: blindtestContent({ room, track: drawn.data.track }),
     id: newRoundId(),
     now: engine.now(),
     room

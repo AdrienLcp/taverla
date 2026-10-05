@@ -5,7 +5,6 @@ import { cors } from 'hono/cors'
 
 import type {
   ApiErrorResponse,
-  CatalogueTrack,
   CreateRoomResponse,
   HealthResponse,
   OpenWallPairingResponse,
@@ -29,10 +28,13 @@ import { normalizeRoomCode } from '@taverla/core/room/room-code'
 
 import { env } from '@/env'
 import type { RoomDoor, WallPairings } from '@/infrastructure/http/http-ports'
+import { logger } from '@/infrastructure/logging/logger'
+import { fetchTracksFor } from '@/infrastructure/music/deezer-client'
 import {
-  fetchTracksFor,
-  type MusicSourceError
-} from '@/infrastructure/music/deezer-client'
+  type CataloguePool,
+  isOutage,
+  type MusicSourceFailure
+} from '@/infrastructure/music/music-source'
 
 /**
  * A catalogue that matched nothing well-known enough to guess is an empty
@@ -41,9 +43,26 @@ import {
  */
 const respondWithTracks = (
   context: Context,
-  found: Result<CatalogueTrack[], MusicSourceError>
+  found: Result<CataloguePool, MusicSourceFailure>
 ) => {
-  if (found.status === 'failure' && found.error === 'no_content_available') {
+  const faults =
+    found.status === 'failure' ? found.error.faults : found.data.faults
+
+  if (faults.length > 0) {
+    const log = isOutage(faults) ? logger.error : logger.warn
+
+    log(
+      found.status === 'failure'
+        ? 'Could not list tracks'
+        : 'Listed tracks past failing catalogue paths',
+      { faults, path: context.req.path }
+    )
+  }
+
+  if (
+    found.status === 'failure' &&
+    found.error.code === 'no_content_available'
+  ) {
     const empty: TrackListResponse = { tracks: [] }
 
     return context.json(empty)
@@ -51,14 +70,14 @@ const respondWithTracks = (
 
   if (found.status === 'failure') {
     const error: ApiErrorResponse = {
-      code: found.error,
+      code: found.error.code,
       message: 'The music catalogue is unavailable right now'
     }
 
     return context.json(error, 502)
   }
 
-  const body: TrackListResponse = { tracks: found.data }
+  const body: TrackListResponse = { tracks: found.data.tracks }
 
   return context.json(body)
 }

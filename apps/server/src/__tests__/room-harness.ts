@@ -6,7 +6,7 @@ import {
   DEFAULT_BLINDTEST_SETTINGS,
   shelvedGames
 } from '@taverla/protocol/game'
-import type { CreateRoomResponse } from '@taverla/protocol/http'
+import { createRoomResponseSchema } from '@taverla/protocol/http'
 import type { HostToken } from '@taverla/protocol/identifiers'
 import {
   DEFAULT_MODE_SETTINGS,
@@ -117,7 +117,10 @@ export const deezerClientStub = () => ({
     const found = CATALOGUE.find((track) => track.id === trackId)
 
     return found === undefined
-      ? { error: 'no_content_available', status: 'failure' }
+      ? {
+          error: { code: 'no_content_available', faults: [] },
+          status: 'failure'
+        }
       : {
           data: {
             ...found,
@@ -126,7 +129,10 @@ export const deezerClientStub = () => ({
           status: 'success'
         }
   },
-  fetchTracksFor: async () => ({ data: CATALOGUE, status: 'success' })
+  fetchTracksFor: async () => ({
+    data: { faults: [], tracks: CATALOGUE },
+    status: 'success'
+  })
 })
 
 /**
@@ -475,7 +481,9 @@ export const harnessAt = ({
       headers: { 'content-type': 'application/json' },
       method: 'POST'
     })
-    const { code, hostToken } = (await response.json()) as CreateRoomResponse
+    const { code, hostToken } = createRoomResponseSchema.parse(
+      await response.json()
+    )
 
     const host = await connect(code, hostServerMessageSchema)
 

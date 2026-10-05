@@ -1,9 +1,17 @@
+import { z } from 'zod'
+
 import {
   chunked,
   readCachedEntries,
   writeCachedEntries
 } from './question-source'
-import { SPARQL_URL, USER_AGENT, withRetries } from './wikimedia-client'
+import {
+  bindingValue,
+  SPARQL_URL,
+  sparqlBindingsSchema,
+  USER_AGENT,
+  withRetries
+} from './wikimedia-client'
 
 /**
  * The Wikidata entity an English answer names, reached through the English
@@ -49,42 +57,65 @@ const LONGEST_TITLE = 200
 const WIKIMEDIA_KIND =
   /^Wikimedia (disambiguation page|list article|category|template|set index article|internal item)/
 
-type Resolution = {
-  entityId: string | null
-  title: string | null
-}
+const resolutionSchema = z.object({
+  entityId: z.string().nullable(),
+  title: z.string().nullable()
+})
 
-type Shape = {
-  kinds: string[]
-  label: string | null
+type Resolution = z.infer<typeof resolutionSchema>
+
+const shapeSchema = z.object({
+  kinds: z.array(z.string()),
+  label: z.string().nullable(),
   /** How many `P279` statements it holds: one or more and it is a class, not a thing. */
-  supers: number
-}
+  supers: z.number()
+})
 
-type Continuation = Record<string, string>
+const continuationSchema = z.record(z.string(), z.string())
 
-type TitlePage = {
-  continue?: Continuation
-  query?: {
-    normalized?: { from: string; to: string }[]
-    pages?: {
-      missing?: boolean
-      pageprops?: { wikibase_item?: string }
-      title: string
-    }[]
-    redirects?: { from: string; to: string }[]
-  }
-}
+type Continuation = z.infer<typeof continuationSchema>
 
-type SparqlBindings = {
-  results: {
-    bindings: {
-      item: { value: string }
-      kinds?: { value: string }
-      supers?: { value: string }
-    }[]
-  }
-}
+const renameSchema = z.object({ from: z.string(), to: z.string() })
+
+const titlePageSchema = z.object({
+  continue: continuationSchema.optional(),
+  query: z
+    .object({
+      normalized: z.array(renameSchema).optional(),
+      pages: z
+        .array(
+          z.object({
+            missing: z.boolean().optional(),
+            pageprops: z
+              .object({ wikibase_item: z.string().optional() })
+              .optional(),
+            title: z.string()
+          })
+        )
+        .optional(),
+      redirects: z.array(renameSchema).optional()
+    })
+    .optional()
+})
+
+const kindsBindingsSchema = sparqlBindingsSchema({
+  item: bindingValue,
+  kinds: bindingValue.optional(),
+  supers: bindingValue.optional()
+})
+
+const labelsSchema = z.object({
+  entities: z
+    .record(
+      z.string(),
+      z.object({
+        labels: z
+          .object({ en: z.object({ value: z.string() }).optional() })
+          .optional()
+      })
+    )
+    .optional()
+})
 
 /**
  * Whether the action API can be asked about this spelling at all. A pipe would
@@ -128,7 +159,7 @@ const resolveTitles = async (
       ...continuation
     })
 
-    const page = await withRetries<TitlePage>(async () =>
+    const page = await withRetries(titlePageSchema, async () =>
       fetch(`${EN_WIKIPEDIA_API}?${parameters}`, {
         headers: { 'user-agent': USER_AGENT }
       })
@@ -192,9 +223,7 @@ const labelsOfBatch = async (
     props: 'labels'
   })
 
-  const body = await withRetries<{
-    entities?: Record<string, { labels?: { en?: { value: string } } }>
-  }>(async () =>
+  const body = await withRetries(labelsSchema, async () =>
     fetch(`${WIKIDATA_API}?${parameters}`, {
       headers: { 'user-agent': USER_AGENT }
     })
@@ -228,7 +257,7 @@ const kindsOfBatch = async (
     'GROUP BY ?item'
   ].join('\n')
 
-  const body = await withRetries<SparqlBindings>(async () =>
+  const body = await withRetries(kindsBindingsSchema, async () =>
     fetch(SPARQL_URL, {
       body: new URLSearchParams({ query }),
       headers: {
@@ -261,7 +290,10 @@ const resolutionsOf = async ({
   label: string
   labels: readonly string[]
 }): Promise<Record<string, Resolution>> => {
-  const resolutions = await readCachedEntries<Resolution>(RESOLUTION_CACHE)
+  const resolutions = await readCachedEntries(
+    RESOLUTION_CACHE,
+    resolutionSchema
+  )
 
   const asked = [...new Set(labels.filter(askable))]
   const wanted = asked.filter((title) => !(title in resolutions))
@@ -372,7 +404,7 @@ export const namedEntitiesOfLabels = async ({
   const resolutions = await resolutionsOf({ label, labels })
   const candidates = entityIdsOf({ labels, resolutions })
 
-  const shapes = await readCachedEntries<Shape>(SHAPE_CACHE)
+  const shapes = await readCachedEntries(SHAPE_CACHE, shapeSchema)
   const wanted = [...new Set(candidates.values())].filter(
     (entityId) => !(entityId in shapes)
   )

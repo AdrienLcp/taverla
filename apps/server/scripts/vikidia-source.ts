@@ -1,10 +1,12 @@
-import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+
+import { z } from 'zod'
 
 import type { QuestionCategory } from '@taverla/protocol/question'
 
 import { frenchViewsOfTitles, isWellKnownInFrench } from './frwiki-notability'
+import { orStop, parseJson, readJsonFile } from './json-file'
 import {
   type Attribution,
   type BankedQuestion,
@@ -54,11 +56,16 @@ const ATTRIBUTION: Attribution = {
  *
  * It is a change to CC BY-SA material, so the attribution says so.
  */
-const writtenDecoys: Record<string, string | null> = JSON.parse(
-  readFileSync(
-    join(dirname(fileURLToPath(import.meta.url)), 'vikidia-fourth-decoys.json'),
-    'utf8'
-  )
+const WRITTEN_DECOYS_PATH = join(
+  dirname(fileURLToPath(import.meta.url)),
+  'vikidia-fourth-decoys.json'
+)
+const writtenDecoys = orStop(
+  readJsonFile(
+    WRITTEN_DECOYS_PATH,
+    z.record(z.string(), z.string().nullable())
+  ),
+  WRITTEN_DECOYS_PATH
 )
 
 /**
@@ -312,21 +319,35 @@ const QUIZ_SUBJECTS: Record<string, QuizSubject> = {
   'Quiz:États-Unis': { category: 'geography' }
 }
 
-type WikiPage = {
-  missing?: boolean
-  revisions?: Array<{ slots: { main: { '*': string } } }>
-  title: string
-}
+const wikiPageSchema = z.object({
+  missing: z.boolean().optional(),
+  revisions: z
+    .array(
+      z.object({ slots: z.object({ main: z.object({ '*': z.string() }) }) })
+    )
+    .optional(),
+  title: z.string()
+})
 
-type WikiResponse = {
-  continue?: Record<string, string>
-  query?: {
-    allpages?: Array<{ title: string }>
-    normalized?: Array<{ from: string; to: string }>
-    pages?: Record<string, WikiPage> | WikiPage[]
-    redirects?: Array<{ from: string; to: string }>
-  }
-}
+type WikiPage = z.infer<typeof wikiPageSchema>
+
+const renameSchema = z.object({ from: z.string(), to: z.string() })
+
+const wikiResponseSchema = z.object({
+  continue: z.record(z.string(), z.string()).optional(),
+  query: z
+    .object({
+      allpages: z.array(z.object({ title: z.string() })).optional(),
+      normalized: z.array(renameSchema).optional(),
+      pages: z
+        .union([z.record(z.string(), wikiPageSchema), z.array(wikiPageSchema)])
+        .optional(),
+      redirects: z.array(renameSchema).optional()
+    })
+    .optional()
+})
+
+type WikiResponse = z.infer<typeof wikiResponseSchema>
 
 const ask = async (
   api: string,
@@ -341,7 +362,7 @@ const ask = async (
     throw new Error(`${api} answered ${response.status}`)
   }
 
-  return response.json() as Promise<WikiResponse>
+  return orStop(parseJson(await response.text(), wikiResponseSchema), api)
 }
 
 const pagesIn = (response: WikiResponse): WikiPage[] =>
@@ -354,42 +375,46 @@ const pagesIn = (response: WikiResponse): WikiPage[] =>
  * to follow, so a rebuild after a parser change asks Vikidia for nothing.
  */
 const quizPages = async (): Promise<Record<string, string>> =>
-  JSON.parse(
-    await cached('vikidia-quizzes.json', async () => {
-      const listing = await ask(API_URL, {
-        aplimit: '500',
-        apnamespace: String(QUIZ_NAMESPACE),
-        list: 'allpages'
-      })
-
-      const titles = (listing.query?.allpages ?? []).map(({ title }) => title)
-      const wikitexts: Record<string, string> = {}
-
-      for (const batch of chunked({
-        items: titles,
-        size: TITLES_PER_REQUEST
-      })) {
-        const page = await ask(API_URL, {
-          prop: 'revisions',
-          rvprop: 'content',
-          rvslots: 'main',
-          titles: batch.join('|')
+  orStop(
+    parseJson(
+      await cached('vikidia-quizzes.json', async () => {
+        const listing = await ask(API_URL, {
+          aplimit: '500',
+          apnamespace: String(QUIZ_NAMESPACE),
+          list: 'allpages'
         })
 
-        for (const { revisions, title } of pagesIn(page)) {
-          const wikitext = revisions?.[0]?.slots.main['*']
+        const titles = (listing.query?.allpages ?? []).map(({ title }) => title)
+        const wikitexts: Record<string, string> = {}
 
-          if (wikitext !== undefined) {
-            wikitexts[title] = wikitext
+        for (const batch of chunked({
+          items: titles,
+          size: TITLES_PER_REQUEST
+        })) {
+          const page = await ask(API_URL, {
+            prop: 'revisions',
+            rvprop: 'content',
+            rvslots: 'main',
+            titles: batch.join('|')
+          })
+
+          for (const { revisions, title } of pagesIn(page)) {
+            const wikitext = revisions?.[0]?.slots.main['*']
+
+            if (wikitext !== undefined) {
+              wikitexts[title] = wikitext
+            }
           }
         }
-      }
 
-      console.info(`  ${Object.keys(wikitexts).length} quiz pages`)
+        console.info(`  ${Object.keys(wikitexts).length} quiz pages`)
 
-      return JSON.stringify(wikitexts)
-    })
-  ) as Record<string, string>
+        return JSON.stringify(wikitexts)
+      }),
+      z.record(z.string(), z.string())
+    ),
+    'vikidia-quizzes.json'
+  )
 
 /**
  * The French Wikipedia article each subject actually lives at, redirects
@@ -411,7 +436,10 @@ const quizPages = async (): Promise<Record<string, string>> =>
 const frenchArticles = async (
   subjects: readonly string[]
 ): Promise<Map<string, string | null>> => {
-  const articles = await readCachedEntries<string | null>(ARTICLES_CACHE)
+  const articles = await readCachedEntries(
+    ARTICLES_CACHE,
+    z.string().nullable()
+  )
   const unresolved = subjects.filter((subject) => !(subject in articles))
 
   console.info(`  ${unresolved.length} subjects left to resolve`)

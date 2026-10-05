@@ -2,6 +2,7 @@ import type React from 'react'
 import { useRouteError } from 'react-router'
 
 import { reloadPage } from '@/infrastructure/browser'
+import { reportUnrenderedError } from '@/infrastructure/diagnostics'
 import { homePathFor } from '@/infrastructure/router/navigation'
 import { Button } from '@/presentation/components/button'
 import { Link } from '@/presentation/components/link'
@@ -27,7 +28,7 @@ export const ErrorScreen: React.FC = () => {
   const translate = useTranslate()
   const error = useRouteError()
 
-  console.error('The app hit an error it could not render through', error)
+  reportUnrenderedError(error)
 
   return (
     <main className='error-screen'>

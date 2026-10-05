@@ -140,7 +140,7 @@
           display: flex
           flex-direction: column
           gap: var(--space-xs)
-          width: min(900px, 100%)
+          width: min(var(--column-wide-max-width), 100%)
 
         .standings-title
           @include typography.label
@@ -368,7 +368,7 @@
           text-wrap: balance
 
       .setup-fold
-        width: min(900px, 100%)
+        width: min(var(--column-wide-max-width), 100%)
 
         // Above the controls it greys out, because a host who has already
         // pressed one has decided it is broken.
@@ -414,7 +414,7 @@
 
         .setup-fold
           flex-basis: 100%
-          max-width: 900px
+          max-width: var(--column-wide-max-width)
 
   // A round in play is held to the screen the ring leaves, like the framed
   // seat: the stage takes what the header and the footer do not, and sizes its

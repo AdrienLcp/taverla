@@ -6,6 +6,8 @@ import {
 } from '@taverla/protocol/game'
 import type { TrackSource } from '@taverla/protocol/track'
 
+import { generateHostToken } from '@taverla/core/room/host-token'
+
 import { newRoom } from '@/domain/room/new-room'
 
 import { discardPoolIfStale } from './track-pool'
@@ -29,6 +31,7 @@ const poolSurvives = ({
   const room = newRoom({
     code: 'ABCD',
     game: 'blindtest',
+    hostToken: generateHostToken(),
     locale: 'en',
     now: 0
   })

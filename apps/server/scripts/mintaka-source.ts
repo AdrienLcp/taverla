@@ -1,8 +1,11 @@
+import { z } from 'zod'
+
 import type { QuestionCategory } from '@taverla/protocol/question'
 
 import { gradeQuizGuess } from '@taverla/core/quiz/question-answer'
 
 import { frenchViewsOf, isWellKnownInFrench } from './frwiki-notability'
+import { orStop, parseJson } from './json-file'
 import {
   type Attribution,
   acceptedOf,
@@ -169,22 +172,42 @@ const SMALLEST_POOL = 8
  */
 const MOST_ROWS_PER_ANSWER = 5
 
-type UpstreamAnswer = {
-  label: Partial<Record<string, string | null>>
-  name: string
-}
+const upstreamAnswerSchema = z.object({
+  label: z.partialRecord(z.string(), z.string().nullable()),
+  name: z.string()
+})
 
-type UpstreamRow = {
-  answer: {
-    answer: UpstreamAnswer[] | null
-    answerType: string
-  }
-  category: string
-  complexityType: string
-  id: string
-  questionEntity: { entityType: string; name: string | number }[]
-  translations: Partial<Record<string, string>>
-}
+type UpstreamAnswer = z.infer<typeof upstreamAnswerSchema>
+
+/**
+ * Only an `entity` answer is an object; a number, a date or a yes/no comes as
+ * the bare value, and one `string` row as a bare string instead of a list.
+ */
+const upstreamRowSchema = z.object({
+  answer: z.object({
+    answer: z
+      .union([
+        z.array(
+          z.union([upstreamAnswerSchema, z.number(), z.boolean(), z.string()])
+        ),
+        z.string()
+      ])
+      .nullable(),
+    answerType: z.string()
+  }),
+  category: z.string(),
+  complexityType: z.string(),
+  id: z.string(),
+  questionEntity: z.array(
+    z.object({
+      entityType: z.string(),
+      name: z.union([z.string(), z.number()]).nullable()
+    })
+  ),
+  translations: z.partialRecord(z.string(), z.string())
+})
+
+type UpstreamRow = z.infer<typeof upstreamRowSchema>
 
 /** A row that passed the rule, before it has been dressed with decoys. */
 type Candidate = {
@@ -211,7 +234,10 @@ const upstreamRows = async (): Promise<UpstreamRow[]> => {
       return response.text()
     })
 
-    const read = JSON.parse(body) as UpstreamRow[]
+    const read = orStop(
+      parseJson(body, z.array(upstreamRowSchema)),
+      `mintaka-${split}.json`
+    )
 
     console.info(`  ${split}: ${read.length} rows`)
 
@@ -237,11 +263,12 @@ const subjectsOf = (row: UpstreamRow): string[] =>
  * of a set typed into one field is not what anybody would write.
  */
 const singleFrenchAnswer = (row: UpstreamRow): UpstreamAnswer | null => {
-  const [only] = row.answer.answer ?? []
+  const answers = Array.isArray(row.answer.answer) ? row.answer.answer : []
+  const [only] = answers
 
   return row.answer.answerType === 'entity' &&
-    row.answer.answer?.length === 1 &&
-    only !== undefined &&
+    answers.length === 1 &&
+    typeof only === 'object' &&
     typeof only.label.fr === 'string' &&
     only.label.fr.length > 0
     ? only

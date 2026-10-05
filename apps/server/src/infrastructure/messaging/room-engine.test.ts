@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
+import { generateHostToken } from '@taverla/core/room/host-token'
+
 import { newRoom } from '@/domain/room/new-room'
 import type { Room } from '@/domain/room/room'
 import { ABANDONED_ROOM_GRACE_MS } from '@/domain/room/room-deadlines'
@@ -62,6 +64,7 @@ const buzzerRoomInCountdown = (): Room => {
   const room = newRoom({
     code: 'ABCD',
     game: 'buzzer',
+    hostToken: generateHostToken(),
     locale: 'fr',
     now: OPENED_AT
   })

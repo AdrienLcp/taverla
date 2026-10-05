@@ -4,9 +4,9 @@ import {
   DEFAULT_QUIZ_SETTINGS,
   DEFAULT_SLATE_SETTINGS
 } from '@taverla/protocol/game'
-import type {
-  OpenWallPairingResponse,
-  WallPairingPollResponse
+import {
+  openWallPairingResponseSchema,
+  wallPairingPollResponseSchema
 } from '@taverla/protocol/http'
 import type { HostToken } from '@taverla/protocol/identifiers'
 import {
@@ -124,9 +124,11 @@ describe('the wall', () => {
   it('[wall] is paired over http by the device holding the token, and nobody else', async () => {
     const { code, hostToken } = await harness.openRoom()
     const origin = `http://${harness.origin}`
-    const opened = (await (
-      await fetch(`${origin}${API_ROUTES.walls}`, { method: 'POST' })
-    ).json()) as OpenWallPairingResponse
+    const opened = openWallPairingResponseSchema.parse(
+      await (
+        await fetch(`${origin}${API_ROUTES.walls}`, { method: 'POST' })
+      ).json()
+    )
     const { pairingCode } = opened
     const poll = () =>
       fetch(
@@ -143,7 +145,9 @@ describe('the wall', () => {
     expect((await vouch('ABCDABCD')).status).toBe(403)
     expect((await vouch(hostToken)).status).toBe(204)
 
-    const collected = (await (await poll()).json()) as WallPairingPollResponse
+    const collected = wallPairingPollResponseSchema.parse(
+      await (await poll()).json()
+    )
 
     expect(collected).toEqual({ hostToken, roomCode: code, status: 'paired' })
     expect((await poll()).status).toBe(404)

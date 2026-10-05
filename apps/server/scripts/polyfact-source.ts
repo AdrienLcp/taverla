@@ -1,10 +1,12 @@
 import { asyncBufferFromFile, parquetReadObjects } from 'hyparquet'
+import { z } from 'zod'
 
 import type { QuestionCategory } from '@taverla/protocol/question'
 
 import { gradeQuizGuess } from '@taverla/core/quiz/question-answer'
 
 import { frenchViewsOf, isWellKnownInFrench } from './frwiki-notability'
+import { checkShape, orStop } from './json-file'
 import {
   type Attribution,
   acceptedOf,
@@ -152,17 +154,19 @@ const MOST_OF_A_RELATION = 0.05
  */
 const SAME_ERA_YEARS = 100
 
-type UpstreamRow = {
-  answer_text: string
-  fact_id: string
-  option_a: string
-  option_b: string
-  option_c: string
-  option_d: string
-  option_ids: string[]
-  question: string
-  relation: string
-}
+const upstreamRowSchema = z.object({
+  answer_text: z.string(),
+  fact_id: z.string(),
+  option_a: z.string(),
+  option_b: z.string(),
+  option_c: z.string(),
+  option_d: z.string(),
+  option_ids: z.array(z.string()),
+  question: z.string(),
+  relation: z.string()
+})
+
+type UpstreamRow = z.infer<typeof upstreamRowSchema>
 
 /** A row that passed the rule, before its decoys have been spread out. */
 type Candidate = {
@@ -201,7 +205,12 @@ const upstreamRows = async (): Promise<UpstreamRow[]> => {
 
     console.info(`  ${split}: ${read.length} rows`)
 
-    rows.push(...(read as UpstreamRow[]))
+    rows.push(
+      ...orStop(
+        checkShape(read, z.array(upstreamRowSchema)),
+        `polyfact-fr-${split}.parquet`
+      )
+    )
   }
 
   return rows

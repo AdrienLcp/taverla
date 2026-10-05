@@ -64,6 +64,17 @@ padding and gap; a `_typography.sass` mixin for a size with its weight and
 leading, and a `--text-*` step for a size set on its own; `--stroke-*` for a line's weight (colour and style stay at the call
 site) and `--hairline` for the board's rule whole; `--radius-*`;
 `--control-touch` / `--control-height`. A step the scale lacks joins it.
+A value that changes with the screen is a **role token** beside the scale,
+redefined in a media query on `:root`, rather than a component's own media query
+swapping steps.
+
+A value a token already names is read through it — the wide column is
+`var(--column-wide-max-width)`, never `900px` — and derived geometry is `calc()`
+over the tokens it is made of, as `--menu-inset` adds `--layout-padding` to
+`--menu-width`, never the total typed out. A parent's placement override written
+twice for its children becomes a variant in the parent's stylesheet. An audit
+lands in two commits: exact tokenisation, which changes no pixel, then the snaps
+to the scale.
 
 A literal is the element's own geometry: `0`, `100%`, a grid template, an
 `em` tracking its font, a sprue nub's 10×3. **Fitted display type is

@@ -16,6 +16,7 @@ import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 import { isJudgedByHost, offersAnswerMode } from '@taverla/core/room/game-modes'
 import { isRoundInPlay } from '@taverla/core/room/room-phase'
 import { reshapesRound } from '@taverla/core/room/room-settings'
+import { newSessionId } from '@taverla/core/room/session-id'
 
 import {
   claimHost,
@@ -57,7 +58,7 @@ import {
 } from '@/domain/round/slate-round'
 import { discardPoolIfStale } from '@/domain/round/track-pool'
 import { nowMs } from '@/infrastructure/clock'
-import { newPlayerId, newSessionId } from '@/infrastructure/ids'
+import { newPlayerId } from '@/infrastructure/ids'
 import { logger } from '@/infrastructure/logging/logger'
 
 import type { Connection, Outbound, Socket } from './connection'
