@@ -43,6 +43,14 @@
       inline-size: var(--control-height)
       min-height: var(--control-height)
 
+      &:first-child
+        border-end-start-radius: var(--radius-m)
+        border-start-start-radius: var(--radius-m)
+
+      &:last-child
+        border-end-end-radius: var(--radius-m)
+        border-start-end-radius: var(--radius-m)
+
       &[data-pressed]
         background: var(--ink)
         color: var(--field)

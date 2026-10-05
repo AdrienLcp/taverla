@@ -619,9 +619,14 @@
       > .stage.lobby
         display: contents
 
+        // Held to the screen rather than centred in the page: an opened fold
+        // makes the page taller and dragged the code down to its new middle.
         > .room-invitation
-          align-self: center
+          align-self: start
           grid-area: invite
+          min-height: calc(100dvh - var(--layout-padding-block-start) - var(--layout-padding-block-end))
+          position: sticky
+          top: var(--layout-padding-block-start)
 
         > .host-side
           grid-area: side
@@ -631,8 +636,11 @@
         display: grid
         gap: var(--space-2xs) var(--space-l)
         grid-area: footer
-        grid-template-areas: 'error error' 'fold start' 'fold reason'
+        // The last row takes what an opened fold adds, so the launch stays
+        // beside the fold's title instead of sinking to the middle of it.
+        grid-template-areas: 'error error' 'fold start' 'fold reason' 'fold .'
         grid-template-columns: minmax(0, 1fr) auto
+        grid-template-rows: auto auto auto minmax(0, 1fr)
 
         .error
           grid-area: error

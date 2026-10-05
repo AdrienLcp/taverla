@@ -812,6 +812,14 @@ one part.
 
 ### Improvements
 
+- `[Game]` **The setup's controls wear the box's rounded corners**: the choice
+  strips, the switches, the number steppers and the sliders were still square
+  from the previous world, and the pending spinner is a ring.
+
+- `[Game]` **Opening the console's setup no longer drags the room code down
+  the page.** The invitation is held to the screen beside the setup however
+  far it scrolls, and *Gather round* stays beside the fold's title.
+
 - `[Game]` **Every game has a glyph, and the glyphs come from Lucide.** A
   note, a question mark, a pencil, a bolt and a bell stand before each game's
   name on the front page's spines and on the host's game picker, and the two

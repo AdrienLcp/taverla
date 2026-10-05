@@ -25,6 +25,7 @@
 
       &::before
         border: var(--stroke-thin) solid var(--edge)
+        border-radius: var(--radius-full)
         content: ''
         height: 12px
         position: absolute
@@ -32,12 +33,14 @@
 
     .fill
       background: var(--ink)
+      border-radius: var(--radius-full)
       height: 12px
       position: absolute
       width: var(--fill, 0%)
 
     .react-aria-SliderThumb
       background: var(--ink)
+      border-radius: var(--radius-full)
       cursor: pointer
       height: 24px
       top: 50%
