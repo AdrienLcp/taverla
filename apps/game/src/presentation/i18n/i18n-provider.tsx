@@ -5,6 +5,7 @@ import { I18nProvider as ReactAriaI18nProvider } from 'react-aria-components'
 
 import type { Locale } from '@taverla/protocol/locale'
 
+import { preferredLocales } from '@/infrastructure/browser'
 import { writeStoredLocale } from '@/infrastructure/storage/preferences-storage'
 
 import { i18n } from './i18n'
@@ -61,7 +62,7 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({
       value={{
         locale,
         setLocale: chooseLocale,
-        translate: i18n.translator(locale)
+        translate: i18n.translator(locale, preferredLocales())
       }}
     >
       <ReactAriaI18nProvider locale={REACT_ARIA_LOCALES[locale]}>

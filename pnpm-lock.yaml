@@ -206,8 +206,8 @@ importers:
   apps/game:
     dependencies:
       '@adrienlcp/browser':
-        specifier: ^0.1.1
-        version: 0.1.1(react@19.3.0)
+        specifier: ^0.2.0
+        version: 0.2.0(react@19.3.0)
       '@adrienlcp/i18n':
         specifier: ^0.5.0
         version: 0.5.0
@@ -376,8 +376,8 @@ packages:
     peerDependencies:
       '@biomejs/biome': '>=2.5.0'
 
-  '@adrienlcp/browser@0.1.1':
-    resolution: {integrity: sha512-oTR4g+YVlrvCGlHdsBE+n84V/vVD2fDEzvDFQLoWp9DTuTLfcJMfvmzj4uTxTJxwcgl+FdXaBrCtrbDgMFD1eg==}
+  '@adrienlcp/browser@0.2.0':
+    resolution: {integrity: sha512-O9PNiyUT3SJ31SMaYQnSmkRcC1u6BIwE51VZvqyExSaDD2MtaMFOm1LaZVTGqTdcim0VqghbF9+3l9eBfg+8QQ==}
     peerDependencies:
       react: '>=18'
     peerDependenciesMeta:
@@ -3603,7 +3603,7 @@ snapshots:
     dependencies:
       '@biomejs/biome': 2.5.14
 
-  '@adrienlcp/browser@0.1.1(react@19.3.0)':
+  '@adrienlcp/browser@0.2.0(react@19.3.0)':
     dependencies:
       '@adrienlcp/result': 0.1.0
     optionalDependencies:

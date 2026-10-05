@@ -812,6 +812,11 @@ one part.
 
 ### Improvements
 
+- `[Game]` **Numbers take the browser's shape, words keep the interface's
+  language**: a French screen on an en-GB browser writes its counts and times
+  the British way. `@adrienlcp/browser` goes to 0.2, whose `reloadPage` replaces
+  the local one.
+
 - `[Game]` **The favicon is the four answer tokens** — coral circle, saffron
   triangle, sky square, leaf diamond on the night board — where the coral piece
   with a *T* still read as the old orange square in a tab. The touch icon is the
@@ -2652,6 +2657,11 @@ one part.
   in turn
 
 ### Internal
+
+- `[Server]` **A catalogue failure's log line is tested**: a track listing and a
+  drawn round each log once, `error` for an outage and `warn` for an unknown
+  path, with the route or the room beside the faults — a success reached past a
+  failing path included.
 
 - `[Game]` **Every margin, padding and gap sits on the spacing scale**, floors
   and caps of the fluid ones included: the off-scale 6, 10, 14, 16, 18, 22, 24,
