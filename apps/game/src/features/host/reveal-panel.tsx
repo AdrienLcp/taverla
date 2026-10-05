@@ -12,6 +12,7 @@ import {
 } from '@/helpers/round-content'
 import { Pawn } from '@/presentation/components/pawn'
 import { ReactionBoard } from '@/presentation/components/reaction-board'
+import { VisuallyHidden } from '@/presentation/components/visually-hidden'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import './reveal-panel.sass'
@@ -74,8 +75,12 @@ export const RevealPanel: React.FC<RevealPanelProps> = ({ players, round }) => {
             className='identity'
             style={answerFitting(whatTheRoomNames(track))}
           >
-            <p className='framing'>{translate('blindtest.reveal.title')}</p>
-            <p className='title'>{whatTheRoomNames(track)}</p>
+            <p className='title'>
+              <VisuallyHidden elementType='span'>
+                {`${translate('blindtest.reveal.title')} `}
+              </VisuallyHidden>
+              {whatTheRoomNames(track)}
+            </p>
             <p className='artist'>{track.artist}</p>
             {cueOf(track) !== null && <p className='note'>{cueOf(track)}</p>}
           </div>
@@ -93,8 +98,12 @@ export const RevealPanel: React.FC<RevealPanelProps> = ({ players, round }) => {
       <section className='reveal-panel' data-game='quiz'>
         <div className='head'>
           <div className='identity' style={answerFitting(question.answer)}>
-            <p className='framing'>{translate('quiz.reveal.title')}</p>
-            <p className='title'>{question.answer}</p>
+            <p className='title'>
+              <VisuallyHidden elementType='span'>
+                {`${translate('quiz.reveal.title')} `}
+              </VisuallyHidden>
+              {question.answer}
+            </p>
             {question.note !== null && <p className='note'>{question.note}</p>}
           </div>
         </div>

@@ -10,6 +10,7 @@ import type { ClockEstimate } from '@taverla/core/time/clock-sync'
 
 import { reflexContent } from '@/helpers/round-content'
 import { buzzFeedback } from '@/infrastructure/browser'
+import { VisuallyHidden } from '@/presentation/components/visually-hidden'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { useFlipField } from '@/presentation/theme/use-flip-field'
 
@@ -70,8 +71,10 @@ export const ReflexBuzzer: React.FC<ReflexBuzzerProps> = ({
       <section className='player-round reflex-buzzer buzzer-area'>
         <div className='press'>
           <div className='reaction'>
-            <p className='framing'>{translate('reflex.pressed')}</p>
             <p className='your-reaction'>
+              <VisuallyHidden elementType='span'>
+                {`${translate('reflex.pressed')} `}
+              </VisuallyHidden>
               {translate('reflex.reaction', {
                 milliseconds: reactionMsOf({
                   flipsAt: content.flipsAt,

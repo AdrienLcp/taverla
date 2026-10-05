@@ -12,12 +12,6 @@
     @media (prefers-reduced-motion: no-preference)
       animation: card-strike var(--transition-slow, 0) var(--timing, ease) both
 
-    &[data-game='blindtest']
-      --spine: var(--spine-blindtest)
-
-    &[data-game='quiz']
-      --spine: var(--spine-quiz)
-
     > .head
       align-items: center
       display: flex
@@ -66,23 +60,6 @@
       // sample; `260cqi` over the length holds an answer to about two lines in
       // the column it is set in. The `dvh` term is the height a hold bar leaves.
       --answer-size: clamp(2rem, min(9vmin, calc((100dvh - var(--hold-bar, 0px)) * 0.09), calc(128rem / var(--answer-length, 10)), calc(260cqi / var(--answer-length, 10)), calc(106cqi / var(--longest-word-width, 10))), 7rem)
-
-      .framing
-        @include typography.label
-
-        align-items: center
-        color: var(--ink-muted)
-        display: flex
-        gap: 0.6em
-        margin-bottom: 0.5em
-
-        &::before
-          background: var(--spine, var(--ink-muted))
-          border-radius: 3px
-          content: ''
-          flex: none
-          height: 0.8em
-          width: 0.8em
 
       .title
         @include typography.monument
