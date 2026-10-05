@@ -632,7 +632,11 @@ never `--danger`: proof the frame landed, not a warning.
 `AppMenu` is an icon piece fixed to the corner, inside the stage's max width,
 on every screen at every phase; it carries the exits a round must keep in
 reach and, while a round is framed, *give it away* at its head. The connection
-sentence hangs below it, never beside. On the wall the chrome goes idle
+sentence takes no room on screen: its `.alert[role=status]` is announced and
+never drawn, and while the socket is not open `.app-menu` carries
+`data-connection` and the trigger turns saffron (`--spine-reflex` on
+`--on-spine-light`) with its dot pulsing — the words are the menu's first line.
+On the wall the chrome goes idle
 (`data-idle`) and returns on the first pointer, key or focus.
 `ConnectionStatus` tells its four states by shape and motion, never by hue.
 
