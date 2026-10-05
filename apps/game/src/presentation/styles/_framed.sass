@@ -26,7 +26,7 @@
   animation: none
   display: grid
   flex: none
-  gap: clamp(var(--space-xs), 1.6vmin, 14px)
+  gap: clamp(var(--space-xs), 1.6vmin, var(--space-s))
   grid-template: 'chrome' auto 'round' minmax(0, 1fr) / minmax(0, 1fr)
   height: 100dvh
   max-width: var(--stage-max-width)
@@ -34,7 +34,7 @@
   padding-block: var(--framed-padding-block-start) var(--framed-padding-block-end)
 
   @include layout.wide
-    gap: clamp(var(--space-xs), 1.6vmin, 14px)
+    gap: clamp(var(--space-xs), 1.6vmin, var(--space-s))
 
   > .choosing-round,
   > .buzzer-area
@@ -51,7 +51,7 @@
   // column.
   @media (min-aspect-ratio: 13 / 10)
     &:has(> .choosing-round, > .buzzer-area .asked-question)
-      column-gap: clamp(10px, 2.4vmin, 18px)
+      column-gap: clamp(var(--space-xs), 2.4vmin, var(--space-m))
       grid-template: 'chrome choices' auto 'card choices' minmax(0, 1fr) 'status choices' auto / minmax(0, 0.82fr) minmax(0, 1.18fr)
 
       > .choosing-round,

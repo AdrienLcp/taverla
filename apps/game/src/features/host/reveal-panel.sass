@@ -95,7 +95,7 @@
       --ink-muted: var(--card-muted)
 
       flex: 1 1 auto
-      padding: clamp(14px, 3vmin, var(--space-l)) clamp(16px, 3.4vmin, 40px)
+      padding: clamp(var(--space-s), 3vmin, var(--space-l)) clamp(var(--space-s), 3.4vmin, var(--space-l))
 
     // What the table said, one chip per player, dealt down then across.
     // Filled for a right answer, an empty outline for a wrong one — the shape
@@ -221,7 +221,7 @@
           margin-top: 0.5em
 
       &[data-game='quiz'] .identity
-        padding: clamp(10px, 3cqh, var(--space-l)) clamp(16px, 3.4cqi, 40px)
+        padding: clamp(var(--space-xs), 3cqh, var(--space-l)) clamp(var(--space-s), 3.4cqi, var(--space-l))
 
       &:not(.bare) > .said,
       &:not(.bare) > .scorers

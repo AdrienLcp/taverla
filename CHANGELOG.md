@@ -2616,6 +2616,13 @@ one part.
 
 ### Internal
 
+- `[Game]` **Every margin, padding and gap sits on the spacing scale**, floors
+  and caps of the fluid ones included: the off-scale 6, 10, 14, 16, 18, 22, 24,
+  28, 36, 40, 44, 56, 60 and 64px went to the nearest step, the smaller on a
+  tie because the round screens are where room runs out. A size set on its own
+  is a `--text-*` step. The question card's top sits a few pixels tighter;
+  `choice-fits` holds on all sixteen viewports.
+
 - `[Game]` **A stylesheet writes a line, a corner and a control by name.**
   `--stroke-hair` / `-thin` / `-bold`, `--hairline`, `--radius-xs`,
   `--control-touch` and `--control-height` join the tokens, every spacing

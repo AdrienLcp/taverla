@@ -8,7 +8,7 @@
     flex: none
     flex-wrap: nowrap
     font-weight: 700
-    gap: clamp(10px, 3vmin, var(--space-m))
+    gap: clamp(var(--space-xs), 3vmin, var(--space-m))
     justify-content: space-between
     min-height: var(--control-touch)
     // The menu trigger is fixed over this line and costs no row of its own.
@@ -48,7 +48,7 @@
 
       i
         background: var(--track-b)
-        border-radius: 2px
+        border-radius: var(--radius-xs)
         box-shadow: 0 1.5px 0 var(--chipboard)
         height: 12px
         width: 8px
@@ -64,4 +64,4 @@
 
     .you .pawn
       flex: none
-      font-size: 1.4rem
+      font-size: var(--text-l)

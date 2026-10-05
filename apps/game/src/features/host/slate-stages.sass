@@ -64,7 +64,7 @@
     .items
       align-content: start
       display: grid
-      gap: clamp(6px, 1.2cqmin, 14px)
+      gap: clamp(var(--space-2xs), 1.2cqmin, var(--space-s))
       grid-auto-rows: calc(clamp(4.25rem, var(--fitted-side, 6.5rem), 10rem) * 1.06)
       grid-template-columns: repeat(var(--fitted-columns, 6), minmax(0, 1fr))
       list-style: none
@@ -292,7 +292,7 @@
       flex: none
       inline-size: var(--token-size)
       justify-items: center
-      padding: 0.6rem
+      padding: var(--space-xs)
 
       .token-label
         @include typography.monument
@@ -342,7 +342,7 @@
       display: flex
       flex-direction: column
       gap: var(--space-2xs)
-      padding: clamp(10px, 2.4cqh, 24px) clamp(16px, 3cqi, 36px)
+      padding: clamp(var(--space-xs), 2.4cqh, var(--space-m)) clamp(var(--space-s), 3cqi, var(--space-l))
 
       @media (prefers-reduced-motion: no-preference)
         animation: key-stamp 280ms cubic-bezier(0.16, 1, 0.3, 1)

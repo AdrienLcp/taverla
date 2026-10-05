@@ -149,7 +149,7 @@
     // one place that refusal cannot hold.
     .button,
     .link
-      font-size: 1rem
+      font-size: var(--text-s)
       white-space: normal
 
     // The one object in this menu that is read *by* somebody else: the register
@@ -228,7 +228,7 @@
       .token
         @include typography.title
 
-        font-size: 1.5rem
+        font-size: var(--text-l)
         letter-spacing: 0.16em
         text-align: center
         user-select: text
@@ -260,7 +260,7 @@
       @include typography.caption
 
       color: var(--ink-muted)
-      font-size: 0.8125rem
+      font-size: var(--text-xs)
       margin-block-start: calc(var(--space-m) * -0.5)
       text-align: center
       text-wrap: balance

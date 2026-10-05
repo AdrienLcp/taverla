@@ -16,7 +16,7 @@
   container-type: normal
   gap: 0.35em
   justify-content: center
-  padding: calc(clamp(10px, 3cqmin, 22px) + 10px) clamp(var(--space-s), 3.4cqmin, 24px) clamp(10px, 3cqmin, 22px)
+  padding: calc(clamp(var(--space-xs), 3cqmin, var(--space-m)) + var(--space-xs)) clamp(var(--space-s), 3.4cqmin, var(--space-m)) clamp(var(--space-xs), 3cqmin, var(--space-m))
   text-align: start
   width: auto
 
@@ -38,4 +38,4 @@
 /// Where the round's clock lies on a question card: inside its top padding,
 /// clear of the corners, on every surface that lays one over a card.
 @mixin clock-margin
-  margin: clamp(var(--space-xs), 1.6vmin, var(--space-s)) clamp(var(--space-s), 3.4cqmin, 24px) 0
+  margin: clamp(var(--space-xs), 1.6vmin, var(--space-s)) clamp(var(--space-s), 3.4cqmin, var(--space-m)) 0

@@ -91,7 +91,7 @@
       display: flex
       justify-content: center
       min-width: 0
-      padding: 0 var(--space-2xs) 6px
+      padding: 0 var(--space-2xs) var(--space-2xs)
       position: relative
       transition: transform var(--transition-fast, 0) var(--timing, ease), box-shadow var(--transition-fast, 0) var(--timing, ease)
 
@@ -162,7 +162,7 @@
       display: grid
       inline-size: var(--token-size)
       justify-items: center
-      padding: 0.6rem
+      padding: var(--space-xs)
 
     .token-label
       @include typography.monument
@@ -293,7 +293,7 @@
         --token-size: 3.5rem
 
       .token.long .token-label
-        font-size: 12px
+        font-size: var(--text-2xs)
         -webkit-line-clamp: 2
         line-clamp: 2
 

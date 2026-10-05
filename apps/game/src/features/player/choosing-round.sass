@@ -18,7 +18,7 @@
     --choice-cap: min(7.4cqi, 4.2cqh)
 
     display: grid
-    gap: clamp(var(--space-xs), 2.2cqmin, 14px)
+    gap: clamp(var(--space-xs), 2.2cqmin, var(--space-s))
     grid-template: 'card' auto 'choices' minmax(0, 1fr) / minmax(0, 1fr)
     min-height: 0
 
@@ -31,14 +31,14 @@
 
     .answer-form.choices
       display: grid
-      gap: clamp(6px, 1.4cqmin, 10px)
+      gap: clamp(var(--space-2xs), 1.4cqmin, var(--space-xs))
       grid-area: choices
       grid-template-rows: minmax(0, 1fr) auto
       min-height: 0
 
       ul
         display: grid
-        gap: clamp(6px, 1.8cqmin, var(--space-s))
+        gap: clamp(var(--space-2xs), 1.8cqmin, var(--space-s))
         grid-template-rows: repeat(4, minmax(min-content, 1fr))
         list-style: none
         min-height: 0

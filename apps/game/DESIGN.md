@@ -475,6 +475,9 @@ a word; a spent tile is a socket.
   controls, tiles, chips), `--radius-l` 18px (cards, lids, the room-code
   token), `--radius-full` for round tokens. Round tokens (countdown, payout,
   place, floor clock) are `card` at 50%.
+- **Spacing** is `--space-*` only — 4, 8, 12, 20, 32, 48, 72 — floors and caps
+  of every fluid `clamp()` included. A size set outside a typography register
+  is a `--text-*` step: 0.75, 0.8125, 1, 1.25, 1.5rem.
 - **Lines**: `--stroke-hair` 1px, `--stroke-thin` 2px (the board's rule, a
   keyline, a recess ring, a dashed socket), `--stroke-bold` 3px (an ink outline,
   the *yours* keyline). `--hairline` is the board's rule whole, declared again

@@ -41,7 +41,7 @@
     flex-direction: column
     gap: var(--space-s)
     max-width: 30rem
-    padding: clamp(24px, 6vmin, var(--space-xl)) clamp(var(--space-m), 6vmin, 44px)
+    padding: clamp(var(--space-m), 6vmin, var(--space-xl)) clamp(var(--space-m), 6vmin, var(--space-xl))
     text-align: center
     width: 100%
 
@@ -71,7 +71,7 @@
     display: flex
     flex-direction: column
     gap: var(--space-s)
-    padding: calc(var(--band) + clamp(16px, 4vmin, var(--space-l))) clamp(18px, 4.4vmin, 36px) clamp(18px, 4vmin, var(--space-l))
+    padding: calc(var(--band) + clamp(var(--space-s), 4vmin, var(--space-l))) clamp(var(--space-m), 4.4vmin, var(--space-l)) clamp(var(--space-m), 4vmin, var(--space-l))
 
     &[data-game='blindtest']
       --spine: var(--spine-blindtest)
@@ -105,7 +105,7 @@
       background: var(--socket)
       box-shadow: inset 0 3px 8px -2px var(--shadow), inset 0 0 0 var(--stroke-thin) var(--socket-line)
       color: var(--board-muted)
-      padding: clamp(var(--space-m), 5vmin, 36px)
+      padding: clamp(var(--space-m), 5vmin, var(--space-l))
 
       .game-name
         @include typography.title
@@ -249,7 +249,7 @@
     display: flex
     flex-wrap: wrap
     gap: clamp(var(--space-s), 3vmin, var(--space-m))
-    padding: clamp(16px, 4vmin, var(--space-l)) clamp(18px, 4.4vmin, 36px)
+    padding: clamp(var(--space-s), 4vmin, var(--space-l)) clamp(var(--space-m), 4.4vmin, var(--space-l))
 
     // Deezer serves covers at 250px and nothing larger, so it stays well
     // under; pasted onto the paper with the shallow edge a print has.
@@ -392,7 +392,7 @@
     --question-cap: min(7cqi, 4cqh)
 
     display: grid
-    gap: clamp(var(--space-xs), 2.2cqmin, 14px)
+    gap: clamp(var(--space-xs), 2.2cqmin, var(--space-s))
     grid-template: 'card' auto 'press' minmax(0, 1fr) / minmax(0, 1fr)
     min-height: 0
 
@@ -408,7 +408,7 @@
     // With no card on top, the round's clock is drawn on the board itself, and
     // the well starts under it.
     &:not(:has(.asked-question))
-      padding-top: 18px
+      padding-top: var(--space-m)
 
     // The piece and the line under it, centred together in the box the page
     // leaves, and what the piece is sized against: a size container, so the
@@ -472,7 +472,7 @@
     .taken-floor
       align-items: end
       display: flex
-      gap: clamp(var(--space-xs), 4cqmin, 28px)
+      gap: clamp(var(--space-xs), 4cqmin, var(--space-l))
       justify-content: center
 
       .pawn

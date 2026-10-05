@@ -19,7 +19,7 @@
     container: playing / size
     display: flex
     flex-direction: column
-    gap: clamp(10px, 2.2cqmin, var(--space-m))
+    gap: clamp(var(--space-xs), 2.2cqmin, var(--space-m))
     min-height: 0
 
     // With nothing but the card, it takes the room the tiles would have had.
@@ -50,7 +50,7 @@
         --choice-k: min(16cqi, 30cqh)
         --choice-cap: min(2.8cqi, 6cqh)
 
-        column-gap: clamp(16px, 3cqi, 40px)
+        column-gap: clamp(var(--space-s), 3cqi, var(--space-l))
         display: grid
         grid-template: 'card choices' minmax(0, 1fr) 'tally tally' auto / minmax(0, 0.85fr) minmax(0, 1.15fr)
 
@@ -114,7 +114,7 @@
       flex-direction: column
       justify-content: safe center
       min-height: 0
-      padding: calc(clamp(10px, 3cqmin, 28px) + var(--space-s)) clamp(14px, 3.4cqmin, 36px) clamp(10px, 3cqmin, 28px)
+      padding: calc(clamp(var(--space-xs), 3cqmin, var(--space-l)) + var(--space-s)) clamp(var(--space-s), 3.4cqmin, var(--space-l)) clamp(var(--space-xs), 3cqmin, var(--space-l))
       position: relative
 
       > .round-progress
@@ -122,7 +122,7 @@
         border: 0
         border-radius: var(--radius-xs)
         height: 6px
-        inset: clamp(10px, 2cqmin, 16px) clamp(16px, 3.4cqmin, 36px) auto
+        inset: clamp(var(--space-xs), 2cqmin, var(--space-s)) clamp(var(--space-s), 3.4cqmin, var(--space-l)) auto
         overflow: hidden
         position: absolute
         width: auto
