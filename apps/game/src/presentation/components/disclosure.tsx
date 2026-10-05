@@ -8,12 +8,14 @@ import {
   type DisclosureProps as ReactAriaDisclosureProps
 } from 'react-aria-components'
 
-import { ChevronIcon } from './chevron-icon'
+import { ChevronIcon } from './icons'
 
 import './disclosure.sass'
 
 type DisclosureProps = Omit<ReactAriaDisclosureProps, 'children'> & {
   children: React.ReactNode
+  /** A glyph printed before the label; decorative, the label stays the name. */
+  icon?: React.ReactNode
   /** Names the section, in the trigger. */
   label: string
   /**
@@ -32,6 +34,7 @@ type DisclosureProps = Omit<ReactAriaDisclosureProps, 'children'> & {
 export const Disclosure: React.FC<DisclosureProps> = ({
   children,
   className,
+  icon,
   label,
   summary,
   ...props
@@ -43,10 +46,13 @@ export const Disclosure: React.FC<DisclosureProps> = ({
     <Heading level={2}>
       <ReactAriaButton className='trigger' slot='trigger'>
         <span className='naming'>
-          <span className='name'>{label}</span>
+          <span className='name'>
+            {icon}
+            {label}
+          </span>
           <span className='summary'>{summary}</span>
         </span>
-        <ChevronIcon />
+        <ChevronIcon className='chevron' />
       </ReactAriaButton>
     </Heading>
     {/*

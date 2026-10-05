@@ -2,6 +2,7 @@ import type React from 'react'
 
 import { paths } from '@/infrastructure/router/navigation'
 import { Disclosure } from '@/presentation/components/disclosure'
+import { ScreenIcon } from '@/presentation/components/icons'
 import { Link } from '@/presentation/components/link'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
@@ -21,6 +22,7 @@ export const WallDoor: React.FC = () => {
   return (
     <Disclosure
       className='wall-door'
+      icon={<ScreenIcon />}
       label={translate('wall.door.label')}
       summary={translate('wall.door.summary')}
     >

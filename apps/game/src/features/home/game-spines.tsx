@@ -3,6 +3,7 @@ import { Button } from 'react-aria-components'
 
 import { type ShelvedGame, shelvedGames } from '@taverla/protocol/game'
 
+import { GameIcon } from '@/presentation/components/icons'
 import { Spinner } from '@/presentation/components/spinner'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import { gameNameKey, gameTaglineKey } from '@/presentation/i18n/translation'
@@ -46,6 +47,7 @@ export const GameSpines: React.FC<GameSpinesProps> = ({ createRoom }) => {
               style={spineStyle(game)}
             >
               <span className='name'>
+                <GameIcon game={game} />
                 {translate(gameNameKey(game))}
                 {isOpening(game) && <Spinner />}
               </span>

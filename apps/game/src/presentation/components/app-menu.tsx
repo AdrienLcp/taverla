@@ -56,8 +56,8 @@ import {
   connectionStatusKey
 } from './connection-status'
 import { Disclosure } from './disclosure'
+import { MenuIcon } from './icons'
 import { Link } from './link'
-import { MenuIcon } from './menu-icon'
 import { RoomInvitation } from './room-invitation'
 import { SegmentedControl } from './segmented-control'
 import { Slider } from './slider'

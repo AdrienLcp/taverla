@@ -14,8 +14,7 @@ import {
   slateLabelsOf
 } from '@/helpers/slate-labels'
 import { Button } from '@/presentation/components/button'
-import { CheckIcon } from '@/presentation/components/check-icon'
-import { LockIcon } from '@/presentation/components/lock-icon'
+import { CheckIcon, LockIcon } from '@/presentation/components/icons'
 import { Pawn } from '@/presentation/components/pawn'
 import { ToggleButton } from '@/presentation/components/toggle-button'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'

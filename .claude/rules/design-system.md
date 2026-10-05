@@ -49,13 +49,14 @@ true, and for nothing else:
 Its `className` is a plain string rather than react-aria render props, so the
 wrapper composes with a template literal and not `composeClassName`.
 
-## A glyph composes `Icon`
+## A glyph is a named export of `icons.tsx`
 
-A new glyph is a component supplying only geometry (`copy-icon.tsx`,
-`check-icon.tsx`), never a `<Icon name='copy' />` — see
-[`abstraction-boundaries.md`](abstraction-boundaries.md) on why a named
-component beats a string key. `Icon` itself is the family's geometry, and
-[`apps/game/DESIGN.md`](../../apps/game/DESIGN.md) holds why it is authored here.
+A new glyph is one line in `presentation/components/icons.tsx` —
+`export const CopyIcon = inFamily(Copy)` over a `lucide-react` icon — never a
+`<Icon name='copy' />`: a named component is what the compiler checks. Never
+draw a path by hand. `inFamily` is what keeps the library's 2-unit round
+hairline off this product's lettering; why the family is that weight is in
+[`apps/game/DESIGN.md`](../../apps/game/DESIGN.md).
 
 ## Two controls that look alike share a mixin, not a component
 

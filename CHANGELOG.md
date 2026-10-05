@@ -812,6 +812,16 @@ one part.
 
 ### Improvements
 
+- `[Game]` **Every game has a glyph, and the glyphs come from Lucide.** A
+  note, a question mark, a pencil, a bolt and a bell stand before each game's
+  name on the front page's spines and on the host's game picker, and the two
+  folded doors carry a screen and a QR code. The nine hand-drawn icon files
+  are one `icons.tsx` over `lucide-react`, redrawn in the product's own heavy
+  stroke.
+
+- `[Game]` **Opening one of the front page's folded doors no longer pushes the
+  other onto a line of its own.**
+
 - `[Game]` **The score track is gone from the console and the wall.** The ring
   of squares from *Départ* to N raised a wide screen's padding from at most 56px
   to at most 120px on every side, and said nothing the standings do not already say. The page and the

@@ -38,6 +38,7 @@ paid on every read of the code.
 | Making an id (`nanoid`) | `infrastructure/ids.ts` in each app, one function per kind of id owning its length — `newSessionId()` on both sides. The domain receives an id as an argument, the way it receives `now`. `crypto.randomUUID` is used nowhere: it exists only in a secure context, and a room tried over plain HTTP on a LAN address is not one |
 | `crypto.getRandomValues` | `packages/core/src/room/random-code.ts` — `secureRandomIndex`, the rejection sampling that keeps a room code's alphabet uniform. A rule about the code's meaning, not an id library, so it stays in core and `ids.ts` calls it |
 | `react-router` | `apps/game/src/infrastructure/router/`, plus `useNavigate` in `presentation/app-shell.tsx` — which hands it to react-aria's `RouterProvider`, so components navigate through the design system's `Link` and never import react-router themselves |
+| `lucide-react` | `apps/game/src/presentation/components/icons.tsx` — every glyph leaves it already in the family's weight |
 | `react-aria-components` | `apps/game/src/presentation/components/`, `presentation/i18n/i18n-provider.tsx` for `I18nProvider`, and a feature that genuinely needs a primitive the design system has not wrapped yet |
 
 An import of one of these anywhere else is a design bug. Fix it by moving the

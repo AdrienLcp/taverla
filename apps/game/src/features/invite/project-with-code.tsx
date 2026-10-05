@@ -10,6 +10,7 @@ import { parseRoomCodeInput } from '@taverla/core/room/room-code'
 import { invitePathFor } from '@/infrastructure/router/navigation'
 import { Button } from '@/presentation/components/button'
 import { Disclosure } from '@/presentation/components/disclosure'
+import { QrCodeIcon } from '@/presentation/components/icons'
 import { TextField } from '@/presentation/components/text-field'
 import {
   type FieldError,
@@ -72,6 +73,7 @@ export const ProjectWithCode: React.FC = () => {
   return (
     <Disclosure
       className='project-with-code'
+      icon={<QrCodeIcon />}
       label={translate('invite.door.label')}
       summary={translate('invite.door.summary')}
     >

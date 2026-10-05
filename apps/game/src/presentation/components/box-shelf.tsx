@@ -8,13 +8,15 @@ import {
   type RadioGroupProps
 } from 'react-aria-components'
 
-import { CheckIcon } from './check-icon'
+import { CheckIcon } from './icons'
 
 import './box-shelf.sass'
 
 type BoxShelfOption = {
   /** One short line under the name, printed on the box's lid. */
   description: string
+  /** A glyph printed before the name; decorative, the name stays the label. */
+  icon?: React.ReactNode
   label: string
   /** The colour of the box's spine, as a CSS colour — usually a `var()`. */
   spine: string
@@ -55,7 +57,10 @@ export const BoxShelf: React.FC<BoxShelfProps> = ({
           <RadioButton className='box' style={{ '--spine': option.spine }}>
             <span className='band' />
             <span className='lid'>
-              <span className='name'>{option.label}</span>
+              <span className='name'>
+                {option.icon}
+                {option.label}
+              </span>
               <span className='description'>{option.description}</span>
             </span>
             <span className='tick'>

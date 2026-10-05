@@ -9,8 +9,7 @@ import {
   type NumberFieldProps as ReactAriaNumberFieldProps
 } from 'react-aria-components'
 
-import { MinusIcon } from './minus-icon'
-import { PlusIcon } from './plus-icon'
+import { MinusIcon, PlusIcon } from './icons'
 
 import './number-field.sass'
 

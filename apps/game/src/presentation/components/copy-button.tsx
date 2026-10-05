@@ -6,8 +6,7 @@ import { useTranslate } from '@/presentation/i18n/i18n-provider'
 import type { PlainTranslationKey } from '@/presentation/i18n/translation'
 
 import { Button } from './button'
-import { CheckIcon } from './check-icon'
-import { CopyIcon } from './copy-icon'
+import { CheckIcon, CopyIcon } from './icons'
 
 /** Long enough to be read from where the host is standing, gone before the next glance. */
 const CONFIRMATION_MS = 2_000

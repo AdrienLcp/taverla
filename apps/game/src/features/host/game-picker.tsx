@@ -11,6 +11,7 @@ import { movedToGame } from '@taverla/core/room/room-settings'
 import { isShelvedGame } from '@taverla/core/room/shelved-game'
 
 import { BoxShelf } from '@/presentation/components/box-shelf'
+import { GameIcon } from '@/presentation/components/icons'
 import { useI18n } from '@/presentation/i18n/i18n-provider'
 import { gameNameKey, gameTaglineKey } from '@/presentation/i18n/translation'
 
@@ -59,6 +60,7 @@ export const GamePicker: React.FC<GamePickerProps> = ({
       }}
       options={shelvedGames.map((game) => ({
         description: translate(gameTaglineKey(game)),
+        icon: <GameIcon game={game} />,
         label: translate(gameNameKey(game)),
         spine: `var(--spine-${game})`,
         value: game

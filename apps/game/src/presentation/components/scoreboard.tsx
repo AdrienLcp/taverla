@@ -11,7 +11,7 @@ import {
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import { Button } from './button'
-import { CrossIcon } from './cross-icon'
+import { CrossIcon } from './icons'
 import { Pawn } from './pawn'
 import { VisuallyHidden } from './visually-hidden'
 

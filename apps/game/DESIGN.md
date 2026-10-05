@@ -487,10 +487,13 @@ a word; a spent tile is a socket.
 
 ### Icons
 
-`Icon` (`presentation/components/icon.tsx`) is the one family: a 24-unit grid,
-`1.25em`, 3.5 units of stroke, butt caps, miter joins, `aria-hidden`. It is
-authored, not installed; a library's 2-unit round hairline reads as another
-product beside lettering this heavy. A glyph never travels alone: it sits
+`presentation/components/icons.tsx` is the one family: Lucide's geometry on its
+24-unit grid, redrawn by `inFamily` at `1.25em`, 3.5 units of stroke, butt caps,
+miter joins, `aria-hidden` — the library's own 2-unit round hairline reads as
+another product beside lettering this heavy. Each game has a glyph (`GameIcon`),
+printed before its name on the spine and on the host's box at `0.8em` and 2.75
+units, where 3.5 closes up the question mark's counter. The folded doors on the
+front page carry one each, the screen and the QR code. A glyph never travels alone: it sits
 beside the word, or its control carries the name.
 
 **The mark** (`public/favicon.svg`) is the coral piece — `#c83122` face on a

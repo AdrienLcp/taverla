@@ -80,15 +80,24 @@
         gap: var(--space-2xs) var(--space-s)
         justify-content: flex-start
 
+    // Above the name on a tile, beside it on a row: a fifth of the console is
+    // narrower than "Blind test" with a glyph in front of it.
     .name
+      align-items: start
+      display: flex
+      flex-direction: column
       font-family: var(--font-display)
       font-size: clamp(1.25rem, 3.4cqi, 1.75rem)
       font-stretch: 85%
       font-weight: 800
+      gap: var(--space-2xs)
       line-height: 1
 
       @container (width < 30rem)
+        align-items: center
+        flex-direction: row
         font-size: var(--text-m)
+        gap: var(--space-xs)
 
     .description
       color: var(--card-muted)
@@ -113,3 +122,8 @@
         inset: -0.7em -0.5em auto auto
         margin: 0
         position: absolute
+
+    .game-icon
+      flex: none
+      height: 0.8em
+      width: 0.8em
