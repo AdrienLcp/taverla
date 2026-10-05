@@ -321,6 +321,53 @@ file; a row that no longer matches is corrected here first.
 | `index.html` `theme-color` metas, `favicon.svg`, `apple-touch-icon.png`, `og.png` | `--room` in both palettes; a new mark | redraw |
 | `apps/game/DESIGN.md` | rewritten for Taverne | rewrite |
 
+### Re-mapped against stage 29 as shipped (2026-10-05)
+
+Every file in the left column still exists. Where the table above is wrong or
+short:
+
+- **There is no `--paper` and no `--on-pawn-N`.** Paper is `--card`,
+  `--card-ink`, `--card-muted`, `--card-rule`; a pawn is `--pawn-N` alone,
+  painted by `pawn.sass` with a `--chipboard-dark` drop shadow. The countdown
+  reads no paper token either — only a local `--token-size`.
+- **The score track's tokens outlived it.** `--track-a`, `--track-b`,
+  `--track-five`, `--track-ink` are still read by `reveal-panel.sass`,
+  `round-board.sass`, `app-menu.sass`, `reaction-board.sass`,
+  `round-chrome.sass`, `_seat-grid.sass` and the contrast test. The phase
+  rules lean on them too (`--phase-ink` in the lobby and the final board).
+- **The floor clock** is its own component, `components/floor-clock.tsx`.
+- **Missed seams**: the partials `_question-card`, `_seat-grid`, `_strip`,
+  `_framed`, `_layout` (`cut`, `ruled`, `poster`) and `_typography` (its
+  `monument`, `billboard`, `title` and `numeric` set Bricolage's width and
+  optical axes, which none of the four new faces has); the token groups
+  `--socket*`, `--on-spine-*`, `--cut*`, `--good*`, `--danger*`,
+  `--primary-edge`, `--phase-on-ink`; the phase hooks
+  `theme/use-phase-field.ts`, `use-flip-field.ts`, `use-marking-field.ts`;
+  `empty-sockets.tsx`, `round-progress`, `asked-question`, `scoreboard`
+  (under `components/`); the spine tokens read from TypeScript in
+  `host/game-picker.tsx` and `shelf/game-home-page.tsx`; and
+  `player/player-round.sass`, the heaviest user of `--card`, `--board`,
+  `--spine` and `--socket`.
+- **`index.html`** carries more than the metas: the Atkinson preload, an
+  `og:image:alt` describing the old field, and a design-brief comment naming
+  Bricolage, Atkinson, pawns, the track and chipboard.
+- **`tokens-contrast.test.ts`** names its pairs by token; it is rewritten with
+  the tokens, not patched.
+
+**How session 1 swaps the world without breaking a screen.** The Taverne tokens
+go in under their own names, and the stage-29 names are kept as aliases onto
+them — `--board` → `--room`, `--pawn-N` → `--coaster-N`, `--primary` →
+`--enamel` — so every screen repaints at once and each later session deletes
+the aliases it stops needing. Two cannot be aliased: the stage-29 tiles share
+one dark `--tile-ink`, and three of the four mats are dark and take a light
+ink, so the tiles keep their colours until session 2 gives each mat its own
+ink.
+
+**The faces are fetched** (Google Fonts, v42 Bitter, v23 Cabin Sketch, v18
+Kalam, v17 Shrikhand) into `public/fonts/`, not yet wired. Cabin Sketch exists
+in latin only and weighs 135 KB — never preload it; preload Bitter's latin file
+(34 KB) where Atkinson's was.
+
 ## Sessions
 
 Sized one session each; order matters for the first two.
