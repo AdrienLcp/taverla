@@ -2616,6 +2616,13 @@ one part.
 
 ### Internal
 
+- `[Game]` **A stylesheet writes a line, a corner and a control by name.**
+  `--stroke-hair` / `-thin` / `-bold`, `--hairline`, `--radius-xs`,
+  `--control-touch` and `--control-height` join the tokens, every spacing
+  `clamp()` takes the scale's step where one matches, and the sand's place on a
+  question card is one mixin. The compiled CSS resolves to the same 4,565
+  declarations it did.
+
 - `[Game]` **A session id is made in `infrastructure/ids.ts`**, by
   `newSessionId()` on `nanoid` as the server's is, rather than inside the seat
   storage with a `crypto.randomUUID` and a `Math.random` fallback for plain

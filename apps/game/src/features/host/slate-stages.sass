@@ -370,7 +370,7 @@
         display: grid
         grid-auto-rows: max-content
         overflow-y: auto
-        padding-block-end: 4px
+        padding-block-end: var(--space-2xs)
 
         .group
           font-size: clamp(14px, calc((100cqh - (var(--groups, 1) - 1) * var(--space-xs)) / var(--groups, 1) / 2.85), 2.75rem)
@@ -398,7 +398,7 @@
         background: transparent
         box-shadow: none
         color: var(--ink-muted)
-        outline: 2px dashed var(--rule)
+        outline: var(--stroke-thin) dashed var(--rule)
         outline-offset: -2px
 
       &.blank

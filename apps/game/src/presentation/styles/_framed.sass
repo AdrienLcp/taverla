@@ -1,6 +1,7 @@
 // Pure module: one mixin, no top-level CSS.
 
 @use 'layout'
+@use 'question-card'
 @use 'typography'
 
 /// A screen held to the viewport: the page does not scroll, the type fits the
@@ -25,7 +26,7 @@
   animation: none
   display: grid
   flex: none
-  gap: clamp(8px, 1.6vmin, 14px)
+  gap: clamp(var(--space-xs), 1.6vmin, 14px)
   grid-template: 'chrome' auto 'round' minmax(0, 1fr) / minmax(0, 1fr)
   height: 100dvh
   max-width: var(--stage-max-width)
@@ -33,7 +34,7 @@
   padding-block: var(--framed-padding-block-start) var(--framed-padding-block-end)
 
   @include layout.wide
-    gap: clamp(8px, 1.6vmin, 14px)
+    gap: clamp(var(--space-xs), 1.6vmin, 14px)
 
   > .choosing-round,
   > .buzzer-area
@@ -83,14 +84,14 @@
   > .card-clock
     align-self: start
     grid-area: round
-    margin: clamp(8px, 1.6vmin, 12px) clamp(12px, 3.4cqmin, 24px) 0
+    @include question-card.clock-margin
     pointer-events: none
     z-index: 1
 
     .round-progress
       background: var(--socket)
       border: 0
-      border-radius: 3px
+      border-radius: var(--radius-xs)
       height: 6px
       overflow: hidden
       width: 100%

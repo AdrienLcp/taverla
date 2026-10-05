@@ -19,7 +19,7 @@
     container: playing / size
     display: flex
     flex-direction: column
-    gap: clamp(10px, 2.2cqmin, 20px)
+    gap: clamp(10px, 2.2cqmin, var(--space-m))
     min-height: 0
 
     // With nothing but the card, it takes the room the tiles would have had.
@@ -114,13 +114,13 @@
       flex-direction: column
       justify-content: safe center
       min-height: 0
-      padding: calc(clamp(10px, 3cqmin, 28px) + 12px) clamp(14px, 3.4cqmin, 36px) clamp(10px, 3cqmin, 28px)
+      padding: calc(clamp(10px, 3cqmin, 28px) + var(--space-s)) clamp(14px, 3.4cqmin, 36px) clamp(10px, 3cqmin, 28px)
       position: relative
 
       > .round-progress
         background: var(--socket)
         border: 0
-        border-radius: 3px
+        border-radius: var(--radius-xs)
         height: 6px
         inset: clamp(10px, 2cqmin, 16px) clamp(16px, 3.4cqmin, 36px) auto
         overflow: hidden

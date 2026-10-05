@@ -1,4 +1,4 @@
-// Pure module: one mixin, no top-level CSS.
+// Pure module: mixins only, no top-level CSS.
 
 @use 'piece'
 
@@ -16,7 +16,7 @@
   container-type: normal
   gap: 0.35em
   justify-content: center
-  padding: calc(clamp(10px, 3cqmin, 22px) + 10px) clamp(12px, 3.4cqmin, 24px) clamp(10px, 3cqmin, 22px)
+  padding: calc(clamp(10px, 3cqmin, 22px) + 10px) clamp(var(--space-s), 3.4cqmin, 24px) clamp(10px, 3cqmin, 22px)
   text-align: start
   width: auto
 
@@ -34,3 +34,8 @@
     color: var(--tile-mark-3)
     font-size: clamp(13px, 2.4cqmin, 16px)
     order: -1
+
+/// Where the round's clock lies on a question card: inside its top padding,
+/// clear of the corners, on every surface that lays one over a card.
+@mixin clock-margin
+  margin: clamp(var(--space-xs), 1.6vmin, var(--space-s)) clamp(var(--space-s), 3.4cqmin, 24px) 0

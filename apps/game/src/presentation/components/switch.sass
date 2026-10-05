@@ -37,14 +37,14 @@
       // The ring goes on the track rather than the label, because the track is
       // what the eye reads as the control.
       &[data-focus-visible] .track
-        outline: 3px solid var(--ink)
+        outline: var(--stroke-bold) solid var(--ink)
         outline-offset: 3px
 
       &[data-disabled]
         cursor: not-allowed
 
     .track
-      border: 2px solid var(--ink-muted)
+      border: var(--stroke-thin) solid var(--ink-muted)
       display: inline-flex
       height: 28px
       padding: 3px

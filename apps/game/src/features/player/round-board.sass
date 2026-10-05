@@ -42,15 +42,15 @@
 
       &:is(.wrong, .silent)
         background: transparent
-        box-shadow: inset 0 0 0 2px var(--rule)
+        box-shadow: inset 0 0 0 var(--stroke-thin) var(--rule)
 
       // Your own chip, held in a keyline of the ink rather than restamped:
       // the payout above already said what it paid.
       &.you
-        box-shadow: inset 0 0 0 3px var(--ink), 0 2px 0 var(--chipboard)
+        box-shadow: inset 0 0 0 var(--stroke-bold) var(--ink), 0 2px 0 var(--chipboard)
 
         &:is(.wrong, .silent)
-          box-shadow: inset 0 0 0 3px var(--ink)
+          box-shadow: inset 0 0 0 var(--stroke-bold) var(--ink)
 
     &.ranked li
       grid-template-columns: 2ch minmax(0, 1fr) auto

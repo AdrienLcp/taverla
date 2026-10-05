@@ -3,7 +3,7 @@
 
 @layer components
   .disclosure
-    border-top: 2px solid var(--rule)
+    border-top: var(--hairline)
 
     // react-aria stamps `data-expanded` on the root, never on the trigger, so
     // the glyph has to be reached from here.
@@ -24,7 +24,7 @@
       display: flex
       gap: var(--space-m)
       justify-content: space-between
-      min-height: 52px
+      min-height: var(--control-height)
       padding: var(--space-s) 0
       text-align: start
       width: 100%

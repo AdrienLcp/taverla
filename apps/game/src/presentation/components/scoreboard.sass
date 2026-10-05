@@ -12,14 +12,14 @@
     // and the nickname is what the width is for.
     li
       align-items: baseline
-      border-top: 2px solid var(--rule)
+      border-top: var(--hairline)
       display: grid
       gap: var(--space-s)
       grid-template-columns: 1fr
       padding: var(--space-s) 0
 
       &:last-child
-        border-bottom: 2px solid var(--rule)
+        border-bottom: var(--hairline)
 
     &.ranked li
       grid-template-columns: 2ch 1fr auto
@@ -109,7 +109,7 @@
         // left one is not `:last-child`, so the bottom edge would go missing on
         // one side only.
         li
-          border-bottom: 2px solid var(--rule)
+          border-bottom: var(--hairline)
           border-top: none
 
     // A player's screen marks its own row rather than tinting it, so the mark

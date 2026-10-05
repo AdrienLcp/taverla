@@ -470,10 +470,15 @@ a word; a spent tile is a socket.
 
 ## Shapes
 
-- **Radii**: `--radius-s` 8px (small controls), `--radius-m` 12px (pieces,
+- **Radii**: `--radius-xs` 3px (the sand's groove, the sprue nubs),
+  `--radius-s` 8px (small controls), `--radius-m` 12px (pieces,
   controls, tiles, chips), `--radius-l` 18px (cards, lids, the room-code
   token), `--radius-full` for round tokens. Round tokens (countdown, payout,
   place, floor clock) are `card` at 50%.
+- **Lines**: `--stroke-hair` 1px, `--stroke-thin` 2px (the board's rule, a
+  keyline, a recess ring, a dashed socket), `--stroke-bold` 3px (an ink outline,
+  the *yours* keyline). `--hairline` is the board's rule whole, declared again
+  by `box-lid` beside the `--rule` it reads.
 - **Sprue nubs**: two 10×3px notches top and bottom centre, cut in the colour of
   the ground the piece sits on (`--ground`, defaulting to `--board`; a piece on
   paper sets `--ground: var(--card)`). They use `::before`/`::after`; a piece

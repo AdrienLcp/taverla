@@ -70,7 +70,7 @@
 
       &[data-selected]
         background: var(--field)
-        box-shadow: inset 0 0 0 3px var(--ink)
+        box-shadow: inset 0 0 0 var(--stroke-bold) var(--ink)
         color: var(--ink)
 
   // A strip of stamps, ruled off from the field. No pill, no inner card.
@@ -82,7 +82,7 @@
   // about a row below it, and no `:last-child` can name the end of a row.
   .segments
     background: var(--rule)
-    border: 2px solid var(--rule)
+    border: var(--hairline)
     display: flex
     flex-wrap: wrap
     gap: 2px

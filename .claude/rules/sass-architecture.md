@@ -56,6 +56,28 @@ is why a duration reference falls back to `0` and never to its nominal value:
 animate for someone who asked for no motion. Non-duration tokens take their real
 value as the fallback (`var(--space-m, 20px)`).
 
+## A component writes values by name
+
+`_tokens.sass` and the pure modules name every value that carries the look or
+comes back twice, and a component picks from them: `--space-*` for margin,
+padding and gap; a `_typography.sass` mixin for a size with its weight and
+leading; `--stroke-*` for a line's weight (colour and style stay at the call
+site) and `--hairline` for the board's rule whole; `--radius-*`;
+`--control-touch` / `--control-height`. A step the scale lacks joins it.
+
+A literal is the element's own geometry: `0`, `100%`, a grid template, an
+`em` tracking its font, a sprue nub's 10×3. **Fitted display type is
+geometry too** — `clamp(14px, calc(100cqh / var(--rows) / 2.3), 1.75rem)` is
+that board dividing its own box — but a spacing `clamp()` takes its floor and
+its cap from the scale where a step matches. The same value written a second
+time for the same purpose is promoted: `question-card.clock-margin` is where
+the sand lies on a card, wherever a card is drawn.
+
+A shorthand token that reads another (`--hairline` reads `--rule`) freezes
+it where it is declared, so it is declared again wherever its input is — the
+lid redeclares both. Nothing in the build notices: a token resolved on
+`:root` inside a lid prints the board's colour on paper.
+
 ## Colours come in two palettes
 
 `_tokens.sass` holds `dark-palette` and `light-palette` as mixins, included from
