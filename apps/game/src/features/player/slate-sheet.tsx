@@ -15,6 +15,7 @@ import { Button } from '@/presentation/components/button'
 import { Disclosure } from '@/presentation/components/disclosure'
 import { LockIcon } from '@/presentation/components/lock-icon'
 import { TextField } from '@/presentation/components/text-field'
+import { VisuallyHidden } from '@/presentation/components/visually-hidden'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import './slate-sheet.sass'
@@ -211,7 +212,7 @@ export const SlateSheet: React.FC<SlateSheetProps> = ({
           return (
             <ListBoxItem
               aria-label={name}
-              className={answer === '' ? 'tile' : 'tile filled'}
+              className={`tile ${state}${answer === '' ? '' : ' filled'}`}
               id={itemIndex}
               key={itemIndex}
               textValue={name}
@@ -262,35 +263,40 @@ export const SlateOnTheWall: React.FC<SlateOnTheWallProps> = ({
       aria-live='polite'
       className={isCompact ? 'slate-on-the-wall compact' : 'slate-on-the-wall'}
     >
-      <p aria-hidden className={name.isShort ? 'label' : 'label long'}>
-        {name.label}
+      <p aria-hidden className={name.isShort ? 'token' : 'token long'}>
+        <span className='token-label'>{name.label}</span>
       </p>
       <div className='yours'>
-        <p className='framing'>
-          {isCompact
-            ? translate('slate.marking.now')
-            : translate('slate.itemOf', {
-                count: content.itemCount,
-                index: index + 1
-              })}
-        </p>
+        {isCompact ? (
+          <VisuallyHidden>{translate('slate.marking.now')}</VisuallyHidden>
+        ) : (
+          <p className='of'>
+            {translate('slate.itemOf', {
+              count: content.itemCount,
+              index: index + 1
+            })}
+          </p>
+        )}
         {line.closedBeforeYou ? (
-          <p className='answer absent'>
+          <p className='said absent'>
             <LockIcon />
-            {translate('slate.sheet.closedBeforeYou')}
+            <span className='answer'>
+              {translate('slate.sheet.closedBeforeYou')}
+            </span>
           </p>
         ) : line.answer === null ? (
-          <p className='answer blank'>{translate('slate.sheet.blank')}</p>
+          <p className='said blank'>
+            <span className='answer'>{translate('slate.sheet.blank')}</span>
+          </p>
         ) : (
-          <p className='answer'>{line.answer}</p>
+          <p className={`said ${verdictClass(line.verdict)}`}>
+            <span className='answer'>{line.answer}</span>
+            <span className='verdict'>
+              {translate(verdictKey(line.verdict))}
+            </span>
+          </p>
         )}
       </div>
-      {/* A blank is never a group on the wall, so it is never waited on. */}
-      {(line.answer !== null || line.verdict !== null) && (
-        <p className={`verdict ${verdictClass(line.verdict)}`}>
-          {translate(verdictKey(line.verdict))}
-        </p>
-      )}
       {revealedKey !== null && (
         <p className='key'>
           <span className='key-title'>
@@ -334,7 +340,11 @@ export const SlateWholeSheet: React.FC<{
                 itemIndex === content.currentItemIndex ? 'true' : undefined
               }
               className={
-                entry.closedBeforeYou ? 'absent' : verdictClass(entry.verdict)
+                entry.closedBeforeYou
+                  ? 'absent'
+                  : entry.answer === null
+                    ? 'blank'
+                    : verdictClass(entry.verdict)
               }
               key={itemIndex}
             >

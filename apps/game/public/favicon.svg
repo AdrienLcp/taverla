@@ -1,6 +1,8 @@
 <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
   <title>Taverla</title>
-  <rect fill="#a8330d" height="32" width="32" />
-  <rect fill="#fff2e6" height="5.5" width="22" x="5" y="6" />
-  <rect fill="#fff2e6" height="20" width="6" x="13" y="6" />
+  <rect fill="#831b11" height="28" rx="6" width="30" x="1" y="3" />
+  <rect fill="#c83122" height="28" rx="6" width="30" x="1" y="1" />
+  <rect fill="#fefdfb" height="5.5" width="16" x="5.5" y="7" />
+  <rect fill="#fefdfb" height="17" width="6.5" x="10.25" y="7" />
+  <circle cx="25" cy="21" fill="#fefdfb" r="3" />
 </svg>

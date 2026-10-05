@@ -1,4 +1,6 @@
+@use '../../presentation/styles/box-lid'
 @use '../../presentation/styles/focus'
+@use '../../presentation/styles/piece'
 @use '../../presentation/styles/typography'
 
 @layer components
@@ -7,16 +9,21 @@
     flex-direction: column
     gap: var(--space-l)
 
+    // The line in hand is the sheet itself: a lid with the item's name struck
+    // at its head and the paper slot under it.
     .writing
+      @include box-lid.box-lid
+
       display: flex
       flex-direction: column
       gap: var(--space-s)
+      padding: var(--space-l) clamp(var(--space-m), 5vmin, var(--space-xl)) var(--space-m)
 
     .label
       @include typography.monument
       @include typography.numeric
 
-      font-size: clamp(4.5rem, 24vmin, 9rem)
+      font-size: clamp(3.5rem, 18vmin, 6rem)
       overflow-wrap: anywhere
       text-align: center
 
@@ -40,71 +47,69 @@
       @include typography.caption
 
       color: var(--ink-muted)
+      text-align: center
       text-wrap: pretty
 
     // Sized from the width it is given, so sixty numbers make nine rows at
-    // 360px and four at a laptop's column, and a tile never drops under a
-    // thumb's 44px.
+    // 360px and four at a laptop's column, and a piece never drops under a
+    // thumb's 44px. The gap leaves room for the chipboard edge under each.
     .tiles
       display: grid
-      gap: var(--space-xs)
-      grid-template-columns: repeat(auto-fill, minmax(44px, 1fr))
-      padding-block-end: var(--space-xs)
+      gap: var(--space-s) var(--space-xs)
+      grid-template-columns: repeat(auto-fill, minmax(48px, 1fr))
+      padding-block: var(--space-2xs) var(--space-xs)
 
-      // A word on a tile needs the width a number does not: the columns widen
-      // for the whole grid so the tiles stay one size, and a label longer than
-      // its tile ends in an ellipsis — the field above spells it in full.
+      // A word on a piece needs the width a number does not: the columns widen
+      // for the whole grid so the pieces stay one size, and a label longer than
+      // its piece ends in an ellipsis — the sheet above spells it in full.
       &.long
         grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr))
 
         .tile
           aspect-ratio: auto
-          min-block-size: 52px
+          min-block-size: 56px
 
           .text.long
             @include typography.label
 
+    // The board's three materials, as the room's screen draws the same items:
+    // paper still being written on, a saffron token collected and owed to the
+    // wall, and the empty socket it leaves once marked. On the paper, a groove
+    // under the label is inked once this line holds something.
     .tile
       @include focus.ring
+      @include piece.card(var(--radius-m))
+      @include piece.pressable
       @include typography.title
       @include typography.numeric
 
       align-items: center
       aspect-ratio: 1
-      border: 3px solid var(--edge)
-      color: var(--ink)
+      background: linear-gradient(var(--socket) 0 0) center bottom 18% / 46% 3px no-repeat, var(--card)
+      color: var(--card-muted)
       cursor: pointer
       display: flex
       justify-content: center
       min-width: 0
-      padding-inline: 2px
+      padding: 0 4px 6px
       position: relative
-      transition: background-color var(--transition-fast, 0) var(--timing, ease), color var(--transition-fast, 0) var(--timing, ease)
+      transition: transform var(--transition-fast, 0) var(--timing, ease), box-shadow var(--transition-fast, 0) var(--timing, ease)
 
       &.filled
-        background: var(--ink)
-        border-color: var(--ink)
-        color: var(--field)
+        background: linear-gradient(var(--card-ink) 0 0) center bottom 18% / 46% 3px no-repeat, var(--card)
+        color: var(--card-ink)
 
-      // The number in the field above. Focus already owns the outline, and the
-      // arrow keys move focus without moving this, so the two need different
-      // marks: a bar under the tile, in the gap the grid leaves.
+      // The line in hand: pulled forward out of the row and held in a keyline,
+      // the way the shelf pulls the chosen box. Focus owns the outer ring, and
+      // the arrow keys move focus without moving this, so the two never share
+      // a mark.
       &[data-selected]
-        border-color: var(--ink)
-
-        &::after
-          background: var(--ink)
-          block-size: 4px
-          content: ''
-          inset-block-end: -9px
-          inset-inline: 0
-          position: absolute
-
-      &[data-pressed]
-        transform: translateY(1px)
+        box-shadow: inset 0 0 0 3px var(--card-ink), 0 6px 0 0 var(--chipboard), 0 14px 18px -8px var(--shadow)
+        color: var(--card-ink)
+        transform: translateY(-3px)
 
       // One line always, in a square whose size the grid decides, so the trim
-      // only moves the numeral onto the tile's centre. Clipped across only:
+      // only moves the numeral onto the piece's centre. Clipped across only:
       // the trimmed box is a cap height tall, and a vertical clip would shave
       // every round figure and accent standing proud of it.
       .text
@@ -114,195 +119,230 @@
         text-overflow: ellipsis
         white-space: nowrap
 
-      // Collected: struck through with the rule's hatching and a padlock in
-      // the corner, so a locked answer reads as out of reach rather than as
-      // one more empty box.
       &[data-disabled]
-        background: repeating-linear-gradient(-45deg, transparent 0 5px, var(--rule) 5px 7px)
-        border-color: var(--rule)
-        color: var(--ink-muted)
         cursor: default
 
         svg
-          background: var(--field)
           block-size: 14px
           inline-size: 14px
-          inset-block-start: 2px
-          inset-inline-end: 2px
+          inset-block-start: 4px
+          inset-inline-end: 4px
           position: absolute
 
+      &.closed
+        background: var(--tile-2)
+        color: var(--tile-ink)
+
+      &.marked
+        background: var(--socket)
+        box-shadow: inset 0 2px 0 var(--socket-line)
+        color: var(--ink-muted)
+
+  // The item on the wall, on the reader's own screen: the saffron token the
+  // room's board shows it as, and beside it what this sheet said, as the chip
+  // the wall shows that answer as.
   .slate-on-the-wall
-    align-items: center
-    display: flex
+    align-content: center
+    display: grid
     flex: 1
-    flex-direction: column
-    gap: var(--space-m)
+    gap: var(--space-m) var(--space-l)
+    grid-template-columns: auto minmax(0, 1fr)
     justify-content: center
-    text-align: center
 
-    .framing
-      @include typography.label
+    .token
+      --token-size: clamp(5rem, 26vmin, 9rem)
 
-      color: var(--ink-muted)
+      align-items: center
+      align-self: center
+      background: var(--tile-2)
+      block-size: var(--token-size)
+      border-radius: 50%
+      box-shadow: 0 4px 0 var(--chipboard), 0 12px 20px -10px var(--shadow)
+      color: var(--tile-ink)
+      display: grid
+      inline-size: var(--token-size)
+      justify-items: center
+      padding: 0.6rem
 
-    .label
+    .token-label
       @include typography.monument
       @include typography.numeric
 
+      font-size: calc(var(--token-size) * 0.5)
+      line-height: 1
       max-inline-size: 100%
-      overflow-wrap: anywhere
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
 
-      &.long
-        @include typography.billboard
-
-    .yours
-      display: flex
-      flex-direction: column
-      gap: var(--space-2xs)
-      max-inline-size: 100%
-
-      .answer
-        @include typography.billboard
-
-        overflow-wrap: anywhere
-        text-wrap: balance
-
-        &.blank
-          color: var(--ink-muted)
-
-        // Never asked of this reader, so drawn as the grid draws a collected
-        // tile — small, muted, padlocked — and never at the size of a miss.
-        &.absent
-          @include typography.body
-
-          align-items: center
-          color: var(--ink-muted)
-          display: inline-flex
-          gap: var(--space-2xs)
-          justify-content: center
-
-          svg
-            block-size: 1em
-            flex: none
-            inline-size: 1em
-
-    .verdict
+    .token.long .token-label
       @include typography.title
 
-      border: 3px solid var(--ink)
-      padding: var(--space-xs) var(--space-m)
-      text-transform: uppercase
+      -webkit-box-orient: vertical
+      display: -webkit-box
+      font-size: max(12px, calc(var(--token-size) * 0.17))
+      -webkit-line-clamp: 3
+      line-clamp: 3
+      line-height: 1.05
+      overflow-wrap: anywhere
+      text-align: center
+      white-space: normal
 
-      @include typography.trimmed-block(var(--space-xs))
+    .yours
+      align-self: center
+      display: flex
+      flex-direction: column
+      gap: var(--space-xs)
+      min-width: 0
+
+    .of
+      @include typography.caption
+
+      color: var(--ink-muted)
+
+    // Paper while it waits on the innkeeper, the reveal's green once right,
+    // an empty dashed outline once passed — and dashed too for a line that was
+    // never written, which is nobody's answer and is never waited on.
+    .said
+      @include piece.card(var(--radius-m))
+
+      align-items: center
+      display: flex
+      flex-wrap: wrap
+      gap: var(--space-2xs) var(--space-s)
+      justify-content: space-between
+      padding: var(--space-s) var(--space-m)
 
       &.right
-        background: var(--ink)
-        color: var(--field)
+        background: var(--good-soft)
+        color: var(--tile-ink)
 
-      &.pending
-        border-color: transparent
+      &.wrong,
+      &.blank,
+      &.absent
+        background: transparent
+        box-shadow: none
         color: var(--ink-muted)
-        text-transform: none
+        outline: 2px dashed var(--rule)
+        outline-offset: -2px
 
-    // The innkeeper's key, once put up: the same stamp the wall wears, so a
-    // reader who never looks up still sees what the room was marked against.
+      &.absent
+        justify-content: start
+
+        svg
+          block-size: 1.1em
+          flex: none
+          inline-size: 1.1em
+
+    .answer
+      @include typography.billboard
+
+      font-size: clamp(1.5rem, 7vmin, 3rem)
+      line-height: 1.1
+      min-width: 0
+      overflow-wrap: anywhere
+      text-wrap: balance
+
+    .blank .answer,
+    .absent .answer
+      @include typography.title
+
+    .verdict
+      @include typography.label
+
+      flex: none
+
+    .pending .verdict
+      color: var(--card-muted)
+
+    // The innkeeper's key, once put up: printed on the paper card the room
+    // sees turned over, so a reader who never looks up still knows what the
+    // table was marked against.
     .key
-      --ink-muted: color-mix(in oklab, var(--field) 85%, var(--ink))
+      @include piece.card
 
-      background: var(--ink)
-      color: var(--field)
       display: flex
       flex-direction: column
       gap: var(--space-2xs)
-      max-inline-size: 100%
+      grid-column: 1 / -1
       padding: var(--space-s) var(--space-m)
 
     .key-title
       @include typography.label
 
-      color: var(--ink-muted)
+      color: var(--card-muted)
 
     .key-text
-      @include typography.title
+      @include typography.billboard
 
+      font-size: clamp(1.25rem, 5.5vmin, 2.25rem)
       overflow-wrap: anywhere
+      text-wrap: balance
 
-    // Above the sheet while the reader still writes: one ruled band, the
-    // label on the left and the answer beside it, the whole of it a glance.
+    // Above the sheet while the reader still writes: one row, the token small
+    // beside the chip, the whole of it a glance.
     &.compact
-      align-items: center
-      border-block: 3px solid var(--ink)
+      --token-size: 3.5rem
+
+      align-content: start
       flex: none
-      flex-direction: row
-      flex-wrap: wrap
-      gap: var(--space-xs) var(--space-m)
-      justify-content: flex-start
-      padding-block: var(--space-s)
-      text-align: start
+      gap: var(--space-s)
+      justify-content: stretch
 
-      .label
-        @include typography.billboard
+      .token
+        --token-size: 3.5rem
 
-        max-inline-size: 40%
+      .token.long .token-label
+        font-size: 12px
+        -webkit-line-clamp: 2
+        line-clamp: 2
 
-      .yours
-        flex: 1 1 10rem
-        min-width: 0
-
-        .answer
-          @include typography.title
-
-          &.absent
-            @include typography.body
-
-            justify-content: flex-start
-
-      .verdict
-        @include typography.label
-
-        padding: var(--space-2xs) var(--space-s)
-
-        @include typography.trimmed-block(var(--space-2xs))
-
-      .key
-        flex: 1 1 100%
-        flex-direction: row
-        flex-wrap: wrap
-        gap: var(--space-2xs) var(--space-s)
+      .said
         padding: var(--space-xs) var(--space-s)
 
+      .answer
+        @include typography.title
+
+  // Every line of the sheet as a chip, in the same three materials as the
+  // line on the wall, the current one held in a keyline.
   .slate-whole-sheet
-    // One grid for every line, so the label column is as wide as the longest
-    // label and no wider, and every answer starts at the same edge.
     .lines
       column-gap: var(--space-s)
       display: grid
       grid-template-columns: minmax(2.5ch, max-content) minmax(0, 1fr) auto
       list-style: none
+      padding-block: var(--space-2xs) var(--space-s)
+      row-gap: var(--space-xs)
 
       li
+        @include piece.card(var(--radius-m))
         @include typography.body
 
         align-items: baseline
-        border-block-end: 1px solid var(--rule)
         display: grid
         grid-column: 1 / -1
         grid-template-columns: subgrid
-        padding-block: var(--space-xs)
+        padding: var(--space-xs) var(--space-s)
+
+        &.right
+          background: var(--good-soft)
+          color: var(--tile-ink)
+
+        &:is(.wrong, .blank, .absent)
+          background: transparent
+          box-shadow: none
+          color: var(--ink-muted)
+          outline: 2px dashed var(--rule)
+          outline-offset: -2px
 
         &[aria-current]
-          font-weight: 800
-
-      .text > .key
-        @include typography.caption
-
-        color: var(--ink-muted)
-        display: block
+          box-shadow: inset 0 0 0 3px currentColor, 0 3px 0 var(--chipboard)
+          font-weight: 700
 
       .index
+        @include typography.title
         @include typography.numeric
 
-        color: var(--ink-muted)
         max-inline-size: 12ch
         overflow: hidden
         text-align: end
@@ -312,9 +352,12 @@
       .text
         overflow-wrap: anywhere
 
+      .text > .key
+        @include typography.caption
+
+        display: block
+
       .mark
         @include typography.label
 
-      .wrong .mark,
-      .absent .text
-        color: var(--ink-muted)
+        justify-self: end

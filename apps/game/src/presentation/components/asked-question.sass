@@ -1,43 +1,11 @@
 @use '../styles/typography'
 
 @layer components
+  // Every call site prints it on a card of its own, which sizes the prompt.
   .asked-question
-    // What the length term below is a share of. Every call site gives this box
-    // a width from outside — a flex column stretches it and it caps itself at
-    // 1100px — so it is never the shrink-to-fit box whose inline size resolves
-    // to zero and fires every query it owns at once.
-    container-type: inline-size
     display: flex
     flex-direction: column
     gap: var(--space-s)
-    text-align: center
-    width: min(1100px, 100%)
-
-    // A step under the billboard size: this is a sentence rather than a title,
-    // and at the nominal size a question of any length is the whole screen.
-    //
-    // **And capped by how much there is to say**, which is the one thing the
-    // viewport cannot answer. The bank runs from nine characters to a hundred
-    // and ninety-two, and a size the viewport alone picks draws the long ones
-    // as eleven lines: 307px of a 344px budget on a 360×640 phone, with the
-    // buzzer under them off the screen entirely. A paragraph settles on the
-    // face's mean — which is what makes a count the whole measurement here,
-    // where an answer needs its longest *word* measured too — and Archivo at
-    // width 125 draws 0.607 of its own font size per character, read with a
-    // `Range` over the rendered node. So one line holds `100 / 0.607` of the
-    // box, and three hold `494cqi`.
-    //
-    // The floor drops to `1rem`, and only the long questions ever reach it,
-    // because **on a phone the viewport floor is the only term that fires**:
-    // 4.5vmin of a 360px screen is 16px, so a clamp starting at 24 draws every
-    // question at 24 whatever its length. A short one keeps that 24 — the
-    // length is a `min()` over the clamp, so it only ever takes size away.
-    .prompt
-      @include typography.billboard
-
-      font-size: min(clamp(1.5rem, 4.5vmin, 3.25rem), max(1rem, calc(494cqi / var(--prompt-length, 60))))
-      line-height: 1.05
-      text-wrap: balance
 
     .category
       @include typography.label

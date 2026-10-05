@@ -292,6 +292,28 @@ new one is whole. This file is the brief: open a fresh session, run
   overflowing into the score column stays inside the chip, so the check reads
   `.nickname` as well as the row.
 
+- **The player's slate sheet**, the last player screen in the old world. The
+  line in hand is a box lid with the item's name struck at its head over the
+  paper slot; the grid under it is the console's three materials — paper being
+  written on (a groove under the number, inked once the line holds something),
+  the saffron token collected, the socket once marked — and the line in hand
+  pulled forward in a keyline. The item on the wall is its saffron token beside
+  the reader's answer as the marking's chip (paper while it waits, green once
+  right, a dashed outline once passed or never written), and the key on the
+  paper card; while lines are still open it is the same row, small, above the
+  sheet. *En ce moment au mur* became a visually hidden prefix. The whole sheet
+  is a chip per line in the same materials. `choice-fits.spec.ts` measures both
+  states over the sixteen viewports; broken on purpose once (the answer column
+  refusing to shrink: 222px of sideways scroll at 320×568). Its spill check
+  reads `scrollWidth`, which a text overflowing an `overflow: visible` box never
+  raises — a wrap broken by `nowrap` alone stayed green.
+- **The icons**: `favicon.svg` is the coral piece with its darker die-cut edge
+  and the wordmark's *T.* in paper; `apple-touch-icon.png` is the same mark
+  full-bleed at 180px, since iOS rounds it itself.
+- **`AskedQuestion`'s own sizing is gone**: every call site prints it on a card
+  that sizes the prompt, so the `494cqi` length term (Archivo's measure) and the
+  container, width and centring it carried were all overridden everywhere.
+
 Measured traps, so the next screen does not pay for them again: a `position:
 fixed` element inside the page is fixed to the page, not the viewport, because
 the entrance animation leaves a `transform` — the track renders beside `<main>`; `height` on the console's `<main>` does
@@ -305,11 +327,7 @@ page's entrance animation, whose leftover `translateY` is a 1px scroll.
 
 ## Next session
 
-1. The player's slate sheet (`slate-sheet.sass`) is the last player screen
-   still in the old world. `favicon.svg` and `apple-touch-icon.png` are still
-   the old world's burnt orange T. `AskedQuestion`'s own `494cqi` now serves
-   only the console's playing stage, which overrides it — check and drop it.
-2. §6.
+1. §6.
 
 ## The prompt
 

@@ -1075,6 +1075,60 @@ const fullTableReveal = {
   yourVerdict: null
 }
 
+const SLATE_SAID = [
+  'Paprika',
+  null,
+  'Poulet rôti, thym et citron de Menton',
+  'Barbecue fumé au bois de hêtre'
+]
+
+/**
+ * The same tasting on one sheet: the first line right, the second left blank,
+ * the third passed, the fourth on the wall — and every later line written or
+ * not by turns, so the grid shows both papers.
+ */
+const playerSlateView = ({ isAllCollected }: { isAllCollected: boolean }) => {
+  const itemStates = isAllCollected
+    ? slateItemStates.map((state) => (state === 'open' ? 'closed' : state))
+    : slateItemStates
+
+  return {
+    ...typedChoosing,
+    round: {
+      ...typedChoosing.round,
+      content: {
+        currentItemIndex: 3,
+        itemCount: SLATE_ITEMS,
+        itemStates,
+        kind: 'slate',
+        revealedKeys: itemStates.map((_, index) =>
+          index === 0 || (isAllCollected && index === 3) ? 'Paprika fumé' : null
+        ),
+        yourSheet: itemStates.map((_, index) => ({
+          answer:
+            index < SLATE_SAID.length
+              ? (SLATE_SAID[index] ?? null)
+              : index % 3 === 0
+                ? null
+                : `Chips n°${index + 1}`,
+          closedBeforeYou: false,
+          verdict:
+            index === 0 || (isAllCollected && index === 3)
+              ? true
+              : index === 2
+                ? false
+                : null
+        }))
+      }
+    },
+    settings: {
+      ...typedChoosing.settings,
+      game: { itemCount: SLATE_ITEMS, kind: 'slate', labels: [] },
+      mode: { kind: 'typed' }
+    }
+  }
+}
+
 /**
  * The player's screens outside the framed rounds may scroll down — a lobby's
  * invitation and table are taller than a phone — but never sideways, and no
@@ -1100,6 +1154,16 @@ const PLAYER_PAGE_SCREENS = [
     view: fullTableReveal
   },
   {
+    name: 'the slate sheet under the item on the wall',
+    ready: '.slate-sheet .tile',
+    view: playerSlateView({ isAllCollected: false })
+  },
+  {
+    name: 'the slate item on the wall once the sheet is collected',
+    ready: '.slate-on-the-wall .said',
+    view: playerSlateView({ isAllCollected: true })
+  },
+  {
     name: 'the final board of a full table',
     ready: '.your-placing',
     view: { ...finishedView(LONG_NAME_WINNING), youId: 'p1', yourVerdict: null }
@@ -1110,7 +1174,7 @@ const measurePage = (): { page: number; spills: string[] } => {
   const root = document.scrollingElement ?? document.documentElement
   const pieces = [
     ...document.querySelectorAll<HTMLElement>(
-      '.round-chrome, .up-next, .room-invitation, .seats li, .asked-question, .answer-form, .answer-card, .your-round, .round-board li, .round-board .nickname, .your-placing, .scoreboard li, .scoreboard .nickname'
+      '.round-chrome, .up-next, .room-invitation, .seats li, .asked-question, .answer-form, .answer-card, .your-round, .round-board li, .round-board .nickname, .your-placing, .scoreboard li, .scoreboard .nickname, .slate-sheet .writing, .slate-sheet .tile, .slate-on-the-wall .said, .slate-on-the-wall .key, .slate-whole-sheet li'
     )
   ]
 
