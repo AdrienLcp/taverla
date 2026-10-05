@@ -234,6 +234,13 @@ one part.
   arrived mid-round, between two rounds — are a paper card lying face up, the
   nickname form sits on the box's lid, and a text field is a paper slot.
 
+- `[Game]` **The console is in the box too, and nothing frames a heading any
+  more.** The console's reveal prints the answer on its card with nothing above
+  it, and the reflex time on a player's screen is the number alone: the
+  *C'était*, *La réponse était* and *C'est pris* lines are read before the
+  heading by a screen reader and shown to nobody, as every player screen's
+  already were. `DESIGN.md` now describes the box rather than the title cards.
+
 - `[Server]` **356 more French questions, 96 of them science**, from Vikidia rows
   the wiki wrote with three candidates. Each takes a fourth written by hand
   against its own row, in `vikidia-fourth-decoys.json`, and ten keep their

@@ -1,9 +1,9 @@
 # Stage 29 — A new UI, from zero
 
-**In progress — the shell and the player's choice screen are built**, on the
-`stage-29-redesign` branch so `main` keeps deploying the old world until the
-new one is whole. This file is the brief: open a fresh session, run
-`/impeccable` with the prompt below, and update this file as decisions land.
+**Done.** Every screen of both surfaces is in the box world, built on the
+`stage-29-redesign` branch so `main` kept deploying the old world until the new
+one was whole. `apps/game/DESIGN.md` is the reference for the built world; this
+file keeps the brief and the record of how it got there.
 
 ## Decisions so far
 
@@ -325,9 +325,17 @@ a size container with `flex: 1` answers its queries against a zero-height box in
 Chromium (`flex: none` + an explicit height); a framed screen must not run the
 page's entrance animation, whose leftover `translateY` is a 1px scroll.
 
-## Next session
+## Closing pass (2026-10-05)
 
-1. §6.
+§6 met. The reviewer pass found the last two kickers — the console reveal's
+*C'était* / *La réponse était* and the reflex time's *C'est pris* — and folded
+them into visually hidden prefixes like the player screens'. The quiz rubric
+above a question stays visible on purpose: it is content the table reads, not a
+label restating the heading. `DESIGN.md` was rewritten from the code with
+impeccable's `document` (738 lines against 1 164), `PRODUCT.md` needed one line
+(two self-hosted families, not one), and three code comments still describing
+the old world — `use-phase-field.ts`, `icon.tsx`, `asked-question.tsx` — were
+corrected. Lint, spell, types, unit, build and the 39 journeys green.
 
 ## The prompt
 

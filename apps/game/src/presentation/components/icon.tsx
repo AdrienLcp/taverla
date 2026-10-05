@@ -10,7 +10,7 @@ type IconProps = React.SVGProps<SVGSVGElement> & {
  * else's weight.
  *
  * It is sized in `em` and drawn at 3.5 units on a 24-unit grid, which puts its
- * stroke on the stem weight of Archivo 900 beside it — the label is the
+ * stroke on the stem weight of the display face's heaviest cut beside it — the label is the
  * heaviest thing in this world and a library's 2-unit hairline reads as a
  * different product next to it. Butt caps and miter joins for the same reason
  * the rest of the product has hard edges: nothing here is round but the buzzer.

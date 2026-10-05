@@ -38,7 +38,7 @@ export const AskedQuestion: React.FC<AskedQuestionProps> = ({ prompt }) => {
       style={{ '--prompt-length': prompt.prompt.length }}
     >
       <p className='prompt'>{prompt.prompt}</p>
-      {/* Below what it frames: it names the question rather than opening it. */}
+      {/* After the prompt so it is read second; the card prints it above. */}
       <p className='category'>
         {translate(questionCategoryKey(prompt.category))}
       </p>

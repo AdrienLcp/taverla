@@ -84,7 +84,7 @@ on the shelf inherits it.
 - **A question and its four choices never scroll**, at any viewport, on a
   player's screen or a seated host's console. The viewport is the frame.
 - **Party Wi-Fi is bad Wi-Fi.** Anything that blocks first paint costs a player
-  the first round. The font is self-hosted.
+  the first round. Both type families are self-hosted.
 - **Cover art is the only real image in the product**, it belongs to the blind
   test alone, and it arrives from Deezer at 250 px. Design around that
   resolution rather than fighting it.
