@@ -24,8 +24,8 @@
     --board-ink: light-dark(oklch(24% 0.035 250), oklch(95% 0.012 230))
     --board-muted: light-dark(oklch(43% 0.035 245), oklch(79% 0.025 230))
 
-    // The squares of the score track, alternating, with every fifth one
-    // printed heavier the way a real track counts in fives.
+    // The board's printed blues: two alternating surfaces, a heavier one, and
+    // the ink printed on them.
     --track-a: light-dark(oklch(97.5% 0.012 218), oklch(34.5% 0.042 226))
     --track-b: light-dark(oklch(88.5% 0.04 218), oklch(26.5% 0.035 226))
     --track-five: light-dark(oklch(83% 0.06 218), oklch(41% 0.06 226))
@@ -88,16 +88,6 @@
     --pawn-6: oklch(74% 0.15 58)
     --pawn-7: oklch(76% 0.12 355)
     --pawn-8: oklch(67% 0.1 200)
-    // What prints on a pawn's colour where the track takes it: the buzzer's
-    // own ink while they hold the floor.
-    --on-pawn-1: var(--on-spine)
-    --on-pawn-2: var(--on-spine)
-    --on-pawn-3: var(--on-spine-light)
-    --on-pawn-4: var(--on-spine-light)
-    --on-pawn-5: var(--on-spine)
-    --on-pawn-6: var(--on-spine-light)
-    --on-pawn-7: var(--on-spine-light)
-    --on-pawn-8: var(--on-spine-light)
 
     --primary: oklch(55% 0.19 30)
     --primary-edge: oklch(40% 0.14 30)
@@ -180,8 +170,8 @@
     --column-wide-max-width: #{layout.$wide-screen}
 
     // The pair every component reads. The board is the ground on every screen
-    // at every phase: the phase is said by the track's ink, never by repainting
-    // the room.
+    // at every phase: the phase is said by `--phase-ink` on the round's own
+    // marks, never by repainting the room.
     --field: var(--board)
     --ink: var(--board-ink)
     --ink-muted: var(--board-muted)
@@ -195,8 +185,8 @@
     // is, because a custom property resolves where it is written.
     --hairline: var(--stroke-thin) solid var(--rule)
 
-    // What the score track is inked in for the phase the room is in, read from
-    // across it. The lobby leaves the track its own colours.
+    // The ink the round's marks — its sand, its pips — take for the phase the
+    // room is in. The lobby keeps the printed blues.
     --phase-ink: var(--track-five)
     --phase-on-ink: var(--track-ink)
 
@@ -223,8 +213,6 @@
     --phase-ink: var(--good)
     --phase-on-ink: var(--on-spine)
 
-  // The winner's colour arrives from `ScoreTrack` itself; a shared win or a
-  // game nobody scored in keeps the track's own ink rather than one pawn's.
   \:root[data-phase='finished']
     --phase-ink: var(--track-five)
     --phase-on-ink: var(--track-ink)

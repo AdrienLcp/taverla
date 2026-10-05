@@ -306,8 +306,8 @@ file; a row that no longer matches is corrected here first.
 | `components/box-shelf.tsx` (lobby picker) | the same *ardoise du jour*, circled choice — one component for both doors | replace + merge |
 | `components/pawn.tsx`, `--pawn-N`, `--on-pawn-N` | `Coaster` (initial in Shrikhand), `--coaster-N` | replace, rename |
 | `components/answer-tile.tsx`, `tile-mark.tsx`, `--tile-N`, `--tile-mark-N` | the beer mat and its suit (`SuitMark`: heart, club, spade, diamond) | replace |
-| `components/score-track.tsx` (ring, `--track-room`, `--layout-padding`) | **removed**: the tally board carries the standings and the light carries the phase. Every `100dvh - chrome` budget that divides `--track-room` is re-pointed — the riskiest row | remove |
-| `trackInkHolderOf` (track takes the floor holder's / winner's colour) | the holder's coaster rings the bell; the winner is circled — the rule stays, its consumer changes | re-consume |
+| `components/score-track.tsx` (ring, `--track-room`, `--layout-padding`) | **removed**: the tally board carries the standings and the light carries the phase. Every `100dvh - chrome` budget that divides `--track-room` is re-pointed — the riskiest row. *Done ahead of this stage, on 2026-10-05: the ring, `--track-room` and the raised padding are gone and `choice-fits.spec.ts` stayed green* | ~~remove~~ done |
+| `trackInkHolderOf` (track takes the floor holder's / winner's colour) | the holder's coaster rings the bell; the winner is circled — the rule stays, its consumer changes. *The helper went with the track on 2026-10-05; the new consumer reads `round.activeBuzz` and `winnersOf` itself* | re-consume |
 | `components/countdown.tsx` (paper token) | one chalk digit on a slate | re-skin |
 | `features/host/playing-stage.tsx`, `printed-choices.tsx`, `answered-pawns.tsx` | the slate, four printed mats, coasters standing for an answer in | re-skin |
 | `features/host/reveal-panel.tsx`, `_boxed-standings.sass`, `standings.tsx`, `scoreboard.tsx` | pinned sleeve, painted title, scorers' coasters with `2 +2`; tally board | re-skin + new tally marks |
@@ -335,7 +335,7 @@ Sized one session each; order matters for the first two.
    coaster, the one-line chrome. `choice-fits.spec.ts` green over its sixteen
    viewports — this is the stage's hard gate, and it is re-run by every session
    after.
-3. **Remove the score track** and re-budget every stage that divided
+3. ~~**Remove the score track**~~ *(done ahead, 2026-10-05)* and re-budget every stage that divided
    `--track-room`; lobby (big slate, QR coaster, counter, empty state) and the
    *ardoise du jour* picker.
 4. **The round on the console and wall**: countdown, playing, buzzed (bell,

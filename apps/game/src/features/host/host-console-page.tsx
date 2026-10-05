@@ -26,7 +26,6 @@ import { withPreparedKey } from '@taverla/core/slate/prepared-keys'
 
 import { NotFoundPage } from '@/features/not-found/not-found-page'
 import { ChoosingRound } from '@/features/player/choosing-round'
-import { trackInkHolderOf } from '@/helpers/track-ink-holder'
 import { useHostConnection } from '@/infrastructure/messaging/use-host-connection'
 import {
   useCameFromWall,
@@ -54,7 +53,6 @@ import { unlockBuzzCue, useBuzzCue } from '@/presentation/audio/buzz-cue'
 import { useVolume } from '@/presentation/audio/volume-provider'
 import { RoundChrome } from '@/presentation/components/round-chrome'
 import { RoundProgress } from '@/presentation/components/round-progress'
-import { ScoreTrack } from '@/presentation/components/score-track'
 import { useReportConnection } from '@/presentation/connection/connection-provider'
 import {
   reflexOutcome,
@@ -373,143 +371,135 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   }
 
   return (
-    <>
-      {view !== null && (
-        <ScoreTrack
-          inkHolderId={trackInkHolderOf(view)}
-          players={view.players}
-        />
-      )}
-      <main className='host-console-page'>
-        <RoomDocumentTitle game={view?.settings.game?.kind ?? null} />
-        <header>
-          {view?.round != null && view.phase !== 'finished' && (
-            <p className='round-index'>
-              {view.settings.roundCount === null
-                ? translate('round.indexOpen', { index: view.round.index })
-                : translate('round.index', {
-                    index: view.round.index,
-                    total: view.settings.roundCount
-                  })}
-            </p>
-          )}
-          {/*
-          The lobby is the one phase that excludes it, because the invitation
-          is already the stage's larger half there. `finished` used to be
-          excluded too and that was backwards: the final board is precisely
-          when somebody says *one more, I'll call Marc*, and the room
-          still answers.
-        */}
-          {view !== null && view.phase !== 'lobby' && (
-            <JoinReminder roomCode={roomCode} />
-          )}
-        </header>
+    <main className='host-console-page'>
+      <RoomDocumentTitle game={view?.settings.game?.kind ?? null} />
+      <header>
+        {view?.round != null && view.phase !== 'finished' && (
+          <p className='round-index'>
+            {view.settings.roundCount === null
+              ? translate('round.indexOpen', { index: view.round.index })
+              : translate('round.index', {
+                  index: view.round.index,
+                  total: view.settings.roundCount
+                })}
+          </p>
+        )}
+        {/*
+        The lobby is the one phase that excludes it, because the invitation
+        is already the stage's larger half there. `finished` used to be
+        excluded too and that was backwards: the final board is precisely
+        when somebody says *one more, I'll call Marc*, and the room
+        still answers.
+      */}
+        {view !== null && view.phase !== 'lobby' && (
+          <JoinReminder roomCode={roomCode} />
+        )}
+      </header>
 
-        <RoomStage
-          canPlay={canPlay}
-          clock={clock}
-          controls={{
-            isAnswerFolded: cameFromWall,
-            isLive,
-            onRememberSlateKey: rememberPreparedKey,
-            onRemovePlayer: removePlayer,
-            onSettingsChange: changeSettings,
-            onTakeSeat: takeSeat,
-            preferences,
-            preparedSlateKeys: preparedKeys,
-            send
-          }}
-          isSpeaker={isSpeaker}
-          onUnlockAudio={armAudio}
-          refusal={refusal}
-          roomCode={roomCode}
-          slateWall={slateWall}
-          view={view}
-        />
+      <RoomStage
+        canPlay={canPlay}
+        clock={clock}
+        controls={{
+          isAnswerFolded: cameFromWall,
+          isLive,
+          onRememberSlateKey: rememberPreparedKey,
+          onRemovePlayer: removePlayer,
+          onSettingsChange: changeSettings,
+          onTakeSeat: takeSeat,
+          preferences,
+          preparedSlateKeys: preparedKeys,
+          send
+        }}
+        isSpeaker={isSpeaker}
+        onUnlockAudio={armAudio}
+        refusal={refusal}
+        roomCode={roomCode}
+        slateWall={slateWall}
+        view={view}
+      />
 
-        <footer>
-          {error !== null && (
-            <p className='error' role='alert'>
-              {translate(protocolErrorKey(error.code))}
-            </p>
-          )}
-          {view !== null && (
-            <>
-              <HostActions
-                draftSource={draftSource}
-                isLive={isLive}
-                onOpenRound={() => {
-                  // Inside the press, never in an effect: the autoplay policy
-                  // grants permission only from a real gesture, and it cannot be
-                  // asked for later when the track arrives.
-                  armAudio()
+      <footer>
+        {error !== null && (
+          <p className='error' role='alert'>
+            {translate(protocolErrorKey(error.code))}
+          </p>
+        )}
+        {view !== null && (
+          <>
+            <HostActions
+              draftSource={draftSource}
+              isLive={isLive}
+              onOpenRound={() => {
+                // Inside the press, never in an effect: the autoplay policy
+                // grants permission only from a real gesture, and it cannot be
+                // asked for later when the track arrives.
+                armAudio()
 
-                  // What the picker is showing is what the host chose, and a
-                  // round about to be drawn is the moment that means something —
-                  // which is why every control that opens one comes through here
-                  // rather than the launch alone. Re-sending an unchanged source
-                  // is free: the server drops the pool only when it differs.
-                  const game = view.settings.game
+                // What the picker is showing is what the host chose, and a
+                // round about to be drawn is the moment that means something —
+                // which is why every control that opens one comes through here
+                // rather than the launch alone. Re-sending an unchanged source
+                // is free: the server drops the pool only when it differs.
+                const game = view.settings.game
 
-                  if (draftSource !== null && game?.kind === 'blindtest') {
-                    changeSettings({
-                      ...view.settings,
-                      game: { ...game, source: draftSource }
-                    })
-                  }
-                }}
-                send={send}
-                slateKeys={preparedSlateKeys}
-                slateWall={slateWall}
-                view={view}
-              />
-              {/*
-              `finished` is not a phase of a game, it is the result of one, and
-              both of these act on a game in flight: how long a reveal is held
-              before the room is moved on, and the settings the next round is
-              built from. Neither has anything on this screen to act on, and
-              both are behind the button beside them — *back to the table* lands
-              on the lobby, whose stage is the picker, the roster and the seat,
-              with the rest folded under it.
+                if (draftSource !== null && game?.kind === 'blindtest') {
+                  changeSettings({
+                    ...view.settings,
+                    game: { ...game, source: draftSource }
+                  })
+                }
+              }}
+              send={send}
+              slateKeys={preparedSlateKeys}
+              slateWall={slateWall}
+              view={view}
+            />
+            {/*
+            `finished` is not a phase of a game, it is the result of one, and
+            both of these act on a game in flight: how long a reveal is held
+            before the room is moved on, and the settings the next round is
+            built from. Neither has anything on this screen to act on, and
+            both are behind the button beside them — *back to the table* lands
+            on the lobby, whose stage is the picker, the roster and the seat,
+            with the rest folded under it.
 
-              They cost 158px of a 302px footer, which is what the final board
-              was overflowing by: nine players on a 1280×800 put the replay
-              half under the fold and the way back entirely below it.
-            */}
-              {view.phase !== 'finished' && (
-                <>
-                  {/*
-                    The reveal's alone, because the reveal is what it holds:
-                    under a round in play it was a row of a screen the question
-                    and its four tiles could not spare, for a choice the reveal
-                    puts back in reach the moment it applies.
-                  */}
-                  {view.phase === 'revealed' &&
-                    view.settings.game?.kind !== 'slate' && (
-                      <AutoAdvanceChoice
-                        isLive={isLive}
-                        onSettingsChange={changeSettings}
-                        settings={view.settings}
-                      />
-                    )}
-                  <SetupFold
-                    draftSource={draftSource}
-                    isLive={isLive}
-                    onDraftSource={setDraftSource}
-                    onRememberSlateKey={rememberPreparedKey}
-                    onSettingsChange={changeSettings}
-                    onTakeSeat={takeSeat}
-                    preferences={preferences}
-                    preparedSlateKeys={preparedKeys}
-                    view={view}
-                  />
-                </>
-              )}
-            </>
-          )}
-        </footer>
-      </main>
-    </>
+            They cost 158px of a 302px footer, which is what the final board
+            was overflowing by: nine players on a 1280×800 put the replay
+            half under the fold and the way back entirely below it.
+          */}
+            {view.phase !== 'finished' && (
+              <>
+                {/*
+                  The reveal's alone, because the reveal is what it holds:
+                  under a round in play it was a row of a screen the question
+                  and its four tiles could not spare, for a choice the reveal
+                  puts back in reach the moment it applies.
+                */}
+                {view.phase === 'revealed' &&
+                  view.settings.game?.kind !== 'slate' && (
+                    <AutoAdvanceChoice
+                      isLive={isLive}
+                      onSettingsChange={changeSettings}
+                      settings={view.settings}
+                    />
+                  )}
+                <SetupFold
+                  draftSource={draftSource}
+                  isLive={isLive}
+                  onDraftSource={setDraftSource}
+                  onRememberSlateKey={rememberPreparedKey}
+                  onSettingsChange={changeSettings}
+                  onTakeSeat={takeSeat}
+                  preferences={preferences}
+                  preparedSlateKeys={preparedKeys}
+                  view={view}
+                />
+              </>
+            )}
+          </>
+        )}
+      </footer>
+    </main>
   )
 }
 

@@ -581,10 +581,7 @@ export const EN_DICTIONARY = defineDictionary({
   },
   room: {
     documentTitle: '{game} — Taverla',
-    documentTitleLobby: 'Taverla',
-    track: {
-      start: 'Start'
-    }
+    documentTitleLobby: 'Taverla'
   },
   round: {
     answer: {

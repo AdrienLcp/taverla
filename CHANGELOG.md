@@ -812,6 +812,15 @@ one part.
 
 ### Improvements
 
+- `[Game]` **The score track is gone from the console and the wall.** The ring
+  of squares from *Départ* to N raised a wide screen's padding from at most 56px
+  to at most 120px on every side, and said nothing the standings do not already say. The page and the
+  menu now sit at the plain `--layout-padding`, so the freed band goes to the
+  stage, and `--track-room` is gone with the ring that published it. The phase
+  is still read in `--phase-ink`, on the round's sand and pips; the floor
+  holder's and the winner's pawn colour had no other wearer and went with it,
+  with `trackInkHolderOf` and the `--on-pawn-N` inks.
+
 - `[Game]` **Every state reads in the dark: a disabled piece is an empty
   socket, a marked item keeps its numeral, and a dropped socket stays off the
   stage.** A disabled control was a dark slab beside the enabled ones in the

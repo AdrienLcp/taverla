@@ -102,7 +102,8 @@ file keeps the brief and the record of how it got there.
   a 5px frame in the phase ink and nothing else. It raises `--layout-padding`,
   so the page and the fixed menu clear it, and publishes `--track-room` — the
   viewport less what it added — which every `100dvh - chrome` budget on the
-  console now divides instead.
+  console now divides instead. *Since removed (2026-10-05): the ring, its
+  holder ink and `--track-room` are gone; the standings say the score.*
 - **The console lobby**: above the split the page is the grid, the invitation
   down the left, the shelf, the table and the launch on the right (the wall
   keeps the old two columns, because its header carries the sound press). The
@@ -163,7 +164,8 @@ file keeps the brief and the record of how it got there.
   the name, and the floor's clock on a smaller token — and **the track takes
   that pawn's colour** for as long as they hold the floor (`trackInkHolderOf`,
   `ScoreTrack`'s `inkHolderId`, `--on-pawn-N` beside each pawn; pawns 2 and 5
-  darkened two points to clear 4.5:1 under white). On the console the answer
+  darkened two points to clear 4.5:1 under white — all removed with the track
+  on 2026-10-05). On the console the answer
   sits on the question's paper and the verdicts are pieces two by two, *right*
   in the reveal's green, *missed* a dashed plain piece. Lying down the pawn and
   the presses share a row; upright the pawn stands beside the name. The wall

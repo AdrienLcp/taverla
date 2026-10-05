@@ -82,8 +82,8 @@
           @include layout.wide
             --hold-bar: calc(10px + var(--space-s))
 
-        // The wait before the next round, as a groove draining in the track's
-        // own ink rather than a block of ink: it is the screen's own clock.
+        // The wait before the next round, as a groove draining in the phase's
+        // ink rather than a block of ink: it is the screen's own clock.
         > .round-progress
           background: var(--socket)
           border: 0
@@ -104,7 +104,7 @@
         // `27rem` is the chrome, measured: at 390×844 the header, the footer,
         // the page padding and two gaps came to 434px.
         @include layout.narrow
-          --stacked-budget: calc(var(--track-room, 100dvh) - 27rem - var(--hold-bar))
+          --stacked-budget: calc(100dvh - 27rem - var(--hold-bar))
 
           // The standings go under the footer rather than above it: the stage
           // hands its children to the page's column, so `order` can put the
@@ -404,8 +404,8 @@
     gap: clamp(var(--space-xs), 2vmin, var(--space-m))
     grid-template-rows: auto minmax(min(22rem, 45dvh), 1fr) auto
 
-    // A screen this short spends its rows on the round: the index is on the
-    // track's ink and the way in is in the menu.
+    // A screen this short spends its rows on the round: the pips already count
+    // the rounds and the way in is in the menu.
     @media (height < 36rem)
       grid-template-rows: minmax(min(22rem, 45dvh), 1fr) auto
 

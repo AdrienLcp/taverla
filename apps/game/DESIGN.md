@@ -163,8 +163,7 @@ the code is right and this file is stale.
 Taverla is a shelf of game boxes on a table, and every screen is a printed
 piece out of one of them: the matte board everything is laid on, paper cards
 for what is read, die-cut chipboard pieces for what is pressed, a pawn per
-seat, a score track printed around the console's edge, and a spine per game on
-the shelf. Nothing is an app panel — no rounded card floating on a dark ground,
+seat, and a spine per game on the shelf. Nothing is an app panel — no rounded card floating on a dark ground,
 no glow, no gradient. The board is pale sky by day and slate blue by evening;
 the printed pieces stay printed when the lights go down.
 
@@ -180,7 +179,7 @@ never scrolls.
 
 **Key Characteristics:**
 - One flat board colour on every screen at every phase; the phase is said by
-  the score track's ink, read from across the room.
+  the ink of the round's own marks — its sand and its pips.
 - Every control is a die-cut piece: a 3px chipboard edge, sprue nubs, lift
   under a pointer, sink under a press.
 - Four answer inks, each with a printed shape, so colour is never the only cue.
@@ -215,18 +214,17 @@ A cool printed board under warm, saturated die-cut inks, every value one
 
 ### Tertiary
 - **Pawns** (`--pawn-1..8`, as many as a box holds; a ninth seat reuses the
-  first, `pawnInksOf` in `pawn.tsx`). Where a pawn's colour becomes a ground —
-  the track while that player holds the floor or has won — it prints in
-  `--on-pawn-N`. Pawns 2 and 5 were darkened two points to clear 4.5:1 under
-  white.
+  first, `pawnNumberOf` in `pawn.tsx`). A pawn's colour is never a ground
+  text is printed on.
 
 ### Neutral
 - **Board** (`--board`, `--board-ink`, `--board-muted`): the ground of every
   screen. Components read the aliases `--field`, `--ink`, `--ink-muted`, which
   point at the board on `:root` and are re-pointed by a lid or a flip.
-- **Track squares** (`--track-a`, `--track-b` alternating, `--track-five` every
-  fifth, `--track-ink` the printed numbers). `--track-a` is also the face of an
-  `outlined` button and a roster chip.
+- **Printed blues** (`--track-a`, `--track-b`, `--track-five`, `--track-ink`),
+  named after the score track they were printed for and kept when it went.
+  `--track-a` is the face of an `outlined` button and a roster chip;
+  `--track-five` / `--track-ink` are the phase ink at rest.
 - **Paper** (`--card`, `--card-ink`, `--card-muted`, `--card-rule` the keyline
   inside a lid): question cards, the QR card, cover mounts, notices, text
   fields. Paper stays light in the dark palette and its ink is one value in
@@ -249,32 +247,32 @@ A cool printed board under warm, saturated die-cut inks, every value one
   itself is drawn in `--ink` (`_focus.sass`), the one colour guaranteed against
   whatever ground is current.
 
-### The phase on the track
+### The phase ink
 
 `usePhaseField` stamps `data-phase` on `<html>`; `_tokens.sass` turns it into
-`--phase-ink` / `--phase-on-ink`, which only the score track (and its 5px
-frame below the split) reads:
+`--phase-ink` / `--phase-on-ink`, which the round's own marks read — the
+draining sand, the current pip, the hold groove under the console's stage:
 
 | Phase | `--phase-ink` |
 |---|---|
-| `lobby` | none — the track keeps its printed blues |
+| `lobby` | `--track-five` — the printed blues |
 | `countdown` | `--spine-reflex` (saffron) |
 | `playing` | `--spine-quiz` (indigo) |
-| `buzzed`, or `playing` while the slate is marking (`data-marking`) | `--primary` (coral), or the floor holder's pawn colour on the console |
+| `buzzed`, or `playing` while the slate is marking (`data-marking`) | `--primary` (coral) |
 | `revealed` | `--good` |
-| `finished` | `--track-five`, or the sole winner's pawn colour |
+| `finished` | `--track-five` |
 
 `data-flipped` (the reflex stimulus, `use-flip-field.ts`) swaps `--field` and
 `--ink`: the largest luminance jump either palette holds, at the cost of no new
 colour.
 
 **The Board Never Repaints Rule.** The ground is the board at every phase. A
-phase changes the track's ink, never the room's colour; the flip is the only
+phase changes the marks' ink, never the room's colour; the flip is the only
 time the field changes, and it changes by inversion.
 
 **The Printed Piece Rule.** Paper, tiles, spines and pawns are the same in both
 palettes (or shift a few points of lightness): a card does not change colour
-when the lights go down. Only the board, track, socket and chipboard follow the
+when the lights go down. Only the board, its printed blues, socket and chipboard follow the
 scheme.
 
 **The Shape Beside Ink Rule.** No two things are told apart by hue alone: tiles
@@ -282,7 +280,7 @@ carry a shape, a seat carries a name beside its pawn, a state carries a word.
 
 **Contrast, measured.** `tokens-contrast.test.ts` checks every ink on the ground
 it is printed on, in both themes: every text pair clears 4.5:1 (worst: the
-muted board ink on the dark track, 5.93:1) and every shape mark 3:1 (worst
+muted board ink on the dark `--track-a`, 5.93:1) and every shape mark 3:1 (worst
 3.37:1, on the dark coral).
 
 ## Typography
@@ -378,14 +376,6 @@ of the two, every `env()` falling back to `0px`; Android's bottom inset read
 from `safe-area-max-inset-bottom`). A framed screen uses the tighter
 `--framed-padding-block-*` (`clamp(8px, 2vmin, 16px)`).
 
-**The track ring.** Above the split the console and the wall are ringed by the
-score track: a fixed grid whose band is `clamp(34px, 6.5vmin, 76px)`, its
-square count measured from the viewport, square nought the start. It raises
-`--layout-padding` so the page and the menu clear it, and publishes
-`--track-room` — the viewport less what the ring added — which every
-`100dvh - chrome` budget divides. Below the split it is a 5px frame in the
-phase ink.
-
 **Console stages are size containers.** Above the split each console stage
 (playing, reveal, countdown, floor, final, slate, reflex) is a three-row grid —
 header, stage, footer — whose stage is a size container, and every list divides
@@ -421,7 +411,7 @@ round screen is checked against it.
 ### Measured traps
 
 - A `position: fixed` element inside a page is fixed to the page, not the
-  viewport: the entrance animation leaves a `transform`. The track renders
+  viewport: the entrance animation leaves a `transform`. Anything fixed renders
   beside `<main>`.
 - `height` on the console's `<main>` does nothing: it is a `flex: 1` item of
   the app shell, and that is what holds it to the viewport.
@@ -493,9 +483,6 @@ a word; a spent tile is a socket.
 - **The pawn** (`Pawn`): head, body, base on a 24×28 grid, `fill: var(--pawn)`
   over a 1.5px `--chipboard-dark` drop. An absent pawn is the same silhouette
   dashed in `--socket-line` inside a socket.
-- **The track's squares**: radius `clamp(4px, 0.7vmin, 8px)` with a 2px bottom
-  inset; numbers printed in the corner, heavier every fifth, the start square
-  spelled out.
 - **Danger and good stamps**: rectangular blocks, trimmed to cap height.
 
 ### Icons
@@ -572,10 +559,6 @@ The code on the saffron token (`--tile-2`, `monument`, a piece at
 fails half the cameras in a room — and the address. Its size is the stage's
 business, through `--invitation-code-size` and a container.
 
-### Score track (`ScoreTrack`)
-See Layout. Each pawn stands on `score % squares`, keyed on its square so a
-move lands (`pawn-lands`, 520ms) rather than teleports.
-
 ### Pawns and seats
 `Pawn` names a player everywhere. The roster (`seat-grid`) is a chip per seat
 on `--track-a` with the pawn and the name, a socket per empty pawn, the own
@@ -589,7 +572,7 @@ in and dashes one owed — *that*, never *what*. Removing a player is a ✕ name
   while the token stays put.
 - **The floor**: the holder's pawn stood up oversize, the name, `FloorClock` on
   a smaller paper token (`billboard` counting down in ink, `title` counting up
-  when the host judges). The track takes the holder's pawn colour.
+  when the host judges).
 - **Payout and place**: struck on a round token — green for a payout, a socket
   for nothing; a saffron token for the round's taker in the reflex race.
 
@@ -674,7 +657,7 @@ On the wall the chrome goes idle
   literal fallback — so reduced motion survives a missing token.
 
 ### Don't:
-- **Don't** repaint the board for a phase; ink the track.
+- **Don't** repaint the board for a phase; ink the round's marks.
 - **Don't** put a kicker label above a heading. The quiz category is the only
   visible line above a question, because the table reads it.
 - **Don't** let a question and its choices scroll, at any of the sixteen
@@ -707,7 +690,6 @@ piece set down, fast then settled, never bounced. Durations:
   900ms).
 - **Reveal** — `card-strike`, scale 1.06 to 1 on `slow`, on the card and never
   the screen holding it (`reveal-panel.sass`, `player-round.sass`).
-- **Pawns** — `pawn-lands` on the track when a score moves.
 - **The round's clock** — a CSS animation (`round-drain`) whose duration is the
   server's remaining time, drained from the fraction still standing and
   re-keyed on every snapshot; absent while the host is away. The same groove

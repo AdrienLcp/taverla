@@ -531,10 +531,7 @@ export const FR_DICTIONARY = defineDictionary({
   },
   room: {
     documentTitle: '{game} — Taverla',
-    documentTitleLobby: 'Taverla',
-    track: {
-      start: 'Départ'
-    }
+    documentTitleLobby: 'Taverla'
   },
   round: {
     answer: {
