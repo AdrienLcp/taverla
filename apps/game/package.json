@@ -1,13 +1,13 @@
 {
   "dependencies": {
     "@adrienlcp/browser": "^0.1.1",
-    "@adrienlcp/i18n": "^0.3.0",
+    "@adrienlcp/i18n": "^0.5.0",
     "@adrienlcp/react": "^0.3.0",
     "@adrienlcp/react-aria": "^0.1.0",
     "@adrienlcp/react-router": "^0.1.1",
     "@adrienlcp/result": "^0.1.0",
     "@adrienlcp/safe-storage": "^0.1.0",
-    "@adrienlcp/styles": "^0.5.0",
+    "@adrienlcp/styles": "^0.6.0",
     "@adrienlcp/theme-preference": "^0.3.0",
     "@taverla/core": "workspace:*",
     "@taverla/protocol": "workspace:*",
