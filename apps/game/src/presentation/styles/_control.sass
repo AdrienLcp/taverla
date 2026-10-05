@@ -58,9 +58,10 @@
 
   // Steeper and higher than `title`'s own clamp, which `medium` keeps: with a
   // gentler slope the large label fell under the medium one on every screen
-  // taller than 830px, and a secondary out-shouted its primary.
+  // taller than 830px, and a secondary out-shouted its primary. No steeper than
+  // 3.3vmin: at 3.6 the verdict stage ran 1px past a 1024×768 console on Linux.
   &.large
-    font-size: clamp(1.375rem, 3.6vmin, 2.25rem)
+    font-size: clamp(1.375rem, 3.3vmin, 2.25rem)
 
   // Every state is guarded on `:not([data-disabled])` because a variant
   // selector outranks the bare `[data-disabled]` below: without it a state left

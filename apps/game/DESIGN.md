@@ -510,7 +510,7 @@ and shelf.
 - **Shape**: a piece. Sizes `small` (40px, `--radius-s`), `medium` (52px),
   `large` (72px), labels in `title` trimmed to cap height so only the centre
   moves. `large` sets its label on a steeper clamp
-  (`clamp(1.375rem, 3.6vmin, 2.25rem)`) so it never falls under `medium`'s.
+  (`clamp(1.375rem, 3.3vmin, 2.25rem)`) so it never falls under `medium`'s.
 - **`filled`**: the coral piece, *go*. One per moment.
 - **`outlined`**: a plain piece on `--track-a` in `--board-ink`.
 - **`underlined`**: no piece, a printed line — 2px underline offset 5px in
