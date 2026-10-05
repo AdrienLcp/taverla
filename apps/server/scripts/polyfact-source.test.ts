@@ -24,13 +24,16 @@ const rowOf = ({ id, options }: { id: string; options: Options }) => ({
   relation: 'author'
 })
 
-const candidateOf = ({ id, options }: { id: string; options: Options }) => ({
-  answer: options[0],
-  category: 'arts' as const,
-  decoys: [options[1], options[2], options[3]] as [string, string, string],
-  isWellKnown: true,
-  row: rowOf({ id, options })
-})
+const candidateOf = ({ id, options }: { id: string; options: Options }) => {
+  const [answer, ...decoys] = options
+  return {
+    answer,
+    category: 'arts' as const,
+    decoys,
+    isWellKnown: true,
+    row: rowOf({ id, options })
+  }
+}
 
 /** Six writers of the same century, so a swap always has somewhere to land. */
 const MODERNS = [

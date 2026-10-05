@@ -167,8 +167,8 @@ importers:
   .:
     devDependencies:
       '@adrienlcp/biome-config':
-        specifier: ^0.1.0
-        version: 0.1.0(@biomejs/biome@2.5.14)
+        specifier: ^0.2.0
+        version: 0.2.0(@biomejs/biome@2.5.14)
       '@adrienlcp/tsconfig':
         specifier: ^0.1.0
         version: 0.1.0
@@ -241,9 +241,6 @@ importers:
       lucide-react:
         specifier: ^1.51.0
         version: 1.51.0(@types/react@19.3.0)(react@19.3.0)
-      nanoid:
-        specifier: ^6.0.1
-        version: 6.0.1
       qrcode.react:
         specifier: ^4.2.0
         version: 4.2.0(react@19.3.0)
@@ -348,6 +345,9 @@ importers:
       '@taverla/protocol':
         specifier: workspace:*
         version: link:../protocol
+      nanoid:
+        specifier: ^6.0.1
+        version: 6.0.1
     devDependencies:
       '@vitest/coverage-v8':
         specifier: 5.0.2
@@ -371,8 +371,8 @@ importers:
 
 packages:
 
-  '@adrienlcp/biome-config@0.1.0':
-    resolution: {integrity: sha512-gkreW3vs81Y01Tc6aclTWOFF/vB6qRyELr++E0blhv1uju7YTtZGRnUc6qqJMyukaKGa6vGupP1vWNK2kMrbHw==}
+  '@adrienlcp/biome-config@0.2.0':
+    resolution: {integrity: sha512-OIR0FxEYduRcIlfxidyL+7f9gEwylN/s9hfPb1zH2HOOSQKHem7m6r7pruJlLNPhnlW/DrrSkgxpmeaSp6aSQw==}
     peerDependencies:
       '@biomejs/biome': '>=2.5.0'
 
@@ -3599,7 +3599,7 @@ packages:
 
 snapshots:
 
-  '@adrienlcp/biome-config@0.1.0(@biomejs/biome@2.5.14)':
+  '@adrienlcp/biome-config@0.2.0(@biomejs/biome@2.5.14)':
     dependencies:
       '@biomejs/biome': 2.5.14
 
