@@ -1483,6 +1483,13 @@ one part.
 
 ### Fixes
 
+- `[Game]` **A healthy room no longer reads as reconnecting.** When a screen's
+  socket was replaced — a nickname change, or React mounting twice in
+  development — the old socket's close landed after the new one had opened and
+  set the screen to *Reconnecting*, greying out every control on a live
+  connection. A torn-down socket now says nothing about the one that replaced
+  it, and `choice-fits.spec.ts` checks the status line is empty after its sweep.
+
 - `[Server]` **The bank's one 275-character choice is repaired.**
   `vikidia-astronomie-2-1` ran three sentences together without a space,
   misspelt half of them and dated the Moon's impact at 5 billion years; it is
