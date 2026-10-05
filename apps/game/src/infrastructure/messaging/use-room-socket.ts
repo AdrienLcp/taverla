@@ -222,9 +222,16 @@ export const useRoomSocket = ({
 
       socket.addEventListener('close', () => {
         window.clearInterval(pingTimer)
+
+        // A torn-down socket closes after its successor has opened, and its
+        // status would overwrite the live one with a false reconnecting.
+        if (disposed) {
+          return
+        }
+
         setSocketStatus(giveUp ? 'refused' : 'closed')
 
-        if (disposed || giveUp) {
+        if (giveUp) {
           return
         }
 

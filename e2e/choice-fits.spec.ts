@@ -365,6 +365,9 @@ for (const seat of SEATS) {
       }
 
       expect(faults).toEqual([])
+      // The sweep outlasts the close of the socket StrictMode tore down, which
+      // once overwrote the live one and greyed every control out.
+      await expect(page.locator('.alert[role=status]')).toHaveText('')
     })
   }
 }
