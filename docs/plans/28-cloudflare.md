@@ -67,14 +67,25 @@ the assets) — copy its layout rather than redesign it.
 - **Configuration** comes from bindings, not `process.env`: `env.ts` keeps its
   Zod schema and parses the Worker's `env` instead.
 
-## Open, to measure in session B
+## The question bank stays bundled — measured
 
-- **The question bank is 5.8 MB of JSON** (928 KB gzipped). It fits the
-  bundle limit; whether parsing it on every cold isolate fits the free plan's
-  CPU budget is not known. Measure a cold quiz room under `wrangler dev` and
-  on the deployed Worker. If it does not fit, the bank moves to D1 and
-  `drawQuestion` queries one category at a time — only quiz rooms pay, and
-  only for the rows they draw.
+**The bank is 5.8 MB of JSON** (928 KB gzipped), parsed and validated at module
+scope, so it is paid in the isolate's **startup**, never in a request. Measured
+on the deployed Worker on 2026-10-05 with `wrangler tail` over four quiz rooms
+opened and started from a script:
+
+| What | CPU | Free plan limit |
+|---|---|---|
+| Startup, with the bank parsed (`wrangler deploy`) | 98 ms | 1 s |
+| `POST /api/rooms` on a cold isolate | 10 ms | 10 ms |
+| `POST /api/rooms`, warm | 1–5 ms | 10 ms |
+| The room object's `open` | 1–3 ms | — |
+| `host.startRound` in a quiz room, the draw included | 4–6 ms | — |
+
+So D1 is not needed. The one number at the line is the cold room creation, and
+the bank is not in it: it is the Worker's own first request. Revisit if the
+startup figure, which grows with the bank, nears the second, or if a cold
+creation starts failing with `exceeded CPU`.
 
 ## Session A — the room engine, still on Node
 
@@ -146,7 +157,7 @@ Nothing is deployed differently at the end of it.
 - e2e: `e2e/playwright.config.ts` starts `wrangler dev` instead of
   `pnpm --filter @taverla/server start`, on its own port; the Deezer stub
   stays.
-- Measure the question bank (see *Open*), and settle it.
+- Measure the question bank, and settle it — see *The question bank stays bundled*.
 - Deploy to `taverla.<account>.workers.dev` by hand, play a room from two
   screens, muted.
 

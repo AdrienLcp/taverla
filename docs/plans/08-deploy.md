@@ -81,10 +81,10 @@ on the same port, and the QR code encoding that origin.
   The deployment's, not the tab's: a phone on a cached bundle still reads what
   the server was built from, which is the question "is my fix live?" asks.
 
-## The free instance sleeps, and that is accepted for now
+## The free instance slept, and that was accepted
 
-After ~15 minutes without traffic Render stops the instance, and the next
-request is held behind Render's own loading page for the 30–60 seconds the
+After ~15 minutes without traffic Render stopped the instance, and the next
+request was held behind Render's own loading page for the 30–60 seconds the
 container takes to come back. A custom domain would change nothing: the veil is
 the plan's, not the URL's.
 
@@ -104,45 +104,20 @@ The arbitration, so it is not reopened for free:
   the guests arrive; the 5-second socket ping keeps it up for the rest of the
   party, and nobody but the host ever meets the loading page.
 
-## Still to do
+## Bundling did not fix the cold start
 
-- **Bundling did not fix the cold start** — see below. Nothing else is open.
+It was never going to. Measuring it is what demoted the idea: the wait was
+container scheduling, and stripping types off a few dozen modules was seconds
+out of tens. It landed for its own sake — one file, no loader in production —
+and went with the rest of the Node host in stage 28, whose Durable Objects have
+no cold start to speak of.
 
-## The Dockerfile, and why it is not what deploys
+## The Dockerfile
 
-There is one at the repository root, and **Render does not read it**: the native
-Node runtime builds the workspace from `render.yaml`, which is still the cheapest
-path and the one the free plan understands. The image exists for a host that
-wants one and for running the production build on a laptop.
-
-Two things in it are not guessable:
-
-- **`pnpm deploy` needs `--legacy`.** From pnpm 10 a deploy refuses a workspace
-  that does not inject its packages, and says so with
-  `ERR_PNPM_DEPLOY_NONINJECTED_WORKSPACE`. The output is the server package with
-  production dependencies only — 15 MB, because `tsdown` has already inlined
-  `@taverla/*` into the bundle.
-- **Running that command outside the image breaks the checkout.** `--prod` is
-  recorded against the workspace, so the next `pnpm` script decides the tree is
-  out of date and re-installs it *without* devDependencies: biome, tsc and
-  vitest all disappear and every command fails at once, several steps away from
-  the cause. `pnpm install` puts it back. Inside Docker it is harmless, because
-  the build stage is thrown away — this is a warning about trying the command by
-  hand.
-- **`SERVE_GAME_FROM` is relative to the process's working directory**, not to
-  the image root: `serveStatic` resolves it against `cwd`. The image reproduces
-  the deployment's layout — server at `/app/server`, game at `/app/game/dist`,
-  the variable set to `../game/dist` — so the two cannot drift into serving the
-  SPA from nowhere.
-
-**CI builds it on every push and throws the result away.** A Dockerfile nothing
-builds is a file that stops working without anybody finding out, and this one is
-not on the path anybody would notice from.
-- **Bundling did not fix the cold start, and was never going to.** Measuring it
-  is what demoted the idea: the wait is container scheduling, and stripping
-  types off a few dozen modules is seconds out of tens. It landed for its own
-  sake — one file, no loader in production — and would only become visible on a
-  host that wakes fast enough for those seconds to be the ones you feel.
+There was one at the repository root, for a host that wanted an image and for
+running the production build on a laptop. Render never read it, and CI built it
+on every push only so it could not rot unnoticed. Stage 28 deleted it with its
+CI job.
 
 ## CI
 
@@ -151,8 +126,9 @@ pull request. It calls `pnpm lint:ci` rather than `pnpm lint`, because the
 latter is `biome check --write`: it would repair the drift and exit 0, passing
 on exactly the code the job exists to reject.
 
-There is no deploy job. Render redeploys from `main` itself, and a second
-mechanism racing it would only be a way to ship a build CI had not seen.
+There was no deploy job while Render redeployed from `main` itself, since a
+second mechanism racing it would only have shipped a build CI had not seen.
+Stage 28 added one: `wrangler deploy` runs after `validate` on a push to `main`.
 
 ## Done when
 
