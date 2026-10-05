@@ -53,6 +53,11 @@ describe('colour tokens', () => {
           minimum: WCAG_AA.text
         },
         {
+          background: '--socket',
+          foreground: '--socket-ink',
+          minimum: WCAG_AA.text
+        },
+        {
           background: '--danger',
           foreground: '--danger-ink',
           minimum: WCAG_AA.text

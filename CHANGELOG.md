@@ -812,6 +812,20 @@ one part.
 
 ### Improvements
 
+- `[Game]` **Every state reads in the dark: a disabled piece is an empty
+  socket, a marked item keeps its numeral, and a dropped socket stays off the
+  stage.** A disabled control was a dark slab beside the enabled ones in the
+  evening palette — *À table !* greyed out looked like *Prendre place* — and is
+  now the socket the piece would sit in: no fill, a dashed die-line, the
+  ground's muted ink. A large control's label now steps up from a medium one at
+  every height, where it used to fall under it past 830px and set *Retour à la
+  table* larger than *Rejouer*. A marked slate item, on the player's sheet and
+  on the console, prints its numeral in a new `--socket-ink` held at text
+  contrast in both palettes. And the connection sentence no longer hangs under
+  the menu over the question card's clock and the lobby's lids: it is announced
+  without being drawn, while the menu button turns saffron with its dot
+  pulsing.
+
 - `[Game]` **The words match the box: the host is the host, a round is a
   round.** The copy left the tavern behind with the board-game redesign —
   *l'aubergiste* / *the innkeeper* is *l'hôte* / *the host*, *la tournée* is

@@ -5,17 +5,7 @@
   .app-menu
     align-items: flex-end
     display: flex
-    // **The corner is one object wide and the sentence hangs below it.** The
-    // two top-anchored headers reserve against this box, so anything laid out
-    // beside the trigger is width taken off the room's own code: the French
-    // `connection.closed` in the row took the corner from 98px to 245 and left
-    // a 390px header 97 — which is not a reservation that header can pay, so it
-    // drew the round and the code over each other. Downwards the sentence
-    // costs height the corner already owns and nothing at all sideways, at
-    // every width. The alert is the first child, so reversing is what puts the
-    // trigger back on top: it is what the corner is anchored to and the
-    // sentence is not.
-    flex-direction: column-reverse
+    flex-direction: column
     inset-block-start: var(--layout-padding-block-start)
     // Fixed to the viewport, but never further out than the field it belongs
     // to. Past `--stage-max-width` the host's surface stops widening, and a
@@ -51,16 +41,25 @@
       opacity: 0
       pointer-events: none
 
+    // **The corner is one object wide, and a dropped socket does not widen
+    // it.** Two top-anchored headers reserve against the trigger, so the
+    // French `connection.closed` beside it took a 390px header down to 97px;
+    // hung below it instead, the sentence lay over the question card's clock
+    // and the lobby's lids. So the sentence is heard and never drawn, and the
+    // trigger itself turns to the countdown's saffron with the dot pulsing in
+    // it — the popover's first line spells the state out for whoever opens it.
     .alert
-      @include typography.label
+      clip-path: inset(50%)
+      height: 1px
+      overflow: hidden
+      position: absolute
+      white-space: nowrap
+      width: 1px
 
-      color: var(--ink)
-      text-align: end
-
-      // The node stays mounted while it is empty, so the gap has to come off
-      // the text rather than off the column.
-      &:not(:empty)
-        margin-block-start: var(--space-2xs)
+    &[data-connection]:not([data-connection='open']) .trigger
+      background: var(--spine-reflex)
+      box-shadow: 0 2px 0 var(--chipboard-dark)
+      color: var(--on-spine-light)
 
     .trigger
       @include focus.ring

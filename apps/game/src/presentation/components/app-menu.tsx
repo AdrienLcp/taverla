@@ -390,8 +390,8 @@ const THEME_KEYS: Record<ThemePreference, PlainTranslationKey> = {
  * straight from a QR code: a player who never passes through the home page
  * still needs to switch language, and everyone needs a way out of a room.
  *
- * A healthy socket says nothing beyond the dot on the trigger. The state only
- * takes room on the screen once it is worth interrupting a game for.
+ * A healthy socket says nothing beyond the dot on the trigger. Any other state
+ * tints the trigger and is announced, and takes no room from the game.
  */
 export const AppMenu: React.FC = () => {
   const { locale, setLocale, translate } = useI18n()
@@ -427,7 +427,7 @@ export const AppMenu: React.FC = () => {
   }
 
   return (
-    <div className='app-menu'>
+    <div className='app-menu' data-connection={connection?.status}>
       {/* Always mounted, empty when all is well: a live region that appears
           together with its first message is a message nobody hears. */}
       <p className='alert' role='status'>

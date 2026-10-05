@@ -56,8 +56,11 @@
     font-size: 1rem
     gap: var(--space-2xs)
 
+  // Steeper and higher than `title`'s own clamp, which `medium` keeps: with a
+  // gentler slope the large label fell under the medium one on every screen
+  // taller than 830px, and a secondary out-shouted its primary.
   &.large
-    font-size: clamp(1.25rem, 2.6vmin, 2rem)
+    font-size: clamp(1.375rem, 3.6vmin, 2.25rem)
 
   // Every state is guarded on `:not([data-disabled])` because a variant
   // selector outranks the bare `[data-disabled]` below: without it a state left
@@ -111,20 +114,24 @@
   &.underlined[data-pressed]
     transform: translateY(1px)
 
-  // A disabled piece is pressed flat into the board: no edge, the board's own
-  // recess colour, and the label still at full contrast, because "disabled" is
-  // the state a host squints at from across the room wondering why nothing
-  // happens.
+  // A disabled piece is the empty socket it would sit in: no fill, no edge, a
+  // dashed die-line and a shallow recess. A flat fill read as one more slab
+  // beside the enabled pieces in the dark palette; the ground showing through
+  // cannot. The label stays in the ground's muted ink, at full text contrast,
+  // because "disabled" is the state a host squints at from across the room
+  // wondering why nothing happens.
   &[data-disabled]
-    --control-ink: var(--board-muted)
+    --control-ink: var(--ink-muted)
 
     color: var(--control-ink)
     cursor: not-allowed
 
   &.filled[data-disabled],
   &.outlined[data-disabled]
-    background: var(--socket)
-    box-shadow: inset 0 2px 4px -2px var(--shadow)
+    background: transparent
+    box-shadow: inset 0 3px 6px -4px var(--shadow)
+    outline: 2px dashed var(--socket-line)
+    outline-offset: -2px
     transform: none
 
   // After the variants on purpose: same specificity, so source order is what

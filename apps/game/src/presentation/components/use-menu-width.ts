@@ -3,9 +3,7 @@ import { type RefObject, useEffect } from 'react'
 /**
  * The menu is fixed in the corner, so the two screens whose content starts at
  * the very top reserve room for it — and a stylesheet cannot know how much. It
- * is the **trigger** that is measured and not the whole corner: the alert hangs
- * below it, so what the header has to clear is the one part of the box drawn on
- * the header's own line.
+ * is the **trigger** that is measured, the one thing the corner draws.
  *
  * So the menu says what it costs and the shell spends it, the way a reveal
  * panel publishes its own header. A `ResizeObserver` rather than one
