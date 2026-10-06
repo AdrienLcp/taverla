@@ -3,7 +3,7 @@ import type { Locale } from '@taverla/protocol/locale'
 
 /**
  * A page served as its own document, one per language. Rooms are not here and
- * never will be: both are already `Disallow`ed, they last one evening, and
+ * never will be: both are served `noindex`, they last one evening, and
  * there is no copy to write for a URL nobody reaches from outside the room.
  */
 export type IndexedPage = 'credits' | 'home' | ShelvedGame

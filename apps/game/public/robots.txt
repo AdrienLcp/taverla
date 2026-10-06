@@ -1,12 +1,8 @@
 User-agent: *
+Allow: /
 
-# A room is one evening long and its code is shared by hand. The SPA fallback
-# answers 200 on any path, so without this a link pasted into a public place
-# would put a dead room in an index. Everything else is allowed by default,
-# which is why no game is named here — a list of them would go stale the day
-# one is added, and buy nothing while it was right.
-Disallow: /host/
-Disallow: /invite/
-Disallow: /pair/
-Disallow: /wall
-Disallow: /play/
+# A room is one evening long and its code is shared by hand, so a link pasted
+# into a public place must not put a dead room in an index. Those screens are
+# not `Disallow`ed but answered `X-Robots-Tag: noindex` by `_headers`: a crawler
+# barred from a page never reads that it should drop it, and indexes the bare
+# address from the link instead.

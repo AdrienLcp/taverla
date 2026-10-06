@@ -39,7 +39,7 @@ export const localizedPaths = {
 
 /**
  * A room is addressed by its code and nothing else. Nobody indexes an evening —
- * both of these are already `Disallow`ed — so a locale segment would buy no
+ * both of these are served `noindex` — so a locale segment would buy no
  * language back and would lengthen the two things a room is passed around by:
  * what the QR code encodes, and what somebody reads out across the table. They
  * keep negotiating at runtime, which is correct precisely because no crawler is

@@ -196,6 +196,14 @@ one part.
 
 ### Features
 
+- `[Server]` **Taverla lives at `taverla.adrienlcp.com`.** The Worker declares
+  the custom domain in `wrangler.jsonc` and keeps `workers.dev` up, answered
+  `X-Robots-Tag: noindex`; the canonical link, Open Graph tags, sitemap and
+  `llms.txt` name the new host, and the analytics tracker loads from
+  `analytics.adrienlcp.com`. A room's screens (`/host`, `/invite`, `/pair`,
+  `/play`, `/wall`) are served `noindex` by `_headers` rather than `Disallow`ed
+  in `robots.txt`, so a crawler can read that they are not to be indexed.
+
 - `[Game]` **The board-game shelf, first pieces: a new shell and a choice
   screen that never scrolls.** Every screen now stands on a matte printed
   board — pale sky by day, slate blue by evening — in Bricolage Grotesque and

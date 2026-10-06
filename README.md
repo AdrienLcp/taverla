@@ -104,7 +104,7 @@ configuration.
 
 CI deploys every push to `main` once lint, tests and the end-to-end journeys are
 green, with the `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` repository
-secrets. It is live at `https://taverla.adrienlcp.workers.dev`.
+secrets. It is live at `https://taverla.adrienlcp.com`.
 
 Why a Durable Object per room, and what Render cost before it, is in
 [`docs/plans/28-cloudflare.md`](docs/plans/28-cloudflare.md).

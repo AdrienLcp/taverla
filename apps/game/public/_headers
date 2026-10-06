@@ -1,0 +1,20 @@
+# Read by Cloudflare's asset server, which matches the request rather than the
+# file served, so the SPA fallback answering a room's address is covered too.
+# A room's screens last one evening and carry a code shared by hand.
+/host/*
+  X-Robots-Tag: noindex
+/invite/*
+  X-Robots-Tag: noindex
+/pair/*
+  X-Robots-Tag: noindex
+/play/*
+  X-Robots-Tag: noindex
+/wall
+  X-Robots-Tag: noindex
+/wall/*
+  X-Robots-Tag: noindex
+
+# The address the app had before its own domain; the canonical one is
+# taverla.adrienlcp.com.
+https://taverla.adrienlcp.workers.dev/*
+  X-Robots-Tag: noindex

@@ -33,5 +33,11 @@
       "namespace_id": "1001",
       "simple": { "limit": 10, "period": 60 }
     }
-  ]
+  ],
+  // Declared here so a deploy keeps the custom domain attached rather than
+  // detaching what was set up outside this file.
+  "routes": [{ "custom_domain": true, "pattern": "taverla.adrienlcp.com" }],
+  // Wrangler turns the workers.dev address off by default once `routes` is set.
+  // It stays up, served `noindex` by `_headers`, so an old link still opens.
+  "workers_dev": true
 }

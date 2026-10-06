@@ -93,8 +93,7 @@ on the shelf inherits it.
 
 - One room, a four-character code from an alphabet with no confusable glyphs,
   up to 24 players. Each room is a Cloudflare Durable Object and survives a
-  deploy; the app is served from `taverla.adrienlcp.workers.dev`, with no custom
-  domain yet.
+  deploy; the app is served from `taverla.adrienlcp.com`.
 - **Five games**, each owning its name and its translation prefix:
   - **Blind test** — a 30-second Deezer preview on the room's speaker; players
     name title and artist, or the film for a score cue. Sources: genre charts,
