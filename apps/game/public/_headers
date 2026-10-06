@@ -13,8 +13,3 @@
   X-Robots-Tag: noindex
 /wall/*
   X-Robots-Tag: noindex
-
-# The address the app had before its own domain; the canonical one is
-# taverla.adrienlcp.com.
-https://taverla.adrienlcp.workers.dev/*
-  X-Robots-Tag: noindex
