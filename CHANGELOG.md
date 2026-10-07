@@ -850,6 +850,12 @@ one part.
   under them ("Réponse envoyée…", "Un seul essai…") is gone, and the round's
   groove no longer sits on the first tile in a game with no question card.
 
+- `[Game]` **The console's settings carry the hold and this screen's volume.**
+  *Time before the next round* sits in the setup fold beside the round count,
+  where an evening is planned, and stays on the reveal as well. The volume
+  slider is offered again at the foot of the fold, the same value as the
+  menu's, on whichever screen is the room's speaker.
+
 - `[Game]` **Numbers take the browser's shape, words keep the interface's
   language**: a French screen on an en-GB browser writes its counts and times
   the British way. `@adrienlcp/browser` goes to 0.2, whose `reloadPage` replaces

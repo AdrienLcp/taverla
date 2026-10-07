@@ -337,8 +337,9 @@
       // width for its own composition. 24rem is this one's: the French row at
       // the label's ceiling is 296px, so it clears `stacks-below`'s 19rem with
       // room to spare and sits under the action it belongs to rather than
-      // across the screen.
-      .auto-advance
+      // across the screen. A direct child only: the same strip inside the setup
+      // fold lines up with the fold's other strips.
+      > .auto-advance
         width: min(24rem, 100%)
 
       .reveal-actions

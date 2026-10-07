@@ -328,7 +328,8 @@ export const FR_DICTIONARY = defineDictionary({
     seeResults: 'Voir les résultats',
     setup: {
       label: 'Réglages',
-      roundInPlay: 'Les changements s’appliquent à la manche suivante'
+      roundInPlay: 'Les changements s’appliquent à la manche suivante',
+      volume: 'Volume de cet écran'
     },
     standings: 'Classement',
     startGame: 'À table\u00a0!',

@@ -360,7 +360,8 @@ export const EN_DICTIONARY = defineDictionary({
     seeResults: 'See the results',
     setup: {
       label: 'Settings',
-      roundInPlay: 'Changes apply from the next round'
+      roundInPlay: 'Changes apply from the next round',
+      volume: 'Volume on this screen'
     },
     standings: 'Standings',
     startGame: 'Gather round',

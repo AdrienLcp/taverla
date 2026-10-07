@@ -6,8 +6,11 @@ import type { TrackSource } from '@taverla/protocol/track'
 import type { HostPreferences } from '@taverla/core/room/host-preferences'
 import { isRoundInPlay } from '@taverla/core/room/room-phase'
 
+import { useVolume } from '@/presentation/audio/volume-provider'
 import { Disclosure } from '@/presentation/components/disclosure'
+import { Slider } from '@/presentation/components/slider'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
+import { useRoomActions } from '@/presentation/room-actions/room-actions-provider'
 
 import { GamePicker } from './game-picker'
 import { HostSeat } from './host-seat'
@@ -61,6 +64,8 @@ export const SetupFold: React.FC<SetupFoldProps> = ({
   const game = view.settings.game
   const isInLobby = view.phase === 'lobby'
   const roundInPlay = isRoundInPlay(view.phase)
+  const { playsSound } = useRoomActions()
+  const { setVolume, volume } = useVolume()
   const summary = useSettingsSummary({ draftSource, settings: view.settings })
 
   return (
@@ -115,6 +120,23 @@ export const SetupFold: React.FC<SetupFoldProps> = ({
         The round in play is the one exception, because taking the seat reopens
         the socket underneath a clip that is running.
       */}
+      {/*
+        This screen's, not the room's: the same value as the menu's slider,
+        offered again where a host setting up the evening is already looking.
+        Absent once a wall is the room's speaker, because this screen is then
+        silent.
+      */}
+      {playsSound && (
+        <Slider
+          formatOptions={{ style: 'percent' }}
+          label={translate('host.setup.volume')}
+          maxValue={1}
+          minValue={0}
+          onChange={setVolume}
+          step={0.05}
+          value={volume}
+        />
+      )}
       {!isInLobby && !roundInPlay && (
         <HostSeat onTakeSeat={onTakeSeat} view={view} />
       )}

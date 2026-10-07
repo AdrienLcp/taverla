@@ -35,6 +35,7 @@ import {
   scoringKey
 } from '@/presentation/i18n/translation'
 
+import { AutoAdvanceChoice } from './auto-advance-choice'
 import { NO_LIMIT, NumberChoice, useDurationLabels } from './number-choice'
 import { SlateKeyEditor } from './slate-key-editor'
 import { SlateLabelsEditor } from './slate-labels-editor'
@@ -375,6 +376,14 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           }
           options={ROUND_COUNT_OPTIONS}
           value={settings.roundCount ?? NO_LIMIT}
+        />
+      )}
+
+      {game?.kind !== 'slate' && (
+        <AutoAdvanceChoice
+          isLive={isLive}
+          onSettingsChange={onChange}
+          settings={settings}
         />
       )}
 
