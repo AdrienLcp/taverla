@@ -47,6 +47,12 @@ a hook, define it outside the component. It is computed once per process where
 the compiler would cache it once per render, and it keeps a dependency array
 from ever being written about it.
 
+That includes an inline arrow in JSX: `onPress={() => reloadPage()}` is a new
+function on every render for a body that closes over nothing — pass
+`onPress={reloadPage}`. A DOM method is never passed bare
+(`onPress={window.location.reload}`): detached from its object it throws
+`Illegal invocation`, and it would receive the press event as its argument.
+
 ## Contexts
 
 `createSafeContext` from `@adrienlcp/react` returns

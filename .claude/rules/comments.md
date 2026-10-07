@@ -1,16 +1,18 @@
 ---
-description: The default is zero — a comment carries a fact absent from the code
+description: Names first — a comment carries a fact absent from the code; JSDoc documents what a caller relies on
 paths:
   - "**/*.ts"
   - "**/*.tsx"
+  - "**/*.sass"
+  - "**/*.css"
 ---
 
-# Comments: the default is zero
+# Comments: names first
 
-A comment is not documentation. It is an admission that the code could not say
-something on its own — so the first question is always whether a better name, a
-smaller function or a clearer control flow would say it instead. Reach for the
-comment only once that has failed.
+A comment is an admission that the code could not say something on its own — so
+the first question is always whether a better name, a smaller function or a
+clearer control flow would say it instead. Reach for the comment only once that
+has failed.
 
 The bar is not "is this true and interesting?". Plenty of true, interesting
 sentences are worth nothing above a line that already says them.
@@ -41,12 +43,32 @@ somebody who is not reading this file.
 Then read the line without it. If it still reads clearly, it was filler. If it
 does not, keep the comment — one or two lines, tight.
 
-## Scope
+## JSDoc is documentation
 
-- **JSDoc on an internal symbol is not exempt.** A `/** … */` above a helper is
-  a comment wearing a doc block.
-- **React component props are the documented exception**: every prop of a
-  `Props` type carries a useful JSDoc — enumerate union values, state the
-  default, note behaviour the type cannot express.
+- **A `/** … */` on an export, a component, a prop or a type is welcome**: it
+  shows on hover and states the contract a caller relies on — enumerate union
+  values, state the default, note behaviour the type cannot express. Every prop
+  of a `Props` type carries one that adds information. Rewrite it when the
+  symbol changes.
+- **JSDoc on an internal helper is a comment wearing a doc block**, and meets the
+  bar above.
 - **Write them on the last pass.** Comments added while iterating bloat the diff
   and most do not survive the final shape of the code.
+
+## Stylesheets
+
+The same rule holds in `.sass` and `.css`, where nothing type-checks and a
+comment drifts unseen:
+
+- **`///` SassDoc on a pure module's `@mixin` or `@function`** is welcome like
+  JSDoc on an export: what it is for, what it demands of the element, what it
+  degrades to.
+- **The first line of a style module names its kind** — side-effect or pure
+  (`sass-architecture.md`) — the one fact a component needs before `@use`-ing it.
+- **A `//` on a declaration** names a browser bug, a constraint another rule
+  depends on, or why the obvious value is wrong. What a block styles is its
+  selector's name; what a value means is a token's name; a section banner is a
+  sign the file holds two components.
+- **A measurement or a design decision** — the viewport a size was tuned on, the
+  ratio a face was compared at — goes to `apps/game/DESIGN.md`, not above the
+  mixin.

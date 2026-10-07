@@ -29,10 +29,13 @@ blocks presses and hovers while keeping the button focusable and announced;
 `isDisabled={isDisabled || isPending}` on top of it takes the focusability away,
 which is a regression rather than a belt.
 
-`composeClassName` from `@adrienlcp/react` merges a caller's `className` with
-the classes the wrapper always applies. Like react-aria's `composeRenderProps`,
-it **always returns a function** — which is what makes it fit a react-aria component and not
-a plain DOM element. For a plain element, a template literal is the answer.
+**Class names are merged by a helper, never a template literal.**
+`composeClassName` from `@adrienlcp/react-aria` merges a caller's `className`
+with the classes the wrapper always applies. Like react-aria's
+`composeRenderProps`, it **always returns a function** — which is what makes it
+fit a react-aria component's render props. A plain string — a DOM element, a
+conditional class — goes through `classNames` from `@adrienlcp/react`, which
+drops the falsy ones: `classNames('buzzer', isClaimed && 'claimed')`.
 
 ## A line is not a `Separator`
 
@@ -47,7 +50,7 @@ true, and for nothing else:
   elements that already carry their own structure.
 
 Its `className` is a plain string rather than react-aria render props, so the
-wrapper composes with a template literal and not `composeClassName`.
+wrapper composes with `classNames` and not `composeClassName`.
 
 ## A glyph is a named export of `icons.tsx`
 

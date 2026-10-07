@@ -61,6 +61,20 @@ for free: nothing yet means a different composition, and every later refresh
 keeps the screen it has. Blanking a page on a refresh is what conflating them
 costs.
 
+## Two arguments of the same type become one object
+
+`fn({ from, to })`, never `fn(from, to)` — a swapped call type-checks.
+
+## Branching
+
+- **Early-return guards** over nesting.
+- **`switch` when three or more branches dispatch on one discriminant** — a
+  status, a `Result` error code, a message type. It names the discriminant once
+  and narrows each `case`; keep it total with a `default` or a `never` check.
+- `if` / `else` for a binary decision or branches testing different expressions.
+- A value **mapped** from a discriminant is a lookup table
+  (`satisfies Record<Status, …>`) or a function, not a `switch`.
+
 ## Imports: the inline `type` keyword
 
 ```typescript

@@ -1,5 +1,5 @@
 ---
-description: Layers, the index.html cascade order, the two palettes, react-aria's state attributes
+description: Layers, the index.html cascade order, tokens and units, the two palettes, the text voice, react-aria's state attributes
 paths:
   - "**/*.sass"
   - "apps/game/index.html"
@@ -50,61 +50,102 @@ value is computed at runtime. A `$var` earns its place only for compile-time
 work: maths, `@if` / `@for` inside a mixin, a value another SASS file reads
 while compiling.
 
-Every `--transition-*` collapses to `0ms` under `prefers-reduced-motion`, which
-is why a duration reference falls back to `0` and never to its nominal value:
-`transition: opacity var(--transition-base, 0)`. A literal duration there would
-animate for someone who asked for no motion. Non-duration tokens take their real
-value as the fallback (`var(--space-m, 20px)`).
+**`tokens.defaults` from `@adrienlcp/styles/tokens` comes first** in `:root`, so
+`_tokens.sass` declares only the values it changes — `--stroke-thin`,
+`--stroke-bold`, `--hairline` — and reads the shared names for the rest:
+`--stroke-hair`, `--target` and `--control-touch`, `--tracking-tight`,
+`--measure`. A shared name keeps its one meaning: a control's own boundary is
+`--rule-strong`, never a parallel name. The ring is `var(--ink)` on purpose, the
+one colour guaranteed against whatever the phase or the reflex flip painted, so
+there is no `--focus` colour.
+
+A duration falls back to `0s` — `transition: opacity var(--transition-base, 0s)`.
+A bare `0` is no `<time>`: the whole declaration goes invalid and every other
+transition in its list dies with it. A literal duration there would animate for
+someone who asked for no motion. Non-duration tokens take their real value as
+the fallback (`var(--space-m, 1.25rem)`).
+
+**Reduced motion is `reduced-motion.css`'s job**: it collapses the
+`--transition-*` tokens and ends every keyframe animation at once, looping ones
+included. A component writes its own `@media (prefers-reduced-motion)` only to
+hold a state the end of its animation would get wrong — a draining bar paused
+at its level — and a looping animation carries its meaning without motion too:
+the reconnecting dot is half full before it pulses.
+
+## Every size answers the user's font size
+
+Text and spacing are `rem` — `--space-*`, `--text-*`, a control's height, a
+layout width or a container threshold — so a raised browser font size or a zoom
+reaches them. Strokes, radii, shadows and the touch target stay `px`.
+`stylesheets.test.ts` beside the tokens runs `findUnitFailures` and
+`findTypeLiterals` from `@adrienlcp/styles/audit` over every stylesheet, so
+`validate` holds this section and the text voice below.
+
+**The game grows with the screen through one unit, `--stage-unit`** (`1vmin`):
+the same page is read at forty centimetres and at four metres, so a size that
+follows the shorter side of the screen is written `calc(var(--stage-unit) * 4)`,
+never a bare `vmin`, and a text size keeps rem bounds around it. The token is
+the named opt-out of the container-first rule; nothing else uses viewport units
+for a size.
 
 ## A component writes values by name
 
 `_tokens.sass` and the pure modules name every value that carries the look or
 comes back twice, and a component picks from them: `--space-*` for margin,
-padding and gap; a `_typography.sass` mixin for a size with its weight and
-leading, and a `--text-*` step for a size set on its own; `--stroke-*` for a line's weight (colour and style stay at the call
-site) and `--hairline` for the board's rule whole; `--radius-*`;
-`--control-touch` / `--control-height`. A step the scale lacks joins it.
-A value that changes with the screen is a **role token** beside the scale,
-redefined in a media query on `:root`, rather than a component's own media query
-swapping steps.
+padding and gap; a `_typography.sass` mixin for the text voice, and a `--text-*`
+step for a size set on its own; `--stroke-*` for a line's weight (colour and
+style stay at the call site) and `--hairline` for the board's rule whole;
+`--radius-*`; `--target` / `--control-height`; `--measure` or a
+`--measure-<role>` for a line length, never a raw `ch`. A step the scale lacks
+joins it. A value that changes with the screen is a **role token** beside the
+scale — `--space-stage-split`, `--space-stage-rows`, `--space-framed` — rather
+than the same `clamp()` typed into each component.
 
 A value a token already names is read through it — the wide column is
 `var(--column-wide-max-width)`, never `900px` — and derived geometry is `calc()`
 over the tokens it is made of, as `--menu-inset` adds `--layout-padding` to
-`--menu-width`, never the total typed out. A parent's placement override written
+`--menu-width`, or the switch's thumb travel subtracts its strokes and inset from
+the track, never the total typed out. A parent's placement override written
 twice for its children becomes a variant in the parent's stylesheet. An audit
 lands in two commits: exact tokenisation, which changes no pixel, then the snaps
 to the scale.
 
 A literal is the element's own geometry: `0`, `100%`, a grid template, an
-`em` tracking its font, a sprue nub's 10×3. **Fitted display type is
-geometry too** — `clamp(14px, calc(100cqh / var(--rows) / 2.3), 1.75rem)` is
-that board dividing its own box — but a spacing `clamp()` takes its floor and
-its cap from the scale. What stays a literal is a few pixels of joint: a pip
-gap, a switch thumb's inset, a strip's seam, a sprue nub. The same value written a second
+`em` tracking its font, a sprue nub's 10×3. **Fitted display type is geometry
+too**, written on the component inside its own container and floored on the
+scale — `clamp(var(--text-floor), calc(100cqh / var(--rows) / 2.3), 1.75rem)`,
+or `max(var(--text-floor), …)` — never a `px` floor. `--text-floor` (0.875rem)
+is the smallest a question, a choice or a fitted board is drawn: the floor
+`e2e/choice-fits.spec.ts` holds every word to. A spacing `clamp()` takes its
+floor and its cap from the scale. What stays a literal is a few pixels of
+joint: a pip gap, a strip's seam, a sprue nub. The same value written a second
 time for the same purpose is promoted: `question-card.clock-margin` is where
 the sand lies on a card, wherever a card is drawn.
 
 A shorthand token that reads another (`--hairline` reads `--rule`) freezes
 it where it is declared, so it is declared again wherever its input is — the
-lid redeclares both. Nothing in the build notices: a token resolved on
-`:root` inside a lid prints the board's colour on paper.
+lid redeclares `--rule`, `--rule-strong` and `--hairline`. Nothing in the build
+notices: a token resolved on `:root` inside a lid prints the board's colour on
+paper.
+
+## The text voice lives in `_typography.sass`
+
+`font-weight`, `line-height` and `letter-spacing` are declared only in a
+`_typography.sass` mixin. A component includes one — `typography.caption-strong`,
+`typography.score`, `typography.solid` — and sets at most its own size; a
+variation becomes a new mixin named for its role, never a declaration beside the
+include. Why the registers are sized as they are, and what they were measured
+on, is in `apps/game/DESIGN.md`.
 
 ## Colours come in two palettes
 
-`_tokens.sass` holds `dark-palette` and `light-palette` as mixins, included from
-three selectors. Every colour is a semantic token — `--field`, `--ink`,
-`--ink-muted`, `--rule`, `--cut`, `--cut-ink` — and the pair a component reads is
-only ever `--field` / `--ink`: the phase decides which of the six they point at,
-and a component never names a phase. **A hex in a component breaks one theme
+Every colour token in `_tokens.sass` is one `light-dark()` — or a single value
+for a printed piece that does not change colour when the lights go down — read
+off `color-scheme`, which `@adrienlcp/theme-preference/color-scheme.css` sets
+from the system and from an explicit `data-theme`. The pair a component reads is
+only ever `--field` / `--ink`: the phase decides which tokens they point at, and
+a component never names a phase. **A hex in a component breaks one theme
 silently**, because nothing type-checks CSS.
-
-```sass
-\:root                                          // dark, the default
-\:root[data-theme='light']                      // an explicit light choice
-@media (prefers-color-scheme: light)
-  \:root:not([data-theme='dark'])               // the system, resolved in CSS
-```
 
 `@adrienlcp/theme-preference` stamps `data-theme` **only for an explicit
 choice** and removes it for `system`, from a pre-paint script its Vite plugin
@@ -112,21 +153,22 @@ inlines in the head and live from `themeStore`. That is what keeps the first
 paint correct: a theme decided after the first paint is the flash of the wrong
 ground. Do not "simplify" it into always stamping.
 
-**Adding a colour is adding it to both mixins**, then checking contrast at the
-size it is used — 4.5:1 for body text, and the light palette is where this
-usually fails, because the muted greys that read well on black are too pale on
-white. The `theme-color` meta tags in `index.html` are the same two grounds: if
-`--void` changes, they change.
+**Adding a colour is writing both its values**, then adding the pair it is drawn
+on to `tokens-contrast.test.ts` — 4.5:1 for text, 3:1 for what is not text. The
+light palette is where this usually fails, because the muted greys that read
+well on dark are too pale on light. The `theme-color` meta tags in `index.html`
+are the two board grounds: if `--board` changes, they change.
 
 ## What the reset owns on a touch screen
 
 Two defaults the browser applies to a *document* and this is not one:
 
-- **`user-select: none` on `body`.** A press that lands on a control the browser
-  will not act on — a buzzer disabled because you already buzzed — falls through
-  to a text selection, and Android answers it with a "search for SALON" sheet
-  over the game. What is genuinely worth lifting off a screen opts back in where
-  it is styled: `.room-code`, `.join-url`, `.join-reminder .code`, the player
+- **`user-select: none` and `-webkit-touch-callout: none` on `body`.** A press
+  that lands on a control the browser will not act on — a buzzer disabled
+  because you already buzzed — falls through to a text selection, and Android
+  answers it with a "search for SALON" sheet over the game. What is genuinely
+  worth lifting off a screen opts back in with `user-select: text` where it is
+  styled: `.room-code`, `.join-url`, `.join-reminder .code`, the player
   header's own `.room`, and every input. The list grows with every surface that
   puts the room code somewhere new — a code you cannot lift is a code somebody
   retypes.
@@ -143,6 +185,15 @@ Semantic names scoped by nesting, not BEM. The root class matches the file name
 (`player-page.tsx` → `.player-page`); everything inside takes a plain semantic
 name (`.roster`, `.blocker`). Prefer `.join-url` over `.url` — a bare generic
 name collides with a shared component's class.
+
+## A component answers its container
+
+`globals.sass` makes `body` a container (`layout.container`, forwarded from
+`@adrienlcp/styles/containers`), so a component no one wrapped still matches
+`container-wide` / `container-narrow` against the page. A query reads `width`
+and `aspect-ratio` in range syntax, thresholds in `rem`. The viewport keeps what
+is positioned against it — the framed screens held to `100dvh` — and what is not
+a width.
 
 ## State comes from react-aria's data attributes
 
@@ -161,6 +212,10 @@ primitive is the same trap one level up: `isHovered`, `isPressed` and
 they match nothing, the build stays green, and the control has stopped answering
 the pointer.
 
+Visually hidden text is `accessibility.visually-hidden` from
+`@adrienlcp/styles/accessibility`, and the ring is `_focus.sass`'s — neither is
+written by hand.
+
 ## Single-line text in a box is trimmed, not squeezed
 
 `text-box: trim-both cap alphabetic` takes the half-leading and the descender
@@ -172,12 +227,12 @@ and `ToggleButton` wrap each string child in a `.control-label` span.
 
 - **A label in a box whose height is a `min-height`** (a control, the menu
   trigger): bare `text-box` on the label. Nothing moves but its centre.
-- **A painted stamp, segment or error**: `typography.trimmed-block($padding)`,
-  which grows the padding by exactly `(1lh - 1cap) / 2` under one `@supports`.
-  The block keeps its size to the pixel, so a reservation measured against it
-  (`.banked`, `.yours`) stays right.
-- **A figure on a line of its own**: `typography.trimmed-numeral`, keeping
-  `line-height: 1` as the fallback. It shrinks the row, so a board whose type is
+- **A painted stamp, segment or error**: `text-box.trimmed-block($padding)` from
+  `@adrienlcp/styles/text-box`, which grows the padding by exactly
+  `(1lh - 1cap) / 2` under one `@supports`. The block keeps its size to the
+  pixel, so a reservation measured against it (`.banked`, `.yours`) stays right.
+- **A figure on a line of its own**: `text-box.trimmed-figure`, with
+  `line-height: 1` as its fallback. It shrinks the row, so a board whose type is
   a budget divided by its rows takes a smaller divisor under the same guard —
   `--standings-row`, `--tallest-row`, `--board-row`, each measured on the
   rendered rows.
@@ -192,6 +247,8 @@ and `ToggleButton` wrap each string child in a `.control-label` span.
 interpolated** — Chrome holds the declaration unresolved for the whole run, so
 the animation sits on its `from` value from the first frame to the last, and
 the property only appears to move when something else rewrites the element.
+`--stage-unit` follows the same rule: a keyframe that needs a size reads a
+token computed outside it.
 
 ```sass
 // Never: the animation does not run.
