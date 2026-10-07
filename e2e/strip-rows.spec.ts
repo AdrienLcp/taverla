@@ -88,7 +88,11 @@ const readFloors = () => {
     const label = strip.querySelector('.react-aria-Label')?.textContent ?? ''
     let box: Element = strip
 
-    for (let el: Element | null = strip; el !== null; el = el.parentElement) {
+    for (
+      let el: Element | null = strip;
+      el !== null && el !== document.body;
+      el = el.parentElement
+    ) {
       if (getComputedStyle(el).containerType === 'inline-size') {
         box = el
         break
@@ -105,7 +109,8 @@ const readFloors = () => {
  * Widens each strip's own box a step at a time and reads the shape it takes.
  * The box is the nearest container ancestor rather than the strip itself,
  * because the two grids in the playlist picker take their column count from the
- * picker's width and not from their own.
+ * picker's width and not from their own — but never `body`, the page's own
+ * container, whose width no strip is handed.
  */
 const sweepShapes = ({
   floors,
@@ -125,7 +130,11 @@ const sweepShapes = ({
     const label = strip.querySelector('.react-aria-Label')?.textContent ?? ''
     let styled = strip instanceof HTMLElement ? strip : null
 
-    for (let el: Element | null = strip; el !== null; el = el.parentElement) {
+    for (
+      let el: Element | null = strip;
+      el !== null && el !== document.body;
+      el = el.parentElement
+    ) {
       if (
         el instanceof HTMLElement &&
         getComputedStyle(el).containerType === 'inline-size'
