@@ -1,3 +1,4 @@
+import { classNames } from '@adrienlcp/react'
 import type React from 'react'
 import { useState } from 'react'
 
@@ -251,7 +252,7 @@ export const RoomStage: React.FC<RoomStageProps> = ({
       // screen the three formulas below are dividing, so they have to know
       // whether it is there.
       <div
-        className={`stage revealed${hold === null ? '' : ' holding'}`}
+        className={classNames('stage revealed', hold !== null && 'holding')}
         style={{ '--standings-rows': view.players.length }}
       >
         <RevealPanel players={view.players} round={round} />

@@ -1,3 +1,4 @@
+import { classNames } from '@adrienlcp/react'
 import type React from 'react'
 import { useState } from 'react'
 import { Button as ReactAriaButton } from 'react-aria-components'
@@ -109,7 +110,11 @@ export const ReflexBuzzer: React.FC<ReflexBuzzerProps> = ({
       */}
       <div className='press'>
         <ReactAriaButton
-          className={`buzzer ${hasFlipped ? '' : 'armed'} ${isClaimed ? 'claimed' : ''}`}
+          className={classNames(
+            'buzzer',
+            !hasFlipped && 'armed',
+            isClaimed && 'claimed'
+          )}
           onPressStart={() => {
             setClaimedRoundId(round.id)
             buzzFeedback('press')

@@ -1,3 +1,4 @@
+import { classNames } from '@adrienlcp/react'
 import type React from 'react'
 import { useId, useRef } from 'react'
 import { Button as ReactAriaButton } from 'react-aria-components'
@@ -222,7 +223,10 @@ export const SlateWritingStage: React.FC<SlateBoardProps> = ({
             const state = itemStates[itemIndex] ?? 'open'
 
             return (
-              <li className={`item ${state}`} key={`${round.id}:${itemIndex}`}>
+              <li
+                className={classNames('item', state)}
+                key={`${round.id}:${itemIndex}`}
+              >
                 <ItemPiece
                   filled={content.filledCounts[itemIndex] ?? 0}
                   isDisabled={isDisabled}

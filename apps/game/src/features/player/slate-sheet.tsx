@@ -1,3 +1,4 @@
+import { classNames } from '@adrienlcp/react'
 import type React from 'react'
 import { useEffect, useEffectEvent, useState } from 'react'
 import { ListBox, ListBoxItem } from 'react-aria-components'
@@ -212,7 +213,7 @@ export const SlateSheet: React.FC<SlateSheetProps> = ({
           return (
             <ListBoxItem
               aria-label={name}
-              className={`tile ${state}${answer === '' ? '' : ' filled'}`}
+              className={classNames('tile', state, answer !== '' && 'filled')}
               id={itemIndex}
               key={itemIndex}
               textValue={name}
@@ -289,7 +290,7 @@ export const SlateOnTheWall: React.FC<SlateOnTheWallProps> = ({
             <span className='answer'>{translate('slate.sheet.blank')}</span>
           </p>
         ) : (
-          <p className={`said ${verdictClass(line.verdict)}`}>
+          <p className={classNames('said', verdictClass(line.verdict))}>
             <span className='answer'>{line.answer}</span>
             <span className='verdict'>
               {translate(verdictKey(line.verdict))}

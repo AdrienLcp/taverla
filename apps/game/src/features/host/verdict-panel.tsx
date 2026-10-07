@@ -1,3 +1,4 @@
+import { classNames } from '@adrienlcp/react'
 import type React from 'react'
 import { useState } from 'react'
 
@@ -153,7 +154,7 @@ const Choices: React.FC<{
     <div className='choices'>
       {choices.map((choice) => (
         <Button
-          className={`choice ${choice.tone}`}
+          className={classNames('choice', choice.tone)}
           key={choice.key}
           onPress={() => {
             onJudge(choice.verdict)

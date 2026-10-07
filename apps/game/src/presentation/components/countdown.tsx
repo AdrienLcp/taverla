@@ -1,3 +1,4 @@
+import { classNames } from '@adrienlcp/react'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 
@@ -31,7 +32,7 @@ export const Countdown: React.FC<CountdownProps> = ({
   const seconds = useSecondsLeft(clock, target)
 
   return (
-    <p aria-live='polite' className={`countdown ${className ?? ''}`}>
+    <p aria-live='polite' className={classNames('countdown', className)}>
       <span className='numeral' key={seconds}>
         {seconds}
       </span>

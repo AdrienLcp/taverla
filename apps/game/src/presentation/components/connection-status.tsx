@@ -1,3 +1,4 @@
+import { classNames } from '@adrienlcp/react'
 import type React from 'react'
 
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
@@ -24,7 +25,7 @@ type ConnectionDotProps = {
 
 /** Decorative alone: whatever renders it also renders the word beside it. */
 export const ConnectionDot: React.FC<ConnectionDotProps> = ({ status }) => (
-  <span aria-hidden='true' className={`connection-dot ${status}`} />
+  <span aria-hidden='true' className={classNames('connection-dot', status)} />
 )
 
 type ConnectionStatusProps = {

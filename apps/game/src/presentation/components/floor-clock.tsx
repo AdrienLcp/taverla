@@ -1,3 +1,4 @@
+import { classNames } from '@adrienlcp/react'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 
@@ -35,7 +36,10 @@ export const FloorClock: React.FC<FloorClockProps> = ({ buzz, clock }) => {
 
   return (
     <p
-      className={`floor-clock ${buzz.expiresAt === null ? 'open' : 'closing'}`}
+      className={classNames(
+        'floor-clock',
+        buzz.expiresAt === null ? 'open' : 'closing'
+      )}
       role='timer'
       // A reading of unknown length publishes its length, the way an answer
       // and a question do: one digit and three are the same fact, and only a

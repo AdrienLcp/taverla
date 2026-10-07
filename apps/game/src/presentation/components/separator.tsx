@@ -1,3 +1,4 @@
+import { classNames } from '@adrienlcp/react'
 import type React from 'react'
 import {
   Separator as ReactAriaSeparator,
@@ -17,7 +18,7 @@ type SeparatorProps = ReactAriaSeparatorProps & {
 
 /**
  * `className` here is a plain string, not react-aria render props, so this is
- * one of the few wrappers that composes with a template literal rather than
+ * one of the few wrappers that composes with `classNames` rather than
  * `composeClassName`.
  */
 export const Separator: React.FC<SeparatorProps> = ({
@@ -26,7 +27,10 @@ export const Separator: React.FC<SeparatorProps> = ({
   ...props
 }) => {
   const rule = (
-    <ReactAriaSeparator {...props} className={`separator ${className ?? ''}`} />
+    <ReactAriaSeparator
+      {...props}
+      className={classNames('separator', className)}
+    />
   )
 
   return label === undefined ? (

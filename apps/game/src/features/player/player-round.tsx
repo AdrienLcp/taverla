@@ -1,3 +1,4 @@
+import { classNames } from '@adrienlcp/react'
 import type React from 'react'
 import { useState } from 'react'
 import { Button as ReactAriaButton } from 'react-aria-components'
@@ -389,7 +390,7 @@ const YourRound: React.FC<{
   const standing = standingOf({ players: view.players, youId: view.youId })
 
   return (
-    <div className={`your-round ${points > 0 ? 'scored' : 'missed'}`}>
+    <div className={classNames('your-round', points > 0 ? 'scored' : 'missed')}>
       <p className='payout'>
         {points > 0 ? translate('round.scored', { points }) : '0'}
       </p>
@@ -507,7 +508,7 @@ const Buzzer: React.FC<{
           */}
         {floorBuzz === null ? (
           <ReactAriaButton
-            className={`buzzer ${isClaimed || isWon ? 'claimed' : ''}`}
+            className={classNames('buzzer', (isClaimed || isWon) && 'claimed')}
             isDisabled={blocker !== null || roundId === null}
             onPressStart={() => {
               if (roundId === null) {
@@ -525,7 +526,10 @@ const Buzzer: React.FC<{
           <TakenFloor buzz={floorBuzz} clock={clock} players={view.players} />
         )}
 
-        <p className={`blocker ${line.isFloor ? 'floor' : ''}`} role='status'>
+        <p
+          className={classNames('blocker', line.isFloor && 'floor')}
+          role='status'
+        >
           {line.text}
         </p>
       </div>
