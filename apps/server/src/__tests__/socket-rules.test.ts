@@ -1,5 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import {
+  DEFAULT_BLINDTEST_SETTINGS,
+  DEFAULT_BUZZER_SETTINGS
+} from '@taverla/protocol/game'
 import { DEFAULT_MODE_SETTINGS } from '@taverla/protocol/room'
 import { POINTS_PER_ARTIST, POINTS_PER_TITLE } from '@taverla/protocol/scoring'
 import {
@@ -293,10 +297,10 @@ describe('the rules every socket obeys', () => {
     expect(errorsIn(host)).toEqual([])
   })
 
-  // The console greys the control out, which is a courtesy rather than a rule:
-  // the round is scored on the way out from whatever mode it closes on, so a
-  // frame that swapped it would pay a typed answer at a pick's rate.
-  it('[settings] refuses the mode the round in play is scored by', async () => {
+  // The round keeps the mode it opened on — it is scored on the way out from
+  // that copy, so a typed answer is never paid at a pick's rate — and the
+  // room's setting waits for the next round to be read.
+  it('[settings] takes the answer mode mid-round, for the next one', async () => {
     const { code, host } = await room.openRoom()
 
     await room.seat({ code, nickname: 'Alice' })
@@ -304,7 +308,37 @@ describe('the rules every socket obeys', () => {
     await waitFor(() => hostView(host)?.phase === 'playing', 'the clip')
 
     host.send({
-      settings: { ...FAST_GAME, mode: DEFAULT_MODE_SETTINGS.choice },
+      settings: {
+        ...FAST_GAME,
+        game: { ...DEFAULT_BLINDTEST_SETTINGS, roundDurationMs: 10_000 },
+        mode: DEFAULT_MODE_SETTINGS.choice
+      },
+      type: 'host.updateSettings'
+    })
+    await waitFor(
+      () => hostView(host)?.settings.mode.kind === 'choice',
+      'the new mode'
+    )
+
+    expect(errorsIn(host)).toEqual([])
+    expect(hostView(host)?.round).toMatchObject({
+      answerMode: 'buzzer',
+      durationMs: 5_000
+    })
+  })
+
+  // The console greys the picker out, which is a courtesy rather than a rule:
+  // the round on screen is one game's content, and the screens would go on
+  // drawing it under the other game's settings.
+  it('[settings] refuses the game the round in play is an arm of', async () => {
+    const { code, host } = await room.openRoom()
+
+    await room.seat({ code, nickname: 'Alice' })
+    host.send({ type: 'host.startRound' })
+    await waitFor(() => hostView(host)?.phase === 'playing', 'the clip')
+
+    host.send({
+      settings: { ...FAST_GAME, game: DEFAULT_BUZZER_SETTINGS },
       type: 'host.updateSettings'
     })
     await waitFor(() => errorsIn(host).length > 0, 'the refusal')
@@ -313,7 +347,7 @@ describe('the rules every socket obeys', () => {
       code: 'wrong_phase',
       fatal: false
     })
-    expect(hostView(host)?.settings.mode.kind).toBe('buzzer')
+    expect(hostView(host)?.settings.game?.kind).toBe('blindtest')
   })
 
   it('[settings] takes the same change once the round is over', async () => {

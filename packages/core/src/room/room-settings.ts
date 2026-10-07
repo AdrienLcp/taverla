@@ -1,8 +1,7 @@
 import {
   DEFAULT_GAME_SETTINGS,
   type GameKind,
-  type GameSettings,
-  roundDurationMsOf
+  type GameSettings
 } from '@taverla/protocol/game'
 import type { Locale } from '@taverla/protocol/locale'
 import {
@@ -171,19 +170,13 @@ export const movedToGame = ({
 
 /**
  * Whether the change would alter what a round already under way is *built on*.
- * Everything else is read at the moment it is next needed, which is what lets a
- * host lengthen the countdown or swap the playlist mid-evening and have it land
- * on the next round.
+ * Everything else is read at the moment it is next needed, or was stamped on the
+ * round as it opened — the answer mode and the round duration both are — which
+ * is what lets a host switch to four choices or lengthen the clock mid-evening
+ * and have it land on the next round.
  *
- * These three cannot wait to be read: a simultaneous round is scored on the way
- * out from the mode, so a typed round switched to `choice` pays a typed answer
- * at a pick's rate; a new `game.kind` leaves `round.content` on the arm the
- * screens are already rendering; and a `roundDurationMs` cut below the time
- * already spent ends the round the moment it arrives.
- *
- * A mode's own settings are not on the list. `answerWindowMs` is read when a
- * buzz lands and stamped into the buzz, so moving it decides the next floor
- * rather than the one being held.
+ * The game cannot wait: a new `game.kind` leaves the screens rendering one game's
+ * round under another game's settings, and moves the answer mode with it.
  */
 export const reshapesRound = ({
   from,
@@ -191,7 +184,4 @@ export const reshapesRound = ({
 }: {
   from: RoomSettings
   to: RoomSettings
-}): boolean =>
-  from.mode.kind !== to.mode.kind ||
-  from.game?.kind !== to.game?.kind ||
-  roundDurationMsOf(from.game) !== roundDurationMsOf(to.game)
+}): boolean => from.game?.kind !== to.game?.kind

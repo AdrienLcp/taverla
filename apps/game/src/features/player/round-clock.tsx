@@ -1,6 +1,5 @@
 import type React from 'react'
 
-import { roundDurationMsOf } from '@taverla/protocol/game'
 import type { PlayerRoomView } from '@taverla/protocol/room'
 
 import type { ClockEstimate } from '@taverla/core/time/clock-sync'
@@ -33,7 +32,7 @@ export const RoundClock: React.FC<RoundClockProps> = ({ clock, view }) => {
     return <RevealHold advancesAt={advancesAt} clock={clock} holdMs={holdMs} />
   }
 
-  const durationMs = roundDurationMsOf(view.settings.game)
+  const durationMs = view.round?.durationMs ?? null
 
   if (
     durationMs === null ||

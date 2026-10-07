@@ -3,7 +3,6 @@ import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
-import { roundDurationMsOf } from '@taverla/protocol/game'
 import type {
   HostToken,
   PlayerId,
@@ -327,7 +326,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
   }
 
   if (view !== null && choosing !== null) {
-    const roundDurationMs = roundDurationMsOf(view.settings.game)
+    const roundDurationMs = choosing.round.durationMs
 
     return (
       <Main className='host-console-page framed'>
@@ -515,7 +514,7 @@ const seatedChoosingRound = (
   view: HostRoomView
 ): { round: RoundView; youId: PlayerId } | null =>
   view.phase === 'playing' &&
-  view.settings.mode.kind === 'choice' &&
+  view.round?.answerMode === 'choice' &&
   view.youId !== null &&
   view.round !== null &&
   !view.round.joinedAfterStart

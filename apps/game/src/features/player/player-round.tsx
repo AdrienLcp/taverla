@@ -336,7 +336,7 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
       )
     }
 
-    if (view.settings.mode.kind === 'choice') {
+    if (round.answerMode === 'choice') {
       return (
         <ChoosingRound
           onAnswer={answerWithRound}
@@ -346,7 +346,7 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
       )
     }
 
-    if (view.settings.mode.kind === 'typed') {
+    if (round.answerMode === 'typed') {
       return (
         <section className='player-round typed-round'>
           <div className='round-card'>

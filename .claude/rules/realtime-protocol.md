@@ -72,32 +72,37 @@ Ordering is decided by when the frame reaches the server.
 `client-message.test.ts` asserts the shape so nobody adds one back for
 "accuracy".
 
-### Settings move mid-game; three of them wait
+### Settings move mid-game; only the game waits
 
 `host.updateSettings` is accepted in every phase, because a party is set up while
-it runs — the countdown, the round count, the answer window and the difficulty
-all land on the round *after* the one on screen. That is the point of the fold
-living in the host's footer rather than inside the lobby.
+it runs — the countdown, the round count, the answer mode, the round duration,
+the answer window and the difficulty all land on the round *after* the one on
+screen. That is the point of the fold living in the host's footer rather than
+inside the lobby.
 
-Three cannot wait to be read, and the server refuses them while
-`isRoundInPlay(room.phase)`:
+The two a round is **built on** are stamped on it as it opens — `Round.mode` and
+`Round.durationMs`, projected as `round.answerMode` and `round.durationMs` — and
+every read that concerns the round in play goes through that copy: scoring
+(`settleSimultaneousRound` picks its rate on the way out, so a typed round must
+never be paid at a pick's rate), who may buzz or answer, when everyone is done,
+the open phase's clock, and every screen drawing the round. **A screen drawing
+the round reads `view.round`, never `view.settings`** for those two; the
+settings are what the *next* round will be.
 
-| Setting | What a mid-round change would do |
-|---|---|
-| `mode.kind` | `settleSimultaneousRound` picks its scoring on the way out, so a typed round switched to `choice` pays a typed answer at a pick's rate |
-| `game.kind` | `round.content` stays on the arm the screens are already rendering |
-| `roundDurationMs` | cut below the time already spent, it ends the round on arrival |
+One cannot wait, and the server refuses it while `isRoundInPlay(room.phase)`:
+`game.kind`, because `round.content` stays on the arm the screens are already
+rendering and the game's other settings are read off `settings.game`.
+`reshapesRound` in `@taverla/core/room/room-settings` is the rule and
+`isRoundInPlay` in `room-phase.ts` the window — `revealed` is deliberately
+outside it. The console greys the picker out, and that is a courtesy: **the
+guard on the socket is the rule**.
 
-`reshapesRound` in `@taverla/core/room/room-settings` is the list, and
-`isRoundInPlay` in `room-phase.ts` is the window — `revealed` is deliberately
-outside it, because the gap between two rounds is when anything about them may
-change. The console greys the three out, and that is a courtesy: **the guard on
-the socket is the rule**, same reason `registerBuzz` re-checks the mode.
-
-A mode's *own* settings are not on the list. `answerWindowMs` is stamped into a
-buzz as `expiresAt` when it lands, so moving it decides the next floor rather
-than the one being held; the blind test's source is drawn when a round opens, so
-the picker commits on whatever opens the next one.
+`answerWindowMs` is the exception to the stamp: it is read from the room as a
+buzz lands and stamped into the buzz as `expiresAt`, so moving it decides the
+next *floor* rather than the next round (`floorWindowMs`). The seat rule follows
+the stamp too: a seated host who switches to `buzzer` mid-round keeps playing
+the round in front of them, and `unseatConsolesThatMustJudge` takes the seat as
+the next round opens (`host-judging.ts`).
 
 ### One snapshot, not deltas
 

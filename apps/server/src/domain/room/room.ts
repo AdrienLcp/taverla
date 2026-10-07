@@ -7,7 +7,11 @@ import type {
   SessionId
 } from '@taverla/protocol/identifiers'
 import type { HostQuestion } from '@taverla/protocol/question'
-import type { RoomPhase, RoomSettings } from '@taverla/protocol/room'
+import type {
+  ModeSettings,
+  RoomPhase,
+  RoomSettings
+} from '@taverla/protocol/room'
 import type { Award, Verdict } from '@taverla/protocol/scoring'
 import type { HostTrack, TrackIdentity } from '@taverla/protocol/track'
 
@@ -192,6 +196,12 @@ export type Round = {
         sheets: Map<PlayerId, Map<number, string>>
       }
   /**
+   * How long the open phase runs, stamped as the round opens so a host moving
+   * the setting mid-round decides the next round rather than cutting this one
+   * short. `null` for a game with no round clock.
+   */
+  durationMs: number | null
+  /**
    * The round's own clock, and the pair that makes a miss resumable: a buzz
    * stops it, and the round has to know how much is left rather than handing
    * the next player a fresh thirty seconds. A game with no clock — the bare
@@ -201,6 +211,13 @@ export type Round = {
   id: RoundId
   index: number
   lockedOutPlayerIds: Set<PlayerId>
+  /**
+   * The answer mode the round was opened on. A simultaneous round is scored on
+   * the way out from it, so the room's setting moving mid-round must not reach
+   * it: a typed round switched to `choice` would pay a typed answer at a pick's
+   * rate. The floor's window is the exception — see `floorWindowMs`.
+   */
+  mode: ModeSettings
   /**
    * Who the round is played by, and `null` until its clip starts — see
    * `@taverla/core/round/round-roster`. One stamp covers the whole round.

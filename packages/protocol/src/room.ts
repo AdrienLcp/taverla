@@ -289,11 +289,22 @@ export const roundViewSchema = z.object({
    * re-sent on every snapshot to stay true.
    */
   advancesAt: serverTimeSchema.nullable(),
+  /**
+   * The answer mode this round was opened on. The room's setting can move while
+   * the round runs and land on the next one, so a screen drawing *this* round
+   * reads it here and never from `settings.mode`.
+   */
+  answerMode: answerModeSchema,
   /** Buzzer mode leaves this empty; the other two fill it as frames arrive. */
   answers: z.array(roundAnswerSchema),
   /** Points already granted this round, in the order the host granted them. */
   awards: z.array(awardSchema),
   content: roundContentSchema,
+  /**
+   * How long the open phase runs, as it stood when the round opened, and `null`
+   * for a game with no round clock. Read here for the reason `answerMode` is.
+   */
+  durationMs: z.number().int().positive().nullable(),
   id: roundIdSchema,
   /** 1-based, so it reads as "round 3 of 10" without arithmetic at the call site. */
   index: z.number().int().positive(),

@@ -13,7 +13,7 @@ import type { Nickname, PlayerId, RoundId } from '@taverla/protocol/identifiers'
 import type { RoomSettings } from '@taverla/protocol/room'
 import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
-import { isJudgedByHost, offersAnswerMode } from '@taverla/core/room/game-modes'
+import { offersAnswerMode } from '@taverla/core/room/game-modes'
 import { isRoundInPlay } from '@taverla/core/room/room-phase'
 import { reshapesRound } from '@taverla/core/room/room-settings'
 import { newSessionId } from '@taverla/core/room/session-id'
@@ -24,7 +24,6 @@ import {
   joinAsPlayer,
   markHostAway,
   markPlayerDisconnected,
-  removePlayer,
   renameSeat,
   touch,
   updateSettings
@@ -62,12 +61,13 @@ import { newPlayerId } from '@/infrastructure/ids'
 import { logger } from '@/infrastructure/logging/logger'
 
 import type { Connection, Outbound, Socket } from './connection'
-import { sendError, sendPong, sendWelcome } from './outbound'
 import {
-  forgetSeat,
-  isHostConnected,
-  isSeatConnected
-} from './room-connections'
+  hostMustJudge,
+  unseat,
+  unseatConsolesThatMustJudge
+} from './host-judging'
+import { sendError, sendPong, sendWelcome } from './outbound'
+import { isHostConnected, isSeatConnected } from './room-connections'
 import { closeRoomEngine, publishRoom, type RoomEngine } from './room-engine'
 import {
   beginRound,
@@ -120,20 +120,6 @@ const displaceOtherConsoles = (engine: RoomEngine, sessionId: string): void => {
     }
   }
 }
-
-/**
- * Whether the room as it stands needs its console to judge, which is the one
- * thing that keeps that screen out of its own game. Read in two places on
- * purpose: where a seat is granted and where the settings that allowed it
- * change, because a console remembers the name it was seated under and replays
- * it on every reconnect — a rule enforced only where the form is drawn is a
- * rule the next `hello` walks straight through.
- */
-const hostMustJudge = (settings: RoomSettings): boolean =>
-  isJudgedByHost({
-    game: settings.game?.kind ?? null,
-    mode: settings.mode.kind
-  })
 
 const introduce = ({
   engine,
@@ -271,7 +257,7 @@ const seatHost = ({
   displaceOtherConsoles(engine, sessionId)
 
   const seat =
-    message.nickname === undefined || hostMustJudge(room.settings)
+    message.nickname === undefined || hostMustJudge(room)
       ? null
       : joinAsPlayer({
           newPlayerId: newPlayerId(),
@@ -955,41 +941,6 @@ const replay = (outbound: Outbound, engine: RoomEngine): void => {
   publishRoom(engine)
 }
 
-// Removed from the roster before the buzz is released, so that the player
-// being unseated cannot be the one counted as still able to answer — and off
-// the console before either, because this is what broadcasts and
-// `toHostView` reads the seat off the connection.
-const unseat = (playerId: PlayerId, engine: RoomEngine): void => {
-  const { room } = engine
-
-  forgetSeat(engine, playerId)
-  removePlayer(room, playerId, engine.now())
-  releaseBuzz({ now: engine.now(), playerId, room })
-  publishRoom(engine)
-}
-
-/**
- * A seat can outlive the reason it was allowed. The picker sits on the lobby
- * stage where a console may already be seated, so a host who takes a seat and
- * then chooses the bare buzzer holds one with nothing behind it: on the board,
- * unable to score, and the only screen that could judge the round.
- *
- * Every host connection rather than the one that sent the frame — a second tab
- * of the same browser is let in on purpose, and the seat is on whichever of
- * them said hello with a name.
- */
-const unseatConsolesThatMustJudge = (engine: RoomEngine): void => {
-  if (!hostMustJudge(engine.room.settings)) {
-    return
-  }
-
-  for (const connection of engine.connections.all()) {
-    if (connection.role === 'host' && connection.playerId !== null) {
-      unseat(connection.playerId, engine)
-    }
-  }
-}
-
 /**
  * The one exit a player does not choose, and therefore the only one that has
  * to be said out loud: a socket left holding a `youId` the roster no longer
@@ -1126,9 +1077,9 @@ const reconfigure = (
     return
   }
 
-  // The console greys these out while a round is under way, and a greyed-out
-  // control is not a guarantee — same reason `registerBuzz` re-checks the
-  // mode it was handed.
+  // The console greys the game picker out while a round is under way, and a
+  // greyed-out control is not a guarantee — same reason `registerBuzz`
+  // re-checks the mode the round was opened on.
   if (
     isRoundInPlay(room.phase) &&
     reshapesRound({ from: room.settings, to: settings })
@@ -1136,7 +1087,7 @@ const reconfigure = (
     sendError(outbound, {
       code: 'wrong_phase',
       fatal: false,
-      message: 'The round under way is built on those; they wait for the next'
+      message: 'The round under way is that game; switch between two rounds'
     })
 
     return

@@ -258,12 +258,14 @@ const toRoundView = ({
           playerId: round.activeBuzz.playerId
         },
   advancesAt: round.advancesAt,
+  answerMode: round.mode.kind,
   answers: round.attempts.map(({ firstGuessedAt, playerId }) => ({
     atServerTime: firstGuessedAt,
     playerId
   })),
   awards: round.awards,
   content: toContentView({ round, youId }),
+  durationMs: round.durationMs,
   id: round.id,
   index: round.index,
   joinedAfterStart:

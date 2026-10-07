@@ -8,6 +8,14 @@ one part.
 
 ### Breaking Changes
 
+- `[Shared]` **Every setting can be changed while a round is under way, and
+  lands on the next one**, and `PROTOCOL_VERSION` goes to 23. The answer mode
+  and the round duration are stamped on the round as it opens and travel as
+  `round.answerMode` and `round.durationMs`; the round on screen is scored,
+  timed and drawn from that copy, so the console no longer greys them out. Only
+  the game itself still waits for the gap between two rounds. A seated host who
+  switches to the buzzer mid-round keeps the seat until the next round opens.
+
 - `[Server]` **The game is served by one Cloudflare Worker, with a Durable
   Object per room, and deploys from CI.** A push to `main` that passes lint,
   tests and the journeys ships with `wrangler deploy`, to

@@ -178,13 +178,15 @@ describe('reshapesRound', () => {
     ).toBe(false)
   })
 
-  it('[room-settings] stops the mode a round is scored by', () => {
+  // The round is stamped with the mode it opened on and scored from that copy,
+  // so the room's setting is free to move on to the next round.
+  it('[room-settings] lets the answer mode through to the next round', () => {
     expect(
       reshapesRound({
         from: blindtest,
         to: { ...blindtest, mode: DEFAULT_MODE_SETTINGS.typed }
       })
-    ).toBe(true)
+    ).toBe(false)
   })
 
   // The floor is stamped with its deadline when the buzz lands, so a window
@@ -207,7 +209,7 @@ describe('reshapesRound', () => {
     expect(reshapesRound({ from: blindtest, to: buzzer })).toBe(true)
   })
 
-  it('[room-settings] stops the clock the round runs on', () => {
+  it('[room-settings] lets the round clock through to the next round', () => {
     expect(
       reshapesRound({
         from: blindtest,
@@ -216,7 +218,7 @@ describe('reshapesRound', () => {
           game: { ...DEFAULT_BLINDTEST_SETTINGS, roundDurationMs: 10_000 }
         }
       })
-    ).toBe(true)
+    ).toBe(false)
   })
 
   // The bare buzzer's round has no clock at all, so both sides read `null` —

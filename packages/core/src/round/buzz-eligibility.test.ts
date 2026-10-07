@@ -18,9 +18,11 @@ import {
 const runningRound: RoundView = {
   activeBuzz: null,
   advancesAt: null,
+  answerMode: 'buzzer',
   answers: [],
   awards: [],
   content: { choices: [], kind: 'blindtest', revealedTrack: null },
+  durationMs: 30_000,
   id: 'r1',
   index: 1,
   joinedAfterStart: false,

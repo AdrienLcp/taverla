@@ -110,6 +110,20 @@ export const quizContent = ({
   }
 }
 
+/**
+ * How long a buzz holds the floor. Read from the room rather than the round on
+ * purpose: moving the window decides the next floor, not the next round, and
+ * that is what a host lengthening it after a rushed answer means. Only when the
+ * room has since left the buzzer mode does the round's own copy answer, because
+ * a buzzer round still has floors to grant.
+ */
+const floorWindowMs = ({ room, round }: { room: Room; round: Round }) => {
+  const mode =
+    room.settings.mode.kind === 'buzzer' ? room.settings.mode : round.mode
+
+  return mode.kind === 'buzzer' ? mode.answerWindowMs : null
+}
+
 export const openRound = ({
   content,
   id,
@@ -134,10 +148,12 @@ export const openRound = ({
     attempts: [],
     awards: [],
     content,
+    durationMs: roundDurationMsOf(room.settings.game),
     elapsedMs: 0,
     id,
     index: (room.round?.index ?? 0) + 1,
     lockedOutPlayerIds: new Set(),
+    mode: room.settings.mode,
     openedWithPlayerIds: null,
     revealed: false,
     runningSince: null,
@@ -196,11 +212,8 @@ export const registerBuzz = ({
   }
 
   // A socket is whatever its owner makes it, and a player's screen showing
-  // four choices can still send a buzz by hand. Narrowing here is also what
-  // produces the window below: it exists on no other mode.
-  const mode = room.settings.mode
-
-  if (mode.kind !== 'buzzer') {
+  // four choices can still send a buzz by hand.
+  if (round.mode.kind !== 'buzzer') {
     return Result.failure('wrong_phase')
   }
 
@@ -225,7 +238,7 @@ export const registerBuzz = ({
     return Result.failure('joined_mid_round')
   }
 
-  const window = mode.answerWindowMs
+  const window = floorWindowMs({ room, round })
 
   round.activeBuzz = {
     atServerTime: now,
@@ -351,7 +364,7 @@ export const registerAnswer = ({
     return Result.failure('stale_round')
   }
 
-  if (room.settings.mode.kind === 'buzzer') {
+  if (round.mode.kind === 'buzzer') {
     return Result.failure('invalid_message')
   }
 
@@ -467,7 +480,7 @@ export const everyoneIsDone = (room: Room, now: number): boolean => {
         return false
       }
 
-      return room.settings.mode.kind === 'choice' || isDone(held)
+      return round.mode.kind === 'choice' || isDone(held)
     })
   )
 }
@@ -492,7 +505,7 @@ export const settleSimultaneousRound = ({
     return
   }
 
-  const roundDurationMs = roundDurationMsOf(room.settings.game)
+  const roundDurationMs = round.durationMs
 
   for (const attempts of round.attempts.toSorted(byFirstScored)) {
     const earned = pointsForSimultaneousAnswer({
@@ -986,20 +999,26 @@ export const startAutoAdvanceHold = (room: Room, now: number): void => {
  * alone reveals it without paying anyone.
  */
 export const closeRound = (room: Room, now: number): void => {
-  if (room.round?.content.kind === 'reflex') {
+  const round = room.round
+
+  if (round === null) {
+    return
+  }
+
+  if (round.content.kind === 'reflex') {
     settleReflexRound(room, now)
 
     return
   }
 
-  if (room.round?.content.kind === 'slate') {
+  if (round.content.kind === 'slate') {
     markEveryItem(room)
     revealRound(room, now)
 
     return
   }
 
-  const mode = room.settings.mode.kind
+  const mode = round.mode.kind
 
   if (mode === 'buzzer') {
     revealRound(room, now)
@@ -1076,11 +1095,15 @@ export const elapsedRoundMs = (round: Round, now: number): number =>
  * round, so the only thing that knows how long the heat runs is the heat.
  */
 const openPhaseDurationMs = (room: Room): number | null => {
-  const content = room.round?.content
+  const round = room.round
 
-  return content?.kind === 'reflex'
-    ? reflexRoundDurationMs(content.flipDelayMs)
-    : roundDurationMsOf(room.settings.game)
+  if (round === null) {
+    return null
+  }
+
+  return round.content.kind === 'reflex'
+    ? reflexRoundDurationMs(round.content.flipDelayMs)
+    : round.durationMs
 }
 
 /**

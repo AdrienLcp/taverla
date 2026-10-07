@@ -9,6 +9,7 @@ import { PROTOCOL_VERSION } from './version'
 const runningRound = {
   activeBuzz: null,
   advancesAt: null,
+  answerMode: 'buzzer' as const,
   answers: [],
   awards: [],
   content: {
@@ -16,6 +17,7 @@ const runningRound = {
     kind: 'blindtest' as const,
     revealedTrack: null
   },
+  durationMs: 30_000,
   id: 'r1',
   index: 1,
   joinedAfterStart: false,

@@ -1,6 +1,5 @@
 import type React from 'react'
 
-import { roundDurationMsOf } from '@taverla/protocol/game'
 import type { HostRoomView, RoundView } from '@taverla/protocol/room'
 
 import {
@@ -43,8 +42,8 @@ export const PlayingStage: React.FC<PlayingStageProps> = ({
   view
 }) => {
   const translate = useTranslate()
-  const roundDurationMs = roundDurationMsOf(view.settings.game)
-  const mode = view.settings.mode.kind
+  const roundDurationMs = round.durationMs
+  const mode = round.answerMode
   const choiceLength = longestChoiceLength(round)
   const isTyping = mode === 'typed' && onAnswer !== null
 

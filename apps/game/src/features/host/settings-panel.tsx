@@ -167,10 +167,9 @@ type SettingsPanelProps = {
   /** The socket is open. Every control here sends a frame, so none of them work without it. */
   isLive: boolean
   /**
-   * A round is under way, so the two controls it is *built on* are held until it
-   * ends: it is scored on the way out from the mode it closes on, and it runs
-   * for the clip length it opened with. The server refuses both — see
-   * `reshapesRound`.
+   * A round is under way. Every number here still moves and lands on the next
+   * round — the round on screen keeps the mode and the clock it opened with —
+   * but the slate's sheet is what that round *is*, so its setup waits.
    */
   isRoundInPlay: boolean
   /** The lobby's stage carries the sheet's own setup, so the fold does not repeat it. */
@@ -186,7 +185,7 @@ type SettingsPanelProps = {
 
 /**
  * The numbers that decide how a party goes, reachable for as long as it runs.
- * All but two land on the round after the one on screen, which is why they are
+ * Every one lands on the round after the one on screen, which is why they are
  * not folded away with the things only a lobby can offer.
  */
 export const SettingsPanel: React.FC<SettingsPanelProps> = ({
@@ -201,7 +200,6 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
 }) => {
   const translate = useTranslate()
   const isDisabled = !isLive
-  const isHeldByRound = isDisabled || isRoundInPlay
   const game = settings.game
   const mode = settings.mode
   const offeredModes = answerModesFor(game?.kind ?? null)
@@ -231,7 +229,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           {offeredModes.length > 1 && (
             <SegmentedControl
               className='answer-mode'
-              isDisabled={isHeldByRound}
+              isDisabled={isDisabled}
               label={translate('host.answerMode.label')}
               onChange={(next) => {
                 if (isAnswerMode(next)) {
@@ -382,7 +380,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
 
       {game?.kind === 'blindtest' && (
         <NumberChoice
-          isDisabled={isHeldByRound}
+          isDisabled={isDisabled}
           label={translate('blindtest.clip')}
           onChange={(roundDurationMs) => {
             onChange({ ...settings, game: { ...game, roundDurationMs } })
@@ -395,7 +393,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
 
       {game?.kind === 'quiz' && (
         <NumberChoice
-          isDisabled={isHeldByRound}
+          isDisabled={isDisabled}
           label={translate('quiz.duration')}
           onChange={(roundDurationMs) => {
             onChange({ ...settings, game: { ...game, roundDurationMs } })

@@ -305,6 +305,6 @@ const isFramed = (view: PlayerRoomView): boolean =>
   view.isHostConnected &&
   view.round !== null &&
   !view.round.joinedAfterStart &&
-  ((view.phase === 'playing' && view.settings.mode.kind === 'choice') ||
+  ((view.phase === 'playing' && view.round.answerMode === 'choice') ||
     ((view.phase === 'playing' || view.phase === 'buzzed') &&
-      view.settings.mode.kind === 'buzzer'))
+      view.round.answerMode === 'buzzer'))

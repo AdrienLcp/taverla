@@ -1,7 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { DEFAULT_BUZZER_SETTINGS } from '@taverla/protocol/game'
-import type { RoomSettings } from '@taverla/protocol/room'
+import {
+  DEFAULT_MODE_SETTINGS,
+  type RoomSettings
+} from '@taverla/protocol/room'
 import { hostServerMessageSchema } from '@taverla/protocol/server-message'
 import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
@@ -127,6 +130,42 @@ describe('a console that plays the room it runs', () => {
     )
 
     expect(hostView(host)?.players).toEqual([])
+  })
+
+  /**
+   * A mode moved mid-round lands on the next round, and so does what it costs:
+   * the console keeps playing the typed round in front of it and is unseated
+   * as the round it would have to judge opens.
+   */
+  it('[host-seat] keeps the seat through the round a buzzer switch was made in', async () => {
+    const { host } = await harness.openRoom(SEATED_CONSOLE_GAME, 'Marina')
+
+    host.send({ type: 'host.startRound' })
+    await waitFor(() => hostView(host)?.phase === 'playing', 'the clip')
+
+    host.send({
+      settings: { ...SEATED_CONSOLE_GAME, mode: DEFAULT_MODE_SETTINGS.buzzer },
+      type: 'host.updateSettings'
+    })
+    await waitFor(
+      () => hostView(host)?.settings.mode.kind === 'buzzer',
+      'the new mode'
+    )
+
+    expect(hostView(host)?.youId).not.toBeNull()
+
+    host.send({
+      roundId: hostView(host)?.round?.id ?? '',
+      type: 'host.reveal'
+    })
+    await waitFor(() => hostView(host)?.phase === 'revealed', 'the reveal')
+    host.send({ type: 'host.nextRound' })
+    await waitFor(
+      () => hostView(host)?.youId === null,
+      'the console to give the seat up'
+    )
+
+    expect(errorsIn(host)).toEqual([])
   })
 
   /**
