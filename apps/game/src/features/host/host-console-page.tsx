@@ -77,6 +77,7 @@ import { useRestoreStoredSetup } from './use-restore-stored-setup'
 import { useSlateWall } from './use-slate-wall'
 
 import './host-console-page.sass'
+import { Main } from '@/presentation/components/main'
 
 const storedHostPreferencesOrNone = (): HostPreferences | null => {
   const stored = readStoredHostPreferences()
@@ -311,7 +312,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
 
   if (status === 'refused') {
     return (
-      <main className='host-console-page'>
+      <Main className='host-console-page'>
         <RoomDocumentTitle game={view?.settings.game?.kind ?? null} />
         <div className='stage solo'>
           <HostRefused
@@ -321,7 +322,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
             onRetry={retry}
           />
         </div>
-      </main>
+      </Main>
     )
   }
 
@@ -329,7 +330,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
     const roundDurationMs = roundDurationMsOf(view.settings.game)
 
     return (
-      <main className='host-console-page framed'>
+      <Main className='host-console-page framed'>
         <RoomDocumentTitle game={view.settings.game?.kind ?? null} />
         <RoundChrome
           players={view.players}
@@ -366,12 +367,12 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
             view={view}
           />
         </div>
-      </main>
+      </Main>
     )
   }
 
   return (
-    <main className='host-console-page'>
+    <Main className='host-console-page'>
       <RoomDocumentTitle game={view?.settings.game?.kind ?? null} />
       <header>
         {view?.round != null && view.phase !== 'finished' && (
@@ -499,7 +500,7 @@ const HostConsole: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
           </>
         )}
       </footer>
-    </main>
+    </Main>
   )
 }
 

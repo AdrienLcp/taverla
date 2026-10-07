@@ -33,6 +33,7 @@ import { asRoomScreenView } from './wall-view'
 
 import '@/features/host/host-console-page.sass'
 import './wall-page.sass'
+import { Main } from '@/presentation/components/main'
 
 /**
  * Long enough for a lid closing and reopening, or a phone's screen locking and
@@ -100,7 +101,7 @@ const Wall: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
 
   if (isRefused) {
     return (
-      <main className='host-console-page wall-page'>
+      <Main className='host-console-page wall-page'>
         <RoomDocumentTitle game={view?.settings.game?.kind ?? null} />
         <div className='stage solo'>
           <ConnectionRefused error={error}>
@@ -111,12 +112,12 @@ const Wall: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
             )}
           </ConnectionRefused>
         </div>
-      </main>
+      </Main>
     )
   }
 
   return (
-    <main className='host-console-page wall-page'>
+    <Main className='host-console-page wall-page'>
       <RoomDocumentTitle game={view?.settings.game?.kind ?? null} />
       <header>
         {view?.round != null && view.phase !== 'finished' && (
@@ -168,6 +169,6 @@ const Wall: React.FC<{ roomCode: RoomCode }> = ({ roomCode }) => {
         slateWall={slateWall}
         view={view}
       />
-    </main>
+    </Main>
   )
 }

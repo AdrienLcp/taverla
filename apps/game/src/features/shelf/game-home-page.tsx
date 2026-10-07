@@ -14,6 +14,7 @@ import {
 } from '@/presentation/i18n/translation'
 
 import './game-home-page.sass'
+import { Main } from '@/presentation/components/main'
 
 /**
  * A game's own front door, and a shortcut rather than the way in: the room is
@@ -42,7 +43,7 @@ const GameHome: React.FC<{ game: ShelvedGame }> = ({ game }) => {
   const { isOpening, open, refusal } = useCreateRoom()
 
   return (
-    <main className='game-home-page'>
+    <Main className='game-home-page'>
       <DocumentTitle>{PAGE_HEADS[locale][game].title}</DocumentTitle>
       <section className='lid' style={lidStyle(game)}>
         <span aria-hidden='true' className='band' />
@@ -68,7 +69,7 @@ const GameHome: React.FC<{ game: ShelvedGame }> = ({ game }) => {
           )}
         </div>
       </section>
-    </main>
+    </Main>
   )
 }
 

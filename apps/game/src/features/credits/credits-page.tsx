@@ -7,6 +7,7 @@ import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
 import type { PlainTranslationKey } from '@/presentation/i18n/translation'
 
 import './credits-page.sass'
+import { Main } from '@/presentation/components/main'
 
 /**
  * The licences the bundled banks are published under, which are not all the
@@ -109,7 +110,7 @@ export const CreditsPage: React.FC = () => {
   const translate = useTranslate()
 
   return (
-    <main className='credits-page'>
+    <Main className='credits-page'>
       <DocumentTitle>{PAGE_HEADS[locale].credits.title}</DocumentTitle>
       <header>
         <h1>{translate('credits.title')}</h1>
@@ -146,6 +147,6 @@ export const CreditsPage: React.FC = () => {
       <Link href={homePathFor(locale)} variant='outlined'>
         {translate('navigation.back')}
       </Link>
-    </main>
+    </Main>
   )
 }

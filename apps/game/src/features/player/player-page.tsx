@@ -38,6 +38,7 @@ import { PlayerRound } from './player-round'
 import { RoundClock } from './round-clock'
 
 import './player-page.sass'
+import { Main } from '@/presentation/components/main'
 
 export const PlayerPage: React.FC = () => {
   const roomCode = useRoomCodeParam()
@@ -172,7 +173,7 @@ const NicknameForm: React.FC<{
   }
 
   return (
-    <main className='player-page nickname-form'>
+    <Main className='player-page nickname-form'>
       <div className='lid'>
         <header>
           <h1>{translate('player.nickname.title')}</h1>
@@ -202,7 +203,7 @@ const NicknameForm: React.FC<{
           </Button>
         </Form>
       </div>
-    </main>
+    </Main>
   )
 }
 
@@ -225,15 +226,15 @@ const Lobby: React.FC<{
 
   if (status === 'refused') {
     return (
-      <main className='player-page'>
+      <Main className='player-page'>
         <ConnectionRefused error={error} />
-      </main>
+      </Main>
     )
   }
 
   if (view !== null && isFramed(view)) {
     return (
-      <main className='player-page playing framed'>
+      <Main className='player-page playing framed'>
         <RoundChrome
           players={view.players}
           roundCount={view.settings.roundCount}
@@ -254,12 +255,12 @@ const Lobby: React.FC<{
           }
           view={view}
         />
-      </main>
+      </Main>
     )
   }
 
   return (
-    <main className='player-page playing'>
+    <Main className='player-page playing'>
       {view === null ? (
         <p className='waiting'>{translate('player.seating')}</p>
       ) : (
@@ -290,7 +291,7 @@ const Lobby: React.FC<{
           />
         </>
       )}
-    </main>
+    </Main>
   )
 }
 

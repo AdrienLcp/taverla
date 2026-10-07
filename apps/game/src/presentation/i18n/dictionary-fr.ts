@@ -400,7 +400,8 @@ export const FR_DICTIONARY = defineDictionary({
     }
   },
   navigation: {
-    back: 'Retour aux jeux'
+    back: 'Retour aux jeux',
+    skipToContent: 'Aller au contenu'
   },
   notFound: {
     description: 'La partie est finie, ou le code a été mal tapé.',

@@ -9,6 +9,7 @@ import { Link } from '@/presentation/components/link'
 import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import './error-screen.sass'
+import { Main } from '@/presentation/components/main'
 
 /**
  * The root route's boundary, so anything that throws below it — a render, a
@@ -31,7 +32,7 @@ export const ErrorScreen: React.FC = () => {
   reportUnrenderedError(error)
 
   return (
-    <main className='error-screen'>
+    <Main className='error-screen'>
       <h1>{translate('error.screen.title')}</h1>
       <p>{translate('error.screen.description')}</p>
       <div className='ways-out'>
@@ -42,6 +43,6 @@ export const ErrorScreen: React.FC = () => {
           {translate('menu.home')}
         </Link>
       </div>
-    </main>
+    </Main>
   )
 }

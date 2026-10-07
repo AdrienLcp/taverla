@@ -18,6 +18,7 @@ import { usePhaseField } from '@/presentation/theme/use-phase-field'
 import { useIdleChrome } from '@/presentation/use-idle-chrome'
 
 import './wall-pairing-page.sass'
+import { Main } from '@/presentation/components/main'
 
 /**
  * Often enough that the wall changes while the host is still looking up from
@@ -147,18 +148,18 @@ const PairingScreen: React.FC<{ onStale: () => void }> = ({ onStale }) => {
 
   if (pairing.status === 'failed') {
     return (
-      <main className='wall-pairing-page failed'>
+      <Main className='wall-pairing-page failed'>
         <DocumentTitle>{translate('wall.pairing.documentTitle')}</DocumentTitle>
         <h1>{translate('wall.pairing.failed')}</h1>
         <Button onPress={onStale} variant='outlined'>
           {translate('wall.pairing.retry')}
         </Button>
-      </main>
+      </Main>
     )
   }
 
   return (
-    <main className='wall-pairing-page'>
+    <Main className='wall-pairing-page'>
       <DocumentTitle>{translate('wall.pairing.documentTitle')}</DocumentTitle>
       <h1>{translate('wall.pairing.title')}</h1>
       {pairing.status === 'waiting' && (
@@ -169,6 +170,6 @@ const PairingScreen: React.FC<{ onStale: () => void }> = ({ onStale }) => {
           url={pairWallUrlFor(pairing.pairingCode)}
         />
       )}
-    </main>
+    </Main>
   )
 }

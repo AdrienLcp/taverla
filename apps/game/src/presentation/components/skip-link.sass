@@ -1,0 +1,21 @@
+@use '../styles/focus'
+@use '../styles/piece'
+@use '../styles/typography'
+
+@layer components
+  .skip-link
+    @include focus.ring
+    @include piece.card(var(--radius-s))
+    @include typography.label
+
+    color: var(--card-ink)
+    inset-block-start: var(--layout-padding-block-start)
+    inset-inline-start: var(--layout-padding-inline-start)
+    padding: var(--space-s) var(--space-m)
+    position: fixed
+    text-decoration: none
+    translate: 0 calc(-100% - var(--layout-padding-block-start) - var(--space-l))
+    z-index: 2
+
+    &:focus-visible
+      translate: none

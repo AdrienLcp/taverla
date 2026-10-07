@@ -231,6 +231,9 @@ export const useIsCurrentPath = (path: string): boolean => {
   return withoutTrailingSlash(pathname) === withoutTrailingSlash(path)
 }
 
+/** The path of the page being drawn, which changes on every navigation. */
+export const usePathname = (): string => useLocation().pathname
+
 const withoutTrailingSlash = (path: string): string =>
   path.length > 1 && path.endsWith('/') ? path.slice(0, -1) : path
 

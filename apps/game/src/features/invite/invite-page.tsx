@@ -14,6 +14,7 @@ import { usePhaseField } from '@/presentation/theme/use-phase-field'
 import { useIdleChrome } from '@/presentation/use-idle-chrome'
 
 import './invite-page.sass'
+import { Main } from '@/presentation/components/main'
 
 /**
  * The invitation on a screen with nothing else on it, for the machine wired to
@@ -88,21 +89,21 @@ export const InvitePage: React.FC = () => {
 
   if (!isWall) {
     return (
-      <main className='invite-page missing'>
+      <Main className='invite-page missing'>
         <DocumentTitle>{translate('invite.documentTitle')}</DocumentTitle>
         <h1>{translate('invite.unknown.title')}</h1>
         <p>{translate('invite.unknown.description')}</p>
         <Link href={homePathFor(locale)} variant='outlined'>
           {translate('navigation.back')}
         </Link>
-      </main>
+      </Main>
     )
   }
 
   return (
-    <main className='invite-page'>
+    <Main className='invite-page'>
       <DocumentTitle>{translate('invite.documentTitle')}</DocumentTitle>
       <RoomInvitation isUnattended roomCode={roomCode} />
-    </main>
+    </Main>
   )
 }

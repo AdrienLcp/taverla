@@ -11,6 +11,7 @@ import { HeldRooms } from './held-rooms'
 import { useCreateRoom } from './use-create-room'
 
 import './home-page.sass'
+import { Main } from '@/presentation/components/main'
 
 /**
  * The product's front door, and the one screen that belongs to no game: the
@@ -28,7 +29,7 @@ export const HomePage: React.FC = () => {
   const { isOpening, open, refusal } = createRoom
 
   return (
-    <main className='home-page'>
+    <Main className='home-page'>
       <DocumentTitle>{PAGE_HEADS[locale].home.title}</DocumentTitle>
 
       <div className='door-side'>
@@ -86,6 +87,6 @@ export const HomePage: React.FC = () => {
         <WallDoor />
         <ProjectWithCode />
       </div>
-    </main>
+    </Main>
   )
 }

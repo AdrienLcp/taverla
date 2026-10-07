@@ -445,7 +445,8 @@ export const EN_DICTIONARY = defineDictionary({
    * and one destination is named one way or the product has three fronts.
    */
   navigation: {
-    back: 'Back to the games'
+    back: 'Back to the games',
+    skipToContent: 'Skip to content'
   },
   notFound: {
     description: 'That game is over, or the code was mistyped.',

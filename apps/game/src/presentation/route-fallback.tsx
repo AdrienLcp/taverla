@@ -4,6 +4,7 @@ import { Loader } from '@/presentation/components/loader'
 import { useTranslate } from '@/presentation/i18n/i18n-provider'
 
 import './route-fallback.sass'
+import { Main } from '@/presentation/components/main'
 
 /**
  * Named, because the build-time prerender refuses to write a document carrying
@@ -24,8 +25,8 @@ export const RouteFallback: React.FC = () => {
   const translate = useTranslate()
 
   return (
-    <main className={ROUTE_FALLBACK_CLASS}>
+    <Main className={ROUTE_FALLBACK_CLASS}>
       <Loader label={translate('loading')} />
-    </main>
+    </Main>
   )
 }

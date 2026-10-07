@@ -20,6 +20,7 @@ import { useI18n, useTranslate } from '@/presentation/i18n/i18n-provider'
 import { usePhaseField } from '@/presentation/theme/use-phase-field'
 
 import './pair-wall-page.sass'
+import { Main } from '@/presentation/components/main'
 
 type Pairing =
   | { status: 'failed' }
@@ -66,7 +67,7 @@ export const PairWallPage: React.FC = () => {
 
   if (pairing.status === 'paired') {
     return (
-      <main className='pair-wall-page'>
+      <Main className='pair-wall-page'>
         <DocumentTitle>{translate('wall.pair.documentTitle')}</DocumentTitle>
         <h1>{translate('wall.pair.done')}</h1>
         <Link
@@ -76,25 +77,25 @@ export const PairWallPage: React.FC = () => {
         >
           {translate('wall.pair.backToTable')}
         </Link>
-      </main>
+      </Main>
     )
   }
 
   if (pairingCode === null || hosted.length === 0) {
     return (
-      <main className='pair-wall-page'>
+      <Main className='pair-wall-page'>
         <DocumentTitle>{translate('wall.pair.documentTitle')}</DocumentTitle>
         <h1>{translate('wall.pair.nothingHeld.title')}</h1>
         <p>{translate('wall.pair.nothingHeld.description')}</p>
         <Link href={homePathFor(locale)} variant='outlined'>
           {translate('navigation.back')}
         </Link>
-      </main>
+      </Main>
     )
   }
 
   return (
-    <main className='pair-wall-page'>
+    <Main className='pair-wall-page'>
       <DocumentTitle>{translate('wall.pair.documentTitle')}</DocumentTitle>
       <h1>{translate('wall.pair.title')}</h1>
       <p>{translate('wall.pair.description', { code: pairingCode })}</p>
@@ -120,6 +121,6 @@ export const PairWallPage: React.FC = () => {
           {translate('wall.pair.failed')}
         </p>
       )}
-    </main>
+    </Main>
   )
 }
