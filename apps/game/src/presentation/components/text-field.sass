@@ -1,5 +1,6 @@
 @use '../styles/focus'
 @use '../styles/typography'
+@use '@adrienlcp/styles/text-box'
 
 @layer components
   .text-field
@@ -27,7 +28,7 @@
       background: var(--card)
       border: 0
       border-radius: var(--radius-m)
-      box-shadow: inset 0 2px 5px -1px var(--shadow), inset 0 0 0 var(--stroke-thin) var(--edge)
+      box-shadow: inset 0 2px 5px -1px var(--shadow), inset 0 0 0 var(--stroke-thin) var(--rule-strong)
       color: var(--card-ink)
       min-height: var(--control-height)
       padding: 0 var(--space-s)
@@ -47,12 +48,11 @@
       color: var(--ink-muted)
 
     .react-aria-FieldError
-      @include typography.caption
+      @include typography.caption-strong
 
       align-self: flex-start
       background: var(--danger)
       color: var(--danger-ink)
-      font-weight: 700
       padding: var(--space-2xs) var(--space-xs)
 
-      @include typography.trimmed-block(var(--space-2xs))
+      @include text-box.trimmed-block(var(--space-2xs))

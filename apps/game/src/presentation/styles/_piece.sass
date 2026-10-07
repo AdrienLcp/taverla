@@ -14,7 +14,7 @@
   border-radius: $radius
   box-shadow: 0 3px 0 0 var(--chipboard), 0 8px 14px -6px var(--shadow)
   position: relative
-  transition: transform var(--transition-fast, 0) var(--timing, ease), box-shadow var(--transition-fast, 0) var(--timing, ease)
+  transition: transform var(--transition-fast, 0s) var(--timing, ease), box-shadow var(--transition-fast, 0s) var(--timing, ease)
 
   @if $nubs
     &::before,
@@ -23,7 +23,7 @@
       content: ''
       height: 3px
       inset-inline-start: 50%
-      margin-inline-start: -5px
+      translate: -50%
       position: absolute
       width: 10px
 

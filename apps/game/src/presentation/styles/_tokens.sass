@@ -15,10 +15,13 @@
 // pieces, and a card does not change colour when the lights go down — so the
 // ink on them is the same in both.
 
+@use '@adrienlcp/styles/tokens'
 @use 'layout'
 
 @layer tokens
   \:root
+    @include tokens.defaults
+
     // The printed board everything is laid on.
     --board: light-dark(oklch(92.5% 0.028 218), oklch(29% 0.04 226))
     --board-ink: light-dark(oklch(24% 0.035 250), oklch(95% 0.012 230))
@@ -92,7 +95,6 @@
     --primary: oklch(55% 0.19 30)
     --primary-edge: oklch(40% 0.14 30)
     --on-primary: oklch(99% 0.005 95)
-    --focus: light-dark(oklch(50% 0.2 262), oklch(82% 0.13 88))
     --good: oklch(52% 0.13 155)
     --good-edge: oklch(38% 0.1 155)
     --good-soft: light-dark(oklch(86% 0.09 155), oklch(75% 0.11 155))
@@ -104,7 +106,6 @@
 
     // The weight of a printed line: a fine separator, the board's own rule and
     // a keyline, a piece's ink outline. Colour and style stay where it is drawn.
-    --stroke-hair: 1px
     --stroke-thin: 2px
     --stroke-bold: 3px
 
@@ -114,17 +115,24 @@
     --radius-l: 18px
     --radius-full: 999px
 
-    --space-2xs: 4px
-    --space-xs: 8px
-    --space-s: 12px
-    --space-m: 20px
-    --space-l: 32px
-    --space-xl: 48px
-    --space-2xl: 72px
+    --space-2xs: 0.25rem
+    --space-xs: 0.5rem
+    --space-s: 0.75rem
+    --space-m: 1.25rem
+    --space-l: 2rem
+    --space-xl: 3rem
+    --space-2xl: 4.5rem
 
-    // The smallest a press may aim at, and the height a control is drawn at.
-    --control-touch: 44px
-    --control-height: 52px
+    // The game is read from the sofa as well as in the hand, so its stage grows
+    // with the shorter side of the screen, through this one unit.
+    --stage-unit: 1vmin
+
+    --space-stage-split: clamp(var(--space-l), calc(var(--stage-unit) * 5), var(--space-2xl))
+    --space-stage-rows: clamp(var(--space-xs), calc(var(--stage-unit) * 2), var(--space-m))
+    --space-framed: clamp(var(--space-xs), calc(var(--stage-unit) * 1.6), var(--space-s))
+
+    // The height a control is drawn at, above the `--target` it must reach.
+    --control-height: 3.25rem
 
     // A size set on its own, outside a `_typography.sass` register: a control
     // held to a constant width, a glyph beside a label, the menu's room code.
@@ -133,6 +141,9 @@
     --text-s: 1rem
     --text-m: 1.25rem
     --text-l: 1.5rem
+    // The smallest a question, a choice or a fitted board is drawn, whatever
+    // its box: `e2e/choice-fits.spec.ts` holds every word to it.
+    --text-floor: 0.875rem
 
     --transition-fast: 140ms
     --transition-base: 260ms
@@ -143,7 +154,7 @@
     --font-display: 'Bricolage Grotesque', 'Atkinson Hyperlegible Next', system-ui, sans-serif
     --font-base: 'Atkinson Hyperlegible Next', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif
 
-    --layout-padding: clamp(16px, 4vmin, 56px)
+    --layout-padding: clamp(1rem, calc(var(--stage-unit) * 4), 3.5rem)
 
     // The same padding per side, because `viewport-fit=cover` in `index.html`
     // lays the page out under the sensor housing, the rounded corners and the
@@ -162,12 +173,23 @@
     // The top and bottom of a screen held to the viewport, tighter than a page's
     // because every pixel of it is taken from the four tiles. The menu reads it
     // too, so its trigger stays on that screen's chrome line.
-    --framed-padding-block-start: max(clamp(8px, 2vmin, 16px), env(safe-area-inset-top, 0px))
-    --framed-padding-block-end: max(clamp(8px, 2vmin, 16px), env(safe-area-max-inset-bottom, env(safe-area-inset-bottom, 0px)))
+    --framed-padding-block-start: max(clamp(var(--space-xs), calc(var(--stage-unit) * 2), 1rem), env(safe-area-inset-top, 0px))
+    --framed-padding-block-end: max(clamp(var(--space-xs), calc(var(--stage-unit) * 2), 1rem), env(safe-area-max-inset-bottom, env(safe-area-inset-bottom, 0px)))
 
-    --stage-max-width: 1800px
-    --column-max-width: 620px
+    --stage-max-width: 112.5rem
+    --column-max-width: 38.75rem
     --column-wide-max-width: #{layout.$wide-screen}
+
+    --measure: 60ch
+    --measure-door-headline: 15ch
+    --measure-door-pitch: 32ch
+    --measure-game-headline: 18ch
+    --measure-game-pitch: 46ch
+    --measure-tagline: 21ch
+    --measure-note: 40ch
+    --measure-error: 42ch
+    --measure-hint: 28ch
+    --measure-slate-index: 12ch
 
     // The pair every component reads. The board is the ground on every screen
     // at every phase: the phase is said by `--phase-ink` on the round's own
@@ -175,10 +197,10 @@
     --field: var(--board)
     --ink: var(--board-ink)
     --ink-muted: var(--board-muted)
-    // `--rule` separates two regions and owes nothing; `--edge` is a control's
-    // own boundary, which WCAG 1.4.11 asks 3:1 of.
+    // `--rule` separates two regions and owes nothing; `--rule-strong` is a
+    // control's own boundary, which WCAG 1.4.11 asks 3:1 of.
     --rule: color-mix(in oklab, var(--ink) 22%, var(--field))
-    --edge: color-mix(in oklab, var(--ink) 60%, var(--field))
+    --rule-strong: color-mix(in oklab, var(--ink) 60%, var(--field))
     --cut: var(--card)
     --cut-ink: var(--card-ink)
     // The rule between two regions, whole. Declared again wherever `--rule`

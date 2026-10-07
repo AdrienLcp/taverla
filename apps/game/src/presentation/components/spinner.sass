@@ -9,12 +9,6 @@
     margin-inline-start: var(--space-2xs)
     width: 0.8em
 
-  // Frozen it is still a ring with one heavier arc, which reads as an
-  // indicator rather than as nothing.
-  @media (prefers-reduced-motion: reduce)
-    .spinner
-      animation: none
-
 @keyframes spinner-turn
   to
     transform: rotate(1turn)

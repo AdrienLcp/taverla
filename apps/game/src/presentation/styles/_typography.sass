@@ -1,15 +1,13 @@
 // Pure module: mixins only, no top-level CSS. Safe to @use from any component.
 //
-// Two faces. Bricolage Grotesque, condensed, is what is printed on the box —
-// anything the room reads from across it, and every figure. Atkinson
-// Hyperlegible Next is everything read up close, and the default.
+// Every weight, leading and tracking the game sets lives here; a component
+// includes the voice and may set its own size. Why the registers grow with
+// `--stage-unit`, and what they were measured on, is in `apps/game/DESIGN.md`.
 
-/// The room code, the countdown, the revealed title. Sized in `vmin` rather
-/// than `vw` so a phone in portrait and a television in landscape both land on
-/// something readable, and capped so it stops growing on a projector.
+/// The room code, the countdown, the revealed title.
 @mixin monument
   font-family: var(--font-display)
-  font-size: clamp(3.5rem, 17vmin, 15rem)
+  font-size: clamp(3.5rem, calc(var(--stage-unit) * 17), 15rem)
   font-stretch: 80%
   font-variation-settings: 'opsz' 96
   font-weight: 800
@@ -19,74 +17,71 @@
 /// One step down: the track title at a reveal, the name of whoever buzzed.
 @mixin billboard
   font-family: var(--font-display)
-  font-size: clamp(1.75rem, 6vmin, 4.5rem)
+  font-size: clamp(1.75rem, calc(var(--stage-unit) * 6), 4.5rem)
   font-stretch: 85%
   font-variation-settings: 'opsz' 96
   font-weight: 800
-  letter-spacing: -0.02em
+  letter-spacing: var(--tracking-tight)
   line-height: 0.95
+
+/// A billboard line that may wrap: a notice's title, a written answer.
+@mixin billboard-wrapping
+  @include billboard
+
+  line-height: 1.1
+
+/// A revealed title, balanced over as many lines as it needs.
+@mixin billboard-revealed
+  @include billboard
+
+  line-height: 1.02
+
+/// A billboard line that may carry a French grave, which rises past 0.95.
+@mixin billboard-accented
+  @include billboard
+
+  line-height: 1.2
+
+/// The line under a revealed title — its artist — a weight lighter.
+@mixin billboard-light
+  @include billboard
+
+  font-weight: 600
 
 @mixin title
   font-family: var(--font-display)
-  font-size: clamp(1.25rem, 3vmin, 1.75rem)
+  font-size: clamp(1.25rem, calc(var(--stage-unit) * 3), 1.75rem)
   font-stretch: 90%
   font-weight: 700
   letter-spacing: -0.005em
   line-height: 1.05
 
-/// The three small registers below, and the reason they carry a viewport term
-/// at all: a player's column widens from 343px to 828px and the faces above
-/// them double over the same span, so a flat `rem` here is the phone screenshot
-/// enlarged that the `screen` mixin already refuses one level up. Measured on
-/// the player's lobby at 1440×900 — `blindtest.name` went 35px → 72 while
-/// the French `player.upNext` held 12, taking a ratio of 2.9 to 6.
-///
-/// The floors are today's phone values, so a viewport whose shorter side is
-/// under 750px renders exactly as it did. `vmin` for the reason every size in
-/// this file is: the same page is read at forty centimetres and at four metres.
-/// The ceilings land between vmin 875 and 900, which is where the column stops
-/// widening — the two grow together, and then both stop.
 @mixin body
-  font-size: clamp(1rem, 2vmin, 1.125rem)
+  font-size: clamp(1rem, calc(var(--stage-unit) * 2), 1.125rem)
   font-weight: 400
   line-height: 1.45
 
 @mixin caption
-  font-size: clamp(0.875rem, 1.8vmin, 1rem)
+  font-size: clamp(0.875rem, calc(var(--stage-unit) * 1.8), 1rem)
   font-weight: 500
   line-height: 1.35
 
-/// A painted block of short text — a stamp, a segment, an error — trimmed to
-/// its capitals and its baseline, so symmetric padding centres the ink rather
-/// than a line box carrying half-leading above and descender room below.
-///
-/// The padding grows by exactly what the trim takes off, so the block keeps the
-/// size it had and nothing measured against it moves; a browser without
-/// `text-box` gets the old padding and the old line. `1lh` and `1cap` are both
-/// older than `text-box` in every engine, so the one guard covers all three.
-/// The block must be a block container: in a flex container the text is an
-/// anonymous item, and the trim never reaches it.
-@mixin trimmed-block($padding-block)
-  @supports (text-box: trim-both cap alphabetic)
-    padding-block: calc(#{$padding-block} + (1lh - 1cap) / 2)
-    text-box: trim-both cap alphabetic
+/// A caption set bold: a strip's segment, a stamped error.
+@mixin caption-strong
+  @include caption
 
-/// A figure on a line of its own, trimmed to its cap height and its baseline:
-/// the leading above and below a numeral is a row of nothing, and every
-/// `line-height: 1` here was a hand-picked way of losing most of it. Kept as
-/// the fallback outside the guard, where `text-box` is above the build targets.
-///
-/// It shrinks the row it sits in, so a board whose type is sized by dividing a
-/// height budget by its rows takes a smaller divisor under the same guard —
-/// measured on the rendered rows, never derived.
-@mixin trimmed-numeral
-  @supports (text-box: trim-both cap alphabetic)
-    text-box: trim-both cap alphabetic
+  font-weight: 700
+
+/// A caption held to one row of a board.
+@mixin caption-row
+  @include caption
+
+  line-height: 1.2
 
 /// Sentence case and the read face: a grandparent reads a label too, and
 /// tracked capitals at twelve pixels are the hardest line on any screen.
 @mixin label
-  font-size: clamp(0.875rem, 1.7vmin, 1rem)
+  font-size: clamp(0.875rem, calc(var(--stage-unit) * 1.7), 1rem)
   font-weight: 700
   letter-spacing: 0.005em
 
@@ -96,3 +91,147 @@
   font-family: var(--font-display)
   font-variant-numeric: tabular-nums
   font-weight: 800
+
+/// The running score of a board, set heavier than the name beside it.
+@mixin score
+  @include numeric
+
+  font-stretch: 85%
+  font-weight: 900
+
+/// A word in a slate's tally — filling, marked, waiting — beside its figures.
+@mixin tally-word
+  @include numeric
+
+  font-weight: 600
+  line-height: 1.15
+
+/// A figure or a glyph set solid, its line box no taller than its size.
+@mixin solid
+  line-height: 1
+
+/// The inherited size and face, set bold.
+@mixin strong
+  font-weight: 700
+
+/// The inherited size and face, set regular.
+@mixin regular
+  font-weight: 400
+
+/// What somebody typed, set in the read face beside the display type around it.
+@mixin aside
+  font-family: var(--font-base)
+  font-stretch: normal
+  font-weight: 400
+
+@mixin heading
+  font-weight: 700
+  line-height: 1.1
+
+/// A short bold line under a figure: the code's caption, a spine's tagline.
+@mixin tagline
+  font-weight: 700
+  line-height: 1.2
+
+/// A bold sentence asking the room to do something.
+@mixin callout
+  font-weight: 700
+  line-height: 1.3
+
+/// A short description printed under a name.
+@mixin blurb
+  line-height: 1.25
+
+/// The question on its card, in the read face whatever surrounds it. The host's
+/// stage sets it a hair tighter, against four tiles sharing its height.
+@mixin question-prompt($line-height: 1.26)
+  font-family: var(--font-base)
+  font-stretch: normal
+  font-variation-settings: normal
+  font-weight: 700
+  letter-spacing: 0
+  line-height: $line-height
+
+/// An answer tile's text, whatever the button would otherwise inherit.
+@mixin answer
+  font: inherit
+  font-weight: 700
+  line-height: 1.18
+
+/// The room code at monument size, opened up so it reads letter by letter.
+@mixin room-code
+  @include monument
+
+  letter-spacing: 0.02em
+
+/// The room code at title size, in the menu, spaced to be read out.
+@mixin room-code-small
+  @include title
+
+  letter-spacing: 0.16em
+
+/// The time a lost connection has been waiting, beside its label.
+@mixin clock-reading
+  font-weight: 500
+  letter-spacing: 0.04em
+
+/// A game's name on its lid on the shelf.
+@mixin lid-name
+  font-family: var(--font-display)
+  font-stretch: 85%
+  font-weight: 800
+  line-height: 1
+
+/// A game's name on its spine.
+@mixin spine-name
+  font-family: var(--font-display)
+  font-stretch: 82%
+  font-weight: 800
+  letter-spacing: -0.01em
+  line-height: 1
+
+/// The word the reflex race holds up while the screen has not changed.
+@mixin poster-word
+  font-family: var(--font-display)
+  font-stretch: 80%
+  font-variation-settings: 'opsz' 96
+  font-weight: 800
+  letter-spacing: -0.01em
+  line-height: 0.95
+
+/// Taverla's own name on the front door.
+@mixin wordmark
+  font-family: var(--font-display)
+  font-stretch: 78%
+  font-variation-settings: 'opsz' 96
+  font-weight: 800
+  letter-spacing: -0.035em
+  line-height: 0.82
+
+/// A game's name on its own front door.
+@mixin game-wordmark
+  @include wordmark
+
+  letter-spacing: -0.03em
+  line-height: 0.86
+
+/// The promise under the wordmark on the front door.
+@mixin door-headline
+  font-family: var(--font-display)
+  font-weight: 700
+  letter-spacing: -0.015em
+  line-height: 1.02
+
+/// The promise under a game's own wordmark.
+@mixin game-door-headline
+  @include door-headline
+
+  line-height: 1.05
+
+/// The paragraph under a front door's headline.
+@mixin pitch
+  line-height: 1.38
+
+/// The paragraph under a game's front door headline.
+@mixin game-pitch
+  line-height: 1.4

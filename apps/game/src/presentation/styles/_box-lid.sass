@@ -7,7 +7,7 @@
 ///
 /// It re-points the board's inks at the paper's, so a component written for
 /// the board — a field, a heading, a hairline — prints correctly on the lid.
-/// `--rule`, `--edge` and `--hairline` are declared again here because a custom property is
+/// `--rule`, `--rule-strong` and `--hairline` are declared again here because a custom property is
 /// resolved where it is declared, and the root's mix was of the board.
 @mixin box-lid
   @include piece.card(var(--radius-l))
@@ -19,7 +19,7 @@
   --ink: var(--card-ink)
   --ink-muted: var(--card-muted)
   --rule: color-mix(in oklab, var(--card-ink) 22%, var(--card))
-  --edge: color-mix(in oklab, var(--card-ink) 60%, var(--card))
+  --rule-strong: color-mix(in oklab, var(--card-ink) 60%, var(--card))
   --hairline: var(--stroke-thin) solid var(--rule)
 
   position: relative

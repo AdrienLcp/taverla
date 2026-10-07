@@ -1,22 +1,21 @@
 @use '../styles/focus'
 @use '../styles/piece'
+@use '../styles/typography'
 
 @layer components
   .answer-tile
     @include focus.ring
     @include piece.piece
     @include piece.pressable
+    @include typography.answer
 
     align-items: center
     background: var(--tile)
     color: var(--tile-ink)
     cursor: pointer
     display: flex
-    font: inherit
-    font-weight: 700
     height: 100%
     hyphens: auto
-    line-height: 1.18
     overflow-wrap: anywhere
     padding: 0.35em 0.7em
     text-align: start
@@ -45,7 +44,8 @@
       text-wrap: pretty
 
     .subtitle
-      font-weight: 400
+      @include typography.regular
+
       margin-block-start: 0.15em
 
     // Spent rather than dead: the tile the player took stays in its ink and

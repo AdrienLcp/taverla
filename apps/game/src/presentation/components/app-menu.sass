@@ -1,5 +1,6 @@
 @use '../styles/focus'
 @use '../styles/typography'
+@use '@adrienlcp/styles/accessibility'
 
 @layer components
   .app-menu
@@ -13,7 +14,7 @@
     // clear of everything it is chrome for.
     inset-inline-end: max(var(--layout-padding-inline-end), calc(50% - var(--stage-max-width) / 2 + var(--layout-padding-inline-end)))
     position: fixed
-    transition: opacity var(--transition-base, 0) var(--timing, ease)
+    transition: opacity var(--transition-base, 0s) var(--timing, ease)
     z-index: 1
 
     :root:has(.player-page.framed, .host-console-page.framed) &
@@ -21,7 +22,7 @@
 
     // A screen of four tiles lying down gives the tiles the whole right-hand
     // column, so the menu moves to the start of the chrome over the question.
-    @media (min-aspect-ratio: 13 / 10)
+    @media (aspect-ratio >= 13 / 10)
       :root:has(.player-page.framed, .host-console-page.framed) &
         align-items: flex-start
         inset-inline: max(var(--layout-padding-inline-start), calc(50% - var(--stage-max-width) / 2 + var(--layout-padding-inline-start))) auto
@@ -49,12 +50,7 @@
     // trigger itself turns to the countdown's saffron with the dot pulsing in
     // it — the popover's first line spells the state out for whoever opens it.
     .alert
-      clip-path: inset(50%)
-      height: 1px
-      overflow: hidden
-      position: absolute
-      white-space: nowrap
-      width: 1px
+      @include accessibility.visually-hidden
 
     &[data-connection]:not([data-connection='open']) .trigger
       background: var(--spine-reflex)
@@ -76,7 +72,7 @@
       gap: var(--space-xs)
       min-height: var(--control-touch)
       padding: 0 var(--space-s)
-      transition: transform var(--transition-fast, 0) var(--timing, ease), box-shadow var(--transition-fast, 0) var(--timing, ease)
+      transition: transform var(--transition-fast, 0s) var(--timing, ease), box-shadow var(--transition-fast, 0s) var(--timing, ease)
 
       &[data-pressed]
         box-shadow: 0 0 0 var(--chipboard)
@@ -98,12 +94,7 @@
           display: block
 
         .trigger-label
-          clip-path: inset(50%)
-          height: 1px
-          overflow: hidden
-          position: absolute
-          white-space: nowrap
-          width: 1px
+          @include accessibility.visually-hidden
 
   // The rulebook leaflet: the board's own ground, so every control inside keeps
   // its tokens, on a piece with the box's edge.
@@ -127,7 +118,7 @@
     scrollbar-width: thin
 
     &[data-entering]
-      animation: popover-strike var(--transition-fast, 0) var(--timing, ease)
+      animation: popover-strike var(--transition-fast, 0s) var(--timing, ease)
 
     .react-aria-Dialog
       display: flex
@@ -226,10 +217,9 @@
       gap: var(--space-xs)
 
       .token
-        @include typography.title
+        @include typography.room-code-small
 
         font-size: var(--text-l)
-        letter-spacing: 0.16em
         text-align: center
         user-select: text
 

@@ -3,6 +3,7 @@
 /// `$wide-screen`, `wide` and `narrow`: where a screen stops being a phone's,
 /// and the source the wide-column token is derived from.
 @forward '@adrienlcp/styles/breakpoints'
+@forward '@adrienlcp/styles/containers'
 @use '@adrienlcp/styles/breakpoints'
 
 /// Where a front door has room to be a poster: display type down one side and
@@ -10,7 +11,7 @@
 /// size — it is the width at which a 72px headline still falls in three or four
 /// lines once the field is split, and below it the two columns are worse than
 /// one.
-$poster-screen: 1200px
+$poster-screen: 75rem
 
 /// Past `wide`, where a stage whose payload is a grid can afford a column
 /// beside it and still keep the grid five cards across. Between the two the
@@ -28,8 +29,7 @@ $poster-screen: 1200px
 /// the moving parts by design, and a screen that resettled on every snapshot
 /// would read as lag on a surface that is timing people.
 @mixin arriving
-  @media (prefers-reduced-motion: no-preference)
-    animation: page-enter var(--transition-base, 0) var(--timing, ease) both
+  animation: page-enter var(--transition-base, 0s) var(--timing, ease) both
 
 /// A narrow-first column. Used by every screen a player sees.
 ///

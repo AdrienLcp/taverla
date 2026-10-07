@@ -1,12 +1,12 @@
 @use '../styles/typography'
+@use '@adrienlcp/styles/text-box'
 
 @layer components
   .floor-clock
     @include typography.billboard
-    @include typography.trimmed-numeral
+    @include text-box.trimmed-figure
 
     font-variant-numeric: tabular-nums
-    line-height: 1
 
     // The two directions read differently on purpose: a window running out is
     // the room's pressure and takes the ink, where a floor nobody is timing is

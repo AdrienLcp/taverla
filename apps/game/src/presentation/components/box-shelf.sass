@@ -83,15 +83,13 @@
     // Above the name on a tile, beside it on a row: a fifth of the console is
     // narrower than "Blind test" with a glyph in front of it.
     .name
+      @include typography.lid-name
+
       align-items: start
       display: flex
       flex-direction: column
-      font-family: var(--font-display)
       font-size: clamp(1.25rem, 3.4cqi, 1.75rem)
-      font-stretch: 85%
-      font-weight: 800
       gap: var(--space-2xs)
-      line-height: 1
 
       @container (width < 30rem)
         align-items: center
@@ -100,9 +98,10 @@
         gap: var(--space-xs)
 
     .description
+      @include typography.blurb
+
       color: var(--card-muted)
       font-size: clamp(0.8125rem, 1.6cqi, 0.9375rem)
-      line-height: 1.25
       text-wrap: pretty
 
     .tick

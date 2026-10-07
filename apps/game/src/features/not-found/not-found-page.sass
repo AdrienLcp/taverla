@@ -12,7 +12,7 @@
     h1
       @include typography.monument
 
-      font-size: clamp(2.5rem, 11vmin, 6rem)
+      font-size: clamp(2.5rem, calc(var(--stage-unit) * 11), 6rem)
 
     p
       @include typography.title

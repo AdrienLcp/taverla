@@ -9,7 +9,7 @@
     &.slate-writing,
     &.slate-correcting
       display: grid
-      gap: clamp(var(--space-m), 3vmin, var(--space-xl))
+      gap: clamp(var(--space-m), calc(var(--stage-unit) * 3), var(--space-xl))
       grid-template-columns: minmax(0, 1fr)
 
     // Above the split the console page makes the stage a size container
@@ -110,9 +110,9 @@
     .label
       @include typography.monument
       @include typography.numeric
+      @include typography.solid
 
       font-size: clamp(1.25rem, min(44cqh, 52cqi), 4.25rem)
-      line-height: 1
       max-inline-size: 100%
       overflow: hidden
       text-overflow: ellipsis
@@ -126,18 +126,15 @@
         font-size: clamp(0.875rem, min(19cqh, 15cqi), 1.75rem)
         -webkit-line-clamp: 2
         line-clamp: 2
-        line-height: 1.05
         overflow-wrap: anywhere
         white-space: normal
 
     .filling,
     .state,
     .verb
-      @include typography.numeric
+      @include typography.tally-word
 
       font-size: clamp(0.75rem, min(13cqh, 11cqi), 1.125rem)
-      font-weight: 600
-      line-height: 1.15
       max-inline-size: 100%
       overflow: hidden
       text-overflow: ellipsis
@@ -256,7 +253,7 @@
         overflow-y: auto
 
         li
-          font-size: clamp(14px, calc(100cqh / var(--sheets, 8) / 2.35), 1.5rem)
+          font-size: clamp(var(--text-floor), calc(100cqh / var(--sheets, 8) / 2.35), 1.5rem)
 
   .slate-correcting
     .marking
@@ -297,9 +294,9 @@
       .token-label
         @include typography.monument
         @include typography.numeric
+        @include typography.solid
 
         font-size: calc(var(--token-size) * 0.5)
-        line-height: 1
         max-inline-size: 100%
         overflow: hidden
         text-overflow: ellipsis
@@ -313,7 +310,6 @@
         font-size: calc(var(--token-size) * 0.17)
         -webkit-line-clamp: 3
         line-clamp: 3
-        line-height: 1.05
         overflow-wrap: anywhere
         text-align: center
         white-space: normal
@@ -344,8 +340,7 @@
       gap: var(--space-2xs)
       padding: clamp(var(--space-xs), 2.4cqh, var(--space-m)) clamp(var(--space-s), 3cqi, var(--space-l))
 
-      @media (prefers-reduced-motion: no-preference)
-        animation: key-stamp 280ms cubic-bezier(0.16, 1, 0.3, 1)
+      animation: key-stamp 280ms var(--timing, ease)
 
     .key-title
       @include typography.label
@@ -373,7 +368,7 @@
         padding-block-end: var(--space-2xs)
 
         .group
-          font-size: clamp(14px, calc((100cqh - (var(--groups, 1) - 1) * var(--space-xs)) / var(--groups, 1) / 2.85), 2.75rem)
+          font-size: clamp(var(--text-floor), calc((100cqh - (var(--groups, 1) - 1) * var(--space-xs)) / var(--groups, 1) / 2.85), 2.75rem)
 
     // One chip per distinct answer, in the reveal's vocabulary: paper while
     // it waits on the host, the reveal's green once it is right, and an empty
@@ -405,7 +400,7 @@
         justify-content: start
 
         .writers
-          font-size: max(14px, 0.6em)
+          font-size: max(var(--text-floor), 0.6em)
 
       .said
         display: flex
@@ -415,10 +410,9 @@
         min-width: 0
 
       .text
-        @include typography.billboard
+        @include typography.billboard-wrapping
 
         font-size: 1em
-        line-height: 1.1
         overflow: hidden
         text-overflow: ellipsis
         white-space: nowrap
@@ -426,7 +420,7 @@
       .writers
         align-items: center
         display: flex
-        font-size: max(14px, 0.5em)
+        font-size: max(var(--text-floor), 0.5em)
         gap: 0.5em
         min-width: 0
 

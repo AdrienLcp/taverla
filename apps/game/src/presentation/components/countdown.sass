@@ -8,7 +8,7 @@
   .countdown
     @include piece.card(50%)
 
-    --token-size: clamp(8rem, 56vmin, 30rem)
+    --token-size: clamp(8rem, calc(var(--stage-unit) * 56), 30rem)
 
     aspect-ratio: 1
     display: grid
@@ -19,16 +19,13 @@
     .numeral
       @include typography.monument
       @include typography.numeric
+      @include typography.solid
 
+      // The one authored moment of the product: each second is struck onto the
+      // token oversize and settles into place. The numeral re-keys on the
+      // value, so the strike restarts on every tick while the token stays put.
+      animation: countdown-strike 900ms var(--timing, ease) both
       font-size: calc(var(--token-size) * 0.66)
-      line-height: 1
-
-    // The one authored moment of the product: each second is struck onto the
-    // token oversize and settles into place. The numeral re-keys on the value,
-    // so the strike restarts on every tick while the token stays put.
-    @media (prefers-reduced-motion: no-preference)
-      .numeral
-        animation: countdown-strike 900ms var(--timing, ease) both
 
 @keyframes countdown-strike
   from

@@ -1,5 +1,6 @@
 @use '../../presentation/styles/question-card'
 @use '../../presentation/styles/typography'
+@use '@adrienlcp/styles/accessibility'
 
 @layer components
   // A question card and four tiles in a box that never scrolls. Every size here
@@ -47,7 +48,7 @@
         min-height: 0
 
       .answer-tile
-        font-size: clamp(14px, calc(var(--choice-k) / sqrt(var(--choice-length, 20))), var(--choice-cap))
+        font-size: clamp(var(--text-floor), calc(var(--choice-k) / sqrt(var(--choice-length, 20))), var(--choice-cap))
 
       .status
         @include typography.caption
@@ -60,15 +61,10 @@
         // A short screen spends its last line on the tiles. The line is still
         // read out, and what it says is on the tiles themselves once one is
         // taken: the pick stays inked and the other three go flat.
-        @media (max-height: 600px)
-          clip-path: inset(50%)
-          height: 1px
-          overflow: hidden
-          position: absolute
-          white-space: nowrap
-          width: 1px
+        @media (height <= 37.5rem)
+          @include accessibility.visually-hidden
 
-    @media (min-width: 560px) and (max-aspect-ratio: 13 / 10)
+    @media (width >= 35rem) and (aspect-ratio <= 13 / 10)
       &:not([data-long-choices]) .answer-form.choices ul
         grid-template-columns: 1fr 1fr
         grid-template-rows: repeat(2, minmax(min-content, 1fr))
@@ -76,7 +72,7 @@
     // Lying down: the question beside the tiles, placed by the page's grid.
     // Sized from the box's height first, because that is the side that runs
     // out.
-    @media (min-aspect-ratio: 13 / 10)
+    @media (aspect-ratio >= 13 / 10)
       --question-k: min(31cqi, 66cqh)
       --question-cap: min(3.6cqi, 7.4cqh)
       --choice-k: min(15cqi, 32cqh)

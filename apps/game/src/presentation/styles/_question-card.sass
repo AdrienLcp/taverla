@@ -1,6 +1,7 @@
 // Pure module: mixins only, no top-level CSS.
 
 @use 'piece'
+@use 'typography'
 
 /// The question printed on a paper card, sized by the square root of its length
 /// between a 14px floor and `--question-cap`, with `--question-k` the share of
@@ -21,21 +22,17 @@
   width: auto
 
   .prompt
-    font-family: var(--font-base)
-    font-size: clamp(14px, min(var(--question-k) / sqrt(var(--prompt-length, 60)), var(--question-cap) * var(--question-yield, 1)), var(--question-cap))
-    font-stretch: normal
-    font-variation-settings: normal
-    font-weight: 700
-    letter-spacing: 0
-    line-height: 1.26
+    @include typography.question-prompt
+
+    font-size: clamp(var(--text-floor), min(var(--question-k) / sqrt(var(--prompt-length, 60)), var(--question-cap) * var(--question-yield, 1)), var(--question-cap))
     text-wrap: pretty
 
   .category
     color: var(--tile-mark-3)
-    font-size: clamp(13px, 2.4cqmin, 16px)
+    font-size: clamp(var(--text-xs), 2.4cqmin, 1rem)
     order: -1
 
 /// Where the round's clock lies on a question card: inside its top padding,
 /// clear of the corners, on every surface that lays one over a card.
 @mixin clock-margin
-  margin: clamp(var(--space-xs), 1.6vmin, var(--space-s)) clamp(var(--space-s), 3.4cqmin, var(--space-m)) 0
+  margin: var(--space-framed) clamp(var(--space-s), 3.4cqmin, var(--space-m)) 0

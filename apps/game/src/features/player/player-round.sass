@@ -4,6 +4,7 @@
 @use '../../presentation/styles/question-card'
 @use '../../presentation/styles/seat-grid'
 @use '../../presentation/styles/typography'
+@use '@adrienlcp/styles/text-box'
 
 @layer components
   .player-round
@@ -41,15 +42,14 @@
     flex-direction: column
     gap: var(--space-s)
     max-width: 30rem
-    padding: clamp(var(--space-m), 6vmin, var(--space-xl)) clamp(var(--space-m), 6vmin, var(--space-xl))
+    padding: clamp(var(--space-m), calc(var(--stage-unit) * 6), var(--space-xl)) clamp(var(--space-m), calc(var(--stage-unit) * 6), var(--space-xl))
     text-align: center
     width: 100%
 
     .notice-title
-      @include typography.billboard
+      @include typography.billboard-wrapping
 
-      font-size: clamp(1.75rem, 7vmin, 3rem)
-      line-height: 1.1
+      font-size: clamp(1.75rem, calc(var(--stage-unit) * 7), 3rem)
       overflow-wrap: anywhere
       text-wrap: balance
 
@@ -65,13 +65,13 @@
   .up-next
     @include piece.card
 
-    --band: clamp(10px, 2.2vmin, 16px)
+    --band: clamp(10px, calc(var(--stage-unit) * 2.2), 16px)
 
     background: linear-gradient(var(--spine, var(--card-muted)) 0 var(--band), var(--card) var(--band))
     display: flex
     flex-direction: column
     gap: var(--space-s)
-    padding: calc(var(--band) + clamp(var(--space-s), 4vmin, var(--space-l))) clamp(var(--space-m), 4.4vmin, var(--space-l)) clamp(var(--space-m), 4vmin, var(--space-l))
+    padding: calc(var(--band) + clamp(var(--space-s), calc(var(--stage-unit) * 4), var(--space-l))) clamp(var(--space-m), calc(var(--stage-unit) * 4.4), var(--space-l)) clamp(var(--space-m), calc(var(--stage-unit) * 4), var(--space-l))
 
     &[data-game='blindtest']
       --spine: var(--spine-blindtest)
@@ -91,33 +91,33 @@
     .game-name
       @include typography.monument
 
-      font-size: clamp(2.5rem, 12vmin, 5rem)
+      font-size: clamp(2.5rem, calc(var(--stage-unit) * 12), 5rem)
       overflow-wrap: anywhere
 
     .how-it-scores
       @include typography.body
 
       color: var(--card-muted)
-      max-width: 40ch
+      max-width: var(--measure-note)
       text-wrap: pretty
 
     &.undecided
       background: var(--socket)
       box-shadow: inset 0 3px 8px -2px var(--shadow), inset 0 0 0 var(--stroke-thin) var(--socket-line)
       color: var(--board-muted)
-      padding: clamp(var(--space-m), 5vmin, var(--space-l))
+      padding: clamp(var(--space-m), calc(var(--stage-unit) * 5), var(--space-l))
 
       .game-name
         @include typography.title
 
-        font-size: clamp(1.25rem, 4vmin, 1.75rem)
+        font-size: clamp(1.25rem, calc(var(--stage-unit) * 4), 1.75rem)
         text-wrap: balance
 
   // The invitation sized for the column it is given rather than the console's
   // screen: four `W` in the display face come to 4.78 times their size.
   .player-round.lobby
     .room-invitation
-      --invitation-code-size: min(clamp(2.5rem, 12vmin, 5rem), 20cqi)
+      --invitation-code-size: min(clamp(2.5rem, calc(var(--stage-unit) * 12), 5rem), 20cqi)
 
     .table
       container-type: inline-size
@@ -191,8 +191,7 @@
 
       // The strike belongs to the thing the round pays out, never the screen
       // it arrived on: a whole-screen settle under a press reads as a reflow.
-      @media (prefers-reduced-motion: no-preference)
-        animation: card-strike var(--transition-slow, 0) var(--timing, ease) both
+      animation: card-strike var(--transition-slow, 0s) var(--timing, ease) both
 
     .hold:empty
       display: none
@@ -248,8 +247,8 @@
     align-items: center
     display: flex
     flex-wrap: wrap
-    gap: clamp(var(--space-s), 3vmin, var(--space-m))
-    padding: clamp(var(--space-s), 4vmin, var(--space-l)) clamp(var(--space-m), 4.4vmin, var(--space-l))
+    gap: clamp(var(--space-s), calc(var(--stage-unit) * 3), var(--space-m))
+    padding: clamp(var(--space-s), calc(var(--stage-unit) * 4), var(--space-l)) clamp(var(--space-m), calc(var(--stage-unit) * 4.4), var(--space-l))
 
     // Deezer serves covers at 250px and nothing larger, so it stays well
     // under; pasted onto the paper with the shallow edge a print has.
@@ -257,9 +256,9 @@
       border-radius: var(--radius-s)
       box-shadow: 0 0 0 1px var(--card-rule), 0 6px 12px -8px var(--shadow)
       flex: none
-      height: clamp(96px, 22vmin, 160px)
+      height: clamp(96px, calc(var(--stage-unit) * 22), 160px)
       object-fit: cover
-      width: clamp(96px, 22vmin, 160px)
+      width: clamp(96px, calc(var(--stage-unit) * 22), 160px)
 
     // A container of its own, because the answer is measured against this
     // column and not the one the cover shares with it. `116cqi` over the
@@ -274,10 +273,9 @@
       min-width: 0
 
     .revealed-title
-      @include typography.billboard
+      @include typography.billboard-revealed
 
-      font-size: clamp(2rem, min(10vmin, calc(240cqi / var(--answer-length, 10)), calc(116cqi / var(--longest-word-width, 10))), 5rem)
-      line-height: 1.02
+      font-size: clamp(2rem, min(calc(var(--stage-unit) * 10), calc(240cqi / var(--answer-length, 10)), calc(116cqi / var(--longest-word-width, 10))), 5rem)
       overflow-wrap: anywhere
       text-wrap: balance
 
@@ -300,13 +298,13 @@
   .your-round
     align-items: center
     display: flex
-    gap: clamp(var(--space-s), 3vmin, var(--space-m))
+    gap: clamp(var(--space-s), calc(var(--stage-unit) * 3), var(--space-m))
 
     .payout
       @include typography.monument
       @include typography.numeric
 
-      --token: clamp(4.5rem, 17vmin, 6.5rem)
+      --token: clamp(4.5rem, calc(var(--stage-unit) * 17), 6.5rem)
 
       align-items: center
       aspect-ratio: 1
@@ -315,7 +313,6 @@
       flex: none
       font-size: calc(var(--token) * 0.42)
       justify-items: center
-      line-height: 1
       width: var(--token)
 
     &.scored .payout
@@ -353,21 +350,21 @@
 
     .your-placing
       align-items: end
-      column-gap: clamp(var(--space-s), 4vmin, var(--space-l))
+      column-gap: clamp(var(--space-s), calc(var(--stage-unit) * 4), var(--space-l))
       display: grid
       grid-template: 'pawn rank' auto 'pawn total' auto / auto 1fr
       padding-block: var(--space-s)
 
       .pawn
         filter: drop-shadow(0 4px 0 var(--chipboard-dark))
-        font-size: clamp(4.5rem, 20vmin, 9rem)
+        font-size: clamp(4.5rem, calc(var(--stage-unit) * 20), 9rem)
         grid-area: pawn
 
       .your-rank
         @include typography.monument
         @include typography.numeric
 
-        font-size: clamp(3.5rem, 18vmin, 8rem)
+        font-size: clamp(3.5rem, calc(var(--stage-unit) * 18), 8rem)
         grid-area: rank
 
       .your-total
@@ -396,7 +393,7 @@
     grid-template: 'card' auto 'press' minmax(0, 1fr) / minmax(0, 1fr)
     min-height: 0
 
-    @media (min-aspect-ratio: 13 / 10)
+    @media (aspect-ratio >= 13 / 10)
       --question-k: min(31cqi, 66cqh)
       --question-cap: min(3.6cqi, 7.4cqh)
 
@@ -442,7 +439,7 @@
       justify-content: center
       margin-bottom: var(--buzzer-edge)
       touch-action: manipulation
-      transition: transform var(--transition-fast, 0) var(--timing, ease), box-shadow var(--transition-fast, 0) var(--timing, ease)
+      transition: transform var(--transition-fast, 0s) var(--timing, ease), box-shadow var(--transition-fast, 0s) var(--timing, ease)
       width: var(--buzzer-size)
 
       // `BUZZ` sets at about 2.6 times its size in the condensed display face,
@@ -526,11 +523,10 @@
       .floor-clock
         @include typography.monument
         @include typography.numeric
-        @include typography.trimmed-numeral
+        @include text-box.trimmed-figure
 
         color: var(--card-ink)
-        font-size: min(40cqi, calc(58cqi / var(--reading-length, 2)))
-        line-height: 1
+        font-size: max(var(--text-floor), min(40cqi, calc(58cqi / var(--reading-length, 2))))
 
     .blocker
       @include typography.caption
@@ -544,11 +540,10 @@
       // phase is, at the size the console bills it. A nickname sets it, so it
       // carries the guard every surface setting one above `title` carries.
       &.floor
-        @include typography.billboard
+        @include typography.billboard-accented
 
         color: var(--ink)
         font-size: clamp(1.5rem, min(8cqi, 6cqh), 3rem)
-        line-height: 1.2
         min-height: 0
         overflow-wrap: anywhere
 

@@ -9,13 +9,12 @@
     gap: var(--space-m)
     min-width: 0
 
-    @media (prefers-reduced-motion: no-preference)
-      animation: card-strike var(--transition-slow, 0) var(--timing, ease) both
+    animation: card-strike var(--transition-slow, 0s) var(--timing, ease) both
 
     > .head
       align-items: center
       display: flex
-      gap: clamp(var(--space-m), 3vmin, var(--space-xl))
+      gap: clamp(var(--space-m), calc(var(--stage-unit) * 3), var(--space-xl))
       min-width: 0
 
       // Below the split the cover and the words share a line wherever the
@@ -28,7 +27,7 @@
     // ceiling: the print is mounted on a paper card rather than floating, the
     // way the box's own photographs are.
     .cover
-      --cover-size: min(34vmin, 250px)
+      --cover-size: min(calc(var(--stage-unit) * 34), 250px)
 
       border: 6px solid var(--card)
       border-radius: var(--radius-s)
@@ -59,7 +58,7 @@
       // word whole on one line, measured against the widest of a fifty-title
       // sample; `260cqi` over the length holds an answer to about two lines in
       // the column it is set in. The `dvh` term is the height a hold bar leaves.
-      --answer-size: clamp(2rem, min(9vmin, calc((100dvh - var(--hold-bar, 0px)) * 0.09), calc(128rem / var(--answer-length, 10)), calc(260cqi / var(--answer-length, 10)), calc(106cqi / var(--longest-word-width, 10))), 7rem)
+      --answer-size: clamp(2rem, min(calc(var(--stage-unit) * 9), calc((100dvh - var(--hold-bar, 0px)) * 0.09), calc(128rem / var(--answer-length, 10)), calc(260cqi / var(--answer-length, 10)), calc(106cqi / var(--longest-word-width, 10))), 7rem)
 
       .title
         @include typography.monument
@@ -72,10 +71,9 @@
       // one line read together and only the answer knows how much room it
       // needed. `0.6` is a floor on the hierarchy, never a resize of it.
       .artist
-        @include typography.billboard
+        @include typography.billboard-light
 
-        font-size: min(clamp(1.25rem, 4vmin, 2.5rem), calc(var(--answer-size) * 0.6))
-        font-weight: 600
+        font-size: min(clamp(1.25rem, calc(var(--stage-unit) * 4), 2.5rem), calc(var(--answer-size) * 0.6))
         margin-top: 0.3em
         overflow-wrap: anywhere
 
@@ -86,7 +84,7 @@
 
         color: var(--ink-muted)
         margin-top: var(--space-s)
-        max-width: 60ch
+        max-width: var(--measure)
 
     // The question card turned over: the same paper, now carrying its answer.
     &[data-game='quiz'] .identity
@@ -95,7 +93,7 @@
       --ink-muted: var(--card-muted)
 
       flex: 1 1 auto
-      padding: clamp(var(--space-s), 3vmin, var(--space-l)) clamp(var(--space-s), 3.4vmin, var(--space-l))
+      padding: clamp(var(--space-s), calc(var(--stage-unit) * 3), var(--space-l)) clamp(var(--space-s), calc(var(--stage-unit) * 3.4), var(--space-l))
 
     // What the table said, one chip per player, dealt down then across.
     // Filled for a right answer, an empty outline for a wrong one — the shape
@@ -146,11 +144,10 @@
       // A zero basis is what makes it the one that gives way: it asks for
       // nothing, so the name and the points are laid out first.
       .words
+        @include typography.aside
+
         flex: 1 1 0
-        font-family: var(--font-base)
         font-size: 0.8em
-        font-stretch: normal
-        font-weight: 400
         min-width: 0
         overflow: hidden
         text-align: end
@@ -217,7 +214,7 @@
         // The note is read up close or not at all, so beside a full table it
         // gives way before the chips do.
         .note
-          font-size: clamp(14px, 3.4cqh, 1.25rem)
+          font-size: clamp(var(--text-floor), 3.4cqh, 1.25rem)
           margin-top: 0.5em
 
       &[data-game='quiz'] .identity
@@ -232,7 +229,7 @@
         // A chip is its pawn's 1.15em, which stands taller than the line, and
         // 0.44em of padding, with the gap between rows on top.
         li
-          font-size: clamp(14px, calc((100cqh - (var(--outcome-rows, 1) - 1) * var(--space-2xs)) / var(--outcome-rows, 1) / 1.7), 1.75rem)
+          font-size: clamp(var(--text-floor), calc((100cqh - (var(--outcome-rows, 1) - 1) * var(--space-2xs)) / var(--outcome-rows, 1) / 1.7), 1.75rem)
 
       // A track of its own width: an `auto` one is sized to its content and
       // centred, and a size container has none, so the board drew 0px wide.
@@ -248,4 +245,4 @@
           // A chip is its place token's 1.28em and 0.44em of padding, with
           // the gap between rows on top — and the cap the reveal's chips share.
           li
-            font-size: clamp(14px, calc((100cqh - (var(--outcome-rows, 5) - 1) * var(--space-2xs)) / var(--outcome-rows, 5) / 1.8), 1.75rem)
+            font-size: clamp(var(--text-floor), calc((100cqh - (var(--outcome-rows, 5) - 1) * var(--space-2xs)) / var(--outcome-rows, 5) / 1.8), 1.75rem)

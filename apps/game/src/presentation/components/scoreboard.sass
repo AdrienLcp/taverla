@@ -1,4 +1,5 @@
 @use '../styles/typography'
+@use '@adrienlcp/styles/text-box'
 
 @layer components
   // A results list ruled straight onto the field: hairlines between rows and
@@ -32,7 +33,7 @@
 
     .rank
       @include typography.numeric
-      @include typography.trimmed-numeral
+      @include text-box.trimmed-figure
 
       color: var(--ink-muted)
 
@@ -60,13 +61,10 @@
       flex: none
 
     .score
-      @include typography.numeric
-      @include typography.trimmed-numeral
+      @include typography.score
+      @include text-box.trimmed-figure
 
-      font-size: clamp(1.5rem, 4vmin, 3rem)
-      font-family: var(--font-display)
-      font-stretch: 85%
-      font-weight: 900
+      font-size: clamp(1.5rem, calc(var(--stage-unit) * 4), 3rem)
 
     // Quieter, not fainter. `opacity: 0.45` put the row under 4.5:1 on every
     // field, and it was the only thing saying the seat was gone; the muted ink
@@ -96,7 +94,7 @@
     // `column` flow, not the default: a grid filled by rows puts second place
     // beside first and third under it, so reading a column top to bottom gives
     // 1, 3, 5. A ranking is read downwards or it is not a ranking.
-    @container (min-width: 624px)
+    @container (width >= 39rem)
       &.in-columns
         --board-rows: var(--scoreboard-rows, 5)
 

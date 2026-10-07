@@ -1,6 +1,7 @@
 @use '../../presentation/styles/box-lid'
 @use '../../presentation/styles/layout'
 @use '../../presentation/styles/typography'
+@use '@adrienlcp/styles/text-box'
 
 @layer components
   .game-home-page
@@ -28,28 +29,23 @@
       position: absolute
 
     .wordmark
-      font-family: var(--font-display)
+      @include typography.game-wordmark
+
       font-size: clamp(3rem, 17cqi, 7rem)
-      font-stretch: 78%
-      font-variation-settings: 'opsz' 96
-      font-weight: 800
-      letter-spacing: -0.03em
-      line-height: 0.86
 
     h1
-      font-family: var(--font-display)
+      @include typography.game-door-headline
+
       font-size: clamp(1.5rem, 6cqi, 2.5rem)
-      font-weight: 700
-      letter-spacing: -0.015em
-      line-height: 1.05
-      max-width: 18ch
+      max-width: var(--measure-game-headline)
       text-wrap: balance
 
     .pitch
+      @include typography.game-pitch
+
       color: var(--ink-muted)
       font-size: clamp(1.0625rem, 3.4cqi, 1.25rem)
-      line-height: 1.4
-      max-width: 46ch
+      max-width: var(--measure-game-pitch)
       text-wrap: pretty
 
     .start
@@ -65,11 +61,10 @@
       color: var(--ink-muted)
 
     .error
-      @include typography.caption
+      @include typography.caption-strong
 
       background: var(--danger)
       color: var(--danger-ink)
-      font-weight: 700
       padding: var(--space-2xs) var(--space-s)
 
-      @include typography.trimmed-block(var(--space-2xs))
+      @include text-box.trimmed-block(var(--space-2xs))

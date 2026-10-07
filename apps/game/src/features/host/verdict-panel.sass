@@ -9,16 +9,16 @@
   .verdict-panel
     align-items: center
     display: grid
-    gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
+    gap: var(--space-stage-split)
     justify-items: center
     text-align: center
     width: min(1200px, 100%)
 
     &:has(> .judging)
-      gap: clamp(var(--space-m), 3.5vmin, var(--space-xl))
+      gap: clamp(var(--space-m), calc(var(--stage-unit) * 3.5), var(--space-xl))
 
-      @media (min-aspect-ratio: 13/10)
-        gap: clamp(var(--space-l), 5vmin, var(--space-2xl))
+      @media (aspect-ratio >= 13 / 10)
+        gap: var(--space-stage-split)
         grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr)
 
   // The buzzer's own pawn, stood up oversize: the one thing on the screen a
@@ -27,12 +27,12 @@
     align-items: center
     display: flex
     flex-direction: column
-    gap: clamp(var(--space-xs), 2vmin, var(--space-m))
+    gap: var(--space-stage-rows)
     min-width: 0
 
     .pawn
       filter: drop-shadow(0 6px 0 var(--chipboard-dark))
-      font-size: clamp(4.5rem, 24vmin, 15rem)
+      font-size: clamp(4.5rem, calc(var(--stage-unit) * 24), 15rem)
 
     // Carries a nickname, so it carries whatever twenty characters someone
     // typed: a word with nowhere to break is what puts a sideways scrollbar
@@ -51,13 +51,13 @@
 
       aspect-ratio: 1
       display: grid
-      font-size: clamp(1.75rem, 5.5vmin, 3.5rem)
+      font-size: clamp(1.75rem, calc(var(--stage-unit) * 5.5), 3.5rem)
       place-items: center
       width: 2em
 
   // Upright, the answer and the presses need the height, so the pawn stands
   // beside the name rather than over it.
-  @media (max-aspect-ratio: 13/10)
+  @media (aspect-ratio <= 13 / 10)
     .verdict-panel:has(> .judging) .holder
       column-gap: var(--space-m)
       display: grid
@@ -66,7 +66,7 @@
       text-align: start
 
       .pawn
-        font-size: clamp(3.5rem, 13vmin, 8rem)
+        font-size: clamp(3.5rem, calc(var(--stage-unit) * 13), 8rem)
         grid-area: pawn
 
       h2
@@ -77,12 +77,12 @@
 
   // The wall holds no answer and no press, so the pawn has the screen.
   .verdict-panel:not(:has(> .judging)) .holder .pawn
-    font-size: clamp(6rem, 36vmin, 22rem)
+    font-size: clamp(6rem, calc(var(--stage-unit) * 36), 22rem)
 
   .verdict-panel .judging
     display: flex
     flex-direction: column
-    gap: clamp(var(--space-s), 3vmin, var(--space-l))
+    gap: clamp(var(--space-s), calc(var(--stage-unit) * 3), var(--space-l))
     min-width: 0
     width: 100%
 
@@ -90,12 +90,12 @@
     .answer
       @include piece.card
 
-      padding: clamp(var(--space-m), 3.5vmin, var(--space-xl))
+      padding: clamp(var(--space-m), calc(var(--stage-unit) * 3.5), var(--space-xl))
 
       .title
         @include typography.billboard
 
-        font-size: clamp(1.5rem, 5vmin, 3.5rem)
+        font-size: clamp(1.5rem, calc(var(--stage-unit) * 5), 3.5rem)
         overflow-wrap: anywhere
         text-wrap: balance
 
@@ -139,5 +139,5 @@
     // The one destructive answer is the only plain piece among filled ones,
     // and dashed, so the difference survives colour blindness.
     .choice.miss
-      outline: var(--stroke-thin) dashed var(--edge)
+      outline: var(--stroke-thin) dashed var(--rule-strong)
       outline-offset: -6px

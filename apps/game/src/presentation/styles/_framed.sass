@@ -26,7 +26,7 @@
   animation: none
   display: grid
   flex: none
-  gap: clamp(var(--space-xs), 1.6vmin, var(--space-s))
+  gap: var(--space-framed)
   grid-template: 'chrome' auto 'round' minmax(0, 1fr) / minmax(0, 1fr)
   height: 100dvh
   max-width: var(--stage-max-width)
@@ -34,7 +34,7 @@
   padding-block: var(--framed-padding-block-start) var(--framed-padding-block-end)
 
   @include layout.wide
-    gap: clamp(var(--space-xs), 1.6vmin, var(--space-s))
+    gap: var(--space-framed)
 
   > .choosing-round,
   > .buzzer-area
@@ -49,9 +49,9 @@
   //
   // A buzzer with no question has nothing to set beside it, and keeps the one
   // column.
-  @media (min-aspect-ratio: 13 / 10)
+  @media (aspect-ratio >= 13 / 10)
     &:has(> .choosing-round, > .buzzer-area .asked-question)
-      column-gap: clamp(var(--space-xs), 2.4vmin, var(--space-m))
+      column-gap: clamp(var(--space-xs), calc(var(--stage-unit) * 2.4), var(--space-m))
       grid-template: 'chrome choices' auto 'card choices' minmax(0, 1fr) 'status choices' auto / minmax(0, 0.82fr) minmax(0, 1.18fr)
 
       > .choosing-round,
@@ -73,9 +73,9 @@
     // Lying down, the menu has moved to the line's start, over the question,
     // and the column can be narrower than the line: the score wraps under the
     // round, in the height the question's column has to spare.
-    @media (min-aspect-ratio: 13 / 10)
+    @media (aspect-ratio >= 13 / 10)
       flex-wrap: wrap
-      padding-inline: calc(var(--menu-width, 56px) + var(--space-xs)) 0
+      padding-inline: calc(var(--menu-width, 3.5rem) + var(--space-xs)) 0
       row-gap: var(--space-2xs)
 
   // The round's sand: a strip draining along the top of the question card,

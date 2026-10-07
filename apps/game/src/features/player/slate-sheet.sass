@@ -17,13 +17,13 @@
       display: flex
       flex-direction: column
       gap: var(--space-s)
-      padding: var(--space-l) clamp(var(--space-m), 5vmin, var(--space-xl)) var(--space-m)
+      padding: var(--space-l) clamp(var(--space-m), calc(var(--stage-unit) * 5), var(--space-xl)) var(--space-m)
 
     .label
       @include typography.monument
       @include typography.numeric
 
-      font-size: clamp(3.5rem, 18vmin, 6rem)
+      font-size: clamp(3.5rem, calc(var(--stage-unit) * 18), 6rem)
       overflow-wrap: anywhere
       text-align: center
 
@@ -35,8 +35,8 @@
         text-wrap: balance
 
     .answer .react-aria-Input
-      font-size: clamp(1.375rem, 4.5vmin, 2rem)
-      min-height: 64px
+      font-size: clamp(1.375rem, calc(var(--stage-unit) * 4.5), 2rem)
+      min-height: 4rem
 
     .stepper
       display: flex
@@ -67,7 +67,7 @@
 
         .tile
           aspect-ratio: auto
-          min-block-size: 56px
+          min-block-size: 3.5rem
 
           .text.long
             @include typography.label
@@ -93,7 +93,7 @@
       min-width: 0
       padding: 0 var(--space-2xs) var(--space-2xs)
       position: relative
-      transition: transform var(--transition-fast, 0) var(--timing, ease), box-shadow var(--transition-fast, 0) var(--timing, ease)
+      transition: transform var(--transition-fast, 0s) var(--timing, ease), box-shadow var(--transition-fast, 0s) var(--timing, ease)
 
       &.filled
         background: linear-gradient(var(--card-ink) 0 0) center bottom 18% / 46% 3px no-repeat, var(--card)
@@ -150,7 +150,7 @@
     justify-content: center
 
     .token
-      --token-size: clamp(5rem, 26vmin, 9rem)
+      --token-size: clamp(5rem, calc(var(--stage-unit) * 26), 9rem)
 
       align-items: center
       align-self: center
@@ -167,9 +167,9 @@
     .token-label
       @include typography.monument
       @include typography.numeric
+      @include typography.solid
 
       font-size: calc(var(--token-size) * 0.5)
-      line-height: 1
       max-inline-size: 100%
       overflow: hidden
       text-overflow: ellipsis
@@ -180,10 +180,9 @@
 
       -webkit-box-orient: vertical
       display: -webkit-box
-      font-size: max(12px, calc(var(--token-size) * 0.17))
+      font-size: max(var(--text-2xs), calc(var(--token-size) * 0.17))
       -webkit-line-clamp: 3
       line-clamp: 3
-      line-height: 1.05
       overflow-wrap: anywhere
       text-align: center
       white-space: normal
@@ -235,10 +234,9 @@
           inline-size: 1.1em
 
     .answer
-      @include typography.billboard
+      @include typography.billboard-wrapping
 
-      font-size: clamp(1.5rem, 7vmin, 3rem)
-      line-height: 1.1
+      font-size: clamp(1.5rem, calc(var(--stage-unit) * 7), 3rem)
       min-width: 0
       overflow-wrap: anywhere
       text-wrap: balance
@@ -275,7 +273,7 @@
     .key-text
       @include typography.billboard
 
-      font-size: clamp(1.25rem, 5.5vmin, 2.25rem)
+      font-size: clamp(1.25rem, calc(var(--stage-unit) * 5.5), 2.25rem)
       overflow-wrap: anywhere
       text-wrap: balance
 
@@ -336,14 +334,15 @@
           outline-offset: -2px
 
         &[aria-current]
+          @include typography.strong
+
           box-shadow: inset 0 0 0 var(--stroke-bold) currentColor, 0 3px 0 var(--chipboard)
-          font-weight: 700
 
       .index
         @include typography.title
         @include typography.numeric
 
-        max-inline-size: 12ch
+        max-inline-size: var(--measure-slate-index)
         overflow: hidden
         text-align: end
         text-overflow: ellipsis

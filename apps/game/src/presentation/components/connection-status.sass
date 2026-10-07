@@ -15,8 +15,10 @@
     &.connecting
       background: transparent
 
+    // Half full, and pulsing where motion is welcome: it is on its way back.
     &.closed
       animation: connection-pulse 1.2s ease-in-out infinite
+      background: linear-gradient(to top, currentColor 50%, transparent 50%)
 
     // Square and still: nothing is coming back on its own.
     &.refused
@@ -31,13 +33,9 @@
     gap: var(--space-xs)
 
     .clock
-      font-weight: 500
-      letter-spacing: 0.04em
-      text-transform: none
+      @include typography.clock-reading
 
-  @media (prefers-reduced-motion: reduce)
-    .connection-dot.closed
-      animation: none
+      text-transform: none
 
 @keyframes connection-pulse
   50%

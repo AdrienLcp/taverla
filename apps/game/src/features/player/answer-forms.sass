@@ -1,4 +1,5 @@
 @use '../../presentation/styles/typography'
+@use '@adrienlcp/styles/text-box'
 
 @layer components
   .answer-form
@@ -52,7 +53,7 @@
       color: var(--on-spine)
       padding: var(--space-2xs) var(--space-s)
 
-      @include typography.trimmed-block(var(--space-2xs))
+      @include text-box.trimmed-block(var(--space-2xs))
 
     // A guess that banked nothing is not an error — the field is still open and
     // the line under it still says so — so it takes the muted ink the reveal

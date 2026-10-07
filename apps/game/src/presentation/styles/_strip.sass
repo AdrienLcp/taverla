@@ -2,6 +2,7 @@
 
 @use 'focus'
 @use 'typography'
+@use '@adrienlcp/styles/text-box'
 
 /// One row or one column, and never the shape in between. A wrap that leaves
 /// rows of unequal length hands the short one's segments the width the missing
@@ -86,7 +87,7 @@
     border-radius: var(--radius-m)
     display: flex
     flex-wrap: wrap
-    gap: 2px
+    gap: var(--stroke-thin)
     overflow: clip
 
   // `flex: 1` rather than content width: the segments share the strip evenly,
@@ -97,20 +98,19 @@
   // wraps and then fills the row it landed on.
   .segment
     @include focus.ring-inset
-    @include typography.caption
+    @include typography.caption-strong
 
     background: var(--field)
     color: var(--ink-muted)
     cursor: pointer
     flex: 1
-    font-weight: 700
     padding: var(--space-2xs) var(--space-s)
     text-align: center
     text-transform: uppercase
-    transition: background-color var(--transition-fast, 0) var(--timing, ease), color var(--transition-fast, 0) var(--timing, ease)
+    transition: background-color var(--transition-fast, 0s) var(--timing, ease), color var(--transition-fast, 0s) var(--timing, ease)
     white-space: nowrap
 
-    @include typography.trimmed-block(var(--space-2xs))
+    @include text-box.trimmed-block(var(--space-2xs))
 
     &[data-hovered],
     &[data-pressed]

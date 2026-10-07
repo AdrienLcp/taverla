@@ -4,6 +4,7 @@
 @use '@adrienlcp/styles/reduced-motion.css'
 @use '@adrienlcp/theme-preference/color-scheme.css'
 @use './fonts'
+@use './layout'
 @use './reset'
 @use './tokens'
 @use './typography'
@@ -34,12 +35,13 @@
   // No gradient, no glow: the field is one flat colour, and the transition
   // between phases is the only thing that moves on it.
   body
+    @include layout.container
+    @include typography.body
+
     background: var(--field)
     color: var(--ink)
     font-family: var(--font-base)
-    transition: background-color var(--transition-slow, 0) var(--timing, ease)
-
-    @include typography.body
+    transition: background-color var(--transition-slow, 0s) var(--timing, ease)
 
   #root
     display: flex

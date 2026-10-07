@@ -42,7 +42,7 @@
       align-self: center
       flex: none
 
-    @media (min-aspect-ratio: 13 / 10)
+    @media (aspect-ratio >= 13 / 10)
       &[data-answering],
       &[data-choices]
         --question-k: min(42cqi, 80cqh)
@@ -96,12 +96,12 @@
     // Four candidates under forty characters sit two by two once the box is
     // wide enough for two columns; sentences stay four rows at every ratio.
     &:not([data-long-choices]) .printed-choices
-      @container playing (width >= 560px)
+      @container playing (width >= 35rem)
         grid-template-columns: repeat(2, minmax(0, 1fr))
         grid-template-rows: repeat(2, minmax(min-content, 1fr))
 
     .printed-choices .answer-tile
-      font-size: clamp(14px, calc(var(--choice-k) / sqrt(var(--choice-length, 20))), var(--choice-cap))
+      font-size: clamp(var(--text-floor), calc(var(--choice-k) / sqrt(var(--choice-length, 20))), var(--choice-cap))
 
     // The question card, with the round's sand draining along its top edge —
     // the clock sits where every eye in the room already is.
@@ -139,18 +139,14 @@
         .prompt
           --question-yield: min(1, sqrt(40 / var(--choice-length, 20)))
 
-          font-family: var(--font-base)
-          font-size: clamp(14px, min(var(--question-k) / sqrt(var(--prompt-length, 60)), var(--question-cap) * var(--question-yield)), var(--question-cap))
-          font-stretch: normal
-          font-variation-settings: normal
-          font-weight: 700
-          letter-spacing: 0
-          line-height: 1.24
+          @include typography.question-prompt(1.24)
+
+          font-size: clamp(var(--text-floor), min(var(--question-k) / sqrt(var(--prompt-length, 60)), var(--question-cap) * var(--question-yield)), var(--question-cap))
           text-wrap: pretty
 
         .category
           color: var(--card-muted)
-          font-size: clamp(14px, 2.4cqmin, 20px)
+          font-size: clamp(var(--text-floor), 2.4cqmin, 1.25rem)
           order: -1
 
       .now

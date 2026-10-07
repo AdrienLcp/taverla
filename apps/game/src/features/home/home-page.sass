@@ -1,10 +1,11 @@
 @use '../../presentation/styles/box-lid'
 @use '../../presentation/styles/layout'
 @use '../../presentation/styles/typography'
+@use '@adrienlcp/styles/text-box'
 
 // Where the lid and the shelf stand side by side: below it the spines sit
 // under the lid, a shelf you reach by scrolling past the promise.
-$side-by-side: 960px
+$side-by-side: 60rem
 
 @layer components
   .home-page
@@ -42,31 +43,26 @@ $side-by-side: 960px
       padding: clamp(var(--space-l), 7vw, 3.25rem) clamp(var(--space-l), 7vw, 3.5rem)
 
     .wordmark
-      font-family: var(--font-display)
+      @include typography.wordmark
+
       font-size: clamp(3.75rem, 21cqi, 9.25rem)
-      font-stretch: 78%
-      font-variation-settings: 'opsz' 96
-      font-weight: 800
-      letter-spacing: -0.035em
-      line-height: 0.82
 
       .dot
         color: var(--primary)
 
     h1
-      font-family: var(--font-display)
+      @include typography.door-headline
+
       font-size: clamp(1.75rem, 6.6cqi, 2.75rem)
-      font-weight: 700
-      letter-spacing: -0.015em
-      line-height: 1.02
-      max-width: 15ch
+      max-width: var(--measure-door-headline)
       text-wrap: balance
 
     .pitch
+      @include typography.pitch
+
       color: var(--ink-muted)
       font-size: clamp(1.0625rem, 3.6cqi, 1.375rem)
-      line-height: 1.38
-      max-width: 32ch
+      max-width: var(--measure-door-pitch)
       text-wrap: pretty
 
       strong
@@ -126,14 +122,13 @@ $side-by-side: 960px
           min-width: 0
 
     .error
-      @include typography.caption
+      @include typography.caption-strong
 
       background: var(--danger)
       color: var(--danger-ink)
-      font-weight: 700
       padding: var(--space-2xs) var(--space-s)
 
-      @include typography.trimmed-block(var(--space-2xs))
+      @include text-box.trimmed-block(var(--space-2xs))
 
     // Columns fixed by the row, not by what is open: sized to content, an
     // opened panel's paragraph widened its door and pushed the other one down.

@@ -16,7 +16,7 @@
 
   &.small
     border-radius: var(--radius-s)
-    min-height: 40px
+    min-height: 2.5rem
     padding: 0 var(--space-s)
 
   &.medium
@@ -26,7 +26,7 @@
 
   &.large
     border-radius: var(--radius-m)
-    min-height: 72px
+    min-height: 4.5rem
     padding: 0 var(--space-l)
 
 /// The shell shared by `Button`, `Link` and `ToggleButton` — everything that
@@ -49,7 +49,7 @@
   justify-content: center
   position: relative
   text-decoration: none
-  transition: background-color var(--transition-fast, 0) var(--timing, ease), color var(--transition-fast, 0) var(--timing, ease), transform var(--transition-fast, 0) var(--timing, ease), box-shadow var(--transition-fast, 0) var(--timing, ease)
+  transition: background-color var(--transition-fast, 0s) var(--timing, ease), color var(--transition-fast, 0s) var(--timing, ease), transform var(--transition-fast, 0s) var(--timing, ease), box-shadow var(--transition-fast, 0s) var(--timing, ease)
   white-space: nowrap
 
   &.small
@@ -61,7 +61,7 @@
   // taller than 830px, and a secondary out-shouted its primary. No steeper than
   // 3.3vmin: at 3.6 the verdict stage ran 1px past a 1024×768 console on Linux.
   &.large
-    font-size: clamp(1.375rem, 3.3vmin, 2.25rem)
+    font-size: clamp(1.375rem, calc(var(--stage-unit) * 3.3), 2.25rem)
 
   // Every state is guarded on `:not([data-disabled])` because a variant
   // selector outranks the bare `[data-disabled]` below: without it a state left

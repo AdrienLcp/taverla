@@ -1,6 +1,7 @@
 @use '../../presentation/styles/focus'
 @use '../../presentation/styles/piece'
 @use '../../presentation/styles/typography'
+@use '@adrienlcp/styles/text-box'
 
 @layer components
   .game-spines
@@ -68,35 +69,31 @@
         margin-inline-end: 7cqi
 
     .name
+      @include typography.spine-name
+
       align-items: center
       display: flex
-      font-family: var(--font-display)
       font-size: clamp(1.75rem, 9cqi, 2.5rem)
-      font-stretch: 82%
-      font-weight: 800
       gap: var(--space-xs)
-      letter-spacing: -0.01em
-      line-height: 1
 
     .tagline
+      @include typography.tagline
+
       font-size: var(--text-s)
-      font-weight: 700
-      line-height: 1.2
       text-wrap: balance
 
       @container (width >= 26rem)
-        max-width: 21ch
+        max-width: var(--measure-tagline)
         text-align: end
 
     .error
-      @include typography.caption
+      @include typography.caption-strong
 
       background: var(--danger)
       color: var(--danger-ink)
-      font-weight: 700
       padding: var(--space-2xs) var(--space-s)
 
-      @include typography.trimmed-block(var(--space-2xs))
+      @include text-box.trimmed-block(var(--space-2xs))
 
     .one-room
       @include typography.body

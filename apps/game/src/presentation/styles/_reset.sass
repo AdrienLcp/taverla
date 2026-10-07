@@ -3,6 +3,7 @@
 // The shared reset, plus what a party game needs on top of it.
 
 @use '@adrienlcp/styles/reset.css'
+@use 'typography'
 
 @layer reset
   body
@@ -27,5 +28,4 @@
   h2,
   h3,
   h4
-    font-weight: 700
-    line-height: 1.1
+    @include typography.heading

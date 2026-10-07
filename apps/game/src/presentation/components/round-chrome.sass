@@ -2,17 +2,18 @@
 
 @layer components
   .round-chrome
+    @include typography.strong
+
     align-items: center
     container-type: inline-size
     display: flex
     flex: none
     flex-wrap: nowrap
-    font-weight: 700
-    gap: clamp(var(--space-xs), 3vmin, var(--space-m))
+    gap: clamp(var(--space-xs), calc(var(--stage-unit) * 3), var(--space-m))
     justify-content: space-between
     min-height: var(--control-touch)
     // The menu trigger is fixed over this line and costs no row of its own.
-    padding-inline-end: calc(var(--menu-width, 56px) + var(--space-xs))
+    padding-inline-end: calc(var(--menu-width, 3.5rem) + var(--space-xs))
     white-space: nowrap
 
     .round-index,
@@ -26,7 +27,7 @@
     .score
       @include typography.numeric
 
-      font-size: clamp(1.125rem, 2.6vmin, 1.5rem)
+      font-size: clamp(1.125rem, calc(var(--stage-unit) * 2.6), 1.5rem)
 
     // Selectable against the reset: it is the way in a seated screen can pass
     // to the one beside it, and a code you cannot lift is a code you retype.
@@ -44,7 +45,7 @@
 
     .pips
       display: flex
-      gap: 3px
+      gap: var(--stroke-bold)
 
       i
         background: var(--track-b)
@@ -59,7 +60,7 @@
         &[data-state='now']
           background: var(--phase-ink)
 
-      @container (width < 300px)
+      @container (width < 18.75rem)
         display: none
 
     .you .pawn

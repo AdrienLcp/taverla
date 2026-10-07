@@ -1,4 +1,5 @@
 @use '../../presentation/styles/typography'
+@use '@adrienlcp/styles/text-box'
 
 @layer components
   // A chip per player, dealt in the order the round left them: filled where
@@ -35,7 +36,7 @@
       color: var(--board-ink)
       column-gap: 0.6em
       display: grid
-      font-size: min(clamp(1.25rem, min(3vmin, 6cqi), 1.75rem), max(1rem, calc(var(--board-budget, 100rem) / var(--board-rows, 5) / var(--board-row))))
+      font-size: min(clamp(1.25rem, min(calc(var(--stage-unit) * 3), 6cqi), 1.75rem), max(1rem, calc(var(--board-budget, 100rem) / var(--board-rows, 5) / var(--board-row))))
       grid-template-columns: minmax(0, 1fr)
       padding: 0.3em 0.6em
       row-gap: 0.15em
@@ -60,7 +61,7 @@
 
     .rank
       @include typography.numeric
-      @include typography.trimmed-numeral
+      @include text-box.trimmed-figure
 
       color: var(--ink-muted)
       font-size: 0.8em
@@ -88,35 +89,29 @@
     // form is four figures (`3 +2`) — so the rows end on one right edge.
     .points
       @include typography.numeric
-      @include typography.trimmed-numeral
+      @include text-box.trimmed-figure
 
       font-size: 0.8em
-      line-height: 1
       min-width: 4.5ch
       text-align: end
 
     // Where that leaves them, the column the whole board is ordered by, so
     // it is set heavier than the name beside it.
     .score
-      @include typography.numeric
-      @include typography.trimmed-numeral
+      @include typography.score
+      @include text-box.trimmed-figure
 
-      font-family: var(--font-display)
       font-size: 1.15em
-      font-stretch: 85%
-      font-weight: 900
-      line-height: 1
 
     // What they typed or picked, under their own name: the first line is read
     // down as columns of numbers, and a sentence dropped into it stops that.
     // Prose keeps the caption's floor whatever the row is sized at.
     .words
-      @include typography.caption
+      @include typography.caption-row
 
       color: var(--ink-muted)
       font-size: max(0.875rem, 0.75em)
       grid-column: 1 / -1
-      line-height: 1.2
       overflow: hidden
       text-overflow: ellipsis
       white-space: nowrap

@@ -45,7 +45,6 @@ colors:
   primary: "oklch(55% 0.19 30)"
   primary-edge: "oklch(40% 0.14 30)"
   on-primary: "oklch(99% 0.005 95)"
-  focus: "light-dark(oklch(50% 0.2 262), oklch(82% 0.13 88))"
   good: "oklch(52% 0.13 155)"
   good-edge: "oklch(38% 0.1 155)"
   good-soft: "light-dark(oklch(86% 0.09 155), oklch(75% 0.11 155))"
@@ -54,38 +53,38 @@ colors:
 typography:
   monument:
     fontFamily: "Bricolage Grotesque, Atkinson Hyperlegible Next, system-ui, sans-serif"
-    fontSize: "clamp(3.5rem, 17vmin, 15rem)"
+    fontSize: "clamp(3.5rem, calc(var(--stage-unit) * 17), 15rem)"
     fontWeight: 800
     lineHeight: 0.9
     letterSpacing: "-0.01em"
     fontVariation: "'opsz' 96, stretch 80%"
   billboard:
     fontFamily: "Bricolage Grotesque, Atkinson Hyperlegible Next, system-ui, sans-serif"
-    fontSize: "clamp(1.75rem, 6vmin, 4.5rem)"
+    fontSize: "clamp(1.75rem, calc(var(--stage-unit) * 6), 4.5rem)"
     fontWeight: 800
     lineHeight: 0.95
     letterSpacing: "-0.02em"
     fontVariation: "'opsz' 96, stretch 85%"
   title:
     fontFamily: "Bricolage Grotesque, Atkinson Hyperlegible Next, system-ui, sans-serif"
-    fontSize: "clamp(1.25rem, 3vmin, 1.75rem)"
+    fontSize: "clamp(1.25rem, calc(var(--stage-unit) * 3), 1.75rem)"
     fontWeight: 700
     lineHeight: 1.05
     letterSpacing: "-0.005em"
     fontVariation: "stretch 90%"
   body:
     fontFamily: "Atkinson Hyperlegible Next, system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
-    fontSize: "clamp(1rem, 2vmin, 1.125rem)"
+    fontSize: "clamp(1rem, calc(var(--stage-unit) * 2), 1.125rem)"
     fontWeight: 400
     lineHeight: 1.45
   caption:
     fontFamily: "Atkinson Hyperlegible Next, system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
-    fontSize: "clamp(0.875rem, 1.8vmin, 1rem)"
+    fontSize: "clamp(0.875rem, calc(var(--stage-unit) * 1.8), 1rem)"
     fontWeight: 500
     lineHeight: 1.35
   label:
     fontFamily: "Atkinson Hyperlegible Next, system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
-    fontSize: "clamp(0.875rem, 1.7vmin, 1rem)"
+    fontSize: "clamp(0.875rem, calc(var(--stage-unit) * 1.7), 1rem)"
     fontWeight: 700
     letterSpacing: "0.005em"
   numeric:
@@ -98,28 +97,28 @@ rounded:
   l: "18px"
   full: "999px"
 spacing:
-  2xs: "4px"
-  xs: "8px"
-  s: "12px"
-  m: "20px"
-  l: "32px"
-  xl: "48px"
-  2xl: "72px"
+  2xs: "0.25rem"
+  xs: "0.5rem"
+  s: "0.75rem"
+  m: "1.25rem"
+  l: "2rem"
+  xl: "3rem"
+  2xl: "4.5rem"
 components:
   button-filled:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.on-primary}"
     typography: "{typography.title}"
     rounded: "{rounded.m}"
-    height: "52px"
-    padding: "0 20px"
+    height: "3.25rem"
+    padding: "0 1.25rem"
   button-outlined:
     backgroundColor: "{colors.track-a}"
     textColor: "{colors.board-ink}"
     typography: "{typography.title}"
     rounded: "{rounded.m}"
-    height: "52px"
-    padding: "0 20px"
+    height: "3.25rem"
+    padding: "0 1.25rem"
   button-disabled:
     backgroundColor: "transparent"
     textColor: "{colors.board-muted}"
@@ -129,7 +128,7 @@ components:
     textColor: "{colors.card-ink}"
     typography: "{typography.title}"
     rounded: "{rounded.m}"
-    height: "52px"
+    height: "3.25rem"
   answer-tile-1:
     backgroundColor: "{colors.tile-1}"
     textColor: "{colors.tile-ink}"
@@ -234,7 +233,7 @@ A cool printed board under warm, saturated die-cut inks, every value one
   what is printed at the bottom of a recess, such as a marked slate item's
   numeral): the recess a piece sits in when it is absent, spent or disabled.
 - **Derived lines**: `--rule` (22% ink into the field) separates regions and
-  owes no contrast; `--edge` (60%) is a control's own boundary and owes 3:1
+  owes no contrast; `--rule-strong` (60%) is a control's own boundary and owes 3:1
   (WCAG 1.4.11).
 
 ### Feedback
@@ -242,9 +241,9 @@ A cool printed board under warm, saturated die-cut inks, every value one
   *revealed* phase, the payout token.
 - **Danger** (`--danger` ground, `--danger-ink` text): always a stamped block,
   never tinted text, so its contrast is fixed in both palettes.
-- **Focus** (`--focus`): indigo by day, saffron by evening. The focus ring
-  itself is drawn in `--ink` (`_focus.sass`), the one colour guaranteed against
-  whatever ground is current.
+- **Focus**: no colour of its own. The ring is drawn in `--ink`
+  (`_focus.sass`), the one colour guaranteed against whatever ground is current,
+  since the phase and the reflex flip repaint the ground under it.
 
 ### The phase ink
 
@@ -297,9 +296,13 @@ face preloaded from `index.html` — party Wi-Fi is the reason for all four.
 
 ### Hierarchy
 
-The mixins live in `src/presentation/styles/_typography.sass`. Sizes are `vmin`
-so the same page lands readable on a phone upright and a television lying
-down; every clamp has a ceiling so a projector stops it growing.
+The mixins live in `src/presentation/styles/_typography.sass`, and they hold
+every weight, leading and tracking in the game: a component includes one and
+sets at most its own size. Sizes grow with `--stage-unit` (`1vmin`), the one
+unit through which the game opts out of sizing on its container: the same page
+is read at forty centimetres and at four metres, so a phone upright and a
+television lying down both land on something readable, and every clamp has a
+rem floor and a ceiling so a projector stops it growing.
 
 - **`monument`** (800, stretch 80%, `opsz` 96, line-height 0.9): the room code,
   the countdown numeral.
@@ -315,22 +318,30 @@ down; every clamp has a ceiling so a projector stops it growing.
 - **`numeric`** (Bricolage 800, tabular figures): every score and count, so a
   score going from one digit to two does not jolt the row.
 
-`body`, `caption` and `label` carry a `vmin` term because a player's column
-widens from 343 to 828px; their floors are the phone values, their ceilings
-land where the column stops widening.
+`body`, `caption` and `label` carry a `--stage-unit` term because a player's
+column widens from 343 to 828px and the faces above them double over the same
+span, so a flat `rem` there is the phone screenshot enlarged that the `screen`
+mixin already refuses one level up. Measured on the player's lobby at 1440×900:
+`blindtest.name` went 35px → 72 while the French `player.upNext` held 12,
+taking a ratio of 2.9 to 6. Their floors are the phone values, so a viewport
+whose shorter side is under 750px renders exactly as it did; their ceilings
+land between a shorter side of 875 and 900px, where the column stops widening —
+the two grow together, and then both stop.
 
-Two trims, both guarded by `@supports (text-box: trim-both cap alphabetic)`:
-`trimmed-block($padding-block)` for a painted block of short text (a stamp, a
-segment, an error), whose padding grows by what the trim takes so nothing
-measured against it moves; `trimmed-numeral` for a figure on its own line. A
-board that sizes its type by dividing a height by its rows takes a smaller
-divisor under the same guard, measured on rendered rows.
+Two trims from `@adrienlcp/styles/text-box`, both guarded by
+`@supports (text-box: trim-both cap alphabetic)`: `trimmed-block($padding-block)`
+for a painted block of short text (a stamp, a segment, an error), whose padding
+grows by what the trim takes so nothing measured against it moves;
+`trimmed-figure` for a figure on its own line. A board that sizes its type by
+dividing a height by its rows takes a smaller divisor under the same guard —
+`--standings-row`, `--tallest-row`, `--board-row` — measured on rendered rows.
 
 **The question** is sized by the square root of its length:
-`clamp(14px, min(k / sqrt(length), cap × yield), cap)` (`_question-card.sass`),
-the caller setting `--question-k`, `--question-cap` and `--question-yield` so
-a question yields room to long choices. Answer tiles size the same way. 14px is
-the floor the e2e spec enforces.
+`clamp(var(--text-floor), min(k / sqrt(length), cap × yield), cap)`
+(`_question-card.sass`), the caller setting `--question-k`, `--question-cap` and
+`--question-yield` so a question yields room to long choices. Answer tiles and
+every board fitted to its box size the same way. `--text-floor` is 0.875rem —
+14px at the default size, the floor the e2e spec enforces.
 
 **The No Kicker Rule.** No label sits above a heading to frame it. Every kicker
 the old world had — *La réponse*, *Tu vas jouer à*, *Tu finis*, *En ce moment
@@ -351,14 +362,14 @@ or above takes `overflow-wrap: anywhere` inside a parent that will not grow
 
 **One split, at 900px** (`$wide-screen`, from `@adrienlcp/styles/breakpoints`,
 forwarded by `_layout.sass` with `wide` and `narrow`). A second width,
-`$poster-screen` 1200px, is where a front door splits into poster and actions
+`$poster-screen` 75rem (1200px), is where a front door splits into poster and actions
 (`poster`, columns 1.35fr / 1fr).
 
 **Three page shapes** (`_layout.sass`, `_framed.sass`):
-- **`screen`** — the player's column: 620px (`--column-max-width`), widening to
-  900px past the split, gap `--space-l`. It widens because the type is `vmin`
-  and the measure has to grow with it.
-- **`stage`** — the console and the wall: the whole field to 1800px
+- **`screen`** — the player's column: 38.75rem (`--column-max-width`), widening
+  to 900px past the split, gap `--space-l`. It widens because the type grows
+  with `--stage-unit` and the measure has to grow with it.
+- **`stage`** — the console and the wall: the whole field to 112.5rem
   (`--stage-max-width`), never centred in a column.
 - **`framed.page`** — a screen held to `100dvh` with `overflow: hidden`: the
   player choosing, the seated host choosing, the player's buzzer. A grid of
@@ -369,11 +380,11 @@ forwarded by `_layout.sass` with `wide` and `narrow`). A second width,
   line's start. Choices over 60 characters (`data-long-choices`) are four
   full-width rows at every ratio and widen the right column to 1.45fr.
 
-**Padding** is `--layout-padding` (`clamp(16px, 4vmin, 56px)`), resolved per
+**Padding** is `--layout-padding` (`clamp(1rem, calc(var(--stage-unit) * 4), 3.5rem)`), resolved per
 side against the safe-area insets (`--layout-padding-block-start` etc., `max()`
 of the two, every `env()` falling back to `0px`; Android's bottom inset read
 from `safe-area-max-inset-bottom`). A framed screen uses the tighter
-`--framed-padding-block-*` (`clamp(8px, 2vmin, 16px)`).
+`--framed-padding-block-*` (`clamp(var(--space-xs), calc(var(--stage-unit) * 2), 1rem)`).
 
 **Console stages are size containers.** Above the split each console stage
 (playing, reveal, countdown, floor, final, slate, reflex) is a three-row grid —
@@ -508,7 +519,7 @@ and shelf.
 - **Shape**: a piece. Sizes `small` (40px, `--radius-s`), `medium` (52px),
   `large` (72px), labels in `title` trimmed to cap height so only the centre
   moves. `large` sets its label on a steeper clamp
-  (`clamp(1.375rem, 3.3vmin, 2.25rem)`) so it never falls under `medium`'s.
+  (`clamp(1.375rem, calc(var(--stage-unit) * 3.3), 2.25rem)`) so it never falls under `medium`'s.
 - **`filled`**: the coral piece, *go*. One per moment.
 - **`outlined`**: a plain piece on `--track-a` in `--board-ink`.
 - **`underlined`**: no piece, a printed line — 2px underline offset 5px in

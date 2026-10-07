@@ -11,7 +11,7 @@
   // written by any stage resolves against this box, because a container unit
   // is evaluated on the element that consumes it.
   .room-invitation
-    --invitation-code-size: min(clamp(2.75rem, 14vmin, 9rem), 20cqi)
+    --invitation-code-size: min(clamp(2.75rem, calc(var(--stage-unit) * 14), 9rem), 20cqi)
     --invitation-qr-max-width: 256px
 
     align-items: stretch
@@ -46,17 +46,16 @@
     // is the fast path, and someone reading the code to a laptop still wants
     // to be able to grab it by hand.
     .room-code
-      @include typography.monument
+      @include typography.room-code
 
       font-size: var(--invitation-code-size)
-      letter-spacing: 0.02em
       user-select: text
       word-break: break-all
 
     .code-caption
-      font-size: clamp(0.9375rem, 2.2vmin, 1.25rem)
-      font-weight: 700
-      line-height: 1.2
+      @include typography.tagline
+
+      font-size: clamp(0.9375rem, calc(var(--stage-unit) * 2.2), 1.25rem)
 
     // The square on a white card in both palettes: a scanner reads dark
     // modules on light paper, and the inverse fails on half the cameras in a
@@ -87,9 +86,9 @@
       min-width: 0
 
     .invite
-      font-size: clamp(1rem, 2.2vmin, 1.25rem)
-      font-weight: 700
-      line-height: 1.3
+      @include typography.callout
+
+      font-size: clamp(1rem, calc(var(--stage-unit) * 2.2), 1.25rem)
       text-wrap: pretty
 
     .join-url

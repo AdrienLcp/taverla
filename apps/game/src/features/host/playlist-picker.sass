@@ -1,5 +1,6 @@
 @use '../../presentation/styles/strip'
 @use '../../presentation/styles/typography'
+@use '@adrienlcp/styles/text-box'
 
 @layer components
   .playlist-picker
@@ -58,15 +59,15 @@
     .genres .segments
       grid-template-columns: repeat(2, 1fr)
 
-    @container (min-width: 530px)
+    @container (width >= 33.125rem)
       .genres .segments
         grid-template-columns: repeat(3, 1fr)
 
-    @container (min-width: 710px)
+    @container (width >= 44.375rem)
       .genres .segments
         grid-template-columns: repeat(4, 1fr)
 
-    @container (min-width: 1060px)
+    @container (width >= 66.25rem)
       .genres .segments
         grid-template-columns: repeat(6, 1fr)
 
@@ -79,12 +80,12 @@
     .decades .segments
       grid-template-columns: repeat(2, 1fr)
 
-    @container (min-width: 440px)
+    @container (width >= 27.5rem)
       .decades .segments
         grid-template-columns: repeat(3, 1fr)
 
     // One row, and the reading order is the chronology.
-    @container (min-width: 780px)
+    @container (width >= 48.75rem)
       .decades .segments
         grid-template-columns: repeat(6, 1fr)
 
@@ -99,14 +100,13 @@
       align-self: flex-start
 
     .error
-      @include typography.caption
+      @include typography.caption-strong
 
       background: var(--danger)
       color: var(--danger-ink)
-      font-weight: 700
       padding: var(--space-2xs) var(--space-s)
 
-      @include typography.trimmed-block(var(--space-2xs))
+      @include text-box.trimmed-block(var(--space-2xs))
 
     .found
       display: flex

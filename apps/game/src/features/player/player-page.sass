@@ -20,7 +20,7 @@
     // one, and on a laptop a 620px ribbon down the middle of the screen wastes
     // the room every phase wants.
     &.playing
-      gap: clamp(var(--space-s), 2.4vmin, var(--space-l))
+      gap: clamp(var(--space-s), calc(var(--stage-unit) * 2.4), var(--space-l))
       justify-content: flex-start
       max-width: var(--column-wide-max-width)
 
@@ -36,7 +36,7 @@
       flex-direction: column
       gap: var(--space-l)
       max-width: 34rem
-      padding: clamp(var(--space-l), 8vmin, var(--space-2xl)) clamp(var(--space-l), 7vmin, var(--space-xl))
+      padding: clamp(var(--space-l), calc(var(--stage-unit) * 8), var(--space-2xl)) clamp(var(--space-l), calc(var(--stage-unit) * 7), var(--space-xl))
       width: 100%
 
     header
@@ -47,7 +47,7 @@
       h1
         @include typography.billboard
 
-        font-size: clamp(2rem, 7vmin, 3.5rem)
+        font-size: clamp(2rem, calc(var(--stage-unit) * 7), 3.5rem)
         text-wrap: balance
 
       // Under the question, not above it: the code confirms which room the

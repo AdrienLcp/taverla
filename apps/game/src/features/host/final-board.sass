@@ -8,7 +8,7 @@
   // every height here divides that box rather than the viewport.
   .final-board
     display: grid
-    gap: clamp(var(--space-m), 4vmin, var(--space-2xl))
+    gap: clamp(var(--space-m), calc(var(--stage-unit) * 4), var(--space-2xl))
     grid-template: 'podium' auto 'standings' minmax(0, 1fr) / minmax(0, 1fr)
     height: 100%
     min-height: 0
@@ -22,7 +22,7 @@
     container-type: inline-size
     display: flex
     flex-direction: column
-    gap: clamp(var(--space-2xs), 1.5vmin, var(--space-s))
+    gap: clamp(var(--space-2xs), calc(var(--stage-unit) * 1.5), var(--space-s))
     grid-area: podium
     min-width: 0
     text-align: center
@@ -37,15 +37,14 @@
 
       font-size: clamp(2.5rem, calc(min(42cqh, 55cqi) / var(--winner-count, 1)), 20rem)
 
-      @media (prefers-reduced-motion: no-preference)
-        .pawn
-          animation: pawn-lands 700ms cubic-bezier(0.16, 1, 0.3, 1) both
+      .pawn
+        animation: pawn-lands 700ms var(--timing, ease) both
 
-          &:nth-child(2)
-            animation-delay: 90ms
+        &:nth-child(2)
+          animation-delay: 90ms
 
-          &:nth-child(3)
-            animation-delay: 180ms
+        &:nth-child(3)
+          animation-delay: 180ms
 
     .pawn
       filter: drop-shadow(0 0.06em 0 var(--chipboard-dark))

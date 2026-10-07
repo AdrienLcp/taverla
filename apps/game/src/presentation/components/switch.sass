@@ -2,7 +2,9 @@
 
 @layer components
   .switch
-    --switch-track-width: 52px
+    --switch-track-width: 3.25rem
+    --switch-inset: 0.1875rem
+    --switch-thumb: 1.125rem
 
     display: flex
     flex-direction: column
@@ -32,7 +34,7 @@
 
         .thumb
           background: var(--field)
-          transform: translateX(24px)
+          transform: translateX(calc(var(--switch-track-width) - 2 * (var(--stroke-thin) + var(--switch-inset)) - var(--switch-thumb)))
 
       // The ring goes on the track rather than the label, because the track is
       // what the eye reads as the control.
@@ -47,17 +49,17 @@
       border: var(--stroke-thin) solid var(--ink-muted)
       border-radius: var(--radius-full)
       display: inline-flex
-      height: 28px
-      padding: 3px
-      transition: background var(--transition-fast, 0), border-color var(--transition-fast, 0)
+      height: 1.75rem
+      padding: var(--switch-inset)
+      transition: background var(--transition-fast, 0s), border-color var(--transition-fast, 0s)
       width: var(--switch-track-width)
 
     .thumb
       background: var(--ink-muted)
       border-radius: var(--radius-full)
-      height: 18px
-      transition: transform var(--transition-fast, 0) var(--timing, ease), background var(--transition-fast, 0)
-      width: 18px
+      height: var(--switch-thumb)
+      transition: transform var(--transition-fast, 0s) var(--timing, ease), background var(--transition-fast, 0s)
+      width: var(--switch-thumb)
 
     // Indented onto the label rather than started at the panel edge: a line
     // beginning under the track reads as a paragraph of the panel instead of

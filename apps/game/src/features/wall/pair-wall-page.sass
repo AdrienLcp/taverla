@@ -1,5 +1,6 @@
 @use '../../presentation/styles/layout'
 @use '../../presentation/styles/typography'
+@use '@adrienlcp/styles/text-box'
 
 @layer components
   // Read at arm's length by one person, once: a question, the table it is
@@ -40,9 +41,10 @@
     // Stamped rather than tinted, for the reason every error here is: red text
     // on the lobby's orange is the field.
     .error
+      @include typography.strong
+
       background: var(--danger)
       color: var(--danger-ink)
-      font-weight: 700
       padding: var(--space-2xs) var(--space-s)
 
-      @include typography.trimmed-block(var(--space-2xs))
+      @include text-box.trimmed-block(var(--space-2xs))
