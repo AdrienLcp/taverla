@@ -3,6 +3,7 @@ import { resolve } from 'node:path'
 import { themePreferencePlugin } from '@adrienlcp/theme-preference/vite'
 import optimizeLocales from '@react-aria/optimize-locales-plugin'
 import react from '@vitejs/plugin-react'
+import fontaine from 'fontaine/postcss'
 import { defineConfig } from 'vite'
 
 import { API_PREFIX, SOCKET_PREFIX } from '@taverla/protocol/routes'
@@ -20,6 +21,16 @@ export default defineConfig({
     // Read by `scripts/prerender.ts`, which needs to know the stylesheet each
     // page's chunk carries before it can inline it.
     manifest: true
+  },
+  css: {
+    postcss: {
+      plugins: [
+        fontaine({
+          fallbacks: ['Arial'],
+          resolvePath: (path) => new URL(`./public${path}`, import.meta.url)
+        })
+      ]
+    }
   },
   plugins: [
     react({ compiler: { logDiagnostics: true } }),
