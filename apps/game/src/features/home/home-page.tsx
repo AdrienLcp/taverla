@@ -26,7 +26,7 @@ export const HomePage: React.FC = () => {
   const { locale } = useI18n()
   const translate = useTranslate()
   const createRoom = useCreateRoom()
-  const { isOpening, open, refusal } = createRoom
+  const { isOpening, isOpeningAny, open, refusal } = createRoom
 
   return (
     <Main className='home-page'>
@@ -49,6 +49,7 @@ export const HomePage: React.FC = () => {
           <div className='doors'>
             <div className='open'>
               <Button
+                isDisabled={isOpeningAny && !isOpening(null)}
                 isPending={isOpening(null)}
                 onPress={() => {
                   void open(null)
@@ -63,7 +64,7 @@ export const HomePage: React.FC = () => {
                 </p>
               )}
             </div>
-            <JoinWithCode />
+            <JoinWithCode isDisabled={isOpeningAny} />
           </div>
         </section>
 
@@ -74,7 +75,7 @@ export const HomePage: React.FC = () => {
           press aims at by 221px. A first-time visitor holds no key and sees no
           section at all.
         */}
-        <HeldRooms />
+        <HeldRooms isDisabled={isOpeningAny} />
       </div>
 
       <GameSpines createRoom={createRoom} />
@@ -84,8 +85,8 @@ export const HomePage: React.FC = () => {
         into a room — one shows a table and runs nothing.
       */}
       <div className='more'>
-        <WallDoor />
-        <ProjectWithCode />
+        <WallDoor isDisabled={isOpeningAny} />
+        <ProjectWithCode isDisabled={isOpeningAny} />
       </div>
     </Main>
   )

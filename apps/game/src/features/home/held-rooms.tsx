@@ -20,7 +20,10 @@ import './held-rooms.sass'
  * `outlined` puts it at the standing of the two doors below rather than above
  * them, and `large` is a press.
  */
-export const HeldRooms: React.FC = () => {
+export const HeldRooms: React.FC<{
+  /** Set while the page is already opening a room, which is where it is about to go. */
+  isDisabled: boolean
+}> = ({ isDisabled }) => {
   const rooms = useHeldRooms()
   const translate = useTranslate()
 
@@ -34,6 +37,7 @@ export const HeldRooms: React.FC = () => {
       {rooms.map(({ role, roomCode }) => (
         <Link
           href={role === 'host' ? hostPathFor(roomCode) : playPathFor(roomCode)}
+          isDisabled={isDisabled}
           key={roomCode}
           size='large'
           variant='outlined'

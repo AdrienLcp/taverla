@@ -43,6 +43,12 @@
         cursor: progress
         transform: translateY(calc(var(--edge) * 0.75))
 
+      // React Aria marks the pending spine disabled too, and that one has to
+      // stay bright: it is the room on its way.
+      &[data-disabled]:not([data-pending])
+        cursor: not-allowed
+        opacity: 0.45
+
       @container (width >= 26rem)
         grid-template-columns: minmax(0, 1fr) auto
         min-height: clamp(4.75rem, 15cqi, 5.75rem)

@@ -1604,6 +1604,13 @@ one part.
   document no longer plays `page-enter`, which the app then played a second
   time over its own nodes; a page reached by a navigation still arrives.
 
+- `[Game]` **A front door opening a room greys every other door out.** The
+  other game lines, *Ouvrir une table*, the code field, the held rooms and the
+  folded wall and projection doors are disabled until the room opens or the
+  request is refused; they used to look pressable and silently do nothing.
+- `[Game]` **The menu stops at a card's length.** The popover is capped at
+  520px, rather than running to the bottom of a tall screen.
+
 - `[Game]` **The launch follows an opened setup down the page.** *À table !*
   and the reason it refuses are one object, under the setup and pinned to the
   screen's bottom edge until the setup ends: scrolled to the last setting, the

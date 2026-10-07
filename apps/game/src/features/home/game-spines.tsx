@@ -30,7 +30,7 @@ type GameSpinesProps = {
  */
 export const GameSpines: React.FC<GameSpinesProps> = ({ createRoom }) => {
   const translate = useTranslate()
-  const { isOpening, open, refusal } = createRoom
+  const { isOpening, isOpeningAny, open, refusal } = createRoom
 
   return (
     <section className='game-spines'>
@@ -40,6 +40,7 @@ export const GameSpines: React.FC<GameSpinesProps> = ({ createRoom }) => {
           <Fragment key={game}>
             <Button
               className='spine'
+              isDisabled={isOpeningAny && !isOpening(game)}
               isPending={isOpening(game)}
               onPress={() => {
                 void open(game)

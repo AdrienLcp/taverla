@@ -38,7 +38,10 @@ import { useTranslate } from '@/presentation/i18n/i18n-provider'
  * field at the weight of *open a table* and *join* is a fork every
  * visitor has to read past to reach the two that are theirs.
  */
-export const ProjectWithCode: React.FC = () => {
+export const ProjectWithCode: React.FC<{
+  /** Set while the page is already opening a room, which is where it is about to go. */
+  isDisabled: boolean
+}> = ({ isDisabled }) => {
   const navigate = useNavigate()
   const translate = useTranslate()
   const [code, setCode] = useState('')
@@ -87,6 +90,7 @@ export const ProjectWithCode: React.FC = () => {
           autoComplete='off'
           description={translate('invite.door.description')}
           errorMessage={fieldErrorMessage({ error: codeError, translate })}
+          isDisabled={isDisabled}
           isInvalid={codeError !== null}
           label={translate('join.roomCode.label')}
           maxLength={ROOM_CODE_LENGTH + 2}
@@ -98,7 +102,7 @@ export const ProjectWithCode: React.FC = () => {
           placeholder={'•'.repeat(ROOM_CODE_LENGTH)}
           value={code}
         />
-        <Button type='submit' variant='outlined'>
+        <Button isDisabled={isDisabled} type='submit' variant='outlined'>
           {translate('invite.door.action')}
         </Button>
       </Form>

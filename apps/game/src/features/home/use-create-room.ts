@@ -34,7 +34,8 @@ type RoomOpening =
  * It is one state and not a boolean beside an error, because the page now has
  * six doors sharing this hook and a spinner has to appear on the one that was
  * pressed. That is also what closes the second press: a door already opening a
- * room refuses to open another, and no card has to be disabled to say so.
+ * room refuses to open another, and `isOpeningAny` is what greys the other
+ * doors out so they stop looking pressable while it does.
  */
 export const useCreateRoom = () => {
   const navigate = useNavigate()
@@ -44,6 +45,7 @@ export const useCreateRoom = () => {
   return {
     isOpening: (door: RoomDoor): boolean =>
       opening.status === 'opening' && opening.door === door,
+    isOpeningAny: opening.status === 'opening',
     open: async (door: RoomDoor): Promise<void> => {
       if (opening.status === 'opening') {
         return

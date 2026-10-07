@@ -16,7 +16,10 @@ import { useTranslate } from '@/presentation/i18n/i18n-provider'
  * door at the weight of *open a table* and *join* is a fork every
  * visitor has to read past to reach the two that are theirs.
  */
-export const WallDoor: React.FC = () => {
+export const WallDoor: React.FC<{
+  /** Set while the page is already opening a room, which is where it is about to go. */
+  isDisabled: boolean
+}> = ({ isDisabled }) => {
   const translate = useTranslate()
 
   return (
@@ -27,7 +30,7 @@ export const WallDoor: React.FC = () => {
       summary={translate('wall.door.summary')}
     >
       <p className='description'>{translate('wall.door.description')}</p>
-      <Link href={paths.wallPairing} variant='outlined'>
+      <Link href={paths.wallPairing} isDisabled={isDisabled} variant='outlined'>
         {translate('wall.door.action')}
       </Link>
     </Disclosure>

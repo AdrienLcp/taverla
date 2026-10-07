@@ -20,12 +20,17 @@ import { apiErrorKey } from '@/presentation/i18n/translation'
 
 import './join-with-code.sass'
 
+type JoinWithCodeProps = {
+  /** Set while this page is already opening a room, which is where it is about to go. */
+  isDisabled: boolean
+}
+
 /**
  * The half of joining that is not a QR code, and shell rather than blind test:
  * a code is a room, and the room knows which game it is running. Someone told
  * four characters across the room types them here whatever is being played.
  */
-export const JoinWithCode: React.FC = () => {
+export const JoinWithCode: React.FC<JoinWithCodeProps> = ({ isDisabled }) => {
   const navigate = useNavigate()
   const translate = useTranslate()
   const [code, setCode] = useState('')
@@ -92,6 +97,7 @@ export const JoinWithCode: React.FC = () => {
           autoComplete='off'
           description={translate('join.roomCode.description')}
           errorMessage={fieldErrorMessage({ error: codeError, translate })}
+          isDisabled={isDisabled}
           isInvalid={codeError !== null}
           label={translate('join.roomCode.label')}
           maxLength={ROOM_CODE_LENGTH + 2}
@@ -106,6 +112,7 @@ export const JoinWithCode: React.FC = () => {
           value={code}
         />
         <Button
+          isDisabled={isDisabled}
           isPending={isJoining}
           size='large'
           type='submit'

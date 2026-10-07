@@ -68,6 +68,13 @@ import { useMenuWidth } from './use-menu-width'
 import './app-menu.sass'
 
 /**
+ * React Aria takes the lower of this and the room left below the trigger, so a
+ * short screen still scrolls inside the card; a tall one stops it at a card's
+ * length rather than at the bottom of the screen.
+ */
+const MENU_MAX_HEIGHT_PX = 520
+
+/**
  * The ways to put this table on a big screen. The invitation is the code and
  * the square alone, for a crowd that only has to get in; the wall is the whole
  * game. The same machine opens either in a new tab — a plain navigation off the
@@ -447,7 +454,11 @@ export const AppMenu: React.FC = () => {
           <span className='trigger-label'>{translate('menu.label')}</span>
         </ReactAriaButton>
 
-        <Popover className='app-menu-popover' placement='bottom end'>
+        <Popover
+          className='app-menu-popover'
+          maxHeight={MENU_MAX_HEIGHT_PX}
+          placement='bottom end'
+        >
           <Dialog aria-label={translate('menu.label')}>
             {({ close }) => (
               <>
