@@ -60,6 +60,7 @@ const encodeViewFor = (
     envelope,
     isHostThere,
     isWallThere,
+    now,
     room
   }: {
     envelope:
@@ -72,6 +73,7 @@ const encodeViewFor = (
       | { type: 'room.updated' }
     isHostThere: boolean
     isWallThere: boolean
+    now: number
     room: Room
   }
 ): string => {
@@ -82,6 +84,7 @@ const encodeViewFor = (
         view: toHostView({
           isHostConnected: isHostThere,
           isWallConnected: isWallThere,
+          now,
           room,
           seatId: connection.playerId
         })
@@ -93,6 +96,7 @@ const encodeViewFor = (
         ...envelope,
         view: toPlayerView({
           isHostConnected: isHostThere,
+          now,
           room,
           youId: connection.playerId
         })
@@ -102,7 +106,7 @@ const encodeViewFor = (
     case 'wall': {
       return encodeChecked(wallServerMessageSchema, {
         ...envelope,
-        view: toWallView({ isHostConnected: isHostThere, room })
+        view: toWallView({ isHostConnected: isHostThere, now, room })
       })
     }
   }
@@ -112,16 +116,19 @@ export const sendWelcome = (
   connection: Connection,
   { engine, sessionId }: { engine: RoomEngine; sessionId: SessionId }
 ): void => {
+  const now = engine.now()
+
   connection.send(
     encodeViewFor(connection, {
       envelope: {
         protocolVersion: PROTOCOL_VERSION,
-        serverTime: engine.now(),
+        serverTime: now,
         sessionId,
         type: 'welcome'
       },
       isHostThere: isHostConnected(engine),
       isWallThere: isWallConnected(engine),
+      now,
       room: engine.room
     })
   )
@@ -131,6 +138,7 @@ export const sendWelcome = (
 export const broadcastRoom = (engine: RoomEngine): void => {
   const isHostThere = isHostConnected(engine)
   const isWallThere = isWallConnected(engine)
+  const now = engine.now()
 
   for (const connection of engine.connections.all()) {
     connection.send(
@@ -138,6 +146,7 @@ export const broadcastRoom = (engine: RoomEngine): void => {
         envelope: { type: 'room.updated' },
         isHostThere,
         isWallThere,
+        now,
         room: engine.room
       })
     )

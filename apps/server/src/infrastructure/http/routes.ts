@@ -27,6 +27,7 @@ import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 import { normalizeRoomCode } from '@taverla/core/room/room-code'
 
 import { env } from '@/env'
+import { invalidInput } from '@/infrastructure/http/error-responses'
 import type { RoomDoor, WallPairings } from '@/infrastructure/http/http-ports'
 import { logger } from '@/infrastructure/logging/logger'
 import { fetchTracksFor } from '@/infrastructure/music/deezer-client'
@@ -121,7 +122,7 @@ export const registerHttpRoutes = ({
   app.post(
     API_ROUTES.rooms,
     limitRoomCreation,
-    zValidator('json', createRoomRequestSchema),
+    zValidator('json', createRoomRequestSchema, invalidInput),
     async (context) => {
       const { game, locale } = context.req.valid('json')
       const opened = await rooms.openRoom({ game: game ?? null, locale })
@@ -172,7 +173,7 @@ export const registerHttpRoutes = ({
 
   app.get(
     API_ROUTES.wall,
-    zValidator('query', wallPairingPollQuerySchema),
+    zValidator('query', wallPairingPollQuerySchema, invalidInput),
     async (context) => {
       const pairingCode = wallPairingCodeSchema.safeParse(
         context.req.param('pairingCode')
@@ -199,7 +200,7 @@ export const registerHttpRoutes = ({
 
   app.post(
     API_ROUTES.wallPair,
-    zValidator('json', pairWallRequestSchema),
+    zValidator('json', pairWallRequestSchema, invalidInput),
     async (context) => {
       const pairingCode = wallPairingCodeSchema.safeParse(
         context.req.param('pairingCode')
@@ -236,7 +237,7 @@ export const registerHttpRoutes = ({
 
   app.get(
     API_ROUTES.trackSearch,
-    zValidator('query', trackSearchQuerySchema),
+    zValidator('query', trackSearchQuerySchema, invalidInput),
     async (context) => {
       const { difficulty, q } = context.req.valid('query')
       const found = await fetchTracksFor({
@@ -253,7 +254,7 @@ export const registerHttpRoutes = ({
   // knowing they pasted the wrong one until the first round comes up empty.
   app.get(
     API_ROUTES.playlistTracks,
-    zValidator('query', playlistPreviewQuerySchema),
+    zValidator('query', playlistPreviewQuerySchema, invalidInput),
     async (context) => {
       const { difficulty } = context.req.valid('query')
       const found = await fetchTracksFor({
@@ -285,7 +286,7 @@ export const registerHttpRoutes = ({
 
   app.get(
     API_ROUTES.decadeTracks,
-    zValidator('query', decadePreviewQuerySchema),
+    zValidator('query', decadePreviewQuerySchema, invalidInput),
     async (context) => {
       const { decades, difficulty } = context.req.valid('query')
       const found = await fetchTracksFor({

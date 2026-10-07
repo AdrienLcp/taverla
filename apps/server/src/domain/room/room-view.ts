@@ -24,7 +24,6 @@ import {
 
 import { elapsedRoundMs, flipsAtOf } from '@/domain/round/round-service'
 import { answerGroupsFor, blankPlayerIdsFor } from '@/domain/round/slate-round'
-import { nowMs } from '@/infrastructure/clock'
 
 import type { Participant, PlayerAttempts, Room, Round } from './room'
 
@@ -37,16 +36,18 @@ import type { Participant, PlayerAttempts, Room, Round } from './room'
 export const toHostView = ({
   isHostConnected,
   isWallConnected,
+  now,
   room,
   seatId
 }: {
   isHostConnected: boolean
   isWallConnected: boolean
+  now: number
   room: Room
   /** The seat this host took, if they took one — they then read what a player reads. */
   seatId: PlayerId | null
 }): HostRoomView => ({
-  ...toBaseView({ isHostConnected, room, youId: seatId }),
+  ...toBaseView({ isHostConnected, now, room, youId: seatId }),
   currentContent:
     room.round === null
       ? null
@@ -64,12 +65,14 @@ export const toHostView = ({
  */
 export const toWallView = ({
   isHostConnected,
+  now,
   room
 }: {
   isHostConnected: boolean
+  now: number
   room: Room
 }): WallRoomView => ({
-  ...toBaseView({ isHostConnected, room, youId: null }),
+  ...toBaseView({ isHostConnected, now, room, youId: null }),
   currentContent:
     room.round === null
       ? null
@@ -187,23 +190,28 @@ const toHostSlateContent = ({
 
 export const toPlayerView = ({
   isHostConnected,
+  now,
   room,
   youId
 }: {
   isHostConnected: boolean
+  now: number
   room: Room
   youId: PlayerId
 }): PlayerRoomView => ({
-  ...toBaseView({ isHostConnected, room, youId }),
+  ...toBaseView({ isHostConnected, now, room, youId }),
   youId
 })
 
 const toBaseView = ({
   isHostConnected,
+  now,
   room,
   youId
 }: {
   isHostConnected: boolean
+  /** The time the frame carrying this view is stamped with. */
+  now: number
   room: Room
   youId: PlayerId | null
 }) => ({
@@ -212,7 +220,7 @@ const toBaseView = ({
   phase: room.phase,
   players: [...room.players.values()].map(toPublicPlayer),
   round: room.round === null ? null : toRoundView({ round: room.round, youId }),
-  roundElapsedMs: room.round === null ? 0 : elapsedRoundMs(room.round, nowMs()),
+  roundElapsedMs: room.round === null ? 0 : elapsedRoundMs(room.round, now),
   settings: room.settings,
   yourVerdict:
     youId === null

@@ -1,10 +1,10 @@
 import { env } from 'cloudflare:workers'
-import { Hono } from 'hono'
 
 import { ROOM_SOCKET_ROUTE } from '@taverla/protocol/routes'
 
 import { normalizeRoomCode } from '@taverla/core/room/room-code'
 
+import { createHttpApp } from '@/infrastructure/http/http-app'
 import { limitRoomCreationWith } from '@/infrastructure/http/rate-limit'
 import { registerHttpRoutes } from '@/infrastructure/http/routes'
 import {
@@ -22,7 +22,7 @@ import {
 export { RoomObject } from '@/infrastructure/worker/room-object'
 export { WallPairingObject } from '@/infrastructure/worker/wall-pairing-object'
 
-const app = new Hono()
+const app = createHttpApp()
 
 registerHttpRoutes({
   app,

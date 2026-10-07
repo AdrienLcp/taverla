@@ -159,8 +159,19 @@ export const healthResponseSchema = z.object({
   status: z.literal('ok')
 })
 
+/**
+ * The socket's codes plus the two only a request can earn: a body or a query
+ * the schema refused, and a path nothing is registered on. Kept off
+ * `protocolErrorCodeSchema` because no socket frame carries either.
+ */
+export const httpErrorCodeSchema = z.enum([
+  ...protocolErrorCodeSchema.options,
+  'invalid_input',
+  'not_found'
+])
+
 export const apiErrorResponseSchema = z.object({
-  code: protocolErrorCodeSchema,
+  code: httpErrorCodeSchema,
   message: z.string()
 })
 

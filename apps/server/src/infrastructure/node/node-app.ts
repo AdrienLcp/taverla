@@ -1,11 +1,11 @@
 import { upgradeWebSocket } from '@hono/node-server'
-import { Hono } from 'hono'
 import { WebSocketServer } from 'ws'
 
 import { ROOM_SOCKET_ROUTE } from '@taverla/protocol/routes'
 
 import { normalizeRoomCode } from '@taverla/core/room/room-code'
 
+import { createHttpApp } from '@/infrastructure/http/http-app'
 import { limitRoomCreationWith } from '@/infrastructure/http/rate-limit'
 import { registerHttpRoutes } from '@/infrastructure/http/routes'
 import { createRoomSocketEvents } from '@/infrastructure/messaging/socket-handler'
@@ -25,7 +25,7 @@ export const ROOMS_BEFORE_RATE_LIMIT = 30
  * test's own process. Nothing deploys it — production is `worker.ts`.
  */
 export const createApp = () => {
-  const app = new Hono()
+  const app = createHttpApp()
   const websocket = { server: new WebSocketServer({ noServer: true }) }
 
   app.get(
