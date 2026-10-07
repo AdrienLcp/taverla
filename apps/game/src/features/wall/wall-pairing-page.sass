@@ -79,6 +79,12 @@
       .join-url
         font-size: clamp(0.875rem, calc(var(--stage-unit) * 2.4), 2.5rem)
 
+      // Split into a poster, the square already has a column of its own, and
+      // the words beside it were squeezed to nothing: they go under it.
+      @include layout.poster-wide
+        .qr
+          grid-template-columns: minmax(0, var(--invitation-qr-max-width))
+
     // No code to show, because the server could not be reached for one.
     &.failed
       gap: var(--space-m)
