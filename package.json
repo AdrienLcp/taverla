@@ -26,7 +26,7 @@
     "build": "pnpm -r build",
     "deps:upgrade": "corepack use pnpm@latest && pnpm -r up -L && biome migrate --write",
     "dev": "pnpm --parallel --filter @taverla/server --filter @taverla/game dev",
-    "lighthouse": "pnpm build && node scripts/lighthouse.mjs",
+    "lighthouse": "pnpm build && node --import tsx scripts/lighthouse.ts",
     "lint": "biome check --write",
     "lint:ci": "biome ci",
     "spell": "cspell --no-progress --gitignore \"**\"",
@@ -35,7 +35,7 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "tsc --noEmit -p e2e && playwright test -c e2e",
     "typecheck": "pnpm -r --parallel exec tsc --noEmit && tsc --noEmit -p e2e && tsc --noEmit -p tsconfig.root.json",
-    "validate": "pnpm lint:ci && pnpm spell && pnpm build && pnpm test && pnpm test:e2e"
+    "validate": "pnpm lint:ci && pnpm spell && pnpm build && pnpm typecheck && pnpm test:coverage && pnpm test:e2e"
   },
   "type": "module",
   "version": "0.1.0"

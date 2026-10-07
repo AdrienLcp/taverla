@@ -39,7 +39,7 @@ const lhci = spawn(
   { stdio: 'inherit' }
 )
 
-const code = await new Promise((resolve) => {
+const code = await new Promise<number | null>((resolve) => {
   lhci.on('close', resolve)
 })
 

@@ -48,8 +48,8 @@ built back to back and emit a byte-identical payload. See
 parallel, `main` deploys from CI with `wrangler deploy`, `pnpm test`
 covers protocol, core and server, `pnpm test:core:watch` is the red-green loop,
 and `pnpm test:e2e` runs three Playwright journeys on ports of their own.
-**`pnpm validate`** is build, test and e2e together — run it before saying
-something works. Ports are offset from 3000/5173 so this repo runs beside the
+**`pnpm validate`** is what CI runs — lint, spell, build, typecheck, tests with
+coverage and e2e — run it before saying something works. Ports are offset from 3000/5173 so this repo runs beside the
 other dev servers on the machine.
 
 ## The four rules that matter most here
