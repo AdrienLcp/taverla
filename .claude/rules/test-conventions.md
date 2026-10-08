@@ -70,8 +70,11 @@ run.
 
 `worker-object.test.ts` is the one suite that runs the Worker rather than the
 Node app: `harnessAt` takes the origin `unstable_startWorker` hands back, so it
-drives the Durable Object with the same peers. It costs ~35 s, because it
-restarts the runtime to prove a room outlives its object.
+drives the Durable Object with the same peers. It restarts the runtime to prove
+a room outlives its object, so it bundles the Worker once with
+`wrangler deploy --dry-run` while the file is collected and starts it with
+`no_bundle`: left to bundle on every start, its first request ran past the
+test's minute on a loaded machine.
 
 `CATALOGUE` and `QUESTIONS` live in the harness because the anti-cheat assertion
 searches raw frames for those exact strings, and a per-file copy that drifted

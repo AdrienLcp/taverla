@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process'
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
@@ -55,43 +56,80 @@ const SERVER_ROOT = resolve(import.meta.dirname, '../..')
 
 // The deployed config without its static assets: `wrangler.jsonc` points them
 // at the game's build, which a test run must not depend on.
-const writeTestConfig = (directory: string) => {
-  const path = join(directory, 'wrangler.json')
+const testConfig = ({
+  main,
+  noBundle
+}: {
+  main: string
+  noBundle: boolean
+}) => ({
+  compatibility_date: '2026-09-01',
+  compatibility_flags: ['nodejs_compat'],
+  durable_objects: {
+    bindings: [
+      { class_name: 'RoomObject', name: 'ROOMS' },
+      { class_name: 'WallPairingObject', name: 'WALL_PAIRINGS' }
+    ]
+  },
+  main,
+  migrations: [
+    {
+      new_sqlite_classes: ['RoomObject', 'WallPairingObject'],
+      tag: 'v1'
+    }
+  ],
+  name: 'taverla-test',
+  no_bundle: noBundle,
+  ratelimits: [
+    {
+      name: 'ROOM_CREATION_LIMITER',
+      namespace_id: '1001',
+      simple: { limit: 1000, period: 60 }
+    }
+  ]
+})
 
-  writeFileSync(
-    path,
-    JSON.stringify({
-      compatibility_date: '2026-09-01',
-      compatibility_flags: ['nodejs_compat'],
-      durable_objects: {
-        bindings: [
-          { class_name: 'RoomObject', name: 'ROOMS' },
-          { class_name: 'WallPairingObject', name: 'WALL_PAIRINGS' }
-        ]
-      },
-      main: join(SERVER_ROOT, 'src/worker.ts'),
-      migrations: [
-        {
-          new_sqlite_classes: ['RoomObject', 'WallPairingObject'],
-          tag: 'v1'
-        }
-      ],
-      name: 'taverla-test',
-      ratelimits: [
-        {
-          name: 'ROOM_CREATION_LIMITER',
-          namespace_id: '1001',
-          simple: { limit: 1000, period: 60 }
-        }
-      ]
-    })
-  )
+const writeConfig = (path: string, config: ReturnType<typeof testConfig>) => {
+  writeFileSync(path, JSON.stringify(config))
 
   return path
 }
 
+/**
+ * Bundled once, while the file is collected and no timeout runs: left to
+ * `unstable_startWorker`, every start bundles the worker again and its first
+ * request waits on that, which a loaded machine stretched past the test's
+ * minute. A restart then only starts the runtime again.
+ */
+const bundleWorker = (directory: string): string => {
+  const sourceConfig = writeConfig(
+    join(directory, 'wrangler.source.json'),
+    testConfig({ main: join(SERVER_ROOT, 'src/worker.ts'), noBundle: false })
+  )
+  const outdir = join(directory, 'bundle')
+
+  execFileSync(
+    process.execPath,
+    [
+      join(SERVER_ROOT, 'node_modules/wrangler/bin/wrangler.js'),
+      'deploy',
+      '--dry-run',
+      '--config',
+      sourceConfig,
+      '--outdir',
+      outdir
+    ],
+    { cwd: SERVER_ROOT, stdio: 'ignore' }
+  )
+
+  return writeConfig(
+    join(directory, 'wrangler.json'),
+    testConfig({ main: join(outdir, 'worker.js'), noBundle: true })
+  )
+}
+
 const stateDirectory = mkdtempSync(join(tmpdir(), 'taverla-worker-'))
-const configPath = writeTestConfig(stateDirectory)
+const configPath = bundleWorker(stateDirectory)
 
 const startRuntime = async () => {
   const worker = await unstable_startWorker({

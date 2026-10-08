@@ -45,18 +45,25 @@ const bankedQuestionSchema = hostQuestionSchema.extend({
 })
 
 /**
- * Parsed once, at boot. A bank that no longer matches the schema is a broken
- * deploy rather than a round that fails in front of a room — and the cost is
- * paid while nobody is playing.
+ * Parsed once, on the first draw rather than at boot. Every cold start of a
+ * Durable Object evaluates this module, and most rooms are not a quiz: parsing
+ * 5.6 MB of rows there held each first request for seconds. A bank that no
+ * longer matches the schema is still caught before a deploy, by the corpus
+ * sweep in `question-bank.test.ts`, which reads the rows through this same
+ * parse.
  *
- * Exported for the corpus sweep, which has to read the rows *as they boot*: the
- * type TypeScript infers from the 5.6 MB JSON literal degraded the day the
- * English half started carrying `accepted` spellings, and a `decoys` silently
- * widening to `any` takes the sweep's guarantees with it.
+ * The parse rather than the JSON's own type: the type TypeScript infers from
+ * the literal degraded the day the English half started carrying `accepted`
+ * spellings, and a `decoys` silently widening to `any` takes the sweep's
+ * guarantees with it.
  */
-export const BANKED_QUESTIONS = z
-  .array(bankedQuestionSchema)
-  .parse(bank.questions)
+let parsedBank: BankedQuestion[] | undefined
+
+export const bankedQuestions = (): BankedQuestion[] => {
+  parsedBank ??= z.array(bankedQuestionSchema).parse(bank.questions)
+
+  return parsedBank
+}
 
 /**
  * A row as the bank holds it, which is more than a round needs: the rating that
@@ -64,17 +71,24 @@ export const BANKED_QUESTIONS = z
  * to the game, so `hostQuestionOf` names the fields that do rather than
  * spreading the row into a round.
  */
-export type BankedQuestion = (typeof BANKED_QUESTIONS)[number]
+export type BankedQuestion = z.infer<typeof bankedQuestionSchema>
 
 /**
- * Split once, at boot, because a room only ever draws from one of them: the two
- * banks are separate downloads from separate sources, and scanning the other
- * four and a half thousand rows on every draw was work that could never match.
+ * Split once, with the parse, because a room only ever draws from one of them:
+ * the two banks are separate downloads from separate sources, and scanning the
+ * other four and a half thousand rows on every draw was work that could never
+ * match.
  */
-const BY_LANGUAGE = Map.groupBy(
-  BANKED_QUESTIONS,
-  (question) => question.language
-)
+let questionsByLanguage: Map<string, BankedQuestion[]> | undefined
+
+const byLanguage = (): Map<string, BankedQuestion[]> => {
+  questionsByLanguage ??= Map.groupBy(
+    bankedQuestions(),
+    (question) => question.language
+  )
+
+  return questionsByLanguage
+}
 
 export const hostQuestionOf = ({
   accepted,
@@ -123,7 +137,7 @@ export const drawQuestion = ({
   playedIds: ReadonlySet<string>
   settings: QuestionDrawSettings
 }): BankedQuestion | null => {
-  const eligible = (BY_LANGUAGE.get(settings.language) ?? []).filter(
+  const eligible = (byLanguage().get(settings.language) ?? []).filter(
     (question) =>
       !playedIds.has(question.id) &&
       (settings.allowsAdultContent || !question.isAdult) &&

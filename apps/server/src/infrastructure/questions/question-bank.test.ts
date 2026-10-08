@@ -16,10 +16,12 @@ import { gradeQuizGuess } from '@taverla/core/quiz/question-answer'
 import { normalizeAnswer } from '@taverla/core/round/answer-matching'
 
 import {
-  BANKED_QUESTIONS,
   type BankedQuestion,
+  bankedQuestions,
   drawQuestion
 } from './question-bank'
+
+const BANKED_QUESTIONS = bankedQuestions()
 
 const NOTHING_PLAYED: ReadonlySet<string> = new Set()
 
