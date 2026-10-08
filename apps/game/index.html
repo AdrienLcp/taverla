@@ -26,7 +26,7 @@
       `scripts/prerender.ts`, which fails the build if any of them stops
       matching. The copy lives in `presentation/head/document-head.ts` alone:
       the empty values here are filled with its English home page by
-      `scripts/shell-head.ts`, so the shell `pnpm dev` and the SPA fallback
+      the `shellHead` plugin in `vite.config.ts`, so the shell `pnpm dev` and the SPA fallback
       serve says what the prerendered home says. The font preloads, the
       `hreflang` alternates, `og:locale:alternate` and the JSON-LD are written
       by the prerender only.

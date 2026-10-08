@@ -111,7 +111,9 @@ padding and gap; a `_typography.sass` mixin for the text voice, and a `--text-*`
 step for a size set on its own; `--stroke-*` for a line's weight (colour and
 style stay at the call site) and `--hairline` for the board's rule whole;
 `--radius-*`; `--target` / `--control-height`; `--measure` or a
-`--measure-<role>` for a line length, never a raw `ch`; a soft shadow is a
+`--measure-<role>` for a line length, in `em`: no size is written in `ch`,
+whose zero the fallback face draws at another width, so a measure is the zero
+of its line's face measured in Chromium and written in `em`; a soft shadow is a
 `--shadow-<role>` layer whole (`--shadow-piece`, `--shadow-pressed`,
 `--shadow-recess`…, coloured `--shadow-ink`), the chipboard edge beside it
 staying the piece's own depth, `--edge`: a press, a lift or a pull reads its
@@ -207,9 +209,11 @@ Neither shows up in a screenshot. They surface by playing on a phone.
 
 `index.html` declares `viewport-fit=cover`, and every surface that reaches an
 edge pads by the larger of its own space and the inset, never the sum:
-`--layout-padding-*` and `--framed-padding-block-*` are `max()` of the padding
-and the `--safe-area-*` tokens from `tokens.defaults`, which carry the `0px`
-fallback and read Android's static bottom inset first. `#root` is not padded, or
+the sides pad by `--gutter-left` and `--gutter-right` from `tokens.defaults`,
+computed on `:root` from `--gutter` (set there to `--layout-padding`), and
+`--layout-padding-block-*` and `--framed-padding-block-*` are `max()` of the
+padding and the `--safe-area-*` tokens, which carry the `0px` fallback and read
+Android's static bottom inset first. `#root` is not padded, or
 every page would pay the inset twice. A raw `env()` is never written.
 
 ## What `globals.sass` sets
@@ -220,12 +224,17 @@ every page would pay the inset twice. A raw `env()` is never written.
 rather than faked; `::selection` is `--selection` under `--ink`, a pair in
 `tokens-contrast.test.ts`; `#root` fills `100dvh` and clips both axes, so a page
 entering with a `transform` or a drawer parked off-screen never scrolls the
-document. Each face the first screen reads is preloaded with
-`fetchpriority="low"` by the prerender, in the prerendered pages only — the
-`index.html` shell also serves the redirect and the not-found page, where a
-preloaded font sits unused while the browser warns. `metricTwins()` from
-`@adrienlcp/styles/metric-twins`, right after fontaine, widens its fallback from
-Arial to Arial, Liberation Sans, Arimo and Roboto; no copy of it lives here.
+document. Both faces load `optional`, and each the first screen reads is
+preloaded at the default priority by the prerender's `addFontPreloads`, in the
+prerendered pages only — the `index.html` shell also serves the redirect and
+the not-found page, where a preloaded font sits unused while the browser warns.
+The fallback faces are written per weight band in `_fonts.sass`
+(`fonts.fallback-faces`, skipped in fontaine): with `font-synthesis: none`,
+fontaine's one regular Arial face would set every bold title regular. The font
+tokens name each `… fallback` family themselves, since fontaine adds it to a
+`font-family` declaration and never to a custom property. `metricTwins()` from
+`@adrienlcp/styles/metric-twins`, right after fontaine, widens Arial and Arial
+Bold to their metric twins; no copy of it lives here.
 
 ## Class naming
 

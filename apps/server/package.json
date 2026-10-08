@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@adrienlcp/result": "^0.1.0",
+    "@adrienlcp/result": "^0.1.1",
     "@hono/zod-validator": "^0.9.1",
     "@taverla/core": "workspace:*",
     "@taverla/protocol": "workspace:*",

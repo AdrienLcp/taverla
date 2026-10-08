@@ -4,13 +4,25 @@
 // lettering printed on the box — a lid title, a room code, a score — and its
 // width axis is what lets a game's name sit condensed on a spine. Atkinson
 // Hyperlegible Next is everything read, chosen for the grandparent at the
-// table. Party Wi-Fi is why both are subset, the read face preloaded from
-// index.html, and both set to `swap`.
+// table. Party Wi-Fi is why both are subset, preloaded by the prerender, and
+// left at `optional`: a face that misses the first paint never swaps in.
 
 @use '@adrienlcp/styles/fonts'
+
+/// Each file's ascent, descent and capital height, in em.
+$bricolage-metrics: (ascent: 0.93, descent: 0.27, cap-height: 0.66)
+$atkinson-metrics: (ascent: 0.984, descent: 0.316, cap-height: 0.668)
 
 @layer base
   @include fonts.font-face('Bricolage Grotesque', '/fonts/bricolage-grotesque-latin.woff2', fonts.$latin, $weight: 200 800, $stretch: 75% 100%)
   @include fonts.font-face('Bricolage Grotesque', '/fonts/bricolage-grotesque-latin-ext.woff2', fonts.$latin-ext, $weight: 200 800, $stretch: 75% 100%)
   @include fonts.font-face('Atkinson Hyperlegible Next', '/fonts/atkinson-hyperlegible-next-latin.woff2', fonts.$latin, $weight: 200 800)
   @include fonts.font-face('Atkinson Hyperlegible Next', '/fonts/atkinson-hyperlegible-next-latin-ext.woff2', fonts.$latin-ext, $weight: 200 800)
+
+  // fontaine's size-adjust for each file, from its average character width;
+  // each width ratio is the scaled Arial's over the face's at that band's
+  // weight, measured over the text of every prerendered page in both
+  // languages, at the width each line is set in. Bricolage's display lines are
+  // trimmed to their capitals.
+  @include fonts.fallback-faces('Bricolage Grotesque', $bricolage-metrics, 1.05428, (200 649: 1.1482, 650 749: 1.1026, 750 800: 1.4324), $trimmed-to-capitals: true)
+  @include fonts.fallback-faces('Atkinson Hyperlegible Next', $atkinson-metrics, 0.995961, (200 449: 1.006, 450 649: 0.9745, 650 800: 1.0141))

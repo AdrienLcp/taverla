@@ -1,5 +1,6 @@
 import { resolve } from 'node:path'
 
+import { shellHead } from '@adrienlcp/prerender/vite'
 import { metricTwins } from '@adrienlcp/styles/metric-twins'
 import { themePreferencePlugin } from '@adrienlcp/theme-preference/vite'
 import optimizeLocales from '@react-aria/optimize-locales-plugin'
@@ -7,10 +8,27 @@ import react from '@vitejs/plugin-react'
 import fontaine from 'fontaine/postcss'
 import { defineConfig } from 'vite'
 
+import { DEFAULT_LOCALE } from '@taverla/protocol/locale'
 import { API_PREFIX, SOCKET_PREFIX } from '@taverla/protocol/routes'
 
-import { shellHeadPlugin } from './scripts/shell-head.ts'
+import {
+  IMAGE_ALTS,
+  OPEN_GRAPH_LOCALES,
+  PAGE_HEADS
+} from './src/presentation/head/document-head.ts'
 import { themeStore } from './src/presentation/theme/theme-store.ts'
+
+/**
+ * Written per weight band in `_fonts.sass`: fontaine writes one fallback face
+ * for a whole variable font, in regular Arial, and `font-synthesis: none` never
+ * draws it bold.
+ */
+const FALLBACK_FACES_WRITTEN_BY_HAND = new Set([
+  'Atkinson Hyperlegible Next fallback',
+  'Bricolage Grotesque fallback'
+])
+
+const HOME_HEAD = PAGE_HEADS[DEFAULT_LOCALE].home
 
 const SERVER_ORIGIN = process.env.VITE_SERVER_ORIGIN ?? 'http://localhost:3100'
 
@@ -29,7 +47,9 @@ export default defineConfig({
       plugins: [
         fontaine({
           fallbacks: ['Arial'],
-          resolvePath: (path) => new URL(`./public${path}`, import.meta.url)
+          resolvePath: (path) => new URL(`./public${path}`, import.meta.url),
+          skipFontFaceGeneration: (fallbackName) =>
+            FALLBACK_FACES_WRITTEN_BY_HAND.has(fallbackName)
         }),
         metricTwins()
       ]
@@ -41,7 +61,17 @@ export default defineConfig({
       ...optimizeLocales.vite({ locales: ['en-US', 'fr-FR'] }),
       enforce: 'pre'
     },
-    shellHeadPlugin(),
+    shellHead({
+      filename: resolve(import.meta.dirname, 'index.html'),
+      metaContents: {
+        'name="description"': HOME_HEAD.description,
+        'property="og:description"': HOME_HEAD.description,
+        'property="og:image:alt"': IMAGE_ALTS[DEFAULT_LOCALE],
+        'property="og:locale"': OPEN_GRAPH_LOCALES[DEFAULT_LOCALE],
+        'property="og:title"': HOME_HEAD.title
+      },
+      title: HOME_HEAD.title
+    }),
     themePreferencePlugin(themeStore)
   ],
   resolve: {

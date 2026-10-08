@@ -175,20 +175,24 @@
     --transition-base: 260ms
     --transition-slow: 520ms
 
-    --font-display: 'Bricolage Grotesque', 'Atkinson Hyperlegible Next', system-ui, sans-serif
-    --font-base: 'Atkinson Hyperlegible Next', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif
+    // Each '… fallback' is the local face `_fonts.sass` scales to the web
+    // face's widths, named here because fontaine adds it to a `font-family`
+    // declaration and never to a custom property.
+    --font-display: 'Bricolage Grotesque', 'Bricolage Grotesque fallback', system-ui, sans-serif
+    --font-base: 'Atkinson Hyperlegible Next', 'Atkinson Hyperlegible Next fallback', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif
 
     --layout-padding: clamp(1rem, calc(var(--stage-unit) * 4), 3.5rem)
+    // The sides pad by `--gutter-left` and `--gutter-right`, which
+    // `tokens.defaults` computes here from it and the side insets.
+    --gutter: var(--layout-padding)
 
-    // The same padding per side, because `viewport-fit=cover` in `index.html`
+    // The top and the bottom, because `viewport-fit=cover` in `index.html`
     // lays the page out under the sensor housing, the rounded corners and the
     // home indicator. `max()` of the two rather than a sum: only the larger is
     // right in both orientations. The `--safe-area-*` insets come from
     // `tokens.defaults`, with their fallback and Android's static bottom.
     --layout-padding-block-start: max(var(--layout-padding), var(--safe-area-top))
     --layout-padding-block-end: max(var(--layout-padding), var(--safe-area-bottom))
-    --layout-padding-inline-start: max(var(--layout-padding), var(--safe-area-left))
-    --layout-padding-inline-end: max(var(--layout-padding), var(--safe-area-right))
 
     // The top and bottom of a screen held to the viewport, tighter than a page's
     // because every pixel of it is taken from the four tiles. The menu reads it
@@ -200,16 +204,18 @@
     --column-max-width: 38.75rem
     --column-wide-max-width: #{layout.$wide-screen}
 
-    --measure: 60ch
-    --measure-door-headline: 15ch
-    --measure-door-pitch: 32ch
-    --measure-game-headline: 18ch
-    --measure-game-pitch: 46ch
-    --measure-tagline: 21ch
-    --measure-note: 40ch
-    --measure-error: 42ch
-    --measure-hint: 28ch
-    --measure-slate-index: 12ch
+    // Each was a count of characters, measured as the zero of the face its
+    // line is set in and written in em, so the fallback face keeps the width.
+    --measure: 38.88em
+    --measure-door-headline: 9.7em
+    --measure-door-pitch: 20.74em
+    --measure-game-headline: 11.7em
+    --measure-game-pitch: 29.81em
+    --measure-tagline: 13.84em
+    --measure-note: 25.92em
+    --measure-error: 27.22em
+    --measure-hint: 18.28em
+    --measure-slate-index: 7.09em
 
     // The pair every component reads. The board is the ground on every screen
     // at every phase: the phase is said by `--phase-ink` on the round's own

@@ -1,8 +1,8 @@
 {
   "author": "Adrien Lacourpaille",
   "devDependencies": {
-    "@adrienlcp/biome-config": "^0.2.0",
-    "@adrienlcp/tsconfig": "^0.1.0",
+    "@adrienlcp/biome-config": "^0.2.1",
+    "@adrienlcp/tsconfig": "^0.1.1",
     "@biomejs/biome": "2.5.14",
     "@cspell/dict-fr-fr": "^2.3.2",
     "@lhci/cli": "^0.15.1",
