@@ -1,10 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { startRoomHarness } from './node-room-harness'
 import {
   playerView,
   type RoomHarness,
   sessionIdOf,
-  startRoomHarness,
   waitFor
 } from './room-harness'
 

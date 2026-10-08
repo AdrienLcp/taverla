@@ -6,6 +6,7 @@ import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
 import { nowMs } from '@/infrastructure/clock'
 
+import { startRoomHarness } from './node-room-harness'
 import {
   FAST_GAME,
   halves,
@@ -14,7 +15,6 @@ import {
   type RoomHarness,
   sessionIdOf,
   sleep,
-  startRoomHarness,
   waitFor
 } from './room-harness'
 

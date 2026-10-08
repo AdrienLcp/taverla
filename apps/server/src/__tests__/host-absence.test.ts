@@ -8,6 +8,7 @@ import {
 } from '@taverla/protocol/server-message'
 import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
+import { startRoomHarness } from './node-room-harness'
 import {
   errorsIn,
   FAST_GAME,
@@ -19,7 +20,6 @@ import {
   SEATED_CONSOLE_GAME,
   sessionIdOf,
   sleep,
-  startRoomHarness,
   waitFor
 } from './room-harness'
 

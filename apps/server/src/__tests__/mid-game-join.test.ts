@@ -7,13 +7,13 @@ import {
   type RoomSettings
 } from '@taverla/protocol/room'
 
+import { startRoomHarness } from './node-room-harness'
 import {
   errorsIn,
   FAST_GAME,
   hostView,
   playerView,
   type RoomHarness,
-  startRoomHarness,
   waitFor
 } from './room-harness'
 

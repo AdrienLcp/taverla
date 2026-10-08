@@ -53,8 +53,13 @@ source the component reads.** Spell the literal out.
 
 ## The socket suites share one harness
 
-`apps/server/src/__tests__/room-harness.ts` boots the app on an ephemeral port
-and hands back `connect`, `openRoom`, `seat` and `stop`. A new suite is a file
+`startRoomHarness` in `apps/server/src/__tests__/node-room-harness.ts` boots
+the app on an ephemeral port and hands back `connect`, `openRoom`, `seat` and
+`stop`; the fixtures and stubs stay in `room-harness.ts`, which the `vi.mock`
+factories import and which therefore never imports the app. What a process pays
+once — the app's module graph and Node's first `fetch` — is paid at the top of
+`node-room-harness.ts`, while vitest collects the file, never inside a
+`beforeEach` whose timeout the first test of a file would blow under load. A new suite is a file
 with the two-line `vi.mock` of the music client and its tests — never a second
 copy of the plumbing. `openRoom` takes the whole `RoomSettings` and creates the
 room for `settings.game.kind`, so a suite for another game is a fixture rather

@@ -14,12 +14,8 @@ import { API_ROUTES } from '@taverla/protocol/routes'
 import { logger } from '@/infrastructure/logging/logger'
 import type { MusicSourceFault } from '@/infrastructure/music/music-source'
 
-import {
-  CATALOGUE,
-  type RoomHarness,
-  startRoomHarness,
-  waitFor
-} from './room-harness'
+import { startRoomHarness } from './node-room-harness'
+import { CATALOGUE, type RoomHarness, waitFor } from './room-harness'
 
 // A static import of the client hands this file a different instance from the
 // app's, and the app then talks to the real Deezer.

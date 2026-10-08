@@ -6,6 +6,7 @@ import {
 } from '@taverla/protocol/server-message'
 import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
+import { startRoomHarness } from './node-room-harness'
 import {
   blindtestRound,
   errorsIn,
@@ -19,7 +20,6 @@ import {
   type RoomHarness,
   sessionIdOf,
   sleep,
-  startRoomHarness,
   waitFor
 } from './room-harness'
 

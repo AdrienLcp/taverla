@@ -1,4 +1,3 @@
-import { serve } from '@hono/node-server'
 import type { z } from 'zod'
 
 import type { ClientMessage } from '@taverla/protocol/client-message'
@@ -360,44 +359,8 @@ export const errorsIn = <TMessage extends { type: string }>(
     )
 
 /**
- * Imported dynamically so a `vi.mock` in the calling suite is registered before
- * the app pulls its music client in.
- */
-export const startRoomHarness = async (): Promise<RoomHarness> => {
-  const { createApp } = await import('@/infrastructure/node/node-app')
-  const { app, websocket } = createApp()
-
-  const started = await new Promise<ReturnType<typeof serve>>((resolve) => {
-    const server = serve({ fetch: app.fetch, port: 0, websocket }, () => {
-      resolve(server)
-    })
-  })
-
-  const address = started.address()
-
-  if (address === null || typeof address === 'string') {
-    throw new Error('The test server did not report a port')
-  }
-
-  return harnessAt({
-    origin: `localhost:${address.port}`,
-    shutDown: async () => {
-      if ('closeAllConnections' in started) {
-        started.closeAllConnections()
-      }
-
-      await new Promise<void>((resolve) => {
-        started.close(() => {
-          resolve()
-        })
-      })
-    }
-  })
-}
-
-/**
  * Every suite's view of a server, whichever process holds the rooms: the Node
- * one above, or the Worker `worker-object.test.ts` starts.
+ * one `node-room-harness.ts` starts, or the Worker `worker-object.test.ts` starts.
  */
 export const harnessAt = ({
   origin,

@@ -22,6 +22,7 @@ import {
 } from '@taverla/protocol/server-message'
 import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
+import { startRoomHarness } from './node-room-harness'
 import {
   CATALOGUE,
   errorsIn,
@@ -33,7 +34,6 @@ import {
   playerView,
   QUESTIONS,
   type RoomHarness,
-  startRoomHarness,
   waitFor
 } from './room-harness'
 

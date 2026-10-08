@@ -7,6 +7,7 @@ import {
   type RoomSettings
 } from '@taverla/protocol/room'
 
+import { startRoomHarness } from './node-room-harness'
 import {
   basePointsFor,
   errorsIn,
@@ -16,7 +17,6 @@ import {
   QUESTIONS,
   quizRound,
   type RoomHarness,
-  startRoomHarness,
   waitFor
 } from './room-harness'
 

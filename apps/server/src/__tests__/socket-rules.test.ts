@@ -17,6 +17,7 @@ import {
 
 import { nowMs } from '@/infrastructure/clock'
 
+import { startRoomHarness } from './node-room-harness'
 import {
   errorsIn,
   FAST_GAME,
@@ -26,7 +27,6 @@ import {
   playerView,
   type RoomHarness,
   sleep,
-  startRoomHarness,
   waitFor
 } from './room-harness'
 

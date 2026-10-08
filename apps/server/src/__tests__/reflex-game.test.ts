@@ -11,13 +11,13 @@ import { FALSE_START_FLOOR_MS } from '@taverla/core/reflex/reaction'
 
 import { nowMs } from '@/infrastructure/clock'
 
+import { startRoomHarness } from './node-room-harness'
 import {
   errorsIn,
   hostView,
   playerView,
   type RoomHarness,
   reflexRound,
-  startRoomHarness,
   waitFor
 } from './room-harness'
 

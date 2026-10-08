@@ -11,6 +11,7 @@ import type {
   PlayerServerMessage
 } from '@taverla/protocol/server-message'
 
+import { startRoomHarness } from './node-room-harness'
 import {
   errorsIn,
   hostSlateContent,
@@ -20,7 +21,6 @@ import {
   type RoomHarness,
   sessionIdOf,
   slateRound,
-  startRoomHarness,
   waitFor
 } from './room-harness'
 

@@ -5,6 +5,7 @@ import type { RoomSettings } from '@taverla/protocol/room'
 import { hostServerMessageSchema } from '@taverla/protocol/server-message'
 import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
+import { startRoomHarness } from './node-room-harness'
 import {
   CATALOGUE,
   errorsIn,
@@ -13,7 +14,6 @@ import {
   type RoomHarness,
   SEATED_CONSOLE_GAME,
   sessionIdOf,
-  startRoomHarness,
   waitFor
 } from './room-harness'
 

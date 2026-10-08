@@ -5,6 +5,7 @@ import {
   type RoomSettings
 } from '@taverla/protocol/room'
 
+import { startRoomHarness } from './node-room-harness'
 import {
   bankedHalves,
   basePointsFor,
@@ -16,7 +17,6 @@ import {
   hostView,
   playerView,
   type RoomHarness,
-  startRoomHarness,
   waitFor
 } from './room-harness'
 

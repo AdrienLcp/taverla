@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { PlayerServerMessage } from '@taverla/protocol/server-message'
 
+import { startRoomHarness } from './node-room-harness'
 import {
   errorsIn,
   hostContent,
@@ -10,7 +11,6 @@ import {
   playerView,
   type RoomHarness,
   SEATED_CONSOLE_GAME,
-  startRoomHarness,
   waitFor
 } from './room-harness'
 
