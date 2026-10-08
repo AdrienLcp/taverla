@@ -243,7 +243,9 @@ A cool printed board under warm, saturated die-cut inks, every value one
   never tinted text, so its contrast is fixed in both palettes.
 - **Focus**: no colour of its own. The ring is drawn in `--ink`
   (`_focus.sass`), the one colour guaranteed against whatever ground is current,
-  since the phase and the reflex flip repaint the ground under it.
+  since the phase and the reflex flip repaint the ground under it. Every
+  focusable rings by default through `focus.ring-focusables` in `globals.sass`;
+  a component includes `focus.ring` only where its ring differs.
 
 ### The phase ink
 
@@ -360,14 +362,14 @@ or above takes `overflow-wrap: anywhere` inside a parent that will not grow
 
 ## Layout
 
-**One split, at 900px** (`$wide-screen`, from `@adrienlcp/styles/breakpoints`,
+**One split, at 56.25rem** (900px, `$wide-screen`, from `@adrienlcp/styles/breakpoints`,
 forwarded by `_layout.sass` with `wide` and `narrow`). A second width,
 `$poster-screen` 75rem (1200px), is where a front door splits into poster and actions
 (`poster`, columns 1.35fr / 1fr).
 
 **Three page shapes** (`_layout.sass`, `_framed.sass`):
 - **`screen`** — the player's column: 38.75rem (`--column-max-width`), widening
-  to 900px past the split, gap `--space-l`. It widens because the type grows
+  to 56.25rem past the split, gap `--space-l`. It widens because the type grows
   with `--stage-unit` and the measure has to grow with it.
 - **`stage`** — the console and the wall: the whole field to 112.5rem
   (`--stage-max-width`), never centred in a column.
@@ -382,7 +384,7 @@ forwarded by `_layout.sass` with `wide` and `narrow`). A second width,
 
 **Padding** is `--layout-padding` (`clamp(1rem, calc(var(--stage-unit) * 4), 3.5rem)`), resolved per
 side against the safe-area insets (`--layout-padding-block-start` etc., `max()`
-of the two, every `env()` falling back to `0px`; Android's bottom inset read
+of the two, every `env()` falling back to `0rem`; Android's bottom inset read
 from `safe-area-max-inset-bottom`). A framed screen uses the tighter
 `--framed-padding-block-*` (`clamp(var(--space-xs), calc(var(--stage-unit) * 2), 1rem)`).
 
@@ -529,7 +531,7 @@ and shelf.
   `--ink-muted` at full text contrast. A flat fill read as one more slab in the
   dark palette; the ground showing through cannot.
 - **Pending** (`data-pending`): the label goes `color: transparent` and the
-  spinner paints over it in `--control-ink`, so the button keeps its size and
+  spinner paints over it in `--on-control`, so the button keeps its size and
   its accessible name.
 
 ### Answer tile (`AnswerTile`)
@@ -691,8 +693,9 @@ On the wall the chrome goes idle
 
 One authored moment per event, all of it collapsing under
 `prefers-reduced-motion` (`@adrienlcp/styles/reduced-motion.css`; every
-duration falls back to `0`). `--timing` is `cubic-bezier(0.16, 1, 0.3, 1)` — a
-piece set down, fast then settled, never bounced. Durations:
+duration falls back to `0s`). `--ease-out`, the shared default
+`cubic-bezier(0.16, 1, 0.3, 1)`, is a piece set down, fast then settled, never
+bounced. Durations:
 `--transition-fast` 140ms, `--transition-base` 260ms, `--transition-slow`
 520ms.
 

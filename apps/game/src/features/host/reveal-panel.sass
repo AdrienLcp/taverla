@@ -9,7 +9,7 @@
     gap: var(--space-m)
     min-width: 0
 
-    animation: card-strike var(--transition-slow, 0s) var(--timing, ease) both
+    animation: card-strike var(--transition-slow, 0s) var(--ease-out) both
 
     > .head
       align-items: center
@@ -27,7 +27,7 @@
     // ceiling: the print is mounted on a paper card rather than floating, the
     // way the box's own photographs are.
     .cover
-      --cover-size: min(calc(var(--stage-unit) * 34), 250px)
+      --cover-size: min(calc(var(--stage-unit) * 34), 15.625rem)
 
       border: 6px solid var(--card)
       border-radius: var(--radius-s)
@@ -40,7 +40,7 @@
       // `vmin` is the width on a portrait screen, where height is the axis
       // under pressure, so stacked it answers the height instead.
       @include layout.narrow
-        --cover-size: clamp(96px, 16dvh, 180px)
+        --cover-size: clamp(6rem, 16dvh, 11.25rem)
 
       &.placeholder
         background: repeating-linear-gradient(135deg, var(--track-a) 0 10px, var(--track-b) 10px 20px)
@@ -58,7 +58,7 @@
       // word whole on one line, measured against the widest of a fifty-title
       // sample; `260cqi` over the length holds an answer to about two lines in
       // the column it is set in. The `dvh` term is the height a hold bar leaves.
-      --answer-size: clamp(2rem, min(calc(var(--stage-unit) * 9), calc((100dvh - var(--hold-bar, 0px)) * 0.09), calc(128rem / var(--answer-length, 10)), calc(260cqi / var(--answer-length, 10)), calc(106cqi / var(--longest-word-width, 10))), 7rem)
+      --answer-size: clamp(2rem, min(calc(var(--stage-unit) * 9), calc((100dvh - var(--hold-bar, 0rem)) * 0.09), calc(128rem / var(--answer-length, 10)), calc(260cqi / var(--answer-length, 10)), calc(106cqi / var(--longest-word-width, 10))), 7rem)
 
       .title
         @include typography.monument
@@ -206,7 +206,7 @@
       min-height: 0
 
       .cover
-        --cover-size: min(250px, 34cqh, 22cqi)
+        --cover-size: min(15.625rem, 34cqh, 22cqi)
 
       .identity
         --answer-size: clamp(1.75rem, min(12cqh, calc(106cqi / var(--longest-word-width, 10)), calc(260cqi / var(--answer-length, 10))), 6rem)

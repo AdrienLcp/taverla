@@ -12,7 +12,7 @@
     gap: var(--space-stage-split)
     justify-items: center
     text-align: center
-    width: min(1200px, 100%)
+    width: min(75rem, 100%)
 
     &:has(> .judging)
       gap: clamp(var(--space-m), calc(var(--stage-unit) * 3.5), var(--space-xl))
@@ -131,7 +131,7 @@
     // Right is the reveal's green, so the press reads as the outcome it
     // grants.
     .choice.win
-      --control-ink: var(--on-spine)
+      --on-control: var(--on-spine)
 
       background: var(--good)
       box-shadow: 0 4px 0 var(--good-edge), 0 12px 18px -10px var(--shadow)

@@ -4,14 +4,14 @@
   .separator
     background: var(--ink)
     border: none
-    height: 3px
+    height: var(--stroke-bold)
     margin: 0
     width: 100%
 
     &[aria-orientation='vertical']
       height: auto
       min-height: 2rem
-      width: 3px
+      width: var(--stroke-bold)
 
   // The label is punched through the rule rather than breaking it into two, so
   // the boundary stays a single element and a single `role="separator"`.

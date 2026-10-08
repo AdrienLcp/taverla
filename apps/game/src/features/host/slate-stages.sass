@@ -340,7 +340,7 @@
       gap: var(--space-2xs)
       padding: clamp(var(--space-xs), 2.4cqh, var(--space-m)) clamp(var(--space-s), 3cqi, var(--space-l))
 
-      animation: key-stamp calc(var(--transition-fast, 0s) * 2) var(--timing, ease)
+      animation: key-stamp calc(var(--transition-fast, 0s) * 2) var(--ease-out)
 
     .key-title
       @include typography.label
@@ -450,7 +450,7 @@
         min-height: 2.5em
 
         &[data-selected]
-          --control-ink: var(--on-spine)
+          --on-control: var(--on-spine)
 
           background: var(--good)
           box-shadow: 0 3px 0 var(--good-edge)

@@ -3,6 +3,7 @@
 
 @use '@adrienlcp/styles/reduced-motion.css'
 @use '@adrienlcp/theme-preference/color-scheme.css'
+@use './focus'
 @use './fonts'
 @use './layout'
 @use './reset'
@@ -10,6 +11,8 @@
 @use './typography'
 
 @layer base
+  @include focus.ring-focusables
+
   // `min-height`, and `dvh` rather than `vh` or a percentage chain. A fixed
   // `height: 100%` pins the app to the viewport it was laid out in: taller
   // content still scrolls on a desktop browser, but on a phone the height does
@@ -41,7 +44,7 @@
     background: var(--field)
     color: var(--ink)
     font-family: var(--font-base)
-    transition: background-color var(--transition-slow, 0s) var(--timing, ease)
+    transition: background-color var(--transition-slow, 0s) var(--ease-out)
 
   #root
     display: flex

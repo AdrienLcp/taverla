@@ -6,7 +6,7 @@
     display: flex
     flex-direction: column
     gap: var(--space-2xs)
-    min-width: 180px
+    min-width: 11.25rem
 
     .slider-header
       @include typography.label
@@ -20,7 +20,7 @@
       align-items: center
       cursor: pointer
       display: flex
-      height: 28px
+      height: 1.75rem
       position: relative
       width: 100%
 
@@ -28,14 +28,14 @@
         border: var(--stroke-thin) solid var(--rule-strong)
         border-radius: var(--radius-full)
         content: ''
-        height: 12px
+        height: 0.75rem
         position: absolute
         width: 100%
 
     .fill
       background: var(--ink)
       border-radius: var(--radius-full)
-      height: 12px
+      height: 0.75rem
       position: absolute
       width: var(--fill, 0%)
 
@@ -45,14 +45,14 @@
       background: var(--ink)
       border-radius: var(--radius-full)
       cursor: pointer
-      height: 24px
+      height: 1.5rem
       top: 50%
-      width: 8px
+      width: 0.5rem
 
       // Grown rather than dimmed. `[data-dragging]` is the one press state that
       // fires on a touch screen, and it fires with a fingertip parked on top of
       // the thumb — a colour change under there is invisible, and dimming reads
       // as disabled besides.
       &[data-dragging]
-        height: 28px
-        width: 12px
+        height: 1.75rem
+        width: 0.75rem

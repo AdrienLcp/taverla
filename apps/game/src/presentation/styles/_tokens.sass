@@ -147,8 +147,6 @@
     --transition-fast: 140ms
     --transition-base: 260ms
     --transition-slow: 520ms
-    // A piece set down: fast, then settled, never bounced.
-    --timing: cubic-bezier(0.16, 1, 0.3, 1)
 
     --font-display: 'Bricolage Grotesque', 'Atkinson Hyperlegible Next', system-ui, sans-serif
     --font-base: 'Atkinson Hyperlegible Next', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif
@@ -158,22 +156,22 @@
     // The same padding per side, because `viewport-fit=cover` in `index.html`
     // lays the page out under the sensor housing, the rounded corners and the
     // home indicator. `max()` of the two rather than a sum: only the larger is
-    // right in both orientations. Every `env()` falls back to `0px`, because an
+    // right in both orientations. Every `env()` falls back to `0rem`, because an
     // unknown one with no fallback voids the whole declaration.
-    --layout-padding-block-start: max(var(--layout-padding), env(safe-area-inset-top, 0px))
+    --layout-padding-block-start: max(var(--layout-padding), env(safe-area-inset-top, 0rem))
 
     // Android's bottom bar retracts on scroll and animates the live inset, so
     // the static ceiling is read where it exists.
-    --layout-padding-block-end: max(var(--layout-padding), env(safe-area-max-inset-bottom, env(safe-area-inset-bottom, 0px)))
+    --layout-padding-block-end: max(var(--layout-padding), env(safe-area-max-inset-bottom, env(safe-area-inset-bottom, 0rem)))
 
-    --layout-padding-inline-start: max(var(--layout-padding), env(safe-area-inset-left, 0px))
-    --layout-padding-inline-end: max(var(--layout-padding), env(safe-area-inset-right, 0px))
+    --layout-padding-inline-start: max(var(--layout-padding), env(safe-area-inset-left, 0rem))
+    --layout-padding-inline-end: max(var(--layout-padding), env(safe-area-inset-right, 0rem))
 
     // The top and bottom of a screen held to the viewport, tighter than a page's
     // because every pixel of it is taken from the four tiles. The menu reads it
     // too, so its trigger stays on that screen's chrome line.
-    --framed-padding-block-start: max(clamp(var(--space-xs), calc(var(--stage-unit) * 2), 1rem), env(safe-area-inset-top, 0px))
-    --framed-padding-block-end: max(clamp(var(--space-xs), calc(var(--stage-unit) * 2), 1rem), env(safe-area-max-inset-bottom, env(safe-area-inset-bottom, 0px)))
+    --framed-padding-block-start: max(clamp(var(--space-xs), calc(var(--stage-unit) * 2), 1rem), env(safe-area-inset-top, 0rem))
+    --framed-padding-block-end: max(clamp(var(--space-xs), calc(var(--stage-unit) * 2), 1rem), env(safe-area-max-inset-bottom, env(safe-area-inset-bottom, 0rem)))
 
     --stage-max-width: 112.5rem
     --column-max-width: 38.75rem

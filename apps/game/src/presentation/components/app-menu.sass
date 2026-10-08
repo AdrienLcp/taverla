@@ -14,7 +14,7 @@
     // clear of everything it is chrome for.
     inset-inline-end: max(var(--layout-padding-inline-end), calc(50% - var(--stage-max-width) / 2 + var(--layout-padding-inline-end)))
     position: fixed
-    transition: opacity var(--transition-base, 0s) var(--timing, ease)
+    transition: opacity var(--transition-base, 0s) var(--ease-out)
     z-index: 1
 
     :root:has(.player-page.framed, .host-console-page.framed) &
@@ -72,7 +72,7 @@
       gap: var(--space-xs)
       min-height: var(--control-height)
       padding: 0 var(--space-s)
-      transition: transform var(--transition-fast, 0s) var(--timing, ease), box-shadow var(--transition-fast, 0s) var(--timing, ease)
+      transition: transform var(--transition-fast, 0s) var(--ease-out), box-shadow var(--transition-fast, 0s) var(--ease-out)
 
       &[data-pressed]
         box-shadow: 0 0 0 var(--chipboard)
@@ -104,7 +104,7 @@
     background: var(--field)
     border-radius: var(--radius-l)
     box-shadow: 0 0 0 1px var(--rule), 0 4px 0 var(--chipboard), 0 24px 40px -16px var(--shadow)
-    max-width: min(92vw, 320px)
+    max-width: min(92vw, 20rem)
     // React Aria writes a `max-height` inline that stops the box at the
     // viewport's edge, and says nothing about what happens to the rest: a host's
     // menu on a landscape phone holds the invitation, the wall doors, the seat,
@@ -118,7 +118,7 @@
     scrollbar-width: thin
 
     &[data-entering]
-      animation: popover-strike var(--transition-fast, 0s) var(--timing, ease)
+      animation: popover-strike var(--transition-fast, 0s) var(--ease-out)
 
     .react-aria-Dialog
       display: flex
@@ -179,7 +179,7 @@
       // this one is for the host holding a screen out to somebody. At 180px the
       // modules of a room URL are seven pixels each, and the half a popover it
       // was spending goes back to the controls under it.
-      --invitation-qr-max-width: 180px
+      --invitation-qr-max-width: 11.25rem
 
       gap: var(--space-m)
 

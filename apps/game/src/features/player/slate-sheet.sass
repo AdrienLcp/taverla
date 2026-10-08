@@ -93,7 +93,7 @@
       min-width: 0
       padding: 0 var(--space-2xs) var(--space-2xs)
       position: relative
-      transition: transform var(--transition-fast, 0s) var(--timing, ease), box-shadow var(--transition-fast, 0s) var(--timing, ease)
+      transition: transform var(--transition-fast, 0s) var(--ease-out), box-shadow var(--transition-fast, 0s) var(--ease-out)
 
       &.filled
         background: linear-gradient(var(--card-ink) 0 0) center bottom 18% / 46% 3px no-repeat, var(--card)
@@ -123,8 +123,8 @@
         cursor: default
 
         svg
-          block-size: 14px
-          inline-size: 14px
+          block-size: 0.875rem
+          inline-size: 0.875rem
           inset-block-start: var(--space-2xs)
           inset-inline-end: var(--space-2xs)
           position: absolute

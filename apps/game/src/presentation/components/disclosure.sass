@@ -31,7 +31,7 @@
 
       .chevron
         flex: none
-        transition: transform var(--transition-fast, 0s) var(--timing, ease)
+        transition: transform var(--transition-fast, 0s) var(--ease-out)
 
       &[data-hovered] .summary,
       &[data-pressed] .summary
@@ -57,7 +57,7 @@
 
       color: var(--ink-muted)
       overflow-wrap: anywhere
-      transition: color var(--transition-fast, 0s) var(--timing, ease)
+      transition: color var(--transition-fast, 0s) var(--ease-out)
 
     // A single grid row going 0fr → 1fr, because `height: auto` is not a length
     // and will not transition. react-aria collapses the panel with
@@ -68,7 +68,7 @@
     .panel
       display: grid
       grid-template-rows: 1fr
-      transition: grid-template-rows var(--transition-base, 0s) var(--timing, ease), content-visibility var(--transition-base, 0s) allow-discrete
+      transition: grid-template-rows var(--transition-base, 0s) var(--ease-out), content-visibility var(--transition-base, 0s) allow-discrete
 
       &[hidden]
         grid-template-rows: 0fr

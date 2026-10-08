@@ -53,11 +53,15 @@ while compiling.
 **`tokens.defaults` from `@adrienlcp/styles/tokens` comes first** in `:root`, so
 `_tokens.sass` declares only the values it changes — `--stroke-thin`,
 `--stroke-bold`, `--hairline` — and reads the shared names for the rest:
-`--stroke-hair`, `--target`, `--tracking-tight`,
-`--measure`. A shared name keeps its one meaning: a control's own boundary is
+`--stroke-hair`, `--target`, `--tracking-tight`, `--measure`, `--ease-out`.
+The durations keep the shared names `--transition-fast`, `--transition-base`
+and `--transition-slow` with the game's own values; a value equal to the
+default is not redeclared. A shared name keeps its one meaning: a control's own boundary is
 `--rule-strong`, never a parallel name, and a drawn control's height is
 `--control-height`, raised to `max(var(--target), 3.25rem)` and never below the
-target. The ring is `var(--ink)` on purpose, the
+target. No other name joins a shared family (`--control-*`, `--outline-*`,
+`--ring-*`, `--target-*`): a control's foreground is `--on-control`, like
+`--on-primary`. The ring is `var(--ink)` on purpose, the
 one colour guaranteed against whatever the phase or the reflex flip painted, so
 there is no `--focus` colour.
 
@@ -67,7 +71,7 @@ transition in its list dies with it. A literal duration there would animate for
 someone who asked for no motion. A duration of the game's own — a keyframe
 animation, a stagger's delay — is written over a shared one,
 `calc(var(--transition-fast, 0s) * 5)`, so the reduced-motion collapse reaches
-it too. Non-duration tokens take their real value as
+it too; a radius is a `--radius-*` token. Non-duration tokens take their real value as
 the fallback (`var(--space-m, 1.25rem)`).
 
 **Reduced motion is `reduced-motion.css`'s job**: it collapses the
@@ -79,12 +83,18 @@ the reconnecting dot is half full before it pulses.
 
 ## Every size answers the user's font size
 
-Text and spacing are `rem` — `--space-*`, `--text-*`, a control's height, a
-layout width or a container threshold — so a raised browser font size or a zoom
-reaches them. Strokes, radii, shadows and the touch target stay `px`.
-`stylesheets.test.ts` beside the tokens runs `findUnitFailures` and
-`findTypeLiterals` from `@adrienlcp/styles/audit` over every stylesheet, so
-`validate` holds this section and the text voice below.
+Text, spacing and boxes are `rem` — `--space-*`, `--text-*`, a control's
+height, a box's width, height or offset, a layout width, a breakpoint or a
+container threshold — so a raised browser font size or a zoom reaches them.
+Strokes, outlines, radii, shadows and the touch target stay `px`, and a zero
+length is `0rem`. A threshold that follows the shell reads
+`layout.$wide-screen`, never a copy of it. `stylesheets.test.ts` beside the
+tokens runs `findUnitFailures`, `findTypeLiterals` and `findUnnamedValues` from
+`@adrienlcp/styles/audit` over every stylesheet, and `findTokenFailures` over
+every source, scripts included: no literal radius or duration, no `var()` of a
+name declared nowhere. A name a script builds from a template
+(`var(--pawn-${n})`) reaches that check as its bare prefix and is the test's
+one exclusion. `validate` holds this section and the text voice below.
 
 **The game grows with the screen through one unit, `--stage-unit`** (`1vmin`):
 the same page is read at forty centimetres and at four metres, so a size that
@@ -225,7 +235,11 @@ Visually hidden text is `accessibility.visually-hidden` from
 `@adrienlcp/styles/accessibility`, and the ring is `_focus.sass`'s — neither is
 written by hand. A ring drawn on a descendant of the focused element passes it
 as `$on` — the switch rings its track with `@include focus.ring('.track')` —
-and a box around a field takes `focus.ring-within`.
+and a box around a field takes `focus.ring-within`. Every focusable rings by
+default: `globals.sass` includes `focus.ring-focusables` once in `@layer base`,
+so a component includes `focus.ring` only where its ring differs, and a ring
+closer than the configured offset passes `$offset` rather than an
+`outline-offset` written after the include.
 
 ## Single-line text in a box is trimmed, not squeezed
 

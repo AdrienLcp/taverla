@@ -1,9 +1,9 @@
 @layer components
   .spinner
     animation: spinner-turn calc(var(--transition-fast, 0s) * 5) linear infinite
-    border: 0.14em solid color-mix(in oklab, var(--control-ink, currentColor) 30%, transparent)
+    border: 0.14em solid color-mix(in oklab, var(--on-control, currentColor) 30%, transparent)
     border-radius: var(--radius-full)
-    border-top-color: var(--control-ink, currentColor)
+    border-top-color: var(--on-control, currentColor)
     flex: none
     height: 0.8em
     margin-inline-start: var(--space-2xs)
