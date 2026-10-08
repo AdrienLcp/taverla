@@ -53,16 +53,21 @@ while compiling.
 **`tokens.defaults` from `@adrienlcp/styles/tokens` comes first** in `:root`, so
 `_tokens.sass` declares only the values it changes — `--stroke-thin`,
 `--stroke-bold`, `--hairline` — and reads the shared names for the rest:
-`--stroke-hair`, `--target` and `--control-touch`, `--tracking-tight`,
+`--stroke-hair`, `--target`, `--tracking-tight`,
 `--measure`. A shared name keeps its one meaning: a control's own boundary is
-`--rule-strong`, never a parallel name. The ring is `var(--ink)` on purpose, the
+`--rule-strong`, never a parallel name, and a drawn control's height is
+`--control-height`, raised to `max(var(--target), 3.25rem)` and never below the
+target. The ring is `var(--ink)` on purpose, the
 one colour guaranteed against whatever the phase or the reflex flip painted, so
 there is no `--focus` colour.
 
 A duration falls back to `0s` — `transition: opacity var(--transition-base, 0s)`.
 A bare `0` is no `<time>`: the whole declaration goes invalid and every other
 transition in its list dies with it. A literal duration there would animate for
-someone who asked for no motion. Non-duration tokens take their real value as
+someone who asked for no motion. A duration of the game's own — a keyframe
+animation, a stagger's delay — is written over a shared one,
+`calc(var(--transition-fast, 0s) * 5)`, so the reduced-motion collapse reaches
+it too. Non-duration tokens take their real value as
 the fallback (`var(--space-m, 1.25rem)`).
 
 **Reduced motion is `reduced-motion.css`'s job**: it collapses the
@@ -113,10 +118,12 @@ to the scale.
 A literal is the element's own geometry: `0`, `100%`, a grid template, an
 `em` tracking its font, a sprue nub's 10×3. **Fitted display type is geometry
 too**, written on the component inside its own container and floored on the
-scale — `clamp(var(--text-floor), calc(100cqh / var(--rows) / 2.3), 1.75rem)`,
-or `max(var(--text-floor), …)` — never a `px` floor. `--text-floor` (0.875rem)
-is the smallest a question, a choice or a fitted board is drawn: the floor
-`e2e/choice-fits.spec.ts` holds every word to. A spacing `clamp()` takes its
+scale — `clamp(var(--text-xs), calc(100cqh / var(--rows) / 2.3), 1.75rem)`,
+or `max(var(--text-xs), …)` — never a `px` floor and never a floor variable
+beside the scale. `--text-xs` (0.875rem) is the smallest a question, a choice or
+a fitted board is drawn: the floor `e2e/choice-fits.spec.ts` holds every word
+to. The scale is a range, not a cap: it grows at either end in the same
+pattern (`--text-3xs`). A spacing `clamp()` takes its
 floor and its cap from the scale. What stays a literal is a few pixels of
 joint: a pip gap, a strip's seam, a sprue nub. The same value written a second
 time for the same purpose is promoted: `question-card.clock-margin` is where
@@ -200,7 +207,9 @@ a width.
 `[data-hovered]`, `[data-pressed]`, `[data-selected]`, `[data-disabled]`,
 `[data-focus-visible]`. Never compose a state class by hand, and never style
 `:hover` where react-aria offers `[data-hovered]` — the latter does not fire on
-a touch device that merely scrolled past.
+a touch device that merely scrolled past. A native element react-aria does not
+drive — a `<details>` summary, a plain `<a>` — has only `:hover`, which a touch
+screen leaves stuck after a tap, so it goes inside `@media (hover: hover)`.
 
 **Read the attribute off the rendered DOM before styling a state**, because it
 is not always on the element the interaction is on. `Disclosure` stamps
@@ -214,7 +223,9 @@ the pointer.
 
 Visually hidden text is `accessibility.visually-hidden` from
 `@adrienlcp/styles/accessibility`, and the ring is `_focus.sass`'s — neither is
-written by hand.
+written by hand. A ring drawn on a descendant of the focused element passes it
+as `$on` — the switch rings its track with `@include focus.ring('.track')` —
+and a box around a field takes `focus.ring-within`.
 
 ## Single-line text in a box is trimmed, not squeezed
 

@@ -131,19 +131,18 @@
     --space-stage-rows: clamp(var(--space-xs), calc(var(--stage-unit) * 2), var(--space-m))
     --space-framed: clamp(var(--space-xs), calc(var(--stage-unit) * 1.6), var(--space-s))
 
-    // The height a control is drawn at, above the `--target` it must reach.
-    --control-height: 3.25rem
+    --control-height: max(var(--target), 3.25rem)
 
     // A size set on its own, outside a `_typography.sass` register: a control
     // held to a constant width, a glyph beside a label, the menu's room code.
-    --text-2xs: 0.75rem
-    --text-xs: 0.8125rem
+    --text-3xs: 0.75rem
+    --text-2xs: 0.8125rem
+    // Also the floor of a question, a choice or a fitted board, whatever its
+    // box: `e2e/choice-fits.spec.ts` holds every word to it.
+    --text-xs: 0.875rem
     --text-s: 1rem
     --text-m: 1.25rem
     --text-l: 1.5rem
-    // The smallest a question, a choice or a fitted board is drawn, whatever
-    // its box: `e2e/choice-fits.spec.ts` holds every word to it.
-    --text-floor: 0.875rem
 
     --transition-fast: 140ms
     --transition-base: 260ms

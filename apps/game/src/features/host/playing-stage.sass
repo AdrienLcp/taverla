@@ -101,7 +101,7 @@
         grid-template-rows: repeat(2, minmax(min-content, 1fr))
 
     .printed-choices .answer-tile
-      font-size: clamp(var(--text-floor), calc(var(--choice-k) / sqrt(var(--choice-length, 20))), var(--choice-cap))
+      font-size: clamp(var(--text-xs), calc(var(--choice-k) / sqrt(var(--choice-length, 20))), var(--choice-cap))
 
     // The question card, with the round's sand draining along its top edge —
     // the clock sits where every eye in the room already is.
@@ -141,12 +141,12 @@
 
           @include typography.question-prompt(1.24)
 
-          font-size: clamp(var(--text-floor), min(var(--question-k) / sqrt(var(--prompt-length, 60)), var(--question-cap) * var(--question-yield)), var(--question-cap))
+          font-size: clamp(var(--text-xs), min(var(--question-k) / sqrt(var(--prompt-length, 60)), var(--question-cap) * var(--question-yield)), var(--question-cap))
           text-wrap: pretty
 
         .category
           color: var(--card-muted)
-          font-size: clamp(var(--text-floor), 2.4cqmin, 1.25rem)
+          font-size: clamp(var(--text-xs), 2.4cqmin, 1.25rem)
           order: -1
 
       .now

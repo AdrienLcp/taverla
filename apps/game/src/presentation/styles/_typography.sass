@@ -62,7 +62,7 @@
   line-height: 1.45
 
 @mixin caption
-  font-size: clamp(0.875rem, calc(var(--stage-unit) * 1.8), 1rem)
+  font-size: clamp(var(--text-xs), calc(var(--stage-unit) * 1.8), 1rem)
   font-weight: 500
   line-height: 1.35
 
@@ -81,7 +81,7 @@
 /// Sentence case and the read face: a grandparent reads a label too, and
 /// tracked capitals at twelve pixels are the hardest line on any screen.
 @mixin label
-  font-size: clamp(0.875rem, calc(var(--stage-unit) * 1.7), 1rem)
+  font-size: clamp(var(--text-xs), calc(var(--stage-unit) * 1.7), 1rem)
   font-weight: 700
   letter-spacing: 0.005em
 

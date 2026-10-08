@@ -1,6 +1,6 @@
 @layer components
   .spinner
-    animation: spinner-turn 700ms linear infinite
+    animation: spinner-turn calc(var(--transition-fast, 0s) * 5) linear infinite
     border: 0.14em solid color-mix(in oklab, var(--control-ink, currentColor) 30%, transparent)
     border-radius: var(--radius-full)
     border-top-color: var(--control-ink, currentColor)

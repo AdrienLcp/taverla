@@ -38,13 +38,13 @@
       font-size: clamp(2.5rem, calc(min(42cqh, 55cqi) / var(--winner-count, 1)), 20rem)
 
       .pawn
-        animation: pawn-lands 700ms var(--timing, ease) both
+        animation: pawn-lands calc(var(--transition-fast, 0s) * 5) var(--timing, ease) both
 
         &:nth-child(2)
-          animation-delay: 90ms
+          animation-delay: var(--transition-fast, 0s)
 
         &:nth-child(3)
-          animation-delay: 180ms
+          animation-delay: calc(var(--transition-fast, 0s) * 2)
 
     .pawn
       filter: drop-shadow(0 0.06em 0 var(--chipboard-dark))

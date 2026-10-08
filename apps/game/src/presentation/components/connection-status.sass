@@ -17,7 +17,7 @@
 
     // Half full, and pulsing where motion is welcome: it is on its way back.
     &.closed
-      animation: connection-pulse 1.2s ease-in-out infinite
+      animation: connection-pulse calc(var(--transition-slow, 0s) * 2.3) ease-in-out infinite
       background: linear-gradient(to top, currentColor 50%, transparent 50%)
 
     // Square and still: nothing is coming back on its own.

@@ -214,7 +214,7 @@
         // The note is read up close or not at all, so beside a full table it
         // gives way before the chips do.
         .note
-          font-size: clamp(var(--text-floor), 3.4cqh, 1.25rem)
+          font-size: clamp(var(--text-xs), 3.4cqh, 1.25rem)
           margin-top: 0.5em
 
       &[data-game='quiz'] .identity
@@ -229,7 +229,7 @@
         // A chip is its pawn's 1.15em, which stands taller than the line, and
         // 0.44em of padding, with the gap between rows on top.
         li
-          font-size: clamp(var(--text-floor), calc((100cqh - (var(--outcome-rows, 1) - 1) * var(--space-2xs)) / var(--outcome-rows, 1) / 1.7), 1.75rem)
+          font-size: clamp(var(--text-xs), calc((100cqh - (var(--outcome-rows, 1) - 1) * var(--space-2xs)) / var(--outcome-rows, 1) / 1.7), 1.75rem)
 
       // A track of its own width: an `auto` one is sized to its content and
       // centred, and a size container has none, so the board drew 0px wide.
@@ -245,4 +245,4 @@
           // A chip is its place token's 1.28em and 0.44em of padding, with
           // the gap between rows on top — and the cap the reveal's chips share.
           li
-            font-size: clamp(var(--text-floor), calc((100cqh - (var(--outcome-rows, 5) - 1) * var(--space-2xs)) / var(--outcome-rows, 5) / 1.8), 1.75rem)
+            font-size: clamp(var(--text-xs), calc((100cqh - (var(--outcome-rows, 5) - 1) * var(--space-2xs)) / var(--outcome-rows, 5) / 1.8), 1.75rem)

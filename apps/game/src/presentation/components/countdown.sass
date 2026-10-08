@@ -24,7 +24,7 @@
       // The one authored moment of the product: each second is struck onto the
       // token oversize and settles into place. The numeral re-keys on the
       // value, so the strike restarts on every tick while the token stays put.
-      animation: countdown-strike 900ms var(--timing, ease) both
+      animation: countdown-strike calc(var(--transition-base, 0s) * 3.5) var(--timing, ease) both
       font-size: calc(var(--token-size) * 0.66)
 
 @keyframes countdown-strike

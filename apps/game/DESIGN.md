@@ -337,10 +337,10 @@ dividing a height by its rows takes a smaller divisor under the same guard —
 `--standings-row`, `--tallest-row`, `--board-row` — measured on rendered rows.
 
 **The question** is sized by the square root of its length:
-`clamp(var(--text-floor), min(k / sqrt(length), cap × yield), cap)`
+`clamp(var(--text-xs), min(k / sqrt(length), cap × yield), cap)`
 (`_question-card.sass`), the caller setting `--question-k`, `--question-cap` and
 `--question-yield` so a question yields room to long choices. Answer tiles and
-every board fitted to its box size the same way. `--text-floor` is 0.875rem —
+every board fitted to its box size the same way. `--text-xs` is 0.875rem —
 14px at the default size, the floor the e2e spec enforces.
 
 **The No Kicker Rule.** No label sits above a heading to frame it. Every kicker
@@ -477,7 +477,7 @@ a word; a spent tile is a socket.
   place, floor clock) are `card` at 50%.
 - **Spacing** is `--space-*` only — 4, 8, 12, 20, 32, 48, 72 — floors and caps
   of every fluid `clamp()` included. A size set outside a typography register
-  is a `--text-*` step: 0.75, 0.8125, 1, 1.25, 1.5rem.
+  is a `--text-*` step: 0.75, 0.8125, 0.875, 1, 1.25, 1.5rem.
 - **Lines**: `--stroke-hair` 1px, `--stroke-thin` 2px (the board's rule, a
   keyline, a recess ring, a dashed socket), `--stroke-bold` 3px (an ink outline,
   the *yours* keyline). `--hairline` is the board's rule whole, declared again
@@ -667,7 +667,7 @@ On the wall the chrome goes idle
   something to rank.
 - **Do** run `e2e/choice-fits.spec.ts` after touching any round screen, and
   break a new check on purpose once.
-- **Do** write duration references as `var(--transition-*, 0)` — never a
+- **Do** write duration references as `var(--transition-*, 0s)` — never a
   literal fallback — so reduced motion survives a missing token.
 
 ### Don't:
@@ -701,7 +701,7 @@ piece set down, fast then settled, never bounced. Durations:
 - **A piece in life** — lift under a pointer, sink under a press, on `fast`.
   Nothing else moves a piece.
 - **Countdown** — each second struck onto the token (`countdown-strike`,
-  900ms).
+  `base` × 3.5).
 - **Reveal** — `card-strike`, scale 1.06 to 1 on `slow`, on the card and never
   the screen holding it (`reveal-panel.sass`, `player-round.sass`).
 - **The round's clock** — a CSS animation (`round-drain`) whose duration is the

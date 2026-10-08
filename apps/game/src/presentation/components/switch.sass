@@ -1,3 +1,4 @@
+@use '../styles/focus'
 @use '../styles/typography'
 
 @layer components
@@ -38,9 +39,7 @@
 
       // The ring goes on the track rather than the label, because the track is
       // what the eye reads as the control.
-      &[data-focus-visible] .track
-        outline: var(--stroke-bold) solid var(--ink)
-        outline-offset: 3px
+      @include focus.ring('.track')
 
       &[data-disabled]
         cursor: not-allowed

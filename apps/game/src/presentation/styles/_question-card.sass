@@ -24,12 +24,12 @@
   .prompt
     @include typography.question-prompt
 
-    font-size: clamp(var(--text-floor), min(var(--question-k) / sqrt(var(--prompt-length, 60)), var(--question-cap) * var(--question-yield, 1)), var(--question-cap))
+    font-size: clamp(var(--text-xs), min(var(--question-k) / sqrt(var(--prompt-length, 60)), var(--question-cap) * var(--question-yield, 1)), var(--question-cap))
     text-wrap: pretty
 
   .category
     color: var(--tile-mark-3)
-    font-size: clamp(var(--text-xs), 2.4cqmin, 1rem)
+    font-size: clamp(var(--text-2xs), 2.4cqmin, 1rem)
     order: -1
 
 /// Where the round's clock lies on a question card: inside its top padding,
