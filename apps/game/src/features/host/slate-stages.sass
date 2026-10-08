@@ -1,4 +1,3 @@
-@use '../../presentation/styles/focus'
 @use '../../presentation/styles/layout'
 @use '../../presentation/styles/piece'
 @use '../../presentation/styles/typography'
@@ -50,7 +49,7 @@
       .now
         @include typography.title
 
-        font-size: clamp(1.125rem, 4.2cqh, 1.75rem)
+        font-size: clamp(var(--text-s), 4.2cqh, var(--text-xl))
         text-wrap: balance
 
       .count-label
@@ -98,7 +97,6 @@
       text-align: center
 
       &:is(button)
-        @include focus.ring
         @include piece.pressable
 
         cursor: pointer
@@ -112,7 +110,7 @@
       @include typography.numeric
       @include typography.solid
 
-      font-size: clamp(1.25rem, min(44cqh, 52cqi), 4.25rem)
+      font-size: clamp(var(--text-m), min(44cqh, 52cqi), 4.25rem)
       max-inline-size: 100%
       overflow: hidden
       text-overflow: ellipsis
@@ -134,7 +132,7 @@
     .verb
       @include typography.tally-word
 
-      font-size: clamp(0.75rem, min(13cqh, 11cqi), 1.125rem)
+      font-size: clamp(var(--text-3xs), min(13cqh, 11cqi), 1.125rem)
       max-inline-size: 100%
       overflow: hidden
       text-overflow: ellipsis
@@ -160,7 +158,7 @@
     .verb
       @include typography.label
 
-      font-size: clamp(0.75rem, min(12cqh, 10cqi), 1rem)
+      font-size: clamp(var(--text-3xs), min(12cqh, 10cqi), var(--text-s))
 
     // Three states, three materials of the box, legible without a word: paper
     // still being written on, a saffron token collected and owed to the wall,
@@ -283,7 +281,7 @@
       background: var(--tile-2)
       block-size: var(--token-size)
       border-radius: 50%
-      box-shadow: 0 4px 0 var(--chipboard), 0 12px 20px -10px var(--shadow)
+      box-shadow: 0 4px 0 var(--chipboard), var(--shadow-raised)
       color: var(--tile-ink)
       display: grid
       flex: none
@@ -350,7 +348,7 @@
     .key-text
       @include typography.billboard
 
-      font-size: clamp(1.5rem, min(9cqh, 5.5cqi), 4.5rem)
+      font-size: clamp(var(--text-l), min(9cqh, 5.5cqi), 4.5rem)
       overflow-wrap: anywhere
       text-wrap: balance
 
@@ -446,7 +444,7 @@
       // by a footnote of a press.
       .toggle-button
         flex-shrink: 0
-        font-size: clamp(1rem, 0.5em, 1.375rem)
+        font-size: clamp(var(--text-s), 0.5em, 1.375rem)
         min-height: 2.5em
 
         &[data-selected]
@@ -467,7 +465,7 @@
         color: var(--on-spine)
         display: inline-flex
         flex-shrink: 0
-        font-size: max(1rem, 0.55em)
+        font-size: max(var(--text-s), 0.55em)
         gap: var(--space-xs)
         padding: var(--space-xs) var(--space-s)
 

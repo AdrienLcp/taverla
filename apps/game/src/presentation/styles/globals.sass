@@ -25,15 +25,18 @@
   // The body's field propagates to the canvas, so the gutter is painted in
   // the phase's own colour rather than left as a white bar.
   html
+    scrollbar-color: var(--rule-strong) var(--field)
     scrollbar-gutter: stable
 
   // `page-enter` lowers a page that already fills the viewport, and a
   // transform still counts as scrollable overflow: unclipped, every arrival
   // makes the document scroll by a few pixels until it settles. `clip`, not
   // `hidden`, so the root never becomes a scroller and `sticky` keeps working.
+  // Sideways too: a drawer parked off-screen or a wide row never scrolls the
+  // page on a phone.
   #root
-    min-height: 100dvh
-    overflow-y: clip
+    min-block-size: 100dvh
+    overflow: clip
 
   // No gradient, no glow: the field is one flat colour, and the transition
   // between phases is the only thing that moves on it.
@@ -42,8 +45,10 @@
     @include typography.body
 
     background: var(--field)
+    caret-color: var(--ink)
     color: var(--ink)
     font-family: var(--font-base)
+    font-synthesis: none
     transition: background-color var(--transition-slow, 0s) var(--ease-out)
 
   #root
@@ -51,8 +56,8 @@
     flex-direction: column
 
   ::selection
-    background: var(--ink)
-    color: var(--field)
+    background: var(--selection)
+    color: var(--ink)
 
 /// A page settling in, and deliberately quieter than the reveal: a few pixels
 /// and a fade where `card-strike` uses scale, on `base` where it uses `slow`.
@@ -61,7 +66,7 @@
 @keyframes page-enter
   from
     opacity: 0
-    transform: translateY(8px)
+    transform: translateY(0.5rem)
   to
     opacity: 1
     transform: translateY(0)

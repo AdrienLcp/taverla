@@ -30,7 +30,7 @@
       @include typography.poster-word
 
       background: linear-gradient(var(--spine-reflex) 0 clamp(8px, 1.6cqmin, 14px), var(--card) 0)
-      font-size: clamp(2rem, 13cqmin, 7.5rem)
+      font-size: clamp(var(--text-2xl), 13cqmin, 7.5rem)
       max-width: 100%
       padding: 0.55em 0.7em 0.45em
       text-wrap: balance
@@ -38,7 +38,7 @@
     .signal
       @include typography.monument
 
-      font-size: clamp(4rem, 34cqmin, 16rem)
+      font-size: clamp(var(--text-4xl), 34cqmin, 16rem)
 
     // Each press stood up as it lands, in arrival order — the first is the
     // round's. The row holds a pawn's height from the flip on, so the first
@@ -46,7 +46,7 @@
     .pressed-pawns
       display: flex
       flex-wrap: wrap
-      font-size: clamp(1.75rem, 8cqmin, 4rem)
+      font-size: clamp(var(--text-xl), 8cqmin, var(--text-4xl))
       gap: 0.2em
       justify-content: center
       list-style: none

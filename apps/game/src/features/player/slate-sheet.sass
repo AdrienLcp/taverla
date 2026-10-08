@@ -1,5 +1,4 @@
 @use '../../presentation/styles/box-lid'
-@use '../../presentation/styles/focus'
 @use '../../presentation/styles/piece'
 @use '../../presentation/styles/typography'
 
@@ -77,7 +76,6 @@
     // wall, and the empty socket it leaves once marked. On the paper, a groove
     // under the label is inked once this line holds something.
     .tile
-      @include focus.ring
       @include piece.card(var(--radius-m))
       @include piece.pressable
       @include typography.title
@@ -104,9 +102,9 @@
       // the arrow keys move focus without moving this, so the two never share
       // a mark.
       &[data-selected]
-        box-shadow: inset 0 0 0 var(--stroke-bold) var(--card-ink), 0 6px 0 0 var(--chipboard), 0 14px 18px -8px var(--shadow)
+        box-shadow: inset 0 0 0 var(--stroke-bold) var(--card-ink), 0 6px 0 0 var(--chipboard), var(--shadow-pulled)
         color: var(--card-ink)
-        transform: translateY(-3px)
+        transform: translateY(-0.1875rem)
 
       // One line always, in a square whose size the grid decides, so the trim
       // only moves the numeral onto the piece's centre. Clipped across only:
@@ -157,7 +155,7 @@
       background: var(--tile-2)
       block-size: var(--token-size)
       border-radius: 50%
-      box-shadow: 0 4px 0 var(--chipboard), 0 12px 20px -10px var(--shadow)
+      box-shadow: 0 4px 0 var(--chipboard), var(--shadow-raised)
       color: var(--tile-ink)
       display: grid
       inline-size: var(--token-size)

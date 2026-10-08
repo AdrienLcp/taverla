@@ -57,8 +57,8 @@
 
       // Pulled forward out of the row, the way a box is taken off a shelf.
       &[data-selected]
-        box-shadow: 0 0 0 3px var(--spine), 0 9px 0 0 var(--chipboard), 0 18px 22px -10px var(--shadow)
-        transform: translateY(-6px)
+        box-shadow: 0 0 0 3px var(--spine), 0 9px 0 0 var(--chipboard), var(--shadow-pulled)
+        transform: translateY(-0.375rem)
 
     .band
       background: var(--spine)
@@ -88,7 +88,7 @@
       align-items: start
       display: flex
       flex-direction: column
-      font-size: clamp(1.25rem, 3.4cqi, 1.75rem)
+      font-size: clamp(var(--text-m), 3.4cqi, var(--text-xl))
       gap: var(--space-2xs)
 
       @container (width < 30rem)
@@ -101,7 +101,7 @@
       @include typography.blurb
 
       color: var(--card-muted)
-      font-size: clamp(0.8125rem, 1.6cqi, 0.9375rem)
+      font-size: clamp(var(--text-2xs), 1.6cqi, 0.9375rem)
       text-wrap: pretty
 
     .tick

@@ -1,4 +1,3 @@
-@use '../styles/focus'
 @use '../styles/typography'
 @use '@adrienlcp/styles/text-box'
 
@@ -22,13 +21,12 @@
     // Never taller than the button that submits it: an input that outweighs its
     // own action is what makes a form read as a wall of slabs.
     .react-aria-Input
-      @include focus.ring
       @include typography.title
 
       background: var(--card)
       border: 0
       border-radius: var(--radius-m)
-      box-shadow: inset 0 2px 5px -1px var(--shadow), inset 0 0 0 var(--stroke-thin) var(--rule-strong)
+      box-shadow: var(--shadow-field), inset 0 0 0 var(--stroke-thin) var(--rule-strong)
       color: var(--card-ink)
       min-height: var(--control-height)
       padding: 0 var(--space-s)
@@ -40,7 +38,7 @@
         color: var(--card-muted)
 
     &[data-invalid] .react-aria-Input
-      box-shadow: inset 0 2px 5px -1px var(--shadow), inset 0 0 0 var(--stroke-bold) var(--danger)
+      box-shadow: var(--shadow-field), inset 0 0 0 var(--stroke-bold) var(--danger)
 
     .react-aria-Text[slot='description']
       @include typography.caption

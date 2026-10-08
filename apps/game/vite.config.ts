@@ -8,6 +8,7 @@ import { defineConfig } from 'vite'
 
 import { API_PREFIX, SOCKET_PREFIX } from '@taverla/protocol/routes'
 
+import { arialMetricTwins } from './scripts/arial-metric-twins.ts'
 import { themeStore } from './src/presentation/theme/theme-store.ts'
 
 const SERVER_ORIGIN = process.env.VITE_SERVER_ORIGIN ?? 'http://localhost:3100'
@@ -28,7 +29,8 @@ export default defineConfig({
         fontaine({
           fallbacks: ['Arial'],
           resolvePath: (path) => new URL(`./public${path}`, import.meta.url)
-        })
+        }),
+        arialMetricTwins()
       ]
     }
   },

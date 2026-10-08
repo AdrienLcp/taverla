@@ -56,6 +56,23 @@ const play = (
   })
 }
 
+/**
+ * The element is React state, which the compiler holds immutable inside the
+ * hook: the effects change it through these instead of assigning to it.
+ */
+const setVolume = (audio: HTMLAudioElement, volume: number): void => {
+  audio.volume = volume
+}
+
+const loadClip = (audio: HTMLAudioElement, url: string): void => {
+  audio.src = url
+  audio.load()
+}
+
+const moveTo = (audio: HTMLAudioElement, positionMs: number): void => {
+  audio.currentTime = positionMs / 1_000
+}
+
 export type RoundAudio = {
   /**
    * Whether a press has blessed an element on this screen. `false` after a
@@ -116,7 +133,7 @@ export const useRoundAudio = ({
 
   useEffect(() => {
     if (audio !== null) {
-      audio.volume = volume
+      setVolume(audio, volume)
     }
   }, [audio, volume])
 
@@ -154,8 +171,7 @@ export const useRoundAudio = ({
 
     if (loadedRoundRef.current !== roundId) {
       loadedRoundRef.current = roundId
-      audio.src = previewUrl
-      audio.load()
+      loadClip(audio, previewUrl)
     }
 
     if (phase === 'playing') {
@@ -167,7 +183,7 @@ export const useRoundAudio = ({
       })
 
       if (seekTo !== null) {
-        audio.currentTime = seekTo / 1_000
+        moveTo(audio, seekTo)
       }
 
       play(audio, disarm)
@@ -179,7 +195,7 @@ export const useRoundAudio = ({
       return
     }
 
-    audio.currentTime = 0
+    moveTo(audio, 0)
 
     let frame = 0
 

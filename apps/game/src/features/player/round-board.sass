@@ -64,7 +64,7 @@
       @include text-box.trimmed-figure
 
       color: var(--ink-muted)
-      font-size: 0.8em
+      font-size: var(--text-em-s)
 
     // Twenty unbreakable characters somebody chose, in a column sized by what
     // is left: a name is atomic where an answer is not, so this is cut last.
@@ -91,7 +91,7 @@
       @include typography.numeric
       @include text-box.trimmed-figure
 
-      font-size: 0.8em
+      font-size: var(--text-em-s)
       min-width: 4.5ch
       text-align: end
 
@@ -101,7 +101,7 @@
       @include typography.score
       @include text-box.trimmed-figure
 
-      font-size: 1.15em
+      font-size: var(--text-em-l)
 
     // What they typed or picked, under their own name: the first line is read
     // down as columns of numbers, and a sentence dropped into it stops that.

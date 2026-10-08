@@ -84,17 +84,17 @@ the reconnecting dot is half full before it pulses.
 ## Every size answers the user's font size
 
 Text, spacing and boxes are `rem` — `--space-*`, `--text-*`, a control's
-height, a box's width, height or offset, a layout width, a breakpoint or a
-container threshold — so a raised browser font size or a zoom reaches them.
+height, a box's width, height or offset, a `translate`, a layout width, a
+breakpoint or a container threshold — so a raised browser font size or a zoom reaches them.
 Strokes, outlines, radii, shadows and the touch target stay `px`, and a zero
 length is `0rem`. A threshold that follows the shell reads
 `layout.$wide-screen`, never a copy of it. `stylesheets.test.ts` beside the
 tokens runs `findUnitFailures`, `findTypeLiterals` and `findUnnamedValues` from
 `@adrienlcp/styles/audit` over every stylesheet, and `findTokenFailures` over
-every source, scripts included: no literal radius or duration, no `var()` of a
-name declared nowhere. A name a script builds from a template
-(`var(--pawn-${n})`) reaches that check as its bare prefix and is the test's
-one exclusion. `validate` holds this section and the text voice below.
+every source, scripts included: no literal radius, duration or font size, no
+`var()` of a name declared nowhere. It passes `{ provided: REACT_ARIA_TOKENS }`
+for the names react-aria sets at runtime and carries no exclusion of its own: a
+name built by interpolation (`var(--pawn-${n})`) is not read. `validate` holds this section and the text voice below.
 
 **The game grows with the screen through one unit, `--stage-unit`** (`1vmin`):
 the same page is read at forty centimetres and at four metres, so a size that
@@ -111,8 +111,10 @@ padding and gap; a `_typography.sass` mixin for the text voice, and a `--text-*`
 step for a size set on its own; `--stroke-*` for a line's weight (colour and
 style stay at the call site) and `--hairline` for the board's rule whole;
 `--radius-*`; `--target` / `--control-height`; `--measure` or a
-`--measure-<role>` for a line length, never a raw `ch`. A step the scale lacks
-joins it. A value that changes with the screen is a **role token** beside the
+`--measure-<role>` for a line length, never a raw `ch`; a soft shadow is a
+`--shadow-<role>` layer whole (`--shadow-piece`, `--shadow-pressed`,
+`--shadow-recess`…, coloured `--shadow-ink`), the chipboard edge beside it
+staying the piece's own depth. A step the scale lacks joins it. A value that changes with the screen is a **role token** beside the
 scale — `--space-stage-split`, `--space-stage-rows`, `--space-framed` — rather
 than the same `clamp()` typed into each component.
 
@@ -126,7 +128,9 @@ lands in two commits: exact tokenisation, which changes no pixel, then the snaps
 to the scale.
 
 A literal is the element's own geometry: `0`, `100%`, a grid template, an
-`em` tracking its font, a sprue nub's 10×3. **Fitted display type is geometry
+`em` tracking its font, a sprue nub's 10×3. A font size taken against its line
+— a rank beside a fitted name, a score above it — is a `--text-em-*` step
+(`--text-em-s`, `--text-em-l`, `--text-em-xl`); only `1em` stays a literal. **Fitted display type is geometry
 too**, written on the component inside its own container and floored on the
 scale — `clamp(var(--text-xs), calc(100cqh / var(--rows) / 2.3), 1.75rem)`,
 or `max(var(--text-xs), …)` — never a `px` floor and never a floor variable
@@ -196,6 +200,27 @@ Two defaults the browser applies to a *document* and this is not one:
 
 Neither shows up in a screenshot. They surface by playing on a phone.
 
+## The page runs edge to edge
+
+`index.html` declares `viewport-fit=cover`, and every surface that reaches an
+edge pads by the larger of its own space and the inset, never the sum:
+`--layout-padding-*` and `--framed-padding-block-*` are `max()` of the padding
+and the `--safe-area-*` tokens from `tokens.defaults`, which carry the `0px`
+fallback and read Android's static bottom inset first. `#root` is not padded, or
+every page would pay the inset twice. A raw `env()` is never written.
+
+## What `globals.sass` sets
+
+`html` reserves the scrollbar's gutter (`stable`) and paints it in
+`--rule-strong` on `--field`; `body` sets `caret-color: var(--ink)` and
+`font-synthesis: none`, so a weight the face lacks shows as missing in review
+rather than faked; `::selection` is `--selection` under `--ink`, a pair in
+`tokens-contrast.test.ts`; `#root` fills `100dvh` and clips both axes, so a page
+entering with a `transform` or a drawer parked off-screen never scrolls the
+document. Each face the first screen reads is preloaded with
+`fetchpriority="low"`, and `scripts/arial-metric-twins.ts` widens fontaine's
+fallback from Arial to Arial, Liberation Sans, Arimo and Roboto.
+
 ## Class naming
 
 Semantic names scoped by nesting, not BEM. The root class matches the file name
@@ -237,7 +262,9 @@ written by hand. A ring drawn on a descendant of the focused element passes it
 as `$on` — the switch rings its track with `@include focus.ring('.track')` —
 and a box around a field takes `focus.ring-within`. Every focusable rings by
 default: `globals.sass` includes `focus.ring-focusables` once in `@layer base`,
-so a component includes `focus.ring` only where its ring differs, and a ring
+so a component includes `focus.ring` only where its ring differs or where the
+focused element is not one that list matches — a `Radio`'s label over its
+hidden input, a slider's thumb — and a ring
 closer than the configured offset passes `$offset` rather than an
 `outline-offset` written after the include.
 

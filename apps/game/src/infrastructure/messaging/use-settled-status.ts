@@ -61,7 +61,9 @@ export const useSettledStatus = (status: SocketStatus): SettledStatus => {
       return
     }
 
-    blinkTimerRef.current ??= window.setTimeout(reveal, BLINK_CEILING_MS)
+    if (blinkTimerRef.current === undefined) {
+      blinkTimerRef.current = window.setTimeout(reveal, BLINK_CEILING_MS)
+    }
   }, [reveal, settled, status])
 
   useEffect(

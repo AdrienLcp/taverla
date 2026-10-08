@@ -15,7 +15,7 @@
     <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
     <!-- iOS ignores an SVG icon outright, and a phone is where this is added to a home screen. -->
     <link href="/apple-touch-icon.png" rel="apple-touch-icon" />
-    <link as="font" crossorigin href="/fonts/atkinson-hyperlegible-next-latin.woff2" rel="preload" type="font/woff2" />
+    <link as="font" crossorigin fetchpriority="low" href="/fonts/atkinson-hyperlegible-next-latin.woff2" rel="preload" type="font/woff2" />
 
     <!--
       The page says "the tavern is open" and nothing else; a tab, a search
@@ -57,6 +57,7 @@
     <meta content="en_US" property="og:locale" />
     <meta content="fr_FR" property="og:locale:alternate" />
     <meta content="summary_large_image" name="twitter:card" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","description":"One screen runs the game, everyone joins by scanning a QR code or typing the room code — no install, no account. Blind test, Buzzer, Quiz, Reflex and Slate.","inLanguage":"en","name":"Taverla","url":"https://taverla.adrienlcp.com/"}</script>
     <!--
       The cascade order lives here, not in a stylesheet, because a layer's
       position is fixed by where its name FIRST appears. Every component

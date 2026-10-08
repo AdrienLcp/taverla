@@ -31,7 +31,7 @@
 
       border: 6px solid var(--card)
       border-radius: var(--radius-s)
-      box-shadow: 0 3px 0 var(--chipboard), 0 12px 20px -10px var(--shadow)
+      box-shadow: 0 3px 0 var(--chipboard), var(--shadow-raised)
       flex: none
       height: var(--cover-size)
       object-fit: cover
@@ -147,7 +147,7 @@
         @include typography.aside
 
         flex: 1 1 0
-        font-size: 0.8em
+        font-size: var(--text-em-s)
         min-width: 0
         overflow: hidden
         text-align: end

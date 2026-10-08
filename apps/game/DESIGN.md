@@ -227,8 +227,10 @@ A cool printed board under warm, saturated die-cut inks, every value one
   inside a lid): question cards, the QR card, cover mounts, notices, text
   fields. Paper stays light in the dark palette and its ink is one value in
   both.
-- **Chipboard** (`--chipboard`, `--chipboard-dark`) and **`--shadow`**: the raw
-  edge under a piece's print, and the soft fall under it.
+- **Chipboard** (`--chipboard`, `--chipboard-dark`) and **`--shadow-ink`**: the
+  raw edge under a piece's print, and the colour of the soft fall under it.
+- **Selection** (`--selection`): a tint of the track's blue that the board's ink
+  reads on, so selected text never shows the browser's own colour.
 - **Socket** (`--socket`, `--socket-line` the dashed die-line, `--socket-ink`
   what is printed at the bottom of a recess, such as a marked slate item's
   numeral): the recess a piece sits in when it is absent, spent or disabled.
@@ -294,7 +296,11 @@ the system stack
 lid title, a room code, a score, every figure. Atkinson is everything read up
 close, chosen for the grandparent at the table. Both are SIL OFL, self-hosted
 in `public/fonts`, subset latin / latin-ext, `font-display: swap`, the read
-face preloaded from `index.html` — party Wi-Fi is the reason for all four.
+face preloaded from `index.html` at low priority — party Wi-Fi is the reason
+for all four. Each face has a fontaine fallback scaled to its metrics, listing
+Arial and its metric twins (Liberation Sans, Arimo, Roboto) so the swap moves no
+line on Linux or Android either; `font-synthesis: none` keeps a weight the face
+lacks from being faked.
 
 ### Hierarchy
 
@@ -384,8 +390,10 @@ forwarded by `_layout.sass` with `wide` and `narrow`). A second width,
 
 **Padding** is `--layout-padding` (`clamp(1rem, calc(var(--stage-unit) * 4), 3.5rem)`), resolved per
 side against the safe-area insets (`--layout-padding-block-start` etc., `max()`
-of the two, every `env()` falling back to `0rem`; Android's bottom inset read
-from `safe-area-max-inset-bottom`). A framed screen uses the tighter
+of the two over the `--safe-area-*` tokens of `tokens.defaults`, which carry the
+`0px` fallback and read Android's static `safe-area-max-inset-bottom` first).
+`#root` is not padded: every surface that reaches an edge pays the inset once,
+through these. A framed screen uses the tighter
 `--framed-padding-block-*` (`clamp(var(--space-xs), calc(var(--stage-unit) * 2), 1rem)`).
 
 **Console stages are size containers.** Above the split each console stage
@@ -444,25 +452,28 @@ round screen is checked against it.
 
 Depth is physical and shallow: a printed piece sits a few millimetres proud of
 the board. The edge is a **hard** offset shadow in chipboard, not a blur; a
-soft `--shadow` underneath only grounds it. Nothing floats, nothing glows.
+soft `--shadow-*` layer underneath only grounds it. Nothing floats, nothing glows.
 
 ### Shadow Vocabulary
-- **Piece at rest** (`0 3px 0 0 var(--chipboard), 0 8px 14px -6px var(--shadow)`):
+- **Piece at rest** (`0 3px 0 0 var(--chipboard), var(--shadow-piece)`):
   every die-cut piece (`piece` mixin).
-- **Piece lifted** (`0 5px 0 0 var(--chipboard), 0 12px 18px -8px var(--shadow)`,
-  `translateY(-2px)`): hover, fine pointers only (`pressable`).
-- **Piece pressed** (`0 1px 0 0 var(--chipboard), 0 4px 8px -6px var(--shadow)`,
-  `translateY(2px)`).
-- **Card** (`0 3px 0 var(--chipboard), 0 10px 18px -10px var(--shadow)`): paper,
-  never pressed (`card` mixin).
-- **Coral piece** (`0 4px 0 var(--primary-edge)`, 6px lifted, 1px pressed): the
-  `filled` button and the buzzer take their own darker coral as the edge.
-- **Recess** (`inset 0 3px 6px -4px var(--shadow)` to
-  `inset 0 3px 8px -2px var(--shadow)`, with `inset 0 0 0 2px var(--socket-line)`
-  or a 2px dashed outline in it): a socket, a disabled control, a dead buzzer,
-  a paper text field.
-- **Pulled forward** (`0 0 0 3px var(--spine), 0 9px 0 0 var(--chipboard), …`):
-  the chosen lid on the shelf.
+- **Piece lifted** (`0 5px 0 0 var(--chipboard), var(--shadow-lifted)`,
+  `translateY(-0.125rem)`): hover, fine pointers only (`pressable`).
+- **Piece pressed** (`0 1px 0 0 var(--chipboard), var(--shadow-pressed)`,
+  `translateY(0.125rem)`).
+- **Card** (`0 3px 0 var(--chipboard), var(--shadow-card)`): paper, never
+  pressed (`card` mixin).
+- **Coral piece** (`0 4px 0 var(--primary-edge), var(--shadow-raised)`, 6px
+  lifted, 1px pressed): the `filled` button and the buzzer take their own darker
+  coral as the edge.
+- **Recess** (`var(--shadow-recess-shallow)` to `var(--shadow-recess)`, with
+  `inset 0 0 0 2px var(--socket-line)` or a 2px dashed outline in it): a socket,
+  a disabled control, a dead buzzer; a paper text field takes the
+  `--shadow-field` well.
+- **Pulled forward** (`0 0 0 3px var(--spine), 0 9px 0 0 var(--chipboard),
+  var(--shadow-pulled)`): the chosen lid on the shelf.
+- **Overlay** (`var(--shadow-overlay)`): the menu's popover, the one thing
+  that leaves the board.
 - **Keyline** (`inset 0 0 0 3px var(--ink)`): *this one is yours* — the own seat,
   the line in hand, a selected strip segment while disabled.
 

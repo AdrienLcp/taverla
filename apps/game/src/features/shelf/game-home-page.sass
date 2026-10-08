@@ -31,12 +31,12 @@
     .wordmark
       @include typography.game-wordmark
 
-      font-size: clamp(3rem, 17cqi, 7rem)
+      font-size: clamp(var(--text-3xl), 17cqi, 7rem)
 
     h1
       @include typography.game-door-headline
 
-      font-size: clamp(1.5rem, 6cqi, 2.5rem)
+      font-size: clamp(var(--text-l), 6cqi, 2.5rem)
       max-width: var(--measure-game-headline)
       text-wrap: balance
 
@@ -44,7 +44,7 @@
       @include typography.game-pitch
 
       color: var(--ink-muted)
-      font-size: clamp(1.0625rem, 3.4cqi, 1.25rem)
+      font-size: clamp(var(--text-s), 3.4cqi, var(--text-m))
       max-width: var(--measure-game-pitch)
       text-wrap: pretty
 

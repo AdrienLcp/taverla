@@ -13,6 +13,10 @@ allowBuilds:
 # install here any more. What still guards pnpm is the "packageManager" pin.
 engineStrict: true
 
+# Most hijacked npm versions are pulled within hours, so an install waits a
+# day; our own packages are exempt.
+minimumReleaseAge: 1440
+
 minimumReleaseAgeExclude:
   - '@adrienlcp/*'
 

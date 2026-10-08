@@ -79,6 +79,27 @@ const escapeAttribute = (value: string): string =>
 const escapeText = (value: string): string =>
   value.replaceAll('&', '&amp;').replaceAll('<', '&lt;')
 
+/** Every `<` written as its `\u003c` escape, so no string in the data can close the script. */
+const structuredDataFor = ({
+  description,
+  locale,
+  url
+}: {
+  description: string
+  locale: Locale
+  url: string
+}): string =>
+  JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    description,
+    inLanguage: locale,
+    name: 'Taverla',
+    url
+  }).replaceAll('<', '\\u003c')
+
+const STRUCTURED_DATA = /<script type="application\/ld\+json">[^<]*<\/script>/
+
 const setMeta = ({
   html,
   key,
@@ -344,6 +365,12 @@ const documentFor = ({
         pattern:
           /<meta\s+content="[^"]*"\s+property="og:locale:alternate"\s*\/>/,
         replacement: alternateOpenGraphLocales({ page, siblings })
+      }),
+    (html: string) =>
+      replaceOnce({
+        html,
+        pattern: STRUCTURED_DATA,
+        replacement: `<script type="application/ld+json">${structuredDataFor({ description: rendered.description, locale: page.locale, url })}</script>`
       }),
     (html: string) =>
       replaceOnce({

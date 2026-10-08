@@ -11,7 +11,7 @@
     .count
       @include typography.numeric
 
-      font-size: clamp(1.125rem, 3.4cqmin, 1.75rem)
+      font-size: clamp(var(--text-s), 3.4cqmin, var(--text-xl))
       white-space: nowrap
 
     ul
@@ -25,7 +25,7 @@
     // on this screen and the one the room is waiting to see.
     li
       display: grid
-      font-size: clamp(1.5rem, 5cqmin, 2.5rem)
+      font-size: clamp(var(--text-l), 5cqmin, 2.5rem)
       transition: transform var(--transition-fast, 0s) var(--ease-out)
 
       &:not([data-answered]) .pawn
@@ -36,4 +36,4 @@
         stroke-width: 1.4
 
       &[data-answered]
-        transform: translateY(-3px)
+        transform: translateY(-0.1875rem)

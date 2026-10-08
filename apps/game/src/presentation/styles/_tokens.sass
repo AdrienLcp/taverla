@@ -38,7 +38,23 @@
     // print, drawn as a hard 3px shadow rather than a soft one.
     --chipboard: light-dark(oklch(60% 0.035 68), oklch(47% 0.035 68))
     --chipboard-dark: light-dark(oklch(48% 0.035 68), oklch(36% 0.03 68))
-    --shadow: light-dark(oklch(30% 0.05 250 / 0.22), oklch(8% 0.02 250 / 0.55))
+    --shadow-ink: light-dark(oklch(30% 0.05 250 / 0.22), oklch(8% 0.02 250 / 0.55))
+
+    // A soft shadow is a whole layer named by what the piece is doing, as
+    // DESIGN.md's shadow vocabulary lists them; the chipboard edge beside it is
+    // the piece's own depth and stays where the piece is drawn.
+    --shadow-piece: 0 8px 14px -6px var(--shadow-ink)
+    --shadow-card: 0 10px 18px -10px var(--shadow-ink)
+    --shadow-raised: 0 12px 20px -10px var(--shadow-ink)
+    --shadow-lifted: 0 12px 18px -8px var(--shadow-ink)
+    --shadow-pressed: 0 4px 8px -6px var(--shadow-ink)
+    --shadow-pulled: 0 18px 22px -10px var(--shadow-ink)
+    --shadow-overlay: 0 24px 40px -16px var(--shadow-ink)
+    --shadow-print: 0 6px 12px -8px var(--shadow-ink)
+    --shadow-recess: inset 0 3px 8px -2px var(--shadow-ink)
+    --shadow-recess-shallow: inset 0 3px 6px -4px var(--shadow-ink)
+    --shadow-field: inset 0 2px 5px -1px var(--shadow-ink)
+    --shadow-groove: inset 0 1px 2px var(--shadow-ink)
 
     // Paper: question cards, the QR card, the cover's mount.
     --card: light-dark(oklch(99.5% 0.003 95), oklch(90% 0.016 95))
@@ -143,6 +159,17 @@
     --text-s: 1rem
     --text-m: 1.25rem
     --text-l: 1.5rem
+    // The floors fitted display type keeps on a wall-sized stage.
+    --text-xl: 1.75rem
+    --text-2xl: 2rem
+    --text-3xl: 3rem
+    --text-4xl: 4rem
+
+    // A size taken against the line it sits in rather than the root: a rank
+    // beside a fitted name, a score above it, a pawn beside a nickname.
+    --text-em-s: 0.8em
+    --text-em-l: 1.15em
+    --text-em-xl: 1.4em
 
     --transition-fast: 140ms
     --transition-base: 260ms
@@ -156,22 +183,18 @@
     // The same padding per side, because `viewport-fit=cover` in `index.html`
     // lays the page out under the sensor housing, the rounded corners and the
     // home indicator. `max()` of the two rather than a sum: only the larger is
-    // right in both orientations. Every `env()` falls back to `0rem`, because an
-    // unknown one with no fallback voids the whole declaration.
-    --layout-padding-block-start: max(var(--layout-padding), env(safe-area-inset-top, 0rem))
-
-    // Android's bottom bar retracts on scroll and animates the live inset, so
-    // the static ceiling is read where it exists.
-    --layout-padding-block-end: max(var(--layout-padding), env(safe-area-max-inset-bottom, env(safe-area-inset-bottom, 0rem)))
-
-    --layout-padding-inline-start: max(var(--layout-padding), env(safe-area-inset-left, 0rem))
-    --layout-padding-inline-end: max(var(--layout-padding), env(safe-area-inset-right, 0rem))
+    // right in both orientations. The `--safe-area-*` insets come from
+    // `tokens.defaults`, with their fallback and Android's static bottom.
+    --layout-padding-block-start: max(var(--layout-padding), var(--safe-area-top))
+    --layout-padding-block-end: max(var(--layout-padding), var(--safe-area-bottom))
+    --layout-padding-inline-start: max(var(--layout-padding), var(--safe-area-left))
+    --layout-padding-inline-end: max(var(--layout-padding), var(--safe-area-right))
 
     // The top and bottom of a screen held to the viewport, tighter than a page's
     // because every pixel of it is taken from the four tiles. The menu reads it
     // too, so its trigger stays on that screen's chrome line.
-    --framed-padding-block-start: max(clamp(var(--space-xs), calc(var(--stage-unit) * 2), 1rem), env(safe-area-inset-top, 0rem))
-    --framed-padding-block-end: max(clamp(var(--space-xs), calc(var(--stage-unit) * 2), 1rem), env(safe-area-max-inset-bottom, env(safe-area-inset-bottom, 0rem)))
+    --framed-padding-block-start: max(clamp(var(--space-xs), calc(var(--stage-unit) * 2), 1rem), var(--safe-area-top))
+    --framed-padding-block-end: max(clamp(var(--space-xs), calc(var(--stage-unit) * 2), 1rem), var(--safe-area-bottom))
 
     --stage-max-width: 112.5rem
     --column-max-width: 38.75rem
@@ -203,6 +226,9 @@
     // The rule between two regions, whole. Declared again wherever `--rule`
     // is, because a custom property resolves where it is written.
     --hairline: var(--stroke-thin) solid var(--rule)
+    // Selected text on the board: a tint of the track's blue that the board's
+    // ink reads on in both palettes.
+    --selection: light-dark(oklch(83% 0.07 218), oklch(41% 0.07 226))
 
     // The ink the round's marks — its sand, its pips — take for the phase the
     // room is in. The lobby keeps the printed blues.

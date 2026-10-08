@@ -77,6 +77,11 @@ describe('colour tokens', () => {
           foreground: '--socket-line',
           minimum: WCAG_AA.nonText
         },
+        {
+          background: '--selection',
+          foreground: '--board-ink',
+          minimum: WCAG_AA.text
+        },
         // The reveal's hold bar drains in the phase's ink along a socket.
         {
           background: '--socket',

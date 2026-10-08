@@ -124,7 +124,7 @@
           .scoreboard li
             --standings-row: 3.15
 
-            font-size: clamp(0.9rem, calc(var(--stacked-budget) / var(--standings-rows, 8) / var(--standings-row)), 1.25rem)
+            font-size: clamp(var(--text-xs), calc(var(--stacked-budget) / var(--standings-rows, 8) / var(--standings-row)), 1.25rem)
             padding: 0.35em 0
 
             @supports (text-box: trim-both cap alphabetic)
@@ -134,7 +134,7 @@
               font-size: 1em
 
             .score
-              font-size: 1.5em
+              font-size: var(--text-em-xl)
 
         .standings
           align-self: center
@@ -163,9 +163,10 @@
         // largest object in the product and nothing shares its line.
         // The fit is measured, not chosen: four `W`, the widest glyph the code
         // alphabet holds, set in `monument` come to 2.98 times their own size,
-        // and the token's padding takes 40px of the column.
+        // and the token's inline padding, a `--space-m` each side, comes off
+        // the column at that same ratio.
         .room-invitation
-          --invitation-code-size: min(clamp(4rem, calc(var(--stage-unit) * 21), 16rem), calc(33cqi - 0.875rem))
+          --invitation-code-size: min(clamp(4rem, calc(var(--stage-unit) * 21), 16rem), calc(33cqi - var(--space-m) * 2 / 2.98))
           --invitation-qr-max-width: clamp(8.75rem, calc(var(--stage-unit) * 24), 15rem)
 
     // The one screen in the product that admits to being silent, and it is a

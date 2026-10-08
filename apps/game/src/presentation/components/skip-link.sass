@@ -1,10 +1,8 @@
-@use '../styles/focus'
 @use '../styles/piece'
 @use '../styles/typography'
 
 @layer components
   .skip-link
-    @include focus.ring
     @include piece.card(var(--radius-s))
     @include typography.label
 
