@@ -57,8 +57,8 @@
 
       // Pulled forward out of the row, the way a box is taken off a shelf.
       &[data-selected]
-        box-shadow: 0 0 0 3px var(--spine), 0 9px 0 0 var(--chipboard), var(--shadow-pulled)
-        transform: translateY(-0.375rem)
+        box-shadow: 0 0 0 3px var(--spine), 0 calc(var(--edge) * 3) 0 0 var(--chipboard), var(--shadow-pulled)
+        transform: translateY(calc(var(--edge) * -2))
 
     .band
       background: var(--spine)

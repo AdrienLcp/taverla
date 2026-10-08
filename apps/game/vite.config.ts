@@ -1,5 +1,6 @@
 import { resolve } from 'node:path'
 
+import { metricTwins } from '@adrienlcp/styles/metric-twins'
 import { themePreferencePlugin } from '@adrienlcp/theme-preference/vite'
 import optimizeLocales from '@react-aria/optimize-locales-plugin'
 import react from '@vitejs/plugin-react'
@@ -8,7 +9,7 @@ import { defineConfig } from 'vite'
 
 import { API_PREFIX, SOCKET_PREFIX } from '@taverla/protocol/routes'
 
-import { arialMetricTwins } from './scripts/arial-metric-twins.ts'
+import { shellHeadPlugin } from './scripts/shell-head.ts'
 import { themeStore } from './src/presentation/theme/theme-store.ts'
 
 const SERVER_ORIGIN = process.env.VITE_SERVER_ORIGIN ?? 'http://localhost:3100'
@@ -30,7 +31,7 @@ export default defineConfig({
           fallbacks: ['Arial'],
           resolvePath: (path) => new URL(`./public${path}`, import.meta.url)
         }),
-        arialMetricTwins()
+        metricTwins()
       ]
     }
   },
@@ -40,6 +41,7 @@ export default defineConfig({
       ...optimizeLocales.vite({ locales: ['en-US', 'fr-FR'] }),
       enforce: 'pre'
     },
+    shellHeadPlugin(),
     themePreferencePlugin(themeStore)
   ],
   resolve: {

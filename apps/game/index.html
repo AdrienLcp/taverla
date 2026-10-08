@@ -15,7 +15,6 @@
     <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
     <!-- iOS ignores an SVG icon outright, and a phone is where this is added to a home screen. -->
     <link href="/apple-touch-icon.png" rel="apple-touch-icon" />
-    <link as="font" crossorigin fetchpriority="low" href="/fonts/atkinson-hyperlegible-next-latin.woff2" rel="preload" type="font/woff2" />
 
     <!--
       The page says "the tavern is open" and nothing else; a tab, a search
@@ -23,18 +22,17 @@
       of the room to explain it, so the explanation lives here instead.
     -->
     <!--
-      This head is the English home page's, and every tag below that names a
-      page is rewritten per document by `scripts/prerender.ts` — which fails the
-      build if any of them stops matching. What is served from here unrewritten
-      is `pnpm dev` and the SPA fallback, so it stays a valid standalone page.
-      The copy itself lives in `presentation/head/document-head.ts`, in both
-      languages; these two must be its `en.home` entry word for word.
+      Every tag below that names a page is rewritten per document by
+      `scripts/prerender.ts`, which fails the build if any of them stops
+      matching. The copy lives in `presentation/head/document-head.ts` alone:
+      the empty values here are filled with its English home page by
+      `scripts/shell-head.ts`, so the shell `pnpm dev` and the SPA fallback
+      serve says what the prerendered home says. The font preloads, the
+      `hreflang` alternates, `og:locale:alternate` and the JSON-LD are written
+      by the prerender only.
     -->
-    <title>Taverla — party games for one screen and the whole room</title>
-    <meta
-      content="One screen runs the game, everyone joins by scanning a QR code or typing the room code — no install, no account. Blind test, Buzzer, Quiz, Reflex and Slate."
-      name="description"
-    />
+    <title></title>
+    <meta content="" name="description" />
     <!--
       Absolute, because most scrapers refuse to resolve a relative one. Both
       this and `og:url` are the deployment's origin: they change the day a
@@ -44,20 +42,15 @@
 
     <meta content="website" property="og:type" />
     <meta content="Taverla" property="og:site_name" />
-    <meta content="Taverla — party games for one screen and the whole room" property="og:title" />
-    <meta
-      content="One screen runs the game, everyone joins by scanning a QR code or typing the room code — no install, no account. Blind test, Buzzer, Quiz, Reflex and Slate."
-      property="og:description"
-    />
+    <meta content="" property="og:title" />
+    <meta content="" property="og:description" />
     <meta content="https://taverla.adrienlcp.com/" property="og:url" />
     <meta content="https://taverla.adrienlcp.com/og.png" property="og:image" />
     <meta content="1200" property="og:image:width" />
     <meta content="630" property="og:image:height" />
-    <meta content="The Taverla wordmark on the lobby's burnt-orange field." property="og:image:alt" />
-    <meta content="en_US" property="og:locale" />
-    <meta content="fr_FR" property="og:locale:alternate" />
+    <meta content="" property="og:image:alt" />
+    <meta content="" property="og:locale" />
     <meta content="summary_large_image" name="twitter:card" />
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","description":"One screen runs the game, everyone joins by scanning a QR code or typing the room code — no install, no account. Blind test, Buzzer, Quiz, Reflex and Slate.","inLanguage":"en","name":"Taverla","url":"https://taverla.adrienlcp.com/"}</script>
     <!--
       The cascade order lives here, not in a stylesheet, because a layer's
       position is fixed by where its name FIRST appears. Every component

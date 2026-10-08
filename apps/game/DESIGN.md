@@ -296,7 +296,7 @@ the system stack
 lid title, a room code, a score, every figure. Atkinson is everything read up
 close, chosen for the grandparent at the table. Both are SIL OFL, self-hosted
 in `public/fonts`, subset latin / latin-ext, `font-display: swap`, the read
-face preloaded from `index.html` at low priority — party Wi-Fi is the reason
+face preloaded at low priority by each prerendered page — party Wi-Fi is the reason
 for all four. Each face has a fontaine fallback scaled to its metrics, listing
 Arial and its metric twins (Liberation Sans, Arimo, Roboto) so the swap moves no
 line on Linux or Android either; `font-synthesis: none` keeps a weight the face
@@ -455,17 +455,22 @@ the board. The edge is a **hard** offset shadow in chipboard, not a blur; a
 soft `--shadow-*` layer underneath only grounds it. Nothing floats, nothing glows.
 
 ### Shadow Vocabulary
-- **Piece at rest** (`0 3px 0 0 var(--chipboard), var(--shadow-piece)`):
+The edge's depth is `--edge` (0.1875rem, 3px at the default size, on a piece
+and a card), and every move reads it twice — the shadow's offset and the
+travel — so the two stay in step at any root size: lifted, the edge grows by
+three quarters of itself as the piece rises as much; pressed, it sinks by three
+quarters and a quarter stays showing.
+- **Piece at rest** (`0 var(--edge) 0 0 var(--chipboard), var(--shadow-piece)`):
   every die-cut piece (`piece` mixin).
-- **Piece lifted** (`0 5px 0 0 var(--chipboard), var(--shadow-lifted)`,
-  `translateY(-0.125rem)`): hover, fine pointers only (`pressable`).
-- **Piece pressed** (`0 1px 0 0 var(--chipboard), var(--shadow-pressed)`,
-  `translateY(0.125rem)`).
-- **Card** (`0 3px 0 var(--chipboard), var(--shadow-card)`): paper, never
-  pressed (`card` mixin).
-- **Coral piece** (`0 4px 0 var(--primary-edge), var(--shadow-raised)`, 6px
-  lifted, 1px pressed): the `filled` button and the buzzer take their own darker
-  coral as the edge.
+- **Piece lifted** (edge × 1.75, `translateY(calc(var(--edge) * -0.75))`, with
+  `var(--shadow-lifted)`): hover, fine pointers only (`pressable`).
+- **Piece pressed** (edge × 0.25, `translateY(calc(var(--edge) * 0.75))`, with
+  `var(--shadow-pressed)`).
+- **Card** (`0 var(--edge) 0 var(--chipboard), var(--shadow-card)`): paper,
+  never pressed (`card` mixin).
+- **Coral piece** (`--edge: 0.25rem` in `--primary-edge`, over
+  `var(--shadow-raised)`, lifted and pressed by the same ratios): the `filled`
+  button and the buzzer take their own darker coral as the edge.
 - **Recess** (`var(--shadow-recess-shallow)` to `var(--shadow-recess)`, with
   `inset 0 0 0 2px var(--socket-line)` or a 2px dashed outline in it): a socket,
   a disabled control, a dead buzzer; a paper text field takes the

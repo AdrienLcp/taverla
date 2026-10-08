@@ -9,10 +9,16 @@
 /// `--ground` and a piece on paper says so with `--ground: var(--card)`. They
 /// take `::before` and `::after`; a piece needing either for something else
 /// passes `$nubs: false`.
+///
+/// `--edge` is the chipboard's depth: the press, the lift and every pull read
+/// their travel from it as well as their shadow, so the two stay in step at
+/// any root size.
 @mixin piece($radius: var(--radius-m), $nubs: true)
+  --edge: 0.1875rem
+
   border: 0
   border-radius: $radius
-  box-shadow: 0 3px 0 0 var(--chipboard), var(--shadow-piece)
+  box-shadow: 0 var(--edge) 0 0 var(--chipboard), var(--shadow-piece)
   position: relative
   transition: transform var(--transition-fast, 0s) var(--ease-out), box-shadow var(--transition-fast, 0s) var(--ease-out)
 
@@ -39,18 +45,20 @@
 /// material because a printed card is a piece and is never pressed.
 @mixin pressable
   &:not([data-disabled])[data-pressed]
-    box-shadow: 0 1px 0 0 var(--chipboard), var(--shadow-pressed)
-    transform: translateY(0.125rem)
+    box-shadow: 0 calc(var(--edge) * 0.25) 0 0 var(--chipboard), var(--shadow-pressed)
+    transform: translateY(calc(var(--edge) * 0.75))
 
   @media (hover: hover) and (pointer: fine)
     &:not([data-disabled])[data-hovered]:not([data-pressed])
-      box-shadow: 0 5px 0 0 var(--chipboard), var(--shadow-lifted)
-      transform: translateY(-0.125rem)
+      box-shadow: 0 calc(var(--edge) * 1.75) 0 0 var(--chipboard), var(--shadow-lifted)
+      transform: translateY(calc(var(--edge) * -0.75))
 
 /// A printed card: paper, no sprue, a shallow edge. Question cards, the QR
 /// card, a cover's mount.
 @mixin card($radius: var(--radius-l))
+  --edge: 0.1875rem
+
   background: var(--card)
   border-radius: $radius
-  box-shadow: 0 3px 0 var(--chipboard), var(--shadow-card)
+  box-shadow: 0 var(--edge) 0 var(--chipboard), var(--shadow-card)
   color: var(--card-ink)

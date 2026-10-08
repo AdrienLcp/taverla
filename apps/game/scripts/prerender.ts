@@ -52,15 +52,16 @@ const replaceOnce = ({
 }: {
   html: string
   pattern: RegExp
-  replacement: string
+  /** A function receives the matched tag, for an insertion that keeps it. */
+  replacement: string | ((matched: string) => string)
 }): string => {
   let matched = 0
   const next = html.replace(
     new RegExp(pattern.source, `${pattern.flags}g`),
-    () => {
+    (tag) => {
       matched += 1
 
-      return replacement
+      return typeof replacement === 'string' ? replacement : replacement(tag)
     }
   )
 
@@ -98,7 +99,25 @@ const structuredDataFor = ({
     url
   }).replaceAll('<', '\\u003c')
 
-const STRUCTURED_DATA = /<script type="application\/ld\+json">[^<]*<\/script>/
+const OPEN_GRAPH_LOCALE = /<meta\s+content="[^"]*"\s+property="og:locale"\s*\/>/
+
+/** The JSON-LD follows it: the shell carries none, the prerender writes one per page. */
+const TWITTER_CARD = /<meta\s+content="[^"]*"\s+name="twitter:card"\s*\/>/
+
+const APPLE_TOUCH_ICON = /<link\s+href="[^"]*"\s+rel="apple-touch-icon"\s*\/>/
+
+/**
+ * Each face the first screen reads, preloaded at low priority. Written into the
+ * prerendered pages only: the shell also serves the redirect and the not-found
+ * page, which paint nothing before the app runs, and a font preloaded there
+ * sits unused while the browser warns about it.
+ */
+const FONT_PRELOADS = ['/fonts/atkinson-hyperlegible-next-latin.woff2']
+  .map(
+    (href) =>
+      `\n    <link as="font" crossorigin fetchpriority="low" href="${href}" rel="preload" type="font/woff2" />`
+  )
+  .join('')
 
 const setMeta = ({
   html,
@@ -354,23 +373,26 @@ const documentFor = ({
         value: imageAlts[page.locale]
       }),
     (html: string) =>
-      setMeta({
+      replaceOnce({
         html,
-        key: 'property="og:locale"',
-        value: openGraphLocales[page.locale]
+        pattern: OPEN_GRAPH_LOCALE,
+        replacement: [
+          `<meta content="${openGraphLocales[page.locale]}" property="og:locale" />`,
+          ...alternateOpenGraphLocales({ page, siblings })
+        ].join('\n    ')
       }),
     (html: string) =>
       replaceOnce({
         html,
-        pattern:
-          /<meta\s+content="[^"]*"\s+property="og:locale:alternate"\s*\/>/,
-        replacement: alternateOpenGraphLocales({ page, siblings })
+        pattern: TWITTER_CARD,
+        replacement: (tag) =>
+          `${tag}\n    <script type="application/ld+json">${structuredDataFor({ description: rendered.description, locale: page.locale, url })}</script>`
       }),
     (html: string) =>
       replaceOnce({
         html,
-        pattern: STRUCTURED_DATA,
-        replacement: `<script type="application/ld+json">${structuredDataFor({ description: rendered.description, locale: page.locale, url })}</script>`
+        pattern: APPLE_TOUCH_ICON,
+        replacement: (tag) => `${tag}${FONT_PRELOADS}`
       }),
     (html: string) =>
       replaceOnce({
@@ -399,14 +421,13 @@ const alternateOpenGraphLocales = ({
 }: {
   page: PrerenderedPage
   siblings: PrerenderedPage[]
-}): string =>
+}): string[] =>
   siblings
     .filter((sibling) => sibling.locale !== page.locale)
     .map(
       (sibling) =>
         `<meta content="${OPEN_GRAPH_TAGS[sibling.locale]}" property="og:locale:alternate" />`
     )
-    .join('\n    ')
 
 /**
  * Duplicated from `document-head.ts` on purpose: this file is the only one that

@@ -102,9 +102,9 @@
       // the arrow keys move focus without moving this, so the two never share
       // a mark.
       &[data-selected]
-        box-shadow: inset 0 0 0 var(--stroke-bold) var(--card-ink), 0 6px 0 0 var(--chipboard), var(--shadow-pulled)
+        box-shadow: inset 0 0 0 var(--stroke-bold) var(--card-ink), 0 calc(var(--edge) * 2) 0 0 var(--chipboard), var(--shadow-pulled)
         color: var(--card-ink)
-        transform: translateY(-0.1875rem)
+        transform: translateY(calc(var(--edge) * -1))
 
       // One line always, in a square whose size the grid decides, so the trim
       // only moves the numeral onto the piece's centre. Clipped across only:

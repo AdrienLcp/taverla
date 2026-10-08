@@ -39,9 +39,9 @@
       // The box stays down for as long as its room is opening, because that is
       // what the press did.
       &[data-pending]
-        box-shadow: 0 1px 0 0 var(--chipboard), var(--shadow-pressed)
+        box-shadow: 0 calc(var(--edge) * 0.25) 0 0 var(--chipboard), var(--shadow-pressed)
         cursor: progress
-        transform: translateY(0.125rem)
+        transform: translateY(calc(var(--edge) * 0.75))
 
       @container (width >= 26rem)
         grid-template-columns: minmax(0, 1fr) auto

@@ -114,7 +114,10 @@ style stay at the call site) and `--hairline` for the board's rule whole;
 `--measure-<role>` for a line length, never a raw `ch`; a soft shadow is a
 `--shadow-<role>` layer whole (`--shadow-piece`, `--shadow-pressed`,
 `--shadow-recess`…, coloured `--shadow-ink`), the chipboard edge beside it
-staying the piece's own depth. A step the scale lacks joins it. A value that changes with the screen is a **role token** beside the
+staying the piece's own depth, `--edge`: a press, a lift or a pull reads its
+travel from `--edge` as well as its shadow's offset
+(`translateY(calc(var(--edge) * 0.75))` against `calc(var(--edge) * 0.25)`),
+since a rem travel against a px shadow stays in step at one root size only. A step the scale lacks joins it. A value that changes with the screen is a **role token** beside the
 scale — `--space-stage-split`, `--space-stage-rows`, `--space-framed` — rather
 than the same `clamp()` typed into each component.
 
@@ -218,8 +221,11 @@ rather than faked; `::selection` is `--selection` under `--ink`, a pair in
 `tokens-contrast.test.ts`; `#root` fills `100dvh` and clips both axes, so a page
 entering with a `transform` or a drawer parked off-screen never scrolls the
 document. Each face the first screen reads is preloaded with
-`fetchpriority="low"`, and `scripts/arial-metric-twins.ts` widens fontaine's
-fallback from Arial to Arial, Liberation Sans, Arimo and Roboto.
+`fetchpriority="low"` by the prerender, in the prerendered pages only — the
+`index.html` shell also serves the redirect and the not-found page, where a
+preloaded font sits unused while the browser warns. `metricTwins()` from
+`@adrienlcp/styles/metric-twins`, right after fontaine, widens its fallback from
+Arial to Arial, Liberation Sans, Arimo and Roboto; no copy of it lives here.
 
 ## Class naming
 

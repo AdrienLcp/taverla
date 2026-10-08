@@ -69,18 +69,19 @@
     @include piece.piece($nubs: false)
     @include piece.pressable
 
+    --edge: 0.25rem
     --on-control: var(--on-primary)
 
     background: var(--primary)
-    box-shadow: 0 4px 0 var(--primary-edge), var(--shadow-raised)
+    box-shadow: 0 var(--edge) 0 var(--primary-edge), var(--shadow-raised)
     color: var(--on-control)
 
     &:not([data-disabled])[data-pressed]
-      box-shadow: 0 1px 0 var(--primary-edge), var(--shadow-pressed)
+      box-shadow: 0 calc(var(--edge) * 0.25) 0 var(--primary-edge), var(--shadow-pressed)
 
     @media (hover: hover) and (pointer: fine)
       &:not([data-disabled])[data-hovered]:not([data-pressed])
-        box-shadow: 0 6px 0 var(--primary-edge), var(--shadow-raised)
+        box-shadow: 0 calc(var(--edge) * 1.75) 0 var(--primary-edge), var(--shadow-raised)
 
   &.outlined
     @include box

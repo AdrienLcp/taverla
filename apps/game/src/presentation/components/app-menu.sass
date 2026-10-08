@@ -53,17 +53,19 @@
 
     &[data-connection]:not([data-connection='open']) .trigger
       background: var(--spine-reflex)
-      box-shadow: 0 2px 0 var(--chipboard-dark)
+      box-shadow: 0 var(--edge) 0 var(--chipboard-dark)
       color: var(--on-spine-light)
 
     .trigger
       @include typography.label
 
+      --edge: 0.125rem
+
       align-items: center
       background: var(--track-a)
       border: 0
       border-radius: var(--radius-m)
-      box-shadow: 0 2px 0 var(--chipboard)
+      box-shadow: 0 var(--edge) 0 var(--chipboard)
       color: var(--board-ink)
       cursor: pointer
       display: flex
@@ -74,7 +76,7 @@
 
       &[data-pressed]
         box-shadow: 0 0 0 var(--chipboard)
-        transform: translateY(0.125rem)
+        transform: translateY(var(--edge))
 
       // Held at 44px by its floor, so the trim only lowers the caps onto the
       // centre the dot beside them already sits on.
