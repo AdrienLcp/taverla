@@ -6,6 +6,7 @@ import {
   DEFAULT_ROOM_SETTINGS,
   type RoomSettings
 } from '@taverla/protocol/room'
+import { POINTS_FOR_A_CLAIM } from '@taverla/protocol/scoring'
 
 import { FALSE_START_FLOOR_MS } from '@taverla/core/reflex/reaction'
 
@@ -150,7 +151,7 @@ describe('a heat nobody has to judge', () => {
     bob.send({ roundId: round.id, type: 'player.buzz' })
     await waitFor(() => hostView(host)?.phase === 'revealed', 'the reveal')
 
-    expect(scoreOf(host, 'Alice')).toBe(1)
+    expect(scoreOf(host, 'Alice')).toBe(POINTS_FOR_A_CLAIM)
     expect(scoreOf(host, 'Bob')).toBe(0)
     expect(hostView(host)?.round?.awards).toHaveLength(1)
   })
@@ -167,7 +168,7 @@ describe('a heat nobody has to judge', () => {
 
     expect(hostView(host)?.round?.awards[0]).toEqual({
       playerId: aliceId,
-      points: 1,
+      points: POINTS_FOR_A_CLAIM,
       speedBonus: 0,
       verdict: { isCorrect: true, kind: 'single' }
     })
@@ -239,7 +240,7 @@ describe('a heat nobody has to judge', () => {
       3_000
     )
 
-    expect(scoreOf(host, 'Alice')).toBe(1)
+    expect(scoreOf(host, 'Alice')).toBe(POINTS_FOR_A_CLAIM)
     expect(scoreOf(host, 'Bob')).toBe(0)
   })
 })

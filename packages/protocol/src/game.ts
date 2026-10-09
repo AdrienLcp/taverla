@@ -133,7 +133,7 @@ export const locksOutOnMissIn = (game: GameSettings | null): boolean =>
 export const DEFAULT_BLINDTEST_SETTINGS: BlindtestSettings = {
   difficulty: 'wellKnown',
   kind: 'blindtest',
-  roundDurationMs: 30_000,
+  roundDurationMs: 20_000,
   source: { genreIds: [], kind: 'chart' }
 }
 

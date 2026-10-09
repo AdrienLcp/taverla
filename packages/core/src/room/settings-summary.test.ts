@@ -13,7 +13,7 @@ describe('settingsSummary', () => {
       [
         { game: 'blindtest', kind: 'game' },
         { kind: 'source', source: 'chart' },
-        { kind: 'answerMode', mode: 'typed' },
+        { kind: 'answerMode', mode: 'choice' },
         { count: 10, kind: 'roundCount' }
       ]
     )

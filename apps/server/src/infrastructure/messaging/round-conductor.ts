@@ -12,13 +12,14 @@ import {
   releaseBuzz,
   resumeRoundClock,
   startRoundClock,
+  TRACK_DRAW_LEAD_MS,
   timeOutBuzz
 } from '@/domain/round/round-service'
 import { slateContent } from '@/domain/round/slate-round'
 import { drawPlayableTrack } from '@/domain/round/track-pool'
 import { newRoundId } from '@/infrastructure/ids'
 import { logger } from '@/infrastructure/logging/logger'
-import { isOutage } from '@/infrastructure/music/music-source'
+import { isOutage, NOTHING_PLAYABLE } from '@/infrastructure/music/music-source'
 import {
   drawQuestion,
   hostQuestionOf
@@ -35,18 +36,41 @@ import {
 } from './room-engine'
 
 /**
+ * The least a countdown may last once the hold has spent its own: the console
+ * loads the clip during it, and a draw slow enough to eat the whole countdown
+ * would otherwise start the round's clock over a clip still loading.
+ */
+const LEAST_COUNTDOWN_MS = 1_000
+
+/**
+ * How long a hold whose draw failed waits before trying again. A room nobody
+ * is pressing for has nobody to read the error either, and a catalogue that
+ * timed out once usually answers the next request.
+ */
+const DRAW_RETRY_MS = 3_000
+
+/**
  * The time-driven transitions live here rather than in the socket handler: a
  * countdown that lands, a round that runs out, and a reveal that moves on by
  * itself are not messages anyone sent, but they still end in a broadcast.
  *
  * `slateKeys` is what a host prepared before the evening, carried by the press
  * that opens the sheet; every path nobody pressed opens it with none.
+ * `heldUntil` is the instant the hold promised the next clip, on the one path
+ * that is the hold running out.
  */
 export const beginRound = async (
   engine: RoomEngine,
-  { slateKeys = [] }: { slateKeys?: readonly (string | null)[] } = {}
+  {
+    heldUntil = null,
+    slateKeys = []
+  }: { heldUntil?: number | null; slateKeys?: readonly (string | null)[] } = {}
 ): Promise<void> => {
   const { room } = engine
+  const startsAtOf = (now: number): number | undefined =>
+    heldUntil === null
+      ? undefined
+      : Math.max(heldUntil, now + LEAST_COUNTDOWN_MS)
 
   // Resolving a track is a network call, and the host pressing "start" twice
   // before it answers would open two rounds over each other.
@@ -54,13 +78,18 @@ export const beginRound = async (
     return
   }
 
+  const game = room.settings.game
+
   // Spent here whatever happens next: a hold left standing after an advance
-  // that opened nothing would be due again on the very next wake.
-  if (room.round !== null) {
+  // that opened nothing would be due again on the very next wake. A held track
+  // draw keeps it until the round opens, because it is what says the room
+  // still wants that round once the draw lands.
+  if (
+    room.round !== null &&
+    (heldUntil === null || game?.kind !== 'blindtest')
+  ) {
     room.round.advancesAt = null
   }
-
-  const game = room.settings.game
 
   // Nobody has chosen what the room is playing, so there is nothing to open a
   // round on. The socket refuses `host.startRound` with a code the host can
@@ -89,7 +118,8 @@ export const beginRound = async (
             : slateContent({ keys: slateKeys, settings: game }),
       id: newRoundId(),
       now: engine.now(),
-      room
+      room,
+      startsAt: startsAtOf(engine.now())
     })
 
     publishRoom(engine)
@@ -127,7 +157,8 @@ export const beginRound = async (
       content: quizContent({ question: hostQuestionOf(question), room }),
       id: newRoundId(),
       now: engine.now(),
-      room
+      room,
+      startsAt: startsAtOf(engine.now())
     })
 
     publishRoom(engine)
@@ -137,11 +168,21 @@ export const beginRound = async (
 
   engine.isDrawing = true
 
-  const drawn = await drawPlayableTrack({ room, settings: game }).finally(
-    () => {
-      engine.isDrawing = false
+  let drawn: Awaited<ReturnType<typeof drawPlayableTrack>>
+  let isStillWanted = true
+
+  // Still drawing while a held round waits to open: the hold's deadline is
+  // already past, and any frame committed in the meantime would wake the room
+  // into a second draw for the same round.
+  try {
+    drawn = await drawPlayableTrack({ room, settings: game })
+
+    if (drawn.status === 'success' && heldUntil !== null) {
+      isStillWanted = await waitToOpen(engine, heldUntil)
     }
-  )
+  } finally {
+    engine.isDrawing = false
+  }
 
   // The draw took a network round trip, and the room can have been closed or
   // swept in the meantime.
@@ -161,7 +202,18 @@ export const beginRound = async (
       code: drawn.error.code,
       message: 'Could not load a track from the music catalogue'
     })
+    retryHeldDraw(engine, {
+      heldUntil,
+      isExhausted: drawn.error.code === NOTHING_PLAYABLE.code
+    })
     publishRoom(engine)
+
+    return
+  }
+
+  // Whatever moved the hold re-armed nothing while the draw was in flight.
+  if (!isStillWanted) {
+    commitRoom(engine)
 
     return
   }
@@ -179,10 +231,58 @@ export const beginRound = async (
     content: blindtestContent({ room, track: drawn.data.track }),
     id: newRoundId(),
     now: engine.now(),
-    room
+    room,
+    startsAt: startsAtOf(engine.now())
   })
 
   publishRoom(engine)
+}
+
+/**
+ * A held draw starts ahead of its countdown, and a fast catalogue lands before
+ * the countdown is due: the round waits for it rather than counting in from
+ * five. `false` when the room stopped wanting it meanwhile — the host left,
+ * changed the hold, or ended the game — which the hold says by having moved.
+ */
+const waitToOpen = async (
+  engine: RoomEngine,
+  heldUntil: number
+): Promise<boolean> => {
+  const waitMs = heldUntil - engine.room.settings.countdownMs - engine.now()
+
+  if (waitMs > 0) {
+    await new Promise((resolve) => setTimeout(resolve, waitMs))
+  }
+
+  return (
+    !engine.isClosed &&
+    engine.room.phase === 'revealed' &&
+    engine.room.round?.advancesAt === heldUntil
+  )
+}
+
+/**
+ * A hold whose draw failed used to leave the reveal on screen with nothing
+ * counting, until somebody thought to press for the next round. A source with
+ * nothing left to play is not retried: the next request answers the same, so
+ * the hold is spent and the room waits for its host.
+ */
+const retryHeldDraw = (
+  engine: RoomEngine,
+  { heldUntil, isExhausted }: { heldUntil: number | null; isExhausted: boolean }
+): void => {
+  const { round } = engine.room
+
+  if (heldUntil === null || round === null) {
+    return
+  }
+
+  round.advancesAt = isExhausted
+    ? null
+    : engine.now() +
+      DRAW_RETRY_MS +
+      engine.room.settings.countdownMs +
+      TRACK_DRAW_LEAD_MS
 }
 
 const tellHost = (
@@ -204,7 +304,7 @@ const tellHost = (
  * than trusted: one deadline per wake, the earliest, and the commit that
  * follows aims the next wake at whatever is due after it.
  */
-export const wakeRoom = (engine: RoomEngine): void => {
+export const wakeRoom = async (engine: RoomEngine): Promise<void> => {
   if (engine.isClosed) {
     return
   }
@@ -215,18 +315,22 @@ export const wakeRoom = (engine: RoomEngine): void => {
     .toSorted((first, second) => first.at - second.at)
     .at(0)
 
-  if (due !== undefined) {
-    runDeadline(engine, due.kind, now)
-  }
+  const drawing =
+    due === undefined ? undefined : runDeadline(engine, due.kind, now)
 
   commitRoom(engine)
+
+  // Returned rather than left floating: a Durable Object's alarm is over when
+  // its handler settles, and a draw still in flight then has nothing keeping
+  // the object awake to open the round it went for.
+  await drawing
 }
 
 const runDeadline = (
   engine: RoomEngine,
   kind: RoomDeadlineKind,
   now: number
-): void => {
+): Promise<void> | undefined => {
   const { room } = engine
   const roundId = room.round?.id
 
@@ -268,9 +372,7 @@ const runDeadline = (
         return
       }
 
-      void beginRound(engine)
-
-      return
+      return beginRound(engine, { heldUntil: room.round?.advancesAt ?? null })
     }
 
     case 'seats': {

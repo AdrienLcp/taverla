@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { POINTS_PER_ARTIST, POINTS_PER_TITLE } from '@taverla/protocol/scoring'
 import {
   hostServerMessageSchema,
   type PlayerServerMessage
@@ -30,6 +31,7 @@ vi.mock('@/infrastructure/music/deezer-client', async () => {
 })
 
 const WON_IT = halves(true, true)
+const PAIR_IN_THE_BUZZER = POINTS_PER_TITLE + POINTS_PER_ARTIST
 const MISSED_IT = halves(false, false)
 
 let room: RoomHarness
@@ -113,7 +115,10 @@ describe('a whole game over real sockets', () => {
       ])
     )
 
-    expect(scores).toEqual({ Alice: 4, Bob: 2 })
+    expect(scores).toEqual({
+      Alice: 2 * PAIR_IN_THE_BUZZER,
+      Bob: PAIR_IN_THE_BUZZER
+    })
   })
 
   it('[buzz] gives the round to one player when two land together', async () => {

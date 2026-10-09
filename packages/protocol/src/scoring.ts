@@ -2,15 +2,25 @@ import { z } from 'zod'
 
 import { playerIdSchema } from './identifiers'
 
-export const POINTS_PER_TITLE = 1
-export const POINTS_PER_ARTIST = 1
+/**
+ * What one point of the rules is worth on the board. A thousand, because the
+ * clock pays by the millisecond: three players right inside the same second are
+ * three different scores, the first one highest, and a scale of single points
+ * can only round them together. Every rule below is still said in points —
+ * a pick is worth one, a typed pair three — and only the board counts them in
+ * thousands.
+ */
+export const POINT = 1_000
+
+export const POINTS_PER_TITLE = POINT
+export const POINTS_PER_ARTIST = POINT
 
 /**
  * Typed mode only, and deliberately more generous than the buzzer's flat pair:
  * typing both against a clock is harder than saying them out loud, so holding
  * the whole answer is worth more than the sum of its halves.
  */
-export const POINTS_FOR_TITLE_AND_ARTIST = 1
+export const POINTS_FOR_TITLE_AND_ARTIST = POINT
 
 /**
  * Choice mode is worth a single point, where typing the whole thing is worth
@@ -18,7 +28,7 @@ export const POINTS_FOR_TITLE_AND_ARTIST = 1
  * nothing — paying them the same makes the easy mode the optimal one, and a
  * room that notices stops using the hard one.
  */
-export const POINTS_FOR_A_RIGHT_CHOICE = 1
+export const POINTS_FOR_A_RIGHT_CHOICE = POINT
 
 /**
  * The other side of that pair, for a game whose answer is one claim rather than
@@ -26,14 +36,14 @@ export const POINTS_FOR_A_RIGHT_CHOICE = 1
  * a point per half and one more for holding both — because the ratio is the
  * point and it has to read the same in every game on the shelf.
  */
-export const POINTS_FOR_A_TYPED_ANSWER = 3
+export const POINTS_FOR_A_TYPED_ANSWER = 3 * POINT
 
 /**
  * What a bare claim is worth. It is not a scale the host can tune, and that is
  * on purpose: the room already owns the question, so letting it own the price
  * too turns every round into a negotiation.
  */
-export const POINTS_FOR_A_CLAIM = 1
+export const POINTS_FOR_A_CLAIM = POINT
 
 /**
  * The most the clock pays, at nought seconds, falling linearly to nothing when
@@ -47,11 +57,12 @@ export const POINTS_FOR_A_CLAIM = 1
  * and the second answers at twenty-nine, a rank pays them 2 and 1; the gap the
  * room actually saw was the whole round. **Do not put the table back.**
  *
- * Two consequences that are not incidental. Two players landing in the same
- * second now score the same, where the table always separated them by arrival —
- * more honest, and a real change in how a board reads. And the bonus is no
- * longer scarce: on a thirty-second round everyone who answers inside
- * twenty-five takes something, where before it was two players or nobody.
+ * The curve first paid in whole points, which put two players landing in the
+ * same second on the same score — and a table that played it said the first of
+ * three quick answers has to come out ahead. That is what `POINT` is for: the
+ * curve is still the curve, counted finely enough that arrival always shows.
+ * The bonus is not scarce either: everyone who answers before the end takes
+ * something, where the table paid two players or nobody.
  *
  * Three is a ceiling, not the amplitude: `speedBonusForElapsed` takes the lower
  * of it and what the answer itself paid, so the clock can double a score and
@@ -64,7 +75,7 @@ export const POINTS_FOR_A_CLAIM = 1
  * The bare buzzer pays no such bonus, and cannot — it has no round clock at all, because the host brings the content and eight
  * seconds into a charade is not eight seconds into a riddle.
  */
-export const MOST_A_SPEED_BONUS_PAYS = 3
+export const MOST_A_SPEED_BONUS_PAYS = 3 * POINT
 
 /**
  * What the host granted, in the vocabulary of the game they were judging — the

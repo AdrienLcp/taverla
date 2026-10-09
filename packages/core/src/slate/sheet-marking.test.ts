@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
+import { POINT } from '@taverla/protocol/scoring'
+
 import {
   closedItem,
   filledCountsPerItem,
@@ -75,7 +77,7 @@ describe('sheetPoints', () => {
         playerId: ANA,
         sheet
       })
-    ).toBe(2)
+    ).toBe(2 * POINT)
   })
 
   // Recomputed rather than accumulated: a verdict taken back takes its point
@@ -89,7 +91,7 @@ describe('sheetPoints', () => {
         playerId: ANA,
         sheet
       })
-    ).toBe(1)
+    ).toBe(POINT)
     expect(
       sheetPoints({
         items: [closedFor(marked({ judged: { sel: false } }))],
@@ -111,8 +113,8 @@ describe('sheetPoints', () => {
       closedFor(marked({ judged: { sel: true } }), [ANA, BO])
     ]
 
-    expect(sheetPoints({ items, playerId: BO, sheet })).toBe(1)
-    expect(sheetPoints({ items, playerId: ANA, sheet })).toBe(2)
+    expect(sheetPoints({ items, playerId: BO, sheet })).toBe(POINT)
+    expect(sheetPoints({ items, playerId: ANA, sheet })).toBe(2 * POINT)
   })
 })
 

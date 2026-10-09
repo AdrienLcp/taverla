@@ -6,6 +6,7 @@ import {
   DEFAULT_ROOM_SETTINGS,
   type RoomSettings
 } from '@taverla/protocol/room'
+import { POINTS_FOR_A_CLAIM } from '@taverla/protocol/scoring'
 
 import { startRoomHarness } from './node-room-harness'
 import {
@@ -106,7 +107,7 @@ describe('a round the room supplies itself', () => {
     expect(
       hostView(host)?.players.find((player) => player.nickname === 'Alice')
         ?.score
-    ).toBe(1)
+    ).toBe(POINTS_FOR_A_CLAIM)
   })
 
   // A host socket is as forgeable as a player's, and two halves over a game

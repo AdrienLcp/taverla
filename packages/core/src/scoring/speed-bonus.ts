@@ -3,8 +3,9 @@ import { MOST_A_SPEED_BONUS_PAYS } from '@taverla/protocol/scoring'
 /**
  * What the clock pays a player who scored, from how far into the round they
  * were when they first did. Linear from the whole bonus at nought to nothing
- * when the round runs out, and rounded once at the end — a party scoreline is
- * read out loud, and *4.7 points* is not a number anybody says.
+ * when the round runs out, and rounded once at the end on a board counted in
+ * `POINT`s — fine enough that two players a few dozen milliseconds apart are
+ * two different scores, the first one higher.
  *
  * **It never pays more than the answer did**, which is what makes the rule one
  * a room can say out loud: being fast doubles what you got, at most. A pick

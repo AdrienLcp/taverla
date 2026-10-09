@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
+import { POINTS_FOR_A_TYPED_ANSWER } from '@taverla/protocol/scoring'
+
 import { isFullyBanked, pointsForSimultaneousAnswer } from '../scoring/verdict'
 import {
   cueOf,
@@ -123,7 +125,7 @@ describe('withGuessBanked', () => {
     expect(isFullyBanked(acrossTwo)).toBe(true)
     expect(
       pointsForSimultaneousAnswer({ mode: 'typed', verdict: acrossTwo })
-    ).toBe(3)
+    ).toBe(POINTS_FOR_A_TYPED_ANSWER)
   })
 })
 

@@ -52,9 +52,10 @@ const restore = (snapshot: Room, { at }: { at: number }) => {
     clock,
     engine,
     /** Runs the room at the moment it asked to be woken, as an alarm would. */
-    fire: () => {
+    fire: (): Promise<void> => {
       clock.now = wakes.at(-1) ?? clock.now
-      wakeRoom(engine)
+
+      return wakeRoom(engine)
     },
     nextWake: () => wakes.at(-1) ?? null
   }
@@ -94,18 +95,18 @@ const buzzerRoomInCountdown = (): Room => {
 }
 
 describe('a room restored from a snapshot', () => {
-  it('[deadline] lands its countdown when it was due, not a countdown later', () => {
+  it('[deadline] lands its countdown when it was due, not a countdown later', async () => {
     const snapshot = buzzerRoomInCountdown()
     const restored = restore(snapshot, { at: OPENED_AT + 1_000 })
 
     expect(restored.nextWake()).toBe(OPENED_AT + COUNTDOWN_MS)
 
-    restored.fire()
+    await restored.fire()
 
     expect(restored.engine.room.phase).toBe('playing')
   })
 
-  it('[deadline] runs out the floor on the window the buzz was given', () => {
+  it('[deadline] runs out the floor on the window the buzz was given', async () => {
     const snapshot = buzzerRoomInCountdown()
     const startedAt = OPENED_AT + COUNTDOWN_MS
     const buzzedAt = startedAt + 2_000
@@ -122,7 +123,7 @@ describe('a room restored from a snapshot', () => {
 
     expect(restored.nextWake()).toBe(buzzedAt + ANSWER_WINDOW_MS)
 
-    restored.fire()
+    await restored.fire()
 
     expect(restored.engine.room.round?.activeBuzz).toBeNull()
     expect(restored.engine.room.round?.lockedOutPlayerIds.has('alice')).toBe(
@@ -130,7 +131,7 @@ describe('a room restored from a snapshot', () => {
     )
   })
 
-  it('[deadline] moves on from a reveal when its hold was due to end', () => {
+  it('[deadline] opens the next round a countdown before its hold ends, and starts it when the hold does', async () => {
     const snapshot = buzzerRoomInCountdown()
     const revealedAt = OPENED_AT + COUNTDOWN_MS + 1_000
 
@@ -143,12 +144,13 @@ describe('a room restored from a snapshot', () => {
 
     const restored = restore(snapshot, { at: revealedAt + 1_000 })
 
-    expect(restored.nextWake()).toBe(revealedAt + HOLD_MS)
+    expect(restored.nextWake()).toBe(revealedAt + HOLD_MS - COUNTDOWN_MS)
 
-    restored.fire()
+    await restored.fire()
 
     expect(restored.engine.room.phase).toBe('countdown')
     expect(restored.engine.room.round?.index).toBe(2)
+    expect(restored.engine.room.round?.startsAt).toBe(revealedAt + HOLD_MS)
   })
 
   it('[deadline] asks for nothing while the round is frozen for an absent host', () => {

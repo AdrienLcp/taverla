@@ -94,7 +94,7 @@ export const engineFor = (room: Room): RoomEngine => {
       wake = setTimeout(
         () => {
           wake = null
-          wakeRoom(engine)
+          void wakeRoom(engine)
         },
         Math.max(0, at - nowMs())
       )

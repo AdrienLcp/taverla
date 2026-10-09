@@ -6,6 +6,11 @@ import {
   DEFAULT_ROOM_SETTINGS,
   type RoomSettings
 } from '@taverla/protocol/room'
+import {
+  POINTS_FOR_A_CLAIM,
+  POINTS_FOR_A_RIGHT_CHOICE,
+  POINTS_FOR_A_TYPED_ANSWER
+} from '@taverla/protocol/scoring'
 
 import { startRoomHarness } from './node-room-harness'
 import {
@@ -178,7 +183,7 @@ describe('a quiz through the seam', () => {
         playerId: playerView(typed.zoe)?.youId ?? null,
         view: playerView(typed.zoe)
       })
-    ).toBe(3)
+    ).toBe(POINTS_FOR_A_TYPED_ANSWER)
 
     await harness.stop()
     harness = await startRoomHarness()
@@ -204,7 +209,7 @@ describe('a quiz through the seam', () => {
         playerId: playerView(picked.zoe)?.youId ?? null,
         view: playerView(picked.zoe)
       })
-    ).toBe(1)
+    ).toBe(POINTS_FOR_A_RIGHT_CHOICE)
   })
 
   /**
@@ -328,7 +333,7 @@ describe('a quiz through the seam', () => {
       'the round to close on a granted claim'
     )
 
-    expect(playerView(zoe)?.players[0]?.score).toBe(1)
+    expect(playerView(zoe)?.players[0]?.score).toBe(POINTS_FOR_A_CLAIM)
   })
 
   it('[quiz] never asks the same question twice in one game', async () => {

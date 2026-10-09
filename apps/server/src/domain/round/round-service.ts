@@ -114,12 +114,19 @@ export const openRound = ({
   content,
   id,
   now,
-  room
+  room,
+  startsAt = now + room.settings.countdownMs
 }: {
   content: Round['content']
   id: RoundId
   now: number
   room: Room
+  /**
+   * When the clip starts. A round opened by the hold lands on the instant the
+   * hold promised, so its countdown is the hold's last seconds rather than
+   * three more on top of them.
+   */
+  startsAt?: number
 }): Round => {
   const round: Round = {
     activeBuzz: null,
@@ -134,7 +141,7 @@ export const openRound = ({
     openedWithPlayerIds: null,
     revealed: false,
     runningSince: null,
-    startsAt: now + room.settings.countdownMs
+    startsAt
   }
 
   room.round = round
@@ -1022,6 +1029,32 @@ export const restartGame = (room: Room, now: number): void => {
   room.phase = 'lobby'
   room.round = null
   touch(room, now)
+}
+
+/**
+ * How long before its countdown a held blind test starts drawing the next
+ * track: the draw is a catalogue round trip or several, and one that ate into
+ * the countdown left the room a second of "3, 2, 1" instead of three.
+ */
+export const TRACK_DRAW_LEAD_MS = 2_000
+
+/**
+ * `advancesAt` is when the next clip starts, so the next round has to open a
+ * countdown before it: the room counts down over the answer it is still
+ * reading, and the hold is the whole wait rather than the wait before another
+ * one. The last reveal opens nothing, and ends the game at `advancesAt` itself.
+ */
+export const advanceDueAt = (room: Room): number | null => {
+  const advancesAt = room.round?.advancesAt ?? null
+
+  if (advancesAt === null || isFinalRound(room)) {
+    return advancesAt
+  }
+
+  const drawLeadMs =
+    room.settings.game?.kind === 'blindtest' ? TRACK_DRAW_LEAD_MS : 0
+
+  return advancesAt - room.settings.countdownMs - drawLeadMs
 }
 
 /** Never final in a room that runs until the host stops it. */

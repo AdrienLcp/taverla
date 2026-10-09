@@ -152,11 +152,13 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   players and nobody else — one stamp for the whole round. The slate stamps at **collection** instead: a sheet has no clock and
   no race, so a latecomer is owed one. A screen that arrives after keeps its seat, is refused everything it
   could send with `joined_mid_round`, and plays from the next round
-- **Answer mode** — `typed` (one field, the default), `choice` (four candidates)
-  or `buzzer` (one player, judged by the host). The first two are everyone at
-  once, decided by the server and scored by the clock on top of being right —
-  `MOST_A_SPEED_BONUS_PAYS` at nought, falling linearly to nothing when the
-  round runs out, so two players in the same second are paid the same; typing
+- **Answer mode** — `typed` (one field), `choice` (four candidates, what the
+  blind test and the quiz open on) or `buzzer` (one player, judged by the
+  host). The first two are everyone at once, decided by the server and scored
+  by the clock on top of being right — `MOST_A_SPEED_BONUS_PAYS` at nought,
+  falling linearly to nothing when the round runs out, on a board counted in
+  `POINT`s of a thousand so the clock separates players by the millisecond:
+  of three quick answers inside one second, the first is paid the most; typing
   pays 3 for the pair where a right pick pays 1, because producing an answer
   from nothing is not recognising it among four. A banked question that is only
   a question beside its own decoys — *which country drives on the left?* answers
@@ -167,7 +169,7 @@ string written into a component is a bug — see `.claude/rules/i18n.md`.
   **The clock never pays more
   than the answer did** — its amplitude is the lower of the two, so being fast
   doubles a score at most, and the console prints the two halves apart
-  (`2 +2`) rather than their total. It stays a *room* setting the
+  (`2 000 +1 500`) rather than their total. It stays a *room* setting the
   game narrows — the bare buzzer and the reflex race offer only `buzzer`, and a
   frame setting anything else is refused
 - **Guess** — one typed line. Each half is looked for *inside* it over runs of

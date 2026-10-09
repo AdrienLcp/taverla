@@ -6,6 +6,7 @@ import {
   DEFAULT_ROOM_SETTINGS,
   type RoomSettings
 } from '@taverla/protocol/room'
+import { POINT } from '@taverla/protocol/scoring'
 import type {
   HostServerMessage,
   PlayerServerMessage
@@ -234,12 +235,18 @@ describe('slate', () => {
     ])
 
     judge({ groupKey: 'sel', host, isCorrect: true, itemIndex: 0, roundId })
-    await waitFor(() => scoreOf(host, idOf(bo)) === 1, 'the group to be paid')
-    expect(scoreOf(host, idOf(ana))).toBe(1)
+    await waitFor(
+      () => scoreOf(host, idOf(bo)) === POINT,
+      'the group to be paid'
+    )
+    expect(scoreOf(host, idOf(ana))).toBe(POINT)
 
     await show({ host, itemIndex: 2, roundId })
     judge({ groupKey: 'poivre', host, isCorrect: true, itemIndex: 2, roundId })
-    await waitFor(() => scoreOf(host, idOf(ana)) === 2, 'the third item paid')
+    await waitFor(
+      () => scoreOf(host, idOf(ana)) === 2 * POINT,
+      'the third item paid'
+    )
 
     host.send({ roundId, type: 'host.reveal' })
     await waitFor(() => playerView(bo)?.phase === 'revealed', 'the reveal')
@@ -250,8 +257,8 @@ describe('slate', () => {
         points
       }))
     ).toEqual([
-      { playerId: idOf(ana), points: 2 },
-      { playerId: idOf(bo), points: 1 }
+      { playerId: idOf(ana), points: 2 * POINT },
+      { playerId: idOf(bo), points: POINT }
     ])
 
     host.send({ type: 'host.nextRound' })
@@ -261,7 +268,8 @@ describe('slate', () => {
     )
 
     expect(playerView(ana)?.players.map((player) => player.score)).toEqual([
-      2, 1
+      2 * POINT,
+      POINT
     ])
   })
 
@@ -372,7 +380,7 @@ describe('slate', () => {
     await write({ answer: 'Sel', itemIndex: 0, player: cy, roundId })
     await collect({ host, roundId })
     judge({ groupKey: 'sel', host, isCorrect: true, itemIndex: 0, roundId })
-    await waitFor(() => scoreOf(host, idOf(cy)) === 1, 'the latecomer paid')
+    await waitFor(() => scoreOf(host, idOf(cy)) === POINT, 'the latecomer paid')
 
     const dee = await harness.seat({ code, nickname: 'Dee' })
 
@@ -396,7 +404,7 @@ describe('slate', () => {
     await write({ answer: 'Ail', itemIndex: 1, player: cy, roundId })
     await close({ host, itemIndex: 1, roundId })
     judge({ groupKey: 'ail', host, isCorrect: true, itemIndex: 1, roundId })
-    await waitFor(() => scoreOf(host, idOf(cy)) === 1, 'the latecomer paid')
+    await waitFor(() => scoreOf(host, idOf(cy)) === POINT, 'the latecomer paid')
     await collect({ host, roundId })
 
     expect(errorsIn(cy).map((error) => error.code)).toEqual(['wrong_phase'])
@@ -463,8 +471,8 @@ describe('slate', () => {
     await collect({ host, roundId })
 
     judge({ groupKey: 'paprika', host, isCorrect: true, itemIndex: 0, roundId })
-    await waitFor(() => scoreOf(host, idOf(bo)) === 1, 'the group paid')
-    expect(scoreOf(host, idOf(ana))).toBe(1)
+    await waitFor(() => scoreOf(host, idOf(bo)) === POINT, 'the group paid')
+    expect(scoreOf(host, idOf(ana))).toBe(POINT)
 
     await show({ host, itemIndex: 1, roundId })
     await show({ host, itemIndex: 0, roundId })
@@ -656,7 +664,7 @@ describe('slate', () => {
     await close({ host, itemIndex: 1, roundId })
     await write({ answer: BO_SECRET, itemIndex: 2, player: bo, roundId })
     judge({ groupKey: 'sel', host, isCorrect: true, itemIndex: 1, roundId })
-    await waitFor(() => scoreOf(host, idOf(bo)) === 1, 'the item paid')
+    await waitFor(() => scoreOf(host, idOf(bo)) === POINT, 'the item paid')
 
     expect(hostSlateContent(host)?.correction?.groups).toHaveLength(1)
     expect(rawTranscript(host)).not.toContain(ANA_SECRET)
@@ -742,17 +750,20 @@ describe('slate', () => {
 
     await close({ host, itemIndex: 1, roundId })
     judge({ groupKey: 'ail', host, isCorrect: true, itemIndex: 1, roundId })
-    await waitFor(() => scoreOf(host, idOf(ana)) === 1, 'item 2 paid')
+    await waitFor(() => scoreOf(host, idOf(ana)) === POINT, 'item 2 paid')
 
     await close({ host, itemIndex: 0, roundId })
     judge({ groupKey: 'sel', host, isCorrect: true, itemIndex: 0, roundId })
-    await waitFor(() => scoreOf(host, idOf(bo)) === 1, 'item 1 paid')
+    await waitFor(() => scoreOf(host, idOf(bo)) === POINT, 'item 1 paid')
 
     await write({ answer: 'Poivre', itemIndex: 3, player: bo, roundId })
     await show({ host, itemIndex: 1, roundId })
     judge({ groupKey: 'ail', host, isCorrect: false, itemIndex: 1, roundId })
     judge({ groupKey: 'thym', host, isCorrect: true, itemIndex: 1, roundId })
-    await waitFor(() => scoreOf(host, idOf(bo)) === 2, 'the verdict moved')
+    await waitFor(
+      () => scoreOf(host, idOf(bo)) === 2 * POINT,
+      'the verdict moved'
+    )
 
     await collect({ host, roundId })
 
@@ -760,7 +771,10 @@ describe('slate', () => {
 
     await show({ host, itemIndex: 3, roundId })
     judge({ groupKey: 'poivre', host, isCorrect: true, itemIndex: 3, roundId })
-    await waitFor(() => scoreOf(host, idOf(bo)) === 3, 'the last item paid')
+    await waitFor(
+      () => scoreOf(host, idOf(bo)) === 3 * POINT,
+      'the last item paid'
+    )
 
     host.send({ roundId, type: 'host.reveal' })
     await waitFor(() => playerView(ana)?.phase === 'revealed', 'the reveal')
@@ -778,8 +792,8 @@ describe('slate', () => {
     expect(
       hostView(host)?.players.map(({ id, score }) => ({ id, score }))
     ).toEqual([
-      { id: idOf(ana), score: 1 },
-      { id: idOf(bo), score: 3 }
+      { id: idOf(ana), score: POINT },
+      { id: idOf(bo), score: 3 * POINT }
     ])
   })
 })

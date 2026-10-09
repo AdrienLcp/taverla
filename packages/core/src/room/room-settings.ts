@@ -38,16 +38,15 @@ const DEFAULT_ROUND_COUNT: Record<GameKind, number | null> = {
  * it, so an entry naming a mode its own game does not offer is corrected rather
  * than served.
  *
- * The split between the two banks' games is what the question is made of. A
- * quiz question is a sentence with one fact missing, and a table reads it faster
- * than it types it — four candidates is the shape the room actually plays, and
- * the shape most of the bank was written in. A blind test's question is a clip:
- * the title and the artist are two answers worth a point each, retries are
- * free, and its candidates are drawn from the room's own pool rather than
- * authored beside the answer. Typing is the game there, not a fallback.
+ * Both games that serve their own content open on four candidates. A quiz
+ * question is a sentence with one fact missing, and a table reads it faster
+ * than it types it — the shape most of the bank was written in. A blind test
+ * was opened on typing until a table played it over lunch: a clip leaves no
+ * time to type an artist on a phone, and the room it was played in asked for
+ * the four.
  */
 const DEFAULT_ANSWER_MODE: Record<GameKind, AnswerMode> = {
-  blindtest: 'typed',
+  blindtest: 'choice',
   buzzer: 'buzzer',
   quiz: 'choice',
   reflex: 'buzzer',
@@ -60,11 +59,9 @@ const DEFAULT_ANSWER_MODE: Record<GameKind, AnswerMode> = {
  * the seam `movedToGame` has always turned on, and naming it is what lets a
  * *remembered* answer come through the same door the game's own defaults do.
  *
- * The hold is the one no game answers with a number of its own — every game
- * opens on the shell's, which waits for the host and so cannot be too short.
- * What it is here for is being *remembered* per game: twenty-five seconds
- * chosen for a quiz whose questions carry a note is not what a reflex race
- * wants, whose reveal is a reaction time and a name.
+ * The hold is remembered per game because twenty-five seconds chosen for a
+ * quiz whose questions carry a note is not what a reflex race wants, whose
+ * reveal is a reaction time and a name.
  */
 export type GameSetup = {
   autoAdvanceMs: RoomSettings['autoAdvanceMs']
@@ -94,6 +91,20 @@ export const roomSettingsFor = ({
     ? DEFAULT_ROOM_SETTINGS
     : { ...DEFAULT_ROOM_SETTINGS, ...openedSetup({ game, locale }) }
 
+/**
+ * How long a reveal is held before the next round, as each game opens. `null`
+ * waits for the host, which cannot be too short. The blind test runs on its
+ * own: its reveal is a cover and a title, read in the eight seconds the clip
+ * goes on playing under it, and the countdown to the next one is inside them.
+ */
+const DEFAULT_HOLD_MS: Record<GameKind, RoomSettings['autoAdvanceMs']> = {
+  blindtest: 8_000,
+  buzzer: null,
+  quiz: null,
+  reflex: null,
+  slate: null
+}
+
 /** What a game answers before anybody has told it otherwise. */
 const openedSetup = ({
   game,
@@ -102,7 +113,7 @@ const openedSetup = ({
   game: GameKind
   locale: Locale
 }): GameSetup => ({
-  autoAdvanceMs: DEFAULT_ROOM_SETTINGS.autoAdvanceMs,
+  autoAdvanceMs: DEFAULT_HOLD_MS[game],
   game: openedGameSettings({ game, locale }),
   mode: modeOfferedBy({
     game,

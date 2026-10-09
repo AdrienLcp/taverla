@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import type { Verdict } from '@taverla/protocol/scoring'
+import { POINT, type Verdict } from '@taverla/protocol/scoring'
 
 import {
   isFullyBanked,
@@ -29,9 +29,9 @@ const halves = (titleCorrect: boolean, artistCorrect: boolean): Verdict => ({
 
 describe('pointsFor', () => {
   it.each([
-    [halves(true, true), 2],
-    [halves(true, false), 1],
-    [halves(false, true), 1],
+    [halves(true, true), 2 * POINT],
+    [halves(true, false), POINT],
+    [halves(false, true), POINT],
     [halves(false, false), 0]
   ])(
     '[verdict] scores each half of the answer independently',
@@ -43,7 +43,7 @@ describe('pointsFor', () => {
   // A charade is one thing to guess. Judging it in halves would pay it twice,
   // which is what the union exists to make impossible.
   it('[verdict] pays a bare claim once', () => {
-    expect(pointsFor({ isCorrect: true, kind: 'single' })).toBe(1)
+    expect(pointsFor({ isCorrect: true, kind: 'single' })).toBe(POINT)
     expect(pointsFor({ isCorrect: false, kind: 'single' })).toBe(0)
   })
 })
@@ -76,8 +76,10 @@ describe('pointsForSimultaneousAnswer', () => {
   it('[verdict] pays a typed claim three where a pick pays one', () => {
     const verdict = { isCorrect: true, kind: 'single' } as const
 
-    expect(pointsForSimultaneousAnswer({ mode: 'typed', verdict })).toBe(3)
-    expect(pointsForSimultaneousAnswer({ mode: 'choice', verdict })).toBe(1)
+    expect(pointsForSimultaneousAnswer({ mode: 'typed', verdict })).toBe(
+      3 * POINT
+    )
+    expect(pointsForSimultaneousAnswer({ mode: 'choice', verdict })).toBe(POINT)
   })
 
   it('[verdict] pays a wrong claim nothing, whichever way it was given', () => {
@@ -95,13 +97,13 @@ describe('pointsForSimultaneousAnswer', () => {
         mode: 'typed',
         verdict: halves(true, true)
       })
-    ).toBe(3)
+    ).toBe(3 * POINT)
     expect(
       pointsForSimultaneousAnswer({
         mode: 'typed',
         verdict: halves(true, false)
       })
-    ).toBe(1)
+    ).toBe(POINT)
   })
 
   // A pick is the whole answer or nothing, so half-credit has no meaning there.
@@ -111,7 +113,7 @@ describe('pointsForSimultaneousAnswer', () => {
         mode: 'choice',
         verdict: halves(true, true)
       })
-    ).toBe(1)
+    ).toBe(POINT)
     expect(
       pointsForSimultaneousAnswer({
         mode: 'choice',

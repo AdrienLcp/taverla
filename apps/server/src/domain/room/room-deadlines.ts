@@ -1,6 +1,6 @@
 import { ABANDONED_SEAT_MS } from '@taverla/core/room/seat-presence'
 
-import { remainingRoundMs } from '@/domain/round/round-service'
+import { advanceDueAt, remainingRoundMs } from '@/domain/round/round-service'
 
 import type { Room } from './room'
 
@@ -107,9 +107,9 @@ const roundDeadline = ({
     }
 
     case 'revealed': {
-      return isDrawing || round.advancesAt === null
-        ? null
-        : { at: round.advancesAt, kind: 'advance' }
+      const dueAt = advanceDueAt(room)
+
+      return isDrawing || dueAt === null ? null : { at: dueAt, kind: 'advance' }
     }
 
     default: {

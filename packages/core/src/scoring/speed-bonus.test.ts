@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest'
 
-import { MOST_A_SPEED_BONUS_PAYS } from '@taverla/protocol/scoring'
+import { MOST_A_SPEED_BONUS_PAYS, POINT } from '@taverla/protocol/scoring'
 
 import { speedBonusForElapsed } from './speed-bonus'
 
 const THIRTY_SECONDS = 30_000
-const A_TYPED_ANSWER = 3
-const A_RIGHT_PICK = 1
+const A_TYPED_ANSWER = 3 * POINT
+const A_RIGHT_PICK = POINT
 
 const paidAt = (elapsedMs: number, roundDurationMs = THIRTY_SECONDS): number =>
   speedBonusForElapsed({
@@ -26,22 +26,27 @@ describe('speedBonusForElapsed', () => {
    * against twenty-nine used to be worth 2 against 1.
    */
   it('[scoring] separates one second from twenty-nine', () => {
-    expect(paidAt(1_000)).toBe(3)
-    expect(paidAt(29_000)).toBe(0)
+    expect(paidAt(1_000)).toBe(2_900)
+    expect(paidAt(29_000)).toBe(100)
   })
 
   it('[scoring] falls with the clock rather than with the order', () => {
-    expect(paidAt(THIRTY_SECONDS / 4)).toBe(2)
-    expect(paidAt(THIRTY_SECONDS / 2)).toBe(2)
-    expect(paidAt((THIRTY_SECONDS * 3) / 4)).toBe(1)
+    expect(paidAt(THIRTY_SECONDS / 4)).toBe(2_250)
+    expect(paidAt(THIRTY_SECONDS / 2)).toBe(1_500)
+    expect(paidAt((THIRTY_SECONDS * 3) / 4)).toBe(750)
   })
 
   /**
-   * Two players in the same second are paid the same, where the table it
-   * replaced always separated them by arrival order.
+   * Three quick players inside one second, which whole points used to pay the
+   * same: the first of them has to come out ahead.
    */
-  it('[scoring] pays a tie the same twice', () => {
-    expect(paidAt(8_100)).toBe(paidAt(8_900))
+  it('[scoring] separates three answers inside the same second, the first highest', () => {
+    const [first, second, third] = [8_100, 8_150, 8_900].map((elapsedMs) =>
+      paidAt(elapsedMs)
+    )
+
+    expect(first).toBeGreaterThan(second ?? 0)
+    expect(second).toBeGreaterThan(third ?? 0)
   })
 
   /**
@@ -88,7 +93,7 @@ describe('speedBonusForElapsed', () => {
       })
 
     expect(pick(0)).toBe(A_RIGHT_PICK)
-    expect(pick(1_000)).toBe(A_RIGHT_PICK)
+    expect(pick(1_000)).toBeLessThan(A_RIGHT_PICK)
     expect(pick(THIRTY_SECONDS)).toBe(0)
   })
 
@@ -98,12 +103,12 @@ describe('speedBonusForElapsed', () => {
    */
   it('[scoring] leaves a fast half below a whole answer', () => {
     const half = speedBonusForElapsed({
-      answerPaid: 1,
+      answerPaid: POINT,
       elapsedMs: 0,
       roundDurationMs: THIRTY_SECONDS
     })
 
-    expect(1 + half).toBeLessThan(A_TYPED_ANSWER)
+    expect(POINT + half).toBeLessThan(A_TYPED_ANSWER)
   })
 
   /** An answer that paid nothing is never asked, and would buy nothing anyway. */

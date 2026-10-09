@@ -12,6 +12,7 @@ import {
   DEFAULT_ROOM_SETTINGS,
   type RoomSettings
 } from '@taverla/protocol/room'
+import { POINTS_FOR_A_CLAIM } from '@taverla/protocol/scoring'
 import { hostServerMessageSchema } from '@taverla/protocol/server-message'
 import { PROTOCOL_VERSION } from '@taverla/protocol/version'
 
@@ -226,7 +227,7 @@ describe('the room object', () => {
       expect(playerView(aliceAgain)?.youId).toBe(aliceId)
       expect(
         hostView(hostAgain)?.players.find(({ id }) => id === aliceId)?.score
-      ).toBe(1)
+      ).toBe(POINTS_FOR_A_CLAIM)
     },
     RUNTIME_BOOT_MS
   )

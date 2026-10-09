@@ -44,7 +44,7 @@ describe('roomSettingsFor', () => {
       DEFAULT_MODE_SETTINGS.choice
     )
     expect(roomSettingsFor({ game: 'blindtest', locale: 'fr' }).mode).toEqual(
-      DEFAULT_MODE_SETTINGS.typed
+      DEFAULT_MODE_SETTINGS.choice
     )
   })
 
@@ -72,7 +72,7 @@ describe('movedToGame', () => {
       settings: onTheBuzzer
     })
 
-    expect(moved.mode).toEqual(DEFAULT_MODE_SETTINGS.typed)
+    expect(moved.mode).toEqual(DEFAULT_MODE_SETTINGS.choice)
     expect(moved.roundCount).toBe(10)
     expect(moved.game?.kind).toBe('blindtest')
   })
@@ -182,7 +182,7 @@ describe('reshapesRound', () => {
     expect(
       reshapesRound({
         from: blindtest,
-        to: { ...blindtest, mode: DEFAULT_MODE_SETTINGS.choice }
+        to: { ...blindtest, mode: DEFAULT_MODE_SETTINGS.typed }
       })
     ).toBe(true)
   })

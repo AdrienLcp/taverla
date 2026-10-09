@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { DEFAULT_MODE_SETTINGS } from '@taverla/protocol/room'
+import { POINTS_PER_ARTIST, POINTS_PER_TITLE } from '@taverla/protocol/scoring'
 import {
   hostServerMessageSchema,
   type PlayerServerMessage,
@@ -170,7 +171,12 @@ describe('the rules every socket obeys', () => {
 
     expect(playerView(reloaded)?.youId).toBe(aliceId)
     expect(playerView(reloaded)?.players).toEqual([
-      { id: aliceId, isConnected: true, nickname: 'Alice', score: 2 }
+      {
+        id: aliceId,
+        isConnected: true,
+        nickname: 'Alice',
+        score: POINTS_PER_TITLE + POINTS_PER_ARTIST
+      }
     ])
   })
 

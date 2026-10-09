@@ -227,6 +227,15 @@ none. A hold the host changes mid-reveal restarts from the change rather than
 keeping the reveal's first deadline, because the number they just picked is the
 wait they are expecting to watch.
 
+`advancesAt` is when the next clip **starts**, not when the next round opens:
+the server opens that round `countdownMs` earlier — and a blind test draws its
+track two seconds before that — so the countdown runs over the answer the room
+is still reading and the hold is the whole wait. The new round's `startsAt` is
+the old `advancesAt`, and every screen keeps the reveal it drew on screen
+while the round counts in. The last reveal opens nothing and ends the game at
+`advancesAt` itself. A held draw that fails is tried again three seconds later
+rather than leaving the reveal standing, unless the source has nothing left.
+
 The bare buzzer's `content` is `{ "kind": "buzzer" }` and nothing else — the
 room owns the question, and the server never learns it. The arm exists rather
 than the field going `null` because "no content" and "no round" are different

@@ -184,9 +184,9 @@ export class RoomObject extends DurableObject<Env> {
     this.webSocketClose(socket)
   }
 
-  override alarm(): void {
+  override async alarm(): Promise<void> {
     if (this.engine !== null) {
-      wakeRoom(this.engine)
+      await wakeRoom(this.engine)
     }
   }
 

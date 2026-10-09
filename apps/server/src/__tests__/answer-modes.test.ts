@@ -4,6 +4,10 @@ import {
   DEFAULT_MODE_SETTINGS,
   type RoomSettings
 } from '@taverla/protocol/room'
+import {
+  POINTS_FOR_A_RIGHT_CHOICE,
+  POINTS_FOR_A_TYPED_ANSWER
+} from '@taverla/protocol/scoring'
 
 import { startRoomHarness } from './node-room-harness'
 import {
@@ -17,6 +21,7 @@ import {
   hostView,
   playerView,
   type RoomHarness,
+  sleep,
   waitFor
 } from './room-harness'
 
@@ -192,8 +197,8 @@ describe('answering all at once', () => {
         playerId: playerView(zoe)?.youId ?? null,
         view: playerView(zoe)
       })
-    ).toBe(1)
-    expect(scores.get('Zoe')).toBeGreaterThanOrEqual(1)
+    ).toBe(POINTS_FOR_A_RIGHT_CHOICE)
+    expect(scores.get('Zoe')).toBeGreaterThanOrEqual(POINTS_FOR_A_RIGHT_CHOICE)
     expect(scores.get('Max')).toBe(0)
   })
 
@@ -288,7 +293,7 @@ describe('answering all at once', () => {
     ).toEqual(['a guess'])
   })
 
-  it('[typed] banks one half at a time, and pays a shared instant the same', async () => {
+  it('[typed] banks one half at a time, and pays the first to score more', async () => {
     const { host, max, zoe } = await roundInPlay(TYPED_GAME)
 
     const roundId = playerView(zoe)?.round?.id ?? ''
@@ -306,14 +311,15 @@ describe('answering all at once', () => {
       })
     }
 
-    // Zoe banks the title first. Under the rank table that alone was worth a
-    // point more than Max; the clock cannot tell two answers a few hundred
-    // milliseconds apart from each other, and no longer pretends to.
+    // Zoe banks the title first, and the clock stamps a player's first scoring
+    // half. The pause puts Max's first half far enough behind hers that the
+    // curve cannot round the two together.
     guess(zoe, track.title)
     await waitFor(
       () => bankedHalves(playerView(zoe))?.titleCorrect === true,
       'Zoe’s title to be banked'
     )
+    await sleep(50)
 
     guess(max, track.artist)
     await waitFor(
@@ -336,15 +342,16 @@ describe('answering all at once', () => {
       ])
     )
 
-    // The pair pays 3 however it was reached, and both reached it inside the
-    // same second of the same round.
+    // The pair pays the same however it was reached; only the clock tells
+    // them apart, and it pays whoever scored first more.
     expect(
       basePointsFor({
         playerId: playerView(zoe)?.youId ?? null,
         view: playerView(zoe)
       })
-    ).toBe(3)
-    expect(scores.get('Zoe')).toBe(scores.get('Max'))
+    ).toBe(POINTS_FOR_A_TYPED_ANSWER)
+    expect(scores.get('Zoe')).toBeGreaterThan(scores.get('Max') ?? 0)
+    expect(scores.get('Max')).toBeGreaterThan(POINTS_FOR_A_TYPED_ANSWER)
   })
 
   it('[typed] keeps a player in the round after a guess that lands nothing', async () => {
@@ -448,7 +455,7 @@ describe('answering all at once', () => {
         playerId: playerView(zoe)?.youId ?? null,
         view: playerView(zoe)
       })
-    ).toBe(3)
+    ).toBe(POINTS_FOR_A_TYPED_ANSWER)
   })
 
   it('[typed] shows what everyone said, only once the answer is out', async () => {
