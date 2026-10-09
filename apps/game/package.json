@@ -7,7 +7,7 @@
     "@adrienlcp/react-router": "^0.1.2",
     "@adrienlcp/result": "^0.1.1",
     "@adrienlcp/safe-storage": "^0.1.1",
-    "@adrienlcp/styles": "^0.15.0",
+    "@adrienlcp/styles": "^0.16.0",
     "@adrienlcp/theme-preference": "^0.4.0",
     "@taverla/core": "workspace:*",
     "@taverla/protocol": "workspace:*",
