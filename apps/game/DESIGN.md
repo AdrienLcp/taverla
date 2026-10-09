@@ -295,12 +295,12 @@ the system stack
 **Character:** Bricolage, condensed, is the lettering printed on the box — a
 lid title, a room code, a score, every figure. Atkinson is everything read up
 close, chosen for the grandparent at the table. Both are SIL OFL, self-hosted
-in `public/fonts`, subset latin / latin-ext, `font-display: swap`, the read
-face preloaded at low priority by each prerendered page — party Wi-Fi is the reason
-for all four. Each face has a fontaine fallback scaled to its metrics, listing
-Arial and its metric twins (Liberation Sans, Arimo, Roboto) so the swap moves no
-line on Linux or Android either; `font-synthesis: none` keeps a weight the face
-lacks from being faked.
+in `public/fonts`, subset latin / latin-ext, `font-display: optional`, each
+latin face preloaded at the default priority by each prerendered page — party
+Wi-Fi is the reason for all four. Each face has a fontaine fallback scaled to
+its metrics, listing Arial and its metric twins (Liberation Sans, Arimo, Roboto)
+so the swap moves no line on Linux or Android either; `font-synthesis: none`
+keeps a weight the face lacks from being faked.
 
 ### Hierarchy
 

@@ -1559,6 +1559,10 @@ one part.
 
 ### Fixes
 
+- `[Game]` **A prerendered page fades in once.** The page painted by the
+  document no longer plays `page-enter`, which the app then played a second
+  time over its own nodes; a page reached by a navigation still arrives.
+
 - `[Game]` **The launch follows an opened setup down the page.** *À table !*
   and the reason it refuses are one object, under the setup and pinned to the
   screen's bottom edge until the setup ends: scrolled to the last setting, the
