@@ -2670,6 +2670,16 @@ one part.
 
 ### Internal
 
+- **`pnpm lighthouse` gates no performance score, and budgets the JS instead.**
+  The 0.9 floor on performance is gone: Lantern's simulated throttling swings
+  that score by ten points between two runs of one build on a busy machine,
+  and what makes the game feel fast is answering during a round, not a
+  navigation audit's first paint. Accessibility, best practices and SEO stay
+  at 1, and `resource-summary:script:size` caps the scripts a page transfers
+  at 260,000 bytes — `/en` transfers 230,688 at most today, `/en/blindtest`
+  and `/en/credits` a little less — so a module that joins the first load
+  shows before anything else moves.
+
 - `[Server]` **A catalogue failure's log line is tested**: a track listing and a
   drawn round each log once, `error` for an outage and `warn` for an unknown
   path, with the route or the room beside the faults — a success reached past a
