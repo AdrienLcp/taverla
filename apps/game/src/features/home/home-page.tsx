@@ -42,8 +42,8 @@ export const HomePage: React.FC = () => {
           </p>
           <h1>{translate('home.promise')}</h1>
           <p className='pitch'>
-            <strong>{translate('home.pitch.lead')}</strong>{' '}
-            {translate('home.pitch.rest')}
+            <strong>{translate('home.pitch.lead')}</strong>
+            {` ${translate('home.pitch.rest')}`}
           </p>
 
           <div className='doors'>

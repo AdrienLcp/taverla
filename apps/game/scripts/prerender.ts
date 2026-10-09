@@ -79,6 +79,7 @@ const documentFor = async (page: PrerenderedPage): Promise<string> => {
   const { title } = renderIntoShell({ document, html, path: page.path })
 
   document.documentElement.setAttribute('lang', page.locale)
+  document.documentElement.setAttribute('data-landing', '')
   setMetaContents({
     document,
     metaContents: {
