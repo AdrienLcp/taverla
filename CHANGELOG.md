@@ -196,6 +196,21 @@ one part.
 
 ### Features
 
+- `[Shared]` **The board counts in thousands, and the clock pays by the
+  millisecond.** A point is now `POINT` = 1 000: a right pick is 1 000, a typed
+  pair 3 000, and the speed bonus still falls linearly from as much again to
+  nothing — but three players right inside the same second are now three
+  different scores, the first one highest. Every score on screen is formatted
+  for the locale (`12 450`).
+- `[Shared]` **A blind test opens on four candidates and an eight-second
+  reveal, with twenty seconds to guess**, and the clip goes on playing under
+  the reveal: the console's audio alternates between two elements, so the
+  next clip loads silently while the last one still sounds.
+- `[Shared]` **The countdown is inside the hold.** The next round opens a
+  countdown before the hold ends and starts its clip when it does, so an
+  eight-second hold is eight seconds from the answer to the next note, and
+  every player's screen keeps the reveal up with the 3-2-1 beside its groove.
+
 - `[Server]` **Taverla lives at `taverla.adrienlcp.com`.** The Worker declares
   the custom domain in `wrangler.jsonc` and turns `workers.dev` off; the
   canonical link, Open Graph tags, sitemap and `llms.txt` name the new host,
@@ -819,6 +834,13 @@ one part.
   and the rest would be somebody's evening quietly rearranged between two rounds
 
 ### Improvements
+
+- `[Game]` **The four candidates fit the screen.** Each tile takes the full
+  width, its mark sits in a column of its own beside the title and the artist,
+  a track is two lines of title and two of artist at most, and the four are as
+  tall as the tallest needs rather than stretched over the screen. The line
+  under them ("Réponse envoyée…", "Un seul essai…") is gone, and the round's
+  groove no longer sits on the first tile in a game with no question card.
 
 - `[Game]` **Numbers take the browser's shape, words keep the interface's
   language**: a French screen on an en-GB browser writes its counts and times
@@ -1558,6 +1580,11 @@ one part.
   and the extra width is only void
 
 ### Fixes
+
+- `[Server]` **A reveal whose next track failed to load no longer waits for a
+  press.** The draw is retried three seconds later, and a Durable Object's
+  alarm now waits for the draw it started instead of returning with it in
+  flight.
 
 - `[Game]` **A prerendered page fades in once.** The page painted by the
   document no longer plays `page-enter`, which the app then played a second

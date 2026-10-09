@@ -437,6 +437,7 @@ export const FR_DICTIONARY = defineDictionary({
     }),
     room: 'Table {code}',
     roomSize: '{count:number} à table',
+    score: '{points:number}',
     seating: 'On te trouve une place…',
     standing: {
       ofRoom: defineTranslation('{rank:plural} sur {count:number}', {
@@ -538,9 +539,7 @@ export const FR_DICTIONARY = defineDictionary({
     answer: {
       correct: 'Tu l’as. Tranquille.',
       label: 'Ta réponse',
-      locked: 'Réponse envoyée. On attend les autres…',
       missed: 'Pas celle-là.',
-      oneShot: 'Un seul essai, et le plus tôt paie le plus.',
       retry: 'Autant d’essais que tu veux.',
       submit: 'Envoyer',
       waiting: defineTranslation('{count:plural}', {

@@ -40,6 +40,12 @@
   > .buzzer-area
     grid-area: round
 
+  // The strip below is laid over a question card, and the blind test asks
+  // none: its first tile would sit under the strip instead, so the round
+  // starts below it.
+  > .choosing-round:not(:has(.asked-question))
+    padding-block-start: calc(var(--space-framed) * 2 + 0.375rem)
+
   // Lying down, the chrome moves over the question and the tiles take the
   // whole height of their column: on a phone held sideways the chrome's row
   // was a fifth of the screen, and it is the tiles that run out of it. The

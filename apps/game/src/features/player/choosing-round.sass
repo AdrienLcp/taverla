@@ -1,6 +1,5 @@
 @use '../../presentation/styles/question-card'
 @use '../../presentation/styles/typography'
-@use '@adrienlcp/styles/accessibility'
 
 @layer components
   // A question card and four tiles in a box that never scrolls. Every size here
@@ -16,7 +15,7 @@
     --question-k: min(72cqi, 38cqh)
     --question-cap: min(8cqi, 4.8cqh)
     --choice-k: min(36cqi, 18cqh)
-    --choice-cap: min(7.4cqi, 4.2cqh)
+    --choice-cap: min(7cqi, 3.4cqh)
 
     display: grid
     gap: clamp(var(--space-xs), 2.2cqmin, var(--space-s))
@@ -34,7 +33,7 @@
       display: grid
       gap: clamp(var(--space-2xs), 1.4cqmin, var(--space-xs))
       grid-area: choices
-      grid-template-rows: minmax(0, 1fr) auto
+      grid-template: minmax(0, 1fr) / minmax(0, 1fr)
       min-height: 0
 
       ul
@@ -50,19 +49,14 @@
       .answer-tile
         font-size: clamp(var(--text-xs), calc(var(--choice-k) / sqrt(var(--choice-length, 20))), var(--choice-cap))
 
-      .status
-        @include typography.caption
-
-        color: var(--ink-muted)
-        min-height: 0
-        text-align: center
-        text-wrap: balance
-
-        // A short screen spends its last line on the tiles. The line is still
-        // read out, and what it says is on the tiles themselves once one is
-        // taken: the pick stays inked and the other three go flat.
-        @media (height <= 37.5rem)
-          @include accessibility.visually-hidden
+    // A blind test asks no question, and its candidates are two lines of
+    // title and two of artist at most: four tiles as tall as the tallest of
+    // them needs, with the box's spare height left around them rather than
+    // poured into each one. A quiz candidate can be a whole sentence, and
+    // keeps its share of the box.
+    &:not(:has(.asked-question)) .answer-form.choices ul
+      align-self: center
+      grid-template-rows: repeat(4, 1fr)
 
     @media (width >= 35rem) and (aspect-ratio <= 13 / 10)
       &:not([data-long-choices]) .answer-form.choices ul
@@ -82,14 +76,8 @@
         grid-template-columns: 1fr 1fr
         grid-template-rows: repeat(2, minmax(min-content, 1fr))
 
-      // The line under the tiles moves under the question, where the card's
-      // column has height to spare and the tiles' has none.
       .answer-form.choices
         display: contents
 
         ul
           grid-area: choices
-
-        .status
-          grid-area: status
-          text-align: start

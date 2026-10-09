@@ -106,7 +106,11 @@ export const RoundBoard: React.FC<RoundBoardProps> = ({ round, view }) => {
                     : translate('round.award', { points: award.points })}
               </span>
             )}
-            {isRanked && <span className='score'>{player.score}</span>}
+            {isRanked && (
+              <span className='score'>
+                {translate('player.score', { points: player.score })}
+              </span>
+            )}
             {answer !== undefined && (
               <span className='words'>{answer.said}</span>
             )}

@@ -83,6 +83,73 @@ type PlayerRoundProps = {
   view: PlayerRoomView
 }
 
+type RevealedRoundProps = {
+  clock: ClockEstimate | null
+  /** When the next round's clip starts, while it counts in over this reveal. */
+  countingInTo: number | null
+  round: RoundView
+  view: PlayerRoomView
+}
+
+const RevealedRound: React.FC<RevealedRoundProps> = ({
+  clock,
+  countingInTo,
+  round,
+  view
+}) => (
+  <section className='player-round revealed'>
+    {/* Grouped here rather than placed in the stylesheet, because the wide
+        screen lays the two halves side by side and a grid item spanning
+        rows it never declared silently resolves back to the first one. */}
+    <div className='outcome'>
+      <Revealed round={round} view={view} />
+      <YourRound round={round} view={view} />
+    </div>
+    <RoundBoard round={round} view={view} />
+    <div className='hold'>
+      {countingInTo !== null && (
+        <Countdown
+          className='counting-in'
+          clock={clock}
+          target={countingInTo}
+        />
+      )}
+      <RoundClock
+        clock={clock}
+        view={
+          countingInTo === null
+            ? view
+            : { ...view, round: { ...round, advancesAt: countingInTo } }
+        }
+      />
+    </div>
+  </section>
+)
+
+/**
+ * The reveal the next round's countdown is drawn over. The view stops carrying
+ * it the moment that round opens, so it is this screen's memory of what it
+ * drew — the console keeps the same one, for the same reason.
+ */
+const useRevealStillBeingRead = (
+  view: PlayerRoomView
+): PlayerRoomView | null => {
+  const [lastRevealed, setLastRevealed] = useState<PlayerRoomView | null>(null)
+
+  if (view.phase === 'revealed' && view !== lastRevealed) {
+    setLastRevealed(view)
+  }
+
+  if (
+    lastRevealed !== null &&
+    (view.phase === 'lobby' || view.phase === 'finished')
+  ) {
+    setLastRevealed(null)
+  }
+
+  return lastRevealed
+}
+
 export const PlayerRound: React.FC<PlayerRoundProps> = ({
   clock,
   onAnswer,
@@ -95,6 +162,8 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
   const round = view.round
 
   useBuzzOutcome(reflexOutcome({ round, youId: view.youId }))
+
+  const lastRevealed = useRevealStillBeingRead(view)
 
   // Ahead of every mode, because the server has frozen the round and none of
   // the three screens below would say why. The buzzer carries its own reason
@@ -163,6 +232,19 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
   }
 
   if (view.phase === 'countdown' && round?.startsAt != null) {
+    // The next round counts in over the answer the room is still reading, and
+    // the hold's groove runs on to the first note: one wait, not two.
+    if (lastRevealed?.round != null) {
+      return (
+        <RevealedRound
+          clock={clock}
+          countingInTo={round.startsAt}
+          round={lastRevealed.round}
+          view={lastRevealed}
+        />
+      )
+    }
+
     return (
       <section className='player-round notice'>
         <Countdown clock={clock} target={round.startsAt} />
@@ -172,19 +254,12 @@ export const PlayerRound: React.FC<PlayerRoundProps> = ({
 
   if (view.phase === 'revealed' && round != null) {
     return (
-      <section className='player-round revealed'>
-        {/* Grouped here rather than placed in the stylesheet, because the wide
-            screen lays the two halves side by side and a grid item spanning
-            rows it never declared silently resolves back to the first one. */}
-        <div className='outcome'>
-          <Revealed round={round} view={view} />
-          <YourRound round={round} view={view} />
-        </div>
-        <RoundBoard round={round} view={view} />
-        <div className='hold'>
-          <RoundClock clock={clock} view={view} />
-        </div>
-      </section>
+      <RevealedRound
+        clock={clock}
+        countingInTo={null}
+        round={round}
+        view={view}
+      />
     )
   }
 
@@ -448,7 +523,9 @@ const YourPlacing: React.FC<{ view: PlayerRoomView }> = ({ view }) => {
         {translate('player.final.rank', { rank: yours.rank })}
       </p>
       <p className='your-total'>
-        <span className='value'>{yours.player.score}</span>{' '}
+        <span className='value'>
+          {translate('player.score', { points: yours.player.score })}
+        </span>{' '}
         {translate('player.points', { points: yours.player.score })}
       </p>
     </div>

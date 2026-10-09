@@ -137,7 +137,11 @@ export const Scoreboard: React.FC<ScoreboardProps> = ({
               <VisuallyHidden elementType='span'>{` (${translate('player.you')})`}</VisuallyHidden>
             )}
           </span>
-          {isRanked && <span className='score'>{player.score}</span>}
+          {isRanked && (
+            <span className='score'>
+              {translate('player.score', { points: player.score })}
+            </span>
+          )}
           {onRemove !== undefined && (
             <Button
               aria-label={translate('host.players.removeNamed', {

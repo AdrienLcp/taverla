@@ -42,9 +42,11 @@ test('[e2e] two players type over the same clip, and the reveal says what they s
     await expect(host.rowFor(nickname)).toBeVisible()
   }
 
+  // A blind test opens on four choices, so typing is picked.
+  await host.openSettings.click()
+  await host.typedMode.click()
   await host.startGame.click()
 
-  // Typing is the default, so the forms are what a round opens on.
   const zoe = playerScreen(firstScreen)
   const max = playerScreen(secondScreen)
 

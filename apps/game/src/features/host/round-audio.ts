@@ -73,6 +73,9 @@ const moveTo = (audio: HTMLAudioElement, positionMs: number): void => {
   audio.currentTime = positionMs / 1_000
 }
 
+/** The two blessed elements a round's clip alternates between. */
+type Decks = readonly [HTMLAudioElement, HTMLAudioElement]
+
 export type RoundAudio = {
   /**
    * Whether a press has blessed an element on this screen. `false` after a
@@ -105,23 +108,31 @@ export const useRoundAudio = ({
   /** 0 to 1. */
   volume: number
 }): RoundAudio => {
-  const loadedRoundRef = useRef<string | null>(null)
   /**
-   * The blessed element is **state**, not a ref, and that is the whole of what
+   * Which deck holds which round's clip. Two decks so the last clip can go on
+   * under its reveal and the countdown after it while the next one loads on
+   * the other: one element would have to drop the music the room is still
+   * listening to, or start the next clip late.
+   */
+  const loadedRef = useRef<{ deck: HTMLAudioElement; roundId: string } | null>(
+    null
+  )
+  /**
+   * The blessed decks are **state**, not a ref, and that is the whole of what
    * makes a mid-round press take: the effect below is what loads, seeks and
    * plays, and a ref changing re-runs nothing. It is also the honest dependency
    * — a boolean beside a ref says the same thing twice and only one of them is
    * in the list.
    */
-  const [audio, setAudio] = useState<HTMLAudioElement | null>(null)
+  const [decks, setDecks] = useState<Decks | null>(null)
   const [refusal, setRefusal] = useState<ClipRefusal | null>(null)
 
   // `useCallback` for the one reason that survives the compiler: it is a
   // dependency of the effect below, and a fresh identity there would tear the
   // clip down and start it again on every render.
   const disarm = useCallback((refused: ClipRefusal): void => {
-    loadedRoundRef.current = null
-    setAudio(null)
+    loadedRef.current = null
+    setDecks(null)
     setRefusal(refused)
   }, [])
 
@@ -132,14 +143,21 @@ export const useRoundAudio = ({
   )
 
   useEffect(() => {
-    if (audio !== null) {
-      setVolume(audio, volume)
+    for (const deck of decks ?? []) {
+      setVolume(deck, volume)
     }
-  }, [audio, volume])
+  }, [decks, volume])
 
   // On the way out, and on the way to a disarmed screen: an element nobody is
   // going to reach again must not go on sounding.
-  useEffect(() => () => audio?.pause(), [audio])
+  useEffect(
+    () => () => {
+      for (const deck of decks ?? []) {
+        deck.pause()
+      }
+    },
+    [decks]
+  )
 
   const phase = view?.phase ?? null
   const round = view?.round ?? null
@@ -149,18 +167,26 @@ export const useRoundAudio = ({
   const elapsedMs = view?.roundElapsedMs ?? 0
 
   useEffect(() => {
-    if (audio === null) {
+    if (decks === null) {
       return
     }
 
-    if (phase === 'lobby' || phase === 'revealed' || phase === 'finished') {
-      audio.pause()
+    if (phase === 'lobby' || phase === 'finished') {
+      for (const deck of decks) {
+        deck.pause()
+      }
 
+      return
+    }
+
+    // The reveal is not silence: the clip goes on under the answer, which is
+    // most of what makes the answer land.
+    if (phase === 'revealed') {
       return
     }
 
     if (phase === 'buzzed') {
-      audio.pause()
+      loadedRef.current?.deck.pause()
 
       return
     }
@@ -169,24 +195,33 @@ export const useRoundAudio = ({
       return
     }
 
-    if (loadedRoundRef.current !== roundId) {
-      loadedRoundRef.current = roundId
-      loadClip(audio, previewUrl)
+    const previous = loadedRef.current
+
+    if (previous?.roundId !== roundId) {
+      const spare = previous?.deck === decks[0] ? decks[1] : decks[0]
+
+      loadedRef.current = { deck: spare, roundId }
+      loadClip(spare, previewUrl)
     }
 
+    const deck = loadedRef.current?.deck ?? decks[0]
+    const other = deck === decks[0] ? decks[1] : decks[0]
+
     if (phase === 'playing') {
+      other.pause()
+
       // Either the clip was paused by a buzz, or this host just reloaded into a
       // round already running — `roundElapsedMs` is what tells the two apart.
       const seekTo = seekTargetMs({
         elapsedMs,
-        playedMs: audio.currentTime * 1_000
+        playedMs: deck.currentTime * 1_000
       })
 
       if (seekTo !== null) {
-        moveTo(audio, seekTo)
+        moveTo(deck, seekTo)
       }
 
-      play(audio, disarm)
+      play(deck, disarm)
 
       return
     }
@@ -195,13 +230,14 @@ export const useRoundAudio = ({
       return
     }
 
-    moveTo(audio, 0)
+    moveTo(deck, 0)
 
     let frame = 0
 
     const startWhenDue = (): void => {
       if (millisecondsUntilStart(startsAt) <= 0) {
-        play(audio, disarm)
+        other.pause()
+        play(deck, disarm)
 
         return
       }
@@ -218,32 +254,37 @@ export const useRoundAudio = ({
       window.clearTimeout(timer)
       cancelAnimationFrame(frame)
     }
-    // The element is a dependency because arming happens *during* a round now:
+    // The decks are a dependency because arming happens *during* a round now:
     // a console that reloaded mid-clip presses once, and this has to run again
-    // or the element sits blessed and silent until the next round opens.
-  }, [audio, disarm, elapsedMs, phase, previewUrl, roundId, startsAt])
+    // or the decks sit blessed and silent until the next round opens.
+  }, [decks, disarm, elapsedMs, phase, previewUrl, roundId, startsAt])
 
   return {
-    canPlay: audio !== null,
+    canPlay: decks !== null,
     refusal,
     unlock: () => {
-      if (audio !== null) {
+      if (decks !== null) {
         return
       }
 
-      const blessed = new Audio(SILENCE)
+      const blessed: Decks = [new Audio(SILENCE), new Audio(SILENCE)]
 
-      blessed.preload = 'auto'
-      blessed.volume = volume
+      for (const deck of blessed) {
+        deck.preload = 'auto'
+        deck.volume = volume
+      }
 
-      // Kept only once the browser has actually let it play. Storing it either
-      // way is what made a refused first press permanent: the guard above then
-      // answered every later press with a silent no-op, and the tab was mute
-      // for the rest of the evening.
-      void blessed.play().then(
+      // Kept only once the browser has actually let both play. Storing them
+      // either way is what made a refused first press permanent: the guard
+      // above then answered every later press with a silent no-op, and the tab
+      // was mute for the rest of the evening.
+      void Promise.all(blessed.map((deck) => deck.play())).then(
         () => {
-          blessed.pause()
-          setAudio(blessed)
+          for (const deck of blessed) {
+            deck.pause()
+          }
+
+          setDecks(blessed)
           setRefusal(null)
         },
         (refused: unknown) => {

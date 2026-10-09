@@ -17,8 +17,8 @@ export const hostConsole = (page: Page) => ({
   /** The track under the buzzer, on the host screen only. */
   answer: page.locator('.verdict-panel .title'),
   /**
-   * Picked rather than assumed: typing is the default now, and this journey is
-   * the buzzer's.
+   * Picked rather than assumed: a blind test opens on four choices, and this
+   * journey is the buzzer's.
    *
    * The label rather than the radio it names — react-aria hides the `<input>`
    * under a `<label>` that takes the pointer, so the accessible name is what
@@ -59,6 +59,8 @@ export const hostConsole = (page: Page) => ({
   startGame: page.getByRole('button', { name: 'Gather round' }),
   theyBuzzed: (nickname: string) =>
     page.getByRole('heading', { name: `${nickname} buzzed` }),
+  /** The typed journey's pick, found the same way as `buzzerMode`. */
+  typedMode: page.getByText('Type it', { exact: true }),
   verdictBoth: page.getByRole('button', { name: 'Title + artist' }),
   wayOut: page.getByRole('link', { name: 'Back to the games' })
 })

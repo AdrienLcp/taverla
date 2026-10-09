@@ -195,6 +195,19 @@
     .hold:empty
       display: none
 
+    // The next round counting in, beside the groove that runs to its first
+    // note: a token small enough to leave the answer the screen.
+    .hold:has(.counting-in)
+      align-items: center
+      display: flex
+      gap: var(--space-s)
+
+      > :not(.counting-in)
+        flex: 1
+
+    .countdown.counting-in
+      --token-size: 3.5rem
+
     // A round before the first point, or one whose question the room owned,
     // leaves the payout alone on the screen: one object, centred.
     &:not(:has(.round-board, .answer-card, .reaction-board))

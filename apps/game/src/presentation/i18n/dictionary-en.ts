@@ -485,6 +485,7 @@ export const EN_DICTIONARY = defineDictionary({
     }),
     room: 'Table {code}',
     roomSize: '{count:number} at the table',
+    score: '{points:number}',
     seating: 'Taking your seat…',
     standing: {
       /** The room's board, reduced to the two facts a screen held in a hand needs. */
@@ -588,14 +589,12 @@ export const EN_DICTIONARY = defineDictionary({
     answer: {
       correct: 'You got it. Sit back.',
       label: 'Your answer',
-      locked: 'Answer sent. Waiting for the others…',
       /**
        * Read together with `retry` under the field: this half says what the
        * guess did, that half says the way out. It is proof of delivery as much
        * as a grade — without it a wrong guess and a dropped frame look alike.
        */
       missed: 'Not that one.',
-      oneShot: 'One pick only, and the sooner pays the more.',
       retry: 'As many goes as you like.',
       submit: 'Send it',
       waiting: defineTranslation('{count:plural}', {

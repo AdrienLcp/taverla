@@ -103,7 +103,6 @@ export const ChoiceAnswer: React.FC<ChoiceAnswerProps> = ({
   round,
   youId
 }) => {
-  const translate = useTranslate()
   const [chosenIndex, setChosenIndex] = useState<number | null>(null)
 
   if (round === null) {
@@ -138,16 +137,6 @@ export const ChoiceAnswer: React.FC<ChoiceAnswerProps> = ({
           </li>
         ))}
       </ul>
-      {/*
-        One line for both moments: before the pick it says the pick is final,
-        which changes which tile a press commits to; after it, that the room is
-        waiting. A second line is height the four tiles cannot spare.
-      */}
-      <p className='status' role='status'>
-        {translate(
-          hasAnswered ? 'round.answer.locked' : 'round.answer.oneShot'
-        )}
-      </p>
     </section>
   )
 }

@@ -95,7 +95,9 @@ export const RoundChrome: React.FC<RoundChromeProps> = ({
           </span>
         ) : (
           <>
-            <span className='score'>{score}</span>
+            <span className='score'>
+              {translate('player.score', { points: score })}
+            </span>
             <VisuallyHidden elementType='span'>
               {translate('player.points', { points: score })}
             </VisuallyHidden>
