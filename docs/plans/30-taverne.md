@@ -1,9 +1,9 @@
 # Stage 30 — Taverne, the tavern on games night
 
-**Chosen on 2026-10-05, built on the `taverne` branch, not merged.** Adrien
-picked Taverne and asked for it to stay on its own branch; `main` keeps the
-stage-29 world until he says to merge. Every session of this stage works on
-`taverne` and rebases it on `main` when `main` moves.
+**Dropped on 2026-10-10.** Chosen on 2026-10-05 and built whole on the
+`taverne` branch, then dropped by Adrien: `main` keeps the stage-29 box, and
+the branch is deleted. Everything it carried that was not the look landed on
+`main` first. The file stays as the record of the world that was built.
 
 If it is chosen, this file is the whole brief: it carries the spec, so it still
 stands if the reference page is gone.
