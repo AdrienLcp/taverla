@@ -221,6 +221,34 @@ const SEATS: Seat[] = [
   { path: `/host/${ROOM_CODE}`, role: 'room', view: consoleView }
 ]
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null
+
+/**
+ * Stamps the round with the answer mode and the duration the settings carry,
+ * the way the server does as a round opens — so a fixture written against the
+ * settings draws the round it describes. A round that names its own wins.
+ */
+const withStampedRound = (view: object): object => {
+  if (
+    !('round' in view && isRecord(view.round)) ||
+    !('settings' in view && isRecord(view.settings))
+  ) {
+    return view
+  }
+
+  const { game, mode } = view.settings
+
+  return {
+    ...view,
+    round: {
+      answerMode: isRecord(mode) ? mode.kind : null,
+      durationMs: isRecord(game) ? (game.roundDurationMs ?? null) : null,
+      ...view.round
+    }
+  }
+}
+
 /**
  * Answers the screen's socket the way the room would: a welcome carrying the
  * snapshot to the hello, a pong to every ping. The protocol version is echoed
@@ -238,7 +266,7 @@ const serveRoom = async ({ page, view }: { page: Page; view: object }) => {
             serverTime: SERVER_TIME,
             sessionId: message.sessionId,
             type: 'welcome',
-            view
+            view: withStampedRound(view)
           })
         )
       }
