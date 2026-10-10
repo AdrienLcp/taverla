@@ -73,8 +73,8 @@
       // rest of the poster rather than like a caption on a page. The component
       // sets the register; how large it is here is this screen's own business,
       // the same way the code's is.
-      .invite
-        font-size: clamp(0.75rem, calc(var(--stage-unit) * 1.8), 1.75rem)
+      .invite, .code-caption
+        font-size: clamp(var(--text-s), calc(var(--stage-unit) * 2.4), var(--text-2xl))
 
       .join-url
         font-size: clamp(var(--text-xs), calc(var(--stage-unit) * 2.4), 2.5rem)
@@ -84,6 +84,7 @@
       @include layout.poster-wide
         .qr
           grid-template-columns: minmax(0, var(--invitation-qr-max-width))
+          text-align: center
 
     // No code to show, because the server could not be reached for one.
     &.failed

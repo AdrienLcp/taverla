@@ -166,6 +166,7 @@ const PairingScreen: React.FC<{ onStale: () => void }> = ({ onStale }) => {
         <CodeAndSquare
           caption={translate('wall.pairing.caption')}
           code={pairing.pairingCode}
+          codeCaption={translate('wall.pairing.codeCaption')}
           isUnattended
           url={pairWallUrlFor(pairing.pairingCode)}
         />

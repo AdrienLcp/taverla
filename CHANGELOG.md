@@ -843,6 +843,22 @@ one part.
 
 ### Improvements
 
+- `[Game]` **The round's clock counts.** Every timer — the console's, the
+  wall's, a player's, the hold before the next round — is one groove draining
+  in the phase's ink with the whole seconds beside it in tabular figures, and
+  the digit ticks from CSS alone, with no render. It keeps counting under
+  reduced motion, where the groove holds still between snapshots. In the dark
+  palette the groove is deeper than a socket, so the indigo of a running round
+  reads against it at 3:1.
+
+- `[Game]` **The words around the QR code no longer crowd it.** On a phone the
+  square keeps its full size and its caption and address sit centred under it,
+  instead of a square squeezed to under half the column beside them. The wall
+  waiting to be paired splits its instruction: *Ou tape ce code dans son menu*
+  under the code, *Scanne depuis l’écran qui tient la table* under the square,
+  both sized to read across the room. An address that has to wrap breaks
+  between the host and the path, never inside the code.
+
 - `[Game]` **The four candidates fit the screen.** Each tile takes the full
   width, its mark sits in a column of its own beside the title and the artist,
   a track is two lines of title and two of artist at most, and the four are as

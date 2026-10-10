@@ -13,20 +13,8 @@
     gap: var(--space-m)
     min-width: 0
 
-    // The round's sand, a groove pressed into whatever it lies on. On the
-    // board it takes the phase's ink.
     .round-progress
-      background: var(--socket)
-      border: 0
-      border-radius: var(--radius-xs)
-      box-shadow: var(--shadow-groove)
-      height: 0.375rem
-      overflow: hidden
       width: 100%
-
-      &::after
-        background: var(--phase-ink)
-        border-radius: inherit
 
   // A wait with nothing to press: one object, centred in the screen the chrome
   // leaves — a paper card, or the countdown's token.
@@ -173,12 +161,11 @@
         @include question-card.card
 
       .asked-question + .round-progress
+        --clock-ink: var(--card-ink)
+
         align-self: start
         @include question-card.clock-margin
         width: auto
-
-        &::after
-          background: var(--card-muted)
 
   // What the round was, what it paid this player, and where it left the room.
   .player-round.revealed

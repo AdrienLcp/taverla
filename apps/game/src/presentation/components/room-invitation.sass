@@ -60,14 +60,22 @@
     // The square on a white card in both palettes: a scanner reads dark
     // modules on light paper, and the inverse fails on half the cameras in a
     // room.
+    //
+    // The words go beside the square only on a column wider than any phone's —
+    // 430px less two 16px gutters is 398px. Below that, a square beside them
+    // was squeezed to under half the column, and under it keeps its whole size.
     .qr
       align-items: center
       display: grid
       gap: var(--space-s) var(--space-m)
       grid-template-columns: minmax(0, var(--invitation-qr-max-width))
+      justify-content: center
+      text-align: center
 
-      @container (width >= 21rem)
+      @container (width >= 25rem)
         grid-template-columns: minmax(0, min(var(--invitation-qr-max-width), 45cqi)) minmax(0, 1fr)
+        justify-content: stretch
+        text-align: start
 
     .qr-card
       @include piece.card(var(--radius-m))
@@ -89,11 +97,11 @@
       @include typography.callout
 
       font-size: clamp(1rem, calc(var(--stage-unit) * 2.2), 1.25rem)
-      text-wrap: pretty
+      text-wrap: balance
 
     .join-url
       @include typography.caption
 
       color: var(--ink-muted)
-      overflow-wrap: anywhere
+      overflow-wrap: break-word
       user-select: text

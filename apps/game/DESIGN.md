@@ -488,7 +488,7 @@ a word; a spent tile is a socket.
 
 ## Shapes
 
-- **Radii**: `--radius-xs` 3px (the sand's groove, the sprue nubs),
+- **Radii**: `--radius-xs` 3px (the sprue nubs),
   `--radius-s` 8px (small controls), `--radius-m` 12px (pieces,
   controls, tiles, chips), `--radius-l` 18px (cards, lids, the room-code
   token), `--radius-full` for round tokens. Round tokens (countdown, payout,
@@ -559,9 +559,9 @@ socket. On the console the same faces are printed, not pressable
 
 ### Question card (`_question-card.sass`, `AskedQuestion`)
 Paper, `--radius-l`, the prompt in Atkinson 700 sized by the square root of its
-length, the category (quiz rubric) above it. The round's clock is a 6px groove
-draining along its top (`.card-clock`, `RoundProgress` in `--card-muted` on
-`--socket`). The reveal is the card turned over: the answer printed on the same
+length, the category (quiz rubric) above it. The round's clock lies along its
+top (`.card-clock`, `RoundProgress`), its seconds in `--card-ink`; the card's
+top padding is the clock's row. The reveal is the card turned over: the answer printed on the same
 paper, a blind test's cover mounted on it.
 
 ### Text field (`TextField`)
@@ -589,7 +589,12 @@ ink keyline.
 The code on the saffron token (`--tile-2`, `monument`, a piece at
 `--radius-l`), the QR on a white card in both palettes — an inverted square
 fails half the cameras in a room — and the address. Its size is the stage's
-business, through `--invitation-code-size` and a container.
+business, through `--invitation-code-size` and a container. Below 25rem — any
+phone's column — the caption and the address are centred under a square that
+keeps its full size; above it they sit beside the square, from the left. Each
+half carries its own instruction: the code's under the code, the square's
+under the square. The address breaks between host and path (`<wbr>`), never
+inside the code.
 
 ### Pawns and seats
 `Pawn` names a player everywhere. The roster (`seat-grid`) is a chip per seat
@@ -725,9 +730,15 @@ bounced. Durations:
   the screen holding it (`reveal-panel.sass`, `player-round.sass`).
 - **The round's clock** — a CSS animation (`round-drain`) whose duration is the
   server's remaining time, drained from the fraction still standing and
-  re-keyed on every snapshot; absent while the host is away. The same groove
-  counts the reveal's hold, along the foot of the console's stage in the phase
-  ink. Under reduced motion it still shows where the round stands, in full ink.
+  re-keyed on every snapshot; absent while the host is away. One groove
+  everywhere (`--groove`, deeper than `--socket` in the dark so every phase
+  ink holds 3:1 along it), drained in the phase ink, with the whole seconds
+  beside it: an animated `@property` (`--seconds-left`) read through a counter
+  rounded up, so the digit ticks without a render. The same clock counts the
+  reveal's hold, along the foot of the console's stage. Under reduced motion
+  the groove holds where the last snapshot put it and the digit keeps counting
+  — it opts out of the collapse through `--reduced-motion-duration`, being a
+  measurement rather than motion.
 - **The flip** — instant: the reflex stimulus is a colour change and nothing
   else.
 - **Continuous motion** — only `Spinner` and the reconnecting dot of

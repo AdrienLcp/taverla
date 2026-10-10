@@ -704,8 +704,8 @@ export const FR_DICTIONARY = defineDictionary({
     },
     pairAgain: 'Appairer cet écran',
     pairing: {
-      caption:
-        'Scanne depuis l’écran qui tient la table, ou tape ce code dans son menu',
+      caption: 'Scanne depuis l’écran qui tient la table',
+      codeCaption: 'Ou tape ce code dans son menu',
       documentTitle: 'En attente d’une table — Taverla',
       failed: 'On n’arrive pas à joindre Taverla pour avoir un code.',
       retry: 'Réessayer',

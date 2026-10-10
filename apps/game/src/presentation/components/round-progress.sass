@@ -1,28 +1,69 @@
+@use '../styles/typography'
+@use '@adrienlcp/styles/text-box'
+
+// A `<number>` rather than an `<integer>`: an animated integer rounds to the
+// nearest, and the digit would turn half a second early. The counter rounds it
+// up instead, which is what a countdown says.
+@property --seconds-left
+  syntax: '<number>'
+  inherits: false
+  initial-value: 0
+
 @layer components
+  // A groove pressed into whatever it lies on, draining in the phase's ink,
+  // with the whole seconds beside it. `tokens-contrast.test.ts` holds every
+  // phase ink a clock is drawn in at 3:1 along `--groove`, in both palettes:
+  // filled against empty is the edge that carries the reading.
   .round-progress
-    border: var(--stroke-bold) solid var(--ink)
-    height: 1.75rem
-    position: relative
+    --clock-height: 0.625rem
+    --clock-seconds-size: clamp(var(--text-s), calc(var(--stage-unit) * 2.4), var(--text-l))
+
+    align-items: center
+    display: flex
+    gap: var(--space-xs)
     width: min(var(--column-wide-max-width), 100%)
 
-    &::after
-      animation: round-drain var(--drain-duration, 0ms) linear forwards
-      background: var(--ink)
-      content: ''
-      inset: 0
-      position: absolute
-      transform-origin: left
+    .groove
+      background: var(--groove)
+      border-radius: var(--radius-full)
+      box-shadow: var(--shadow-groove)
+      flex: 1
+      height: var(--clock-height)
+      overflow: hidden
+
+      &::after
+        animation: round-drain var(--drain-duration, 0ms) linear forwards
+        background: var(--phase-ink)
+        border-radius: inherit
+        content: ''
+        display: block
+        height: 100%
+        transform-origin: left
+
+    // Two figures wide whatever it reads, so the groove does not twitch when
+    // ten becomes nine: a digit of the display face sets at about 0.6em.
+    .seconds
+      @include typography.numeric
+      @include text-box.trimmed-figure
+
+      color: var(--clock-ink, var(--ink))
+      font-size: var(--clock-seconds-size)
+      min-width: 1.2em
+      text-align: end
+
+      // A digit changing in place is the measurement, not motion, so it opts
+      // out of the reduced-motion collapse and keeps counting.
+      &::before
+        --reduced-motion-duration: var(--drain-duration, 0ms)
+
+        animation: seconds-left var(--drain-duration, 0ms) linear forwards
+        content: counter(seconds)
+        counter-reset: seconds round(up, var(--seconds-left), 1)
 
     // Still the measurement, minus the moving: someone who asked for no motion
     // gets where the round stands each time a snapshot corrects it.
-    //
-    // In the same ink as the moving one, and that is the point. This used to
-    // fade to 35%, which put the edge that carries the reading — filled against
-    // empty — at 1.84:1 against the field, under the 3:1 WCAG 1.4.11 asks of
-    // anything that is the information rather than around it. Full ink is
-    // 5.65:1 on the worst pair, and it is what a paused bar looks like anyway.
     @media (prefers-reduced-motion: reduce)
-      &::after
+      .groove::after
         animation: none
         transform: scaleX(var(--drain-from, 1))
 
@@ -31,3 +72,9 @@
     transform: scaleX(var(--drain-from, 1))
   to
     transform: scaleX(0)
+
+@keyframes seconds-left
+  from
+    --seconds-left: var(--seconds-from, 0)
+  to
+    --seconds-left: 0

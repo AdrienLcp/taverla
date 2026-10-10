@@ -114,21 +114,15 @@
       flex-direction: column
       justify-content: safe center
       min-height: 0
-      padding: calc(clamp(var(--space-xs), 3cqmin, var(--space-l)) + var(--space-s)) clamp(var(--space-s), 3.4cqmin, var(--space-l)) clamp(var(--space-xs), 3cqmin, var(--space-l))
+      padding: calc(clamp(var(--space-xs), 3cqmin, var(--space-l)) + var(--space-m)) clamp(var(--space-s), 3.4cqmin, var(--space-l)) clamp(var(--space-xs), 3cqmin, var(--space-l))
       position: relative
 
       > .round-progress
-        background: var(--socket)
-        border: 0
-        border-radius: var(--radius-xs)
-        height: 0.375rem
+        --clock-ink: var(--card-ink)
+
         inset: clamp(var(--space-xs), 2cqmin, var(--space-s)) clamp(var(--space-s), 3.4cqmin, var(--space-l)) auto
-        overflow: hidden
         position: absolute
         width: auto
-
-        &::after
-          background: var(--card-muted)
 
       .asked-question
         container-type: normal

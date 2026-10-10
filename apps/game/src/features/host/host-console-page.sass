@@ -74,26 +74,15 @@
       &.revealed
         --reveal-gap: clamp(var(--space-m), calc(var(--stage-unit) * 3.6), var(--space-2xl))
         // What the hold bar's row costs the stacked budget below, and nothing
-        // when no bar is drawn. `0.625rem` is the bar's own height.
+        // when no bar is drawn. `--text-l` is the row's own height: the
+        // seconds at their ceiling, taller than the groove beside them.
         --hold-bar: 0rem
 
         &.holding
-          --hold-bar: calc(0.625rem + var(--reveal-gap))
+          --hold-bar: calc(var(--text-l) + var(--reveal-gap))
 
           @include layout.wide
-            --hold-bar: calc(0.625rem + var(--space-s))
-
-        // The wait before the next round, as a groove draining in the phase's
-        // ink rather than a block of ink: it is the screen's own clock.
-        > .round-progress
-          background: var(--socket)
-          border: 0
-          border-radius: var(--radius-full)
-          height: 0.625rem
-          overflow: hidden
-
-          &::after
-            background: var(--phase-ink)
+            --hold-bar: calc(var(--text-l) + var(--space-s))
 
         // Stacked, a console is held in a hand rather than read across a room,
         // so scrolling is a gesture it has — and the standings, the half that
@@ -167,7 +156,11 @@
         // the column at that same ratio.
         .room-invitation
           --invitation-code-size: min(clamp(4rem, calc(var(--stage-unit) * 21), 16rem), calc(33cqi - var(--space-m) * 2 / 2.98))
-          --invitation-qr-max-width: clamp(8.75rem, calc(var(--stage-unit) * 24), 15rem)
+
+          // Stacked, the console is in somebody's hand and the square is
+          // scanned off it at arm's length: it keeps the component's full size.
+          @include layout.wide
+            --invitation-qr-max-width: clamp(8.75rem, calc(var(--stage-unit) * 24), 15rem)
 
     // The one screen in the product that admits to being silent, and it is a
     // line and a press rather than a warning block: the round is running, the

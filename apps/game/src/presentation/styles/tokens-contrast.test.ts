@@ -15,6 +15,9 @@ const PHASE_MARKS = [
   { background: '--good', foreground: '--on-spine' }
 ] as const
 
+/** The phase inks a running clock or the reveal's hold drains in: playing, buzzed or marking, revealed. */
+const ROUND_CLOCK_INKS = ['--spine-quiz', '--primary', '--good'] as const
+
 describe('colour tokens', () => {
   it('[contrast] every ink reads on the ground it is printed on, in both themes', () => {
     expect(
@@ -82,12 +85,11 @@ describe('colour tokens', () => {
           foreground: '--board-ink',
           minimum: WCAG_AA.text
         },
-        // The reveal's hold bar drains in the phase's ink along a socket.
-        {
-          background: '--socket',
-          foreground: '--good',
+        ...ROUND_CLOCK_INKS.map((foreground) => ({
+          background: '--groove',
+          foreground,
           minimum: WCAG_AA.nonText
-        }
+        }))
       ])
     ).toEqual([])
   })

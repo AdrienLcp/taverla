@@ -774,8 +774,8 @@ export const EN_DICTIONARY = defineDictionary({
     },
     pairAgain: 'Pair this screen',
     pairing: {
-      caption:
-        'Scan from the screen running the table, or type this code in its menu',
+      caption: 'Scan from the screen running the table',
+      codeCaption: 'Or type this code in its menu',
       documentTitle: 'Waiting for a table — Taverla',
       failed: 'We cannot reach Taverla for a code.',
       retry: 'Try again',

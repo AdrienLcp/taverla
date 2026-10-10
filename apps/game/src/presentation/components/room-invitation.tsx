@@ -118,8 +118,24 @@ export const CodeAndSquare: React.FC<CodeAndSquareProps> = ({
       </div>
       <div className='qr-words'>
         <p className='invite'>{caption}</p>
-        <p className='join-url'>{url}</p>
+        <JoinUrl url={url} />
       </div>
     </div>
   </section>
 )
+
+/**
+ * Broken, when it must be, between the host and the path — never inside the
+ * code at the end, which is the half somebody reads aloud.
+ */
+const JoinUrl: React.FC<{ url: string }> = ({ url }) => {
+  const pathStart = url.indexOf('/', url.indexOf('//') + 2)
+
+  return (
+    <p className='join-url'>
+      {url.slice(0, pathStart)}
+      <wbr />
+      {url.slice(pathStart)}
+    </p>
+  )
+}

@@ -20,9 +20,11 @@ type RoundProgressProps = {
 }
 
 /**
- * How much of the round is left, drained by a CSS animation rather than a React
+ * How much of the round is left, as a groove draining in the phase's ink and
+ * the whole seconds beside it. Both run on CSS animations rather than a React
  * timer: the server has already decided when this ends, so a per-frame render
- * would only add work.
+ * would only add work. The seconds are an animated `@property` read through a
+ * counter, so the digit ticks without a render either.
  *
  * It starts at the fraction still standing rather than at full, which is what
  * lets a screen arriving mid-round — a player back from a lock, a host who
@@ -44,9 +46,14 @@ export const RoundProgress: React.FC<RoundProgressProps> = ({
       key={remainingMs}
       style={{
         '--drain-duration': `${remainingMs}ms`,
-        '--drain-from': (remainingMs / durationMs).toFixed(3)
+        '--drain-from': (remainingMs / durationMs).toFixed(3),
+        '--seconds-from': (remainingMs / 1_000).toFixed(3)
       }}
-    />
+    >
+      <div className='groove' />
+      {/* Read by the eye alone: a number announced every second would talk over the round. */}
+      <span aria-hidden className='seconds' />
+    </div>
   )
 }
 
