@@ -2718,6 +2718,12 @@ one part.
 
 ### Internal
 
+- `[Game]` **Images and fonts are binary to git.** `.gitattributes` marks them
+  so, after a share image lost the carriage return of every CR LF pair and no
+  link preview could decode it, and a test checks `og.png`'s signature, every
+  chunk's checksum and its size against `og:image:width` and
+  `og:image:height`.
+
 - **`pnpm lighthouse` gates no performance score, and budgets the JS instead.**
   The 0.9 floor on performance is gone: Lantern's simulated throttling swings
   that score by ten points between two runs of one build on a busy machine,
